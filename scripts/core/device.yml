@@ -176,16 +176,24 @@ name: $x_device_thread_t
 members:
     - type: "uint32_t"
       name: slice
-      desc: "[in,out] the slice number.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numSlices."
+      desc: |
+            [in,out] the slice number.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numSlices.
     - type: "uint32_t"
       name: subslice
-      desc: "[in,out] the sub-slice number within its slice.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numSubslicesPerSlice."
+      desc: |
+            [in,out] the sub-slice number within its slice.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numSubslicesPerSlice.
     - type: "uint32_t"
       name: eu
-      desc: "[in,out] the eEU number within its sub-slice.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numEUs."
+      desc: |
+            [in,out] the EU number within its sub-slice.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numEUsPerSubslice.
     - type: "uint32_t"
       name: thread
-      desc: "[in,out] the thread number within its EU.  Can be UINT32_MAX to mean 'all' or must be less than $x_device_properties_t.numThreadsPerEU."
+      desc: |
+            [in,out] the thread number within its EU.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numThreadsPerEU.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves properties of the device."

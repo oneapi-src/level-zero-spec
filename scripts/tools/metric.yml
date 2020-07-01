@@ -117,55 +117,6 @@ etors:
       desc: "Metric type: raw"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported value types"
-class: $t
-name: $t_value_type_t
-etors:
-    - name: UINT32
-      desc: "32-bit unsigned-integer"
-    - name: UINT64
-      desc: "64-bit unsigned-integer"
-    - name: FLOAT32
-      desc: "32-bit floating-point"
-    - name: FLOAT64
-      desc: "64-bit floating-point"
-    - name: BOOL8
-      desc: "8-bit boolean"
---- #--------------------------------------------------------------------------
-type: union
-desc: "Union of values"
-class: $t
-name: $t_value_t
-members:
-    - type: uint32_t
-      name: "ui32"
-      desc: "[out] 32-bit unsigned-integer"
-    - type: uint64_t
-      name: "ui64"
-      desc: "[out] 32-bit unsigned-integer"
-    - type: float
-      name: "fp32"
-      desc: "[out] 32-bit floating-point"
-    - type: double
-      name: "fp64"
-      desc: "[out] 64-bit floating-point"
-    - type: $x_bool_t
-      name: "b8"
-      desc: "[out] 8-bit boolean"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Typed value"
-class: $t
-name: $t_typed_value_t
-members:
-    - type: $t_value_type_t
-      name: "type"
-      desc: "[out] type of value"
-    - type: $t_value_t
-      name: "value"
-      desc: "[out] value"
---- #--------------------------------------------------------------------------
-type: enum
 desc: "Metric group calculation type"
 class: $tMetricGroup
 name: $t_metric_group_calculation_type_t

@@ -205,7 +205,7 @@ representation of independent device resources that can safely be used
 concurrently.
 
 Sampling Types
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 Sampling types are a software representation of device capabilities in
 terms of reading metric values. Each Metric Group provides information
@@ -407,7 +407,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
 .. _Event-based:
 
 Metric Query
-~~~~~~~~~~~~
+~~~~~~~~~~~
 
 Event-based collection uses a simple Begin, End, GetData scheme:
 
@@ -564,6 +564,7 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
            free(phMetrics);
        }
 
+
 Program Instrumentation
 =======================
 
@@ -621,7 +622,7 @@ As an example, a tool could use a custom loader layer to inject this build flag 
 In another example, a tool could recompile a Module using the build flag and use a custom loader layer to replace the application's Module handle with it's own.
 
 Instrumentation
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 Once the module has been compiled with instrumentation enabled, a tool may use ${t}ModuleGetDebugInfo and ${t}KernelGetProfileInfo 
 in order to decode the application's instructions and register usage for each function in the module.
@@ -640,6 +641,7 @@ Execution
 If a tool requires changing the address of an application's function,
 then it should use a custom loader layer to intercept API calls dealing with function pointers.
 For example, ${x}ModuleGetFunctionPointer and all flavors of ${x}CommandListAppendLaunchKernel.
+
 
 Program Debug
 =============
@@ -664,16 +666,23 @@ Device Debug Properties
 
 A tool may query the debug properties of a device by calling ${t}DeviceGetDebugProperties.
 
+To start a debug session, a tool should first query the debug properties of the device it wants to attach to.
+Support for attaching debuggers is indicated by the ${T}_DEVICE_DEBUG_PROPERTY_FLAG_ATTACH flag in ${t}_device_debug_properties_t.
+
+.. parsed-literal::
+
+    ${t}_device_debug_properties_t props;
+    ${t}DeviceGetDebugProperties(hDevice, &props);
+
+    if (${T}_DEVICE_DEBUG_PROPERTY_FLAG_ATTACH & props.flags == 0)
+        return; // debugging not supporting
+
 
 Attach and Detach
 -----------------
 
-To start a debug session, a tool should query the debug properties of the device
-it wants to attach to.  Support for attaching debuggers is indicated by the
-supports_attach property.
-
-A tool must attach to a device by calling ${t}DebugAttach.  The library will
-check the following properties:
+A tool must attach to a device by calling ${t}DebugAttach.
+The library will check the following properties:
 
   * the device must support attaching debuggers.
 
@@ -699,23 +708,22 @@ The following sample code demonstrates attaching and detaching:
 
 .. parsed-literal::
 
-    ${x}_device_handle_t device = ...;
-    ${t}_debug_session_handle_t session;
-    ${t}_debug_config_t config;
-    ${x}_result_t errcode;
+    ${t}_debug_session_handle_t hDebug;
 
+    ${t}_debug_config_t config;
     memset(&config, 0, sizeof(config));
     config.pid = ...;
 
-    errcode = ${t}DebugAttach(device, &config, &session);
+    errcode = ${t}DebugAttach(hDevice, &config, &hDebug);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = ${t}DebugDetach(session);
+    errcode = ${t}DebugDetach(hDebug);
     if (errcode)
         return errcode;
+
 
 Devices and Sub-Devices
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -723,7 +731,8 @@ Devices and Sub-Devices
 A tool may attach to any device and will implicitly be attached to all sub-devices of that device.
 
 Implementations that use separate code segments per sub-device may further allow attaching to sub-devices individually.
-Support for this is indicated by the supports_attach field in the device's debug properties.
+Support for this can be determined by calling ${t}DeviceGetDebugProperties using a sub-device handle and
+checking for the ${T}_DEVICE_DEBUG_PROPERTY_FLAG_ATTACH flag in ${t}_device_debug_properties_t.
 In that case, a tool may choose to either attach to the device or to one or more sub-devices.
 
 When attached to a sub-device, writes to the code segment will not be broadcast to other sub-devices,
@@ -739,8 +748,7 @@ Device Thread Identification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Device threads are identified by their slice, sub-slice, EU, and thread numbers,
-which lie between zero and the respective number reported in the device's
-properties minus one.
+which lie between zero and the respective number reported by ${x}_device_properties_t minus one.
 
 If a tool is attached to a device, device threads are enumerated for all sub-devices within that device.
 
@@ -748,11 +756,10 @@ The total number of threads on a device can be computed using device properties 
 
 .. parsed-literal::
 
-    ${x}_device_handle_t device = ...;
     ${x}_device_properties_t properties;
     uint64_t num_threads;
 
-    ${x}DeviceGetProperties(device, &properties);
+    ${x}DeviceGetProperties(hDevice, &properties);
 
     num_threads = properties.numSlices * properties.numSubslicesPerSlice *
         properties.numEUsPerSubslice * properties.numThreadsPerEU;
@@ -781,33 +788,21 @@ Debug Events
 ------------
 
 As soon as the debug session has been started, it will receive debug events from the device.
-
-To read the topmost event in the FIFO, the tool must call ${t}DebugReadEvent()
-passing a pointer to a ${t}_debug_event_t object to be filled and a timeout in
-milliseconds.
-
-A timeout of zero does not wait and immediately returns if no events are available.
-A timeout of UINT64_MAX waits indefinitely.
-If the timeout expires, ${X}_RESULT_NOT_READY is returned.
-
-On success, the topmost event is copied into the buffer.
+To read the topmost event in the FIFO, the tool must call ${t}DebugReadEvent.
 
 The following sample code demonstrates reading an event:
 
 .. parsed-literal::
 
-    ${t}_debug_session_handle_t session = ...;
     ${t}_debug_event_t event;
-    ${x}_result_t errcode;
-
-    errcode = ${t}DebugReadEvent(session, UINT64_MAX, &event);
+    errcode = ${t}DebugReadEvent(hDebug, UINT64_MAX, &event);
     if (errcode)
         return errcode;
 
     ...
 
     if (event.flags & ${T}_DEBUG_EVENT_FLAG_NEED_ACK) {
-        errcode = ${t}DebugAcknowledgeEvent(session, &event);
+        errcode = ${t}DebugAcknowledgeEvent(hDebug, &event);
         if (errcode)
             return errcode;
     }
@@ -819,14 +814,11 @@ A debug event is described by the ${t}_debug_event_t structure, which contains:
 
   * A bit-vector of ${t}_debug_event_flags_t, which can be:
 
-    * ${T}_DEBUG_EVENT_FLAG_NEED_ACK indicates that the event needs to be
-      acknowledged by calling ${t}DebugAcknowledgeEvent().  This allows tools to
-      perform any action in response to an event and indicate their completion
-      by acknowledging the event.
+    * ${T}_DEBUG_EVENT_FLAG_NEED_ACK indicates that the event needs to be acknowledged by calling ${t}DebugAcknowledgeEvent.
+      This allows tools to perform any action in response to an event and indicate their completion by acknowledging the event.
 
-      Implementations are allowed to block reading of new events until the
-      previous event has been acknowledged.  If an implementation allows reading
-      further events, it must allow acknowledging events out of order.
+      Implementations are allowed to block reading of new events until the previous event has been acknowledged.
+      If an implementation allows reading further events, it must allow acknowledging events out of order.
 
 
 Following the common fields, the event object contains event-specific fields depending on the event type.
@@ -844,201 +836,149 @@ Not all events have event-specific fields.
 
   * ${T}_DEBUG_EVENT_TYPE_MODULE_LOAD: an in-memory module was loaded onto the device.
 
-  * ${T}_DEBUG_EVENT_TYPE_MODULE_UNLOAD: an in-memory module is about to get
-    unloaded from the device.
+  * ${T}_DEBUG_EVENT_TYPE_MODULE_UNLOAD: an in-memory module is about to get unloaded from the device.
 
   * ${T}_DEBUG_EVENT_TYPE_THREAD_STOPPED: threads stopped due to a device exception.
 
-    The reported threads remain stopped until they are resumed by a call to ${t}DebugResume().
+    The reported threads remain stopped until they are resumed by a call to ${t}DebugResume.
 
   * ${T}_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE: threads cannot be interrupted because they are unavailable.
 
-    The event is generated in response to an interrupt request if none of the
-    requested threads is availalbe to be interrupted.
+    The event is generated in response to an interrupt request if none of the requested threads is available to be interrupted.
 
 
 Run Control
 -----------
 
-The tool may interrupt and resume device threads by calling ${t}DebugInterrupt()
-and ${t}DebugResume(), respectively.
+The tool may interrupt and resume device threads by calling ${t}DebugInterrupt and ${t}DebugResume, respectively.
 
-The thread argument may specify a single thread, a group of threads, or all
-threads on the device.  To specify all threads, the tool must set all fields in
-${x}_device_thread_t to their maximum value.  By setting some but not all fields
-to their maximum value, a tool may specify a group of threads.
+The thread argument may specify a single thread, a group of threads, or all threads on the device.
+To specify all threads, the tool must set all fields in ${x}_device_thread_t to their maximum value.
+By setting some but not all fields to their maximum value, a tool may specify a group of threads.
 
-The ${t}DebugInterrupt() call is not blocking.  When all specified threads
-either stopped or are determined to be currently unavailable, the tool receives
-a ${T}_DEBUG_EVENT_TYPE_THREAD_STOPPED event if at least one thread could be
-stopped or a ${T}_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE event if none of the
-threads is currently available.
+The ${t}DebugInterrupt call is not blocking.
+When all specified threads either stopped or are determined to be currently unavailable,
+the tool receives a ${T}_DEBUG_EVENT_TYPE_THREAD_STOPPED event if at least one thread could be stopped
+or a ${T}_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE event if none of the threads is currently available.
 
-If the thread argument specified a group of threads or all threads on the
-device, the event may be preceded by ${T}_DEBUG_EVENT_TYPE_THREAD_STOPPED events
-of individual threads.
+If the thread argument specified a group of threads or all threads on the device,
+the event may be preceded by ${T}_DEBUG_EVENT_TYPE_THREAD_STOPPED events of individual threads.
 
-The tool does not know whether a thread stopped or is unavailable until it tries
-to access its state or access memory through it.
-
+The tool does not know whether a thread stopped or is unavailable until it tries to access its state or access memory through it.
 Unavailable threads may become available at any time.
 
-The following sample code demonstrates how to interrupt and resume all threads
-in a debug session:
+The following sample code demonstrates how to interrupt and resume all threads in a debug session:
 
 .. parsed-literal::
 
-    ${t}_debug_session_handle_t session = ...;
-    ${x}_device_thread_t thread;
-    ${x}_result_t errcode;
-
-    thread.slice = UINT32_MAX;
-    thread.subslice = UINT32_MAX;
-    thread.eu = UINT32_MAX;
-    thread.thread = UINT32_MAX;
-
-    errcode = ${t}DebugInterrupt(session, thread);
-    if (errcode)
-        return errcode;
-
-    ...
-
-    errcode = ${t}DebugResume(session, thread);
-    if (errcode)
-        return errcode;
-
-
-
-Memory Access
--------------
-
-A tool may read and write memory in the context of a stopped device thread
-as if that thread had read or written the memory.
-
-Memory may be partitioned into device-specific memory spaces.
-
-Intel graphics devices, for example, use the following memory spaces defined in
-${t}_debug_memory_space_igfx_t:
-
-  * 0: default memory space
-  * 1: shared local memory space
-
-The default memory space may also be accessed in the context of the
-special thread with all fields set to their maximum value.
-
-To read and write memory, call the ${t}DebugReadMemory and ${t}DebugWriteMemory function, respectively.
-The functions take a ${t}_debug_session_handle_t, a thread identifier, a memory space selector,
-the virtual address of the memory to access, the size of the access, and
-an input or output buffer.
-
-The following example copies 16 bytes of memory from one location in the
-context of one Intel graphics device thread to another location in the
-default memory space.
-
-.. parsed-literal::
-
-    ${t}_debug_session_handle_t session = ...;
-    int memSpace = ...;
-    uint64_t src = ..., dst = ...;
-    ${x}_device_thread_t thread = ...;
     ${x}_device_thread_t allthreads;
-    uint8_t buffer[16];
-    ${x}_result_t errcode;
-
     allthreads.slice = UINT32_MAX;
     allthreads.subslice = UINT32_MAX;
     allthreads.eu = UINT32_MAX;
     allthreads.thread = UINT32_MAX;
 
-    errcode = ${t}DebugReadMemory(session, thread, memSpace, src, sizeof(buffer), buffer);
+    errcode = ${t}DebugInterrupt(hDebug, allthreads);
     if (errcode)
         return errcode;
 
     ...
 
-    errcode = ${t}DebugWriteMemory(session, allthreads, ${T}_DEBUG_MEMORY_SPACE_IGFX_DEFAULT, dst, sizeof(buffer), buffer);
+    errcode = ${t}DebugResume(hDebug, allthreads);
     if (errcode)
         return errcode;
+
+
+Memory Access
+-------------
+
+A tool may read and write memory in the context of a stopped device thread as if that thread had read or written the memory.
+
+Memory may be partitioned into device-specific memory spaces.
+For example, GPU devices support the following memory spaces, defined by ${t}_debug_memory_space_type_t:
+
+  * ${T}_DEBUG_MEMORY_SPACE_TYPE_DEFAULT - default memory space
+
+  * ${T}_DEBUG_MEMORY_SPACE_TYPE_SLM - shared local memory space
+
+The default memory space may also be accessed in the context of the special thread with all fields set to their maximum value.
+
+To read and write memory, call the ${t}DebugReadMemory and ${t}DebugWriteMemory function, respectively.
+The functions specify the thread(s), memory space and input or output buffer, respectively.
+
+The following example copies 16 bytes of memory from one location in the context of one device thread to another location in the default memory space:
+
+.. parsed-literal::
+
+    ${t}_debug_memory_space_desc_t srcSpace = {
+        ${T}_STRUCTURE_TYPE_DEBUG_MEMORY_SPACE_DESC,
+        nullptr,
+        ${T}_DEBUG_MEMORY_SPACE_TYPE_DEFAULT,
+        srcAddress
+    };
+    ${t}_debug_memory_space_desc_t dstSpace = {
+        ${T}_STRUCTURE_TYPE_DEBUG_MEMORY_SPACE_DESC,
+        nullptr,
+        ${T}_DEBUG_MEMORY_SPACE_TYPE_DEFAULT,
+        dstAddress
+    };
+
+    ${x}_device_thread_t thread0 = {
+        0, 0, 0, 0
+    };
+
+    uint8_t buffer[16];
+    errcode = ${t}DebugReadMemory(hDebug, thread0, &srcSpace, sizeof(buffer), buffer);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = ${t}DebugWriteMemory(hDebug, allthreads, &dstSpace, sizeof(buffer), buffer);
+    if (errcode)
+        return errcode;
+
 
 Register State Access
 ---------------------
 
 A tool may read and write the register state of a stopped device thread.
 The register state is represented as a randomly accessible range of memory.
-It starts with a description of the memory layout followed by the actual register state content.
-The layout is fixed per device thread.
 
-To read and write the register state, use the ${t}DebugReadRegisters and
-${t}DebugWriteRegisters function, respectively.
-They take a ${t}_debug_session_handle_t, a thread identifier, an offset into the
-register state area, an access size in bytes, and an input or output
-buffer.
+The types of register sets supported by a device can be queried using ${t}DebugGetRegisterSetProperties.
+The register set properties specify details about each register set,
+such as the maximum number of registers in each set, and whether the register set is read-only.
 
-The register state area starts with a ${t}_debug_regstate_t descriptor containing the following fields:
+.. parsed-literal::
 
-  * the size of the register state object in bytes
-
-  * the size of the register state descriptor in bytes.
-
-    This also defines the offset of the register set descriptor array.
-
-  * the size of each register set descriptor in bytes.
-
-  * the number of register set contained in this state object.
+    uint32_t nRegSets = 0;
+    ${t}DebugGetRegisterSetProperties(hDevice, &nRegSets, nullptr);
+    
+    ${t}_debug_regset_properties_t* pRegSets = allocate(nRegSets * sizeof(${t}_debug_regset_properties_t));
+    ${t}DebugGetRegisterSetProperties(hDevice, &nRegSets, pRegSets);
 
 
-The register state descriptor is followed by an array of register set descriptors
-starting at offset ${t}_debug_regstate_t.headerSize of the register state
-object.  Each describes one register set contained in the register state object
-via the following fields:
-
-  * the register set type
-
-    This is a device-specific enumeration.
-
-  * the register set version
-
-    This defines variations of the same basic register set as it evolves
-    over time.
-
-    Version numbers start at one with zero reserved to denote an invalid
-    or unsupported version of this register set.
-
-    New registers are typically added to the end of a register set
-    allowing tools to skip unknown portions while still providing limited
-    support for that device.
-
-  * The size of the register set in the register state object in bytes.
-
-  * The offset of the register set in the register state object.
-
+To read and write the register state, use the ${t}DebugReadRegisters and ${t}DebugWriteRegisters function, respectively.
 
 The following sample code demonstrates iterating over register sets:
 
 .. parsed-literal::
 
-    ${t}_debug_session_handle_t session = ...;
-    ${x}_device_thread_t thread = ...;
-    ${t}_debug_regstate_t state;
-    ${x}_result_t errcode;
-    uint16_t sec;
+    for (i = 0; i < nRegSets; ++i) {
+        ${t}_value_t* values = allocate(pRegSets[i].count * sizeof(${t}_value_t));
 
-    errcode = ${t}DebugReadRegisters(session, thread, 0ull, sizeof(state), &state);
-    if (errcode)
-        return errcode;
-
-    for (sec = 0; sec < state.numSec; ++i) {
-        ${t}_debug_regstate_t regset;
-        uint64_t offset;
-
-        offset = state.headerSize + (state.secSize * sec);
-
-        errcode = ${t}DebugReadRegisters(session, thread, offset, sizeof(regset), &regset);
+        errcode = ${t}DebugReadRegisters(hDebug, thread0, pRegSets[i].type, 0, pRegSets[i].count, values);
         if (errcode)
             return errcode;
 
         ...
+
+        errcode = ${t}DebugWriteRegisters(hDebug, thread0, pRegSets[i].type, 0, pRegSets[i].count, values);
+        if (errcode)
+            return errcode;
+
+        free(values);
     }
+
 
 .. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
 .. |MetricStreamer| image:: ../images/tools_metric_streamer.png?raw=true

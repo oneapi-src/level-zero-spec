@@ -8,20 +8,27 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Debug"
-ordinal: "7"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device debug property flags"
+class: $tDevice
+name: $t_device_debug_property_flags_t
+etors:
+    - name: ATTACH
+      desc: "the device supports attaching for debug"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device debug properties."
+desc: "Device debug properties queried using $tDeviceGetDebugProperties."
 class: $tDevice
 name: $t_device_debug_properties_t
 base: $t_base_properties_t
 members:
-    - type: "bool"
-      name: supports_attach
-      desc: "[out] the device node supports attaching"
+    - type: $t_device_debug_property_flags_t
+      name: flags
+      desc: "[out] returns 0 (none) or a valid combination of $t_device_debug_property_flag_t"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get device debug properties."
+desc: "Retrieves debug properties of the device."
 class: $tDevice
 name: GetDebugProperties
 params:
@@ -30,17 +37,14 @@ params:
       desc: "[in] device handle"
     - type: "$t_device_debug_properties_t*"
       name: pDebugProperties
-      desc: "[in,out] the debug properties of this device"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid device handle has been supplied"
+      desc: "[in,out] query result for debug properties"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Debug configuration"
+desc: "Debug configuration provided to $tDebugAttach"
 class: $tDebug
 name: $t_debug_config_t
 members:
-    - type: "uint32_t"
+    - type: uint32_t
       name: pid
       desc: "[in] the host process identifier"
 --- #--------------------------------------------------------------------------
@@ -49,6 +53,8 @@ desc: "Attach to a device."
 class: $tDebug
 name: Attach
 decl: static
+details:
+    - "The device must be enabled for debug; see $sSchedulerSetComputeUnitDebugMode."
 params:
     - type: $t_device_handle_t
       name: hDevice
@@ -60,9 +66,6 @@ params:
       name: phDebug
       desc: "[out] debug session handle"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid device handle has been supplied"
-        - "an invalid configuration has been supplied"
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "attaching to this device is not supported"
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
@@ -78,20 +81,17 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in][release] debug session handle"
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle has been supplied"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Debug event flags."
+desc: "Supported debug event flags."
 class: $tDebug
 name: $t_debug_event_flags_t
 etors:
     - name: NEED_ACK
-      desc: "The event needs to be acknowledged by calling $tDebugAcknowledgeEvent()."
+      desc: "The event needs to be acknowledged by calling $tDebugAcknowledgeEvent."
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Debug event types."
+desc: "Supported debug event types."
 class: $tDebug
 name: $t_debug_event_type_t
 etors:
@@ -114,7 +114,7 @@ etors:
       desc: "The thread is not available to be stopped"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Debug detach reason."
+desc: "Supported debug detach reasons."
 class: $tDebug
 name: $t_debug_detach_reason_t
 etors:
@@ -125,34 +125,34 @@ etors:
       desc: "The host process exited"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event information for $T_DEBUG_EVENT_DETACHED"
+desc: "Event information for $T_DEBUG_EVENT_TYPE_DETACHED"
 class: $tDebug
 name: $t_debug_event_info_detached_t
 members:
-    - type: "uint8_t"
+    - type: $t_debug_detach_reason_t
       name: reason
       desc: "[out] the detach reason"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event information for $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
+desc: "Event information for $T_DEBUG_EVENT_TYPE_MODULE_LOAD and $T_DEBUG_EVENT_TYPE_MODULE_UNLOAD"
 class: $tDebug
 name: $t_debug_event_info_module_t
 members:
     - type: $t_module_debug_info_format_t
       name: format
       desc: "[out] the module format"
-    - type: "uint64_t"
+    - type: uint64_t
       name: moduleBegin
       desc: "[out] the begin address of the in-memory module"
-    - type: "uint64_t"
+    - type: uint64_t
       name: moduleEnd
       desc: "[out] the end address of the in-memory module"
-    - type: "uint64_t"
+    - type: uint64_t
       name: load
       desc: "[out] the load address of the module on the device"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event information for $T_DEBUG_EVENT_THREAD_STOPPED/UNAVAILABLE"
+desc: "Event information for $T_DEBUG_EVENT_TYPE_THREAD_STOPPED and $T_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE"
 class: $tDebug
 name: $t_debug_event_info_thread_stopped_t
 members:
@@ -161,26 +161,26 @@ members:
       desc: "[out] the stopped/unavailable thread"
 --- #--------------------------------------------------------------------------
 type: union
-desc: "Event type specific information"
+desc: "Event type-specific information"
 class: $tDebug
 name: $t_debug_event_info_t
 members:
     - type: $t_debug_event_info_detached_t
       name: detached
-      desc: "[out] type == $T_DEBUG_EVENT_DETACHED"
+      desc: "[out] type == $T_DEBUG_EVENT_TYPE_DETACHED"
     - type: $t_debug_event_info_module_t
       name: module
-      desc: "[out] type == $T_DEBUG_EVENT_MODULE_LOAD/UNLOAD"
+      desc: "[out] type == $T_DEBUG_EVENT_TYPE_MODULE_LOAD or $T_DEBUG_EVENT_TYPE_MODULE_UNLOAD"
     - type: $t_debug_event_info_thread_stopped_t
       name: thread
-      desc: "[out] type == $T_DEBUG_EVENT_THREAD_STOPPED/UNAVAILABLE"
+      desc: "[out] type == $T_DEBUG_EVENT_TYPE_THREAD_STOPPED or $T_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A debug event on the device."
 class: $tDebug
 name: $t_debug_event_t
 members:
-    - type: "uint8_t"
+    - type: $t_debug_event_type_t
       name: type
       desc: "[out] the event type"
     - type: $t_debug_event_flags_t
@@ -198,15 +198,17 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "uint64_t"
+    - type: uint64_t
       name: timeout
-      desc: "[in] timeout in milliseconds (or UINT64_MAX for infinite)"
+      desc: |
+            [in] if non-zero, then indicates the maximum time (in milliseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+            if zero, then immediately returns the status of the event;
+            if UINT64_MAX, then function will not return until complete or device is lost.
+            Due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies.
     - type: "$t_debug_event_t*"
       name: event
       desc: "[in,out] a pointer to a $t_debug_event_t."
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or a NULL event pointer has been supplied"
     - $X_RESULT_NOT_READY:
         - "the timeout expired"
 --- #--------------------------------------------------------------------------
@@ -218,12 +220,9 @@ params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
-    - type: "$t_debug_event_t*"
+    - type: "const $t_debug_event_t*"
       name: event
       desc: "[in] a pointer to a $t_debug_event_t."
-returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or a NULL event pointer has been supplied"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Interrupt device threads."
@@ -237,8 +236,7 @@ params:
       name: thread
       desc: "[in] the thread to interrupt"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "the thread is already stopped or unavailable"
 --- #--------------------------------------------------------------------------
 type: function
@@ -253,93 +251,97 @@ params:
       name: thread
       desc: "[in] the thread to resume"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "the thread is already running or unavailable"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Memory spaces for Intel Graphics devices."
+desc: "Supported device memory space types."
 class: $tDebug
-name: $t_debug_memory_space_igfx_t
+name: $t_debug_memory_space_type_t
 etors:
     - name: DEFAULT
       desc: "default memory space (attribute may be omitted)"
       value: "0"
     - name: SLM
-      desc: "shared local memory space"
+      desc: "shared local memory space (GPU-only)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device memory space descriptor"
+class: $tDebug
+name: $t_debug_memory_space_desc_t
+base: $t_base_desc_t
+members:
+    - type: $t_debug_memory_space_type_t
+      name: type
+      desc: "[in] type of memory space"
+    - type: uint64_t
+      name: address
+      desc: "[in] the virtual address within the memory space"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read memory."
 class: $tDebug
 name: ReadMemory
+details:
+    - "The thread identifier 'all' can be used for accessing the default memory space, e.g. for setting breakpoints."
 params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
     - type: $x_device_thread_t
       name: thread
-      desc: "[in] the thread context.  The special thread 'all' can be used for accessing the default memory space, e.g. for setting breakpoints."
-    - type: "int"
-      name: memSpace
-      desc: "[in] the (device-specific) memory space"
-    - type: "uint64_t"
-      name: address
-      desc: "[in] the virtual address of the memory to read from"
-    - type: "size_t"
+      desc: "[in] the thread identifier."
+    - type: "const $t_debug_memory_space_desc_t*"
+      name: desc
+      desc: "[in] memory space descriptor"
+    - type: size_t
       name: size
       desc: "[in] the number of bytes to read"
     - type: "void*"
       name: buffer
       desc: "[in,out] a buffer to hold a copy of the memory"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
-        - "the thread is running or unavailable"
-        - "an invalid address has been supplied"
     - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "the thread is running or unavailable"
         - "the memory cannot be accessed from the supplied thread"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Write memory."
 class: $tDebug
 name: WriteMemory
+details:
+    - "The thread identifier 'all' can be used for accessing the default memory space, e.g. for setting breakpoints."
 params:
     - type: $t_debug_session_handle_t
       name: hDebug
       desc: "[in] debug session handle"
     - type: $x_device_thread_t
       name: thread
-      desc: "[in] the thread context.  The special thread 'all' can be used for accessing the default memory space, e.g. for setting breakpoints."
-    - type: "int"
-      name: memSpace
-      desc: "[in] the (device-specific) memory space"
-    - type: "uint64_t"
-      name: address
-      desc: "[in] the virtual address of the memory to write to"
-    - type: "size_t"
+      desc: "[in] the thread identifier."
+    - type: "const $t_debug_memory_space_desc_t*"
+      name: desc
+      desc: "[in] memory space descriptor"
+    - type: size_t
       name: size
       desc: "[in] the number of bytes to write"
     - type: "const void*"
       name: buffer
       desc: "[in] a buffer holding the pattern to write"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
-        - "the thread is running or unavailable"
-        - "an invalid address has been supplied"
     - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "the thread is running or unavailable"
         - "the memory cannot be accessed from the supplied thread"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Register set types for Intel Graphics devices."
+desc: "Supported device register set types."
 class: $tDebug
-name: $t_debug_regset_igfx_t
+name: $t_debug_regset_type_t
 etors:
     - name: INVALID
       desc: "An invalid register set"
       value: "0"
-    - name: GRF
-      desc: "The general register set"
+    - name: GPR
+      desc: "The general purpose register set"
     - name: ACC
       desc: "The accumulator register set"
     - name: ADDR
@@ -347,42 +349,52 @@ etors:
     - name: FLAG
       desc: "The flags register set"
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "A register set descriptor."
+type: enum
+desc: "Supported device register set flags."
 class: $tDebug
-name: $t_debug_regset_desc_t
-base: $t_base_desc_t
-members:
-    - type: "uint16_t"
-      name: type
-      desc: "[out] the register set type type"
-    - type: "uint16_t"
-      name: version
-      desc: "[out] the register set version"
-    - type: "uint32_t"
-      name: size
-      desc: "[out] the size of the register set in bytes"
-    - type: "uint64_t"
-      name: offset
-      desc: "[out] the offset into the register state area"
+name: $t_debug_regset_flags_t
+etors:
+    - name: READ_ONLY
+      desc: "register set is read-only"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "A register state descriptor."
+desc: "Device register set properties queried using $tDebugGetRegisterSetProperties."
 class: $tDebug
-name: $t_debug_regstate_t
+name: $t_debug_regset_properties_t
+base: $t_base_properties_t
 members:
-    - type: "uint32_t"
-      name: size
-      desc: "[out] the size of the register state object in bytes"
-    - type: "uint8_t"
-      name: headerSize
-      desc: "[out] the size of the register state descriptor in bytes"
-    - type: "uint8_t"
-      name: secSize
-      desc: "[out] the size of register set descriptors in bytes"
-    - type: "uint16_t"
-      name: numSec
-      desc: "[out] the number of register set descriptors"
+    - type: $t_debug_regset_type_t
+      name: type
+      desc: "[out] register set type"
+    - type: $t_debug_regset_flags_t
+      name: flags
+      desc: "[out] register set flags"
+    - type: uint32_t
+      name: count
+      desc: "[out] number of registers in the set"
+    - type: $t_value_type_t
+      name: valueType
+      desc: "[out] value type of registers in the set"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves debug register set properties."
+class: $tDebug
+name: GetRegisterSetProperties
+decl: static
+params:
+    - type: $t_device_handle_t
+      name: hDevice
+      desc: "[in] device handle"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of register set properties.
+            if count is zero, then the driver will update the value with the total number of register set properties available.
+            if count is non-zero, then driver will only retrieve that number of register set properties.
+            if count is larger than the number of register set properties available, then the driver will update the value with the correct number of registry set properties available.
+    - type: "$t_debug_regset_properties_t*"
+      name: pRegisterSetProperties
+      desc: "[in,out][optional][range(0, *pCount)] array of query results for register set properties"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read register state."
@@ -394,21 +406,22 @@ params:
       desc: "[in] debug session handle"
     - type: $x_device_thread_t
       name: thread
-      desc: "[in] the thread context"
-    - type: "uint64_t"
-      name: offset
-      desc: "[in] the offset into the register state area"
-    - type: "size_t"
-      name: size
-      desc: "[in] the number of bytes to read"
-    - type: "void*"
-      name: buffer
-      desc: "[in,out] a buffer to hold a copy of the register state"
+      desc: "[in] the thread identifier"
+    - type: $t_debug_regset_type_t
+      name: type
+      desc: "[in] register set type"
+    - type: uint32_t
+      name: start
+      desc: "[in] the starting offset into the register state area; must be less than $t_debug_regset_properties_t.count for the type"
+    - type: uint32_t
+      name: count
+      desc: "[in] the number of registers to read; start+count must be <= zet_debug_register_group_properties_t.count for the type"
+    - type: "$t_value_t*"
+      name: pRegisterValues
+      desc: "[in,out][optional][range(0, count)] buffer of register values"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "the thread is running or unavailable"
-        - "an invalid offset or size has been supplied"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Write register state."
@@ -420,21 +433,22 @@ params:
       desc: "[in] debug session handle"
     - type: $x_device_thread_t
       name: thread
-      desc: "[in] the thread context"
-    - type: "uint64_t"
-      name: offset
-      desc: "[in] the offset into the register state area"
-    - type: "size_t"
-      name: size
-      desc: "[in] the number of bytes to write"
-    - type: "const void*"
-      name: buffer
-      desc: "[in] a buffer holding the pattern to write"
+      desc: "[in] the thread identifier"
+    - type: $t_debug_regset_type_t
+      name: type
+      desc: "[in] register set type"
+    - type: uint32_t
+      name: start
+      desc: "[in] the starting offset into the register state area; must be less than $t_debug_regset_properties_t.count for the type"
+    - type: uint32_t
+      name: count
+      desc: "[in] the number of registers to write; start+count must be <= zet_debug_register_group_properties_t.count for the type"
+    - type: "$t_value_t*"
+      name: pRegisterValues
+      desc: "[in,out][optional][range(0, count)] buffer of register values"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "an invalid debug handle or thread identifier has been supplied"
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "the thread is running or unavailable"
-        - "an invalid offset or size has been supplied"
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for Debug API"
