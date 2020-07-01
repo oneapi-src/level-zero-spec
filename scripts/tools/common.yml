@@ -132,7 +132,6 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported value types"
-class: $t
 name: $t_value_type_t
 etors:
     - name: UINT32
@@ -148,7 +147,6 @@ etors:
 --- #--------------------------------------------------------------------------
 type: union
 desc: "Union of values"
-class: $t
 name: $t_value_t
 members:
     - type: uint32_t
@@ -169,7 +167,6 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Typed value"
-class: $t
 name: $t_typed_value_t
 members:
     - type: $t_value_type_t

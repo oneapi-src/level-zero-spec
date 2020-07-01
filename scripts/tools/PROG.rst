@@ -964,7 +964,7 @@ The following sample code demonstrates iterating over register sets:
 .. parsed-literal::
 
     for (i = 0; i < nRegSets; ++i) {
-        ${t}_value_t* values = allocate(pRegSets[i].count * sizeof(${t}_value_t));
+        void* values = allocate(pRegSets[i].count * pRegSets[i].valueSize);
 
         errcode = ${t}DebugReadRegisters(hDebug, thread0, pRegSets[i].type, 0, pRegSets[i].count, values);
         if (errcode)

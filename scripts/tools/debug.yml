@@ -374,7 +374,10 @@ members:
       desc: "[out] number of registers in the set"
     - type: $t_value_type_t
       name: valueType
-      desc: "[out] value type of registers in the set"
+      desc: "[out] register value type"
+    - type: size_t
+      name: valueSize
+      desc: "[out] register value size in bytes"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves debug register set properties."
@@ -416,7 +419,7 @@ params:
     - type: uint32_t
       name: count
       desc: "[in] the number of registers to read; start+count must be <= zet_debug_register_group_properties_t.count for the type"
-    - type: "$t_value_t*"
+    - type: "void*"
       name: pRegisterValues
       desc: "[in,out][optional][range(0, count)] buffer of register values"
 returns:
@@ -443,7 +446,7 @@ params:
     - type: uint32_t
       name: count
       desc: "[in] the number of registers to write; start+count must be <= zet_debug_register_group_properties_t.count for the type"
-    - type: "$t_value_t*"
+    - type: "void*"
       name: pRegisterValues
       desc: "[in,out][optional][range(0, count)] buffer of register values"
 returns:
