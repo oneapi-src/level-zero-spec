@@ -571,10 +571,9 @@ configuration:
 
 .. parsed-literal::
 
-       // Large SLM for Intermediate and Last Level cache.
-       // Note: The intermediate cache setting is applied to each kernel.
-       ${x}_cache_config_flags_t cacheConfig = ${X}_CACHE_CONFIG_FLAG_LARGE_SLM;
-       ${x}KernelSetAttribute(hKernel, ${X}_KERNEL_ATTRIBUTE_INTERMEDIATE_CACHE_CONFIG, sizeof(cacheConfig), &cacheConfig);
+       // Configure cache to support larger SLM
+       // Note: The cache setting is applied to each kernel.
+       ${x}KernelSetCacheConfig(hKernel, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
 
        ...
 
