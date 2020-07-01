@@ -575,7 +575,8 @@ configuration:
        // Note: The cache setting is applied to each kernel.
        ${x}KernelSetCacheConfig(hKernel, ${X}_CACHE_CONFIG_FLAG_LARGE_SLM);
 
-       ...
+
+.. _external-memory:
 
 External Memory Import and Export
 ---------------------------------
@@ -1726,10 +1727,20 @@ The following pseudo-code demonstrates a sequence for using fine-grain residency
        ${x}ContextEvictMemory(hContext, hDevice, begin->next->next, sizeof(node));
        ...
 
-OpenCL Interoperability
------------------------
+Interoperability with Other APIs
+--------------------------------
+Level-Zero includes general-purpose interoperability mechanisms for
+memory allocations (both images and device memory) and modules.
 
-Interoperability with OpenCL is currently only supported *from* OpenCL cl_program *to* Level-Zero ${x}Module.
+Memory allocations may be shared between Level-Zero and other APIs via
+:ref:`external-memory`.
+Level-Zero supports exporting memory allocations for use in other APIs
+and importing memory allocations from other APIs.
+
+Modules may be shared between Level-Zero and other APIs via native
+format binaries, see ${x}ModuleGetNativeBinary and ${X}_MODULE_FORMAT_NATIVE.
+
+The following pseudo-code demonstrates interoperability with OpenCL *from* a OpenCL cl_program *to* a Level-Zero Kernel:
 
 .. parsed-literal::
 
