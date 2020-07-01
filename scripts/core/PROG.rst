@@ -1364,33 +1364,8 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
        ${x}KernelCreate(hModule, &kernelDesc, &hKernel);
        ...
 
-Kernel Attributes and Properties
+Kernel Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Use ${x}KernelSetAttribute to set attributes for a Kernel.
-
-.. parsed-literal::
-
-    // Kernel performs indirect device access.
-    bool_t isIndirect = true;
-    ${x}KernelSetAttribute(hKernel, ${X}_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
-    ...
-
-Use ${x}KernelSetAttribute to get attributes for a Kernel.
-
-.. parsed-literal::
-
-    // Does kernel perform indirect device access.
-    ${x}KernelGetAttribute(hKernel, ${X}_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS, sizeof(bool_t), &isIndirect);
-    ...
-    
-    uint32_t strSize = 0; // Size of string + null terminator
-    ${x}KernelGetSourceAttributes(hKernel, &strSize, nullptr );
-    char* pAttributes = allocate(strSize);
-    ${x}KernelGetSourceAttributes(hKernel, nullptr, pAttributes );
-    ...
-
-See ${x}_kernel_attribute_t for more information on the "set" and "get" attributes.
 
 Use ${x}KernelGetProperties to query invariant properties from a Kernel object.
 
@@ -1664,11 +1639,11 @@ as multiple levels of indirection, there are two methods available:
 
 1. The application may set the ${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 
-    + The application should specify which allocations will be indirectly accessed, using ${x}KernelSetAttribute and the following, to optimize which allocations are made resident.
+    + The application should specify which allocation types will be indirectly accessed, using ${x}KernelSetIndirectAccess and the following flags, to optimize which allocations are made resident.
            
-        * ${X}_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS
-        * ${X}_KERNEL_ATTRIBUTE_INDIRECT_DEVICE_ACCESS
-        * ${X}_KERNEL_ATTRIBUTE_INDIRECT_SHARED_ACCESS
+        * ${X}_KERNEL_INDIRECT_ACCESS_FLAG_HOST
+        * ${X}_KERNEL_INDIRECT_ACCESS_FLAG_DEVICE
+        * ${X}_KERNEL_INDIRECT_ACCESS_FLAG_SHARED
 
     + If the driver is unable to make all allocations resident, then the call to ${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
@@ -1691,8 +1666,7 @@ The following pseudo-code demonstrates a sequence for using coarse-grain residen
        ${x}MemAllocHost(hContext, &desc, sizeof(node), 1, &begin->next->next);
 
        // 'begin' is passed as kernel argument and appended into command list
-       bool hasIndirectHostAccess = true;
-       ${x}KernelSetAttribute(hFuncArgs, ${X}_KERNEL_ATTRIBUTE_INDIRECT_HOST_ACCESS, sizeof(bool), &hasIndirectHostAccess);
+       ${x}KernelSetIndirectAccess(hKernel, ${X}_KERNEL_INDIRECT_ACCESS_FLAG_HOST);
        ${x}KernelSetArgumentValue(hKernel, 0, sizeof(node*), &begin);
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 

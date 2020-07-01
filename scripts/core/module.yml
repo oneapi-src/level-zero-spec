@@ -499,76 +499,54 @@ returns:
     - $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Kernel attributes"
+desc: "Kernel indirect access flags"
 class: $xKernel
-name: $x_kernel_attribute_t
-analogue:
-    - "**cl_kernel_exec_info**"
+name: $x_kernel_indirect_access_flags_t
 etors:
-    - name: INDIRECT_HOST_ACCESS
-      value: "0"
-      desc: "Indicates that the kernel accesses host allocations indirectly (default: false, type: bool_t)"
-    - name: INDIRECT_DEVICE_ACCESS
-      desc: "Indicates that the kernel accesses device allocations indirectly (default: false, type: bool_t)"
-    - name: INDIRECT_SHARED_ACCESS
-      desc: "Indicates that the kernel accesses shared allocations indirectly (default: false, type: bool_t)"
+    - name: HOST
+      desc: "Indicates that the kernel accesses host allocations indirectly."
+    - name: DEVICE
+      desc: "Indicates that the kernel accesses device allocations indirectly."
+    - name: SHARED
+      desc: "Indicates that the kernel accesses shared allocations indirectly."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Sets a kernel attribute"
+desc: "Sets kernel indirect access flags."
 class: $xKernel
-name: SetAttribute
-analogue:
-    - "**clSetKernelExecInfo**"
+name: SetIndirectAccess
 details:
-    - "This function may **not** be called from simultaneous threads with the same function handle."
+    - "The application should specify which allocations will be indirectly accessed by the kernel to allow driver to optimize which allocations are made resident"
+    - "This function may **not** be called from simultaneous threads with the same Kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object"
-    - type: "$x_kernel_attribute_t"
-      name: attr
-      desc: "[in] attribute to set"
-    - type: "uint32_t"
-      name: size
-      desc: "[in] size in bytes of kernel attribute value."
-    - type: "const void*"
-      name: pValue
-      desc: "[in][optional] pointer to attribute value."
-returns:
-    - $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
+    - type: "$x_kernel_indirect_access_flags_t"
+      name: flags
+      desc: "[in] kernel indirect access flags"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Gets a kernel attribute"
+desc: "Get kernel indirect access flags."
 class: $xKernel
-name: GetAttribute
+name: GetIndirectAccess
 details:
-    - "The caller sets pValue to nullptr when querying only for size."
-    - "The caller must provide memory for pValue querying when querying size."
-    - "This function may be called from simultaneous threads with the same function handle."
+    - "This function may be called from simultaneous threads with the same Kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object"
-    - type: "$x_kernel_attribute_t"
-      name: attr
-      desc: "[in] attribute to get. Documentation for $x_kernel_attribute_t for return type information for pValue."
-    - type: "uint32_t*"
-      name: pSize
-      desc: "[in,out] size in bytes needed for kernel attribute value. If pValue is nullptr then the size needed for pValue memory will be written to pSize. Only need to query size for arbitrary sized attributes."
-    - type: "void*"
-      name: pValue
-      desc: "[in,out][optional] pointer to attribute value result."
-returns:
-    - $X_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
+    - type: "$x_kernel_attribute_t*"
+      name: pFlags
+      desc: "[out] query result for kernel indirect access flags."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Gets a declared kernel attribute (i.e. can be specified with __attribute__ in runtime language)."
 class: $xKernel
 name: GetSourceAttributes
 details:
-    - "This function may be called from simultaneous threads with the same function handle."
+    - "This function may be called from simultaneous threads with the same Kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
