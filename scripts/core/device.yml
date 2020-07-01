@@ -130,7 +130,7 @@ members:
       desc: "[out] 0 (none) or a valid combination of $x_device_property_flag_t"
     - type: uint32_t
       name: subdeviceId
-      desc: "[out] sub-device id. Only valid if $X_DEVICE_PROPERTY_FLAGS_SUBDEVICE is set."
+      desc: "[out] sub-device id. Only valid if $X_DEVICE_PROPERTY_FLAG_SUBDEVICE is set."
     - type: uint32_t
       name: coreClockRate
       desc: "[out] Clock rate for device core."
@@ -347,7 +347,7 @@ members:
       name: fp16flags
       desc: |
             [out] Capabilities for half-precision floating-point operations.
-            returns 0 (if $X_DEVICE_MODULE_FLAGS_FP16 is not set) or a combination of $x_device_fp_flag_t.
+            returns 0 (if $X_DEVICE_MODULE_FLAG_FP16 is not set) or a combination of $x_device_fp_flag_t.
     - type: $x_device_fp_flags_t
       name: fp32flags
       desc: |
@@ -357,7 +357,7 @@ members:
       name: fp64flags
       desc: |
             [out] Capabilities for double-precision floating-point operations.
-            returns 0 (if $X_DEVICE_MODULE_FLAGS_FP64 is not set) or a combination of $x_device_fp_flag_t.
+            returns 0 (if $X_DEVICE_MODULE_FLAG_FP64 is not set) or a combination of $x_device_fp_flag_t.
     - type: uint32_t
       name: maxArgumentsSize
       desc: "[out] Maximum kernel argument size that is supported."

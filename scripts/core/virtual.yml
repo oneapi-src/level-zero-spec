@@ -30,7 +30,7 @@ decl: static
 ordinal: "0"
 details:
     - "The application must only use the memory allocation on the context for which it was created."
-    - "The starting address and size must be page aligned. See $xVirtualQueryPageSize."
+    - "The starting address and size must be page aligned. See $xVirtualMemQueryPageSize."
     - "If pStart is not null then implementation will attempt to reserve starting from that address. If not available then will find another suitable starting address."
     - "The application may call this function from simultaneous threads."
     - "The access attributes will default to none to indicate reservation is inaccessible."
@@ -138,7 +138,7 @@ decl: static
 ordinal: "0"
 details:
     - "The application must only use the physical memory object on the context for which it was created."
-    - "The size must be page aligned. See $xVirtualQueryPageSize."
+    - "The size must be page aligned. See $xVirtualMemQueryPageSize."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -189,7 +189,7 @@ ordinal: "0"
 details:
     - "The virtual address range must have been reserved using $xVirtualMemReserve."
     - "The application must only use the mapped memory allocation on the context for which it was created."
-    - "The virtual start address and size must be page aligned. See $xVirtualQueryPageSize."
+    - "The virtual start address and size must be page aligned. See $xVirtualMemQueryPageSize."
     - "The application should use, for the starting address and size, the same size alignment used for the physical allocation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
