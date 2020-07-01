@@ -537,7 +537,7 @@ params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object"
-    - type: "$x_kernel_attribute_t*"
+    - type: "$x_kernel_indirect_access_flags_t*"
       name: pFlags
       desc: "[out] query result for kernel indirect access flags."
 --- #--------------------------------------------------------------------------
