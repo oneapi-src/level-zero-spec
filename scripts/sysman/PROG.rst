@@ -1466,14 +1466,25 @@ locations. The following locations are supported:
 +-------------------------------------------------------------+-------------------------------------------------------------+
 | Temperature sensor location                                 | Description                                                 |
 +=============================================================+=============================================================+
-| ${S}_TEMP_SENSORS_GLOBAL         | Returns the maximum measured                                |
+| ${S}_TEMP_SENSORS_GLOBAL         | Returns the maximum measured temperature                    |
 |                                                             | across all sensors in the device.                           |
 +-------------------------------------------------------------+-------------------------------------------------------------+
-| ${S}_TEMP_SENSORS_GPU            | Returns the maximum measured                                |
+| ${S}_TEMP_SENSORS_GPU            | Returns the maximum measured temperature                    |
 |                                                             | across all sensors in the GPU                               |
 |                                                             | accelerator.                                                |
 +-------------------------------------------------------------+-------------------------------------------------------------+
-| ${S}_TEMP_SENSORS_MEMORY         | Returns the maximum measured                                |
+| ${S}_TEMP_SENSORS_MEMORY         | Returns the maximum measured temperature                    |
+|                                                             | across all sensors in the device                            |
+|                                                             | memory.                                                     |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| ${S}_TEMP_SENSORS_GLOBAL_MIN     | Returns the minimum measured temperature                    |
+|                                                             | across all sensors in the device.                           |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| ${S}_TEMP_SENSORS_GPU_MIN        | Returns the minimum measured temperature                    |
+|                                                             | across all sensors in the GPU                               |
+|                                                             | accelerator.                                                |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| ${S}_TEMP_SENSORS_MEMORY_MIN     | Returns the minimum measured temperature                    |
 |                                                             | across all sensors in the device                            |
 |                                                             | memory.                                                     |
 +-------------------------------------------------------------+-------------------------------------------------------------+
