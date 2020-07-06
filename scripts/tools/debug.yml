@@ -54,7 +54,7 @@ class: $tDebug
 name: Attach
 decl: static
 details:
-    - "The device must be enabled for debug; see $sSchedulerSetComputeUnitDebugMode."
+    - "The device must be enabled for debug; see $xsSchedulerSetComputeUnitDebugMode."
 params:
     - type: $t_device_handle_t
       name: hDevice

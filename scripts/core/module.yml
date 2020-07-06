@@ -276,7 +276,7 @@ class: $xModule
 name: $x_module_property_flags_t
 etors:
     - name: IMPORTS
-      desc: "Module has imports (i.e. imported global variables and/or kernels). See ${x}ModuleDynamicLink."
+      desc: "Module has imports (i.e. imported global variables and/or kernels). See $xModuleDynamicLink."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Module properties"

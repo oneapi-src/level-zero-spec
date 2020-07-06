@@ -8,13 +8,11 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool Experimental Extension APIs for API Tracing"
-includes:
-    - "$x_callbacks.h"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API Tracing Experimental Extension Name"
 name: $T_API_TRACING_EXP_NAME
-value: '"$T_experimental_api_tracing"'
+value: '"$XT_experimental_api_tracing"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "API Tracing Experimental Extension Version(s)"
