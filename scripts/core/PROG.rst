@@ -677,14 +677,15 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
     ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
 
     ${x}_command_queue_group_properties_t* cmdqueueGroupProperties = (${x}_command_queue_group_properties_t*)
-        malloc(cmdqueueGroupCount * sizeof(${x}_command_queue_group_properties_t));
-    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, allQueues);
+        allocate(cmdqueueGroupCount * sizeof(${x}_command_queue_group_properties_t));
+    ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, cmdqueueGroupProperties);
 
 
     // Find a proper command queue
-    for(uint32_t i = 0; i < cmdqueueGroupCount; ++i) {
-        if( cmdqueueGroupProperties.flags & ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE ) {
-            command_queue_ordinal = i;
+    uint32_t computeQueueGroupOrdinal = cmdqueueGroupCount;
+    for( uint32_t i = 0; i < cmdqueueGroupCount; ++i ) {
+        if( cmdqueueGroupProperties[ i ].flags & ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE ) {
+            computeQueueGroupOrdinal = i;
             break;
         }
     }
