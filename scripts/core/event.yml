@@ -70,7 +70,7 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_INVALID_SIZE:
-        - "0 < desc->count"
+        - "`0 < desc->count`"
         - "`(nullptr == phDevices) && (0 < numDevices)`"
 --- #--------------------------------------------------------------------------
 type: function
@@ -142,7 +142,7 @@ analogue:
     - vkCreateEvent
 details:
     - "An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies have completed."
-    - "The application must ensure multiple events do not use the same location within the same pool."
+    - "The application must ensure the location in the pool is not being used by another event."
     - "The application must **not** call this function from simultaneous threads with the same event pool handle."
     - "The implementation of this function should be lock-free."
 params:
