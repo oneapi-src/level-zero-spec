@@ -1004,9 +1004,9 @@ The following diagram illustrates a dependency between command lists using event
 Kernel Timestamp Events
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-A kernel timestamp event is a special type of event that records device timestamps at the start and end of the execution of kernels.
+A kernel timestamp event is a special type of event that records device timestamps at the start and end of the execution of kernels. The primary motivation for kernel timestamps is to provide a duration of execution.  For consistency and orthogonality, kernel timestamps are also supported for non-kernel operations. Kernel timestamps execute along a device timeline but because of limited range may wrap unexpectedly. Because of this, the temporal order of two kernel timestamps shouldn't be inferred despite coincidental START/END values. {x}CommandListAppendWriteGlobalTimestamp provides a similar mechanism but with maximum range.  Timestamps from {x}CommandListAppendWriteGlobalTimestamp and kernel timestamp events should not be inferred as equivalent even if reported within identical ranges.
 
-- A kernel timestamp event can only be signaled from ${x}CommandListAppendLaunchKernel et al. functions
+- The duration of a kernel timestamp for ${x}CommandListAppendSignalEvent and ${x}EventHostSignal is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality. 
 - A kernel timestamp event result can be queried using either ${x}EventQueryKernelTimestamp or ${x}CommandListAppendQueryKernelTimestamps
 - The ${x}_kernel_timestamp_result_t contains both the per-context and global timestamp values at the start and end of the kernel's execution
 - Since these counters are only 32bits, the application must detect and handle counter wrapping when calculating execution time

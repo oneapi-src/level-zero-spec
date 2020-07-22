@@ -237,7 +237,7 @@ analogue:
     - vkCmdSetEvent
 details:
     - "The application must ensure the events are accessible by the device on which the command list was created."
-    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The duration of an event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -280,7 +280,7 @@ name: HostSignal
 analogue:
     - clSetUserEventStatus
 details:
-    - "The application must ensure the signal event was **not** created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The duration of an event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
