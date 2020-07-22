@@ -32,6 +32,12 @@ from templates import helper as th
 #include <stddef.h>
 %endif
 
+#if defined(__GNUC__)
+// disable unknown pragma warning message
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#endif
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -209,6 +215,10 @@ typedef struct _${n}_callbacks_t
 
 #if defined(__cplusplus)
 } // extern "C"
+#endif
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
 #endif
 
 #endif // _${N}_API_H

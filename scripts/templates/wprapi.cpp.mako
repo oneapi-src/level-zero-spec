@@ -33,6 +33,12 @@ def define_dbg(obj, tags):
 #define _${X}_STRING(s) #s
 #define ${X}_STRING(s) _${X}_STRING(s)
 
+#if defined(__GNUC__)
+// disable unknown pragma warning message
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+#endif
+
 namespace ${n}
 {
 %for s in specs:
@@ -493,3 +499,7 @@ namespace ${n}
 #pragma endregion
     %endfor ## s in specs
 } // namespace ${n}
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
