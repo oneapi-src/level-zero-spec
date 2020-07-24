@@ -632,6 +632,7 @@ The following pseudo-code how to import a Linux dma_buf as an external memory ha
         alloc_desc.pNext = &import_fd;
         ${x}MemAllocDevice(hContext, &alloc_desc, size, alignment, hDevice, &ptr);
 
+
 Command Queues and Command Lists
 ================================
 
@@ -646,34 +647,29 @@ The following diagram illustrates the hierarchy of command lists and command que
 
 .. image:: ../images/core_queue.png
 
-Command Queues
---------------
+Command Queue Groups
+--------------------
 
-A command queue represents a logical input stream to the device, tied to a physical input
-stream.
+A command queue group represents a physical input stream, which represents one or more physical device engines.
 
-Creation
-~~~~~~~~
 
--  At creation time, the logical command queue is explicitly bound to a physical command queue.
--  The number and properties of physical command queues is queried by using ${x}DeviceGetCommandQueueGroupProperties.
--  Multiple logical command queues may be created that use the same physical command queue. For example,
-   an application may create a logical command queue per Host thread with different scheduling priorities.
--  Multiple logical command queues created for the same physical command queue on the same context,
-   also share the same physcial hardware context.
--  The maximum number of logical command queues an application can create is limited by device-specific
-   resources; e.g., the maximum number of logical hardware contexts supported by the device. 
-   This can be queried from ${x}_device_properties_t.maxHardwareContexts.
--  All command lists executed on a logical command queue are guaranteed to **only** execute on the physical
-   command queue which it is assigned; e.g., copy commands in a compute command list / queue will
-   execute via the compute engine, not the copy engine.
+Discovery
+~~~~~~~~~
 
-The following pseudo-code demonstrates a basic sequence for creation of command queues:
+- The number and properties of command queue groups is queried by using ${x}DeviceGetCommandQueueGroupProperties.
+- The number of physical engines within a group is queried from ${x}_command_queue_group_properties_t.numQueues.
+- The types of commands supported by the group is queried from ${x}_command_queue_group_properties_t.flags.
+- For example, if a command list is meant to be submitted to a copy-only engine,
+  then it must be created using a command queue group ordinal with
+  ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY set and ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE not set,
+  and submitted to a command queue created using the same ordinal. 
+
+The following pseudo-code demonstrates a basic sequence for discovery of command queue groups:
 
 .. parsed-literal::
 
-    // Discover all command queue types
-    uint32_t cmdqueueGroupCount = 0;_
+    // Discover all command queue groups
+    uint32_t cmdqueueGroupCount = 0;
     ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, nullptr);
 
     ${x}_command_queue_group_properties_t* cmdqueueGroupProperties = (${x}_command_queue_group_properties_t*)
@@ -681,7 +677,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
     ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, cmdqueueGroupProperties);
 
 
-    // Find a proper command queue
+    // Find a command queue type that support compute
     uint32_t computeQueueGroupOrdinal = cmdqueueGroupCount;
     for( uint32_t i = 0; i < cmdqueueGroupCount; ++i ) {
         if( cmdqueueGroupProperties[ i ].flags & ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE ) {
@@ -692,6 +688,35 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 
     if(computeQueueGroupOrdinal == cmdqueueGroupCount)
         return; // no compute queues found
+
+
+Command Queues
+--------------
+
+A command queue represents a logical input stream to the device, tied to a physical input stream.
+
+Creation
+~~~~~~~~
+
+- At creation time, the command queue is explicitly bound to a command queue group via its ordinal.
+- Multiple command queues may be created that use the same command queue group. For example,
+  an application may create a command queue per Host thread with different scheduling priorities.
+- Multiple command queues created for the same command queue group on the same context,
+  may also share the same physical hardware context.
+- The maximum number of command queues an application can create is limited by device-specific
+  resources; e.g., the maximum number of logical hardware contexts supported by the device. 
+  This can be queried from ${x}_device_properties_t.maxHardwareContexts.
+- All command lists executed on a command queue are guaranteed to **only** execute on an engine from the 
+  command queue group which it is assigned; e.g., copy commands in a compute command list / queue will
+  execute via the compute engine, not the copy engine.
+- The command queue index provides a mechanism for an application to indicate which command queues
+  can execute concurrently (different indices) vs. those that cannot (same indices).
+- There is no guarantee command lists submitted to command queues with different indices will execute concurrently, 
+  only a possibility that they might execute concurrently.
+
+The following pseudo-code demonstrates a basic sequence for creation of command queues:
+
+.. parsed-literal::
 
     // Create a command queue
     ${x}_command_queue_desc_t commandQueueDesc = {
@@ -715,21 +740,20 @@ Execution
   share the same command queue.
 - If multiple Host threads enter the same command queue simultaneously, then execution order
   is undefined.
-- Command lists can only be executed on a command queue with an identical command queue group ordinal,
-  see more details below.
+- Command lists can only be executed on a command queue with an identical command queue group ordinal.
 - If a device contains multiple sub-devices, then command lists submitted to a device-level command queue
   may be optimized by the driver to fully exploit the concurrency of the sub-devices by distributing command lists across sub-devices.
-  If the application prefers to opt-out of these optimizations, such as when the application plans to perform this distribution itself,
+- If the application prefers to opt-out of these optimizations, such as when the application plans to perform this distribution itself,
   then it should use ${X}_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY. Only command lists created using ${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY
   can be executed on a command queue created using ${X}_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY.
 
 Destruction
 ~~~~~~~~~~~
 
--  The application is responsible for making sure the device is not currently
-   executing from a command queue before it is deleted. This is
-   typically done by tracking command queue fences, but may also be
-   handled by calling ${x}CommandQueueSynchronize.
+- The application is responsible for making sure the device is not currently
+  executing from a command queue before it is deleted. This is
+  typically done by tracking command queue fences, but may also be
+  handled by calling ${x}CommandQueueSynchronize.
 
 Command Lists
 -------------
@@ -741,34 +765,34 @@ A command list represents a sequence of commands for execution on a command queu
 Creation
 ~~~~~~~~
 
--  A command list is created for a device to allow device-specific appending of commands.
--  A command list is created for execution on a specific type of command queue, specified using
-   the command queue group ordinal.
--  A command list can be copied to create another command list. The application may use this
-   to copy a command list for use on a different device.
+- A command list is created for a device to allow device-specific appending of commands.
+- A command list is created for execution on a specific type of command queue, specified using
+  the command queue group ordinal.
+- A command list can be copied to create another command list. The application may use this
+  to copy a command list for use on a different device.
 
 Appending
 ~~~~~~~~~
 
--  There is no implicit binding of command lists to Host threads. Therefore, an
-   application may share a command list handle across multiple Host threads. However,
-   the application is responsible for ensuring that multiple Host threads do not access
-   the same command list simultaneously.
--  By default, commands are started in the same order in which they are appended.
-   However, an application may allow the driver to optimize the ordering by using
-   ${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING. Reordering is guaranteed to only occur
-   between barriers and synchronization primitives.
--  By default, commands submitted to a command list are optimized for execution by
-   balancing both device throughput and Host latency. 
--  For very low-level latency usage-models, applications should use immediate command lists. 
--  For usage-models where maximum throughput is desired, applications should 
-   use ${X}_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT. This flag will indicate to the driver
-   it may perform additional device-specific optimizations.
--  If a device contains multiple sub-devices, then commands submitted to a device-level
-   command list may be optimized by the driver to fully exploit the concurrency of the
-   sub-devices by distributing commands across sub-devices. If the application prefers
-   to opt-out of these optimizations, such as when the application plans to perform this
-   distribution itself, then it should use ${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY.
+- There is no implicit binding of command lists to Host threads. Therefore, an
+  application may share a command list handle across multiple Host threads. However,
+  the application is responsible for ensuring that multiple Host threads do not access
+  the same command list simultaneously.
+- By default, commands are started in the same order in which they are appended.
+  However, an application may allow the driver to optimize the ordering by using
+  ${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING. Reordering is guaranteed to only occur
+  between barriers and synchronization primitives.
+- By default, commands submitted to a command list are optimized for execution by
+  balancing both device throughput and Host latency. 
+- For very low-level latency usage-models, applications should use immediate command lists. 
+- For usage-models where maximum throughput is desired, applications should 
+  use ${X}_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT. This flag will indicate to the driver
+  it may perform additional device-specific optimizations.
+- If a device contains multiple sub-devices, then commands submitted to a device-level
+  command list may be optimized by the driver to fully exploit the concurrency of the
+  sub-devices by distributing commands across sub-devices. If the application prefers
+  to opt-out of these optimizations, such as when the application plans to perform this
+  distribution itself, then it should use ${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY.
 
 The following pseudo-code demonstrates a basic sequence for creation of command lists:
 
@@ -788,19 +812,15 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 Submission
 ~~~~~~~~~~
 
-- There is no implicit association between a command list and a logical command queue. 
-  Therefore, a command list may be submitted to any or multiple logical command queues.
-- By definition, a command list cannot be executed concurrently on multiple physical command queues.
-- If a command list is meant to be submitted to a physical copy-only command queue,
-  then it must be created using a command queue group ordinal with
-  ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY set and ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE not set,
-  and submitted to a logical command queue created using the same ordinal. 
+- There is no implicit association between a command list and a command queue. 
+  Therefore, a command list may be submitted to any or multiple command queues.
+- By definition, a command list cannot be executed concurrently on multiple command queues.
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
 - A command list may be submitted multiple times.  It is up to the application to ensure 
   that the command list can be executed multiple times.
-  For example, event must be explicitly reset prior to re-execution.
+  For example, events must be explicitly reset prior to re-execution.
 
 The following pseudo-code demonstrates submission of commands to a command queue, via a command list:
 
@@ -823,13 +843,13 @@ The following pseudo-code demonstrates submission of commands to a command queue
 Recycling
 ~~~~~~~~~
 
--  A command list may be recycled to avoid the overhead of frequent creation and destruction.
--  The application is responsible for making sure the device is not currently
-   executing from a command list before it is reset. This should be
-   handled by tracking a completion event associated with the command list.
--  The application is responsible for making sure the device is not currently
-   executing from a command list before it is deleted. This should be
-   handled by tracking a completion event associated with the command list.
+- A command list may be recycled to avoid the overhead of frequent creation and destruction.
+- The application is responsible for making sure the device is not currently
+  executing from a command list before it is reset. This should be
+  handled by tracking a completion event associated with the command list.
+- The application is responsible for making sure the device is not currently
+  executing from a command list before it is deleted. This should be
+  handled by tracking a completion event associated with the command list.
 
 Low-Latency Immediate Command Lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1484,7 +1504,7 @@ Cooperative Kernels
 
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
-The command list must be submitted to a logical command queue that was created with an ordinal of a physical command queue
+The command list must be submitted to a command queue that was created with an ordinal of a command queue group
 that has the ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COOPERATIVE_KERNELS flags set.
 Finally, there is a ${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
 the device supports.
