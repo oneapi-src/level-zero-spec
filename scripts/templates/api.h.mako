@@ -32,12 +32,6 @@ from templates import helper as th
 #include <stddef.h>
 %endif
 
-#if defined(__GNUC__)
-// disable unknown pragma warning message
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#endif
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -45,7 +39,9 @@ extern "C" {
 %for spec in specs:
 %if len(spec['objects']):
 // ${th.subt(n, tags, spec['header']['desc'])}
+#if !defined(__GNUC__)
 #pragma region ${spec['name']}
+#endif
 %endif
 %for obj in spec['objects']:
 %if not re.match(r"class", obj['type']):
@@ -138,12 +134,16 @@ typedef struct _${th.make_type_name(n, tags, obj)} ${th.make_type_name(n, tags, 
 
 %endif
 %if len(spec['objects']):
+#if !defined(__GNUC__)
 #pragma endregion
+#endif
 %endif
 %endfor # spec in specs
 %if n not in ["zet", "zes"]:
 // Intel ${tags['$OneApi']} Level-Zero API Callbacks
+#if !defined(__GNUC__)
 #pragma region callbacks
+#endif
 %for tbl in th.get_pfncbtables(specs, meta, n, tags):
 %for obj in tbl['functions']:
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,15 +210,13 @@ typedef struct _${n}_callbacks_t
 %endfor
 } ${n}_callbacks_t;
 
+#if !defined(__GNUC__)
 #pragma endregion
+#endif
 %endif # not in ["zet", "zes"]:
 
 #if defined(__cplusplus)
 } // extern "C"
-#endif
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
 #endif
 
 #endif // _${N}_API_H

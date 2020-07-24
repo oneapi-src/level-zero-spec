@@ -56,16 +56,12 @@ def declare_dbg(obj, tags):
 #include <sstream>
 %endif
 
-#if defined(__GNUC__)
-// disable unknown pragma warning message
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#endif
-
 %for spec in specs:
 %if len(spec['objects']):
 // ${th.subt(n, tags, spec['header']['desc'])}
+#if !defined(__GNUC__)
 #pragma region ${spec['name']}
+#endif
 %endif
 ## MACROS #####################################################################
 %for obj in th.filter_items(spec['objects'], 'type', "macro"):
@@ -417,13 +413,11 @@ namespace ${n}
 } // namespace ${n}
 %endif
 %if len(spec['objects']):
+#if !defined(__GNUC__)
 #pragma endregion
+#endif
 %endif
 %endfor # spec in specs
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
 
 #endif // defined(__cplusplus)
 #endif // _${N}_API_HPP

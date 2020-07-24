@@ -33,16 +33,12 @@ def define_dbg(obj, tags):
 #define _${X}_STRING(s) #s
 #define ${X}_STRING(s) _${X}_STRING(s)
 
-#if defined(__GNUC__)
-// disable unknown pragma warning message
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#endif
-
 namespace ${n}
 {
 %for s in specs:
+#if !defined(__GNUC__)
 #pragma region ${s['name']}
+#endif
 ## EXCEPTION ##############################################################
 %if re.match(r"common", s['name']) and (n == x):
     ///////////////////////////////////////////////////////////////////////////////
@@ -253,7 +249,9 @@ namespace ${n}
 %endif
 
 %endfor
+#if !defined(__GNUC__)
 #pragma endregion
+#endif
 %endfor
 } // namespace ${n}
 
@@ -261,7 +259,9 @@ namespace ${n}
 namespace ${n}
 {
     %for s in specs:
+#if !defined(__GNUC__)
 #pragma region ${s['name']}
+#endif
     %for obj in s['objects']:
     %if define_dbg(obj, tags):
     %if re.match(r"enum", obj['type']) or re.match(r"struct|union", obj['type']):
@@ -496,10 +496,8 @@ namespace ${n}
     %endif  ## class
     %endif  ## define_dbg
     %endfor ## obj in s['objects']
+#if !defined(__GNUC__)
 #pragma endregion
+#endif
     %endfor ## s in specs
 } // namespace ${n}
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
