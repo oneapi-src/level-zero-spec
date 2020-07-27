@@ -133,12 +133,14 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of components of this type.
-            if count is zero, then the driver will update the value with the total number of components of this type.
-            if count is non-zero, then driver will only retrieve that number of components.
-            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
     - type: "$s_pwr_handle_t*"
       name: phPower
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties related to a power domain"

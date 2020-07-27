@@ -192,12 +192,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of processes.
-            if count is zero, then the driver will update the value with the total number of processes currently using the device.
-            if count is non-zero but less than the number of processes, the driver will set to the number of processes currently using the device and return the error $X_RESULT_ERROR_INVALID_SIZE.
-            if count is larger than the number of processes, then the driver will update the value with the correct number of processes that are returned.
+            if count is zero, then the driver shall update the value with the total number of processes currently attached to the device.
+            if count is greater than the number of processes currently attached to the device, then the driver shall update the value with the correct number of processes.
     - type: "$s_process_state_t*"
       name: pProcesses
-      desc: "[in,out][optional][range(0, *pCount)] array of process information, one for each process currently using the device"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of process information.
+            if count is less than the number of processes currently attached to the device, then the driver shall only retrieve information about that number of processes. In this case, the return code will $X_RESULT_ERROR_INVALID_SIZE.
 returns:
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "The provided value of pCount is not big enough to store information about all the processes currently attached to the device."
@@ -424,12 +425,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of PCI bars.
-            if count is zero, then the driver will update the value with the total number of bars.
-            if count is non-zero, then driver will only retrieve that number of bars.
-            if count is larger than the number of bar, then the driver will update the value with the correct number of bars that are returned.
+            if count is zero, then the driver shall update the value with the total number of PCI bars that are setup.
+            if count is greater than the number of PCI bars that are setup, then the driver shall update the value with the correct number of PCI bars.
     - type: "$s_pci_bar_properties_t*"
       name: pProperties
-      desc: "[in,out][optional][range(0, *pCount)] array of bar properties"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of information about setup PCI bars.
+            if count is less than the number of PCI bars that are setup, then the driver shall only retrieve information about that number of PCI bars.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get PCI stats - bandwidth, number of packets, number of replays"

@@ -206,12 +206,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of components of this type.
-            if count is zero, then the driver will update the value with the total number of components of this type.
-            if count is non-zero, then driver will only retrieve that number of components.
-            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
     - type: "$s_freq_handle_t*"
       name: phFrequency
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get frequency properties - available frequencies"
@@ -244,12 +245,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of frequencies.
-            If count is zero, then the driver will update the value with the total number of frequencies available.
-            If count is non-zero, then driver will only retrieve that number of frequencies.
-            If count is larger than the number of frequencies available, then the driver will update the value with the correct number of frequencies available.
+            if count is zero, then the driver shall update the value with the total number of frequencies that are available.
+            if count is greater than the number of frequencies that are available, then the driver shall update the value with the correct number of frequencies.
     - type: "double*"
       name: phFrequency
-      desc: "[in,out][optional][range(0, *pCount)] array of frequencies in units of MHz and sorted from slowest to fastest"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of frequencies in units of MHz and sorted from slowest to fastest.
+            if count is less than the number of frequencies that are available, then the driver shall only retrieve that number of frequencies.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current frequency limits"

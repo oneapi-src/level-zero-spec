@@ -80,12 +80,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of components of this type.
-            if count is zero, then the driver will update the value with the total number of components of this type.
-            if count is non-zero, then driver will only retrieve that number of components.
-            if count is larger than the number of components available, then the driver will update the value with the correct number of components that are returned.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
     - type: "$s_diag_handle_t*"
       name: phDiagnostics
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of components of this type"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties of a diagnostics test suite"
@@ -118,12 +119,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of tests.
-            If count is zero, then the driver will update the value with the total number of tests available.
-            If count is non-zero, then driver will only retrieve that number of tests.
-            If count is larger than the number of tests available, then the driver will update the value with the correct number of tests available.
+            if count is zero, then the driver shall update the value with the total number of tests that are available.
+            if count is greater than the number of tests that are available, then the driver shall update the value with the correct number of tests.
     - type: "$s_diag_test_t*"
       name: pTests
-      desc: "[in,out][optional][range(0, *pCount)] Array of tests sorted by increasing value of $s_diag_test_t.index"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of information about individual tests sorted by increasing value of $s_diag_test_t.index.
+            if count is less than the number of tests that are available, then the driver shall only retrieve that number of tests.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Run a diagnostics test suite, either all tests or a subset of tests."
