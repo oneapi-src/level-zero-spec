@@ -392,12 +392,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of register set properties.
-            if count is zero, then the driver will update the value with the total number of register set properties available.
-            if count is non-zero, then driver will only retrieve that number of register set properties.
-            if count is larger than the number of register set properties available, then the driver will update the value with the correct number of registry set properties available.
+            if count is zero, then the driver shall update the value with the total number of register set properties available.
+            if count is greater than the number of register set properties available, then the driver shall update the value with the correct number of registry set properties available.
     - type: "$t_debug_regset_properties_t*"
       name: pRegisterSetProperties
-      desc: "[in,out][optional][range(0, *pCount)] array of query results for register set properties"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for register set properties.
+            if count is less than the number of register set properties available, then driver shall only retrieve that number of register set properties.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read register state."

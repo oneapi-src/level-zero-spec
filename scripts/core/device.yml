@@ -29,12 +29,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of devices.
-            if count is zero, then the driver will update the value with the total number of devices available.
-            if count is non-zero, then driver will only retrieve that number of devices.
-            if count is larger than the number of devices available, then the driver will update the value with the correct number of devices available.
+            if count is zero, then the driver shall update the value with the total number of devices available.
+            if count is greater than the number of devices available, then the driver shall update the value with the correct number of devices available.
     - type: "$x_device_handle_t*"
       name: phDevices
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of devices"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of devices.
+            if count is less than the number of devices available, then driver shall only retrieve that number of devices.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves a sub-device from a device"
@@ -56,12 +57,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of sub-devices.
-            if count is zero, then the driver will update the value with the total number of sub-devices available.
-            if count is non-zero, then driver will only retrieve that number of sub-devices.
-            if count is larger than the number of sub-devices available, then the driver will update the value with the correct number of sub-devices available.
+            if count is zero, then the driver shall update the value with the total number of sub-devices available.
+            if count is greater than the number of sub-devices available, then the driver shall update the value with the correct number of sub-devices available.
     - type: "$x_device_handle_t*"
       name: phSubdevices
-      desc: "[in,out][optional][range(0, *pCount)] array of handle of sub-devices"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of sub-devices.
+            if count is less than the number of sub-devices available, then driver shall only retrieve that number of sub-devices.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device types"
@@ -443,12 +445,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of command queue group properties.
-            if count is zero, then the driver will update the value with the total number of command queue group properties available.
-            if count is non-zero, then driver will only retrieve that number of command queue group properties.
-            if count is larger than the number of command queue group properties available, then the driver will update the value with the correct number of command queue group properties available.
+            if count is zero, then the driver shall update the value with the total number of command queue group properties available.
+            if count is greater than the number of command queue group properties available, then the driver shall update the value with the correct number of command queue group properties available.
     - type: "$x_command_queue_group_properties_t*"
       name: pCommandQueueGroupProperties
-      desc: "[in,out][optional][range(0, *pCount)] array of query results for command queue group properties"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for command queue group properties.
+            if count is less than the number of command queue group properties available, then driver shall only retrieve that number of command queue group properties.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device memory property flags"
@@ -501,12 +504,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of memory properties.
-            if count is zero, then the driver will update the value with the total number of memory properties available.
-            if count is non-zero, then driver will only retrieve that number of memory properties.
-            if count is larger than the number of memory properties available, then the driver will update the value with the correct number of memory properties available.
+            if count is zero, then the driver shall update the value with the total number of memory properties available.
+            if count is greater than the number of memory properties available, then the driver shall update the value with the correct number of memory properties available.
     - type: "$x_device_memory_properties_t*"
       name: pMemProperties
-      desc: "[in,out][optional][range(0, *pCount)] array of query results for memory properties"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for memory properties.
+            if count is less than the number of memory properties available, then driver shall only retrieve that number of memory properties.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory access capability flags"
@@ -613,12 +617,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of cache properties.
-            if count is zero, then the driver will update the value with the total number of cache properties available.
-            if count is non-zero, then driver will only retrieve that number of cache properties.
-            if count is larger than the number of cache properties available, then the driver will update the value with the correct number of cache properties available.
+            if count is zero, then the driver shall update the value with the total number of cache properties available.
+            if count is greater than the number of cache properties available, then the driver shall update the value with the correct number of cache properties available.
     - type: "$x_device_cache_properties_t*"
       name: pCacheProperties
-      desc: "[in,out][optional][range(0, *pCount)] array of query results for cache properties"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for cache properties.
+            if count is less than the number of cache properties available, then driver shall only retrieve that number of cache properties.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device image properties queried using $xDeviceGetImageProperties"
