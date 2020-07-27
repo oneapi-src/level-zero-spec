@@ -58,12 +58,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of driver instances.
-            if count is zero, then the loader will update the value with the total number of drivers available.
-            if count is non-zero, then the loader will only retrieve that number of drivers.
-            if count is larger than the number of drivers available, then the loader will update the value with the correct number of drivers available.
+            if count is zero, then the loader shall update the value with the total number of drivers available.
+            if count is greater than the number of drivers available, then the loader shall update the value with the correct number of drivers available.
     - type: "$x_driver_handle_t*"
       name: phDrivers
-      desc: "[in,out][optional][range(0, *pCount)] array of driver instance handles"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of driver instance handles.
+            if count is less than the number of drivers available, then the loader shall only retrieve that number of drivers.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"
@@ -208,12 +209,13 @@ params:
       name: pCount
       desc: |
             [in,out] pointer to the number of extension properties.
-            if count is zero, then the driver will update the value with the total number of extension properties available.
-            if count is non-zero, then driver will only retrieve that number of extension properties.
-            if count is larger than the number of extension properties available, then the driver will update the value with the correct number of extension properties available.
+            if count is zero, then the driver shall update the value with the total number of extension properties available.
+            if count is greater than the number of extension properties available, then the driver shall update the value with the correct number of extension properties available.
     - type: "$x_driver_extension_properties_t*"
       name: pExtensionProperties
-      desc: "[in,out][optional][range(0, *pCount)] array of query results for extension properties"
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for extension properties.
+            if count is less than the number of extension properties available, then driver shall only retrieve that number of extension properties.
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a driver instance handle"
