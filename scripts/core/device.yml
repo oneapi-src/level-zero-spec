@@ -404,7 +404,7 @@ etors:
             Command queue group supports cooperative kernels.
             See $xCommandListAppendLaunchCooperativeKernel for more details.
     - name: METRICS
-      desc: "Command queue groups supports metric streamers and queries."
+      desc: "Command queue groups supports metric queries."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command queue group properties queried using $xDeviceGetCommandQueueGroupProperties"
