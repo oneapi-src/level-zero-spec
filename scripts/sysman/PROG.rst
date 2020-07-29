@@ -193,17 +193,19 @@ provided for all components in each class.
 |                       |                                 |                                           |
 |                       |                                 | Get port rx/tx bandwidth                  |
 +-----------------------+---------------------------------+-------------------------------------------+
-| Temperature_          | Package: temperature            | Get current temperature sensor reading    |
+| Temperature_          | Package: temperature (min, max) | Get current temperature sensor reading    |
 |                       |                                 |                                           |
 |                       | Sub-device 0: GPU temperature   |                                           |
+|                       | (min, max)                      |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 0: Memory            |                                           |
-|                       | temperature                     |                                           |
+|                       | temperature (min, max)          |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 1: GPU temperature   |                                           |
+|                       | (min, max)                      |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 1: Memory            |                                           |
-|                       | temperature                     |                                           |
+|                       | temperature (min, max)          |                                           |
 +-----------------------+---------------------------------+-------------------------------------------+
 | PSU_                  | Package: Power supplies         | Get details about the power supply        |
 |                       |                                 |                                           |
