@@ -116,7 +116,7 @@ members:
       desc: "[in,out] The current fixed fan speed setting"
     - type: $s_fan_temp_speed_t
       name: "speedTable"
-      desc: "[out] Array of temperature/fan speed pairs currently configured"
+      desc: "[out] A table containing temperature/speed pairs"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of fans"
