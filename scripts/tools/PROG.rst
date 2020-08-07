@@ -107,7 +107,7 @@ The following pseudo-code demonstrates a basic usage of API tracing:
        } my_instance_data_t;
 
        void OnEnterCommandListAppendLaunchKernel(
-           ${x}_command_list_append_launch_function_params_t* params,
+           ${x}_command_list_append_launch_kernel_params_t* params,
            ${x}_result_t result,
            void* pTracerUserData,
            void** ppTracerInstanceUserData )
@@ -119,7 +119,7 @@ The following pseudo-code demonstrates a basic usage of API tracing:
        }
 
        void OnExitCommandListAppendLaunchKernel(
-           ${x}_command_list_append_launch_function_params_t* params,
+           ${x}_command_list_append_launch_kernel_params_t* params,
            ${x}_result_t result,
            void* pTracerUserData,
            void** ppTracerInstanceUserData )
