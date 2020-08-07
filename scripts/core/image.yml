@@ -98,6 +98,33 @@ etors:
       desc: "Media Format: Y216. Format type and swizzle is ignored for this."
     - name: P216
       desc: "Media Format: P216. Format type and swizzle is ignored for this."
+    - name: P8
+      desc: "Media Format: P8. Format type and swizzle is ignored for this."
+    - name: YUY2
+      desc: "Media Format: YUY2. Format type and swizzle is ignored for this."
+    - name: A8P8
+      desc: "Media Format: A8P8. Format type and swizzle is ignored for this."
+    - name: IA44
+      desc: "Media Format: IA44. Format type and swizzle is ignored for this."
+    - name: AI44
+      desc: "Media Format: AI44. Format type and swizzle is ignored for this."
+    - name: Y416
+      desc: "Media Format: Y416. Format type and swizzle is ignored for this."
+    - name: Y210
+      desc: "Media Format: Y210. Format type and swizzle is ignored for this."
+    - name: I420
+      desc: "Media Format: I420. Format type and swizzle is ignored for this."
+    - name: YV12
+      desc: "Media Format: YV12. Format type and swizzle is ignored for this."
+    - name: 400P
+      desc: "Media Format: 400P. Format type and swizzle is ignored for this."
+    - name: 422H
+      desc: "Media Format: 422H. Format type and swizzle is ignored for this."
+    - name: 422V
+      desc: "Media Format: 422V. Format type and swizzle is ignored for this."
+    - name: 444P
+      desc: "Media Format: 444P. Format type and swizzle is ignored for this."
+
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported image format types"
