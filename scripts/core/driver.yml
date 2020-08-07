@@ -173,7 +173,7 @@ params:
       desc: "[in] handle of the driver instance"
     - type: "$x_driver_ipc_properties_t*"
       name: pIpcProperties
-      desc: "[out] query result for IPC properties"
+      desc: "[in,out] query result for IPC properties"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum extension name string size"
