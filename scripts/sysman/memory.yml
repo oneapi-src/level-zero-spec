@@ -106,8 +106,8 @@ class: $sMemory
 name: $s_mem_state_t
 base: $s_base_state_t
 details:
-    - "Percent allocation is given by 100 * allocatedSize / maxSize."
-    - "Percent free is given by 100 * (maxSize - allocatedSize) / maxSize."
+    - "Percent allocation is given by 100 * (size - free / size."
+    - "Percent free is given by 100 * free / size."
 members:
     - type: $s_mem_health_t
       name: health
