@@ -41,7 +41,7 @@ members:
       desc: "[out] Software can change the scheduler component configuration assuming the user has permissions."
     - type: $s_engine_type_flags_t
       name: "engines"
-      desc: "[out] Bitfield of accelerator engine types that are controlled by this scheduler component."
+      desc: "[out] Bitfield of accelerator engine types that are managed by this scheduler component. Note that there can be more than one scheduler component for the same type of accelerator engine."
     - type: uint32_t
       name: "supportedModes"
       desc: "[out] Bitfield of scheduler modes that can be configured for this scheduler component (bitfield of 1<<$s_sched_mode_t)."
@@ -79,10 +79,12 @@ members:
       desc: "[in,out] The maximum time in microseconds that the scheduler will wait to preempt a workload running on an engine before deciding to reset the hardware engine and terminating the associated context."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get handle to a scheduler component"
+desc: "Returns handles to scheduler components."
 class: $sDevice
 name: EnumSchedulers
 details:
+    - "Each scheduler component manages the distribution of work across one or more accelerator engines."
+    - "If an application wishes to change the scheduler behavior for all accelerator engines of a specific type (e.g. compute), it should select all the handles where the structure member $s_sched_properties_t.engines contains that type."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

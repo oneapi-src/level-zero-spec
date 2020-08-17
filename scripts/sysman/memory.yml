@@ -92,7 +92,7 @@ members:
       desc: "[out] Location of this memory (system, device)"
     - type: uint64_t
       name: physicalSize
-      desc: "[out] Physical memory size in bytes"
+      desc: "[out] Physical memory size in bytes. A value of 0 indicates that this property is not known. However, a call to $sMemoryGetState() will correctly return the total size of usable memory."
     - type: int32_t
       name: busWidth
       desc: "[out] Width of the memory bus. A value of -1 means that this property is unknown."
