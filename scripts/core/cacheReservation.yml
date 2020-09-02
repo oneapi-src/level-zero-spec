@@ -37,7 +37,7 @@ etors:
       desc: "Utilize reserver region 1"
     - name: $X_CACHE_RESERVE_REGION2
       desc: "Utilize reserver region 2"
-    - name: $X_CACHE_NON-RESERVED_REGION
+    - name: $X_CACHE_NON_RESERVED_REGION
       desc: "Utilize non-reserverd region"
 --- #--------------------------------------------------------------------------
 type: struct
