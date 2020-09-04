@@ -148,6 +148,7 @@ details:
     - "ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not."
     - "A link log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "See SPIR-V specification for linkage details."
+    - "The application must ensure the modules being linked were created on the same context."
     - "The application may call this function from simultaneous threads as long as the import modules being linked are not the same."
     - "The implementation of this function should be lock-free."
 params:
