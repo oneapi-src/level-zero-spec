@@ -1,0 +1,55 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting module programs."
+version: "1.0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Module Program Extension Name"
+version: "1.0"
+name: $X_MODULE_PROGRAM_EXP_NAME
+value: '"$X_experimental_module_program"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Module Program Extension Version(s)"
+version: "1.0"
+name: $x_module_program_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Module extended descriptor to support multiple input modules."
+details:
+    - "Implementation must support $X_experimental_module_program extension"
+    - "pInputModules, pBuildFlags, and pConstants from $x_module_desc_t is ignored."
+    - "Format in $x_module_desc_t needs to be set to $X_MODULE_FORMAT_IL_SPIRV."
+class: $xModule
+name: $x_module_program_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: "uint32_t"
+      name: count
+      desc: "[in] Count of input modules"
+    - type: "const size_t*"
+      name: inputSizes
+      desc: "[in][range(0, count)] sizes of each input IL module in pInputModules."
+    - type: "const uint8_t**"
+      name: pInputModules
+      desc: "[in][range(0, count)] pointer to an array of IL (e.g. SPIR-V modules). Valid only for SPIR-V input."
+      init: nullptr
+    - type: "const char**"
+      name: pBuildFlags
+      desc: "[in][optional][range(0, count)] array of strings containing build flags. See pBuildFlags in $x_module_desc_t."
+      init: nullptr
+    - type: "const $x_module_constants_t**"
+      name: pConstants
+      desc: "[in][optional][range(0, count)] pointer to array of specialization constant strings. Valid only for SPIR-V input. This must be set to nullptr if no specialization constants are provided."
+      init: nullptr
