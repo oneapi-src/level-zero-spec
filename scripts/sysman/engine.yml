@@ -33,6 +33,8 @@ etors:
       desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
     - name: COPY_SINGLE
       desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_COPY_ALL for that."
+    - name: MEDIA_ENHANCEMENT_SINGLE
+      desc: "Access information about a single media enhancement engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Engine group properties"
