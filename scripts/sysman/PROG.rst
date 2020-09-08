@@ -193,17 +193,19 @@ provided for all components in each class.
 |                       |                                 |                                           |
 |                       |                                 | Get port rx/tx bandwidth                  |
 +-----------------------+---------------------------------+-------------------------------------------+
-| Temperature_          | Package: temperature            | Get current temperature sensor reading.   |
-|                       |                                 | Typically this will be the maximum of     |
-|                       | Sub-device 0: GPU temperature   | the readings from multiple sensors.       |
+| Temperature_          | Package: temperature (min, max) | Get current temperature sensor reading    |
+|                       |                                 |                                           |
+|                       | Sub-device 0: GPU temperature   |                                           |
+|                       | (min, max)                      |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 0: Memory            |                                           |
-|                       | temperature                     |                                           |
+|                       | temperature (min, max)          |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 1: GPU temperature   |                                           |
+|                       | (min, max)                      |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 1: Memory            |                                           |
-|                       | temperature                     |                                           |
+|                       | temperature (min, max)          |                                           |
 +-----------------------+---------------------------------+-------------------------------------------+
 | PSU_                  | Package: Power supplies         | Get details about the power supply        |
 |                       |                                 |                                           |
@@ -1474,6 +1476,17 @@ locations. The following locations are supported:
 |                                                             | accelerator.                                                |
 +-------------------------------------------------------------+-------------------------------------------------------------+
 | ${S}_TEMP_SENSORS_MEMORY         | Returns the maximum measured temperature                    |
+|                                                             | across all sensors in the device                            |
+|                                                             | memory.                                                     |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| ${S}_TEMP_SENSORS_GLOBAL_MIN     | Returns the minimum measured temperature                    |
+|                                                             | across all sensors in the device.                           |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| ${S}_TEMP_SENSORS_GPU_MIN        | Returns the minimum measured temperature                    |
+|                                                             | across all sensors in the GPU                               |
+|                                                             | accelerator.                                                |
++-------------------------------------------------------------+-------------------------------------------------------------+
+| ${S}_TEMP_SENSORS_MEMORY_MIN     | Returns the minimum measured temperature                    |
 |                                                             | across all sensors in the device                            |
 |                                                             | memory.                                                     |
 +-------------------------------------------------------------+-------------------------------------------------------------+

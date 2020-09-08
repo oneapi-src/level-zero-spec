@@ -21,6 +21,12 @@ etors:
       desc: "The maximum temperature across all sensors in the GPU"
     - name: MEMORY
       desc: "The maximum temperature across all sensors in the local memory"
+    - name: GLOBAL_MIN
+      desc: "The minimum temperature across all device sensors"
+    - name: GPU_MIN
+      desc: "The minimum temperature across all sensors in the GPU"
+    - name: MEMORY_MIN
+      desc: "The minimum temperature across all sensors in the local device memory"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
