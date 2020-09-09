@@ -23,13 +23,15 @@ etors:
     - name: OTHER
       desc: "Undefined types of accelerators."
     - name: COMPUTE
-      desc: "Engines that process compute kernels."
+      desc: "Engines that process compute kernels only (no 3D content)."
     - name: 3D
-      desc: "Engines that process 3D content"
+      desc: "Engines that process 3D content only (no compute kernels)."
     - name: MEDIA
-      desc: "Engines that process media workloads"
+      desc: "Engines that process media workloads."
     - name: DMA
-      desc: "Engines that copy blocks of data"
+      desc: "Engines that copy blocks of data."
+    - name: RENDER
+      desc: "Engines that can process both 3D content and compute kernels."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Device repair status"
