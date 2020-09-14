@@ -318,6 +318,9 @@ etors:
       desc: $x_raytracing_mem_alloc_ext_desc_t
       value: "0x00010001"
       version: "1.0"
+    - name: CACHE_RESERVATION_EXT_DESC
+      desc: $x_cache_reservation_ext_desc_t
+      version: "1.0"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       value: "0x00020001"

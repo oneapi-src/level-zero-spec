@@ -48,11 +48,11 @@ name: $x_cache_reservation_ext_desc_t
 base: $x_base_desc_t
 members:
     - type: size_t
-      name: maxcacheReservationsize
-      desc: "[out] Max cache Reservation size."
+      name: maxCacheReservationSize
+      desc: "[out] max cache reservation size"
 details:
-    - "This structure must be passed to $xDeviceGetCacheProperties via `pNext` member of $x_cache_reservation_ext_desc_t"
-    - "determining max cache reservation allowed on device. Size of 0 = no reservation."
+    - "This structure must be passed to $xDeviceGetCacheProperties via `pNext` member of $x_device_cache_properties_t"
+    - "Used for determining the max cache reservation allowed on device. Size of zero means no reservation available."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reserve Cache on Device"
@@ -68,11 +68,11 @@ params:
       name: hDevice
       desc: "[in] handle of the device object"
     - type: size_t
-      name: CacheLevel
-      desc: "[in] cache level where application want to reserve. 0 = then the driver shall default to last level of cache and attempt to reserve in that cache."
+      name: cacheLevel
+      desc: "[in] cache level where application want to reserve. If zero, then the driver shall default to last level of cache and attempt to reserve in that cache."
     - type: size_t
-      name: CacheReservationSize
-      desc: "[in] Value for reserving size in bytes. 0 = then the driver shall remove prior reservation"
+      name: cacheReservationSize
+      desc: "[in] value for reserving size, in bytes. If zero, then the driver shall remove prior reservation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Assign VA section to use reserved section"
@@ -89,8 +89,8 @@ params:
       name: ptr
       desc: "[in] memory pointer to query"
     - type: size_t
-      name: regionsize
-      desc: "[in] Size in page size multiple"
+      name: regionSize
+      desc: "[in] region size, in pages"
     - type: $x_cache_ext_region_t
-      name: CacheRegion
-      desc: "[in] one of reservation region ENUM."
+      name: cacheRegion
+      desc: "[in] reservation region"
