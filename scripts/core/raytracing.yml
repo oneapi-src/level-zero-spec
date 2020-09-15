@@ -26,6 +26,34 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "Supported raytracing capability flags"
+version: "1.0"
+class: $xContext
+name: $x_device_raytracing_ext_flags_t
+etors:
+    - name: RAYQUERY
+      desc: "Supports rayquery"
+    - name: MOTIONBLUR
+      desc: "Supports motion blur"
+      version: "2.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Raytracing properties queried using $xDeviceGetModuleProperties"
+version: "1.0"
+class: $xContext
+name: $x_device_raytracing_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_device_raytracing_ext_flags_t
+      name: flags
+      desc: "[out] 0 or a valid combination of $x_device_raytracing_ext_flags_t"
+    - type: uint32_t
+      name: maxBVHLevels
+      desc: "[out] Maximum number of BVH levels supported"
+details:
+    - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "Supported raytracing memory allocation flags"
 version: "1.0"
 class: $xContext

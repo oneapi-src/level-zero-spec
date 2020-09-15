@@ -314,9 +314,12 @@ etors:
       desc: $x_sampler_desc_t
     - name: PHYSICAL_MEM_DESC
       desc: $x_physical_mem_desc_t
+    - name: DEVICE_RAYTRACING_EXT_PROPERTIES
+      desc: $x_device_raytracing_ext_properties_t
+      value: "0x00010001"
+      version: "1.0"
     - name: RAYTRACING_MEM_ALLOC_EXT_DESC
       desc: $x_raytracing_mem_alloc_ext_desc_t
-      value: "0x00010001"
       version: "1.0"
     - name: CACHE_RESERVATION_EXT_DESC
       desc: $x_cache_reservation_ext_desc_t
