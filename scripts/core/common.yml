@@ -327,7 +327,10 @@ etors:
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       value: "0x00020001"
-      version: "2.0"
+    - name: MODULE_PROGRAM_EXP_DESC
+      desc: $x_module_program_exp_desc_t
+      value: "0x00020002"
+      version: "1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
