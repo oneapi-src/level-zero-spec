@@ -217,6 +217,25 @@ params:
             [in,out][optional][range(0, *pCount)] array of query results for extension properties.
             if count is less than the number of extension properties available, then driver shall only retrieve that number of extension properties.
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves function pointer for vendor-specific or experimental extensions"
+version: "1.1"
+class: $xDriver
+name: GetExtensionFunctionAddress
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
+    - type: "const char*"
+      name: name
+      desc: "[in] extension name"
+    - type: "void**"
+      name: ppFunctionAddress
+      desc: "[out] pointer to function pointer"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a driver instance handle"
 name: $xDriver
