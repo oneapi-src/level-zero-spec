@@ -21,7 +21,7 @@ Most applications should not require the additional control provided by the Leve
 The Level-Zero API is intended for providing explicit controls needed by higher-level runtime APIs and libraries.
 
 While initially influenced by other low-level APIs, such as OpenCL and Vulkan, the Level-Zero APIs are designed to evolve independently.
-While initially influenced by GPU architecture, the Level-Zero APIs are designed to be supportable across different compute device architectures, such as FPGAs, CSAs, etc.
+While initially influenced by GPU architecture, the Level-Zero APIs are designed to be supportable across different compute device architectures, such as FPGAs and other types of accelerator architectures.
 
 Core
 ----
@@ -208,7 +208,10 @@ C/C++ loaders and drivers must include "${x}_ddi.h".
 
 The implementation of these libraries must use the default Application Binary Interface (ABI) of the standard C compiler for the platform.
 An ABI in this context means the size, alignment, and layout of C data types; the procedure calling convention;
-and the naming convention for shared library symbols corresponding to C functions. 
+and the naming convention for shared library symbols corresponding to C functions. The ABI is backward-compatible
+for API minor version increments such as adding new functions, appending new enumerators, and using reserved
+bits in bitfields. ABI is not guaranteed to be backward-compatible for API major version increments such as
+modifying existing function signatures and structures, removing functions and structures, etc.
 
 ## --validate=off
 On platforms where Level-Zero is provided as a shared library, library symbols beginning with "${x}", "${x}t" or "${x}s" 
@@ -216,4 +219,3 @@ and followed by a digit or uppercase letter are reserved for use by the implemen
 ## --validate=on
 Applications which use Level-Zero must not provide definitions of these symbols. 
 This allows the Level-Zero shared library to be updated with additional symbols for new API versions or extensions without causing symbol conflicts with existing applications.
-
