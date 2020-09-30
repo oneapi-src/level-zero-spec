@@ -1,7 +1,12 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
+set(TARGET_NAME ze_test)
 
-add_subdirectory(lib)
-add_subdirectory(loader)
-add_subdirectory(layers)
-add_subdirectory(drivers)
-add_subdirectory(wrapper)
+add_library(${TARGET_NAME}
+    STATIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/ze_api.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zet_api.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zes_api.cpp
+)
+
+target_link_libraries(${TARGET_NAME}
+    ${CMAKE_DL_LIBS}
+)

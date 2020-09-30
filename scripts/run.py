@@ -9,7 +9,7 @@ import util
 import parse_specs
 import generate_code
 import generate_docs
-import os, sys
+import os, sys, platform
 import time
 import subprocess
 
@@ -48,7 +48,10 @@ def update_spec(target):
     helper for running cmake windows build
 """
 def build():
-    result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 16 2019" -A x64')
+    if "Windows" == platform.system():
+        result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 16 2019" -A x64')
+    else:
+        result = -1 #todo
     if result == 0:
         result = os.system('cmake --build ../build --clean-first')
     return result == 0
@@ -88,12 +91,7 @@ def main():
     for section in configParser.sections():
         add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
     add_argument(parser, "clean", "cleaning previous generated files.")
-    add_argument(parser, "lib", "generation of lib files.", True)
-    add_argument(parser, "loader", "generation of loader files.", True)
-    add_argument(parser, "layers", "generation of validation layer files.", True)
-    add_argument(parser, "drivers", "generation of null driver files.", True)
-    add_argument(parser, "wrapper", "generation of c++ wrapper files.", True)
-    add_argument(parser, "build", "running cmake to generate and build projects.")
+    add_argument(parser, "build", "running cmake to generate and build projects.", True)
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
@@ -143,22 +141,7 @@ def main():
         config = input['configs'][idx]
         if args[config['name']]:
 
-            generate_code.generate_api(incpath, config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
-
-            if args['lib']:
-                generate_code.generate_lib(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
-
-            if args['loader']:
-                generate_code.generate_loader(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
-
-            if args['layers']:
-                generate_code.generate_layers(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
-
-            if args['drivers']:
-                generate_code.generate_drivers(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
-
-            if args['wrapper']:
-                generate_code.generate_wrapper(srcpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
+            generate_code.generate_api(incpath, srcpath, config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
             if args['rst']:
                 generate_docs.generate_rst(docpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])

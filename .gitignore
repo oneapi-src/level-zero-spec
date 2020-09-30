@@ -55,13 +55,7 @@ scripts/**/*.json
 
 # Generated code
 include/
-source/drivers/null/*_nullddi.cpp
-source/layers/validation/*_valddi.cpp
-source/lib/*_libapi.cpp
-source/lib/*_libddi.cpp
-source/loader/*_ldrddi.*
-source/wrapper/*_wprapi.cpp
-source/wrapper/include/
+source/*.cpp
 
 # Generated docs
 docs/
