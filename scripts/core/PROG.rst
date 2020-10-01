@@ -1505,9 +1505,23 @@ Cooperative Kernels
 Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
 there is a ${x}CommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
 The command list must be submitted to a command queue that was created with an ordinal of a command queue group
-that has the ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COOPERATIVE_KERNELS flags set.
-Finally, there is a ${x}KernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
-the device supports.
+that has the ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COOPERATIVE_KERNELS flags set. The maximum number of groups for a
+cooperative kernel launch may be determined by calling ${x}KernelSuggestMaxCooperativeGroupCount.
+
+.. parsed-literal::
+
+       // query the maximum cooperative kernel launch for the kernel
+       uint32_t maxGroupCount;
+       ${x}KernelSuggestMaxCooperativeGroupCount(hKernel, &maxGroupCount);
+
+       // the total group count must be smaller than the queried maximum
+       assert(numGroupsX * numGroupsY * numGroupsZ < maxGroupCount);
+
+       ${x}_group_count_t launchArgs = { numGroupsX, numGroupsY, numGroupsZ };
+
+       // Append launch cooperative kernel
+       ${x}CommandListAppendLaunchCooperativeKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
+
 
 Sampler
 -------
