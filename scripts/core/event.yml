@@ -121,14 +121,14 @@ members:
       desc: |
             [in] defines the scope of relevant cache hierarchies to flush on a signal action before the event is triggered.
             must be 0 (default) or a valid combination of $x_event_scope_flag_t;
-            default behavior is execution synchronization only, no cache hierarchies are flushed.
+            default behavior is synchronization within the command list only, no additional cache hierarchies are flushed.
       init: "0"
     - type: $x_event_scope_flags_t
       name: wait
       desc: |
             [in] defines the scope of relevant cache hierarchies to invalidate on a wait action after the event is complete.
             must be 0 (default) or a valid combination of $x_event_scope_flag_t;
-            default behavior is execution synchronization only, no cache hierarchies are invalidated.
+            default behavior is synchronization within the command list only, no additional cache hierarchies are invalidated.
       init: "0"
 --- #--------------------------------------------------------------------------
 type: function

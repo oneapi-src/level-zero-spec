@@ -1001,7 +1001,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0, // index
-           0, // no memory/cache coherency required on signal
+           0, // no additional memory/cache coherency required on signal
            ${X}_EVENT_SCOPE_FLAG_HOST  // ensure memory coherency across device and Host after event completes
        };
        ${x}_event_handle_t hEvent;
@@ -1051,8 +1051,8 @@ A kernel timestamp event is a special type of event that records device timestam
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0, // index
-           0, // no memory/cache coherency required on signal
-           0  // no memory/cache coherency required on wait
+           0, // no additional memory/cache coherency required on signal
+           0  // no additional memory/cache coherency required on wait
        };
        ${x}_event_handle_t hTSEvent;
        ${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
@@ -1126,8 +1126,8 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            0, // index
-           0, // no memory/cache coherency required on signal
-           0  // no memory/cache coherency required on wait
+           0, // no additional memory/cache coherency required on signal
+           0  // no additional memory/cache coherency required on wait
        };
        ${x}_event_handle_t hEvent1;
        ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
@@ -1157,7 +1157,7 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
            nullptr,
            0, // index
            ${X}_EVENT_SCOPE_FLAG_DEVICE, // ensure memory coherency across device before event signaled
-           0  // no memory/cache coherency required on wait
+           0  // no additional memory/cache coherency required on wait
        };
        ${x}_event_handle_t hEvent1;
        ${x}EventCreate(hEventPool, &event1Desc, &hEvent1);
@@ -1866,7 +1866,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            5, // index
-           0, // no memory/cache coherency required on signal
+           0, // no additional memory/cache coherency required on signal
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
@@ -1885,7 +1885,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            ${X}_STRUCTURE_TYPE_EVENT_DESC,
            nullptr,
            5,
-           0, // no memory/cache coherency required on signal
+           0, // no additional memory/cache coherency required on signal
            ${X}_EVENT_SCOPE_FLAG_HOST, // ensure memory coherency across device and Host after event signaled
        };
        ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
