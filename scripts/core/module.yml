@@ -556,14 +556,10 @@ params:
       desc: "[in] handle of the kernel object"
     - type: "uint32_t*"
       name: pSize
-      desc: |
-            [in,out] pointer to size of string in bytes.
-            if size is zero, then the driver will update string argument.
-            if size is non-zero, then driver will only retrieve string size in bytes.
-            if size is larger than source attributes string, then the driver will update the string.
+      desc: "[in,out] pointer to size of string in bytes."
     - type: "char**"
       name: pString
-      desc: "[in,out][optional] pointer to null-terminated string where kernel source attributes are separated by space."
+      desc: "[in,out] pointer to null-terminated string, whose lifetime is tied to the kernel object, where kernel source attributes are separated by space."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported Cache Config flags"
