@@ -91,7 +91,7 @@ def main():
     for section in configParser.sections():
         add_argument(parser, section, "generation of C/C++ '%s' files."%section, True)
     add_argument(parser, "clean", "cleaning previous generated files.")
-    add_argument(parser, "build", "running cmake to generate and build projects.", True)
+    add_argument(parser, "build", "running cmake to generate and build projects.")
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
