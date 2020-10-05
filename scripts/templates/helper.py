@@ -365,10 +365,15 @@ Public:
 """
 def subt(namespace, tags, string, comment=False, remove_namespace=False):
     for key, value in tags.items():
-        string = re.sub(r"-%s"%re.escape(key), "-"+value, string)           # hack for compile options
-        repl = "::"+value if comment and "$OneApi" != key else value        # replace tag; e.g., "$x" -> "xe"
-        string = re.sub(re.escape(key), repl, string)
-        string = re.sub(re.escape(key.upper()), repl.upper(), string)
+        if remove_namespace:
+            repl = ""                                                           # remove namespace; e.g. "$x" -> ""
+            string = re.sub(r"%s_?"%re.escape(key), repl, string)
+            string = re.sub(r"%s_?"%re.escape(key.upper()), repl.upper(), string)
+        else:
+            string = re.sub(r"-%s"%re.escape(key), "-"+value, string)           # hack for compile options
+            repl = "::"+value if comment and "$OneApi" != key else value        # replace tag; e.g., "$x" -> "xe"
+            string = re.sub(re.escape(key), repl, string)
+            string = re.sub(re.escape(key.upper()), repl.upper(), string)
     return string
 
 """
@@ -840,7 +845,7 @@ Public:
 """
 def get_table_name(namespace, tags, obj):
     cname = obj_traits.class_name(obj)
-    name = subt(namespace, tags, cname) # i.e., "$x" -> ""
+    name = subt(namespace, tags, cname, remove_namespace=True) # i.e., "$x" -> ""
     name = name if len(name) > 0 else "Global"
     return name
 
