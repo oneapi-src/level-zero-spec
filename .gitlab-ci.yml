@@ -2,34 +2,30 @@ cache:
   paths:
   - .irepo/
   - .deps/
-  - include/
-  - source/
   - docs/
 
 stages:
 - build
 - deploy
 
-generate:
+build:all:
   stage: build
   script:
     - call ci/pyenv.cmd update_pip
     - call ci/pyenv.cmd up
     - set PATH=%_CI_TOOLS_DIR%\doxygen;%VDIR%\Scripts;%PATH%
     - cd scripts
-    - python run.py --!build
+    - python run.py --html --build
   artifacts:
     name: "%CI_JOB_NAME%"
     paths:
-      - docs/html/
-      - docs/ref/
       - include/
       - source/wrapper/include/
     expire_in: 1 week
   only:
     refs:
       - master
-      - staging_ci
+      - stage_ci
   tags:
     - win
     - git
@@ -41,13 +37,15 @@ pages:
     - call ci/pyenv.cmd up
     - cd scripts
     - python ci.py --publish-html
+  dependencies:
+    - build:all
   artifacts:
     paths:
     - public
   only:
     refs:
       - master
-      - staging_ci
+      - stage_ci
   tags:
     - win
     - git
