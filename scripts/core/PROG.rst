@@ -616,7 +616,7 @@ The following pseudo-code demonstrates how to allocate and export an external me
         alloc_props.pNext = &export_fd;
         ${x}MemGetAllocProperties(hContext, ptr, &alloc_props, nullptr);
 
-The following pseudo-code how to import a Linux dma_buf as an external memory handle for a device memory allocation:
+The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for a device memory allocation:
 
 .. parsed-literal::
 
@@ -631,6 +631,28 @@ The following pseudo-code how to import a Linux dma_buf as an external memory ha
         // Link the request into the allocation descriptor and allocate
         alloc_desc.pNext = &import_fd;
         ${x}MemAllocDevice(hContext, &alloc_desc, size, alignment, hDevice, &ptr);
+
+Another example, which the following pseudo-code demonstrates, is how to import a Linux dma_buf as an external
+memory handle for :ref:`Images`:
+
+.. parsed-literal::
+
+        // Set up the request to import the external memory handle
+        ${x}_external_memory_import_fd_t import_fd = {
+            ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
+            nullptr, // pNext
+            ${X}_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF,
+            fd
+        };
+
+        // Link the request into the allocation descriptor and allocate
+        image_desc.pNext = &import_fd; // extend ze_image_desc_t
+
+        // Setup matching image properties for imported image.
+        image_desc.width = import_width;
+        ...
+
+        ${x}ImageCreate(hContext, hDevice, &image_desc, &hImage);
 
 
 Command Queues and Command Lists
