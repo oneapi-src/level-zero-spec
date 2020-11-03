@@ -846,6 +846,14 @@ Not all events have event-specific fields.
 
     The event is generated in response to an interrupt request if none of the requested threads is available to be interrupted.
 
+%if ver >= 1.1:
+  * ${T}_DEBUG_EVENT_TYPE_PAGE_FAULT: there was a page fault on the device
+
+    The event provides the page fault reason, the faulting address aligned to the page granularity, and a mask specifying the alignment.
+
+    To mask can be bit-wise ANDed with an address to obtain an address that is similarly aligned to the same page granularity as the provided faulting address.
+%endif
+
 
 Run Control
 -----------

@@ -112,6 +112,9 @@ etors:
       desc: "The thread stopped due to a device exception"
     - name: THREAD_UNAVAILABLE
       desc: "The thread is not available to be stopped"
+    - name: PAGE_FAULT
+      desc: "A page request could not be completed on the device"
+      version: "1.1"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported debug detach reasons."
@@ -160,6 +163,36 @@ members:
       name: thread
       desc: "[out] the stopped/unavailable thread"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Page fault reasons."
+class: $tDebug
+name: $t_debug_page_fault_reason_t
+version: "1.1"
+etors:
+    - name: INVALID
+      desc: "The page fault reason is not valid"
+      value: "0"
+    - name: MAPPING_ERROR
+      desc: "The address is not mapped"
+    - name: PERMISSION_ERROR
+      desc: "Invalid access permissions"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event information for $T_DEBUG_EVENT_TYPE_PAGE_FAULT"
+class: $tDebug
+name: $t_debug_event_info_page_fault_t
+version: "1.1"
+members:
+    - type: uint64_t
+      name: address
+      desc: "[out] the faulting address"
+    - type: uint64_t
+      name: mask
+      desc: "[out] the alignment mask"
+    - type: $t_debug_page_fault_reason_t
+      name: reason
+      desc: "[out] the page fault reason"
+--- #--------------------------------------------------------------------------
 type: union
 desc: "Event type-specific information"
 class: $tDebug
@@ -174,6 +207,10 @@ members:
     - type: $t_debug_event_info_thread_stopped_t
       name: thread
       desc: "[out] type == $T_DEBUG_EVENT_TYPE_THREAD_STOPPED or $T_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE"
+    - type: $t_debug_event_info_page_fault_t
+      name: page_fault
+      desc: "[out] type == $T_DEBUG_EVENT_TYPE_PAGE_FAULT"
+      version: "1.1"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "A debug event on the device."
