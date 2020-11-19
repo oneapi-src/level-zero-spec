@@ -25,10 +25,12 @@ name: Init
 decl: static
 ordinal: "0"
 details: 
-    - "This function must be called before any other API function."
+    - "The application must call this function before calling any other function."
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
     - "Only one instance of each driver will be initialized per process."
-    - "This function is thread-safe for scenarios where multiple libraries may initialize the driver(s) simultaneously."
+    - "The application may call this function multiple times with different flags or environment variables enabled."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe for scenarios where multiple libraries may initialize the driver(s) simultaneously."
 params:
     - type: $x_init_flags_t
       name: flags
