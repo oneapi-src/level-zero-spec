@@ -26,7 +26,6 @@ def add_argument(parser, name, help, default=False):
     helper for cleaning previously generated files
 """
 def clean():
-    util.removeFile(util.jsonRead("generated.json"))
     util.removePath("../include")
     util.makePath("../include")
     util.removePath("../build")
@@ -125,6 +124,8 @@ def main():
 
     if args['debug']:
         util.jsonWrite("input.json", input)
+
+    util.jsonWrite("level_zero.json", input['ref'])
 
     # phase 3: generate files
     if args['clean']:

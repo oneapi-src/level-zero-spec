@@ -14,6 +14,7 @@ import copy
 from templates.helper import param_traits, type_traits, value_traits
 
 default_version = "1.0"
+all_versions = ["1.0", "1.1", "2.0"]
 
 """
     preprocess object
@@ -93,7 +94,7 @@ def _validate_doc(f, d, tags, line_num):
             if ordinal != d['ordinal']:
                 raise Exception("'ordinal' invalid value: '%s'"%d['ordinal'])   
 
-    def __validate_version(d, prefix=""):
+    def __validate_version(d, prefix="", base_version=default_version):
         if 'version' in d:
             if not isinstance(d['version'], str):
                 raise Exception(prefix+"'version' must be a string: '%s'"%type(d['version']))
@@ -106,7 +107,7 @@ def _validate_doc(f, d, tags, line_num):
             if version != d['version']:
                 raise Exception(prefix+"'version' invalid value: '%s'"%d['version'])
 
-        return float(d.get('version', default_version))
+        return float(d.get('version', base_version))
 
     def __validate_tag(d, key, tags, case):
         for x in tags:
@@ -178,7 +179,8 @@ def _validate_doc(f, d, tags, line_num):
             raise Exception("'etors' must be a sequence: '%s'"%type(d['etors']))
 
         value = -1
-        max_ver = float(default_version)
+        d_ver = d.get('version', default_version)
+        max_ver = float(d_ver)
         for i, item in enumerate(d['etors']):
             prefix="'etors'[%s] "%i
             if not isinstance(item, dict):
@@ -198,7 +200,9 @@ def _validate_doc(f, d, tags, line_num):
             if value >= 0x7fffffff:
                 raise Exception(prefix+"'value' must be less than 0x7fffffff: %s"%value)
 
-            ver = __validate_version(item, prefix=prefix)
+            ver = __validate_version(item, prefix=prefix, base_version=d_ver)
+            if item.get('value'):
+                max_ver = ver
             if ver < max_ver:
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
@@ -224,7 +228,8 @@ def _validate_doc(f, d, tags, line_num):
         if not isinstance(d['members'], list):
             raise Exception("'members' must be a sequence: '%s'"%type(d['members']))
 
-        max_ver = float(default_version)
+        d_ver = d.get('version', default_version)
+        max_ver = float(d_ver)
         for i, item in enumerate(d['members']):
             prefix="'members'[%s] "%i
             if not isinstance(item, dict):
@@ -243,7 +248,7 @@ def _validate_doc(f, d, tags, line_num):
             if item['type'].endswith("flag_t"):
                 raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
 
-            ver = __validate_version(item, prefix=prefix)
+            ver = __validate_version(item, prefix=prefix, base_version=d_ver)
             if ver < max_ver:
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
@@ -255,7 +260,8 @@ def _validate_doc(f, d, tags, line_num):
         if not isinstance(d['params'], list):
             raise Exception("'params' must be a sequence: '%s'"%type(d['params']))
 
-        max_ver = float(default_version)
+        d_ver = d.get('version', default_version)
+        max_ver = float(d_ver)
         min = {'[in]': None, '[out]': None, '[in,out]': None}
         for i, item in enumerate(d['params']):
             prefix="'params'[%s] "%i
@@ -281,7 +287,7 @@ def _validate_doc(f, d, tags, line_num):
             if item['type'].endswith("flag_t"):
                 raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
 
-            ver = __validate_version(item, prefix=prefix)
+            ver = __validate_version(item, prefix=prefix, base_version=d_ver)
             if ver < max_ver:
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
@@ -422,6 +428,31 @@ def _filter_version(d, max_ver):
         d['members'] = flt
 
     return d
+
+"""
+    creates docs per version
+"""
+def _make_versions(d, max_ver):
+    docs = []
+    type = d['type']
+    if 'function' == type or 'struct' == type:
+        for ver in all_versions:
+            if float(ver) > max_ver:
+                break
+
+            dv = _filter_version(copy.deepcopy(d), float(ver))
+            if not dv:
+                continue
+
+            if len(docs) > 0:
+                if dv == docs[-1]:
+                    continue
+
+                dv['name'] += ver
+            docs.append(dv)
+    else:
+        docs.append(d)
+    return docs
 
 """
     generates meta-data on all objects
@@ -723,6 +754,7 @@ def parse(section, version, tags, meta, ref):
                 header['ordinal'] *= 1000 if re.match(r"experimental", header.get('desc',"").lower()) else 1
 
             elif header:
+                # for d in _make_versions(d, float(version)):
                 objects.append(d)
                 meta = _generate_meta(d, header['ordinal'], meta)
 
