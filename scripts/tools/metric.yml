@@ -71,7 +71,7 @@ members:
             returns a combination of $t_metric_group_sampling_type_flag_t.
     - type: uint32_t
       name: "domain"
-      desc: "[out] metric group domain number. Cannot use simultaneous metric groups from different domains."
+      desc: "[out] metric group domain number. Cannot use multiple, simultaneous metric groups from the same domain."
     - type: uint32_t
       name: "metricCount"
       desc: "[out] metric count belonging to this group"
