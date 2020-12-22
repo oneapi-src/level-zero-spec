@@ -114,7 +114,7 @@ members:
     - type: $s_fan_speed_t
       name: "speedFixed"
       desc: "[in,out] The current fixed fan speed setting"
-    - type: $s_fan_temp_speed_t
+    - type: $s_fan_speed_table_t
       name: "speedTable"
       desc: "[out] A table containing temperature/speed pairs"
 --- #--------------------------------------------------------------------------
