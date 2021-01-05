@@ -162,7 +162,9 @@ members:
       desc: "[out] Number of slices."
     - type: uint64_t
       name: timerResolution
-      desc: "[out] Returns the resolution of device timer in nanoseconds used for profiling, timestamps, etc."
+      desc:
+            "1.0": "[out] Returns the resolution of device timer in nanoseconds used for profiling, timestamps, etc."
+            "1.1": "[out] Returns the resolution of device timer in cycles per second used for profiling, timestamps, etc."
     - type: uint32_t
       name: timestampValidBits
       desc: "[out] Returns the number of valid bits in the timestamp value."

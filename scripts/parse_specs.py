@@ -116,9 +116,26 @@ def _validate_doc(f, d, tags, line_num):
         return None
 
     def __validate_desc(desc):
-        for x in ['[in]', '[out]', '[in,out]']:
-            if desc.startswith(x):
-                return x
+        if isinstance(desc, dict):
+            for k, v in desc.items():
+                if not isinstance(k, str):
+                    raise Exception(prefix+"'version' must be a string: '%s'"%type(k))
+
+                try:
+                    version = str(float(k))
+                except:
+                    version = None
+
+                if version != k:
+                    raise Exception(prefix+"'version' invalid value: '%s'"%k)
+
+                for x in ['[in]', '[out]', '[in,out]']:
+                    if v.startswith(x):
+                        return x
+        else:
+            for x in ['[in]', '[out]', '[in,out]']:
+                if desc.startswith(x):
+                    return x
         return None
 
     def __validate_name(d, key, tags, case='lower', prefix=""):
@@ -398,13 +415,21 @@ def _filter_version(d, max_ver):
     if ver > max_ver:
         return None
 
+    def __filter_desc(d):
+        if 'desc' in d and isinstance(d['desc'], dict):
+            for k, v in d['desc'].items():
+                if float(k) <= max_ver:
+                    desc = v
+            d['desc'] = desc
+        return d
+
     flt = []
-    type = d['type']
+    type = d['type']   
     if 'enum' == type:
         for e in d['etors']:
             ver = float(e.get('version', default_version))
             if ver <= max_ver:
-                flt.append(e)
+                flt.append(__filter_desc(e))
         if d['name'].endswith('version_t'):
             flt.append({
                 'name': d['name'][:-1].upper() + "CURRENT",
@@ -417,17 +442,17 @@ def _filter_version(d, max_ver):
         for p in d['params']:
             ver = float(p.get('version', default_version))
             if ver <= max_ver:
-                flt.append(p)
+                flt.append(__filter_desc(p))
         d['params'] = flt
 
     elif 'struct' == type or 'union' == type or 'class' == type:
         for m in d.get('members',[]):
             ver = float(m.get('version', default_version))
             if ver <= max_ver:
-                flt.append(m)
+                flt.append(__filter_desc(m))
         d['members'] = flt
 
-    return d
+    return __filter_desc(d)
 
 """
     creates docs per version

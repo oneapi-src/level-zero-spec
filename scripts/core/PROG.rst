@@ -1056,7 +1056,11 @@ A kernel timestamp event is a special type of event that records device timestam
 .. parsed-literal::
 
        // Get timestamp frequency
+%if ver >= 1.1:
+       const double timestampFreq = NS_IN_SEC / device_properties.timerResolution;
+%else:
        const uint64_t timestampFreq = device_properties.timerResolution;
+%endif
        const uint64_t timestampMaxValue = ~(-1 << device_properties.kernelTimestampValidBits);
 
        // Create event pool
@@ -1103,12 +1107,12 @@ A kernel timestamp event is a special type of event that records device timestam
 
        // Calculation execution time(s)
        double globalTimeInNs = ( tsResult->global.kernelEnd >= tsResult->global.kernelStart ) 
-           ? ( tsResult->global.kernelEnd - tsResult->global.kernelStart ) * (double)timestampFreq
-           : (( timestampMaxValue - tsResult->global.kernelStart) + tsResult->global.kernelEnd + 1 ) * (double)timestampFreq;
+           ? ( tsResult->global.kernelEnd - tsResult->global.kernelStart ) * timestampFreq
+           : (( timestampMaxValue - tsResult->global.kernelStart) + tsResult->global.kernelEnd + 1 ) * timestampFreq;
 
        double contextTimeInNs = ( tsResult->context.kernelEnd >= tsResult->context.kernelStart )
-           ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart ) * (double)timestampFreq
-           : (( timestampMaxValue - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * (double)timestampFreq;
+           ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart ) * timestampFreq
+           : (( timestampMaxValue - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * timestampFreq;
        ...
 
 
