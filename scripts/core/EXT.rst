@@ -16,12 +16,15 @@ Objective
 Features which are device- or vendor-specific can be exposed as extensions.
 The list of extensions supported by the driver implementation can be queried using ${x}DriverGetExtensionProperties.
 
-There are two types of extensions:
+There are two types of extensions defined by this specification:
 
 1. **Standard** - extensions ratified for inclusion into the current and all future versions of the specification.
 2. **Experimental** - extensions require additional experimentation and feedback from application vendors
    before ratification, therefore applications should not rely on experimental extensions in production.
 
+In addition, an implementation may choose to provide additional non-standard extensions via ${x}DriverGetExtensionFunctionAddress.
+It is the responsibility of the implementation to ensure these extensions do not conflict or interfere with any features or extensions of the core APIs.
+These extensions are not documented as part of this specification.
 
 Requirements
 ============
