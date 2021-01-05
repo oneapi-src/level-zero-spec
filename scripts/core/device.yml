@@ -793,6 +793,25 @@ returns:
     - $X_RESULT_ERROR_DEVICE_LOST:
         - "Device is lost; must be reset for use."
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Returns synchronized Host and device global timestamps."
+version: "1.1"
+class: $xDevice
+name: GetGlobalTimestamps
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "uint64_t*"
+      name: hostTimestamp
+      desc: "[out] value of the Host's global timestamp that correlates with the Device's global timestamp value"
+    - type: "uint64_t*"
+      name: deviceTimestamp
+      desc: "[out] value of the Device's global timestamp that correlates with the Host's global timestamp value"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a device"
 name: $xDevice
