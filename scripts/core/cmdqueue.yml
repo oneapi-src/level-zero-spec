@@ -140,7 +140,9 @@ ordinal: "1"
 analogue:
     - vkQueueSubmit
 details:
+    - "The command lists are submitted to the device in the order they are received, whether from multiple calls (on the same or different threads) or a single call with multiple command lists."
     - "The application must ensure the command lists are accessible by the device on which the command queue was created."
+    - "The application must ensure the command lists are not currently referencing the command list since the implementation is allowed to modify the contents of the command list for submission."
     - "The application must only execute command lists created with an identical command queue group ordinal to the command queue."
     - "The application must use a fence created using the same command queue."
     - "The application must ensure the command queue, command list and fence were created on the same context."
