@@ -527,10 +527,14 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+      desc: 
+            "1.0": "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+            "1.1": "[in] must be zero"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+      desc: 
+            "1.0": "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+            "1.1": "[in] must be nullptr"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
     - $X_RESULT_ERROR_INVALID_SIZE:
