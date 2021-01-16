@@ -31,9 +31,8 @@ version: "1.1"
 class: $xKernel
 name: SetGlobalOffsetExp
 details:
-    - "The implementation will maintain the global offset in thread-local storage."
-    - "The global work offset will be used when a $xCommandListAppendLaunchKernel() variant is called on the same Host thread."
-    - "The application may call this function from simultaneous threads with the same kernel handle."
+    - "The global work offset will be used when a $xCommandListAppendLaunchKernel() variant is called."
+    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
