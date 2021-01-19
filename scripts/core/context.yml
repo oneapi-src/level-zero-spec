@@ -57,6 +57,42 @@ returns:
     - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Creates a context for the driver."
+version: "1.1"
+class: $xContext
+name: CreateEx
+decl: static
+ordinal: "0"
+details:
+    - "The application must only use the context for the driver which was provided during creation."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver object"
+    - type: "const $x_context_desc_t*"
+      name: desc
+      desc: "[in] pointer to context descriptor"
+    - type: uint32_t
+      name: numDevices
+      desc: "[in][optional] number of device handles; must be 0 if `nullptr == phDevices`"
+    - type: $x_device_handle_t*
+      name: phDevices
+      desc: |
+            [in][optional][range(0, numDevices)] array of device handles which context has visibility.
+            if nullptr, then all devices supported by the driver instance are visible to the context.
+            otherwise, context only has visibility to devices in this array.
+    - type: $x_context_handle_t*
+      name: phContext
+      desc: "[out] pointer to handle of context object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phDevices) && (0 < numDevices)`"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Destroys a context."
 class: $xContext
 name: Destroy
