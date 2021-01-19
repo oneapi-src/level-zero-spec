@@ -406,9 +406,8 @@ desc: "Set group size for a kernel on the current Host thread."
 class: $xKernel
 name: SetGroupSize
 details:
-    - "The implementation will maintain the group size in thread-local storage."
-    - "The group size will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application may call this function from simultaneous threads with the same kernel handle."
+    - "The group size will be used when a $xCommandListAppendLaunchKernel variant is called."
+    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
@@ -479,9 +478,8 @@ desc: "Set kernel argument for a kernel on the current Host thread."
 class: $xKernel
 name: SetArgumentValue
 details:
-    - "The implementation will maintain the argument values in thread-local storage."
-    - "The argument values will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application may call this function from simultaneous threads with the same kernel handle."
+    - "The argument values will be used when a $xCommandListAppendLaunchKernel variant is called."
+    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
@@ -577,9 +575,8 @@ class: $xKernel
 name: SetCacheConfig
 ordinal: "2"
 details:
-    - "The implementation will maintain the cache configuration in thread-local storage."
-    - "The cache configuration will be used when a $xCommandListAppendLaunchKernel variant is called on the same Host thread."
-    - "The application may call this function from simultaneous threads with the same kernel handle."
+    - "The cache configuration will be used when a $xCommandListAppendLaunchKernel variant is called."
+    - "The application must **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
     - type: "$x_kernel_handle_t"
