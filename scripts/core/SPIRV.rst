@@ -410,12 +410,54 @@ The following restrictions apply to the
    words, the write must begin at a 32-bit boundary. There is no
    restriction on the y-component of the coordinate.
 
-Other Extensions to Consider:
------------------------------
+%if ver >= 1.1:
 
--  `SPV_INTEL_media_block_io <http://htmlpreview.github.io/?https://github.com/KhronosGroup/SPIRV-Registry/blob/master/extensions/INTEL/SPV_INTEL_media_block_io.html>`__
-   /
-   `cl_intel_spirv_media_block_io <https://www.khronos.org/registry/OpenCL/extensions/intel/cl_intel_spirv_media_block_io.html>`__?
+Floating-Point Atomics
+----------------------
+
+${OneApi} Level-Zero API environments supporting the extension
+**${X}_extension_float_atomics** must support additional atomic instructions,
+capabilities, and types.
+
+Atomic Load, Store, and Exchange
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the ${OneApi} Level-Zero API environment supports the extension **${X}_extension_float_atomics** and ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_LOAD_STORE or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_LOAD_STORE, then for the **Atomic Instructions** **OpAtomicLoad**, **OpAtomicStore**, and **OpAtomicExchange**:
+
+-  16-bit floating-point types are supported for the *Result Type* and type of
+   *Value*.
+-  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_LOAD_STORE, the *Pointer* operand may be a pointer to the **CrossWorkGroup** *Storage Class*.
+-  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_LOAD_STORE, the *Pointer* operand may be a pointer to the **Workgroup** *Storage Class*.
+
+Atomic Add and Subtract
+~~~~~~~~~~~~~~~~~~~~~~~
+
+If the ${OneApi} Level-Zero API environment supports the extension **${X}_extension_float_atomics** and ${x}_device_fp_atomic_ext_flags_t.fp16Flags, ${x}_device_fp_atomic_ext_flags_t.fp32Flags, or ${x}_device_fp_atomic_ext_flags_t.fp64Flags include ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, then the environment must accept modules that declare use of the extensions ``SPV_EXT_shader_atomic_float_add`` and ``SPV_EXT_shader_atomic_float16_add``.
+Additionally:
+
+-  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, the **AtomicFloat16AddEXT** capability must be supported.
+-  When ${x}_device_fp_atomic_ext_flags_t.fp32Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, the **AtomicFloat32AddEXT** capability must be supported.
+-  When ${x}_device_fp_atomic_ext_flags_t.fp64Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, the **AtomicFloat64AddEXT** capability must be supported.
+-  For the **Atomic Instruction** **OpAtomicFAddEXT** added by these extensions:
+
+  -  When ${x}_device_fp_atomic_ext_flags_t.fp32Flags, ${x}_device_fp_atomic_ext_flags_t.fp64Flags, or ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD, the *Pointer* operand may be a pointer to the **CrossWorkGroup** *Storage Class*.
+  -  When ${x}_device_fp_atomic_ext_flags_t.fp32Flags, ${x}_device_fp_atomic_ext_flags_t.fp64Flags, or ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, the *Pointer* operand may be a pointer to the **Workgroup** *Storage Class*.
+
+Atomic Min and Max
+~~~~~~~~~~~~~~~~~~
+
+If the ${OneApi} Level-Zero API environment supports the extension **${X}_extension_float_atomics** and the ${x}_device_fp_atomic_ext_flags_t.fp32Flags, ${x}_device_fp_atomic_ext_flags_t.fp64Flags, or ${x}_device_fp_atomic_ext_flags_t.fp16Flags bitfields include ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, then the environment must accept modules that declare use of the extension ``SPV_EXT_shader_atomic_float_min_max``.
+Additionally:
+
+-  When ${x}_device_fp_atomic_ext_flags_t.fp32Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, the **AtomicFloat32MinMaxEXT** capability must be supported.
+-  When ${x}_device_fp_atomic_ext_flags_t.fp64Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, the **AtomicFloat64MinMaxEXT** capability must be supported.
+-  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, the **AtomicFloat16MinMaxEXT** capability must be supported.
+-  For the **Atomic Instructions** **OpAtomicFMinEXT** and **OpAtomicFMaxEXT** added by this extension:
+
+  -  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags, ${x}_device_fp_atomic_ext_flags_t.fp32Flags, or ${x}_device_fp_atomic_ext_flags_t.fp64Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX , the *Pointer* operand may be a pointer to the **CrossWorkGroup** *Storage Class*.
+  -  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags, ${x}_device_fp_atomic_ext_flags_t.fp32Flags, or ${x}_device_fp_atomic_ext_flags_t.fp64Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, the *Pointer* operand may be a pointer to the **Workgroup** *Storage Class*.
+
+%endif
 
 Numerical Compliance
 ====================

@@ -324,6 +324,9 @@ etors:
     - name: CACHE_RESERVATION_EXT_DESC
       desc: $x_cache_reservation_ext_desc_t
       version: "1.1"
+    - name: FLOAT_ATOMIC_EXT_PROPERTIES
+      desc: $x_float_atomic_ext_properties_t
+      version: "1.1"
     - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
       desc: $x_relaxed_allocation_limits_exp_desc_t
       value: "0x00020001"
