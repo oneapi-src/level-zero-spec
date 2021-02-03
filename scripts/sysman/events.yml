@@ -101,6 +101,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Wait for events to be received from a one or more devices."
+version: "1.1"
 class: $sDriver
 decl: static
 name: EventListenEx
