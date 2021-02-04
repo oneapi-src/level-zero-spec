@@ -512,7 +512,7 @@ details:
     - "The application must ensure the command list, events and metric query were created on the same context."
     - "The duration of the signal event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the query."
-    - "If numWaitEvents is non-zero, then then all phWaitEvents must be signaled prior to the execution of the query."
+    - "If numWaitEvents is non-zero, then all phWaitEvents must be signaled prior to the execution of the query."
     - "This command blocks all following commands from beginning until the execution of the query completes."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
 params:
