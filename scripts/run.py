@@ -68,7 +68,7 @@ def revision():
     items = result.stdout.decode().strip().split('-')
     tag = items[0][1:] # remove 'v'
     count = 0
-    if items[1].isdigit():
+    if len(items) > 1 and items[1].isdigit():
        count = int(items[1])
 
     # Bump count if any local files are dirty.  
