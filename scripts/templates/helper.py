@@ -837,9 +837,9 @@ def get_class_function_objs(specs, cname):
             match_cls = cname == obj_traits.class_name(obj)
             if is_function and match_cls:
                 objects.append(obj)
-    return sorted(objects, key=lambda obj: int(int(obj.get('ordinal',"1000")) * float(obj.get('version',"1.0"))))
+    return sorted(objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))
 
-"""
+""" 
 Public:
     returns string name of table for function object
 """
