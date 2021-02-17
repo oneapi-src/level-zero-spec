@@ -26,11 +26,21 @@ class obj_traits:
             return False
 
     @staticmethod
+    def is_experimental(obj):
+        try:
+            return True if re.search("Exp$", obj['name']) else False
+        except:
+            return False
+
+    @staticmethod
     def class_name(obj):
         try:
             return obj['class']
         except:
             return None
+    
+
+    
 
 """
     Extracts traits from a class name
@@ -825,6 +835,7 @@ def make_pfncb_param_type(namespace, tags, obj):
 
     return "%s_params_t"%_camel_to_snake(make_func_name(namespace, tags, obj))
 
+
 """
 Public:
     returns a list of all function objs for the specified class
@@ -839,12 +850,34 @@ def get_class_function_objs(specs, cname):
                 objects.append(obj)
     return sorted(objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))
 
+"""
+Public:
+    returns a list of all non-experimental function objs and a list of experimental function objs for the specified class
+"""
+def get_class_function_objs_exp(specs, cname):
+    objects = []
+    exp_objects = []
+    for s in specs:
+        for obj in s['objects']:
+            is_function = obj_traits.is_function(obj)
+            match_cls = cname == obj_traits.class_name(obj)
+            if is_function and match_cls:
+                if obj_traits.is_experimental(obj):
+                    exp_objects.append(obj)
+                else:
+                    objects.append(obj)
+    objects = sorted(objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))
+    exp_objects = sorted(exp_objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))              
+    return objects, exp_objects
+
 """ 
 Public:
     returns string name of table for function object
 """
 def get_table_name(namespace, tags, obj):
     cname = obj_traits.class_name(obj)
+    if obj_traits.is_experimental(obj):
+        cname=cname+"Exp"
     name = subt(namespace, tags, cname, remove_namespace=True) # i.e., "$x" -> ""
     name = name if len(name) > 0 else "Global"
     return name
@@ -856,9 +889,9 @@ Public:
 def get_pfntables(specs, meta, namespace, tags):
     tables = []
     for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
-        objs = get_class_function_objs(specs, cname)
+        objs, exp_objs = get_class_function_objs_exp(specs, cname)
         if len(objs) > 0:
-            name = get_table_name(namespace, tags, {'class': cname})
+            name = get_table_name(namespace, tags, objs[0])
             table = "%s_%s_dditable_t"%(namespace, _camel_to_snake(name))
 
             params = []
@@ -886,6 +919,37 @@ def get_pfntables(specs, meta, namespace, tags):
                 'pfn': pfn,
                 'functions': objs
             })
+        if len(exp_objs) > 0:
+            name = get_table_name(namespace, tags, exp_objs[0])
+            table = "%s_%s_dditable_t"%(namespace, _camel_to_snake(name))
+
+            params = []
+            params.append({
+                'type': "$x_api_version_t",
+                'name': "version",
+                'desc': "[in] API version requested"
+                })
+            params.append({
+                'type': "%s*"%table,
+                'name': "pDdiTable",
+                'desc': "[in,out] pointer to table of DDI function pointers"
+                })
+            export = {
+                'name': "%sGet%sProcAddrTable"%(namespace, name),
+                'params': params
+                }
+
+            pfn = "%s_pfnGet%sProcAddrTable_t"%(namespace, name)
+
+            tables.append({
+                'name': name, 
+                'type': table,
+                'export': export,
+                'pfn': pfn,
+                'functions': exp_objs
+            })
+        
+        
     return tables
 
 """
