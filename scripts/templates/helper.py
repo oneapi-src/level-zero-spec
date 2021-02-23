@@ -838,16 +838,19 @@ def make_pfncb_param_type(namespace, tags, obj):
 
 """
 Public:
-    returns a list of all function objs for the specified class
+    returns a list of all function objs for the specified class. 
 """
-def get_class_function_objs(specs, cname):
+def get_class_function_objs(specs, cname, version = None):
     objects = []
     for s in specs:
         for obj in s['objects']:
             is_function = obj_traits.is_function(obj)
             match_cls = cname == obj_traits.class_name(obj)
             if is_function and match_cls:
-                objects.append(obj)
+                if version is None:
+                    objects.append(obj)
+                elif float(obj.get('version',"1.0")) <= version:
+                    objects.append(obj)
     return sorted(objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))
 
 """
@@ -959,7 +962,7 @@ Public:
 def get_pfncbtables(specs, meta, namespace, tags):
     tables = []
     for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
-        objs = get_class_function_objs(specs, cname)
+        objs = get_class_function_objs(specs, cname, 1.0)
         if len(objs) > 0:
             name = get_table_name(namespace, tags, {'class': cname})
             table = "%s_%s_callbacks_t"%(namespace, _camel_to_snake(name))
