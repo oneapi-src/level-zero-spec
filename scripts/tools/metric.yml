@@ -534,7 +534,7 @@ params:
       name: phWaitEvents
       desc: 
             "1.0": "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
-            "1.1": "[in] must be nullptr"
+            "1.1": "[in][mbz] must be nullptr"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
     - $X_RESULT_ERROR_INVALID_SIZE:
