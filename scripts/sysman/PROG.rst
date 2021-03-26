@@ -32,6 +32,8 @@ The following environment variables are required to be enabled during initializa
 +=================+=====================================+============+===================================================================================+
 | Sysman          | ${S}_ENABLE_SYSMAN                   | {**0**, 1} | Enables driver initialization and dependencies for system management              |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+| Sysman          | ${S}_ENABLE_SYSMAN_LOW_POWER         | {**0**, 1} | Driver initialize the device in low power mode                                    |
++-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 ## --validate=on
 
 Initialization
@@ -2022,6 +2024,12 @@ used to request non-blocking operations (timeout = 0)
 or blocking operations (timeout = UINT32_MAX)
 or to return after a specified amount of time
 even if no events have been received.
+
+Note that calling zesDeviceEventRegister with no events (set argument events to "0")
+will unregister all events that are being listened too. If the application
+has a thread blocked in the function zesDriverEventListen() and there are
+no more events to listen to, the function will unblock and return control
+to the application thread with an event count of 0.
 
 When events are received, they are returned when the call to function
 ${s}DriverEventListen() completes. This will indicate which devices has
