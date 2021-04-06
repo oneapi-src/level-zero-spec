@@ -180,6 +180,12 @@ etors:
       desc: "[Core] error occurred when building module, see build log for details"
     - name: ERROR_MODULE_LINK_FAILURE
       desc: "[Core] error occurred when linking modules, see build log for details"
+    - name: ERROR_DEVICE_REQUIRES_RESET
+      desc: "[Core] device requires a reset"
+      version: "1.2"
+    - name: ERROR_DEVICE_IN_LOW_POWER_STATE
+      desc: "[Core] device currently in low power state"
+      version: "1.2"
     - name: ERROR_INSUFFICIENT_PERMISSIONS
       value: "0x70010000"
       desc: "[Sysman] access denied due to permission level"
