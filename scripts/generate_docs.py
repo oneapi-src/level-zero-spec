@@ -114,8 +114,11 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
         if re.match(RE_INVALID_TAG_FORMAT, line):
             print("%s(%s) : error : invalid %s tag used"%(fin, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line)))
 
+        newline = line # new line will contain proper tags for reStructuredText if needed.
         if re.match(RE_PROPER_TAG_FORMAT, line):
             words = re.findall(RE_EXTRACT_NAME, line)
+
+            newline = ""
             for word in words:
                 symbol = re.sub(RE_EXTRACT_TAG_NAME, r"$\1", word)
                 if symbol:
@@ -130,17 +133,16 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                         if len(words) != len(meta['function'][symbol]['params']):
                             print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['params'])))
                             print("line = %s"%line)
-                            for word in words:
-                                print("word = %s"%word)
 
                     ref = _make_ref(symbol, symbol_type, meta)
                     if ref:
                         tuple = line.partition(word)
-                        line = tuple[0] + tuple[1].replace(word, ref)
+
+                        newline += tuple[0] + tuple[1].replace(word, ref)
                         if tuple[2] and not re.match(r'\s', tuple[2]):
                             # reStructuredText requires an escape character after references that are not followed by whitespace.
-                            line += "\\"
-                        line += tuple[2]
+                            newline += "\\"
+                        line = tuple[2]
                     else:
                         # ignore reference links for specific types that have no API documentation for them.
                         if not re.match(r"env|handle|typedef|macro", symbol_type):
@@ -148,7 +150,9 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                 else:
                     print("%s(%s) : warning : reference link %s not used."%(fin, iline+1, word))
 
-        outlines.append(line)
+            newline += line
+
+        outlines.append(newline)
 
     util.writelines(os.path.abspath(fout), outlines)
 
