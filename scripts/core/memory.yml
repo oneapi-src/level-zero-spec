@@ -18,6 +18,9 @@ etors:
       desc: "device should cache allocation"
     - name: BIAS_UNCACHED
       desc: "device should not cache allocation (UC)"
+    - name: BIAS_INITIAL_PLACEMENT
+      desc: "optimize shared allocation for first access on the device"
+      version: "1.2"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device memory allocation descriptor"
@@ -50,6 +53,9 @@ etors:
       desc: "host should not cache allocation (UC)"
     - name: BIAS_WRITE_COMBINED
       desc: "host memory should be allocated write-combined (WC)"
+    - name: BIAS_INITIAL_PLACEMENT
+      desc: "optimize shared allocation for first access on the host"
+      version: "1.2"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Host memory allocation descriptor"
