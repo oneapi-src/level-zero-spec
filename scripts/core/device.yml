@@ -79,6 +79,8 @@ etors:
       desc: "Field Programmable Gate Array"
     - name: MCA
       desc: "Memory Copy Accelerator"
+    - name: VPU
+      desc: "Vision Processing Unit"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device universal unique id (UUID) size in bytes"

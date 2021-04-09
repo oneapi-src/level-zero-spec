@@ -17,6 +17,8 @@ name: $x_init_flags_t
 etors:
     - name: GPU_ONLY
       desc: "only initialize GPU drivers"
+    - name: VPU_ONLY
+      desc: "only initialize VPU drivers"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initialize the $OneApi driver(s)"
