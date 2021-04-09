@@ -29,6 +29,8 @@ type: struct
 desc: "Module extended descriptor to support multiple input modules."
 details:
     - "Implementation must support $X_experimental_module_program extension"
+    - "Modules support import and export linkage for functions and global variables."
+    - "SPIR-V import and export linkage types are used. See SPIR-V specification for linkage details."
     - "pInputModules, pBuildFlags, and pConstants from $x_module_desc_t is ignored."
     - "Format in $x_module_desc_t needs to be set to $X_MODULE_FORMAT_IL_SPIRV."
 class: $xModule
