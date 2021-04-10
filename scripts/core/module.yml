@@ -58,6 +58,11 @@ members:
             [in][optional] string containing compiler flags. Following options are supported.
               - "-$x-opt-disable"
                    - Disable optimizations
+              - "-$x-opt-level"
+                   - Specifies optimization level for compiler. Levels are implementation specific.
+                       - 0 is no optimizations (equivalent to $x-opt-disable)
+                       - 1 is optimize minimally (may be the same as 2)
+                       - 2 is optimize more (default)
               - "-$x-opt-greater-than-4GB-buffer-required"
                    - Use 64-bit offset calculations for buffers.
               - "-$x-opt-large-register-file"
