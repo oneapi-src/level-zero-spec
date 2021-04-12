@@ -301,7 +301,8 @@ The environment must accept the following types for *Data* for the
    components of the following *Component Type* types:
 
    -  **OpTypeFloat** with a *Width* of 32 bits (``float``)
-   -  TBD: ``char`` types?
+   -  **OpTypeInt** with a *Width* of 8 bits and *Signedness* of 0
+      (``char`` and ``uchar``)
    -  **OpTypeInt** with a *Width* of 16 bits and *Signedness* of 0
       (``short`` and ``ushort``)
    -  **OpTypeInt** with a *Width* of 32 bits and *Signedness* of 0
