@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 Intel Corporation
+# Copyright (C) 2021 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -8,17 +8,17 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Extension APIs for Subgroups"
-version: "1.0"
+version: "1.2"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Subgroups Extension Name"
-version: "1.0"
+version: "1.2"
 name: $X_SUBGROUPS_EXT_NAME
 value: '"$X_extension_subgroups"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Subgroups Extension Version(s)"
-version: "1.0"
+version: "1.2"
 name: $x_subgroup_ext_version_t
 etors:
     - name: "1_0"

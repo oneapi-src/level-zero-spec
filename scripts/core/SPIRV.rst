@@ -458,7 +458,7 @@ Additionally:
 
 %endif
 
-%if ver >= 1.1:
+%if ver >= 1.2:
 Extended Subgroups
 ------------------
 
