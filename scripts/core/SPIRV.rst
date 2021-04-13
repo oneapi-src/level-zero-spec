@@ -279,8 +279,8 @@ For all other instructions, *Scope* for *Execution* must be one of:
 Extensions
 ==========
 
-``SPV_INTEL_subgroups``
------------------------
+Intel Subgroups
+---------------
 
 ${OneApi} Level-Zero API environments must accept SPIR-V modules that
 declare use of the ``SPV_INTEL_subgroups`` extension via
@@ -301,7 +301,8 @@ The environment must accept the following types for *Data* for the
    components of the following *Component Type* types:
 
    -  **OpTypeFloat** with a *Width* of 32 bits (``float``)
-   -  TBD: char types?
+   -  **OpTypeInt** with a *Width* of 8 bits and *Signedness* of 0
+      (``char`` and ``uchar``)
    -  **OpTypeInt** with a *Width* of 16 bits and *Signedness* of 0
       (``short`` and ``ushort``)
    -  **OpTypeInt** with a *Width* of 32 bits and *Signedness* of 0
@@ -309,8 +310,6 @@ The environment must accept the following types for *Data* for the
 
 -  Scalars of **OpTypeInt** with a *Width* of 64 bits and *Signedness*
    of 0 (``long`` and ``ulong``)
-
-   -  TBD: vectors of long types?
 
 Additionally, if the **Float16** capability is declared and supported:
 
@@ -456,6 +455,199 @@ Additionally:
 
   -  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags, ${x}_device_fp_atomic_ext_flags_t.fp32Flags, or ${x}_device_fp_atomic_ext_flags_t.fp64Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX , the *Pointer* operand may be a pointer to the **CrossWorkGroup** *Storage Class*.
   -  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags, ${x}_device_fp_atomic_ext_flags_t.fp32Flags, or ${x}_device_fp_atomic_ext_flags_t.fp64Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, the *Pointer* operand may be a pointer to the **Workgroup** *Storage Class*.
+
+%endif
+
+%if ver >= 1.2:
+Extended Subgroups
+------------------
+
+${OneApi} Level-Zero API environments supporting the extension
+**${X}_extension_subgroups** must support additional subgroup instructions,
+capabilities, and types.
+
+Extended Types
+~~~~~~~~~~~~~~
+
+The following Groups instructions must be supported with *Scope* for *Execution*
+equal to **Subgroup**:
+
+-  **OpGroupBroadcast**
+-  **OpGroupIAdd**, **OpGroupFAdd**
+-  **OpGroupSMin**, **OpGroupUMin**, **OpGroupFMin**
+-  **OpGroupSMax**, **OpGroupUMax**, **OpGroupFMax**
+
+For these instructions, valid types for *Value* are:
+
+-  Scalars of supported types:
+
+  -  **OpTypeInt** (equivalent to ``char``, ``uchar``, ``short``, ``ushort``,
+     ``int``, ``uint``, ``long``, and ``ulong``)
+  -  **OpTypeFloat** (equivalent to ``half``, ``float``, and ``double``)
+
+Additionally, for **OpGroupBroadcast**, valid types for *Value* are:
+
+-  **OpTypeVectors** with 2, 3, 4, 8, or 16 Component Count components of
+   supported types:
+
+  -  **OpTypeInt** (equivalent to ``charn``, ``ucharn``, ``shortn``,
+     ``ushortn``, ``intn``, ``uintn``, ``longn``, and ``ulongn``)
+  -  **OpTypeFloat** (equivalent to ``halfn``, ``floatn``, and ``doublen``)
+
+Vote
+~~~~
+
+The following capabilities must be supported:
+
+-  **GroupNonUniform**
+-  **GroupNonUniformVote**
+
+For instructions requiring these capabilities, *Scope* for *Execution* may be:
+
+-  **Subgroup**
+
+For the instruction **OpGroupNonUniformAllEqual**, valid types for *Value* are:
+
+-  Scalars of supported types:
+
+  -  **OpTypeInt** (equivalent to ``char``, ``uchar``, ``short``, ``ushort``,
+     ``int``, ``uint``, ``long``, and ``ulong``)
+  -  **OpTypeFloat** (equivalent to ``half``, ``float``, and ``double``)
+
+Ballot
+~~~~~~
+
+The following capabilities must be supported:
+
+-  **GroupNonUniformBallot**
+
+For instructions requiring these capabilities, *Scope* for *Execution* may be:
+
+- **Subgroup**
+
+For the non-uniform broadcast instruction **OpGroupNonUniformBroadcast**, valid
+types for *Value* are:
+
+-  Scalars of supported types:
+
+  -  **OpTypeInt** (equivalent to ``char``, ``uchar``, ``short``, ``ushort``,
+     ``int``, ``uint``, ``long``, and ``ulong``)
+  -  **OpTypeFloat** (equivalent to ``half``, ``float``, and ``double``)
+
+-  **OpTypeVectors** with 2, 3, 4, 8, or 16 Component Count components of
+   supported types:
+
+  -  **OpTypeInt** (equivalent to ``charn``, ``ucharn``, ``shortn``,
+     ``ushortn``, ``intn``, ``uintn``, ``longn``, and ``ulongn``)
+  -  **OpTypeFloat** (equivalent to ``halfn``, ``floatn``, and ``doublen``)
+
+For the instruction **OpGroupNonUniformBroadcastFirst**, valid types for *Value* are:
+
+-  Scalars of supported types:
+
+  -  **OpTypeInt** (equivalent to ``char``, ``uchar``, ``short``, ``ushort``,
+     ``int``, ``uint``, ``long``, and ``ulong``)
+  -  **OpTypeFloat** (equivalent to ``half``, ``float``, and ``double``)
+
+For the instruction **OpGroupNonUniformBallot**, the valid Result Type is an
+OpTypeVector with four Component Count components of **OpTypeInt**, with *Width*
+equal to 32 and *Signedness* equal to 0 (equivalent to ``uint4``).
+
+For the instructions **OpGroupNonUniformInverseBallot**,
+**OpGroupNonUniformBallotBitExtract**, **OpGroupNonUniformBallotBitCount**,
+**OpGroupNonUniformBallotFindLSB**, and **OpGroupNonUniformBallotFindMSB**, the
+valid type for *Value* is an **OpTypeVector** with four *Component Count*
+components of **OpTypeInt**, with *Width* equal to 32 and *Signedness* equal to
+0 (equivalent to uint4).
+
+For built-in variables decorated with **SubgroupEqMask**, **SubgroupGeMask**,
+**SubgroupGtMask**, **SubgroupLeMask**, or **SubgroupLtMask**, the supported
+variable type is an **OpTypeVector** with four *Component Count* components of
+**OpTypeInt**, with *Width* equal to 32 and *Signedness* equal to 0 (equivalent
+to ``uint4``).
+
+Non-Uniform Arithmetic
+~~~~~~~~~~~~~~~~~~~~~~
+
+The following capabilities must be supported:
+
+-  **GroupNonUniformArithmetic**
+
+For instructions requiring these capabilities, *Scope* for *Execution* may be:
+
+- **Subgroup**
+
+For the instructions **OpGroupNonUniformLogicalAnd**,
+**OpGroupNonUniformLogicalOr**, and **OpGroupNonUniformLogicalXor**, the valid
+type for *Value* is **OpTypeBool**.
+
+Otherwise, for the **GroupNonUniformArithmetic** scan and reduction
+instructions, valid types for *Value* are:
+
+-  Scalars of supported types:
+
+  -  **OpTypeInt** (equivalent to ``char``, ``uchar``, ``short``, ``ushort``,
+     ``int``, ``uint``, ``long``, and ``ulong``)
+  -  **OpTypeFloat** (equivalent to ``half``, ``float``, and ``double``)
+
+For the **GroupNonUniformArithmetic** scan and reduction instructions, the
+optional *ClusterSize* operand must not be present.
+
+Shuffles
+~~~~~~~~
+
+The following capabilities must be supported:
+
+-  **GroupNonUniformShuffle**
+
+For instructions requiring these capabilities, *Scope* for *Execution* may be:
+
+- **Subgroup**
+
+For the instructions **OpGroupNonUniformShuffle** and
+**OpGroupNonUniformShuffleXor** requiring these capabilities, valid types for
+*Value* are:
+
+-  Scalars of supported types:
+
+  -  **OpTypeInt** (equivalent to ``char``, ``uchar``, ``short``, ``ushort``,
+     ``int``, ``uint``, ``long``, and ``ulong``)
+  -  **OpTypeFloat** (equivalent to ``half``, ``float``, and ``double``)
+
+Relative Shuffles
+~~~~~~~~~~~~~~~~~
+
+The following capabilities must be supported:
+
+-  **GroupNonUniformShuffleRelative**
+
+For instructions requiring these capabilities, *Scope* for *Execution* may be:
+
+- **Subgroup**
+
+For the **GroupNonUniformShuffleRelative** instructions, valid types for *Value*
+are:
+
+-  Scalars of supported types:
+
+  -  **OpTypeInt** (equivalent to ``char``, ``uchar``, ``short``, ``ushort``,
+     ``int``, ``uint``, ``long``, and ``ulong``)
+  -  **OpTypeFloat** (equivalent to ``half``, ``float``, and ``double``)
+
+Clustered Reductions
+~~~~~~~~~~~~~~~~~~~~
+
+The following capabilities must be supported:
+
+-  **GroupNonUniformClustered**
+
+For instructions requiring these capabilities, *Scope* for *Execution* may be:
+
+- **Subgroup**
+
+When the **GroupNonUniformClustered** capability is declared, the
+**GroupNonUniformArithmetic** scan and reduction instructions may include the
+optional *ClusterSize* operand.
 
 %endif
 
