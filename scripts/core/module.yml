@@ -60,7 +60,7 @@ members:
                    - Disable optimizations
               - "-$x-opt-level"
                    - Specifies optimization level for compiler. Levels are implementation specific.
-                       - 0 is no optimizations (equivalent to $x-opt-disable)
+                       - 0 is no optimizations (equivalent to -$x-opt-disable)
                        - 1 is optimize minimally (may be the same as 2)
                        - 2 is optimize more (default)
               - "-$x-opt-greater-than-4GB-buffer-required"
@@ -668,6 +668,19 @@ members:
     - type: $x_kernel_uuid_t
       name: uuid
       desc: "[out] universal unique identifier."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Additional kernel preferred group size properties"
+version: "1.2"
+class: $xKernel
+name: $x_kernel_preferred_group_size_properties_t
+base: $x_base_properties_t
+members:
+    - type: uint32_t
+      name: preferredMultiple
+      desc: "[out] preferred group size multiple"
+details:
+    - "This structure may be passed to $xKernelGetProperties, via the `pNext` member of $x_kernel_properties_t, to query additional kernel preferred group size properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieve kernel properties."
