@@ -341,6 +341,10 @@ etors:
       desc: $x_module_program_exp_desc_t
       value: "0x00020002"
       version: "1.0"
+    - name: IMAGE_VIEW_PLANAR_EXP_DESC
+      desc: $x_image_view_planar_exp_desc_t
+      value: "0x00020003"
+      version: "1.2"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"

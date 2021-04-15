@@ -1,0 +1,37 @@
+#
+# Copyright (C) 2021 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting image views for planar images."
+version: "1.2"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Image View Planar Extension Name"
+version: "1.2"
+name: $X_IMAGE_VIEW_PLANAR_EXP_NAME
+value: '"$X_image_view_planar"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Image View Planar Extension Version(s)"
+version: "1.2"
+name: $x_image_view_planar_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Image view planar descriptor"
+version: "1.2"
+class: $xImage
+name: $x_image_view_planar_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint32_t
+      name: planeIndex
+      desc: "[in] the 0-based plane index (e.g. NV12 is 0 = Y plane, 1 UV plane)"
