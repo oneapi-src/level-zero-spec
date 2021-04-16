@@ -96,7 +96,7 @@ def main():
     add_argument(parser, "pdf", "generation of PDF file.")
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
     parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
-    parser.add_argument("--ver", type=str, default="1.1", required=False, help="specification version to generate.")
+    parser.add_argument("--ver", type=str, default="1.2", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
     args['rev'] = revision()
 
