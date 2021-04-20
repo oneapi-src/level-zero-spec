@@ -187,7 +187,7 @@ If an application needs lock-free memory allocation, then it could allocate a pe
 
 An application is in direct control over all Host thread creation and usage.
 The driver should never implicitly create threads.
-If there is a need for an implementation to use a background thread, then that thread should be create and provided by the application.
+If there is a need for an implementation to use a background thread, then that thread should be created and provided by the application.
 
 Each API function must document details on the multithreading requirements for that call.
 
