@@ -14,7 +14,7 @@ type: macro
 desc: "Image View Planar Extension Name"
 version: "1.2"
 name: $X_IMAGE_VIEW_PLANAR_EXP_NAME
-value: '"$X_image_view_planar"'
+value: '"$X_experimental_image_view_planar"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Image View Planar Extension Version(s)"
