@@ -410,7 +410,6 @@ The following restrictions apply to the
    restriction on the y-component of the coordinate.
 
 %if ver >= 1.1:
-
 Floating-Point Atomics
 ----------------------
 
@@ -648,6 +647,21 @@ For instructions requiring these capabilities, *Scope* for *Execution* may be:
 When the **GroupNonUniformClustered** capability is declared, the
 **GroupNonUniformArithmetic** scan and reduction instructions may include the
 optional *ClusterSize* operand.
+
+%endif
+
+%if ver >= 1.2:
+Linkonce ODR
+------------
+
+${OneApi} Level-Zero API environments supporting the extension
+**${X}_extension_linkonce_odr** must must accept SPIR-V modules that
+declare use of the ``SPV_KHR_linkonce_odr`` extension via
+**OpExtension**.
+
+When use of the ``SPV_KHR_linkonce_odr`` extension is declared in the
+module via **OpExtension**, the environment must accept modules that
+include the **LinkOnceODR** linkage type.
 
 %endif
 
