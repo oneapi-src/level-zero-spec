@@ -315,8 +315,12 @@ desc: "Supported IPC memory flags"
 class: $xMem
 name: $x_ipc_memory_flags_t
 etors:
-    - name: TBD
-      desc: "reserved for future use"
+    - name: BIAS_CACHED
+      desc: "device should cache allocation"
+      version: "1.2"
+    - name: BIAS_UNCACHED
+      desc: "device should not cache allocation (UC)"
+      version: "1.2"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens an IPC memory handle to retrieve a device pointer on the context."
