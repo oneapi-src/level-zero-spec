@@ -1,0 +1,64 @@
+#
+# Copyright (C) 2021 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting image memory properties."
+version: "1.2"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Image Memory Properties Extension Name"
+version: "1.2"
+name: $X_IMAGE_MEMORY_PROPERTIES_EXP_NAME
+value: '"$X_experimental_image_memory_properties"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Image Memory Properties Extension Version(s)"
+version: "1.2"
+name: $x_image_memory_properties_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Image memory properties"
+version: "1.2"
+class: $xImage
+name: $x_image_memory_properties_exp_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: size
+      desc: "[out] size of image allocation in bytes."
+    - type: uint64_t
+      name: rowPitch
+      desc: "[out] size of image row in bytes."
+    - type: uint64_t
+      name: slicePitch
+      desc: "[out] size of image slice in bytes."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Query image memory properties."
+version: "1.2"
+class: $xImage
+name: GetMemoryPropertiesExp
+decl: static
+ordinal: "0"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+    - "The implementation must support $X_experimental_image_memory_properties extension."
+analogue:
+    - None
+params:
+    - type: "$x_image_handle_t"
+      name: hImage
+      desc: "[in] handle of image object"
+    - type: "$x_image_memory_properties_exp_t*"
+      name: pMemoryProperties
+      desc: "[in,out] query result for image memory properties."
