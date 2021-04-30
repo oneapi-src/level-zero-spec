@@ -20,7 +20,7 @@ API
 * Functions
 
 
-    * ${x}KernelSchedulingHint
+    * ${x}KernelSchedulingHintExp
 
  
 * Enumerations
@@ -33,5 +33,6 @@ API
 * Structures
 
 
+    * ${x}_scheduling_hint_exp_properties_t
     * ${x}_scheduling_hint_exp_desc_t
 

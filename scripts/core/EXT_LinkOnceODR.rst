@@ -8,11 +8,11 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZE_extension_subgroups:
+.. _ZE_extension_linkonce_odr:
 
-=========================
- Subgroups Extension
-=========================
+=============================
+ Link Once ODR Extension
+=============================
 
 API
 ----
@@ -20,5 +20,4 @@ API
 * Enumerations
 
 
-    * ${x}_subgroup_ext_version_t
-
+    * ${x}_linkonce_odr_ext_version_t
