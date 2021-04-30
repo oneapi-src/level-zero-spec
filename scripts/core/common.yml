@@ -323,6 +323,12 @@ etors:
     - name: KERNEL_PREFERRED_GROUP_SIZE_PROPERTIES
       desc: $x_kernel_preferred_group_size_properties_t
       version: "1.2"
+    - name: EXTERNAL_MEMORY_IMPORT_WIN32
+      desc: $x_external_memory_import_win32_handle_t
+      version: "1.2"
+    - name: EXTERNAL_MEMORY_EXPORT_WIN32
+      desc: $x_external_memory_export_win32_handle_t
+      version: "1.2"
     - name: DEVICE_RAYTRACING_EXT_PROPERTIES
       desc: $x_device_raytracing_ext_properties_t
       value: "0x00010001"
@@ -364,6 +370,24 @@ etors:
       desc: "an opaque POSIX file descriptor handle"
     - name: DMA_BUF
       desc: "a file descriptor handle for a Linux dma_buf"
+    - name: OPAQUE_WIN32
+      desc: "an NT handle"
+      version: "1.2"
+    - name: OPAQUE_WIN32_KMT
+      desc: "a global share (KMT) handle"
+      version: "1.2"
+    - name: D3D11_TEXTURE
+      desc: "an NT handle referring to a Direct3D 10 or 11 texture resource"
+      version: "1.2"
+    - name: D3D11_TEXTURE_KMT
+      desc: "a global share (KMT) handle referring to a Direct3D 10 or 11 texture resource"
+      version: "1.2"
+    - name: D3D12_HEAP
+      desc: "an NT handle referring to a Direct3D 12 heap resource"
+      version: "1.2"
+    - name: D3D12_RESOURCE
+      desc: "an NT handle referring to a Direct3D 12 committed resource"
+      version: "1.2"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
