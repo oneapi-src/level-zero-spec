@@ -33,6 +33,27 @@ name: $x_scheduling_hint_exp_flags_t
 etors:
     - name: LONG_RUNNING
       desc: "Hint that the kernel is long-running"
+    - name: OLDEST_FIRST
+      desc: "Hint that the kernel prefers oldest-first scheduling"
+    - name: ROUND_ROBIN
+      desc: "Hint that the kernel prefers round-robin scheduling"
+    - name: STALL_BASED_ROUND_ROBIN
+      desc: "Hint that the kernel prefers stall-based round-robin scheduling"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device kernel scheduling hint properties queried using $xDeviceGetModuleProperties"
+version: "1.2"
+class: $xDevice
+name: $x_scheduling_hint_exp_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_scheduling_hint_exp_flags_t
+      name: schedulingHintFlags
+      desc: |
+            [out] Supported kernel scheduling hints.
+            May be 0 (none) or a valid combination of $x_scheduling_hint_exp_flag_t.
+details:
+    - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel scheduling hint descriptor"
@@ -45,7 +66,7 @@ members:
       name: flags
       desc: |
             [in] flags specifying kernel scheduling hints.
-            must be 0 (default) or a valid combination of $x_scheduling_hint_exp_flag_t;
+            must be 0 (default) or a valid combination of $x_scheduling_hint_exp_flag_t.
       init: "0"
 details:
     - "This structure may be passed to $xKernelSchedulingHint."
@@ -54,9 +75,13 @@ type: function
 desc: "Provide kernel scheduling hints that may improve performance"
 version: "1.2"
 class: $xKernel
-name: SchedulingHint
+name: SchedulingHintExp
 details:
     - "The scheduling hints may improve performance only and are not required for correctness."
+    - "If a specified scheduling hint is unsupported it will be silently ignored."
+    - |
+      If two conflicting scheduling hints are specified there is no defined behavior;
+      the hints may be ignored or one hint may be chosen arbitrarily.
     - "The application must not call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
 params:
