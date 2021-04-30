@@ -55,7 +55,7 @@ params:
       desc: "[in] pointer to image descriptor"
     - type: "$x_image_handle_t"
       name: hImage
-      desc: "[in] pointer to handle of image object to create view from"
+      desc: "[in] handle of image object to create view from"
     - type: "$x_image_handle_t*"
       name: phImageView
       desc: "[out] pointer to handle of image object created for view"
