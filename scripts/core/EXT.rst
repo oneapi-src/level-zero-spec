@@ -76,7 +76,7 @@ Etors must still use extension naming convention and values should be assigned t
 Extending Structures
 --------------------
 
-Any structure derived from `${x}_base_desc_t` or `${x}_base_properties_t` can be extended using structure chains.
+Any structure derived from ${x}_base_desc_t or ${x}_base_properties_t can be extended using structure chains.
 While it is possible to use other methods, this is the required method for extending existing structures.
 
 A structure chain can contain more than one extension structure, in any order.
@@ -89,7 +89,8 @@ List of Standard Extensions
 
 %for name in meta['macro']:
 %if name.endswith("EXT_NAME"):
-- ${th.subt(namespace, tags, meta['macro'][name]['values'][0])}
+    - :ref:`${th.subt(namespace, tags, meta['macro'][name]['values'][0])} <${th.subt(namespace, tags, meta['macro'][name]['values'][0]).replace('"', '')}>`\
+
 %endif
 %endfor
 
@@ -99,6 +100,7 @@ List of Experimental Extensions
 
 %for name in meta['macro']:
 %if name.endswith("EXP_NAME"):
-- ${th.subt(namespace, tags, meta['macro'][name]['values'][0])}
+    - :ref:`${th.subt(namespace, tags, meta['macro'][name]['values'][0])} <${th.subt(namespace, tags, meta['macro'][name]['values'][0]).replace('"', '')}>`\
+
 %endif
 %endfor
