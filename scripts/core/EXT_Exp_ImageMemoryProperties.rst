@@ -24,11 +24,11 @@ API
  
 * Enumerations
 
-    * ${x}-image-memory-properties-exp-version-t
+    * ${x}_image_memory_properties_exp_version_t
 
  
 * Structures
 
-    * ${x}-image-memory-properties-exp-t
+    * ${x}_image_memory_properties_exp_t
 
 
