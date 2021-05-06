@@ -362,6 +362,9 @@ etors:
       desc: $x_image_view_planar_exp_desc_t
       value: "0x00020005"
       version: "1.2"
+    - name: DEVICE_PROPERTIES_1_2
+      desc: $x_device_properties_t
+      version: "1.2"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
