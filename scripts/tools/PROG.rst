@@ -950,11 +950,13 @@ Register State Access
 ---------------------
 
 A tool may read and write the register state of a stopped device thread.
-The register state is represented as a randomly accessible range of memory.
 
+Registers are grouped into sets of similar registers.
 The types of register sets supported by a device can be queried using ${t}DebugGetRegisterSetProperties.
 The register set properties specify details about each register set,
 such as the maximum number of registers in each set, and whether the register set is read-only.
+
+The actual type of registers is device-specific and will be defined by the device vendor.
 
 .. parsed-literal::
 
