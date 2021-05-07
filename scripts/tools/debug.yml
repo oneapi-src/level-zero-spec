@@ -392,10 +392,10 @@ members:
       name: version
       desc: "[out] device-specific version of this register set"
     - type: $t_debug_regset_flags_t
-      name: general_flags
+      name: generalFlags
       desc: "[out] general register set flags"
     - type: uint32_t
-      name: device_flags
+      name: deviceFlags
       desc: "[out] device-specific register set flags"
     - type: uint32_t
       name: count
