@@ -351,7 +351,7 @@ etors:
       value: "0x00020002"
       version: "1.0"
     - name: SCHEDULING_HINT_EXP_PROPERTIES
-      desc: $x_scheduling_hint_ext_properties_t
+      desc: $x_scheduling_hint_exp_properties_t
       value: "0x00020003"
       version: "1.2"
     - name: SCHEDULING_HINT_EXP_DESC

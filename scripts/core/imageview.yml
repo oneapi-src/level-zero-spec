@@ -36,7 +36,7 @@ details:
     - "The application must only use the image view for the device, or its sub-devices, which was provided during creation."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
-    - "The implementation must support $X_image_view extension."
+    - "The implementation must support $X_experimental_image_view extension."
     - "Image views are treated as images from the API."
     - "Image views provide a mechanism to redescribe how an image is interpreted (e.g. different format)."
     - "Image views become disabled when their corresponding image resource is destroyed."
