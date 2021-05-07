@@ -124,6 +124,10 @@ etors:
       desc: "Media Format: 422V. Format type and swizzle is ignored for this."
     - name: 444P
       desc: "Media Format: 444P. Format type and swizzle is ignored for this."
+    - name: RGBP
+      desc: "Media Format: RGBP. Format type and swizzle is ignored for this."
+    - name: BRGP
+      desc: "Media Format: BRGP. Format type and swizzle is ignored for this."
 
 --- #--------------------------------------------------------------------------
 type: enum
