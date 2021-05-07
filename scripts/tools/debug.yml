@@ -370,29 +370,14 @@ returns:
         - "the memory cannot be accessed from the supplied thread"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported device register set types."
-class: $tDebug
-name: $t_debug_regset_type_t
-etors:
-    - name: INVALID
-      desc: "An invalid register set"
-      value: "0"
-    - name: GPR
-      desc: "The general purpose register set"
-    - name: ACC
-      desc: "The accumulator register set"
-    - name: ADDR
-      desc: "The address register set"
-    - name: FLAG
-      desc: "The flags register set"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Supported device register set flags."
+desc: "Supported general register set flags."
 class: $tDebug
 name: $t_debug_regset_flags_t
 etors:
-    - name: READ_ONLY
-      desc: "register set is read-only"
+    - name: READABLE
+      desc: "register set is readable"
+    - name: WRITEABLE
+      desc: "register set is writeable"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device register set properties queried using $tDebugGetRegisterSetProperties."
@@ -400,21 +385,27 @@ class: $tDebug
 name: $t_debug_regset_properties_t
 base: $t_base_properties_t
 members:
-    - type: $t_debug_regset_type_t
+    - type: uint32_t
       name: type
-      desc: "[out] register set type"
+      desc: "[out] device-specific register set type"
+    - type: uint32_t
+      name: version
+      desc: "[out] device-specific version of this register set"
     - type: $t_debug_regset_flags_t
-      name: flags
-      desc: "[out] register set flags"
+      name: general_flags
+      desc: "[out] general register set flags"
+    - type: uint32_t
+      name: device_flags
+      desc: "[out] device-specific register set flags"
     - type: uint32_t
       name: count
       desc: "[out] number of registers in the set"
-    - type: $t_value_type_t
-      name: valueType
-      desc: "[out] register value type"
-    - type: size_t
-      name: valueSize
-      desc: "[out] register value size in bytes"
+    - type: uint32_t
+      name: bitSize
+      desc: "[out] the size of a register in bits"
+    - type: uint32_t
+      name: byteSize
+      desc: "[out] the size required for reading or writing a register in bytes"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves debug register set properties."
@@ -448,7 +439,7 @@ params:
     - type: $x_device_thread_t
       name: thread
       desc: "[in] the thread identifier"
-    - type: $t_debug_regset_type_t
+    - type: uint32_t
       name: type
       desc: "[in] register set type"
     - type: uint32_t
@@ -475,7 +466,7 @@ params:
     - type: $x_device_thread_t
       name: thread
       desc: "[in] the thread identifier"
-    - type: $t_debug_regset_type_t
+    - type: uint32_t
       name: type
       desc: "[in] register set type"
     - type: uint32_t
