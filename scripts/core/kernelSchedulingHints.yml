@@ -88,6 +88,6 @@ params:
     - type: "$x_kernel_handle_t"
       name: hKernel
       desc: "[in] handle of the kernel object"
-    - type: $x_scheduling_hint_exp_desc_t
+    - type: "$x_scheduling_hint_exp_desc_t*"
       name: pHint
       desc: "[in] pointer to kernel scheduling hint descriptor"
