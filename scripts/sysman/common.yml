@@ -172,6 +172,9 @@ etors:
       desc: $s_ras_state_t
     - name: TEMP_CONFIG
       desc: $s_temp_config_t
+    - name: PCI_BAR_PROPERTIES_1_2
+      desc: $s_pci_bar_properties_1_2_t
+      version: "1.2"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
