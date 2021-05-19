@@ -33,10 +33,8 @@ name: $x_cache_ext_region_t
 etors:
     - name: $X_CACHE_REGION_DEFAULT
       desc: "utilize driver default scheme"
-    - name: $X_CACHE_RESERVE_REGION1
-      desc: "Utilize reserver region 1"
-    - name: $X_CACHE_RESERVE_REGION2
-      desc: "Utilize reserver region 2"
+    - name: $X_CACHE_RESERVE_REGION
+      desc: "Utilize reserver region"
     - name: $X_CACHE_NON_RESERVED_REGION
       desc: "Utilize non-reserverd region"
 --- #--------------------------------------------------------------------------
