@@ -19,8 +19,8 @@ API
 
 * Functions
 
-    * ${x}DeviceReserveCache
-    * ${x}DeviceSetCacheAdvice
+    * ${x}DeviceReserveCacheExt
+    * ${x}DeviceSetCacheAdviceExt
 
 * Enumerations
 
