@@ -243,7 +243,7 @@ params:
       desc: "[in] handle of the driver instance"
     - type: "const char*"
       name: name
-      desc: "[in] extension name"
+      desc: "[in] extension function name"
     - type: "void**"
       name: ppFunctionAddress
       desc: "[out] pointer to function pointer"
