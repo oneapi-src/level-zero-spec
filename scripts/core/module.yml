@@ -407,7 +407,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_FUNCTION_NAME
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set group size for a kernel on the current Host thread."
+desc: "Set group size for a kernel."
 class: $xKernel
 name: SetGroupSize
 details:
@@ -479,7 +479,7 @@ params:
       desc: "[out] recommended total group count."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set kernel argument for a kernel on the current Host thread."
+desc: "Set kernel argument for a kernel."
 class: $xKernel
 name: SetArgumentValue
 details:
@@ -575,7 +575,7 @@ etors:
       desc: "Large General Data size"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Sets the preferred cache configuration for a kernel on the current Host thread."
+desc: "Sets the preferred cache configuration."
 class: $xKernel
 name: SetCacheConfig
 ordinal: "2"
