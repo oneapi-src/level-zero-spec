@@ -60,9 +60,9 @@ details:
     - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by dstptr as it is free to be modified by either the Host or device up until execution."
     - "The value to initialize memory to is described by the pattern and the pattern size."
-    - "The pattern size must be a power-of-two and less than $x_command_queue_group_properties_t.maxMemoryFillPatternSize."
+    - "The pattern size must be a power-of-two and less than or equal to $x_command_queue_group_properties_t.maxMemoryFillPatternSize."
     - "The application must ensure the events are accessible by the device on which the command list was created."
-    - "The application must enusre the command list and events were created, and the memory was allocated, on the same context."
+    - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 analogue:
