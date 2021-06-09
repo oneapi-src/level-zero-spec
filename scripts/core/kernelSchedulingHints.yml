@@ -31,8 +31,6 @@ version: "1.2"
 class: $xKernel
 name: $x_scheduling_hint_exp_flags_t
 etors:
-    - name: LONG_RUNNING
-      desc: "Hint that the kernel is long-running"
     - name: OLDEST_FIRST
       desc: "Hint that the kernel prefers oldest-first scheduling"
     - name: ROUND_ROBIN
