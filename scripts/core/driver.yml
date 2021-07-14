@@ -31,6 +31,7 @@ details:
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
     - "Only one instance of each driver will be initialized per process."
     - "The application may call this function multiple times with different flags or environment variables enabled."
+    - "The application must call this function after forking new processes. Each forked process must call this function."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe for scenarios where multiple libraries may initialize the driver(s) simultaneously."
 params:
