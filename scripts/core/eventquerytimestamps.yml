@@ -50,7 +50,12 @@ params:
       desc: "[in] handle of the device to query"
     - type: "uint32_t*"
       name: pCount
-      desc: "[in,out] pointer to the number of timestamp results"
+      desc: |
+            [in,out] pointer to the number of timestamp results.
+            if count is zero, then the driver shall update the value with the total number of timestamps available.
+            if count is greater than the number of timestamps available, then the driver shall update the value with the correct number of timestamps available.
     - type: "$x_kernel_timestamp_result_t*"
       name: pTimestamps
-      desc: "[in,out][range(0, *pCount)] pointer to memory where timestamp results will be written."
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of timestamp results.
+            if count is less than the number of timestamps available, then driver shall only retrieve that number of timestamps.
