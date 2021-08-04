@@ -37,7 +37,6 @@ desc: "Microsoft-specific dllexport storage-class attribute"
 condition: "defined(_WIN32)"
 name: $X_APIEXPORT
 value: __declspec(dllexport)
-altvalue: ""
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "GCC-specific dllexport storage-class attribute"
