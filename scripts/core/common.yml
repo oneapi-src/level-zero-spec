@@ -365,6 +365,11 @@ etors:
     - name: DEVICE_PROPERTIES_1_2
       desc: $x_device_properties_t
       version: "1.2"
+      value: "0x00020006"
+    - name: IMAGE_MEMORY_EXP_PROPERTIES
+      desc: $x_image_memory_properties_exp_t
+      version: "1.2"
+      value: "0x00020007"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
