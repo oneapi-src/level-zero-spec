@@ -79,8 +79,9 @@ Extending Structures
 Any structure derived from ${x}_base_desc_t or ${x}_base_properties_t can be extended using structure chains.
 While it is possible to use other methods, this is the required method for extending existing structures.
 
-A structure chain can contain more than one extension structure, in any order.
-Therefore, extensions should not be dependent on their order relative to other extensions and the implementation must be order agnostic.
+A structure chain can contain more than one extension structure, in any order. Therefore, extensions should not be
+dependent on their order relative to other extensions and the implementation must be order agnostic. In addition,
+the implementation will ignore extended structures that it does not support.
 
 The extension must document the specific structures and functions that may be extended using the structure chain.
 
