@@ -7,29 +7,29 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Extension APIs for Capability Query"
+desc: "Intel $OneApi Level-Zero Extension APIs for Extended Device Properties"
 version: "1.3"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Capability Query Extension Name"
+desc: "Extended Device Properties Extension Name"
 version: "1.3"
-name: $X_CAPABILITY_QUERY_EXT_NAME
-value: '"$X_extension_capability_query"'
+name: $X_EXTENDED_DEVICE_PROPERTIES_EXT_NAME
+value: '"$X_extension_extended_device_properties"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Capability Query Extension Version(s)"
+desc: "Extended Device Properties Extension Version(s)"
 version: "1.3"
-name: $x_capability_query_ext_version_t
+name: $x_extended_device_properties_ext_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "CapabilityQuery structure"
+desc: "ExtendedDeviceProperties structure"
 version: "1.3"
 class: $xDevice
-name: $x_capability_query_ext_desc_t
+name: $x_extended_device_properties_ext_t
 base: $x_base_desc_t
 members:
     - type: uint32_t
