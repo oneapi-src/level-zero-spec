@@ -37,4 +37,4 @@ members:
       desc: "[out] Total number of EUs available"
 details:
     - "This structure must be passed to $xDeviceGetProperties via `pNext` member of $x_device_properties_t"
-    - "Used for determining the total number of assests (EUs etc...) available on device."
+    - "Used for determining the total number of assets (EUs etc...) available on device."
