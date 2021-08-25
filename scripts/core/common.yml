@@ -348,8 +348,8 @@ etors:
     - name: CACHE_RESERVATION_EXT_DESC
       desc: $x_cache_reservation_ext_desc_t
       version: "1.2"
-    - name: EXTENDED_DEVICE_PROPERTIES_EXT
-      desc: $x_extended_device_properties_ext_t
+    - name: EU_COUNT_EXT
+      desc: $x_eu_count_ext_t
       version: "1.3"
     - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
       desc: $x_relaxed_allocation_limits_exp_desc_t

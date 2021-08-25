@@ -8,10 +8,10 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZE_extension_extended_device_properties:
+.. _ZE_extension_eu_count:
 
 ======================================
- Extended Device Properties Extension
+ EU Count Extension
 ======================================
 
 API
@@ -19,4 +19,4 @@ API
 
 * Structures
 
-    * ${x}_extended_device_properties_ext_t
+    * ${x}_eu_count_ext_t

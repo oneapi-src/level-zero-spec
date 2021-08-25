@@ -7,29 +7,29 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Extension APIs for Extended Device Properties"
+desc: "Intel $OneApi Level-Zero Extension APIs for EU Count"
 version: "1.3"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Extended Device Properties Extension Name"
+desc: "EU Count Extension Name"
 version: "1.3"
-name: $X_EXTENDED_DEVICE_PROPERTIES_EXT_NAME
-value: '"$X_extension_extended_device_properties"'
+name: $X_EU_COUNT_EXT_NAME
+value: '"$X_extension_eu_count"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Extended Device Properties Extension Version(s)"
+desc: "EU Count Extension Version(s)"
 version: "1.3"
-name: $x_extended_device_properties_ext_version_t
+name: $x_eu_count_ext_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "ExtendedDeviceProperties structure"
+desc: "EUCount structure"
 version: "1.3"
 class: $xDevice
-name: $x_extended_device_properties_ext_t
+name: $x_eu_count_ext_t
 base: $x_base_desc_t
 members:
     - type: uint32_t
@@ -37,4 +37,4 @@ members:
       desc: "[out] Total number of EUs available"
 details:
     - "This structure must be passed to $xDeviceGetProperties via `pNext` member of $x_device_properties_t"
-    - "Used for determining the total number of assets (EUs etc...) available on device."
+    - "Used for determining the total number of EUs available on device."
