@@ -26,7 +26,7 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "EUCount structure"
+desc: "EU count queried using $xDeviceGetProperties"
 version: "1.3"
 class: $xDevice
 name: $x_eu_count_ext_t
@@ -36,5 +36,5 @@ members:
       name: numTotalEUs
       desc: "[out] Total number of EUs available"
 details:
-    - "This structure must be passed to $xDeviceGetProperties via `pNext` member of $x_device_properties_t"
+    - "This structure may be returned from $xDeviceGetProperties via `pNext` member of $x_device_properties_t"
     - "Used for determining the total number of EUs available on device."
