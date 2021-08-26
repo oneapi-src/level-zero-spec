@@ -128,7 +128,7 @@ members:
       desc: "[out] vendor id from PCI configuration"
     - type: uint32_t
       name: deviceId
-      desc: "[out] device id from PCI configuration" 
+      desc: "[out] device id from PCI configuration"
     - type: $x_device_property_flags_t
       name: flags
       desc: "[out] 0 (none) or a valid combination of $x_device_property_flag_t"
@@ -149,19 +149,19 @@ members:
       desc: "[out] Maximum priority for command queues. Higher value is higher priority."
     - type: uint32_t
       name: numThreadsPerEU
-      desc: "[out] Number of threads per EU."
+      desc: "[out] Maximum number of threads per EU."
     - type: uint32_t
       name: physicalEUSimdWidth
       desc: "[out] The physical EU simd width."
     - type: uint32_t
       name: numEUsPerSubslice
-      desc: "[out] Number of EUs per sub-slice."
+      desc: "[out] Maximum number of EUs per sub-slice."
     - type: uint32_t
       name: numSubslicesPerSlice
-      desc: "[out] Number of sub-slices per slice."
+      desc: "[out] Maximum number of sub-slices per slice."
     - type: uint32_t
       name: numSlices
-      desc: "[out] Number of slices."
+      desc: "[out] Maximum number of slices."
     - type: uint64_t
       name: timerResolution
       desc:
