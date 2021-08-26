@@ -146,12 +146,12 @@ details:
     - "Modules that have imports can be dynamically linked to export modules that satisfy those import requirements."
     - "Modules can have both import and export linkages."
     - "Modules that do not have any imports or exports do not need to be linked."
-    - "Modules cannot be partially linked. All modules needed to satisfy all import dependencies for a module must be passed in or $X_RESULT_ERROR_MODULE_LINK_FAILURE will returned."
+    - "A link log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
+    - "Modules cannot be partially linked. All modules needed to satisfy all import dependencies for a module must be passed in or $X_RESULT_ERROR_MODULE_LINK_FAILURE will returned. The link log may contain a list of the unresolved import dependencies."
     - "Modules with imports need to be linked before kernel objects can be created from them."
     - "Modules will only be linked once. A module can be used in multiple link calls if it has exports but it's imports will not be re-linked."
     - "Ambiguous dependencies, where multiple modules satisfy the import dependencies for another module, is not allowed."
     - "ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not."
-    - "A link log can optionally be returned to the caller. The caller is responsible for destroying build log using $xModuleBuildLogDestroy."
     - "SPIR-V import and export linkage types are used. See SPIR-V specification for linkage details."
     - "The application must ensure the modules being linked were created on the same context."
     - "The application may call this function from simultaneous threads as long as the import modules being linked are not the same."
@@ -380,7 +380,7 @@ details:
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
-      desc: "[in][release] handle of the kernel object"  
+      desc: "[in][release] handle of the kernel object"
 returns:
     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
@@ -417,7 +417,7 @@ details:
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
-      desc: "[in] handle of the kernel object" 
+      desc: "[in] handle of the kernel object"
     - type: "uint32_t"
       name: groupSizeX
       desc: "[in] group size for X dimension to use for this kernel"
@@ -441,7 +441,7 @@ details:
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
-      desc: "[in] handle of the kernel object" 
+      desc: "[in] handle of the kernel object"
     - type: "uint32_t"
       name: globalSizeX
       desc: "[in] global width for X dimension"
@@ -473,7 +473,7 @@ details:
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
-      desc: "[in] handle of the kernel object" 
+      desc: "[in] handle of the kernel object"
     - type: "uint32_t*"
       name: totalGroupCount
       desc: "[out] recommended total group count."
@@ -586,11 +586,11 @@ details:
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
-      desc: "[in] handle of the kernel object" 
+      desc: "[in] handle of the kernel object"
     - type: "$x_cache_config_flags_t"
       name: flags
       desc: |
-            [in] cache configuration. 
+            [in] cache configuration.
             must be 0 (default configuration) or a valid combination of $x_cache_config_flag_t.
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE
@@ -799,7 +799,7 @@ params:
       desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"      
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
     - $X_RESULT_ERROR_INVALID_SIZE:
