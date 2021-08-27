@@ -19,7 +19,7 @@ synchronization methods are defined as logical entities.
 All logical entities will be bound to device level physical capabilities.
 
 Device discovery APIs enumerate the accelerators functional features.
-These APIs provide interface to query information like compute unit count within the device or sub device, 
+These APIs provide interface to query information like compute unit count within the device or sub device,
 available memory and affinity to the compute, user managed cache size and work submission command queues.
 
 Drivers
@@ -52,7 +52,7 @@ Initialization and Discovery
 
 The Level-Zero API must be initialized by calling ${x}Init before calling any other API function.
 This function will load all Level-Zero driver(s) in the system into memory for the current process, for use by all Host threads.
-Simultaneous calls to ${x}Init are thread-safe and only one instance of each driver will be loaded. 
+Simultaneous calls to ${x}Init are thread-safe and only one instance of each driver will be loaded.
 
 The following pseudo-code demonstrates a basic initialization and device discovery sequence:
 
@@ -81,7 +81,7 @@ The following pseudo-code demonstrates a basic initialization and device discove
            for(d = 0; d < deviceCount; ++d) {
                ${x}_device_properties_t device_properties;
                ${x}DeviceGetProperties(allDevices[d], &device_properties);
-       
+
                if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
                    hDriver = allDrivers[i];
                    hDevice = allDevices[d];
@@ -203,7 +203,7 @@ The type of allocation describes the *ownership* of the allocation:
 2. **Device** allocations are owned by a specific device and are intended to be allocated out of device local memory, if present.
 
     + Device allocations generally trade off access limitations for higher performance.
-    + With very few exceptions, device allocations may only be accessed by the specific device that they are allocated on, 
+    + With very few exceptions, device allocations may only be accessed by the specific device that they are allocated on,
       or copied to another device or Host allocation.
     + The same pointer to a device allocation may be used on any supported device.
 
@@ -258,7 +258,7 @@ However, it is undefined behavior for an application to access memory outside of
 The actual page size used for an allocation can be queried from ${x}_memory_allocation_properties_t.pageSize using ${x}MemGetAllocProperties.
 Applications should implement usage-specific allocators from device memory pools (e.g., small and/or fixed-sized allocations, lock-free, etc.).
 
-Furthermore, drivers may *oversubscribe* some **shared** allocations. 
+Furthermore, drivers may *oversubscribe* some **shared** allocations.
 When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
 
 The required matrix of capabilities are:
@@ -453,7 +453,7 @@ The following example makes a 1GB reserved allocation and then makes both 128KB 
         // Sub-allocate 128KB of our 1GB allocation.
         size_t subAllocSize = 131072;
         ${x}VirtualMemQueryPageSize(hContext, hDevice, subAllocSize, &pageSize);
-        
+
         // Create physical memory object for our 128KB sub-allocation.
         size_t subAllocAlignedSize = align(subAllocSize, pageSize);
         ${x}_physical_mem_desc_t pmemDesc = {
@@ -483,8 +483,8 @@ The following example makes a 1GB reserved allocation and then makes both 128KB 
 Images
 ------
 
-An image is used to store multi-dimensional and format-defined memory. 
-An image's contents may be stored in an implementation-specific encoding 
+An image is used to store multi-dimensional and format-defined memory.
+An image's contents may be stored in an implementation-specific encoding
 and layout in memory for optimal device access
 (e.g., tile swizzle patterns, lossless compression, etc.).
 There is no support for direct Host access to an image's content.
@@ -684,7 +684,7 @@ Discovery
 - For example, if a command list is meant to be submitted to a copy-only engine,
   then it must be created using a command queue group ordinal with
   ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY set and ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COMPUTE not set,
-  and submitted to a command queue created using the same ordinal. 
+  and submitted to a command queue created using the same ordinal.
 
 The following pseudo-code demonstrates a basic sequence for discovery of command queue groups:
 
@@ -726,14 +726,14 @@ Creation
 - Multiple command queues created for the same command queue group on the same context,
   may also share the same physical hardware context.
 - The maximum number of command queues an application can create is limited by device-specific
-  resources; e.g., the maximum number of logical hardware contexts supported by the device. 
+  resources; e.g., the maximum number of logical hardware contexts supported by the device.
   This can be queried from ${x}_device_properties_t.maxHardwareContexts.
-- All command lists executed on a command queue are guaranteed to **only** execute on an engine from the 
+- All command lists executed on a command queue are guaranteed to **only** execute on an engine from the
   command queue group which it is assigned; e.g., copy commands in a compute command list / queue will
   execute via the compute engine, not the copy engine.
 - The command queue index provides a mechanism for an application to indicate which command queues
   can execute concurrently (different indices) vs. those that cannot (same indices).
-- There is no guarantee command lists submitted to command queues with different indices will execute concurrently, 
+- There is no guarantee command lists submitted to command queues with different indices will execute concurrently,
   only a possibility that they might execute concurrently.
 
 The following pseudo-code demonstrates a basic sequence for creation of command queues:
@@ -805,9 +805,9 @@ Appending
   ${X}_COMMAND_LIST_FLAG_RELAXED_ORDERING. Reordering is guaranteed to only occur
   between barriers and synchronization primitives.
 - By default, commands submitted to a command list are optimized for execution by
-  balancing both device throughput and Host latency. 
-- For very low-level latency usage-models, applications should use immediate command lists. 
-- For usage-models where maximum throughput is desired, applications should 
+  balancing both device throughput and Host latency.
+- For very low-level latency usage-models, applications should use immediate command lists.
+- For usage-models where maximum throughput is desired, applications should
   use ${X}_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT. This flag will indicate to the driver
   it may perform additional device-specific optimizations.
 - If a device contains multiple sub-devices, then commands submitted to a device-level
@@ -834,13 +834,13 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
 Submission
 ~~~~~~~~~~
 
-- There is no implicit association between a command list and a command queue. 
+- There is no implicit association between a command list and a command queue.
   Therefore, a command list may be submitted to any or multiple command queues.
 - By definition, a command list cannot be executed concurrently on multiple command queues.
 - The application is responsible for calling close before submission to a command queue.
 - Command lists do not inherit state from other command lists executed on the same
   command queue.  i.e. each command list begins execution in its own default state.
-- A command list may be submitted multiple times.  It is up to the application to ensure 
+- A command list may be submitted multiple times.  It is up to the application to ensure
   that the command list can be executed multiple times.
   For example, events must be explicitly reset prior to re-execution.
 
@@ -1048,7 +1048,7 @@ Kernel Timestamp Events
 
 A kernel timestamp event is a special type of event that records device timestamps at the start and end of the execution of kernels. The primary motivation for kernel timestamps is to provide a duration of execution.  For consistency and orthogonality, kernel timestamps are also supported for non-kernel operations. Kernel timestamps execute along a device timeline but because of limited range may wrap unexpectedly. Because of this, the temporal order of two kernel timestamps shouldn't be inferred despite coincidental START/END values. {x}CommandListAppendWriteGlobalTimestamp provides a similar mechanism but with maximum range.  Timestamps from {x}CommandListAppendWriteGlobalTimestamp and kernel timestamp events should not be inferred as equivalent even if reported within identical ranges.
 
-- The duration of a kernel timestamp for ${x}CommandListAppendSignalEvent and ${x}EventHostSignal is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality. 
+- The duration of a kernel timestamp for ${x}CommandListAppendSignalEvent and ${x}EventHostSignal is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality.
 - A kernel timestamp event result can be queried using either ${x}EventQueryKernelTimestamp or ${x}CommandListAppendQueryKernelTimestamps
 - The ${x}_kernel_timestamp_result_t contains both the per-context and global timestamp values at the start and end of the kernel's execution
 - Since these counters are only 32bits, the application must detect and handle counter wrapping when calculating execution time
@@ -1106,7 +1106,7 @@ A kernel timestamp event is a special type of event that records device timestam
        ${x}EventHostSynchronize(hEvent, 0);
 
        // Calculation execution time(s)
-       double globalTimeInNs = ( tsResult->global.kernelEnd >= tsResult->global.kernelStart ) 
+       double globalTimeInNs = ( tsResult->global.kernelEnd >= tsResult->global.kernelStart )
            ? ( tsResult->global.kernelEnd - tsResult->global.kernelStart ) * timestampFreq
            : (( timestampMaxValue - tsResult->global.kernelStart) + tsResult->global.kernelEnd + 1 ) * timestampFreq;
 
@@ -1347,7 +1347,7 @@ The ${x}ModuleCreate function can optionally generate a build log object ${x}_mo
        {
            size_t szLog = 0;
            ${x}ModuleBuildLogGetString(buildlog, &szLog, nullptr);
-           
+
            char_t* strLog = allocate(szLog);
            ${x}ModuleBuildLogGetString(buildlog, &szLog, strLog);
 
@@ -1358,6 +1358,37 @@ The ${x}ModuleCreate function can optionally generate a build log object ${x}_mo
        }
 
        ${x}ModuleBuildLogDestroy(buildlog);
+
+Dynamically Linked Modules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Modules may be interdependent i.e. a module may contain functions and global variables that are used by another module while, at the same time, containing functions and global variables that are defined in a different module. Such a module is said to have both import as well as export linkage requirements. All the import linkage requirements of a module must be satisfied before a kernel can be created from that module. Modules that have no imports do not need to be linked. Linking modules together is performed using ${x}ModuleDynamicLink. Modules cannot have ambiguous import dependencies i.e. imported functions and global variables must only be defined once in any given set of modules passed to ${x}ModuleDynamicLink. Imports are linked only once. Once all the import dependencies of a module have been linked, the use of that fully import-linked module in subsequent calls to ${x}ModuleDynamicLink will not cause the imports of the module to be re-linked.
+
+The ${x}ModuleDynamicLink function can optionally generate a link log object ${x}_module_build_log_handle_t.
+
+
+
+.. parsed-literal::
+
+       ...
+       ${x}_module_build_log_handle_t linklog;
+       ${x}_result_t result = ${x}ModuleDynamicLink(numModules, &hModules, &hLinklog);
+
+       // Check if there are linking errors
+       if (result == ${x}_RESULT_ERROR_MODULE_LINK_FAILURE) {
+         si${x}_t szLog = 0;
+         ${x}ModuleBuildLogGetString(linklog, &szLog, nullptr);
+
+         char_t* strLog = allocate(szLog);
+         ${x}ModuleBuildLogGetString(linklog, &szLog, strLog);
+
+         // Save log to disk.
+         ...
+
+         free(strLog);
+       }
+
+       ${x}ModuleBuildLogDestroy(linklog);
 
 Module Caching with Native Binaries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1413,7 +1444,20 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
            "image_scaling"
        };
        ${x}_kernel_handle_t hKernel;
-       ${x}KernelCreate(hModule, &kernelDesc, &hKernel);
+       ${x}_result_t result = ${x}KernelCreate(hModule, &kernelDesc, &hKernel);
+
+       // Check if there are unresolved imports
+       if (result == ${x}_RESULT_ERROR_INVALID_MODULE_UNLINKED) {
+          // Call ${x}ModuleDynamicLink to dump out a link log
+          ...
+       }
+
+       // Check to see if the kernel "image_scaling" was found in the supplied module
+       if (result == ${x}_RESULT_ERROR_INVALID_KERNEL_NAME) {
+          // Kernel "image_scaling" not found in module!
+          ...
+       }
+
        ...
 
 Kernel Properties
@@ -1425,8 +1469,6 @@ Use ${x}KernelGetProperties to query invariant properties from a Kernel object.
 
     ...
     ${x}_kernel_properties_t kernelProperties;
-
-    // 
     ${x}KernelGetProperties(hKernel, &kernelProperties);
     ...
 
@@ -1524,7 +1566,7 @@ device to generate the parameters.
 .. parsed-literal::
 
        ${x}_group_count_t* pIndirectArgs;
-       
+
        ...
        ${x}MemAllocDevice(hContext, &desc, sizeof(${x}_group_count_t), sizeof(uint32_t), hDevice, &pIndirectArgs);
 
@@ -1592,7 +1634,7 @@ The following pseudo-code demonstrates the creation of a sampler object and pass
        ${x}_sampler_handle_t sampler;
        ${x}SamplerCreate(hContext, hDevice, &desc, &sampler);
        ...
-       
+
        // The sampler can be passed as a kernel argument.
        ${x}KernelSetArgumentValue(hKernel, 0, sizeof(${x}_sampler_handle_t), &sampler);
 
@@ -1620,7 +1662,7 @@ The following table documents the supported knobs for overriding default functio
 Affinity Mask
 ~~~~~~~~~~~~~
 
-The affinity mask allows an application or tool to restrict which devices, and sub-devices, are visible to 3rd-party libraries or applications in another process, respectively. 
+The affinity mask allows an application or tool to restrict which devices, and sub-devices, are visible to 3rd-party libraries or applications in another process, respectively.
 The affinity mask affects the number of handles returned from ${x}DeviceGet and ${x}DeviceGetSubDevices.
 The affinity mask is specified via an environment variable as a comma-seperated list of device and/or subdevice ordinals.
 The values are specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
@@ -1691,7 +1733,7 @@ or sub-device using ${x}DeviceGetProperties.
 Device Residency
 ----------------
 
-For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution. 
+For devices that do not support page-faults, the driver must ensure that all pages that will be accessed by the kernel are resident before program execution.
 This can be determined by checking ${x}_device_properties_t.flags for ${X}_DEVICE_PROPERTY_FLAG_ONDEMANDPAGING.
 
 In most cases, the driver implicitly handles residency of allocations for device access.
@@ -1702,7 +1744,7 @@ such as multiple levels of indirection, there are two methods available:
 1. The application may set the ${X}_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.
 
     + The application should specify which allocation types will be indirectly accessed, using ${x}KernelSetIndirectAccess and the following flags, to optimize which allocations are made resident.
-           
+
         * ${X}_KERNEL_INDIRECT_ACCESS_FLAG_HOST
         * ${X}_KERNEL_INDIRECT_ACCESS_FLAG_DEVICE
         * ${X}_KERNEL_INDIRECT_ACCESS_FLAG_SHARED
@@ -1883,7 +1925,7 @@ The following code examples demonstrate how to use the event IPC APIs:
        };
        ${x}_event_pool_handle_t hEventPool;
        ${x}EventPoolCreate(hContext, &eventPoolDesc, 1, &hDevice, &hEventPool);
-    
+
        // get IPC handle and send to another process
        ${x}_ipc_event_pool_handle_t hIpcEvent;
        ${x}EventPoolGetIpcHandle(hEventPool, &hIpcEventPool);
