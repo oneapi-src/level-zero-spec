@@ -44,7 +44,7 @@ params:
       desc: "[in][range(0, numModules)] pointer to an array of modules to be inspected for import dependencies."
     - type: "$x_module_build_log_handle_t*"
       name: phLog
-      desc: "[out][optional] pointer to handle of log listing all import dependencies."
+      desc: "[out] pointer to handle of log listing all import dependencies."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "List Unresolvable Import Dependencies"
@@ -65,7 +65,7 @@ params:
       desc: "[in][range(0, numModules)] pointer to an array of modules to be inspected for unresolvable import dependencies."
     - type: "$x_module_build_log_handle_t*"
       name: phLog
-      desc: "[out][optional] pointer to handle of log listing unresolved import dependencies."
+      desc: "[out] pointer to handle of log listing unresolved import dependencies."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "List Exports"
@@ -86,4 +86,4 @@ params:
       desc: "[in][range(0, numModules)] pointer to an array of modules to be inspected for exports."
     - type: "$x_module_build_log_handle_t*"
       name: phLog
-      desc: "[out][optional] pointer to handle of log listing exports."
+      desc: "[out] pointer to handle of log listing exports."
