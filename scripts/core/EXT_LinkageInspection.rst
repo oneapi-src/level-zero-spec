@@ -20,74 +20,47 @@ API
 * Functions
 
 
-    * ${x}ModuleListImportsExt
-    * ${x}ModuleListUnresolvableImportsExt
-    * ${x}ModuleListExportsExt
+    * ${x}ModuleInspectLinkageExt
+
+
+* Enumerations
+
+
+    * ${x}_linkage_inspection_ext_version_t
+    * ${x}_linkage_inspection_ext_flags_t
+
+
+* Structures
+
+
+    * ${x}_linkage_inspection_ext_desc_t
 
 Linkage Inspection
 ~~~~~~~~~~~~~~~~~~
 
 Modules support SPIR-V linkage, i.e., modules can import and export global variables and function definitions to/from other modules. This extension provides an API to inspect the linkage properties & requirements of a collection of modules.
 
-Modules may require global variables & functions to be imported before all dependencies are satisfied. The following psuedo-code demonstrates a sequence for inspecting the import requirements of a set of modules:
+Modules may require global variables & functions to be imported before all dependencies are satisfied. Modules may also export global variables & functions that can be imported by dependent modules. Additionally, a set of modules may have un-satisfiable import dependencies, i.e., import dependencies that are required by one or modules in the set that are not provided as exports by any other module within the set. If the set of modules is to be dynamically linked using ${x}ModuleDynamicLink, all un-resolvable import dependencies must be eliminated from the set by adding modules to the set that define the missing import dependencies. The following psuedo-code demonstrates a sequence for inspecting the import dependencies, un-resolvable import dependencies, and exports of a set of modules:
 
 .. parsed-literal::
 
        ...
-       ${x}_module_build_log_handle_t importlog;
-       ${x}_result_t result = ${x}ModuleListImportsExt(numModules, &hModules, &importlog);
+       // Create a linkage inspection descriptor
+       ${x}_linkage_inspection_desc_t inspectDesc = {
+           ${X}_LINKAGE_INSPECTION_EXT_FLAG_IMPORTS | ${X}_LINKAGE_INSPECTION_EXT_FLAG_UNRESOLVABLE_IMPORTS | ${X}_LINKAGE_INSPECTION_EXT_FLAG_EXPORTS
+       };
+       ${x}_module_build_log_handle_t linkLog;
+       ${x}_result_t result = ${x}ModuleInspectLinkageExt(&inspectDesc, numModules, &hModules, &linkLog);
 
        size_t szLog = 0;
-       ${x}ModuleBuildLogGetString(importlog, &szLog, nullptr);
+       ${x}ModuleBuildLogGetString(linkLog, &szLog, nullptr);
 
        char_t* strLog = allocate(szLog);
-       ${x}ModuleBuildLogGetString(importlog, &szLog, strLog);
+       ${x}ModuleBuildLogGetString(linkLog, &szLog, strLog);
 
        // Save log to disk.
        ...
 
        free(strLog);
 
-       ${x}ModuleBuildLogDestroy(importlog);
-
-Modules may export global variables & functions that can be imported by dependent modules. The following psuedo-code demonstrates a sequence for inspecting the exports of a set of modules:
-
-.. parsed-literal::
-
-       ...
-       ${x}_module_build_log_handle_t exportlog;
-       ${x}_result_t result = ${x}ModuleListExportsExt(numModules, &hModules, &exportlog);
-
-       size_t szLog = 0;
-       ${x}ModuleBuildLogGetString(exportlog, &szLog, nullptr);
-
-       char_t* strLog = allocate(szLog);
-       ${x}ModuleBuildLogGetString(exportlog, &szLog, strLog);
-
-       // Save log to disk.
-       ...
-
-       free(strLog);
-
-       ${x}ModuleBuildLogDestroy(exportlog);
-
-A set of modules can be checked for unsatisfied import dependencies, i.e., imports required by one of more module in the set that are not met by other modules from within the set. Modules must be added to the set until no unsatisfied import dependencies remain. The following psuedo-code demonstrates a sequence for inspecting the unsatisfied import dependencies of a set of modules:
-
-.. parsed-literal::
-
-       ...
-       ${x}_module_build_log_handle_t log;
-       ${x}_result_t result = ${x}ModuleListExportsExt(numModules, &hModules, &log);
-
-       size_t szLog = 0;
-       ${x}ModuleBuildLogGetString(log, &szLog, nullptr);
-
-       char_t* strLog = allocate(szLog);
-       ${x}ModuleBuildLogGetString(log, &szLog, strLog);
-
-       // Save log to disk.
-       ...
-
-       free(strLog);
-
-       ${x}ModuleBuildLogDestroy(log);
+       ${x}ModuleBuildLogDestroy(linkLog);
