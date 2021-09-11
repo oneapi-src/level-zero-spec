@@ -149,7 +149,6 @@ details:
     - "Modules cannot be partially linked. Unsatisfiable import dependencies in the set of modules passed to $xModuleDynamicLink will result in  $X_RESULT_ERROR_MODULE_LINK_FAILURE being returned."
     - "Modules will only be linked once. A module can be used in multiple link calls if it has exports but its imports will not be re-linked."
     - "Ambiguous dependencies, where multiple modules satisfy the same import dependencies for a module, are not allowed."
-    - "The linkage properties of a set of modules may be inspected using the ${x}ModuleInspectLinkageExt function in the Linkage Inspection extension."
     - "The application must ensure the modules being linked were created on the same context."
     - "The application may call this function from simultaneous threads as long as the import modules being linked are not the same."
     - "ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not."
