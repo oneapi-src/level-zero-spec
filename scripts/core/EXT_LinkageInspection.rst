@@ -40,7 +40,11 @@ Linkage Inspection
 
 Modules support SPIR-V linkage, i.e., modules can import and export global variables and function definitions to/from other modules. This extension provides an API to inspect the linkage properties & requirements of a collection of modules.
 
-Modules may require global variables & functions to be imported before all dependencies are satisfied. Modules may also export global variables & functions that can be imported by dependent modules. Additionally, a set of modules may have un-satisfiable import dependencies, i.e., import dependencies that are required by one or modules in the set that are not provided as exports by any other module within the set. If the set of modules is to be dynamically linked using ${x}ModuleDynamicLink, all un-resolvable import dependencies must be eliminated from the set by adding modules to the set that define the missing import dependencies. The following psuedo-code demonstrates a sequence for inspecting the import dependencies, un-resolvable import dependencies, and exports of a set of modules:
+Modules may require global variables & functions to be imported before all dependencies are satisfied. Modules may also export global variables & functions that can be imported by dependent modules. Additionally, a set of modules may have un-satisfiable import dependencies, i.e., import dependencies that are required by one or modules in the set that are not provided as exports by any other module within the set. If the set of modules is to be dynamically linked using ${x}ModuleDynamicLink, all un-resolvable import dependencies must be eliminated from the set by adding modules to the set that define the missing import dependencies.
+
+The ${x}_module_build_log_handle_t log object returned by the call to ${x}ModuleInspectLinkageExt will contain separate lists of the imports, un-resolvable imports, & exports requested via the appropriate combination of ${x}_linkage_inspection_ext_flags_t flags.
+
+The following psuedo-code demonstrates a sequence for inspecting the import dependencies, un-resolvable import dependencies, and exports of a set of modules:
 
 .. parsed-literal::
 

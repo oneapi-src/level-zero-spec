@@ -73,4 +73,4 @@ params:
       desc: "[in][range(0, numModules)] pointer to an array of modules to be inspected for import dependencies."
     - type: "$x_module_build_log_handle_t*"
       name: phLog
-      desc: "[out] pointer to handle of log listing all import dependencies."
+      desc: "[out] pointer to handle of linkage inspection log. Log object will contain separate lists of imports, un-resolvable imports, and exports."
