@@ -43,6 +43,18 @@ etors:
       desc: "Execution unit register file"
     - name: SLM
       desc: "Execution unit shared local memory"
+    - name: GDDR4
+      desc: "GDDR4 memory"
+    - name: GDDR5
+      desc: "GDDR5 memory"
+    - name: GDDR5X
+      desc: "GDDR5X memory"
+    - name: GDDR6
+      desc: "GDDR6 memory"
+    - name: GDDR6X
+      desc: "GDDR6X memory"
+    - name: GDDR7
+      desc: "GDDR7 memory"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory module location"
