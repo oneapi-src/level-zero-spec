@@ -146,10 +146,10 @@ members:
       desc: "[out] the module format"
     - type: uint64_t
       name: moduleBegin
-      desc: "[out] the begin address of the in-memory module"
+      desc: "[out] the begin address of the in-memory module (inclusive)"
     - type: uint64_t
       name: moduleEnd
-      desc: "[out] the end address of the in-memory module"
+      desc: "[out] the end address of the in-memory module (exclusive)"
     - type: uint64_t
       name: load
       desc: "[out] the load address of the module on the device"
