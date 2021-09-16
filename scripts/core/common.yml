@@ -379,6 +379,10 @@ etors:
       desc: $x_image_memory_properties_exp_t
       version: "1.2"
       value: "0x00020007"
+    - name: POWER_SAVING_HINT_EXP_DESC
+      desc: $x_context_power_saving_hint_exp_desc_t
+      value: "0x00020008"
+      version: "1.2"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
