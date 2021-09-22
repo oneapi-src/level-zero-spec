@@ -732,7 +732,9 @@ Creation
   via its index, limited by the number of physical engines of the type of the command queue group,
   i.e. ${x}_command_queue_group_properties_t.numQueues.
 - The command queue index provides a mechanism for an application to indicate which command queues
-  can execute concurrently (different indices) vs. those that cannot (same indices).
+  can execute concurrently (different indices).
+- Command queues that do not share the same index may launch and execute concurrently.
+- Command queues that share the same index launch sequentially but may execute concurrently.
 - All command lists executed on a command queue are guaranteed to **only** execute on an engine from the
   command queue group to which it is assigned; e.g., copy commands in a compute command list / queue will
   execute via the compute engine, not the copy engine.
