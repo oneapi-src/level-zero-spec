@@ -65,6 +65,9 @@ details:
 analogue:
     - None
 params:
+    - type: "$x_linkage_inspection_ext_desc_t*"
+      name: pInspectDesc
+      desc: "[in] pointer to linkage inspection descriptor structure."
     - type: uint32_t
       name: numModules
       desc: "[in] number of modules to be inspected pointed to by phModules."

@@ -50,7 +50,7 @@ The following psuedo-code demonstrates a sequence for inspecting the import depe
 
        ...
        // Create a linkage inspection descriptor
-       ${x}_linkage_inspection_desc_t inspectDesc = {
+       ${x}_linkage_inspection_ext_desc_t inspectDesc = {
            ${X}_LINKAGE_INSPECTION_EXT_FLAG_IMPORTS | ${X}_LINKAGE_INSPECTION_EXT_FLAG_UNRESOLVABLE_IMPORTS | ${X}_LINKAGE_INSPECTION_EXT_FLAG_EXPORTS
        };
        ${x}_module_build_log_handle_t linkLog;

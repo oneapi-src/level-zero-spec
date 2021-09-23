@@ -1375,8 +1375,8 @@ The ${x}ModuleDynamicLink function can optionally generate a link log object ${x
        ${x}_result_t result = ${x}ModuleDynamicLink(numModules, &hModules, &hLinklog);
 
        // Check if there are linking errors
-       if (result == ${x}_RESULT_ERROR_MODULE_LINK_FAILURE) {
-         si${x}_t szLog = 0;
+       if (result == ${X}_RESULT_ERROR_MODULE_LINK_FAILURE) {
+         size_t szLog = 0;
          ${x}ModuleBuildLogGetString(linklog, &szLog, nullptr);
 
          char_t* strLog = allocate(szLog);
@@ -1447,13 +1447,13 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
        ${x}_result_t result = ${x}KernelCreate(hModule, &kernelDesc, &hKernel);
 
        // Check if there are unresolved imports
-       if (result == ${x}_RESULT_ERROR_INVALID_MODULE_UNLINKED) {
-          // Call ${x}ModuleDynamicLink to dump out a link log
+       if (result == ${X}_RESULT_ERROR_INVALID_MODULE_UNLINKED) {
+          // Un-resolvable import dependencies found in module!
           ...
        }
 
        // Check to see if the kernel "image_scaling" was found in the supplied module
-       if (result == ${x}_RESULT_ERROR_INVALID_KERNEL_NAME) {
+       if (result == ${X}_RESULT_ERROR_INVALID_KERNEL_NAME) {
           // Kernel "image_scaling" not found in module!
           ...
        }
