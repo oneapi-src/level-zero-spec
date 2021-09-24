@@ -39,7 +39,7 @@ API
 PCI Properties
 ~~~~~~~~~~~~~~~~~~
 
-Accelerator devices connected to the host CPU over a PCI root complex can be located in the PCI switch fabric using the BDF address. This is useful, e.g., to determine which PCI devices are located *close* to each other in the PCI switch fabric. The ${x}_pci_address_ext_t struct returned via ${x}_pci_ext_properties_t by the call to ${x}DevicePciGetPropertiesExt contains the BDF address of the device.
+Accelerator devices connected to the host CPU over a PCI root complex can be located in the PCI switch fabric using a bus:device:function (BDF) address. This is useful, e.g., to determine which PCI devices are located *close* to each other in the PCI switch fabric. The ${x}_pci_address_ext_t struct returned via ${x}_pci_ext_properties_t by the call to ${x}DevicePciGetPropertiesExt contains the BDF address of the device.
 
 The choice of the optimal algorithm to use for a given computation may be dependent on the access speed, i.e., bandwidth at which data can be transferred over PCI to the device. The ${x}_pci_speed_ext_t struct returned via ${x}_pci_ext_properties_t by the call to ${x}DevicePciGetPropertiesExt contains the theoretical PCI BW for accessing the device.
 

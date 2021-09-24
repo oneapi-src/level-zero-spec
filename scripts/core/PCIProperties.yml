@@ -33,16 +33,19 @@ name: $x_pci_address_ext_t
 members:
     - type: uint32_t
       name: "domain"
-      desc: "[out] BDF domain"
+      desc: "[out] PCI domain number"
     - type: uint32_t
       name: "bus"
-      desc: "[out] BDF bus"
+      desc: "[out] PCI BDF bus number"
     - type: uint32_t
       name: "device"
-      desc: "[out] BDF device"
+      desc: "[out] PCI BDF device number"
     - type: uint32_t
       name: "function"
-      desc: "[out] BDF function"
+      desc: "[out] PCI BDF function number"
+details:
+    - "This structure may be passed to $xDevicePciGetPropertiesExt as an attribute of $x_pci_ext_properties_t."
+    - "A PCI BDF address is the bus:device:function address of the device and is useful for locating the device in the PCI switch fabric."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device PCI speed"
@@ -51,14 +54,14 @@ class: $xDevice
 name: $x_pci_speed_ext_t
 members:
     - type: int32_t
-      name: "gen"
+      name: "genVersion"
       desc: "[out] The link generation. A value of -1 means that this property is unknown."
     - type: int32_t
       name: "width"
       desc: "[out] The number of lanes. A value of -1 means that this property is unknown."
     - type: int64_t
       name: "maxBandwidth"
-      desc: "[out] The maximum bandwidth in bytes/sec (sum of all lanes). A value of -1 means that this property is unknown."
+      desc: "[out] The theoretical maximum bandwidth in bytes/sec (sum of all lanes). A value of -1 means that this property is unknown."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Static PCI properties"
@@ -87,7 +90,7 @@ analogue:
 params:
     - type: $x_device_handle_t
       name: hDevice
-      desc: "[in] Sysman handle of the device."
+      desc: "[in] handle of the device object."
     - type: $x_pci_ext_properties_t*
       name: pProperties
-      desc: "[in,out] Will contain the PCI properties."
+      desc: "[in,out] returns the PCI properties of the device."
