@@ -728,12 +728,17 @@ Creation
 - The maximum number of command queues an application can create is limited by device-specific
   resources; e.g., the maximum number of logical hardware contexts supported by the device.
   This can be queried from ${x}_device_properties_t.maxHardwareContexts.
-- All command lists executed on a command queue are guaranteed to **only** execute on an engine from the
-  command queue group which it is assigned; e.g., copy commands in a compute command list / queue will
-  execute via the compute engine, not the copy engine.
+- The physical engine within a command queue group on which a command queue executes is virtualized
+  via its index, limited by the number of physical engines of the type of the command queue group,
+  i.e. ${x}_command_queue_group_properties_t.numQueues.
 - The command queue index provides a mechanism for an application to indicate which command queues
-  can execute concurrently (different indices) vs. those that cannot (same indices).
-- There is no guarantee command lists submitted to command queues with different indices will execute concurrently,
+  can execute concurrently (different indices).
+- Command queues that do not share the same index may launch and execute concurrently.
+- Command queues that share the same index launch sequentially but may execute concurrently.
+- All command lists executed on a command queue are guaranteed to **only** execute on an engine from the
+  command queue group to which it is assigned; e.g., copy commands in a compute command list / queue will
+  execute via the compute engine, not the copy engine.
+- There is no guarantee that command lists submitted to command queues with different indices will execute concurrently,
   only a possibility that they might execute concurrently.
 
 The following pseudo-code demonstrates a basic sequence for creation of command queues:
