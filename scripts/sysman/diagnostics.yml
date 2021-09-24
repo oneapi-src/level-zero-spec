@@ -132,7 +132,7 @@ desc: "Run a diagnostics test suite, either all tests or a subset of tests."
 class: $sDiagnostics
 name: RunTests
 details:
-    - "WARNING: Performancing diagnostics may destroy current device state information. Gracefully close any running workloads before initiating."
+    - "WARNING: Running diagnostics may destroy current device state information. Gracefully close any running workloads before initiating."
     - "To run all tests in a test suite, set start = $S_DIAG_FIRST_TEST_INDEX and end = $S_DIAG_LAST_TEST_INDEX."
     - "If the test suite permits running individual tests, $s_diag_properties_t.haveTests will be true. In this case, the function $sDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
     - "This function will block until the diagnostics have completed."
@@ -145,6 +145,32 @@ params:
       desc: "[in] The index of the first test to run. Set to $S_DIAG_FIRST_TEST_INDEX to start from the beginning."
     - type: uint32_t
       name: end
+      desc: "[in] The index of the last test to run. Set to $S_DIAG_LAST_TEST_INDEX to complete all tests after the start test."
+    - type: $s_diag_result_t*
+      name: pResult
+      desc: "[in,out] The result of the diagnostics"
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to perform diagnostics."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Run a diagnostics test suite, either all tests or a subset of tests."
+class: $sDiagnostics
+name: RunTestsWithReset
+details:
+    - "WARNING: Running diagnostics may destroy current device state information. Gracefully close any running workloads before initiating."
+    - "To run all tests in a test suite, set start = $S_DIAG_FIRST_TEST_INDEX and end = $S_DIAG_LAST_TEST_INDEX."
+    - "If the test suite permits running individual tests, $s_diag_properties_t.haveTests will be true. In this case, the function $sDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
+    - "This function will block until the diagnostics have completed and force cold reset based on result"
+params:
+    - type: $s_diag_handle_t
+      name: hDiagnostics
+      desc: "[in] Handle for the component."
+    - type: uint32_t
+      name: startIndex
+      desc: "[in] The index of the first test to run. Set to $S_DIAG_FIRST_TEST_INDEX to start from the beginning."
+    - type: uint32_t
+      name: endIndex
       desc: "[in] The index of the last test to run. Set to $S_DIAG_LAST_TEST_INDEX to complete all tests after the start test."
     - type: $s_diag_result_t*
       name: pResult
