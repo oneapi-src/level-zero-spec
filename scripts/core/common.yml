@@ -351,6 +351,9 @@ etors:
     - name: EU_COUNT_EXT
       desc: $x_eu_count_ext_t
       version: "1.3"
+    - name: SRGB_SUPPORT_EXT
+      desc: $x_srgb_support_ext_t
+      version: "1.3"
     - name: LINKAGE_INSPECTION_EXT_DESC
       desc: $x_linkage_inspection_ext_desc_t
       version: "1.3"
