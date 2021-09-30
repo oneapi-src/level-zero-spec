@@ -1,0 +1,128 @@
+#
+# Copyright (C) 2021 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Image Copy To/From Memory"
+version: "1.3"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Image Copy Extension Name"
+version: "1.3"
+name: $X_IMAGE_COPY_EXT_NAME
+value: '"$X_extension_image_copy"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Imae Copy Extension Version(s)"
+version: "1.3"
+name: $x_image_copy_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Copies from an image to device or shared memory."
+class: $xCommandList
+name: AppendImageCopyToMemoryExt
+analogue:
+    - clEnqueueReadImage
+details:
+    - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
+    - "The implementation must not access the memory pointed to by dstptr as it is free to be modified by either the Host or device up until execution."
+    - "The application must ensure the image and events are accessible by the device on which the command list was created."
+    - "The application must ensure the image format descriptor for the source image is not a media format."
+    - "The application must ensure that the rowPitch is greater than or equal to the element size in bytes × width."
+    - "If rowPitch is set to 0, the appropriate row pitch is calculated based on the size of each element in bytes multiplied by width"
+    - "The application must ensure that the slicePitch is set to 0 if image is a 1D or 2D image. Otherwise this value must be greater than or equal to row_pitch × height."
+    - "If slice_pitch is set to 0, the appropriate slice pitch is calculated based on the row_pitch × height."
+    - "The application must ensure the command list, image and events were created, and the memory was allocated, on the same context."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: "void*"
+      name: dstptr
+      desc: "[in] pointer to destination memory to copy to"
+    - type: $x_image_handle_t
+      name: hSrcImage
+      desc: "[in] handle of source image to copy from"
+    - type: "const $x_image_region_t*"
+      name: pSrcRegion
+      desc: "[in][optional] source region descriptor"
+    - type: uint32_t
+      name: rowPitch
+      desc: "[in] size in bytes of the length of each row"
+    - type: uint32_t
+      name: slicePitch
+      desc: "[in] size in bytes of the 2D slice of the 3D region of a 3D image or each image of a 1D or 2D image array being written"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Copies to an image from device or shared memory."
+class: $xCommandList
+name: AppendImageCopyFromMemoryExt
+analogue:
+    - clEnqueueWriteImage
+details:
+    - "The application must ensure the memory pointed to by srcptr is accessible by the device on which the command list was created."
+    - "The implementation must not access the memory pointed to by srcptr as it is free to be modified by either the Host or device up until execution."
+    - "The application must ensure the image and events are accessible by the device on which the command list was created."
+    - "The application must ensure the image format descriptor for the destination image is not a media format."
+    - "The application must ensure that the rowPitch is greater than or equal to the element size in bytes × width."
+    - "If rowPitch is set to 0, the appropriate row pitch is calculated based on the size of each element in bytes multiplied by width"
+    - "The application must ensure that the slicePitch is set to 0 if image is a 1D or 2D image. Otherwise this value must be greater than or equal to row_pitch × height."
+    - "If slice_pitch is set to 0, the appropriate slice pitch is calculated based on the row_pitch × height."
+    - "The application must ensure the command list, image and events were created, and the memory was allocated, on the same context."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list"
+    - type: $x_image_handle_t
+      name: hDstImage
+      desc: "[in] handle of destination image to copy to"
+    - type: "const void*"
+      name: srcptr
+      desc: "[in] pointer to source memory to copy from"
+    - type: "const $x_image_region_t*"
+      name: pDstRegion
+      desc: "[in][optional] destination region descriptor"
+    - type: uint32_t
+      name: rowPitch
+      desc: "[in] size in bytes of the length of each row"
+    - type: uint32_t
+      name: slicePitch
+      desc: "[in] size in bytes of the 2D slice of the 3D region of a 3D image or each image of a 1D or 2D image array being read"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
