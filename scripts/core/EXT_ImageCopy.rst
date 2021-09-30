@@ -40,7 +40,7 @@ The following psuedo-code demonstrates a sequence for copying a 32x32 patch out 
 
        ...
        // Create image region descriptor
-       ze_image_region_t srcReg = {
+       ${x}_image_region_t srcReg = {
          0,  // originX
          0,  // originY
          0,  // originZ
@@ -60,7 +60,7 @@ The following psuedo-code demonstrates a sequence for copying a 32x32 patch from
 
        ...
        // Create image region descriptor
-       ze_image_region_t srcReg = {
+       ${x}_image_region_t srcReg = {
          0,  // originX
          0,  // originY
          0,  // originZ
