@@ -70,4 +70,4 @@ The following psuedo-code demonstrates a sequence for copying a 32x32 patch from
        };
 
 
-       ${x}_result_t result = ${x}CommandListAppendImageCopyToMemoryExt(hCmdList, hDstImage, &src, &srcRegion, 64, 0, nullptr, 0, nullptr);
+       ${x}_result_t result = ${x}CommandListAppendImageCopyFromMemoryExt(hCmdList, hDstImage, &src, &srcRegion, 64, 0, nullptr, 0, nullptr);
