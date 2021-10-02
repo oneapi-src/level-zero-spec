@@ -1,0 +1,40 @@
+#
+# Copyright (C) 2021 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for sRGB"
+version: "1.3"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "sRGB Extension Name"
+version: "1.3"
+name: $X_SRGB_EXT_NAME
+value: '"$X_extension_srgb"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "sRGB Extension Version(s)"
+version: "1.3"
+name: $x_srgb_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "sRGB image descriptor"
+version: "1.3"
+class: $xImage
+name: $x_srgb_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: bool
+      name: sRGB
+      desc: "[in] Is sRGB."
+details:
+    - "This structure may be passed to $xImageCreate via the `pNext` member of $x_image_desc_t"
+    - "Used for specifying that the image is in sRGB format."
