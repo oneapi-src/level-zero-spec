@@ -26,10 +26,10 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "sRGB Image"
+desc: "sRGB image descriptor"
 version: "1.3"
 class: $xImage
-name: $x_srgb_ext_t
+name: $x_srgb_ext_desc_t
 base: $x_base_desc_t
 members:
     - type: bool

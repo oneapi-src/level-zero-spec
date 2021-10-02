@@ -19,12 +19,12 @@ API
 
 * Structures
 
-    * ${x}_srgb_ext_t
+    * ${x}_srgb_ext_desc_t
 
 sRGB
 ~~~~
 
-Device capabilities may include native support for sRGB image formats. sRGB images may benefit from harwdare acceleration on devices that include native support for sRGB. The following psuedo-code demonstrates a sequence for creating an sRGB image:
+Device capabilities may include native support for sRGB image formats. sRGB images may benefit from hardware acceleration on devices that include native support for sRGB. The following psuedo-code demonstrates a sequence for creating an sRGB image:
 
 .. parsed-literal::
 
@@ -35,8 +35,8 @@ Device capabilities may include native support for sRGB image formats. sRGB imag
        };
 
        // Specify sRGB image format
-       ${x}_srgb_ext_t isSRGB = {
-           ${X}_STRUCTURE_TYPE_SRGB_EXT,
+       ${x}_srgb_ext_desc_t isSRGB = {
+           ${X}_STRUCTURE_TYPE_SRGB_EXT_DESC,
            nullptr,
            true
        };
