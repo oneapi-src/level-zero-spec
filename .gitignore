@@ -38,6 +38,7 @@
 *.filters
 .vs/
 .idea/
+level_zero.json
 
 # Compiled Static libraries
 *.lai
