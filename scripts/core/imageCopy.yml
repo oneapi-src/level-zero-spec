@@ -17,7 +17,7 @@ name: $X_IMAGE_COPY_EXT_NAME
 value: '"$X_extension_image_copy"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Imae Copy Extension Version(s)"
+desc: "Image Copy Extension Version(s)"
 version: "1.3"
 name: $x_image_copy_ext_version_t
 etors:
@@ -35,11 +35,11 @@ details:
     - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by dstptr as it is free to be modified by either the Host or device up until execution."
     - "The application must ensure the image and events are accessible by the device on which the command list was created."
-    - "The application must ensure the image format descriptor for the source image is not a media format."
-    - "The application must ensure that the rowPitch is greater than or equal to the element size in bytes × width."
+    - "The application must ensure the image format descriptor for the source image is a single-planar format."
+    - "The application must ensure that the rowPitch is set to 0 if image is a 1D image. Otherwise the rowPitch must be greater than or equal to the element size in bytes × width."
     - "If rowPitch is set to 0, the appropriate row pitch is calculated based on the size of each element in bytes multiplied by width"
-    - "The application must ensure that the slicePitch is set to 0 if image is a 1D or 2D image. Otherwise this value must be greater than or equal to row_pitch × height."
-    - "If slice_pitch is set to 0, the appropriate slice pitch is calculated based on the row_pitch × height."
+    - "The application must ensure that the slicePitch is set to 0 if image is a 1D or 2D image. Otherwise this value must be greater than or equal to rowPitch × height."
+    - "If slicePitch is set to 0, the appropriate slice pitch is calculated based on the rowPitch × height."
     - "The application must ensure the command list, image and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -57,10 +57,10 @@ params:
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
     - type: uint32_t
-      name: rowPitch
-      desc: "[in] size in bytes of the length of each row"
+      name: destRowPitch
+      desc: "[in] size in bytes of the 1D slice of the 2D region of a 2D or 3D image or each image of a 1D or 2D image array being written"
     - type: uint32_t
-      name: slicePitch
+      name: destSlicePitch
       desc: "[in] size in bytes of the 2D slice of the 3D region of a 3D image or each image of a 1D or 2D image array being written"
     - type: $x_event_handle_t
       name: hSignalEvent
@@ -86,11 +86,11 @@ details:
     - "The application must ensure the memory pointed to by srcptr is accessible by the device on which the command list was created."
     - "The implementation must not access the memory pointed to by srcptr as it is free to be modified by either the Host or device up until execution."
     - "The application must ensure the image and events are accessible by the device on which the command list was created."
-    - "The application must ensure the image format descriptor for the destination image is not a media format."
-    - "The application must ensure that the rowPitch is greater than or equal to the element size in bytes × width."
+    - "The application must ensure the image format descriptor for the destination image is a single-planar format."
+    - "The application must ensure that the rowPitch is set to 0 if image is a 1D image. Otherwise the rowPitch must be greater than or equal to the element size in bytes × width."
     - "If rowPitch is set to 0, the appropriate row pitch is calculated based on the size of each element in bytes multiplied by width"
-    - "The application must ensure that the slicePitch is set to 0 if image is a 1D or 2D image. Otherwise this value must be greater than or equal to row_pitch × height."
-    - "If slice_pitch is set to 0, the appropriate slice pitch is calculated based on the row_pitch × height."
+    - "The application must ensure that the slicePitch is set to 0 if image is a 1D or 2D image. Otherwise this value must be greater than or equal to rowPitch × height."
+    - "If slicePitch is set to 0, the appropriate slice pitch is calculated based on the rowPitch × height."
     - "The application must ensure the command list, image and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -108,10 +108,10 @@ params:
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
     - type: uint32_t
-      name: rowPitch
-      desc: "[in] size in bytes of the length of each row"
+      name: srcRowPitch
+      desc: "[in] size in bytes of the 1D slice of the 2D region of a 2D or 3D image or each image of a 1D or 2D image array being read"
     - type: uint32_t
-      name: slicePitch
+      name: srcSlicePitch
       desc: "[in] size in bytes of the 2D slice of the 3D region of a 3D image or each image of a 1D or 2D image array being read"
     - type: $x_event_handle_t
       name: hSignalEvent
