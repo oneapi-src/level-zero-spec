@@ -38,7 +38,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Compression hints memory allocation descriptor"
-version: "1.1"
+version: "1.0"
 class: $xMem
 name: $x_memory_compression_hints_ext_desc_t
 base: $x_base_desc_t
@@ -47,7 +47,7 @@ members:
       name: flags
       desc: |
             [in] flags specifying if allocation should be compressible or not.
-            must be a valid combination of $x_memory_compression_hints_ext_flag_t;
+            Must be a valid combination of $x_memory_compression_hints_ext_flag_t;
       init: "0"
 details:
     - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t."
