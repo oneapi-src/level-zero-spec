@@ -56,9 +56,6 @@ params:
     - type: "const $x_image_region_t*"
       name: pSrcRegion
       desc: "[in][optional] source region descriptor"
-    - type: "const $x_image_region_t*"
-      name: pDestRegion
-      desc: "[in][optional] destination region descriptor"
     - type: uint32_t
       name: destRowPitch
       desc: "[in] size in bytes of the 1D slice of the 2D region of a 2D or 3D image or each image of a 1D or 2D image array being written"
@@ -110,9 +107,6 @@ params:
     - type: "const $x_image_region_t*"
       name: pDstRegion
       desc: "[in][optional] destination region descriptor"
-    - type: "const $x_image_region_t*"
-      name: pSrcRegion
-      desc: "[in][optional] source region descriptor"
     - type: uint32_t
       name: srcRowPitch
       desc: "[in] size in bytes of the 1D slice of the 2D region of a 2D or 3D image or each image of a 1D or 2D image array being read"
