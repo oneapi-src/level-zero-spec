@@ -395,6 +395,10 @@ etors:
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
+    - name: MEMORY_COMPRESSION_HINTS_EXT_DESC
+      desc: $x_memory_compression_hints_ext_desc_t
+      value: "0x00020009"
+      version: "1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
