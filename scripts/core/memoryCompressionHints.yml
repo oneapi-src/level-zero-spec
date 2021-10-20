@@ -12,22 +12,22 @@ version: "1.3"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Memory Compression Hints Extension Name"
-version: "1.0"
+version: "1.3"
 name: $X_MEMORY_COMPRESSION_HINTS_EXT_NAME
 value: '"$X_extension_memory_compression_hints"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory Compression Hints Extension Version(s)"
-version: "1.0"
+version: "1.3"
 name: $x_memory_compression_hints_ext_version_t
 etors:
-    - name: "1_0"
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+    - name: "1_3"
+      value: "$X_MAKE_VERSION( 1, 3 )"
+      desc: "version 1.3"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported memory compression hints flags"
-version: "1.0"
+version: "1.3"
 class: $xMem
 name: $x_memory_compression_hints_ext_flags_t
 etors:
@@ -38,7 +38,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Compression hints memory allocation descriptor"
-version: "1.0"
+version: "1.3"
 class: $xMem
 name: $x_memory_compression_hints_ext_desc_t
 base: $x_base_desc_t
