@@ -131,7 +131,10 @@ provided for all components in each class.
 +-----------------------+---------------------------------+-------------------------------------------+
 | Class                 | Components                      | Operations                                |
 +=======================+=================================+===========================================+
-| Power_                | Package:                        | Get energy consumption                    |
+| Power_                | Card:                           | Get energy consumption                    |
+|                       | power                           |                                           |
+|                       |                                 |                                           |
+|                       | Package:                        |                                           |
 |                       | power                           |                                           |
 |                       |                                 |                                           |
 |                       | Sub-device 0: total             |                                           |
@@ -249,9 +252,9 @@ provided for all components in each class.
 +------------------------+---------------------------------+-------------------------------------------+
 | Class                  | Components                      | Operations                                |
 +========================+=================================+===========================================+
-| Power_                 | Package: power                  | Set sustained power limit                 |
+| Power_                 | Card: power                     | Set sustained power limit                 |
 |                        |                                 |                                           |
-|                        |                                 | Set burst power limit                     |
+|                        | Package: power                  | Set burst power limit                     |
 |                        |                                 |                                           |
 |                        |                                 | Set peak power limit                      |
 +------------------------+---------------------------------+-------------------------------------------+
@@ -577,27 +580,61 @@ If the voltage and frequency are too high, two conditions can occur:
 When either of these conditions occurs, the Punit throttles the
 frequencies/voltages of the device down to their minimum values,
 severely impacting performance. The Punit avoids such severe throttling
-by measuring the actual power being consumed by the system and slowly
-throttling the frequencies down when power exceeds some limits. Three
-limits are monitored by the Punit:
+by imposing power limits. There are two types of power limits:
+
+1. Reactive - In this case, the Punit will measure the moving average over
+   some interval of the actual power (hardware measurement). If the average
+   power exceeds the limit, Punit will start slowly decreasing the
+   maximum frequency limits that can be requested for each frequency domain.
+   Conversely, if the average power is below the limit, Punit will slowly
+   increase the maximum frequency limits that can be requested up to the
+   hardware frequency limit for each domain. When user/driver frequency
+   requests are above the maximum frequency limits, throttling occurs and
+   this should normally reduce the power.
+2. Proactive - In this case, the Punit can perform a calculation based on
+   the current configuration of the chip and frequency requests to predict
+   the worst case power that could be generated. If this calculation exceeds
+   the proactive limit, a search is done to find the maximum frequency
+   limits that will fit within the limit and those will be actual
+   frequencies.
+
+The table below summaries the different types of power limits that can
+be configured on a power domain. Note that the sustained and burst
+power limits are only reactive, whereas a peak power limit can be
+either reactive or proactive. As a general rule, card-level peak
+power limits are reactive whereas they are proactive for all other
+power domains that can be enumerated on the chip.
 
 +-----------------------+-----------------------+-----------------------+
 | Limit                 | Window                | Description           |
 +=======================+=======================+=======================+
-| Peak                  | Instantaneous         | Punit tracks the      |
-|                       |                       | instantaneous power.  |
-|                       |                       | When this exceeds a   |
+| Peak (proactive)      | Instantaneous         | Punit predicts the    |
+|                       |                       | worst case power for  |
+|                       |                       | the current frequency |
+|                       |                       | requests and if it    |
+|                       |                       | exceeds the limit,    |
+|                       |                       | the actual            |
+|                       |                       | frequencies           |
+|                       |                       | will be lower. This   |
+|                       |                       | threshold is referred |
+|                       |                       | to as PL4 - Power     |
+|                       |                       | Limit 4 - or peak     |
+|                       |                       | power.                |
++-----------------------+-----------------------+-----------------------+
+| Peak (reactive)       | 100usec               | Punit tracks the      |
+|                       |                       | 100usec moving        |
+|                       |                       | average of            |
+|                       |                       | power. When this      |
+|                       |                       | exceeds a             |
 |                       |                       | programmable          |
 |                       |                       | threshold, the Punit  |
-|                       |                       | will aggressively     |
-|                       |                       | throttle              |
+|                       |                       | starts throttling     |
 |                       |                       | frequencies/voltages. |
 |                       |                       | The threshold is      |
-|                       |                       | referred to as PL4 -  |
-|                       |                       | Power Limit 4 - or    |
-|                       |                       | peak power.           |
+|                       |                       | referred to as Psys - |
+|                       |                       | System Power limit.   |
 +-----------------------+-----------------------+-----------------------+
-| Burst                 | 2ms                   | Punit tracks the 2ms  |
+| Burst (reactive)      | 2ms                   | Punit tracks the 2ms  |
 |                       |                       | moving average of     |
 |                       |                       | power. When this      |
 |                       |                       | exceeds a             |
@@ -610,7 +647,7 @@ limits are monitored by the Punit:
 |                       |                       | Power Limit 2 - or    |
 |                       |                       | burst power.          |
 +-----------------------+-----------------------+-----------------------+
-| Sustained             | 28sec                 | Punit tracks the      |
+| Sustained (reactive)  | 28sec                 | Punit tracks the      |
 |                       |                       | 28sec moving average  |
 |                       |                       | of power. When this   |
 |                       |                       | exceeds a             |
@@ -624,10 +661,8 @@ limits are monitored by the Punit:
 |                       |                       | sustained power.      |
 +-----------------------+-----------------------+-----------------------+
 
-Peak power limit is generally greater than the burst power limit which
-is generally greater than the sustained power limit. The default factory
-values are tuned assuming the device is operating at normal temperatures
-running significant workloads:
+The default factory values are tuned assuming the device is operating at
+normal temperatures running significant workloads:
 
 -  The peak power limit is tuned to avoid tripping the PSU over-current
    signal for all but the most intensive compute workloads. Most
@@ -651,12 +686,24 @@ block until the event is triggered. When the energy consumed by the
 power domain from the time the call is made exceeds the specified delta,
 the event is triggered, and the application is woken up.
 
+A device can have multiple power domains:
+
+-  One card level power domain that handles the power consumed by the entire
+   PCIe card.
+-  One package level power domain that handles the power consumed by the
+   entire accelerator chip. This includes the power of all sub-devices on
+   the chip.
+-  One or more power domains for each sub-device if the product has
+   sub-devices.
+
 The following functions are provided to manage the power of the device:
 
 +--------------------------------------+-------------------------------------------------------------------------------------+
 | Function                             | Description                                                                         |
 +======================================+=====================================================================================+
 | ${s}DeviceEnumPowerDomains()  | Enumerate the power domains.                                                        |
++--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}DeviceGetCardPowerDomain()| Returns a handle to the card-level power domain if available/applicable.            |
 +--------------------------------------+-------------------------------------------------------------------------------------+
 | ${s}PowerGetProperties()      | Get the minimum/maximum power limit that can be                                     |
 |                                      | specified when changing the power limits of a                                       |
