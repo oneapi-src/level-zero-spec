@@ -54,7 +54,8 @@ The following code demonstrates how to calculate and process multiple metric val
        uint32_t startIndex = 0;
        for (uint32_t dataIndex = 0; dataIndex < dataCount; dataIndex++) {
 
-           // Processing each metric data is the same as for ${t}MetricGroupCalculateMetricValues
+           // Processing each metric data is the same as for the single
+           // calculate metric values
            const uint32_t metricCountForDataIndex = metricCounts[dataIndex];
            const uint32_t reportCount = metricCountForDataIndex / metricCount;
            for (uint32_t report = 0; report < reportCount; report++) {
