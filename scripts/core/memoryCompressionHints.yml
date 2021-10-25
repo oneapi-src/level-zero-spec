@@ -21,9 +21,9 @@ desc: "Memory Compression Hints Extension Version(s)"
 version: "1.3"
 name: $x_memory_compression_hints_ext_version_t
 etors:
-    - name: "1_3"
-      value: "$X_MAKE_VERSION( 1, 3 )"
-      desc: "version 1.3"
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported memory compression hints flags"
