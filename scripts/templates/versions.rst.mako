@@ -24,8 +24,10 @@ Latest Release
 Previous Releases
 ==================
 
-* `1.1.2 Level Zero Spec <https://spec.oneapi.com/level-zero/1.1.2/index.html>`__ (Feb 2021)
+* `1.2.43 Level Zero Spec <https://spec.oneapi.com/level-zero/1.2.43/index.html>`__ (Oct 2021)
+* `1.2.13 Level Zero Spec <https://spec.oneapi.com/level-zero/1.2.13/index.html>`__ (Apr 2021)
+* `1.2.2 Level Zero Spec <https://spec.oneapi.com/level-zero/1.1.2/index.html>`__ (Feb 2021)
 * `1.0.4 Level Zero Spec <https://spec.oneapi.com/level-zero/1.0.4/index.html>`__ (Oct 2020)
-* `0.95  Level Zero Spec <https://spec.oneapi.com/level-zero/0.95/index.html>`__ (June 2020)
-* `0.91  Level Zero Spec <https://spec.oneapi.com/level-zero/0.91/index.html>`__ (March 2020)
+* `0.95  Level Zero Spec <https://spec.oneapi.com/level-zero/0.95/index.html>`__ (Jun 2020)
+* `0.91  Level Zero Spec <https://spec.oneapi.com/level-zero/0.91/index.html>`__ (Mar 2020)
 
