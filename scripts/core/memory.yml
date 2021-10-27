@@ -422,7 +422,7 @@ members:
       desc: "[out] the exported file descriptor handle representing the allocation."
 details:
     - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a file descriptor."
-    - "This structure may be passed to $xImageGetProperties, via the `pNext` member of $x_image_properties_t, to export an image as a file descriptor."
+    - "This structure may be passed to $xImageGetAllocPropertiesExt, via the `pNext` member of $x_image_allocation_ext_properties_t, to export an image as a file descriptor."
     - "The requested memory export type must have been specified when the allocation was made."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -461,15 +461,15 @@ members:
     - type: $x_external_memory_type_flags_t
       name: flags
       desc: |
-            [in] flags specifying the memory export type for the file descriptor.
+            [in] flags specifying the memory export type for the Win32 handle.
             must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
       init: "0"
     - type: void*
       name: handle
       desc: "[out] the exported Win32 handle representing the allocation."
 details:
-    - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a file descriptor."
-    - "This structure may be passed to $xImageGetProperties, via the `pNext` member of $x_image_properties_t, to export an image as a file descriptor."
+    - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a Win32 handle."
+    - "This structure may be passed to $xImageGetAllocPropertiesExt, via the `pNext` member of $x_image_allocation_ext_properties_t, to export an image as a Win32 handle."
     - "The requested memory export type must have been specified when the allocation was made."
 --- #--------------------------------------------------------------------------
 type: class
