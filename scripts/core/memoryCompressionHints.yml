@@ -51,4 +51,5 @@ members:
       init: "0"
 details:
     - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t."
-    - "This structure may also be passed to $xMemAllocHost, via `pNext` member of $x_host_mem_alloc_desc_t."
+    - "This structure may be passed to $xMemAllocHost, via `pNext` member of $x_host_mem_alloc_desc_t."
+    - "This structure may be passed to $xImageCreate, via `pNext` member of $x_image_desc_t."
