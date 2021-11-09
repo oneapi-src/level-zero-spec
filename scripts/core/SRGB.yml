@@ -32,7 +32,7 @@ class: $xImage
 name: $x_srgb_ext_desc_t
 base: $x_base_desc_t
 members:
-    - type: bool
+    - type: ze_bool_t
       name: sRGB
       desc: "[in] Is sRGB."
 details:
