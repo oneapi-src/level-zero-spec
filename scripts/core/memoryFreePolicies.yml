@@ -80,7 +80,7 @@ params:
       name: hContext
       desc: "[in] handle of the context object"
     - type: "const $x_memory_free_ext_desc_t*"
-      name: desc
+      name: pMemFreeDesc
       desc: "[in] pointer to memory free descriptor"
     - type: "void*"
       name: ptr

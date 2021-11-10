@@ -92,5 +92,5 @@ params:
       name: hDevice
       desc: "[in] handle of the device object."
     - type: $x_pci_ext_properties_t*
-      name: pProperties
+      name: pPciProperties
       desc: "[in,out] returns the PCI properties of the device."
