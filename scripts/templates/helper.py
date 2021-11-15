@@ -31,6 +31,13 @@ class obj_traits:
             return True if re.search("Exp$", obj['name']) else False
         except:
             return False
+    
+    @staticmethod
+    def is_extension(obj):
+        try:
+            return True if re.search("Ext$", obj['name']) else False
+        except:
+            return False
 
     @staticmethod
     def class_name(obj):
@@ -840,17 +847,20 @@ def make_pfncb_param_type(namespace, tags, obj):
 Public:
     returns a list of all function objs for the specified class. 
 """
-def get_class_function_objs(specs, cname, version = None):
+def get_class_function_objs(specs, cname, version = None, includeExt = False):
     objects = []
     for s in specs:
         for obj in s['objects']:
             is_function = obj_traits.is_function(obj)
             match_cls = cname == obj_traits.class_name(obj)
             if is_function and match_cls:
-                if version is None:
-                    objects.append(obj)
-                elif float(obj.get('version',"1.0")) <= version:
-                    objects.append(obj)
+                if version is None or (float(obj.get('version',"1.0")) <= version):
+                    if obj_traits.is_extension(obj):
+                        if includeExt: 
+                            objects.append(obj)
+                    else:
+                        objects.append(obj)
+
     return sorted(objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))
 
 """

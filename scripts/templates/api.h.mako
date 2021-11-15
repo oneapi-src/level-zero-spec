@@ -9,7 +9,7 @@ from templates import helper as th
     X=x.upper()
 %>/*
  *
- * Copyright (C) 2019 Intel Corporation
+ * Copyright (C) 2019-2021 Intel Corporation
  *
  * SPDX-License-Identifier: MIT
  *
@@ -203,13 +203,26 @@ typedef struct _${tbl['type']}
 %endfor
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Container for all callbacks
-typedef struct _${n}_callbacks_t
+typedef struct _ze_callbacks_t
 {
-%for tbl in th.get_pfncbtables(specs, meta, n, tags):
-    ${th.append_ws(tbl['type'], 35)} ${tbl['name']};
-%endfor
-} ${n}_callbacks_t;
-
+    ze_global_callbacks_t               Global;
+    ze_driver_callbacks_t               Driver;
+    ze_device_callbacks_t               Device;
+    ze_context_callbacks_t              Context;
+    ze_command_queue_callbacks_t        CommandQueue;
+    ze_command_list_callbacks_t         CommandList;
+    ze_fence_callbacks_t                Fence;
+    ze_event_pool_callbacks_t           EventPool;
+    ze_event_callbacks_t                Event;
+    ze_image_callbacks_t                Image;
+    ze_module_callbacks_t               Module;
+    ze_module_build_log_callbacks_t     ModuleBuildLog;
+    ze_kernel_callbacks_t               Kernel;
+    ze_sampler_callbacks_t              Sampler;
+    ze_physical_mem_callbacks_t         PhysicalMem;
+    ze_mem_callbacks_t                  Mem;
+    ze_virtual_mem_callbacks_t          VirtualMem;
+} ze_callbacks_t;
 #if !defined(__GNUC__)
 #pragma endregion
 #endif
