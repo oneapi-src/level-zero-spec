@@ -8,7 +8,7 @@ from templates import helper as th
     x=tags['$x']
     X=x.upper()
 %>"""
- Copyright (C) 2019 Intel Corporation
+ Copyright (C) 2019-2021 Intel Corporation
 
  SPDX-License-Identifier: MIT
 

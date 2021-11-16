@@ -28,6 +28,7 @@ etors:
 type: function
 desc: "Copies from an image to device or shared memory."
 class: $xCommandList
+version: "1.3"
 name: AppendImageCopyToMemoryExt
 analogue:
     - clEnqueueReadImage
@@ -79,6 +80,7 @@ returns:
 type: function
 desc: "Copies to an image from device or shared memory."
 class: $xCommandList
+version: "1.3"
 name: AppendImageCopyFromMemoryExt
 analogue:
     - clEnqueueWriteImage
