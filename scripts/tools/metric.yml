@@ -111,6 +111,9 @@ etors:
       desc: "Metric type: ratio"
     - name: RAW
       desc: "Metric type: raw"
+    - name: IP_EXP
+      desc: "Metric type: stalled instruction pointer"
+      value: "0x7ffffffe"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric group calculation type"
@@ -527,12 +530,12 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
     - type: uint32_t
       name: numWaitEvents
-      desc: 
+      desc:
             "1.0": "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
             "1.1": "[in] must be zero"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
-      desc: 
+      desc:
             "1.0": "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
             "1.1": "[in][mbz] must be nullptr"
 returns:
@@ -580,7 +583,7 @@ owner: $tDevice
 members:
     - type: $t_metric_group_handle_t
       name: handle
-      desc: "[in] handle of metric group object" 
+      desc: "[in] handle of metric group object"
       init: nullptr
     - type: $tDevice*
       name: pDevice
@@ -594,7 +597,7 @@ owner: $tMetricGroup
 members:
     - type: $t_metric_handle_t
       name: handle
-      desc: "[in] handle of metric object" 
+      desc: "[in] handle of metric object"
     - type: $tMetricGroup*
       name: pMetricGroup
       desc: "[in] pointer to owner object"
@@ -606,7 +609,7 @@ owner: $tDevice
 members:
     - type: $t_metric_streamer_handle_t
       name: handle
-      desc: "[in] handle of metric streamer object" 
+      desc: "[in] handle of metric streamer object"
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
@@ -621,7 +624,7 @@ owner: $tDevice
 members:
     - type: $t_metric_query_pool_handle_t
       name: handle
-      desc: "[in] handle of metric query pool object" 
+      desc: "[in] handle of metric query pool object"
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
@@ -636,7 +639,7 @@ owner: $tDevice
 members:
     - type: $t_metric_query_handle_t
       name: handle
-      desc: "[in] handle of metric query object" 
+      desc: "[in] handle of metric query object"
     - type: $tDevice*
       name: pDevice
       desc: "[in] pointer to owner object"
