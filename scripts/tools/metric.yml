@@ -112,7 +112,7 @@ etors:
     - name: RAW
       desc: "Metric type: raw"
     - name: IP_EXP
-      desc: "Metric type: stalled instruction pointer"
+      desc: "Metric type: instruction pointer"
       value: "0x7ffffffe"
 --- #--------------------------------------------------------------------------
 type: enum
