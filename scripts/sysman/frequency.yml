@@ -52,9 +52,13 @@ members:
       desc: "[out] The maximum non-overclock hardware clock frequency in units of MHz."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Frequency range between which the hardware can operate. The limits can be above or below the hardware limits - the hardware will clamp appropriately."
+desc: "Frequency range between which the hardware can operate."
 class: $sFrequency
 name: $s_freq_range_t
+details:
+    - When setting limits, they will be clamped to the hardware limits.
+    - When setting limits, ensure that the max frequency is greater than or equal to the min frequency specified.
+    - When setting limits to return to factory settings, specify -1 for both the min and max limit.
 members:
     - type: double
       name: "min"
