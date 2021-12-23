@@ -237,6 +237,12 @@ def generate_html(dstpath, sections, ver, rev):
     print(cmdline)
     os.system(cmdline)
 
+    print("Generating PDF...")
+    cmdline = "sphinx-build -b pdf %s ../docs"%sourcepath
+    print(cmdline)
+    os.system(cmdline)
+
+
 """
 Entry-point:
     generate PDF file using generated LaTeX files
@@ -257,7 +263,7 @@ def prepare(docpath, gen_rst, gen_html, ver):
         htmlpath = os.path.join(docpath, "html")
         if util.exists(htmlpath):
             util.removePath(htmlpath)
-    
+
     # if generating rst then assume everything in docs is invalid and clean it.
     if gen_rst:
         if util.exists(docpath):
@@ -267,4 +273,3 @@ def prepare(docpath, gen_rst, gen_html, ver):
     util.copyTree("./assets/html/_static",    os.path.join(docsourcepath, "_static"))
     util.copyTree("./assets/html/_templates", os.path.join(docsourcepath, "_templates"))
     util.copyTree("./assets/images",          os.path.join(docsourcepath, "images"))
-    
