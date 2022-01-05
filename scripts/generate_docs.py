@@ -203,11 +203,7 @@ def generate_ref(dstpath, ref):
 
     util.jsonWrite(os.path.join(refpath, "level_zero.json"), ref)
 
-"""
-Entry-point:
-    generate HTML files using reStructuredText (rst) and Doxygen template
-"""
-def generate_html(dstpath, sections, ver, rev):
+def generate_common(dstpath, sections, ver, rev):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
     xmlpath = os.path.join(dstpath, "xml")
@@ -232,26 +228,28 @@ def generate_html(dstpath, sections, ver, rev):
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
 
+"""
+Entry-point:
+    generate HTML files using reStructuredText (rst) and Doxygen template
+"""
+def generate_html(dstpath):
+    sourcepath = os.path.join(dstpath, "source")
+
     print("Generating HTML...")
     cmdline = "sphinx-build -M html %s ../docs"%sourcepath
     print(cmdline)
     os.system(cmdline)
-
-    print("Generating PDF...")
-    cmdline = "sphinx-build -b pdf %s ../docs"%sourcepath
-    print(cmdline)
-    os.system(cmdline)
-
 
 """
 Entry-point:
     generate PDF file using generated LaTeX files
 """
 def generate_pdf(dstpath):
-    latexpath = os.path.join(dstpath, "latex")
+    sourcepath = os.path.join(dstpath, "source")
 
-    print("Generating PDF..")
-    cmdline = "%s"%os.path.join(latexpath, "make.bat")
+    print("Generating PDF...")
+    cmdline = "sphinx-build -b pdf %s ../docs/latex"%sourcepath
+    print(cmdline)
     os.system(cmdline)
 
 """
