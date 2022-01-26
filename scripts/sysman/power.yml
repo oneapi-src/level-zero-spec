@@ -22,8 +22,8 @@ etors:
       desc: "The PUnit power domain is a card-level power domain."
     - name: PACKAGE
       desc: "The PUnit power domain is a package-level power domain."
-    - name: TILE
-      desc: "The PUnit power domain is a tile-level power domain."
+    - name: STACK
+      desc: "The PUnit power domain is a stack-level power domain."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Power Level Type"

@@ -605,8 +605,8 @@ exist at different hardware scopes such as:
    consumption over a whole card.
 2. Package-level - Power domains defined at this level monitor & control power
    consumption over a single physical package on a card.
-3. Tile-level - Power domains defined at this level monitor & control power
-   consumption over a single tile within a package.
+3. Stack-level - Power domains defined at this level monitor & control power
+   consumption over a single stack within a package.
 
 Devices can be located in various platforms such as server, workstation,
 desktop, mobile, etc... These platforms can be characterized as being either:

@@ -76,7 +76,7 @@ members:
 details:
     - "This structure may be returned from $sPowerGetProperties via the `pNext` member of $s_power_properties_t."
     - "This structure may also be returned from $sPowerGetProperties via the `pNext` member of $s_power_ext_properties_t"
-    - "Used for determining the power domain level, i.e. card-level v/s package-level v/s tile-level & the factory default power limits."
+    - "Used for determining the power domain level, i.e. card-level v/s package-level v/s stack-level & the factory default power limits."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power limits"
@@ -101,6 +101,10 @@ desc: "Set power limits"
 class: $sPower
 name: SetLimitsExt
 details:
+    - "The application can only modify unlocked members of the limit descriptors returned by ${s}PowerGetLimitsExt."
+    - "Not all the limits returned by ${s}PowerGetLimitsExt need to be supplied to this function."
+    - "Limits do not have to be supplied in the same order as returned by ${s}PowerGetLimitsExt."
+    - "The same limit can be supplied multiple times. Limits are applied in the order in which they are supplied."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
