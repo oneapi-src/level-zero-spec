@@ -375,6 +375,9 @@ params:
     - type: uint8_t*
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing streamer reports in raw format"
+returns:
+    - $X_RESULT_WARNING_DROPPED_DATA
+        - "Metric streamer data may have been dropped. Increase polling frequency."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric query pool types"

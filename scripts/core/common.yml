@@ -200,6 +200,9 @@ etors:
     - name: ERROR_DEPENDENCY_UNAVAILABLE
       value: "0x70020000"
       desc: "[Tools] external required dependency is unavailable or missing"
+    - name: WARNING_DROPPED_DATA
+      desc: "[Tools] data may have been dropped"
+      version: "1.4"
     - name: ERROR_UNINITIALIZED
       value: "0x78000001"
       desc: "[Validation] driver is not initialized"
