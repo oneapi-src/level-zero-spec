@@ -1113,6 +1113,40 @@ while permitting other work to attempt to run:
                    else
                        output("ERROR: Problem calling the API.")
 
+.. _ECC:
+
+Enabling/disabling ECC Config Dynamically
+-----------------------------------------
+
+Memory corruption occurs when random bits in data flip due to natural processes
+such as background radiation, cosmic rays, etc... A single bit flip in one of the
+high-bits of a single data-value may drastically change the behavior of some
+applications. Workloads from the financial, industrial control, critical
+infrastructure, and critical database sectors are typically not tolerant to memory
+corruption---memory corruption can cause highly undesirable behavior. Error correction
+codes (ECC) are a memory controller technology that reduce memory corruption at
+the cost of reduced memory performance and capacity.
+
+The loss of memory performance and capacity makes ECC undesirable for some workloads.
+Application domains may be insensitive to low-level memory corruption. Algorithms
+may be designed for numerical stability or may be inherently stochastic, making them
+insensitive to memory corruption.
+
+Products may support ECC capabilities and may additionally make ECC dynamically
+configurable, i.e. if ECC is supported, then it may be turned on or off on demand.
+A device reset, either in the form of a warm reset or a cold reboot, may be
+required to switch between ECC enabled and disabled states.
+
+Support for ECC can be checked using the function {s}DeviceEccAvailable(). If ECC
+is supported, then support for dynamic ECC control can be checked using the
+function ${s}DeviceEccConfigurable().
+
+The current status
+
+Is ECC available?
+Is ECC configurable?
+Is ECC enabled?
+
 .. _Performance-Factor:
 
 Tuning workload performance
