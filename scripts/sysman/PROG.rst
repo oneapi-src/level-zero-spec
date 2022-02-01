@@ -73,7 +73,7 @@ system and create Sysman handles for them:
                uint32_t deviceCount = 0
                ${x}DeviceGet(allDrivers[i], &deviceCount, nullptr)
 
-               ${x}_device_handle_t* allDevices = 
+               ${x}_device_handle_t* allDevices =
                    allocate_memory(deviceCount * sizeof(${x}_device_handle_t))
                ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices)
 
@@ -108,7 +108,7 @@ information and control aspects of the entire device:
    -  Query current throughput
    -  Query packet retry counters
 
-The full list of available functions is described `below <#glo>`__.
+The full list of available functions is described below.
 
 Device component management
 ---------------------------
@@ -415,8 +415,7 @@ The following events are provided:
 
 -  Any RAS errors have occurred
 
-The full list of available functions for handling events is described
-`below <#evd>`__.
+The full list of available functions for handling events is described below.
 
 Telemetry and timestamps
 ------------------------
@@ -1947,7 +1946,7 @@ Performing Diagnostics
 ----------------------
 
 Diagnostics is the process of requesting that the hardware run self-checks
-and repairs. 
+and repairs.
 
 **WARNING:** Performing diagnostics can destroy current device state.
 It is important that all workloads are stopped before initiating.
@@ -2168,14 +2167,14 @@ when the critical temperature is reached.
    {
        # This will contain the number of devices that we will listen for events from
        var numListenDevices = 0
-       
+
        # Get list of all devices under this driver
        uint32_t deviceCount = 0
        ${x}DeviceGet(hDriver, &deviceCount, nullptr)
        # Allocate memory for all device handles
        ${x}_device_handle_t* phDevices =
            allocate_memory(deviceCount * sizeof(${x}_device_handle_t))
-           
+
        # Allocate memory for the devices from which we will listen to temperature events
        ${s}_device_handle_t* phListenDevices =
            allocate_memory(deviceCount * sizeof(${s}_device_handle_t))
@@ -2228,7 +2227,7 @@ when the critical temperature is reached.
            uint32_t numEvents
            if (${s}DriverEventListen(hDriver, UINT32_MAX, numListenDevices, phListenDevices, &numEvents, pDeviceEvents)
                == ${X}_RESULT_SUCCESS)
-               if (numEvents)    
+               if (numEvents)
                    for (evtIndex .. numListenDevices)
                        if (pDeviceEvents[evtIndex] & ${S}_EVENT_TYPE_FLAG_TEMP_CRITICAL)
                            output("Device %u: Went above the critical temperature.",

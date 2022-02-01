@@ -34,7 +34,7 @@ release = u''
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #
-# needs_sphinx = '1.0'
+needs_sphinx = '1.8'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -48,6 +48,7 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'rst2pdf.pdfbuilder',
     'breathe'
 ]
 
@@ -152,6 +153,16 @@ man_pages = [
      [author], 1)
 ]
 
+
+# -- Options for PDF output
+
+# index - master document
+# rst2pdf - name of the generated pdf
+# Sample rst2pdf doc - title of the pdf
+# Your Name - author name in the pdf
+pdf_documents = [
+    (master_doc, u'oneapi-levelzero-spec', u'oneAPI Level Zero Specification', u'Intel', u'manual'),
+]
 
 # -- Options for Texinfo output ----------------------------------------------
 

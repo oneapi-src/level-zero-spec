@@ -71,7 +71,7 @@ def revision():
     if len(items) > 1 and items[1].isdigit():
        count = int(items[1])
 
-    # Bump count if any local files are dirty.  
+    # Bump count if any local files are dirty.
     # Keeps the count the same after doing a commit (assuming all dirty files are committed)
     if 'dirty' in items[-1]:
         count += 1
@@ -160,9 +160,13 @@ def main():
             print("\nBuild failed, stopping execution!")
             return
 
+    # phase 5: prep for publication of html or pdf
+    if args['html'] or args['pdf']:
+        generate_docs.generate_common(docpath, configParser.sections(), args['ver'], args['rev'])
+
     # phase 5: publish documentation
     if args['html']:
-        generate_docs.generate_html(docpath, configParser.sections(), args['ver'], args['rev'])
+        generate_docs.generate_html(docpath)
 
     if args['pdf']:
         generate_docs.generate_pdf(docpath)
