@@ -1137,15 +1137,37 @@ configurable, i.e. if ECC is supported, then it may be turned on or off on deman
 A device reset, either in the form of a warm reset or a cold reboot, may be
 required to switch between ECC enabled and disabled states.
 
-Support for ECC can be checked using the function {s}DeviceEccAvailable(). If ECC
+Support for ECC can be checked using the function ${s}DeviceEccAvailable(). If ECC
 is supported, then support for dynamic ECC control can be checked using the
-function ${s}DeviceEccConfigurable().
+function ${s}DeviceEccConfigurable(). Assuming that ECC is configurable, a warm
+reset or cold reboot may be required to affect an ECC status change. The type of
+action required can be queried using the function ${s}DeviceGetEccAction(). The
+current ECC status, pending ECC status, and action required to affect the pending
+ECC status can be determined using the struct ${s}_device_ecc_properties_t returned
+by the function ${s}DeviceGetEccStatus(). The ECC status can be changed by setting
+the pendingStatus attribute of the struct ${s}_device_ecc_properties_t and passing
+the struct to ${s}DeviceSetEccStatus().
 
-The current status
+The following psuedo code demonstrates how the ECC status can be queried and changed
+from disabled to enabled:
 
-Is ECC available?
-Is ECC configurable?
-Is ECC enabled?
+.. parsed-literal::
+
+    function EnableECC(${s}_device_handle_t hSysmanDevice)
+        ze_bool_t EccAvailable = False;
+        ${s}DeviceEccAvailable(hSysmanDevice, &EccAvailable)
+        if (EccAvailable == True) {
+            ze_bool_t EccConfigurable = False;
+            ${s}DeviceEccConfigurable(hSysmanDevice, &EccConfigurable)
+            if (EccConfigurable == True) {
+                ${s}_device_ecc_properties_t props = {NONE, NONE, NONE}
+                ${s}DeviceGetEccStatus(hSysmanDevice, &props)
+                if (props.currentStatus == DISABLED) {
+                    props.pendingStatus = ENABLED
+                    ${s}DeviceSetEccStatus(hSysmanDevice, &props)
+                }
+            }
+        }
 
 .. _Performance-Factor:
 
