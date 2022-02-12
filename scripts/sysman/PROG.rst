@@ -1139,14 +1139,11 @@ required to switch between ECC enabled and disabled states.
 
 Support for ECC can be checked using the function ${s}DeviceEccAvailable(). If ECC
 is supported, then support for dynamic ECC control can be checked using the
-function ${s}DeviceEccConfigurable(). Assuming that ECC is configurable, a warm
-reset or cold reboot may be required to affect an ECC status change. The type of
-action required can be queried using the function ${s}DeviceGetEccAction(). The
-current ECC status, pending ECC status, and action required to affect the pending
-ECC status can be determined using the struct ${s}_device_ecc_properties_t returned
-by the function ${s}DeviceGetEccStatus(). The ECC status can be changed by setting
-the pendingStatus attribute of the struct ${s}_device_ecc_properties_t and passing
-the struct to ${s}DeviceSetEccStatus().
+function ${s}DeviceEccConfigurable(). The current ECC status, pending ECC status,
+and action required to affect the pending ECC status can be determined using the
+struct ${s}_device_ecc_properties_t returned by the function ${s}DeviceGetEccState().
+The ECC status can be changed by setting the pendingStatus attribute of the struct
+${s}_device_ecc_properties_t and passing the struct to ${s}DeviceSetEccState().
 
 The following psuedo code demonstrates how the ECC status can be queried and changed
 from disabled to enabled:
@@ -1161,10 +1158,10 @@ from disabled to enabled:
             ${s}DeviceEccConfigurable(hSysmanDevice, &EccConfigurable)
             if (EccConfigurable == True) {
                 ${s}_device_ecc_properties_t props = {NONE, NONE, NONE}
-                ${s}DeviceGetEccStatus(hSysmanDevice, &props)
-                if (props.currentStatus == DISABLED) {
-                    props.pendingStatus = ENABLED
-                    ${s}DeviceSetEccStatus(hSysmanDevice, &props)
+                ${s}DeviceGetEccState(hSysmanDevice, &props)
+                if (props.currentState == DISABLED) {
+                    props.pendingState = ENABLED
+                    ${s}DeviceSetEccState(hSysmanDevice, &props)
                 }
             }
         }

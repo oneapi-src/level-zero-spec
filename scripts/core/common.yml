@@ -253,6 +253,8 @@ etors:
       desc: "[Validation] command list type does not match command queue type"
     - name: ERROR_OVERLAPPING_REGIONS
       desc: "[Validation] copy operations do not support overlapping regions of memory"
+    - name: WARNING_ACTION_REQUIRED
+      desc: "[Sysman] an action is required to complete the desired operation"
     - name: ERROR_UNKNOWN
       value: "0x7ffffffe"
       desc: "[Core] unknown or internal error"

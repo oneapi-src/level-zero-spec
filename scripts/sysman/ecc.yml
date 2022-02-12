@@ -46,7 +46,7 @@ type: struct
 desc: "ECC State Descriptor"
 class: $sDevice
 name: $s_device_ecc_desc_t
-base: $s_desc_t
+base: $s_base_desc_t
 members:
     - type: $s_device_ecc_state_t
       name: state
@@ -64,7 +64,7 @@ members:
     - type: $s_device_ecc_state_t
       name: pendingState
       desc: "[out] Pending ECC state"
-    - type: $s_device_ecc_action_t
+    - type: $s_device_action_t
       name: pendingAction
       desc: "[out] Pending action"
 --- #--------------------------------------------------------------------------
