@@ -10,11 +10,11 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - ECC management"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "ECC Status"
+desc: "ECC State"
 class: $sDevice
-name: $s_device_ecc_status_t
+name: $s_device_ecc_state_t
 etors:
-    - name: NONE
+    - name: UNAVAILABLE
       value: "0"
       desc: "None"
     - name: ENABLED
@@ -25,42 +25,45 @@ etors:
       desc: "ECC disabled."
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Status Change Requirements"
+desc: "State Change Requirements"
 class: $sDevice
 name: $s_device_action_t
 etors:
     - name: NONE
       value: "0"
       desc: "No action."
-    - name: WARM_RESET
+    - name: WARM_CARD_RESET
       value: "1"
-      desc: "Warm reset."
-    - name: COLD_REBOOT
+      desc: "Warm reset of the card."
+    - name: COLD_CARD_RESET
       value: "2"
-      desc: "Cold reboot."
+      desc: "Cold reset of the card."
+    - name: COLD_SYSTEM_REBOOT
+      value: "3"
+      desc: "Cold reboot of the system."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "ECC Status Change Action"
+desc: "ECC State Descriptor"
 class: $sDevice
-name: $s_device_ecc_action_t
-base: $s_base_t
+name: $s_device_ecc_desc_t
+base: $s_desc_t
 members:
-    - type: $s_device_action_t
-      name: action
-      desc: "[out] Action required for status change"
+    - type: $s_device_ecc_state_t
+      name: state
+      desc: "[out] ECC state"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "ECC Status"
+desc: "ECC State"
 class: $sDevice
 name: $s_device_ecc_properties_t
 base: $s_base_properties_t
 members:
-    - type: $s_device_ecc_status_t
-      name: currentStatus
-      desc: "[out] Current ECC status"
-    - type: $s_device_ecc_status_t
-      name: pendingStatus
-      desc: "[out] Pending ECC status"
+    - type: $s_device_ecc_state_t
+      name: currentState
+      desc: "[out] Current ECC state"
+    - type: $s_device_ecc_state_t
+      name: pendingState
+      desc: "[out] Pending ECC state"
     - type: $s_device_ecc_action_t
       name: pendingAction
       desc: "[out] Pending action"
@@ -96,24 +99,9 @@ params:
       desc: "[out] ECC can be enabled/disabled (true)/enabled/disabled (false)."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Action required to change ECC status"
+desc: "Get current ECC state, pending state, and pending action"
 class: $sDevice
-name: GetEccAction
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_device_handle_t
-      name: hDevice
-      desc: "[in] Handle for the component."
-    - type: $s_device_ecc_action_t
-      name: pAction
-      desc: "[out] Action required for ECC status change."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get current ECC status, pending status, and pending action"
-class: $sDevice
-name: GetEccStatus
+name: GetEccState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -122,20 +110,24 @@ params:
       name: hDevice
       desc: "[in] Handle for the component."
     - type: $s_device_ecc_properties_t*
-      name: pStatus
-      desc: "[out] ECC status, pending status, and pending action."
+      name: pState
+      desc: "[out] ECC state, pending state, and pending action for state change."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set new ECC status"
+desc: "Set new ECC state"
 class: $sDevice
-name: SetEccStatus
+name: SetEccState
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "$sDeviceGetState should be called to determine pending action required to implement state change."
 params:
     - type: $s_device_handle_t
       name: hDevice
       desc: "[in] Handle for the component."
-    - type: $s_device_ecc_properties_t*
-      name: pStatus
-      desc: "[in, out] New ECC status, and pending action for status change."
+    - type: $s_device_ecc_desc_t
+      name: newState
+      desc: "[in] Desired ECC state."
+returns:
+    - $X_RESULT_WARNING_ACTION_REQUIRED:
+        - "User must use $sDeviceGetEccStatus to lookup & perform the action required to complete the ECC state change."
