@@ -593,8 +593,8 @@ by imposing power limits. There are two types of power limits:
 2. Proactive - In this case, the Punit can perform a calculation based on
    the current configuration of the chip and frequency requests to predict
    the worst case power that could be generated. If this calculation exceeds
-   the proactive limit, a search is done to find the maximum frequency
-   limits that will fit within the limit and those will be actual frequencies.
+   the proactive limit, a search is done to find the maximum frequency that will
+   fit within the limit.
 
 Limits need not be applied at the hardware scope level of a device. Devices are
 subdivided into one or more power domains. A power domain is a hardware scope
@@ -608,26 +608,18 @@ exist at different hardware scopes such as:
 3. Stack-level - Power domains defined at this level monitor & control power
    consumption over a single stack within a package.
 
-Devices can be located in various platforms such as server, workstation,
-desktop, mobile, etc... These platforms can be characterized as being either:
+At any given point in time, a platform can be running on either mains power or,
+in the case of platforms such as laptops, can be running on battery power. This
+is referred to as the power source. Limits can be configured to take effect only
+when a device is drawing power from a specified source, i.e., separate limits
+can be imposed when a device is running off battery power as opposed to mains
+power.
 
-1. Mains-powered: Power is drawn from the mains.
-2. Battery-powered: Power is supplied from an onboard battery.
+Depending on the platform and power domain, power limits can be expressed in
+terms of either amperage or wattage. The API can be queried to determine in which
+units a given power limit should be specified.
 
-Limits can be configured to take effect only when a device is drawing power from
-a specified source, i.e., separate limits can be imposed when a device is
-running off battery power as opposed to mains power.
-
-The Punit may impose limits in terms of either the physical power generated or
-the current drawn with the current draw serving as a proxy for the power draw.
-Limits should be checked for the correct unit to be used given the Punit
-involved.
-
-Different types of power limits that can be configured on a power domain. Note
-that the sustained, burst, and peak power limits are only reactive, whereas the
-instantaneous power limit is only proactive. As a general rule, card-level peak
-power limits are reactive whereas they are proactive for all other
-power domains that can be enumerated on the chip.
+A power limit can correspond one of the following power levels.
 
 +---------------------+-----------------+-----------------------+
 | Limit               | Window          | Description           |
@@ -639,11 +631,7 @@ power domains that can be enumerated on the chip.
 |                     |                 | exceeds the limit,    |
 |                     |                 | the actual            |
 |                     |                 | frequencies           |
-|                     |                 | will be lower. This   |
-|                     |                 | threshold is referred |
-|                     |                 | to as PL4 - Power     |
-|                     |                 | Limit 4 - or peak     |
-|                     |                 | power.                |
+|                     |                 | will be lowered.      |
 +---------------------+-----------------+-----------------------+
 | Peak                | e.g. 100usec    | Punit tracks a moving |
 |                     |                 | average of power over |
@@ -653,9 +641,6 @@ power domains that can be enumerated on the chip.
 |                     |                 | threshold, the Punit  |
 |                     |                 | starts throttling     |
 |                     |                 | frequencies/voltages. |
-|                     |                 | The threshold is      |
-|                     |                 | referred to as Psys - |
-|                     |                 | System Power limit.   |
 +---------------------+-----------------+-----------------------+
 | Burst               | e.g. 2ms        | Punit tracks a moving |
 |                     |                 | average of power over |
@@ -665,10 +650,6 @@ power domains that can be enumerated on the chip.
 |                     |                 | threshold, the Punit  |
 |                     |                 | starts throttling     |
 |                     |                 | frequencies/voltages. |
-|                     |                 | The threshold is      |
-|                     |                 | referred to as PL2 -  |
-|                     |                 | Power Limit 2 - or    |
-|                     |                 | burst power.          |
 +---------------------+-----------------+-----------------------+
 | Sustained           | e.g. 28s        | Punit tracks a moving |
 |                     |                 | average of power over |
@@ -678,11 +659,10 @@ power domains that can be enumerated on the chip.
 |                     |                 | threshold, the Punit  |
 |                     |                 | throttles             |
 |                     |                 | frequencies/voltages. |
-|                     |                 | The threshold is      |
-|                     |                 | referred to as PL1 -  |
-|                     |                 | Power Limit 1 - or    |
-|                     |                 | sustained power.      |
 +---------------------+-----------------+-----------------------+
+
+Note that the sustained, burst, and peak power limits are only reactive, whereas
+the instantaneous power limit is only proactive.
 
 The default factory values are tuned assuming the device is operating at
 normal temperatures running significant workloads:
