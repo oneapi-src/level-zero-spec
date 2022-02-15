@@ -377,7 +377,7 @@ params:
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing streamer reports in raw format"
 returns:
     - $X_RESULT_WARNING_DROPPED_DATA
-        - "Incomplete read, expect data to be missing."
+        - "Metric streamer data may have been dropped. Reduce sampling period."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric query pool types"
