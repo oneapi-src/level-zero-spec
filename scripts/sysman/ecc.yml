@@ -13,6 +13,7 @@ type: enum
 desc: "ECC State"
 class: $sDevice
 name: $s_device_ecc_state_t
+version: "1.4"
 etors:
     - name: UNAVAILABLE
       value: "0"
@@ -28,6 +29,7 @@ type: enum
 desc: "State Change Requirements"
 class: $sDevice
 name: $s_device_action_t
+version: "1.4"
 etors:
     - name: NONE
       value: "0"
@@ -47,6 +49,7 @@ desc: "ECC State Descriptor"
 class: $sDevice
 name: $s_device_ecc_desc_t
 base: $s_base_desc_t
+version: "1.4"
 members:
     - type: $s_device_ecc_state_t
       name: state
@@ -57,6 +60,7 @@ desc: "ECC State"
 class: $sDevice
 name: $s_device_ecc_properties_t
 base: $s_base_properties_t
+version: "1.4"
 members:
     - type: $s_device_ecc_state_t
       name: currentState
@@ -72,6 +76,7 @@ type: function
 desc: "Is ECC functionality available - true or false?"
 class: $sDevice
 name: EccAvailable
+version: "1.4"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -87,6 +92,7 @@ type: function
 desc: "Is ECC support configurable - true or false?"
 class: $sDevice
 name: EccConfigurable
+version: "1.4"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -102,6 +108,7 @@ type: function
 desc: "Get current ECC state, pending state, and pending action"
 class: $sDevice
 name: GetEccState
+version: "1.4"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -117,6 +124,7 @@ type: function
 desc: "Set new ECC state"
 class: $sDevice
 name: SetEccState
+version: "1.4"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -128,6 +136,9 @@ params:
     - type: $s_device_ecc_desc_t
       name: newState
       desc: "[in] Desired ECC state."
+    - type: $s_device_ecc_properties_t*
+      name: pState
+      desc: "[out] ECC state, pending state, and pending action for state change."
 returns:
     - $X_RESULT_WARNING_ACTION_REQUIRED:
-        - "User must use $sDeviceGetEccStatus to lookup & perform the action required to complete the ECC state change."
+        - "User must look at the pendingAction attribute of pState & perform the action required to complete the ECC state change."

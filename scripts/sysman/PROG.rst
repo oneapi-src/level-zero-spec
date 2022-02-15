@@ -1139,13 +1139,15 @@ required to switch between ECC enabled and disabled states.
 
 Support for ECC can be checked using the function ${s}DeviceEccAvailable(). If ECC
 is supported, then support for dynamic ECC control can be checked using the
-function ${s}DeviceEccConfigurable(). The current ECC status, pending ECC status,
-and action required to affect the pending ECC status can be determined using the
+function ${s}DeviceEccConfigurable(). The current ECC state, pending ECC state,
+and action required to affect the pending ECC state can be determined using the
 struct ${s}_device_ecc_properties_t returned by the function ${s}DeviceGetEccState().
-The ECC status can be changed by setting the pendingStatus attribute of the struct
-${s}_device_ecc_properties_t and passing the struct to ${s}DeviceSetEccState().
+The ECC state can be changed by calling the ${s}DeviceSetEccState() which takes the
+desired ECC state as input and returns the struct ${s}_device_ecc_properties_t which
+lists the current ECC state, pending ECC state, and action required to affect the
+pending ECC state
 
-The following psuedo code demonstrates how the ECC status can be queried and changed
+The following pseudo code demonstrates how the ECC state can be queried and changed
 from disabled to enabled:
 
 .. parsed-literal::
@@ -1157,11 +1159,11 @@ from disabled to enabled:
             ze_bool_t EccConfigurable = False;
             ${s}DeviceEccConfigurable(hSysmanDevice, &EccConfigurable)
             if (EccConfigurable == True) {
-                ${s}_device_ecc_properties_t props = {NONE, NONE, NONE}
+                ${s}_device_ecc_properties_t props = {${S}_DEVICE_ECC_STATE_UNAVAILABLE, ${S}_DEVICE_ECC_STATE_UNAVAILABLE, ${S}_DEVICE_ACTION_NONE}
                 ${s}DeviceGetEccState(hSysmanDevice, &props)
-                if (props.currentState == DISABLED) {
-                    props.pendingState = ENABLED
-                    ${s}DeviceSetEccState(hSysmanDevice, &props)
+                if (props.currentState == ${S}_DEVICE_ECC_STATE_DISABLED) {
+                    ${s}_device_ecc_desc_t newState = ${S}_DEVICE_ECC_STATE_ENABLED
+                    ${s}DeviceSetEccState(hSysmanDevice, newState, &props)
                 }
             }
         }
