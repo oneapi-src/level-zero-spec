@@ -9,6 +9,67 @@
 type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Scheduler management"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Power Domain"
+version: "1.4"
+class: $sPower
+name: $s_power_domain_t
+etors:
+    - name: UNKNOWN
+      value: "0"
+      desc: "The PUnit power domain level cannot be determined."
+    - name: CARD
+      desc: "The PUnit power domain is a card-level power domain."
+    - name: PACKAGE
+      desc: "The PUnit power domain is a package-level power domain."
+    - name: STACK
+      desc: "The PUnit power domain is a stack-level power domain."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Power Level Type"
+version: "1.4"
+class: $sPower
+name: $s_power_level_t
+etors:
+    - name: UNKNOWN
+      value: "0"
+      desc: "The PUnit power monitoring duration cannot be determined."
+    - name: SUSTAINED
+      desc: "The PUnit determines effective power draw by computing a moving average of the actual power draw over a time interval (longer than BURST)."
+    - name: BURST
+      desc: "The PUnit determines effective power draw by computing a moving average of the actual power draw over a time interval (longer than PEAK)."
+    - name: PEAK
+      desc: "The PUnit determines effective power draw by computing a moving average of the actual power draw over a very short time interval."
+    - name: INSTANTANEOUS
+      desc: "The PUnit predicts effective power draw using the current device configuration (frequency, voltage, etc...) & throttles proactively to stay within the specified limit."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Power Source Type"
+version: "1.4"
+class: $sPower
+name: $s_power_source_t
+etors:
+    - name: ANY
+      desc: "Limit active no matter whether the power source is mains powered or battery powered."
+    - name: MAINS
+      desc: "Limit active only when the device is mains powered."
+    - name: BATTERY
+      desc: "Limit active only when the device is battery powered."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Limit Unit"
+version: "1.4"
+class: $sPower
+name: $s_limit_unit_t
+etors:
+    - name: UNKNOWN
+      value: "0"
+      desc: "The PUnit power monitoring unit cannot be determined."
+    - name: CURRENT
+      desc: "The limit is specified in milliamperes of current drawn."
+    - name: POWER
+      desc: "The limit is specified in milliwatts of power generated."
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Properties related to device power settings"
 class: $sPower
@@ -29,13 +90,13 @@ members:
       desc: "[out] Indicates if this power domain supports the energy threshold event ($S_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED)."
     - type: int32_t
       name: "defaultLimit"
-      desc: "[out] The factory default TDP power limit of the part in milliwatts. A value of -1 means that this is not known."  
+      desc: "[out] (Deprecated) The factory default TDP power limit of the part in milliwatts. A value of -1 means that this is not known."
     - type: int32_t
       name: "minLimit"
-      desc: "[out] The minimum power limit in milliwatts that can be requested."  
+      desc: "[out] (Deprecated) The minimum power limit in milliwatts that can be requested. A value of -1 means that this is not known."
     - type: int32_t
       name: "maxLimit"
-      desc: "[out] The maximum power limit in milliwatts that can be requested."  
+      desc: "[out] (Deprecated) The maximum power limit in milliwatts that can be requested. A value of -1 means that this is not known."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Energy counter snapshot"
@@ -289,7 +350,7 @@ owner: $sDevice
 members:
     - type: $s_pwr_handle_t
       name: handle
-      desc: "[in] handle of Sysman object" 
+      desc: "[in] handle of Sysman object"
       init: nullptr
     - type: $sDevice*
       name: pDevice

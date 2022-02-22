@@ -14,7 +14,7 @@ import copy
 from templates.helper import param_traits, type_traits, value_traits
 
 default_version = "1.0"
-all_versions = ["1.0", "1.1", "2.0"]
+all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "2.0"]
 
 """
     preprocess object
@@ -92,7 +92,7 @@ def _validate_doc(f, d, tags, line_num):
                 ordinal = None
 
             if ordinal != d['ordinal']:
-                raise Exception("'ordinal' invalid value: '%s'"%d['ordinal'])   
+                raise Exception("'ordinal' invalid value: '%s'"%d['ordinal'])
 
     def __validate_version(d, prefix="", base_version=default_version):
         if 'version' in d:
@@ -424,7 +424,7 @@ def _filter_version(d, max_ver):
         return d
 
     flt = []
-    type = d['type']   
+    type = d['type']
     if 'enum' == type:
         for e in d['etors']:
             ver = float(e.get('version', default_version))
