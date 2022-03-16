@@ -279,6 +279,8 @@ etors:
       desc: $x_device_module_properties_t
     - name: COMMAND_QUEUE_GROUP_PROPERTIES
       desc: $x_command_queue_group_properties_t
+    - name: COPY_BANDWIDTH_EXT_PROPERTIES
+      desc: $x_copy_bandwidth_ext_properties_t
     - name: DEVICE_MEMORY_PROPERTIES
       desc: $x_device_memory_properties_t
     - name: DEVICE_MEMORY_ACCESS_PROPERTIES
@@ -439,6 +441,32 @@ etors:
     - name: D3D12_RESOURCE
       desc: "an NT handle referring to a Direct3D 12 committed resource"
       version: "1.2"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Bandwith unit"
+version: "1.4"
+name: $x_bandwidth_unit_t
+etors:
+    - name: UNKNOWN
+      desc: "The unit used for bandwith is unknown"
+    - name: BYTES_PER_NANOSEC
+      desc: "Bandwidth is provided in bytes/nanosec"
+    - name: BYTES_PER_CLOCK
+      desc: "Bandwidth is provided in bytes/clock"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Latency unit"
+version: "1.4"
+name: $x_latency_unit_t
+etors:
+    - name: UNKNOWN
+      desc: "The unit used for latency is unknown"
+    - name: NANOSEC
+      desc: "Latency is provided in nanosecs"
+    - name: CLOCK
+      desc: "Latency is provided in clocks"
+    - name: HOP
+      desc: "Latency is provided in hops (normalized so that the lowest latency link has a latency of 1 hop)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
