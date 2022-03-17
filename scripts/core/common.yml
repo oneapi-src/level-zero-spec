@@ -139,6 +139,16 @@ version: "2.0"
 class: $xCommandGraphExp
 name: "$x_command_graph_exp_handle_t"
 --- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's fabric vertex object"
+class: $xFabricVertex
+name: "$x_fabric_vertex_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's fabric edge object"
+class: $xFabricEdge
+name: "$x_fabric_edge_handle_t"
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum IPC handle size"
 name: $X_MAX_IPC_HANDLE_SIZE
@@ -192,6 +202,15 @@ etors:
     - name: ERROR_DEVICE_IN_LOW_POWER_STATE
       desc: "[Core] device currently in low power state"
       version: "1.2"
+    - name: ERROR_DEVICE_IS_NOT_VERTEX
+      desc: "[Core] device is not represented by a fabrci vertex"
+      version: "1.4"
+    - name: ERROR_VERTEX_IS_NOT_DEVICE
+      desc: "[Core] fabric vertex does not represent a device"
+      version: "1.4"
+    - name: ERROR_REMOTE_DEVICE
+      desc: "[Core] fabric vertex represents a remote device or subdevice"
+      version: "1.4"
     - name: ERROR_INSUFFICIENT_PERMISSIONS
       value: "0x70010000"
       desc: "[Sysman] access denied due to permission level"
@@ -469,6 +488,19 @@ etors:
       desc: "Latency is provided in clocks"
     - name: HOP
       desc: "Latency is provided in hops (normalized so that the lowest latency link has a latency of 1 hop)"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum universal unique id (UUID) size in bytes"
+name: $X_MAX_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Universal unique id (UUID)"
+name: "$x_uuid_t"
+members:
+    - type: uint8_t
+      name: "id[$X_MAX_UUID_SIZE]"
+      desc: "[out] opaque data representing a UUID"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

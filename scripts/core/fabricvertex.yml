@@ -1,0 +1,186 @@
+#
+# Copyright (C) 2019 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Fabric Vertex"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric Vertex types"
+version: "1.4"
+class: $xFabricVertex
+name: $x_fabric_vertex_type_t
+etors:
+    - name: UNKNOWN
+      desc: Fabric vertex type is unknown
+    - name: DEVICE
+      desc: Fabric vertex represents a device
+    - name: SUBEVICE
+      desc: Fabric vertex represents a subdevice
+    - name: SWITCH
+      desc: Fabric vertex represents a switch
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "PCI address"
+version: "1.4"
+class: $xFabricVertex
+name: $x_fabric_vertex_pci_address_t
+members:
+    - type: uint32_t
+      name: "domain"
+      desc: "[out] PCI domain number"
+    - type: uint32_t
+      name: "bus"
+      desc: "[out] PCI BDF bus number"
+    - type: uint32_t
+      name: "device"
+      desc: "[out] PCI BDF device number"
+    - type: uint32_t
+      name: "function"
+      desc: "[out] PCI BDF function number"
+details:
+    - "A PCI BDF address is the bus:device:function address of the device and is useful for locating the device in the PCI switch fabric."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric Vertex properties"
+version: "1.4"
+class: $xFabricVertex
+name: $x_fabric_vertex_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier. If the vertex is co-located with a device/subdevice, then this uuid will match that of the corresponding device/subdevice"
+    - type: $x_fabric_vertex_type_t
+      name: type
+      desc: "[out] does the fabric vertex represent a device, subdevice, or switch?"
+    - type: $x_bool_t
+      name: remote
+      desc: "[out] does the fabric vertex live on the local node or on a remote node?"
+    - type: $x_fabric_vertex_pci_address_t
+      name: address
+      desc: "[out] B/D/F address of fabric vertex & associated device/subdevice if available"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves fabric vertices within a driver"
+version: "1.4"
+class: $xFabricVertex
+name: Get
+decl: static
+ordinal: "0"
+details:
+    - "A fabric vertex represents either a device or a switch connected to other fabric vertices."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of fabric vertices.
+            if count is zero, then the driver shall update the value with the total number of fabric vertices available.
+            if count is greater than the number of fabric vertices available, then the driver shall update the value with the correct number of fabric vertices available.
+    - type: "$x_fabric_vertex_handle_t*"
+      name: phVertices
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of fabric vertices.
+            if count is less than the number of fabric vertices available, then driver shall only retrieve that number of fabric vertices.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves a fabric sub-vertex from a fabric vertex"
+version: "1.4"
+class: $xFabricVertex
+name: GetSubVertices
+ordinal: "1"
+details:
+    - "Multiple calls to this function will return identical fabric vertex handles, in the same order."
+    - "The number of handles returned from this function is affected by the $X_AFFINITY_MASK environment variable."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex object"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of sub-vertices.
+            if count is zero, then the driver shall update the value with the total number of sub-vertices available.
+            if count is greater than the number of sub-vertices available, then the driver shall update the value with the correct number of sub-vertices available.
+    - type: "$x_fabric_vertex_handle_t*"
+      name: phSubvertices
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of sub-vertices.
+            if count is less than the number of sub-vertices available, then driver shall only retrieve that number of sub-vertices.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves properties of the fabric vertex."
+version: "1.4"
+class: $xFabricVertex
+name: GetProperties
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex"
+    - type: "$x_fabric_vertex_properties_t*"
+      name: pVertexProperties
+      desc: "[in,out] query result for fabric vertex properties"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Checks if fabric vertex represents a device."
+version: "1.4"
+class: $xFabricVertex
+name: IsDevice
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex"
+    - type: "$x_bool_t*"
+      name: pIsDevice
+      desc: "[out] query result for fabric vertex represenst a device"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns device handle from fabric vertex handle."
+version: "1.4"
+class: $xFabricVertex
+name: GetDevice
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex"
+    - type: "$x_device_handle_t*"
+      name: pDevice
+      desc: "[out] device handle corresponding to fabric vertex"
+returns:
+    - $X_RESULT_ERROR_VERTEX_IS_NOT_DEVICE:
+        - "Provided fabric vertex handle does not correspond to a device or subdevice."
+    - $X_RESULT_ERROR_REMOTE_DEVICE:
+        - "Provided fabric vertex handle corresponds to remote device or subdevice."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for fabric vertex"
+name: $xFabricVertex
+owner: $xDriver
+members:
+    - type: $x_fabric_vertex_handle_t
+      name: handle
+      desc: "[in] handle of fabric vertex object"
+    - type: $xDriver*
+      name: pDriver
+      desc: "[in] pointer to owner object"
