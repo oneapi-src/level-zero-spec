@@ -291,6 +291,8 @@ etors:
       desc: $x_device_image_properties_t
     - name: DEVICE_P2P_PROPERTIES
       desc: $x_device_p2p_properties_t
+    - name: DEVICE_P2P_BANDWIDTH_EXT_PROPERTIES
+      desc: $x_device_p2p_bandwidth_ext_properties_t
     - name: DEVICE_EXTERNAL_MEMORY_PROPERTIES
       desc: $x_device_external_memory_properties_t
     - name: CONTEXT_DESC

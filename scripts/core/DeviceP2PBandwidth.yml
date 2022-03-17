@@ -1,0 +1,39 @@
+#
+# Copyright (C) 2021 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Device P2P Bandwidth"
+version: "1.4"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Device P2P Bandwidth Extension Name"
+version: "1.4"
+name: $X_DEVICE_P2P_BANDWITH_PROPERTIES_EXT_NAME
+value: '"$X_extension_device_p2p_bandwidth_properties"'
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "P2P Bandwith Properties"
+version: "1.4"
+class: $xDevice
+name: $x_device_p2p_bandwidth_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: uint32_t
+      name: "bandwith"
+      desc: "[out] maximum bandwidth supported between the provided devices for copy operations"
+    - type: $x_bandwidth_unit_t
+      name: "bandwidthUnit"
+      desc: "[out] The unit used for supplying the p2p bandwith"
+    - type: uint32_t
+      name: "latency"
+      desc: "[out] latency between the provided devices for copy operations"
+    - type: $x_latency_unit_t
+      name: "latencyUnit"
+      desc: "[out] The unit used for supplying the p2p latency"
+details:
+    - "This structure may be passed to $xDeviceGetP2PProperties by having the pNext member of $x_device_p2p_properties_t point at this struct."
