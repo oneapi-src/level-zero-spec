@@ -1,5 +1,5 @@
 """
- Copyright (C) 2019 Intel Corporation
+ Copyright (C) 2019-2022 Intel Corporation
 
  SPDX-License-Identifier: MIT
 
@@ -50,7 +50,7 @@ def build():
     if "Windows" == platform.system():
         result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 16 2019" -A x64')
     else:
-        result = -1 #todo
+        result = os.system('cmake -B ../build/ -S ..')
     if result == 0:
         result = os.system('cmake --build ../build --clean-first')
     return result == 0
