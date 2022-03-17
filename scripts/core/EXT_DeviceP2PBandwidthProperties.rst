@@ -10,9 +10,9 @@ from templates import helper as th
 
 .. _ZE_extension_device_p2p_bandwidth_properties:
 
-======================================
+==========================================
 Device P2P Bandwidth Extension Properties
-======================================
+==========================================
 
 API
 ----
