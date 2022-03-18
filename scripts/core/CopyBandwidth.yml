@@ -25,9 +25,9 @@ base: $x_base_properties_t
 members:
     - type: uint32_t
       name: "copyBandwith"
-      desc: "[out] maximum bandwidth supported by this engine type for copy operations"
+      desc: "[out] design bandwidth supported by this engine type for copy operations"
     - type: $x_bandwidth_unit_t
       name: "copyBandwidthUnit"
-      desc: "[out] The unit used for supplying the copy bandwith"
+      desc: "[out] copy bandwith unit"
 details:
     - "This structure may be passed to $xDeviceGetCommandQueueGroupProperties by having the pNext member of $x_command_queue_group_properties_t point at this struct."

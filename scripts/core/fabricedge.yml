@@ -41,16 +41,16 @@ members:
       desc: "[out] Description of fabric edge technology. Will be set to the string \"unkown\" if this cannot be determined for this edge"
     - type: uint32_t
       name: "bandwith"
-      desc: "[out] maximum bandwidth supported between the provided devices for copy operations"
+      desc: "[out] design bandwidth"
     - type: $x_bandwidth_unit_t
       name: "bandwidthUnit"
-      desc: "[out] The unit used for supplying the p2p bandwith"
+      desc: "[out] bandwith unit"
     - type: uint32_t
       name: "latency"
-      desc: "[out] latency between the provided devices for copy operations"
+      desc: "[out] design latency"
     - type: $x_latency_unit_t
       name: "latencyUnit"
-      desc: "[out] The unit used for supplying the p2p latency"
+      desc: "[out] latency unit"
     - type: $x_fabric_edge_duplexity_t
       name: "duplexity"
       desc: "[out] Duplexity of the fabric edge"
