@@ -56,20 +56,23 @@ members:
       desc: "[out] Duplexity of the fabric edge"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves fabric edges attached to a fabric vertex"
+desc: "Retrieves all fabric edges between provided pair of fabric vertices"
 version: "1.4"
 class: $xFabricEdge
 name: Get
 decl: static
 ordinal: "0"
 details:
-    - "A fabric edge represents one or morte phyiscal links between two fabriuc vertices."
+    - "A fabric edge represents one or morte physical links between two fabric vertices."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
     - type: $x_fabric_vertex_handle_t
-      name: hVertex
-      desc: "[in] handle of the fabric vertex instance"
+      name: hVertexA
+      desc: "[in] handle of first fabric vertex instance"
+    - type: $x_fabric_vertex_handle_t
+      name: hVertexB
+      desc: "[in] handle of second fabric vertex instance"
     - type: "uint32_t*"
       name: pCount
       desc: |
