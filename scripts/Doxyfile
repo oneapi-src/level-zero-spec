@@ -1142,7 +1142,7 @@ HTML_FILE_EXTENSION    = .html
 # of the possible markers and block names see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_HEADER            = 
+HTML_HEADER            =
 
 # The HTML_FOOTER tag can be used to specify a user-defined HTML footer for each
 # generated HTML page. If the tag is left blank doxygen will generate a standard
@@ -1152,7 +1152,7 @@ HTML_HEADER            =
 # that doxygen normally uses.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_FOOTER            = 
+HTML_FOOTER            =
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading style
 # sheet that is used by each HTML page. It can be used to fine-tune the look of
@@ -1177,7 +1177,7 @@ HTML_STYLESHEET        =
 # list). For an example see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  = 
+HTML_EXTRA_STYLESHEET  =
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1746,7 +1746,7 @@ EXTRA_PACKAGES         =
 # to HTML_HEADER.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_HEADER           = 
+LATEX_HEADER           =
 
 # The LATEX_FOOTER tag can be used to specify a personal LaTeX footer for the
 # generated LaTeX document. The footer should contain everything after the last
@@ -1757,7 +1757,7 @@ LATEX_HEADER           =
 # Note: Only use a user-defined footer if you know what you are doing!
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_FOOTER           = 
+LATEX_FOOTER           =
 
 # The LATEX_EXTRA_STYLESHEET tag can be used to specify additional user-defined
 # LaTeX style sheets that are included after the standard style sheets created
@@ -1768,7 +1768,7 @@ LATEX_FOOTER           =
 # list).
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_EXTRA_STYLESHEET = 
+LATEX_EXTRA_STYLESHEET =
 
 # The LATEX_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the LATEX_OUTPUT output
@@ -1791,7 +1791,11 @@ LATEX_EXTRA_FILES      = ../docs/source/images/core_device.png \
                          ../docs/source/images/tools_sysman_freq_subdevices.png \
                          ../docs/source/images/tools_sysman_object_hierarchy.png \
                          ../docs/source/images/tools_sysman_oc.png \
-                         ../docs/source/images/tools_sysman_resprops.png
+                         ../docs/source/images/tools_sysman_resprops.png \
+                         ../docs/source/images/A21_Vertex.png \
+                         ../docs/source/images/A21_Subvertex.png \
+                         ../docs/source/images/A21_Subvertex+Remote.png \
+                         ../docs/source/images/DGXA100_Vertex.png
 
 # If the PDF_HYPERLINKS tag is set to YES, the LaTeX that is generated is
 # prepared for conversion to PDF (using ps2pdf or pdflatex). The PDF file will
