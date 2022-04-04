@@ -1650,7 +1650,7 @@ Topology Discovery
 ==================
 The API supports two forms of topology discovery - logical & physical.
 
-The API architecture exposes the logical topology of the scale-up fabrics interconnecting accelerators. Accelerators are logically connected if they are able to access each other's memory, even if the access passes through other accelerators. Two accelerators can be checked for logical connectivity using ${x}DeviceCanAccessPeer. Support for remote memory access & atomic capabilities can be checked using the ${x}DeviceGetP2PProperties function. The ${x}_device_p2p_bandwidth_ext_properties_t extension struct provides the bandwidth of the connection between the two accelerators as well as the latency of access. 
+The API architecture exposes the logical topology of the scale-up fabrics interconnecting accelerators. Accelerators are logically connected if they are able to access each other's memory, even if the access passes through other accelerators. Two accelerators can be checked for logical connectivity using ${x}DeviceCanAccessPeer. Support for remote memory access & atomic capabilities can be checked using the ${x}DeviceGetP2PProperties function. The ${x}_device_p2p_bandwidth_ext_properties_t extension struct provides the bandwidth of the connection between the two accelerators as well as the latency of access.
 
 The API architecture also exposes the physical topology of scale-up fabrics interconnecting accelerators (exposed as devices and subdevices) and switches. Both accelerators and switches are represented as fabric vertices. The physical links that interconnect accelerators and switches are represented as fabric edges. The API supports a hierarchy of fabric vertices and fabric subvertices in keeping with the hierarchy of devices and subdevices. Devices always correspond to fabric vertices while subdevices always correspond to fabric subvertices. Both fabric vertices and fabric subvertices are represented by the same opaque handle. Fabric vertices may be remote, i.e. be associated with accelerator devices on remote nodes.
 
@@ -2100,28 +2100,26 @@ The following code examples demonstrate how to use the event IPC APIs:
 Peer-to-Peer Access and Queries
 -------------------------------
 
-Peer to Peer API's provide capabilities to marshall data across Host to
+Peer to Peer API's provide capabilities to marshal data across Host to
 Device, Device to Host and Device to Device. The data marshalling API
 can be scheduled as asynchronous operations or can be synchronized with
 kernel execution through command queues. Data coherency is maintained by
 the driver without any explicit involvement from the application.
 
-Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
-the fabric can support atomics, compute kernel remote access, and data copies.
+Cards may be linked together within a node by a scale-up fabric and depending on the configuration,
+the fabric can support remote access, atomics, and data copies.
 
 The following Peer-to-Peer functionalities are provided through the API:
 
-- Check for existence of peer-to-peer fabric between two devices.
+- Check for existence of interconnection between two devices/subdevices: ${x}DeviceCanAccessPeer
 
-       + ${x}DeviceCanAccessPeer
+       The following rules apply to ${x}DeviceCanAccessPeer queries
 
-- Query remote memory access and atomic capabilities for peer-to-peer
+       + A device/subdevice with itself - benign - return true
 
-       + ${x}DeviceGetP2PProperties
+- Query remote memory access and atomic capabilities for peer-to-peer: ${x}DeviceGetP2PProperties
 
-- Copy data between devices over peer-to-peer fabric.
-
-       + ${x}CommandListAppendMemoryCopy
+- Copy data between devices over peer-to-peer fabric: ${x}CommandListAppendMemoryCopy
 
 .. |Device| image:: ../images/core_device.png?raw=true
 .. |Queue| image:: ../images/core_queue.png?raw=true
