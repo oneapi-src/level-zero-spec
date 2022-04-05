@@ -203,7 +203,7 @@ etors:
       desc: "[Core] device currently in low power state"
       version: "1.2"
     - name: ERROR_DEVICE_IS_NOT_VERTEX
-      desc: "[Core] device is not represented by a fabrci vertex"
+      desc: "[Core] device is not represented by a fabric vertex"
       version: "1.4"
     - name: ERROR_VERTEX_IS_NOT_DEVICE
       desc: "[Core] fabric vertex does not represent a device"

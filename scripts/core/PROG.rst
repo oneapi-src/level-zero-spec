@@ -1686,13 +1686,11 @@ Assuming that the application is using a graph API to construct a graph, the fol
 
        // Create graph object
 
-       // Find all fabric sub-vertices & the edges connecting them
+       // Find all fabric vertices & the edges connecting them
        ${x}_fabric_vertex_handle_t* vertices = nullptr;
 
        uint32_t vertexCount = 0;
        ${x}FabricVertexGet(drivers[0], &vertexCount, nullptr);
-
-       uint32_t deviceCount = 0;
 
        vertices = allocate(vertexCount * sizeof(${x}_fabric_vertex_handle_t));
 
@@ -1738,7 +1736,7 @@ Same as above, but with remote subdevices that manifest as subvertices but do no
 
 .. image:: ../images/A21_Subvertex+Remote.png
 
-Am eight device system with six switches establishing all-to-all connectivity between the devices.
+An eight device system with six switches establishing all-to-all connectivity between the devices.
 
 .. image:: ../images/DGXA100_Vertex.png
 

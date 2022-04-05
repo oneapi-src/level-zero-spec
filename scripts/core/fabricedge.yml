@@ -63,7 +63,7 @@ name: Get
 decl: static
 ordinal: "0"
 details:
-    - "A fabric edge represents one or morte physical links between two fabric vertices."
+    - "A fabric edge represents one or more physical links between two fabric vertices."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -99,7 +99,7 @@ details:
 params:
     - type: $x_fabric_edge_handle_t
       name: hEdge
-      desc: "[in] handle of the fabriuc edge instance"
+      desc: "[in] handle of the fabric edge instance"
     - type: "$x_fabric_vertex_handle_t*"
       name: phVertexA
       desc: "[out] fabric vertex connected to one end of the given fabric edge."

@@ -25,13 +25,13 @@ base: $x_base_properties_t
 members:
     - type: uint32_t
       name: "bandwith"
-      desc: "[out] design bandwidth"
+      desc: "[out] total design bandwidth for all links connecting the two devices"
     - type: $x_bandwidth_unit_t
       name: "bandwidthUnit"
-      desc: "[out] bandwith unity"
+      desc: "[out] bandwith unit"
     - type: uint32_t
       name: "latency"
-      desc: "[out] design latency"
+      desc: "[out] average design latency for all links connecting the two devices"
     - type: $x_latency_unit_t
       name: "latencyUnit"
       desc: "[out] latency unit"

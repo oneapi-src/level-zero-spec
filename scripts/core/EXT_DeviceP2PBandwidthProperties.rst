@@ -25,9 +25,9 @@ API
 Device P2P Bandwidth Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Engines from different command queue groups may drive differing amounts of bandwidth over the same link between two devices. The copy bandwidth of the engines within each command queue group is provided to help users determine which command queue group to pick an engine from for driving each copy operation given constraints such as the maximum bandwidth that a link supports, current usage of engines, etc... For example, some command queue groups that support copy may afford engines that support a higher copy bandwidth as compared to those from a different command queue group. For driving copies from local memory to local memory, it may be advisable to use an engine from a higher copy bandwidth group. For performing copies between devices interconnected with a lower bandwidth link, it may suffice to use an engine from a lower copy bandwidth group.
+Devices and subdevices within a system may be connected using different link technologies as well as differing numbers of links. Two devices (or subdevices) may be logically but not physically connected to each other, meaning that memory accesses and copies between the devices have to go over intervening devices which limits the maximum bandwidth to the lowest bandwidth link along the connection while increasing the latency to the sum total of the latencies of the links along the connection. The net bandwidth & latency is the design bandwidth & latency between two logically devices and account for link technology, numb er of links, number of hops between the devices, etc... 
 
-The following psuedo-code demonstrates a sequence for obtaining the p2p bandwidth between two devices:
+The following psuedo-code demonstrates a sequence for obtaining the p2p bandwidth & latency between two devices:
 
 .. parsed-literal::
 
