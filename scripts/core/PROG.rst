@@ -2111,15 +2111,21 @@ the fabric can support remote access, atomics, and data copies.
 
 The following Peer-to-Peer functionalities are provided through the API:
 
-- Check for existence of interconnection between two devices/subdevices: ${x}DeviceCanAccessPeer
+- Check for remote memory access capability between two devices/subdevices: ${x}DeviceCanAccessPeer
 
        The following rules apply to ${x}DeviceCanAccessPeer queries
 
-       + A device/subdevice with itself - benign - return true
+       + A device/subdevice is always its own peer, i.e. it can always access itself.
 
 - Query remote memory access and atomic capabilities for peer-to-peer: ${x}DeviceGetP2PProperties
 
+       The following rules apply to ${x}DeviceCanAccessPeer queries
+
+       + A device/subdevice is always its own peer, i.e. it can always access itself and also do so atomically.
+
 - Copy data between devices over peer-to-peer fabric: ${x}CommandListAppendMemoryCopy
+
+Both ${x}DeviceCanAccessPeer & ${x}DeviceGetP2PProperties return the same information - do two devices have peer-to-peer access. ${x}DeviceGetP2PProperties provides more detail than ${x}DeviceCanAccessPeer, such as support for atomics, etc...
 
 .. |Device| image:: ../images/core_device.png?raw=true
 .. |Queue| image:: ../images/core_queue.png?raw=true
