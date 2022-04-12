@@ -202,15 +202,18 @@ etors:
     - name: ERROR_DEVICE_IN_LOW_POWER_STATE
       desc: "[Core] device currently in low power state"
       version: "1.2"
-    - name: ERROR_DEVICE_IS_NOT_VERTEX
-      desc: "[Core] device is not represented by a fabric vertex"
+    - name: ERROR_DEVICE_IS_NOT_EXP_VERTEX
+      desc: "[Core, Expoerimental] device is not represented by a fabric vertex"
       version: "1.4"
-    - name: ERROR_VERTEX_IS_NOT_DEVICE
-      desc: "[Core] fabric vertex does not represent a device"
+      value: "0x7ff00001"
+    - name: ERROR_VERTEX_IS_NOT_EXP_DEVICE
+      desc: "[Core, Experimental] fabric vertex does not represent a device"
       version: "1.4"
-    - name: ERROR_REMOTE_DEVICE
-      desc: "[Core] fabric vertex represents a remote device or subdevice"
+      value: "0x7ff00002"
+    - name: ERROR_REMOTE_EXP_DEVICE
+      desc: "[Core, Expoerimental] fabric vertex represents a remote device or subdevice"
       version: "1.4"
+      value: "0x7ff00003"
     - name: ERROR_INSUFFICIENT_PERMISSIONS
       value: "0x70010000"
       desc: "[Sysman] access denied due to permission level"
@@ -299,7 +302,7 @@ etors:
     - name: COMMAND_QUEUE_GROUP_PROPERTIES
       desc: $x_command_queue_group_properties_t
     - name: COPY_BANDWIDTH_EXT_PROPERTIES
-      desc: $x_copy_bandwidth_ext_properties_t
+      desc: $x_copy_bandwidth_exp_properties_t
     - name: DEVICE_MEMORY_PROPERTIES
       desc: $x_device_memory_properties_t
     - name: DEVICE_MEMORY_ACCESS_PROPERTIES
@@ -311,7 +314,7 @@ etors:
     - name: DEVICE_P2P_PROPERTIES
       desc: $x_device_p2p_properties_t
     - name: DEVICE_P2P_BANDWIDTH_EXT_PROPERTIES
-      desc: $x_device_p2p_bandwidth_ext_properties_t
+      desc: $x_device_p2p_bandwidth_exp_properties_t
     - name: DEVICE_EXTERNAL_MEMORY_PROPERTIES
       desc: $x_device_external_memory_properties_t
     - name: CONTEXT_DESC

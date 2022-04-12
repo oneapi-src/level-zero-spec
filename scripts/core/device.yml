@@ -815,41 +815,6 @@ params:
       name: deviceTimestamp
       desc: "[out] value of the Device's global timestamp that correlates with the Host's global timestamp value"
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Checks if device is represented by a fabric vertex."
-version: "1.4"
-class: $xDevice
-name: IsFabricVertex
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
-    - type: "$x_bool_t*"
-      name: pIsFabricVertex
-      desc: "[out] query result for device is represented by a fabric vertex"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Returns fabric vertex handle from device handle."
-version: "1.4"
-class: $xDevice
-name: GetFabricVertex
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_device_handle_t
-      name: hVertex
-      desc: "[in] handle of the device"
-    - type: "$x_fabric_vertex_handle_t*"
-      name: pVertex
-      desc: "[out] fabric vertex handle corresponding to device"
-returns:
-    - $X_RESULT_ERROR_DEVICE_IS_NOT_VERTEX:
-        - "Provided device handle does not correspond to a fabric vertex."
---- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a device"
 name: $xDevice

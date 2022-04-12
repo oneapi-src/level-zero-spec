@@ -13,14 +13,14 @@ version: "1.4"
 type: macro
 desc: "Copy Bandwidth Extension Name"
 version: "1.4"
-name: $X_COPY_BANDWITH_PROPERTIES_EXT_NAME
-value: '"$X_extension_copy_bandwidth_properties"'
+name: $X_COPY_BANDWITH_PROPERTIES_EXP_NAME
+value: '"$X_experimental_copy_bandwidth_properties"'
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Copy Bandwith Properties"
 version: "1.4"
 class: $xCommandQueue
-name: $x_copy_bandwidth_ext_properties_t
+name: $x_copy_bandwidth_exp_properties_t
 base: $x_base_properties_t
 members:
     - type: uint32_t

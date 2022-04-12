@@ -1646,100 +1646,6 @@ The following pseudo-code demonstrates the creation of a sampler object and pass
        // Append launch kernel
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
-Topology Discovery
-==================
-The API supports two forms of topology discovery - logical & physical.
-
-The API architecture exposes the logical topology of the scale-up fabrics interconnecting accelerators. Accelerators are logically connected if they are able to access each other's memory, even if the access passes through other accelerators. Two accelerators can be checked for logical connectivity using ${x}DeviceCanAccessPeer. Support for remote memory access & atomic capabilities can be checked using the ${x}DeviceGetP2PProperties function. The ${x}_device_p2p_bandwidth_ext_properties_t extension struct provides the bandwidth of the connection between the two accelerators as well as the latency of access.
-
-The API architecture also exposes the physical topology of scale-up fabrics interconnecting accelerators (exposed as devices and subdevices) and switches. Both accelerators and switches are represented as fabric vertices. The physical links that interconnect accelerators and switches are represented as fabric edges. The API supports a hierarchy of fabric vertices and fabric subvertices in keeping with the hierarchy of devices and subdevices. Devices always correspond to fabric vertices while subdevices always correspond to fabric subvertices. Both fabric vertices and fabric subvertices are represented by the same opaque handle. Fabric vertices may be remote, i.e. be associated with accelerator devices on remote nodes.
-
-Fabric Vertices
----------------
-
-A fabric vertex object represents either a physical accelerator or switch in a system that supports Level-Zero.
-
-- The application may query the number of fabric vertices supported by a driver, and their respective handles, using ${x}FabricVertexGet.
-- The application may also obtain fabric vertex handles directly from the underlying device handles using ${x}DeviceGetFabricVertex.
-- Fabric vertices objects are read-only, global constructs. i.e. multiple calls to ${x}FabricVertexGet or ${x}DeviceGetFabricVertex will return identical fabric vertex handles.
-- Fabric vertices may expose sub-vertices that allow finer-grained querying of the  topological properties of the system.
-- The device represented by a fabric vertex may be obtainable from the fabric vertex handle using ${x}FabricVertexGetDevice.
-- Fabric vertices may represent remote accelerators or switches, i.e. accelerators or switches on a remote node, that are connected to the accelerators and switches in the local node via scale-out links. Such accelerators cannot be programmed from the local node & the corresponding device handles cannot be obtained from the fabric vertex handles representing the remote accelerator.
-- A fabric vertex handle is primarily used for identifying topological properties of the L0 system that can be used for optimization of the algorithm used for compute/communication.
-
-Fabric Edges
-------------
-
-A fabric edge object represents one or more physical links between fabric vertices in a system that supports Level-Zero.
-
-- The application may query the number of fabric edges connected to a fabric vertex, and their respective handles, using ${x}FabricEdgeGet.
-- Fabric edge objects are read-only, global constructs. Multiple calls to ${x}FabricEdgeGet made with the same fabric vertices will return identical fabric edge handles.
-- A single fabric edge may represent multiple physical links between two fabric vertices as long as traffic is automatically spread over all links when a single engine is used to drive the transfer.
-- A fabric edge handle is primarily used for identifying topological properties of the L0 system that can be used for optimization of the algorithm used for compute/communication.
-
-Discovery
----------
-
-Assuming that the application is using a graph API to construct a graph, the following pseudo-code demonstrates a basic topology discovery sequence:
-
-.. parsed-literal::
-
-       // Create graph object
-
-       // Find all fabric vertices & the edges connecting them
-       ${x}_fabric_vertex_handle_t* vertices = nullptr;
-
-       uint32_t vertexCount = 0;
-       ${x}FabricVertexGet(drivers[0], &vertexCount, nullptr);
-
-       vertices = allocate(vertexCount * sizeof(${x}_fabric_vertex_handle_t));
-
-       ${x}FabricVertexGet(drivers[0], &vertexCount, vertices);
-
-       // Copy all vertices into graph
-
-       for (u = 0; u < vertexCount; ++u) {
-            for (v = u + 1; u < vertexCount; ++v) {
-
-                 uint32_t edgeCount = 0;
-
-                 ${x}FabricEdgeGet(vertices[u], vertices[v], &edgeCount, nullptr);
-
-                 ${x}_fabric_edge_handle_t* edges = nullptr;
-
-                 edges = allocate(edgeCount * sizeof(${x}_fabric_edge_handle_t));
-
-                 ${x}FabricEdgeGet(vertices[u], vertices[v], &edgeCount, edges);
-
-                 // Copy edges into graph
-
-                 free(edges);
-
-            }
-       }
-
-       free(vertices);
-
-       ...
-
-The following diagrams illustrates examples of topologies exposed via the fabric vertex & fabric edge API.
-
-A six device system with all-to-all connectivity between the devices.
-
-.. image:: ../images/A21_Vertex.png
-
-Subvertex discovery reveals that each device in the system is actually composed of two subdevices with two planes of all-to-all connectivity (light-green & dark-green) and one plane of 2-d mesh connectivity (blue) between the subdevices.
-
-.. image:: ../images/A21_Subvertex.png
-
-Same as above, but with remote subdevices that manifest as subvertices but do not expose a subdevice handle.
-
-.. image:: ../images/A21_Subvertex+Remote.png
-
-An eight device system with six switches establishing all-to-all connectivity between the devices.
-
-.. image:: ../images/DGXA100_Vertex.png
-
 Advanced
 ========
 
@@ -2115,15 +2021,15 @@ The following Peer-to-Peer functionalities are provided through the API:
 
        + A device/subdevice is always its own peer, i.e. it can always access itself.
 
-- Query remote memory access and atomic capabilities for peer-to-peer: ${x}DeviceGetP2PProperties
+- Query remote memory access, atomic capabilities, logical & physical bandwidth & latency for peer-to-peer: ${x}DeviceGetP2PProperties + :ref:`ZE_experimental_device_p2p_bandwidth_properties`.
 
-       The following rules apply to ${x}DeviceCanAccessPeer queries
+       The following rules apply to ${x}DeviceGetP2PProperties queries
 
        + A device/subdevice is always its own peer, i.e. it can always access itself and also do so atomically.
 
 - Copy data between devices over peer-to-peer fabric: ${x}CommandListAppendMemoryCopy
 
-Both ${x}DeviceCanAccessPeer & ${x}DeviceGetP2PProperties return the same information - do two devices have peer-to-peer access. ${x}DeviceGetP2PProperties provides more detail than ${x}DeviceCanAccessPeer, such as support for atomics, etc...
+Both ${x}DeviceCanAccessPeer & ${x}DeviceGetP2PProperties return the same information - do two devices support peer-to-peer access? ${x}DeviceGetP2PProperties provides more detail than ${x}DeviceCanAccessPeer, such as support for atomics, bandwidths, latencies, etc...
 
 .. |Device| image:: ../images/core_device.png?raw=true
 .. |Queue| image:: ../images/core_queue.png?raw=true
@@ -2131,7 +2037,3 @@ Both ${x}DeviceCanAccessPeer & ${x}DeviceGetP2PProperties return the same inform
 .. |Fence| image:: ../images/core_fence.png?raw=true
 .. |Event| image:: ../images/core_event.png?raw=true
 .. |Module| image:: ../images/core_module.png?raw=true
-.. |Topology| image:: ../images/A21_Vertex.png?raw=true
-.. |Topology| image:: ../images/A21_Subvertex.png?raw=true
-.. |Topology| image:: ../images/A21_Subvertex+Remote.png?raw=true
-.. |Topology| image:: ../images/DGXA100_Vertex.png?raw=true

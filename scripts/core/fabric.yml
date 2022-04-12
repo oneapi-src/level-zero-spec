@@ -1,0 +1,355 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Fabric Topology Discovery"
+version: "1.4"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Fabric Topology Discovery Extension Name"
+version: "1.4"
+name: $X_FABRIC_EXP_NAME
+value: '"$X_experimental_fabric"'
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum fabric edge model string size"
+name: $X_MAX_FABRIC_EDGE_MODEL_EXP_SIZE
+value: "256"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric Vertex types"
+version: "1.4"
+class: $xFabricVertex
+name: $x_fabric_vertex_exp_type_t
+etors:
+    - name: UNKNOWN
+      desc: Fabric vertex type is unknown
+    - name: DEVICE
+      desc: Fabric vertex represents a device
+    - name: SUBEVICE
+      desc: Fabric vertex represents a subdevice
+    - name: SWITCH
+      desc: Fabric vertex represents a switch
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric edge duplexity"
+version: "1.4"
+class: $xFabricEdge
+name: $x_fabric_edge_exp_duplexity_t
+etors:
+    - name: UNKNOWN
+      desc: Fabric edge duplexity is unknown
+    - name: HALF_DUPLEX
+      desc: Fabric edge is half duplex, i.e. stated bandwidth is obtained in only one direction at time
+    - name: FULL_DUPLEX
+      desc: Fabric edge is full duplex, i.e. stated bandwidth is supported in both directions simultaneously
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "PCI address"
+version: "1.4"
+class: $xFabricVertex
+name: $x_fabric_vertex_pci_exp_address_t
+members:
+    - type: uint32_t
+      name: "domain"
+      desc: "[out] PCI domain number"
+    - type: uint32_t
+      name: "bus"
+      desc: "[out] PCI BDF bus number"
+    - type: uint32_t
+      name: "device"
+      desc: "[out] PCI BDF device number"
+    - type: uint32_t
+      name: "function"
+      desc: "[out] PCI BDF function number"
+details:
+    - "A PCI BDF address is the bus:device:function address of the device and is useful for locating the device in the PCI switch fabric."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric Vertex properties"
+version: "1.4"
+class: $xFabricVertex
+name: $x_fabric_vertex_exp_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier. If the vertex is co-located with a device/subdevice, then this uuid will match that of the corresponding device/subdevice"
+    - type: $x_fabric_vertex_exp_type_t
+      name: type
+      desc: "[out] does the fabric vertex represent a device, subdevice, or switch?"
+    - type: $x_bool_t
+      name: remote
+      desc: "[out] does the fabric vertex live on the local node or on a remote node?"
+    - type: $x_fabric_vertex_pci_exp_address_t
+      name: address
+      desc: "[out] B/D/F address of fabric vertex & associated device/subdevice if available"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric Edge properties"
+class: $xFabricEdge
+name: $x_fabric_edge_exp_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier."
+    - type: char
+      name: "model[$X_MAX_FABRIC_EDGE_MODEL_EXP_SIZE]"
+      desc: "[out] Description of fabric edge technology. Will be set to the string \"unkown\" if this cannot be determined for this edge"
+    - type: uint32_t
+      name: "bandwith"
+      desc: "[out] design bandwidth"
+    - type: $x_bandwidth_unit_t
+      name: "bandwidthUnit"
+      desc: "[out] bandwith unit"
+    - type: uint32_t
+      name: "latency"
+      desc: "[out] design latency"
+    - type: $x_latency_unit_t
+      name: "latencyUnit"
+      desc: "[out] latency unit"
+    - type: $x_fabric_edge_exp_duplexity_t
+      name: "duplexity"
+      desc: "[out] Duplexity of the fabric edge"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves fabric vertices within a driver"
+version: "1.4"
+class: $xFabricVertex
+name: GetExp
+decl: static
+ordinal: "0"
+details:
+    - "A fabric vertex represents either a device or a switch connected to other fabric vertices."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of fabric vertices.
+            if count is zero, then the driver shall update the value with the total number of fabric vertices available.
+            if count is greater than the number of fabric vertices available, then the driver shall update the value with the correct number of fabric vertices available.
+    - type: "$x_fabric_vertex_handle_t*"
+      name: phVertices
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of fabric vertices.
+            if count is less than the number of fabric vertices available, then driver shall only retrieve that number of fabric vertices.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves a fabric sub-vertex from a fabric vertex"
+version: "1.4"
+class: $xFabricVertex
+name: GetSubVerticesExp
+ordinal: "1"
+details:
+    - "Multiple calls to this function will return identical fabric vertex handles, in the same order."
+    - "The number of handles returned from this function is affected by the $X_AFFINITY_MASK environment variable."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex object"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of sub-vertices.
+            if count is zero, then the driver shall update the value with the total number of sub-vertices available.
+            if count is greater than the number of sub-vertices available, then the driver shall update the value with the correct number of sub-vertices available.
+    - type: "$x_fabric_vertex_handle_t*"
+      name: phSubvertices
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of sub-vertices.
+            if count is less than the number of sub-vertices available, then driver shall only retrieve that number of sub-vertices.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves properties of the fabric vertex."
+version: "1.4"
+class: $xFabricVertex
+name: GetPropertiesExp
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex"
+    - type: "$x_fabric_vertex_exp_properties_t*"
+      name: pVertexProperties
+      desc: "[in,out] query result for fabric vertex properties"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Checks if fabric vertex represents a device."
+version: "1.4"
+class: $xFabricVertex
+name: IsDeviceExp
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex"
+    - type: "$x_bool_t*"
+      name: pIsDevice
+      desc: "[out] query result for fabric vertex represenst a device"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns device handle from fabric vertex handle."
+version: "1.4"
+class: $xFabricVertex
+name: GetDeviceExp
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertex
+      desc: "[in] handle of the fabric vertex"
+    - type: "$x_device_handle_t*"
+      name: pDevice
+      desc: "[out] device handle corresponding to fabric vertex"
+returns:
+    - $X_RESULT_ERROR_VERTEX_IS_NOT_EXP_DEVICE:
+        - "Provided fabric vertex handle does not correspond to a device or subdevice."
+    - $X_RESULT_ERROR_REMOTE_EXP_DEVICE:
+        - "Provided fabric vertex handle corresponds to remote device or subdevice."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Checks if device is represented by a fabric vertex."
+version: "1.4"
+class: $xDevice
+name: IsFabricVertexExp
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_bool_t*"
+      name: pIsFabricVertex
+      desc: "[out] query result for device is represented by a fabric vertex"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns fabric vertex handle from device handle."
+version: "1.4"
+class: $xDevice
+name: GetFabricVertexExp
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hVertex
+      desc: "[in] handle of the device"
+    - type: "$x_fabric_vertex_handle_t*"
+      name: pVertex
+      desc: "[out] fabric vertex handle corresponding to device"
+returns:
+    - $X_RESULT_ERROR_DEVICE_IS_NOT_EXP_VERTEX:
+        - "Provided device handle does not correspond to a fabric vertex."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves all fabric edges between provided pair of fabric vertices"
+version: "1.4"
+class: $xFabricEdge
+name: GetExp
+decl: static
+ordinal: "0"
+details:
+    - "A fabric edge represents one or more physical links between two fabric vertices."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_fabric_vertex_handle_t
+      name: hVertexA
+      desc: "[in] handle of first fabric vertex instance"
+    - type: $x_fabric_vertex_handle_t
+      name: hVertexB
+      desc: "[in] handle of second fabric vertex instance"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of fabric edges.
+            if count is zero, then the driver shall update the value with the total number of fabric edges available.
+            if count is greater than the number of fabric edges available, then the driver shall update the value with the correct number of fabric edges available.
+    - type: "$x_fabric_edge_handle_t*"
+      name: phEdges
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of fabric edges.
+            if count is less than the number of fabric edges available, then driver shall only retrieve that number of fabric edges.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves fabric vertices connected by a fabric edge"
+version: "1.4"
+class: $xFabricEdge
+name: GetVerticesExp
+decl: static
+ordinal: "1"
+details:
+    - "A fabric vertex represents either a device or a switch connected to other fabric vertices via a fabric edge."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_fabric_edge_handle_t
+      name: hEdge
+      desc: "[in] handle of the fabric edge instance"
+    - type: "$x_fabric_vertex_handle_t*"
+      name: phVertexA
+      desc: "[out] fabric vertex connected to one end of the given fabric edge."
+    - type: "$x_fabric_vertex_handle_t*"
+      name: phVertexB
+      desc: "[out] fabric vertex connected to other end of the given fabric edge."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves properties of the fabric edge."
+version: "1.4"
+class: $xFabricEdge
+name: GetPropertiesExp
+ordinal: "2"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_fabric_edge_handle_t
+      name: hEdge
+      desc: "[in] handle of the fabric edge"
+    - type: "$x_fabric_edge_exp_properties_t*"
+      name: pEdgeProperties
+      desc: "[in,out] query result for fabric edge properties"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for fabric vertex"
+name: $xFabricVertex
+owner: $xDriver
+members:
+    - type: $x_fabric_vertex_handle_t
+      name: handle
+      desc: "[in] handle of fabric vertex object"
+    - type: $xDriver*
+      name: pDriver
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for fabric edge"
+name: $xFabricEdge
+owner: $xDriver
+members:
+    - type: $x_fabric_edge_handle_t
+      name: handle
+      desc: "[in] handle of fabric edge object"
+    - type: $xDriver*
+      name: pDriver
+      desc: "[in] pointer to owner object"
