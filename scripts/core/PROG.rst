@@ -2021,7 +2021,7 @@ The following Peer-to-Peer functionalities are provided through the API:
 
        + A device/subdevice is always its own peer, i.e. it can always access itself.
 
-- Query remote memory access, atomic capabilities, logical & physical bandwidth & latency for peer-to-peer: ${x}DeviceGetP2PProperties + :ref:`ZE_experimental_device_p2p_bandwidth_properties`.
+- Query remote memory access, atomic capabilities, logical & physical bandwidth & latency for peer-to-peer: ${x}DeviceGetP2PProperties + :ref:`ZE_experimental_bandwidth_properties`.
 
        The following rules apply to ${x}DeviceGetP2PProperties queries
 

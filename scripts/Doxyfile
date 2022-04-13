@@ -1795,6 +1795,7 @@ LATEX_EXTRA_FILES      = ../docs/source/images/core_device.png \
                          ../docs/source/images/A21_Vertex.png \
                          ../docs/source/images/A21_Subvertex.png \
                          ../docs/source/images/A21_Subvertex+Remote.png \
+                         ../docs/source/images/A21_Vertex+Subvertex+\Remote.png \
                          ../docs/source/images/DGXA100_Vertex.png
 
 # If the PDF_HYPERLINKS tag is set to YES, the LaTeX that is generated is
