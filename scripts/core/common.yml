@@ -204,15 +204,15 @@ etors:
     - name: ERROR_DEVICE_IN_LOW_POWER_STATE
       desc: "[Core] device currently in low power state"
       version: "1.2"
-    - name: ERROR_DEVICE_IS_NOT_EXP_VERTEX
+    - name: EXP_ERROR_DEVICE_IS_NOT_VERTEX
       desc: "[Core, Expoerimental] device is not represented by a fabric vertex"
       version: "1.4"
       value: "0x7ff00001"
-    - name: ERROR_VERTEX_IS_NOT_EXP_DEVICE
+    - name: EXP_ERROR_VERTEX_IS_NOT_DEVICE
       desc: "[Core, Experimental] fabric vertex does not represent a device"
       version: "1.4"
       value: "0x7ff00002"
-    - name: ERROR_REMOTE_EXP_DEVICE
+    - name: EXP_ERROR_REMOTE_DEVICE
       desc: "[Core, Expoerimental] fabric vertex represents a remote device or subdevice"
       version: "1.4"
       value: "0x7ff00003"
@@ -303,7 +303,7 @@ etors:
       desc: $x_device_module_properties_t
     - name: COMMAND_QUEUE_GROUP_PROPERTIES
       desc: $x_command_queue_group_properties_t
-    - name: COPY_BANDWIDTH_EXT_PROPERTIES
+    - name: COPY_BANDWIDTH_EXP_PROPERTIES
       desc: $x_copy_bandwidth_exp_properties_t
       version: "1.4"
       value: "0x00020009"
@@ -317,7 +317,7 @@ etors:
       desc: $x_device_image_properties_t
     - name: DEVICE_P2P_PROPERTIES
       desc: $x_device_p2p_properties_t
-    - name: DEVICE_P2P_BANDWIDTH_EXT_PROPERTIES
+    - name: DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES
       desc: $x_device_p2p_bandwidth_exp_properties_t
       version: "1.4"
       value: "0x00020010"
@@ -473,12 +473,12 @@ etors:
       version: "1.2"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Bandwith unit"
+desc: "Bandwidth unit"
 version: "1.4"
 name: $x_bandwidth_unit_t
 etors:
     - name: UNKNOWN
-      desc: "The unit used for bandwith is unknown"
+      desc: "The unit used for bandwidth is unknown"
     - name: BYTES_PER_NANOSEC
       desc: "Bandwidth is provided in bytes/nanosec"
     - name: BYTES_PER_CLOCK

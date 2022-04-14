@@ -43,11 +43,7 @@ API
 
     * ${x}FabricVertexGetPropertiesExp
 
-    * ${x}FabricVertexIsDeviceExp
-
     * ${x}FabricVertexGetDeviceExp
-
-    * ${x}DeviceIsFabricVertexExp
 
     * ${x}DeviceGetFabricVertexExp
 

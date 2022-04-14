@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021 Intel Corporation
+# Copyright (C) 2021-2022 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -13,25 +13,25 @@ version: "1.4"
 type: macro
 desc: "Bandwidth Extension Name"
 version: "1.4"
-name: $X_BANDWITH_PROPERTIES_EXP_NAME
+name: $X_BANDWIDTH_PROPERTIES_EXP_NAME
 value: '"$X_experimental_bandwidth_properties"'
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "P2P Bandwith Properties"
+desc: "P2P Bandwidth Properties"
 version: "1.4"
 class: $xDevice
 name: $x_device_p2p_bandwidth_exp_properties_t
 base: $x_base_properties_t
 members:
     - type: uint32_t
-      name: "logicalBandwith"
+      name: "logicalBandwidth"
       desc: "[out] total logical design bandwidth for all links connecting the two devices"
     - type: uint32_t
-      name: "physicalBandwith"
+      name: "physicalBandwidth"
       desc: "[out] total physical design bandwidth for all links connecting the two devices"
     - type: $x_bandwidth_unit_t
       name: "bandwidthUnit"
-      desc: "[out] bandwith unit"
+      desc: "[out] bandwidth unit"
     - type: uint32_t
       name: "logicalLatency"
       desc: "[out] average logical design latency for all links connecting the two devices"
@@ -45,17 +45,17 @@ details:
     - "This structure may be passed to $xDeviceGetP2PProperties by having the pNext member of $x_device_p2p_properties_t point at this struct."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Copy Bandwith Properties"
+desc: "Copy Bandwidth Properties"
 version: "1.4"
 class: $xCommandQueue
 name: $x_copy_bandwidth_exp_properties_t
 base: $x_base_properties_t
 members:
     - type: uint32_t
-      name: "copyBandwith"
+      name: "copyBandwidth"
       desc: "[out] design bandwidth supported by this engine type for copy operations"
     - type: $x_bandwidth_unit_t
       name: "copyBandwidthUnit"
-      desc: "[out] copy bandwith unit"
+      desc: "[out] copy bandwidth unit"
 details:
     - "This structure may be passed to $xDeviceGetCommandQueueGroupProperties by having the pNext member of $x_command_queue_group_properties_t point at this struct."

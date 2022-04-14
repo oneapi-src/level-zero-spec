@@ -56,8 +56,8 @@ The following pseudo-code demonstrates a sequence for obtaining the p2p bandwidt
         latTable[dev] = (uint32_t *)allocate(devCount*sizeof(uint32_t));
         for (uint32_t peer_dev = 0; peer_dev < devCount; ++peer_dev) {
             zeDeviceGetP2PProperties(devices[dev], devices[peer_dev], &P2PProps);
-            bwTable[dev][peer_dev] = P2PProps.pNext->bandwidth;
-            latTable[dev][peer_dev] = P2PProps.pNext->latency;
+            bwTable[dev][peer_dev] = P2PProps.pNext->logicalBandwidth;
+            latTable[dev][peer_dev] = P2PProps.pNext->logicalLatency;
         }
     }
 
@@ -90,7 +90,7 @@ The following pseudo-code demonstrates a sequence for obtaining the copy bandwid
     for( uint32_t i = 0; i < cmdqueueGroupCount; ++i ) {
         if( cmdqueueGroupProperties[ i ].flags & ${X}_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY ) {
             computeQueueGroupOrdinal = i;
-            printf("copyBandwidth: %ul\n", cmdqueueGroupBandwidth[i].copyBandwith)
+            printf("copyBandwidth: %ul\n", cmdqueueGroupBandwidth[i].copyBandwidth)
             break;
         }
     }

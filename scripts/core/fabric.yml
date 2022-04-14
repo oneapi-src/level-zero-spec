@@ -103,11 +103,11 @@ members:
       name: "model[$X_MAX_FABRIC_EDGE_MODEL_EXP_SIZE]"
       desc: "[out] Description of fabric edge technology. Will be set to the string \"unkown\" if this cannot be determined for this edge"
     - type: uint32_t
-      name: "bandwith"
+      name: "bandwidth"
       desc: "[out] design bandwidth"
     - type: $x_bandwidth_unit_t
       name: "bandwidthUnit"
-      desc: "[out] bandwith unit"
+      desc: "[out] bandwidth unit"
     - type: uint32_t
       name: "latency"
       desc: "[out] design latency"
@@ -190,22 +190,6 @@ params:
       desc: "[in,out] query result for fabric vertex properties"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Checks if fabric vertex represents a device."
-version: "1.4"
-class: $xFabricVertex
-name: IsDeviceExp
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_fabric_vertex_handle_t
-      name: hVertex
-      desc: "[in] handle of the fabric vertex"
-    - type: "$x_bool_t*"
-      name: pIsDevice
-      desc: "[out] query result for fabric vertex represenst a device"
---- #--------------------------------------------------------------------------
-type: function
 desc: "Returns device handle from fabric vertex handle."
 version: "1.4"
 class: $xFabricVertex
@@ -221,26 +205,10 @@ params:
       name: pDevice
       desc: "[out] device handle corresponding to fabric vertex"
 returns:
-    - $X_RESULT_ERROR_VERTEX_IS_NOT_EXP_DEVICE:
+    - $X_RESULT_EXP_ERROR_VERTEX_IS_NOT_DEVICE:
         - "Provided fabric vertex handle does not correspond to a device or subdevice."
-    - $X_RESULT_ERROR_REMOTE_EXP_DEVICE:
+    - $X_RESULT_EXP_ERROR_REMOTE_DEVICE:
         - "Provided fabric vertex handle corresponds to remote device or subdevice."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Checks if device is represented by a fabric vertex."
-version: "1.4"
-class: $xDevice
-name: IsFabricVertexExp
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $x_device_handle_t
-      name: hDevice
-      desc: "[in] handle of the device"
-    - type: "$x_bool_t*"
-      name: pIsFabricVertex
-      desc: "[out] query result for device is represented by a fabric vertex"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns fabric vertex handle from device handle."
@@ -258,7 +226,7 @@ params:
       name: pVertex
       desc: "[out] fabric vertex handle corresponding to device"
 returns:
-    - $X_RESULT_ERROR_DEVICE_IS_NOT_EXP_VERTEX:
+    - $X_RESULT_EXP_ERROR_DEVICE_IS_NOT_VERTEX:
         - "Provided device handle does not correspond to a fabric vertex."
 --- #--------------------------------------------------------------------------
 type: function
@@ -318,7 +286,7 @@ desc: "Retrieves properties of the fabric edge."
 version: "1.4"
 class: $xFabricEdge
 name: GetPropertiesExp
-ordinal: "2"
+ordinal: "1"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
