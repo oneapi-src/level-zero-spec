@@ -120,7 +120,7 @@ name: $s_fabric_link_type_t
 members:
     - type: char
       name: "desc[$S_MAX_FABRIC_LINK_TYPE_SIZE]"
-      desc: "[out] This provides a static textural description of the physic attachment type. Will be set to the string \"unkown\" if this cannot be determined for this port."
+      desc: "[out] Description of link technology. Will be set to the string \"unkown\" if this cannot be determined for this link."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Fabric port configuration"
@@ -147,7 +147,7 @@ members:
     - type: $s_fabric_port_qual_issue_flags_t
       name: "qualityIssues"
       desc: |
-            [out] If status is $S_FABRIC_PORT_STATUS_DEGRADED, 
+            [out] If status is $S_FABRIC_PORT_STATUS_DEGRADED,
             then this gives a combination of $s_fabric_port_qual_issue_flag_t for quality issues that have been detected;
             otherwise, 0 indicates there are no quality issues with the link at this time.
     - type: $s_fabric_port_failure_flags_t
@@ -311,7 +311,7 @@ owner: $sDevice
 members:
     - type: $s_fabric_port_handle_t
       name: handle
-      desc: "[in] handle of Sysman object" 
+      desc: "[in] handle of Sysman object"
       init: nullptr
     - type: $sDevice*
       name: pDevice

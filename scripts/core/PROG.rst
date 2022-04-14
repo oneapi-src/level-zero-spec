@@ -2004,28 +2004,32 @@ The following code examples demonstrate how to use the event IPC APIs:
 Peer-to-Peer Access and Queries
 -------------------------------
 
-Peer to Peer API's provide capabilities to marshall data across Host to
+Peer to Peer API's provide capabilities to marshal data across Host to
 Device, Device to Host and Device to Device. The data marshalling API
 can be scheduled as asynchronous operations or can be synchronized with
 kernel execution through command queues. Data coherency is maintained by
 the driver without any explicit involvement from the application.
 
-Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
-the fabric can support atomics, compute kernel remote access, and data copies.
+Cards may be linked together within a node by a scale-up fabric and depending on the configuration,
+the fabric can support remote access, atomics, and data copies.
 
 The following Peer-to-Peer functionalities are provided through the API:
 
-- Check for existence of peer-to-peer fabric between two devices.
+- Check for remote memory access capability between two devices/subdevices: ${x}DeviceCanAccessPeer
 
-       + ${x}DeviceCanAccessPeer
+       The following rules apply to ${x}DeviceCanAccessPeer queries
 
-- Query remote memory access and atomic capabilities for peer-to-peer
+       + A device/subdevice is always its own peer, i.e. it can always access itself.
 
-       + ${x}DeviceGetP2PProperties
+- Query remote memory access, atomic capabilities, logical & physical bandwidth & latency for peer-to-peer: ${x}DeviceGetP2PProperties + :ref:`ZE_experimental_bandwidth_properties`.
 
-- Copy data between devices over peer-to-peer fabric.
+       The following rules apply to ${x}DeviceGetP2PProperties queries
 
-       + ${x}CommandListAppendMemoryCopy
+       + A device/subdevice is always its own peer, i.e. it can always access itself and also do so atomically.
+
+- Copy data between devices over peer-to-peer fabric: ${x}CommandListAppendMemoryCopy
+
+Both ${x}DeviceCanAccessPeer & ${x}DeviceGetP2PProperties return the same information - do two devices support peer-to-peer access? ${x}DeviceGetP2PProperties provides more detail than ${x}DeviceCanAccessPeer, such as support for atomics, bandwidths, latencies, etc...
 
 .. |Device| image:: ../images/core_device.png?raw=true
 .. |Queue| image:: ../images/core_queue.png?raw=true
