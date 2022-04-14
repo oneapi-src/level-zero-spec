@@ -45,15 +45,18 @@ The following pseudo-code demonstrates a sequence for obtaining the p2p bandwidt
 
     ${x}_device_p2p_properties_t P2PProps;
     ${x}_device_p2p_bandwidth_exp_properties_t P2PBandwidthProps;
+    P2PProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
     P2Props.pNext = &P2PbandwidthProps;
+    P2PBandwidthProps = ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXT_PROPERTIES;
+    P2PBandwidthProps = nullptr;
 
-    // Assume devices are stored in array called devices
+    // Assume devices are stored in array called devices of size devCount
     for (uint32_t dev = 0; dev < devCount; ++dev) {
         bwTable[dev] = (uint32_t *)allocate(devCount*sizeof(uint32_t));
         latTable[dev] = (uint32_t *)allocate(devCount*sizeof(uint32_t));
         for (uint32_t peer_dev = 0; peer_dev < devCount; ++peer_dev) {
             zeDeviceGetP2PProperties(devices[dev], devices[peer_dev], &P2PProps);
-            bwTable[dev][peer_dev] = P2PProps.pNext->bandwith;
+            bwTable[dev][peer_dev] = P2PProps.pNext->bandwidth;
             latTable[dev][peer_dev] = P2PProps.pNext->latency;
         }
     }
@@ -74,7 +77,10 @@ The following pseudo-code demonstrates a sequence for obtaining the copy bandwid
     ${x}_copy_bandwidth_exp_properties_t* cmdqueueGroupBandwidth = (${x}_copy_bandwidth_exp_properties_t*)
             allocate(cmdqueueGroupCount * sizeof(${x}_copy_bandwidth_exp_properties_t));
     for( uint32_t i = 0; i < cmdqueueGroupCount; ++i ) {
+        cmdqueueGroupProperties[i].stype = ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES;
         cmdqueueGroupProperties[i].pNext = &cmdqueueGroupBandwidth[i];
+        cmdqueueGroupBandwidth[i].stype = ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXT_PROPERTIES;
+        cmdqueueGroupBandwidth[i].pNext = nullptr;
     }
     ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, cmdqueueGroupProperties);
 
