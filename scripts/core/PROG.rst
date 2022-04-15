@@ -246,13 +246,6 @@ In summary:
 |                   |                                       | Device          | Yes                        | Device         | Yes      |
 +-------------------+---------------------------------------+-----------------+----------------------------+----------------+----------+
 
-Devices may support different capabilities for each type of allocation. Supported capabilities are:
-
-* ${X}_MEMORY_ACCESS_CAP_FLAG_RW - if a device supports access (read or write) to allocations of the specified type.
-* ${X}_MEMORY_ACCESS_CAP_FLAG_ATOMIC - if a device support atomic operations on allocations of the specified type. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
-* ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
-* ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.
-
 At a minimum, drivers will assign unique physical pages for each device and shared memory allocation.
 However, it is undefined behavior for an application to access memory outside of the allocation size requested.
 The actual page size used for an allocation can be queried from ${x}_memory_allocation_properties_t.pageSize using ${x}MemGetAllocProperties.
@@ -260,6 +253,39 @@ Applications should implement usage-specific allocators from device memory pools
 
 Furthermore, drivers may *oversubscribe* some **shared** allocations.
 When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.
+
+Access Capabilities
+~~~~~~~~~~~~~~~~~~~
+
+Devices may support different access capabilities for each type of allocation. Supported capabilities are:
+
+1. **Host Allocations**: Assume a buffer allocated on the host via ${x}MemAllocHost that is accessed from device hDevice:
+
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_RW: Buffer can be accessed (read from as well as written to) from hDevice as well as from the host.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_ATOMIC: Buffer can be atomically accessed from hDevice. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT: Buffer can be accessed from hDevice concurrently with another device that also supports concurrent access as well as with the host itself. Concurrent access is at the granularity of the whole allocation. This capability makes no guarantees about coherency or memory consistency. Undefined behavior occurs if concurrent accesses are made to an allocation from devices that do not support concurrent access. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC: Buffer can be atomically accessed from hDevice concurrently with another device that also supports concurrent atomic access as well as with the host itself. Concurrent atomic access is at the granularity of the whole allocation. Memory consistency can be enforced between the host & devices that support concurrent atomic access using atomic operations. Undefined behavior occurs if concurrent atomic accesses are made to an allocation from devices that do not support concurrent atomic access.
+
+2. **Device Allocations**: Assume a buffer allocated on device hDevice via ${x}MemAllocDevice:
+
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_RW: Buffer can be accessed (read from as well as written to) from hDevice.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_ATOMIC: Buffer can be atomically accessed from hDevice. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT: Buffer can be accessed from hDevice concurrently with another device that also supports concurrent access. By symmetry, the buffer could be located on either device and be accessed concurrently from both devices. Concurrent access is at the granularity of the whole allocation. This capability makes no guarantees about coherency or memory consistency. Undefined behavior occurs if concurrent accesses are made to an allocation from devices that do not support concurrent access. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior. A device can concurrently access a buffer on another device if both devices support concurrent access and both devices also support peer-to-peer access. If one device does not permit concurrent access, but peer-to-peer access is permitted, then the devices support peer-to-peer access but not concurrently to the same buffer.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC: Buffer can be atomically accessed from hDevice concurrently with another device that also supports concurrent atomic access. By symmetry, the buffer could be located on either device and be atomically accessed concurrently from both devices. Concurrent atomic access is at the granularity of the whole allocation. Memory consistency can be enforced between devices that support concurrent atomic access using atomic operations. Undefined behavior occurs if concurrent atomic accesses are made to an allocation from devices that do not support concurrent atomic access. A device can concurrently perform atomic access to a device buffer on another device if both devices support concurrent atomic access and both devices also support peer-to-peer atomic access. If one device does not permit concurrent atomic access, but peer-to-peer atomic access is permitted, then the devices support peer-to-peer atomic access but not concurrently to the same buffer.
+
+3. **Shared Single Device Allocations**: Assume a shared allocation across the host & device hDevice created via ${x}MemAllocShared
+
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_RW: Buffer can be accessed (read from as well as written to) from hDevice as well as from the host.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_ATOMIC: Buffer can be atomically accessed from hDevice as well as from the host. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT: Buffer can be accessed from hDevice concurrently with the host. Concurrent access is at the granularity of the whole allocation. This capability makes no guarantees about coherency or memory consistency. Undefined behavior occurs if concurrent accesses are made to the allocation from the host and from hDevice if it does not support concurrent access. A devices that supports concurrent access but does not support concurrent atomic access must write to unique non-overlapping (with the host) memory locations to avoid data races and hence undefined behavior.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC: Buffer can be atomically accessed from hDevice concurrently with the host. Concurrent atomic access is at the granularity of the whole allocation. Memory consistency can be enforced between devices that support concurrent atomic access using atomic operations. Undefined behavior occurs if concurrent atomic accesses are made to the allocation from the host & hDevice if it does not support concurrent atomic access.
+
+4. **Shared Cross Device Allocations**: Assume a shared allocation across the host & the set of devices that support cross-device shared access capabilities created via ${x}MemAllocShared that is accessed from device hDevice:
+
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_RW: Buffer can be accessed (read from as well as written to) from hDevice as well as from the host.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_ATOMIC: Buffer can be atomically accessed from hDevice as well as from the host. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT: Buffer can be accessed from hDevice concurrently with another device that also supports concurrent access and from the host. Concurrent access is at the granularity of the whole allocation. This capability makes no guarantees about coherency or memory consistency. Undefined behavior occurs if concurrent accesses are made to an allocation from devices that do not support concurrent access. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.
+    + ${X}_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC: Buffer can be atomically accessed from hDevice concurrently with another device that also supports concurrent atomic access and from the host. Concurrent atomic access is at the granularity of the whole allocation. Memory consistency can be enforced between devices that support concurrent atomic access using atomic operations. Undefined behavior occurs if concurrent atomic accesses are made to an allocation from devices that do not support concurrent atomic access.
 
 The required matrix of capabilities are:
 
