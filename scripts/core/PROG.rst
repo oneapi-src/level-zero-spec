@@ -1672,6 +1672,20 @@ The following pseudo-code demonstrates the creation of a sampler object and pass
        // Append launch kernel
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
+Formatted Output
+----------------
+
+The API supports the ability to print formatted output from a kernel using functions such as ``printf``.
+Calls to print formatted output will cause data to be written to an internal buffer, where the size of the internal buffer is given by ${x}_device_module_properties_t.printfBufferSize.
+When the internal buffer becomes full, additional calls to print formatted output will return an error code.
+
+There is no ordering guarantee for the formatted output.
+If multiple work-items make multiple calls to ``printf``, the output from one work-item may appear intermixed with output from other work-items.
+
+On some devices, the internal buffer may not contain the formatted output itself, and instead the formatting may occur on the host.
+Additionally, the final formatting may not occur and the output may not be flushed to the output stream until the event associated with the kernel launch is complete.
+To ensure all output has been flushed to the output stream, wait on the event associated with the kernel launch, or wait for the kernel launch to complete using a coarser-grained synchronization method such as ${x}FenceHostSynchronize or ${x}CommandQueueSynchronize.
+
 Advanced
 ========
 
