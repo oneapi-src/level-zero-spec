@@ -154,8 +154,3 @@ An eight device system with six switches establishing all-to-all connectivity be
 
 .. image:: ../images/DGXA100_Vertex.png
 
-.. image:: ../images/A21_Vertex.png?raw=true
-.. image:: ../images/A21_Subvertex.png?raw=true
-.. image:: ../images/A21_Subvertex+Remote.png?raw=true
-.. image:: ../images/A21_Vertex+Subvertex+Remote.png?raw=true
-.. image:: ../images/DGXA100_Vertex.png?raw=true

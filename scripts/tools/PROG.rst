@@ -990,7 +990,3 @@ The following sample code demonstrates iterating over register sets:
     }
 
 
-.. |Metrics| image:: ../images/tools_metric_hierarchy.png?raw=true
-.. |MetricStreamer| image:: ../images/tools_metric_streamer.png?raw=true
-.. |MetricQuery| image:: ../images/tools_metric_query.png?raw=true
-

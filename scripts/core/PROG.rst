@@ -2071,9 +2071,3 @@ The following Peer-to-Peer functionalities are provided through the API:
 
 Both ${x}DeviceCanAccessPeer & ${x}DeviceGetP2PProperties return the same information - do two devices support peer-to-peer access? ${x}DeviceGetP2PProperties provides more detail than ${x}DeviceCanAccessPeer, such as support for atomics, bandwidths, latencies, etc...
 
-.. |Device| image:: ../images/core_device.png?raw=true
-.. |Queue| image:: ../images/core_queue.png?raw=true
-.. |Graph| image:: ../images/core_sync.png?raw=true
-.. |Fence| image:: ../images/core_fence.png?raw=true
-.. |Event| image:: ../images/core_event.png?raw=true
-.. |Module| image:: ../images/core_module.png?raw=true
