@@ -303,15 +303,8 @@ etors:
       desc: $x_device_module_properties_t
     - name: COMMAND_QUEUE_GROUP_PROPERTIES
       desc: $x_command_queue_group_properties_t
-    - name: COPY_BANDWIDTH_EXP_PROPERTIES
-      desc: $x_copy_bandwidth_exp_properties_t
-      version: "1.4"
-      value: "0x00020009"
     - name: DEVICE_MEMORY_PROPERTIES
       desc: $x_device_memory_properties_t
-    - name: DEVICE_MEMORY_EXT_PROPERTIES
-      desc: $x_device_memory_ext_properties_t
-      version: "1.4"
     - name: DEVICE_MEMORY_ACCESS_PROPERTIES
       desc: $x_device_memory_access_properties_t
     - name: DEVICE_CACHE_PROPERTIES
@@ -320,10 +313,6 @@ etors:
       desc: $x_device_image_properties_t
     - name: DEVICE_P2P_PROPERTIES
       desc: $x_device_p2p_properties_t
-    - name: DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES
-      desc: $x_device_p2p_bandwidth_exp_properties_t
-      version: "1.4"
-      value: "0x00020010"
     - name: DEVICE_EXTERNAL_MEMORY_PROPERTIES
       desc: $x_device_external_memory_properties_t
     - name: CONTEXT_DESC
@@ -415,6 +404,9 @@ etors:
     - name: DEVICE_LUID_EXT_PROPERTIES
       desc: $x_device_luid_ext_properties_t
       version: "1.4"
+    - name: DEVICE_MEMORY_EXT_PROPERTIES
+      desc: $x_device_memory_ext_properties_t
+      version: "1.4"
     - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
       desc: $x_relaxed_allocation_limits_exp_desc_t
       value: "0x00020001"
@@ -447,6 +439,14 @@ etors:
       desc: $x_context_power_saving_hint_exp_desc_t
       value: "0x00020008"
       version: "1.2"
+    - name: COPY_BANDWIDTH_EXP_PROPERTIES
+      desc: $x_copy_bandwidth_exp_properties_t
+      version: "1.4"
+      value: "0x00020009"
+    - name: DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES
+      desc: $x_device_p2p_bandwidth_exp_properties_t
+      version: "1.4"
+      value: "0x00020010"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
