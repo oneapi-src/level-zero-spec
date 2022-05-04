@@ -133,9 +133,9 @@ params:
     - type: $s_device_handle_t
       name: hDevice
       desc: "[in] Handle for the component."
-    - type: $s_device_ecc_desc_t
+    - type: const $s_device_ecc_desc_t*
       name: newState
-      desc: "[in] Desired ECC state."
+      desc: "[in] Pointer to desired ECC state."
     - type: $s_device_ecc_properties_t*
       name: pState
       desc: "[out] ECC state, pending state, and pending action for state change."
