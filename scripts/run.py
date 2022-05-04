@@ -99,6 +99,10 @@ def main():
     parser.add_argument("--ver", type=str, default="1.4", required=False, help="specification version to generate.")
     args = vars(parser.parse_args())
     args['rev'] = revision()
+    
+    print("--------------------------------------------")
+    print("Building Level Zero Spec Version: %s" % args['rev'])
+    print("--------------------------------------------")
 
     start = time.time()
 
