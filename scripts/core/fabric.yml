@@ -202,7 +202,7 @@ params:
       name: hVertex
       desc: "[in] handle of the fabric vertex"
     - type: "$x_device_handle_t*"
-      name: pDevice
+      name: phDevice
       desc: "[out] device handle corresponding to fabric vertex"
 returns:
     - $X_RESULT_EXP_ERROR_VERTEX_IS_NOT_DEVICE:
@@ -220,10 +220,10 @@ details:
     - "The implementation of this function should be lock-free."
 params:
     - type: $x_device_handle_t
-      name: hVertex
+      name: hDevice
       desc: "[in] handle of the device"
     - type: "$x_fabric_vertex_handle_t*"
-      name: pVertex
+      name: phVertex
       desc: "[out] fabric vertex handle corresponding to device"
 returns:
     - $X_RESULT_EXP_ERROR_DEVICE_IS_NOT_VERTEX:

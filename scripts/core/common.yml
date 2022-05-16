@@ -446,7 +446,15 @@ etors:
     - name: DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES
       desc: $x_device_p2p_bandwidth_exp_properties_t
       version: "1.4"
-      value: "0x00020010"
+      value: "0x0002000A"
+    - name: FABRIC_VERTEX_EXP_PROPERTIES
+      desc: $x_fabric_vertex_exp_properties_t
+      version: "1.4"
+      value: "0x0002000B"
+    - name: FABRIC_EDGE_EXP_PROPERTIES
+      desc: $x_fabric_edge_exp_properties_t 
+      version: "1.4"
+      value: "0x0002000C"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"

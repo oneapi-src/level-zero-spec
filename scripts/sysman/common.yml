@@ -175,6 +175,18 @@ etors:
     - name: PCI_BAR_PROPERTIES_1_2
       desc: $s_pci_bar_properties_1_2_t
       version: "1.2"
+    - name: DEVICE_ECC_DESC
+      desc: $s_device_ecc_desc_t
+      version: "1.4"
+    - name: DEVICE_ECC_PROPERTIES
+      desc: $s_device_ecc_properties_t
+      version: "1.4"
+    - name: POWER_LIMIT_EXT_DESC
+      desc: $s_power_limit_ext_desc_t
+      version: "1.4"
+    - name: POWER_EXT_PROPERTIES
+      desc: $s_power_ext_properties_t
+      version: "1.4"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
