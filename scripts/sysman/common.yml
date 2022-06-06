@@ -97,6 +97,11 @@ desc: "Handle for a Sysman device diagnostics test suite"
 class: $sDiagnostics
 name: "$s_diag_handle_t"
 --- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman device overclock domain"
+class: $sOverclock
+name: "$s_overclock_handle_t"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Defines structure types"
 name: $s_structure_type_t
@@ -187,7 +192,10 @@ etors:
     - name: POWER_EXT_PROPERTIES
       desc: $s_power_ext_properties_t
       version: "1.4"
---- #--------------------------------------------------------------------------
+    - name: OVERCLOCK_PROPERTIES
+      desc: $s_overclock_properties_t
+      version: "1.1"
+--- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
 name: $s_base_properties_t
