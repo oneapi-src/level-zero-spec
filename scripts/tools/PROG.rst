@@ -952,11 +952,20 @@ Register State Access
 A tool may read and write the register state of a stopped device thread.
 
 Registers are grouped into sets of similar registers.
-The types of register sets supported by a device can be queried using ${t}DebugGetRegisterSetProperties.
+The types of register sets supported by a device can be queried using
+%if ver < 1.5:
+${t}DebugGetRegisterSetProperties.
+%endif
+%if ver >= 1.5:
+${t}DebugGetRegisterSetProperties and ${t}DebugGetThreadRegisterSetProperties.
+The former provides general information about the register sets supported on a device.  The latter provides the concrete register set for the argument thread.  The register set may depend on dynamic properties and may change between stops.
+%endif
 The register set properties specify details about each register set,
 such as the maximum number of registers in each set, and whether the register set is read-only.
 
 The actual type of registers is device-specific and will be defined by the device vendor.
+
+The following pseudo-code demonstrates obtaining register set properties for a device:
 
 .. parsed-literal::
 
@@ -965,11 +974,25 @@ The actual type of registers is device-specific and will be defined by the devic
     
     ${t}_debug_regset_properties_t* pRegSets = allocate(nRegSets * sizeof(${t}_debug_regset_properties_t));
     ${t}DebugGetRegisterSetProperties(hDevice, &nRegSets, pRegSets);
+%if ver >= 1.5:
 
+The following pseudo-code demonstrates obtaining register set properties for a thread:
+
+.. parsed-literal::
+
+    ${x}_device_thread_t thread0 = {
+        0, 0, 0, 0
+    };
+    uint32_t nRegSets = 0;
+    ${t}DebugGetThreadRegisterSetProperties(hDebug, thread0, &nRegSets, nullptr);
+
+    ${t}_debug_regset_properties_t* pRegSets = allocate(nRegSets * sizeof(${t}_debug_regset_properties_t));
+    ${t}DebugGetThreadRegisterSetProperties(hDebug, thread0, &nRegSets, pRegSets);
+%endif
 
 To read and write the register state, use the ${t}DebugReadRegisters and ${t}DebugWriteRegisters function, respectively.
 
-The following sample code demonstrates iterating over register sets:
+The following pseudo-code demonstrates iterating over register sets:
 
 .. parsed-literal::
 
