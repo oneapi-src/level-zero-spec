@@ -18,4 +18,4 @@
    core/SPIRV.rst
    core/EXT.rst
    api.rst
-   versions.rst
+   Versions <https://spec.oneapi.io/releases/index.html#level-zero>
