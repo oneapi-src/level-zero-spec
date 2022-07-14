@@ -34,7 +34,7 @@ base: $s_base_desc_t
 members:
     - type: $s_power_level_t
       name: "level"
-      desc: "[in, out] duration type over which the power draw is measured, i.e. sustained, burst, peak, or critical."
+      desc: "[in,out] duration type over which the power draw is measured, i.e. sustained, burst, peak, or critical."
     - type: $s_power_source_t
       name: "source"
       desc: "[out] source of power used by the system, i.e. AC or DC."
