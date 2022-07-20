@@ -101,6 +101,7 @@ type: handle
 desc: "Handle for a Sysman device overclock domain"
 class: $sOverclock
 name: "$s_overclock_handle_t"
+version: "1.5"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Defines structure types"
@@ -194,7 +195,7 @@ etors:
       version: "1.4"
     - name: OVERCLOCK_PROPERTIES
       desc: $s_overclock_properties_t
-      version: "1.1"
+      version: "1.5"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

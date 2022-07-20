@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 Intel Corporation
+# Copyright (C) 2022 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -13,6 +13,7 @@ type: enum
 desc: "Overclock domains."
 class: $sDevice
 name: $s_overclock_domain_t
+version: "1.5"
 etors:
     - name: CARD
       value: "1"
@@ -46,6 +47,7 @@ type: enum
 desc: "Overclock controls."
 class: $sOverclock
 name: $s_overclock_control_t
+version: "1.5"
 etors:
     - name: VF
       value: "1"
@@ -88,6 +90,7 @@ type: enum
 desc: "Overclock modes."
 class: $sOverclock
 name: $s_overclock_mode_t
+version: "1.5"
 etors:
     - name: MODE_OFF
       value: "0"
@@ -109,6 +112,7 @@ type: enum
 desc: "Overclock control states."
 class: $sOverclock
 name: $s_control_state_t
+version: "1.5"
 etors:
     - name: STATE_UNSET
       value: "0"
@@ -124,6 +128,7 @@ type: enum
 desc: "Overclock pending actions."
 class: $sOverclock
 name: $s_pending_action_t
+version: "1.5"
 etors:
     - name: PENDING_NONE
       value: "0"
@@ -142,6 +147,7 @@ type: enum
 desc: "Overclock V-F curve programing."
 class: $sOverclock
 name: $s_vf_program_type_t
+version: "1.5"
 etors:
     - name: VF_ARBITRARY
       value: "0"
@@ -157,6 +163,7 @@ type: enum
 desc: "VF type"
 class: $sOverclock
 name: $s_vf_type_t
+version: "1.5"
 etors:
     - name: VOLT
       value: "0"
@@ -169,6 +176,7 @@ type: enum
 desc: "VF type"
 class: $sOverclock
 name: $s_vf_array_type_t
+version: "1.5"
 etors:
     - name: USER_VF_ARRAY
       value: "0"
@@ -184,6 +192,7 @@ type: struct
 desc: "Overclock properties"
 class: $sOverclock
 name: $s_overclock_properties_t
+version: "1.5"
 base: $s_base_properties_t
 details:
     - "Information on the overclock domain type and all the contols that are part of the domain."
@@ -205,6 +214,7 @@ type: struct
 desc: "Overclock Control properties"
 class: $sOverclock
 name: $s_control_property_t
+version: "1.5"
 details:
     - "Provides all the control capabilities supported by the device for the overclock domain."
 members:
@@ -228,6 +238,7 @@ type: struct
 desc: "Overclock VF properties"
 class: $sOverclock
 name: $s_vf_property_t
+version: "1.5"
 details:
     - "Provides all the VF capabilities supported by the device for the overclock domain."
 members:
@@ -254,6 +265,7 @@ type: function
 desc: "Set the overclock waiver.The overclock waiver setting is persistent until the next pcode boot"
 class: $sDevice
 name: SetOverclockWaiver
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -269,6 +281,7 @@ type: function
 desc: "Get the list of supported overclock domains for this device"
 class: $sDevice
 name: GetOverclockDomains
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -287,6 +300,7 @@ type: function
 desc: "Get the list of supported overclock controls available for one of the supported overclock domains on the device"
 class: $sDevice
 name: GetOverclockControls
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -308,6 +322,7 @@ type: function
 desc: "Reset all overclock settings to default values (shipped = 1 or manufacturing =0)"
 class: $sDevice
 name: ResetOverclockSettings
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -326,6 +341,7 @@ type: function
 desc: "Determine the state of overclocking"
 class: $sDevice
 name: ReadOverclockState
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -356,6 +372,7 @@ type: function
 desc: "Get handle of overclock domains"
 class: $sDevice
 name: EnumOverclockDomains
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -379,6 +396,7 @@ type: function
 desc: "Get overclock domain control properties"
 class: $sOverclock
 name: GetDomainProperties
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -397,6 +415,7 @@ type: function
 desc: "Read overclock VF min,max and step values"
 class: $sOverclock
 name: GetDomainVFProperties
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -415,6 +434,7 @@ type: function
 desc: "Read overclock control values - min/max/step/default/ref"
 class: $sOverclock
 name: GetDomainControlProperties
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -436,6 +456,7 @@ type: function
 desc: "Read the current value for a given overclock control"
 class: $sOverclock
 name: GetControlCurrentValue
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -457,6 +478,7 @@ type: function
 desc: "Read the the reset pending value for a given overclock control"
 class: $sOverclock
 name: GetControlPendingValue
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -479,6 +501,7 @@ type: function
 desc: "Set the value for a given overclock control"
 class: $sOverclock
 name: SetControlUserValue
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -503,6 +526,7 @@ type: function
 desc: "Determine the state of an overclock control"
 class: $sOverclock
 name: GetControlState
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -527,6 +551,7 @@ type: function
 desc: "Read the frequency or voltage of a V-F point from the default or custom V-F curve."
 class: $sOverclock
 name: GetVFPointValues
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -554,6 +579,7 @@ type: function
 desc: "Write the frequency or voltage of a V-F point to custom V-F curve."
 class: $sOverclock
 name: SetVFPointValues
+version: "1.5"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -577,6 +603,7 @@ returns:
 type: class
 desc: "C++ wrapper for a Sysman device overclock domain"
 name: $sOverclock
+version: "1.5"
 owner: $sDevice
 members:
     - type: $s_overclock_handle_t
