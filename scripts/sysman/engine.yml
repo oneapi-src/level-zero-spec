@@ -1,0 +1,145 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Engine groups"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Accelerator engine groups"
+class: $sEngine
+name: $s_engine_group_t
+etors:
+    - name: ALL
+      value: "0"
+      desc: "Access information about all engines combined."
+    - name: COMPUTE_ALL
+      desc: "Access information about all compute engines combined. Compute engines can only process compute kernels (no 3D content)."
+    - name: MEDIA_ALL
+      desc: "Access information about all media engines combined."
+    - name: COPY_ALL
+      desc: "Access information about all copy (blitter) engines combined."
+    - name: COMPUTE_SINGLE
+      desc: "Access information about a single compute engine - this is an engine that can process compute kernels. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_3D_RENDER_COMPUTE_ALL for that."
+    - name: RENDER_SINGLE
+      desc: "Access information about a single render engine - this is an engine that can process both 3D content and compute kernels. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_3D_RENDER_COMPUTE_ALL for that."
+    - name: MEDIA_DECODE_SINGLE
+      desc: "Access information about a single media decode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+    - name: MEDIA_ENCODE_SINGLE
+      desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+    - name: COPY_SINGLE
+      desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_COPY_ALL for that."
+    - name: MEDIA_ENHANCEMENT_SINGLE
+      desc: "Access information about a single media enhancement engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+    - name: 3D_SINGLE
+      desc: "Access information about a single 3D engine - this is an engine that can process 3D content only. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_3D_RENDER_COMPUTE_ALL for that."
+    - name: 3D_RENDER_COMPUTE_ALL
+      desc: "Access information about all 3D/render/compute engines combined."
+    - name: RENDER_ALL
+      desc: "Access information about all render engines combined. Render engines are those than process both 3D content and compute kernels."
+    - name: 3D_ALL
+      desc: "Access information about all 3D engines combined. 3D engines can process 3D content only (no compute kernels)."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Engine group properties"
+class: $sEngine
+name: $s_engine_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_engine_group_t
+      name: "type"
+      desc: "[out] The engine group"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Engine activity counters"
+details:
+    - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeTime - s1.activeTime) / (s2.timestamp - s1.timestamp)"
+class: $sEngine
+name: $s_engine_stats_t
+members:
+    - type: uint64_t
+      name: "activeTime"
+      desc: "[out] Monotonic counter for time in microseconds that this resource is actively running workloads."
+    - type: uint64_t
+      name: "timestamp"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when activeTime counter was sampled.
+            This timestamp should only be used to calculate delta time between snapshots of this structure.
+            Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
+            The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of engine groups"
+class: $sDevice
+name: EnumEngineGroups
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
+    - type: "$s_engine_handle_t*"
+      name: phEngine
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get engine group properties"
+class: $sEngine
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_engine_handle_t
+      name: hEngine
+      desc: "[in] Handle for the component."
+    - type: $s_engine_properties_t*
+      name: pProperties
+      desc: "[in,out] The properties for the specified engine group."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the activity stats for an engine group"
+class: $sEngine
+name: GetActivity
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_engine_handle_t
+      name: hEngine
+      desc: "[in] Handle for the component."
+    - type: $s_engine_stats_t*
+      name: pStats
+      desc: "[in,out] Will contain a snapshot of the engine group activity counters."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device engine group"
+name: $sEngine
+owner: $sDevice
+members:
+    - type: $s_engine_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

@@ -1,0 +1,80 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Raytracing"
+version: "1.0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Raytracing Extension Name"
+version: "1.0"
+name: $X_RAYTRACING_EXT_NAME
+value: '"$X_extension_raytracing"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Raytracing Extension Version(s)"
+version: "1.0"
+name: $x_raytracing_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported raytracing capability flags"
+version: "1.0"
+class: $xContext
+name: $x_device_raytracing_ext_flags_t
+etors:
+    - name: RAYQUERY
+      desc: "Supports rayquery"
+    - name: MOTIONBLUR
+      desc: "Supports motion blur"
+      version: "2.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Raytracing properties queried using $xDeviceGetModuleProperties"
+version: "1.0"
+class: $xContext
+name: $x_device_raytracing_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_device_raytracing_ext_flags_t
+      name: flags
+      desc: "[out] 0 or a valid combination of $x_device_raytracing_ext_flags_t"
+    - type: uint32_t
+      name: maxBVHLevels
+      desc: "[out] Maximum number of BVH levels supported"
+details:
+    - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported raytracing memory allocation flags"
+version: "1.0"
+class: $xContext
+name: $x_raytracing_mem_alloc_ext_flags_t
+etors:
+    - name: TBD
+      desc: "reserved for future use"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Raytracing memory allocation descriptor"
+version: "1.0"
+class: $xContext
+name: $x_raytracing_mem_alloc_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_raytracing_mem_alloc_ext_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying additional allocation controls.
+            must be 0 (default) or a valid combination of $x_raytracing_mem_alloc_ext_flag_t;
+            default behavior may use implicit driver-based heuristics.
+      init: "0"
+details:
+    - "This structure must be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t, for any memory allocation that is to be accessed by raytracing fixed-function of the device."

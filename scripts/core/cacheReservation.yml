@@ -1,0 +1,96 @@
+#
+# Copyright (C) 2021-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Cache Reservation"
+version: "1.2"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Cache_Reservation Extension Name"
+version: "1.2"
+name: $X_CACHE_RESERVATION_EXT_NAME
+value: '"$X_extension_cache_reservation"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Cache_Reservation Extension Version(s)"
+version: "1.2"
+name: $x_cache_reservation_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Cache Reservation Region"
+version: "1.2"
+class: $xDevice
+name: $x_cache_ext_region_t
+etors:
+    - name: $X_CACHE_REGION_DEFAULT
+      desc: "utilize driver default scheme"
+    - name: $X_CACHE_RESERVE_REGION
+      desc: "Utilize reserver region"
+    - name: $X_CACHE_NON_RESERVED_REGION
+      desc: "Utilize non-reserverd region"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "CacheReservation structure"
+version: "1.2"
+class: $xDevice
+name: $x_cache_reservation_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: size_t
+      name: maxCacheReservationSize
+      desc: "[out] max cache reservation size"
+details:
+    - "This structure must be passed to $xDeviceGetCacheProperties via `pNext` member of $x_device_cache_properties_t"
+    - "Used for determining the max cache reservation allowed on device. Size of zero means no reservation available."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reserve Cache on Device"
+version: "1.2"
+class: $xDevice
+name: ReserveCacheExt
+decl: static
+details:
+    - "The application may call this function but may not be successful as some other application may have reserve prior"
+analogue:
+    - None
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: size_t
+      name: cacheLevel
+      desc: "[in] cache level where application want to reserve. If zero, then the driver shall default to last level of cache and attempt to reserve in that cache."
+    - type: size_t
+      name: cacheReservationSize
+      desc: "[in] value for reserving size, in bytes. If zero, then the driver shall remove prior reservation"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Assign VA section to use reserved section"
+version: "1.2"
+class: $xDevice
+name: SetCacheAdviceExt
+decl: static
+details:
+    - "The application may call this function to assign VA to particular reservartion region"
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "void*"
+      name: ptr
+      desc: "[in] memory pointer to query"
+    - type: size_t
+      name: regionSize
+      desc: "[in] region size, in pages"
+    - type: $x_cache_ext_region_t
+      name: cacheRegion
+      desc: "[in] reservation region"

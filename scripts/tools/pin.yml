@@ -1,0 +1,88 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Program Instrumentation (PIN)"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supportted profile features"
+class: $tKernel
+name: $t_profile_flags_t
+etors:
+    - name: REGISTER_REALLOCATION
+      desc: "request the compiler attempt to minimize register usage as much as possible to allow for instrumentation"
+    - name: FREE_REGISTER_INFO
+      desc: "request the compiler generate free register info"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Profiling meta-data for instrumentation"
+class: $tKernel
+name: $t_profile_properties_t
+base: $t_base_properties_t
+members:
+    - type: $t_profile_flags_t
+      name: flags
+      desc: |
+            [out] indicates which flags were enabled during compilation.
+            returns 0 (none) or a combination of $t_profile_flag_t
+    - type: uint32_t
+      name: numTokens
+      desc: "[out] number of tokens immediately following this structure"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported profile token types"
+class: $tKernel
+name: $t_profile_token_type_t
+etors:
+    - name: FREE_REGISTER
+      desc: "GRF info"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Profile free register token detailing unused registers in the current function"
+class: $tKernel
+name: $t_profile_free_register_token_t
+members:
+    - type: $t_profile_token_type_t
+      name: type
+      desc: "[out] type of token"
+    - type: uint32_t
+      name: size
+      desc: "[out] total size of the token, in bytes"
+    - type: uint32_t
+      name: count
+      desc: "[out] number of register sequences immediately following this structure"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Profile register sequence detailing consecutive bytes, all of which are unused"
+class: $tKernel
+name: $t_profile_register_sequence_t
+members:
+    - type: uint32_t
+      name: start
+      desc: "[out] starting byte in the register table, representing the start of unused bytes in the current function"
+    - type: uint32_t
+      name: count
+      desc: "[out] number of consecutive bytes in the sequence, starting from start"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve profiling information generated for the kernel."
+class: $tKernel
+name: GetProfileInfo
+details:
+    - "Module must be created using the following build option:":
+        - "\"-$t-profile-flags <n>\" - enable generation of profile information"
+        - "\"<n>\" must be a combination of $t_profile_flag_t, in hex"
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_kernel_handle_t
+      name: hKernel
+      desc: "[in] handle to kernel"
+    - type: "$t_profile_properties_t*"
+      name: pProfileProperties
+      desc: "[out] pointer to profile properties"

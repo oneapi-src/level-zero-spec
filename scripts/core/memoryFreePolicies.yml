@@ -1,0 +1,87 @@
+#
+# Copyright (C) 2021-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Memory Free Policies"
+version: "1.3"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Memory Free Policies Extension Name"
+version: "1.3"
+name: $X_MEMORY_FREE_POLICIES_EXT_NAME
+value: '"$X_extension_memory_free_policies"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory Free Policies Extension Version(s)"
+version: "1.3"
+name: $x_memory_free_policies_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported memory free policy capability flags"
+version: "1.3"
+class: $xDriver
+name: $x_driver_memory_free_policy_ext_flags_t
+etors:
+    - name: BLOCKING_FREE
+      desc: "blocks until all commands using the memory are complete before freeing"
+    - name: DEFER_FREE
+      desc: "schedules the memory to be freed but does not free immediately"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Driver memory free properties queried using $xDriverGetProperties"
+version: "1.3"
+class: $xDriver
+name: $x_driver_memory_free_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_driver_memory_free_policy_ext_flags_t
+      name: freePolicies
+      desc: |
+            [out] Supported memory free policies.
+            must be 0 or a combination of $x_driver_memory_free_policy_ext_flag_t.
+details:
+    - "All drivers must support an immediate free policy, which is the default free policy."
+    - "This structure may be returned from $xDriverGetProperties, via `pNext` member of $x_driver_properties_t."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory free descriptor with free policy"
+version: "1.3"
+class: $xMem
+name: $x_memory_free_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_driver_memory_free_policy_ext_flags_t
+      name: freePolicy
+      desc: |
+            [in] flags specifying the memory free policy.
+            must be 0 (default) or a supported $x_driver_memory_free_policy_ext_flag_t;
+            default behavior is to free immediately.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Frees allocated host memory, device memory, or shared memory using the specified free policy."
+version: "1.3"
+class: $xMem
+name: FreeExt
+details:
+    - "The memory free policy is specified by the memory free descriptor."
+    - "The application must **not** call this function from simultaneous threads with the same pointer."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const $x_memory_free_ext_desc_t*"
+      name: pMemFreeDesc
+      desc: "[in] pointer to memory free descriptor"
+    - type: "void*"
+      name: ptr
+      desc: "[in][release] pointer to memory to free"

@@ -1,0 +1,144 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - ECC management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "ECC State"
+class: $sDevice
+name: $s_device_ecc_state_t
+version: "1.4"
+etors:
+    - name: UNAVAILABLE
+      value: "0"
+      desc: "None"
+    - name: ENABLED
+      value: "1"
+      desc: "ECC enabled."
+    - name: DISABLED
+      value: "2"
+      desc: "ECC disabled."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "State Change Requirements"
+class: $sDevice
+name: $s_device_action_t
+version: "1.4"
+etors:
+    - name: NONE
+      value: "0"
+      desc: "No action."
+    - name: WARM_CARD_RESET
+      value: "1"
+      desc: "Warm reset of the card."
+    - name: COLD_CARD_RESET
+      value: "2"
+      desc: "Cold reset of the card."
+    - name: COLD_SYSTEM_REBOOT
+      value: "3"
+      desc: "Cold reboot of the system."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "ECC State Descriptor"
+class: $sDevice
+name: $s_device_ecc_desc_t
+base: $s_base_desc_t
+version: "1.4"
+members:
+    - type: $s_device_ecc_state_t
+      name: state
+      desc: "[out] ECC state"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "ECC State"
+class: $sDevice
+name: $s_device_ecc_properties_t
+base: $s_base_properties_t
+version: "1.4"
+members:
+    - type: $s_device_ecc_state_t
+      name: currentState
+      desc: "[out] Current ECC state"
+    - type: $s_device_ecc_state_t
+      name: pendingState
+      desc: "[out] Pending ECC state"
+    - type: $s_device_action_t
+      name: pendingAction
+      desc: "[out] Pending action"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Is ECC functionality available - true or false?"
+class: $sDevice
+name: EccAvailable
+version: "1.4"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Handle for the component."
+    - type: $x_bool_t*
+      name: pAvailable
+      desc: "[out] ECC functionality is available (true)/unavailable (false)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Is ECC support configurable - true or false?"
+class: $sDevice
+name: EccConfigurable
+version: "1.4"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Handle for the component."
+    - type: $x_bool_t*
+      name: pConfigurable
+      desc: "[out] ECC can be enabled/disabled (true)/enabled/disabled (false)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current ECC state, pending state, and pending action"
+class: $sDevice
+name: GetEccState
+version: "1.4"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Handle for the component."
+    - type: $s_device_ecc_properties_t*
+      name: pState
+      desc: "[out] ECC state, pending state, and pending action for state change."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set new ECC state"
+class: $sDevice
+name: SetEccState
+version: "1.4"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "$sDeviceGetState should be called to determine pending action required to implement state change."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Handle for the component."
+    - type: const $s_device_ecc_desc_t*
+      name: newState
+      desc: "[in] Pointer to desired ECC state."
+    - type: $s_device_ecc_properties_t*
+      name: pState
+      desc: "[out] ECC state, pending state, and pending action for state change."
+returns:
+    - $X_RESULT_WARNING_ACTION_REQUIRED:
+        - "User must look at the pendingAction attribute of pState & perform the action required to complete the ECC state change."

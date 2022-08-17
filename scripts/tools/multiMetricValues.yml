@@ -1,0 +1,72 @@
+#
+# Copyright (C) 2021-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool Experimental Extension for Calculating Multiple Metrics"
+version: "1.2"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Calculating Multiple Metrics Experimental Extension Name"
+version: "1.2"
+name: $T_MULTI_METRICS_EXP_NAME
+value: '"$XT_experimental_calculate_multiple_metrics"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Calculating Multiple Metrics Experimental Extension Version(s)"
+version: "1.2"
+name: $x_calculate_multiple_metrics_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Calculate one or more sets of metric values from raw data."
+version: "1.2"
+class: $tMetricGroup
+name: CalculateMultipleMetricValuesExp
+decl: static
+details:
+    - "This function is similar to $tMetricGroupCalculateMetricValues except it may calculate more than one set of metric values from a single data buffer.  There may be one set of metric values for each sub-device, for example."
+    - "Each set of metric values may consist of a different number of metric values, returned as the metric value count."
+    - "All metric values are calculated into a single buffer; use the metric counts to determine which metric values belong to which set."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: "$t_metric_group_handle_t"
+      name: hMetricGroup
+      desc: "[in] handle of the metric group"
+    - type: "$t_metric_group_calculation_type_t"
+      name: type
+      desc: "[in] calculation type to be applied on raw data"
+    - type: size_t
+      name: rawDataSize
+      desc: "[in] size in bytes of raw data buffer"
+    - type: "const uint8_t*"
+      name: pRawData
+      desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
+    - type: uint32_t*
+      name: pSetCount
+      desc: |
+            [in,out] pointer to number of metric sets.
+            if count is zero, then the driver shall update the value with the total number of metric sets to be calculated.
+            if count is greater than the number available in the raw data buffer, then the driver shall update the value with the actual number of metric sets to be calculated.
+    - type: uint32_t*
+      name: pTotalMetricValueCount
+      desc: |
+            [in,out] pointer to number of the total number of metric values calculated, for all metric sets.
+            if count is zero, then the driver shall update the value with the total number of metric values to be calculated.
+            if count is greater than the number available in the raw data buffer, then the driver shall update the value with the actual number of metric values to be calculated.
+    - type: uint32_t*
+      name: pMetricCounts
+      desc: |
+            [in,out][optional][range(0, *pSetCount)] buffer of metric counts per metric set.
+    - type: "$t_typed_value_t*"
+      name: pMetricValues
+      desc: |
+            [in,out][optional][range(0, *pTotalMetricValueCount)] buffer of calculated metrics.
+            if count is less than the number available in the raw data buffer, then driver shall only calculate that number of metric values.

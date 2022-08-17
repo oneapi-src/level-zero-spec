@@ -1,0 +1,204 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Temperature sensors"
+class: $sTemperature
+name: $s_temp_sensors_t
+etors:
+    - name: GLOBAL
+      value: "0"
+      desc: "The maximum temperature across all device sensors"
+    - name: GPU
+      desc: "The maximum temperature across all sensors in the GPU"
+    - name: MEMORY
+      desc: "The maximum temperature across all sensors in the local memory"
+    - name: GLOBAL_MIN
+      desc: "The minimum temperature across all device sensors"
+    - name: GPU_MIN
+      desc: "The minimum temperature across all sensors in the GPU"
+    - name: MEMORY_MIN
+      desc: "The minimum temperature across all sensors in the local device memory"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Temperature sensor properties"
+class: $sTemperature
+name: $s_temp_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_temp_sensors_t
+      name: "type"
+      desc: "[out] Which part of the device the temperature sensor measures"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: double
+      name: "maxTemperature"
+      desc: "[out] Will contain the maximum temperature for the specific device in degrees Celsius."
+    - type: $x_bool_t
+      name: "isCriticalTempSupported"
+      desc: "[out] Indicates if the critical temperature event $S_EVENT_TYPE_FLAG_TEMP_CRITICAL is supported"
+    - type: $x_bool_t
+      name: "isThreshold1Supported"
+      desc: "[out] Indicates if the temperature threshold 1 event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 is supported"
+    - type: $x_bool_t
+      name: "isThreshold2Supported"
+      desc: "[out] Indicates if the temperature threshold 2 event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 is supported"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Temperature sensor threshold"
+class: $sTemperature
+name: $s_temp_threshold_t
+members:
+    - type: $x_bool_t
+      name: "enableLowToHigh"
+      desc: "[in,out] Trigger an event when the temperature crosses from below the threshold to above."
+    - type: $x_bool_t
+      name: "enableHighToLow"
+      desc: "[in,out] Trigger an event when the temperature crosses from above the threshold to below."
+    - type: double
+      name: "threshold"
+      desc: "[in,out] The threshold in degrees Celsius."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Temperature configuration - which events should be triggered and the trigger conditions."
+class: $sTemperature
+name: $s_temp_config_t
+base: $s_base_config_t
+members:
+    - type: $x_bool_t
+      name: "enableCritical"
+      desc: "[in,out] Indicates if event $S_EVENT_TYPE_FLAG_TEMP_CRITICAL should be triggered by the driver."
+    - type: $s_temp_threshold_t
+      name: "threshold1"
+      desc: "[in,out] Configuration controlling if and when event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 should be triggered by the driver."
+    - type: $s_temp_threshold_t
+      name: "threshold2"
+      desc: "[in,out] Configuration controlling if and when event $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 should be triggered by the driver."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of temperature sensors"
+class: $sDevice
+name: EnumTemperatureSensors
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
+    - type: "$s_temp_handle_t*"
+      name: phTemperature
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get temperature sensor properties"
+class: $sTemperature
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: $s_temp_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain the temperature sensor properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get temperature configuration for this sensor - which events are triggered and the trigger conditions"
+class: $sTemperature
+name: GetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: $s_temp_config_t*
+      name: pConfig
+      desc: "[in,out] Returns current configuration."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL"
+        - "One or both of the thresholds is not supported - check $s_temp_properties_t.isThreshold1Supported and $s_temp_properties_t.isThreshold2Supported"
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set temperature configuration for this sensor - indicates which events are triggered and the trigger conditions"
+class: $sTemperature
+name: SetConfig
+details:
+    - "Events $S_EVENT_TYPE_FLAG_TEMP_CRITICAL will be triggered when temperature reaches the critical range. Use the function $sDeviceEventRegister() to start receiving this event."
+    - "Events $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD1 and $S_EVENT_TYPE_FLAG_TEMP_THRESHOLD2 will be generated when temperature cross the thresholds set using this function. Use the function $sDeviceEventRegister() to start receiving these events."
+    - "Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error $X_RESULT_ERROR_NOT_AVAILABLE will be returned. The function $sTemperatureGetConfig() will return the process ID currently controlling these settings."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: "const $s_temp_config_t*"
+      name: pConfig
+      desc: "[in] New configuration."
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL"
+        - "Enabling the critical temperature event is not supported - check $s_temp_properties_t.isCriticalTempSupported"
+        - "One or both of the thresholds is not supported - check $s_temp_properties_t.isThreshold1Supported and $s_temp_properties_t.isThreshold2Supported"
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "Another running process is controlling these settings."
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "One or both the thresholds is above TjMax (see $sFrequencyOcGetTjMax()). Temperature thresholds must be below this value."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the temperature from a specified sensor"
+class: $sTemperature
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_temp_handle_t
+      name: hTemperature
+      desc: "[in] Handle for the component."
+    - type: double*
+      name: pTemperature
+      desc: "[in,out] Will contain the temperature read from the specified sensor in degrees Celsius."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device temperature sensor"
+name: $sTemperature
+owner: $sDevice
+members:
+    - type: $s_temp_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

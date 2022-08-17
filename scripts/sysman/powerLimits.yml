@@ -1,0 +1,125 @@
+#
+# Copyright (C) 2021-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Sysman Extension APIs for Power Limits"
+version: "1.4"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Power Limits Extension Name"
+version: "1.4"
+name: $S_POWER_LIMITS_EXT_NAME
+value: '"$XS_extension_power_limits"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Power Limits Extension Version(s)"
+version: "1.4"
+name: $s_power_limits_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device power/current limit descriptor."
+version: "1.4"
+class: $sPower
+name: $s_power_limit_ext_desc_t
+base: $s_base_desc_t
+members:
+    - type: $s_power_level_t
+      name: "level"
+      desc: "[in,out] duration type over which the power draw is measured, i.e. sustained, burst, peak, or critical."
+    - type: $s_power_source_t
+      name: "source"
+      desc: "[out] source of power used by the system, i.e. AC or DC."
+    - type: $s_limit_unit_t
+      name: "limitUnit"
+      desc: "[out] unit used for specifying limit, i.e. current units (milliamps) or power units (milliwatts)."
+    - type: ze_bool_t
+      name: enabledStateLocked
+      desc: "[out] indicates if the power limit state (enabled/ignored) can be set (false) or is locked (true)."
+    - type: ze_bool_t
+      name: enabled
+      desc: "[in,out] indicates if the limit is enabled (true) or ignored (false). If enabledStateIsLocked is True, this value is ignored."
+    - type: ze_bool_t
+      name: intervalValueLocked
+      desc: "[out] indicates if the interval can be modified (false) or is fixed (true)."
+    - type: int32_t
+      name: interval
+      desc: "[in,out] power averaging window in milliseconds. If intervalValueLocked is true, this value is ignored."
+    - type: ze_bool_t
+      name: limitValueLocked
+      desc: "[out] indicates if the limit can be set (false) or if the limit is fixed (true)."
+    - type: int32_t
+      name: limit
+      desc: "[in,out] limit value. If limitValueLocked is true, this value is ignored. The value should be provided in the unit specified by limitUnit."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Extension properties related to device power settings"
+version: "1.4"
+class: $sPower
+name: $s_power_ext_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_power_domain_t
+      name: "domain"
+      desc: "[out] domain that the power limit belongs to."
+    - type: $s_power_limit_ext_desc_t*
+      name: defaultLimit
+      desc: "[out] the factory default limit of the part."
+details:
+    - "This structure may be returned from $sPowerGetProperties via the `pNext` member of $s_power_properties_t."
+    - "This structure may also be returned from $sPowerGetProperties via the `pNext` member of $s_power_ext_properties_t"
+    - "Used for determining the power domain level, i.e. card-level v/s package-level v/s stack-level & the factory default power limits."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power limits"
+class: $sPower
+name: GetLimitsExt
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "This function returns all the power limits assocaited with the supplied power domain."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Power domain handle instance."
+    - type: uint32_t*
+      name: pCount
+      desc: "[in,out] Pointer to the number of power limit descriptors. If count is zero, then the driver shall update the value with the total number of components of this type that are available. If count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components."
+    - type: $s_power_limit_ext_desc_t*
+      name: pSustained
+      desc: "[in,out][optional][range(0, *pCount)] Array of query results for power limit descriptors. If count is less than the number of components of this type that are available, then the driver shall only retrieve that number of components."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set power limits"
+class: $sPower
+name: SetLimitsExt
+details:
+    - "The application can only modify unlocked members of the limit descriptors returned by ${s}PowerGetLimitsExt."
+    - "Not all the limits returned by ${s}PowerGetLimitsExt need to be supplied to this function."
+    - "Limits do not have to be supplied in the same order as returned by ${s}PowerGetLimitsExt."
+    - "The same limit can be supplied multiple times. Limits are applied in the order in which they are supplied."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pCount
+      desc: "[in] Pointer to the number of power limit descriptors."
+    - type: $s_power_limit_ext_desc_t*
+      name: pSustained
+      desc: "[in][optional][range(0, *pCount)] Array of power limit descriptors."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+    - $X_RESULT_ERROR_NOT_AVAILABLE:
+        - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."

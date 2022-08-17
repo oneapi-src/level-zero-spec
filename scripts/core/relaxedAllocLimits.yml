@@ -1,0 +1,52 @@
+#
+# Copyright (C) 2021-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting relaxed allocation limits."
+version: "1.1"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Relaxed Allocation Limits Extension Name"
+version: "1.1"
+name: $X_RELAXED_ALLOCATION_LIMITS_EXP_NAME
+value: '"$X_experimental_relaxed_allocation_limits"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Relaxed Allocation Limits Extension Version(s)"
+version: "1.1"
+name: $x_relaxed_allocation_limits_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported relaxed memory allocation flags"
+version: "1.1"
+class: $xMem
+name: $x_relaxed_allocation_limits_exp_flags_t
+etors:
+    - name: MAX_SIZE
+      desc: "Allocation size may exceed $x_device_properties_t.maxMemAllocSize"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Relaxed limits memory allocation descriptor"
+version: "1.1"
+class: $xMem
+name: $x_relaxed_allocation_limits_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_relaxed_allocation_limits_exp_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying allocation limits to relax.
+            must be 0 (default) or a valid combination of $x_relaxed_allocation_limits_exp_flag_t;
+      init: "0"
+details:
+    - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t."
+    - "This structure may also be passed to $xMemAllocHost, via `pNext` member of $x_host_mem_alloc_desc_t."

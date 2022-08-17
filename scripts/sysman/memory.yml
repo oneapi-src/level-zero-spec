@@ -1,0 +1,240 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Memory management"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory module types"
+class: $sMemory
+name: $s_mem_type_t
+etors:
+    - name: HBM
+      value: "0"
+      desc: "HBM memory"
+    - name: DDR
+      desc: "DDR memory"
+    - name: DDR3
+      desc: "DDR3 memory"
+    - name: DDR4
+      desc: "DDR4 memory"
+    - name: DDR5
+      desc: "DDR5 memory"
+    - name: LPDDR
+      desc: "LPDDR memory"
+    - name: LPDDR3
+      desc: "LPDDR3 memory"
+    - name: LPDDR4
+      desc: "LPDDR4 memory"
+    - name: LPDDR5
+      desc: "LPDDR5 memory"
+    - name: SRAM
+      desc: "SRAM memory"
+    - name: L1
+      desc: "L1 cache"
+    - name: L3
+      desc: "L3 cache"
+    - name: GRF
+      desc: "Execution unit register file"
+    - name: SLM
+      desc: "Execution unit shared local memory"
+    - name: GDDR4
+      desc: "GDDR4 memory"
+    - name: GDDR5
+      desc: "GDDR5 memory"
+    - name: GDDR5X
+      desc: "GDDR5X memory"
+    - name: GDDR6
+      desc: "GDDR6 memory"
+    - name: GDDR6X
+      desc: "GDDR6X memory"
+    - name: GDDR7
+      desc: "GDDR7 memory"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory module location"
+class: $sMemory
+name: $s_mem_loc_t
+etors:
+    - name: SYSTEM
+      value: "0"
+      desc: "System memory"
+    - name: DEVICE
+      desc: "On board local device memory"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory health"
+class: $sMemory
+name: $s_mem_health_t
+etors:
+    - name: UNKNOWN
+      value: "0"
+      desc: "The memory health cannot be determined."
+    - name: OK
+      desc: "All memory channels are healthy."
+    - name: DEGRADED
+      desc: "Excessive correctable errors have been detected on one or more channels. Device should be reset."
+    - name: CRITICAL
+      desc: "Operating with reduced memory to cover banks with too many uncorrectable errors."
+    - name: REPLACE
+      desc: "Device should be replaced due to excessive uncorrectable errors."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory properties"
+class: $sMemory
+name: $s_mem_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_mem_type_t
+      name: type
+      desc: "[out] The memory type"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $s_mem_loc_t
+      name: location
+      desc: "[out] Location of this memory (system, device)"
+    - type: uint64_t
+      name: physicalSize
+      desc: "[out] Physical memory size in bytes. A value of 0 indicates that this property is not known. However, a call to $sMemoryGetState() will correctly return the total size of usable memory."
+    - type: int32_t
+      name: busWidth
+      desc: "[out] Width of the memory bus. A value of -1 means that this property is unknown."
+    - type: int32_t
+      name: numChannels
+      desc: "[out] The number of memory channels. A value of -1 means that this property is unknown."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory state - health, allocated"
+class: $sMemory
+name: $s_mem_state_t
+base: $s_base_state_t
+details:
+    - "Percent allocation is given by 100 * (size - free / size."
+    - "Percent free is given by 100 * free / size."
+members:
+    - type: $s_mem_health_t
+      name: health
+      desc: "[out] Indicates the health of the memory"
+    - type: uint64_t
+      name: free
+      desc: "[out] The free memory in bytes"
+    - type: uint64_t
+      name: size
+      desc: "[out] The total allocatable memory in bytes (can be less than $s_mem_properties_t.physicalSize)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory bandwidth"
+class: $sMemory
+name: $s_mem_bandwidth_t
+details:
+    - "Percent bandwidth is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) + (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
+members:
+    - type: uint64_t
+      name: readCounter
+      desc: "[out] Total bytes read from memory"
+    - type: uint64_t
+      name: writeCounter
+      desc: "[out] Total bytes written to memory"
+    - type: uint64_t
+      name: maxBandwidth
+      desc: "[out] Current maximum bandwidth in units of bytes/sec"
+    - type: uint64_t
+      name: timestamp
+      desc: |
+            [out] The timestamp when these measurements were sampled.
+            This timestamp should only be used to calculate delta time between snapshots of this structure.
+            Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
+            The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of memory modules"
+class: $sDevice
+name: EnumMemoryModules
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
+    - type: "$s_mem_handle_t*"
+      name: phMemory
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory properties"
+class: $sMemory
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_mem_handle_t
+      name: hMemory
+      desc: "[in] Handle for the component."
+    - type: $s_mem_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain memory properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory state - health, allocated"
+class: $sMemory
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_mem_handle_t
+      name: hMemory
+      desc: "[in] Handle for the component."
+    - type: $s_mem_state_t*
+      name: pState
+      desc: "[in,out] Will contain the current health and allocated memory."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory bandwidth"
+class: $sMemory
+name: GetBandwidth
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_mem_handle_t
+      name: hMemory
+      desc: "[in] Handle for the component."
+    - type: $s_mem_bandwidth_t*
+      name: pBandwidth
+      desc: "[in,out] Will contain the current health, free memory, total memory size."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to query this telemetry."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device memory module"
+name: $sMemory
+owner: $sDevice
+members:
+    - type: $s_mem_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"
