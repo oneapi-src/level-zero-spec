@@ -1,0 +1,829 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Device"
+ordinal: "2"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves devices within a driver"
+class: $xDevice
+name: Get
+decl: static
+ordinal: "0"
+details:
+    - "Multiple calls to this function will return identical device handles, in the same order."
+    - "The number and order of handles returned from this function is affected by the $X_AFFINITY_MASK and $X_ENABLE_PCI_ID_DEVICE_ORDER environment variables."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the driver instance"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of devices.
+            if count is zero, then the driver shall update the value with the total number of devices available.
+            if count is greater than the number of devices available, then the driver shall update the value with the correct number of devices available.
+    - type: "$x_device_handle_t*"
+      name: phDevices
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of devices.
+            if count is less than the number of devices available, then driver shall only retrieve that number of devices.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves a sub-device from a device"
+class: $xDevice
+name: GetSubDevices
+ordinal: "1"
+analogue:
+    - clCreateSubDevices
+details:
+    - "Multiple calls to this function will return identical device handles, in the same order."
+    - "The number of handles returned from this function is affected by the $X_AFFINITY_MASK environment variable."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of sub-devices.
+            if count is zero, then the driver shall update the value with the total number of sub-devices available.
+            if count is greater than the number of sub-devices available, then the driver shall update the value with the correct number of sub-devices available.
+    - type: "$x_device_handle_t*"
+      name: phSubdevices
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of sub-devices.
+            if count is less than the number of sub-devices available, then driver shall only retrieve that number of sub-devices.
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device types"
+class: $xDevice
+name: $x_device_type_t
+etors:
+    - name: GPU
+      value: "1"
+      desc: "Graphics Processing Unit"
+    - name: CPU
+      desc: "Central Processing Unit"
+    - name: FPGA
+      desc: "Field Programmable Gate Array"
+    - name: MCA
+      desc: "Memory Copy Accelerator"
+    - name: VPU
+      desc: "Vision Processing Unit"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device universal unique id (UUID) size in bytes"
+name: $X_MAX_DEVICE_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device universal unique id (UUID)"
+name: "$x_device_uuid_t"
+members:
+    - type: uint8_t
+      name: "id[$X_MAX_DEVICE_UUID_SIZE]"
+      desc: "[out] opaque data representing a device UUID"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device name string size"
+name: $X_MAX_DEVICE_NAME
+value: "256"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device property flags"
+class: $xDevice
+name: $x_device_property_flags_t
+etors:
+    - name: INTEGRATED
+      desc: "Device is integrated with the Host."
+    - name: SUBDEVICE
+      desc: "Device handle used for query represents a sub-device."
+    - name: ECC
+      desc: "Device supports error correction memory access."
+    - name: ONDEMANDPAGING
+      desc: "Device supports on-demand page-faulting."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties queried using $xDeviceGetProperties"
+class: $xDevice
+name: $x_device_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_device_type_t
+      name: type
+      desc: "[out] generic device type"
+    - type: uint32_t
+      name: vendorId
+      desc: "[out] vendor id from PCI configuration"
+    - type: uint32_t
+      name: deviceId
+      desc: "[out] device id from PCI configuration"
+    - type: $x_device_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $x_device_property_flag_t"
+    - type: uint32_t
+      name: subdeviceId
+      desc: "[out] sub-device id. Only valid if $X_DEVICE_PROPERTY_FLAG_SUBDEVICE is set."
+    - type: uint32_t
+      name: coreClockRate
+      desc: "[out] Clock rate for device core."
+    - type: uint64_t
+      name: maxMemAllocSize
+      desc: "[out] Maximum memory allocation size."
+    - type: uint32_t
+      name: maxHardwareContexts
+      desc: "[out] Maximum number of logical hardware contexts."
+    - type: uint32_t
+      name: maxCommandQueuePriority
+      desc: "[out] Maximum priority for command queues. Higher value is higher priority."
+    - type: uint32_t
+      name: numThreadsPerEU
+      desc: "[out] Maximum number of threads per EU."
+    - type: uint32_t
+      name: physicalEUSimdWidth
+      desc: "[out] The physical EU simd width."
+    - type: uint32_t
+      name: numEUsPerSubslice
+      desc: "[out] Maximum number of EUs per sub-slice."
+    - type: uint32_t
+      name: numSubslicesPerSlice
+      desc: "[out] Maximum number of sub-slices per slice."
+    - type: uint32_t
+      name: numSlices
+      desc: "[out] Maximum number of slices."
+    - type: uint64_t
+      name: timerResolution
+      desc:
+            "1.0": "[out] Returns the resolution of device timer in nanoseconds used for profiling, timestamps, etc."
+            "1.1": "[out] Returns the resolution of device timer in cycles per second used for profiling, timestamps, etc."
+            "1.2": "[out] Returns the resolution of device timer used for profiling, timestamps, etc. When stype==$X_STRUCTURE_TYPE_DEVICE_PROPERTIES the units are in nanoseconds. When stype==$X_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 units are in cycles/sec"
+    - type: uint32_t
+      name: timestampValidBits
+      desc: "[out] Returns the number of valid bits in the timestamp value."
+    - type: uint32_t
+      name: kernelTimestampValidBits
+      desc: "[out] Returns the number of valid bits in the kernel timestamp values"
+    - type: $x_device_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier. Note: Subdevices will have their own uuid."
+    - type: char
+      name: "name[$X_MAX_DEVICE_NAME]"
+      desc: "[out] Device name"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device thread identifier."
+class: $xDevice
+name: $x_device_thread_t
+members:
+    - type: "uint32_t"
+      name: slice
+      desc: |
+            [in,out] the slice number.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numSlices.
+    - type: "uint32_t"
+      name: subslice
+      desc: |
+            [in,out] the sub-slice number within its slice.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numSubslicesPerSlice.
+    - type: "uint32_t"
+      name: eu
+      desc: |
+            [in,out] the EU number within its sub-slice.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numEUsPerSubslice.
+    - type: "uint32_t"
+      name: thread
+      desc: |
+            [in,out] the thread number within its EU.
+            Must be UINT32_MAX (all) or less than $x_device_properties_t.numThreadsPerEU.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves properties of the device."
+class: $xDevice
+name: GetProperties
+ordinal: "1"
+analogue:
+    - clGetDeviceInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_properties_t*"
+      name: pDeviceProperties
+      desc: "[in,out] query result for device properties"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum number of subgroup sizes supported."
+name: $X_SUBGROUPSIZE_COUNT
+value: "8"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device compute properties queried using $xDeviceGetComputeProperties"
+class: $xDevice
+name: $x_device_compute_properties_t
+base: $x_base_properties_t
+members:
+    - type: uint32_t
+      name: maxTotalGroupSize
+      desc: "[out] Maximum items per compute group. (groupSizeX * groupSizeY * groupSizeZ) <= maxTotalGroupSize"
+    - type: uint32_t
+      name: maxGroupSizeX
+      desc: "[out] Maximum items for X dimension in group"
+    - type: uint32_t
+      name: maxGroupSizeY
+      desc: "[out] Maximum items for Y dimension in group"
+    - type: uint32_t
+      name: maxGroupSizeZ
+      desc: "[out] Maximum items for Z dimension in group"
+    - type: uint32_t
+      name: maxGroupCountX
+      desc: "[out] Maximum groups that can be launched for x dimension"
+    - type: uint32_t
+      name: maxGroupCountY
+      desc: "[out] Maximum groups that can be launched for y dimension"
+    - type: uint32_t
+      name: maxGroupCountZ
+      desc: "[out] Maximum groups that can be launched for z dimension"
+    - type: uint32_t
+      name: maxSharedLocalMemory
+      desc: "[out] Maximum shared local memory per group."
+    - type: uint32_t
+      name: numSubGroupSizes
+      desc: "[out] Number of subgroup sizes supported. This indicates number of entries in subGroupSizes."
+    - type: uint32_t
+      name: "subGroupSizes[$X_SUBGROUPSIZE_COUNT]"
+      desc: "[out] Size group sizes supported."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves compute properties of the device."
+class: $xDevice
+name: GetComputeProperties
+ordinal: "1"
+analogue:
+    - clGetDeviceInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_compute_properties_t*"
+      name: pComputeProperties
+      desc: "[in,out] query result for compute properties"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum native kernel universal unique id (UUID) size in bytes"
+name: $X_MAX_NATIVE_KERNEL_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Native kernel universal unique id (UUID)"
+class: $xDevice
+name: "$x_native_kernel_uuid_t"
+members:
+    - type: uint8_t
+      name: "id[$X_MAX_NATIVE_KERNEL_UUID_SIZE]"
+      desc: "[out] opaque data representing a native kernel UUID"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device module flags"
+class: $xDevice
+name: $x_device_module_flags_t
+etors:
+    - name: FP16
+      desc: "Device supports 16-bit floating-point operations"
+    - name: FP64
+      desc: "Device supports 64-bit floating-point operations"
+    - name: INT64_ATOMICS
+      desc: "Device supports 64-bit atomic operations"
+    - name: DP4A
+      desc: "Device supports four component dot product and accumulate operations"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported floating-Point capability flags"
+class: $xDevice
+name: $x_device_fp_flags_t
+etors:
+    - name: DENORM
+      desc: "Supports denorms"
+    - name: INF_NAN
+      desc: "Supports INF and quiet NaNs"
+    - name: ROUND_TO_NEAREST
+      desc: "Supports rounding to nearest even rounding mode"
+    - name: ROUND_TO_ZERO
+      desc: "Supports rounding to zero."
+    - name: ROUND_TO_INF
+      desc: "Supports rounding to both positive and negative INF."
+    - name: FMA
+      desc: "Supports IEEE754-2008 fused multiply-add."
+    - name: ROUNDED_DIVIDE_SQRT
+      desc: "Supports rounding as defined by IEEE754 for divide and sqrt operations."
+    - name: SOFT_FLOAT
+      desc: "Uses software implementation for basic floating-point operations."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device module properties queried using $xDeviceGetModuleProperties"
+class: $xDevice
+name: $x_device_module_properties_t
+base: $x_base_properties_t
+members:
+    - type: uint32_t
+      name: spirvVersionSupported
+      desc: |
+            [out] Maximum supported SPIR-V version.
+            Returns zero if SPIR-V is not supported.
+            Contains major and minor attributes, use $X_MAJOR_VERSION and $X_MINOR_VERSION.
+    - type: $x_device_module_flags_t
+      name: flags
+      desc: "[out] 0 or a valid combination of $x_device_module_flag_t"
+    - type: $x_device_fp_flags_t
+      name: fp16flags
+      desc: |
+            [out] Capabilities for half-precision floating-point operations.
+            returns 0 (if $X_DEVICE_MODULE_FLAG_FP16 is not set) or a combination of $x_device_fp_flag_t.
+    - type: $x_device_fp_flags_t
+      name: fp32flags
+      desc: |
+            [out] Capabilities for single-precision floating-point operations.
+            returns a combination of $x_device_fp_flag_t.
+    - type: $x_device_fp_flags_t
+      name: fp64flags
+      desc: |
+            [out] Capabilities for double-precision floating-point operations.
+            returns 0 (if $X_DEVICE_MODULE_FLAG_FP64 is not set) or a combination of $x_device_fp_flag_t.
+    - type: uint32_t
+      name: maxArgumentsSize
+      desc: "[out] Maximum kernel argument size that is supported."
+    - type: uint32_t
+      name: printfBufferSize
+      desc: "[out] Maximum size of internal buffer that holds output of printf calls from kernel."
+    - type: $x_native_kernel_uuid_t
+      name: nativeKernelSupported
+      desc: |
+            [out] Compatibility UUID of supported native kernel.
+            UUID may or may not be the same across driver release, devices, or operating systems.
+            Application is responsible for ensuring UUID matches before creating module using
+            previously created native kernel.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves module properties of the device"
+class: $xDevice
+name: GetModuleProperties
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_module_properties_t*"
+      name: pModuleProperties
+      desc: "[in,out] query result for module properties"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue group property flags"
+class: $xDevice
+name: $x_command_queue_group_property_flags_t
+etors:
+    - name: COMPUTE
+      desc: "Command queue group supports enqueing compute commands."
+    - name: COPY
+      desc: "Command queue group supports enqueing copy commands."
+    - name: COOPERATIVE_KERNELS
+      desc: |
+            Command queue group supports cooperative kernels.
+            See $xCommandListAppendLaunchCooperativeKernel for more details.
+    - name: METRICS
+      desc: "Command queue groups supports metric queries."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Command queue group properties queried using $xDeviceGetCommandQueueGroupProperties"
+class: $xDevice
+name: $x_command_queue_group_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_command_queue_group_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $x_command_queue_group_property_flag_t"
+    - type: size_t
+      name: maxMemoryFillPatternSize
+      desc: |
+            [out] maximum `pattern_size` supported by command queue group.
+            See $xCommandListAppendMemoryFill for more details.
+    - type: uint32_t
+      name: numQueues
+      desc: "[out] the number of physical engines within the group."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves command queue group properties of the device."
+class: $xDevice
+name: GetCommandQueueGroupProperties
+ordinal: "1"
+analogue:
+    - "**vkGetPhysicalDeviceQueueFamilyProperties**"
+details:
+    - "Properties are reported for each physical command queue type supported by the device."
+    - "Multiple calls to this function will return properties in the same order."
+    - "The order in which the properties are returned defines the command queue group's ordinal."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of command queue group properties.
+            if count is zero, then the driver shall update the value with the total number of command queue group properties available.
+            if count is greater than the number of command queue group properties available, then the driver shall update the value with the correct number of command queue group properties available.
+    - type: "$x_command_queue_group_properties_t*"
+      name: pCommandQueueGroupProperties
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for command queue group properties.
+            if count is less than the number of command queue group properties available, then driver shall only retrieve that number of command queue group properties.
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device memory property flags"
+class: $xDevice
+name: $x_device_memory_property_flags_t
+etors:
+    - name: TBD
+      desc: "reserved for future use"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device local memory properties queried using $xDeviceGetMemoryProperties"
+class: $xDevice
+name: $x_device_memory_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_device_memory_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $x_device_memory_property_flag_t"
+    - type: uint32_t
+      name: maxClockRate
+      desc: "[out] Maximum clock rate for device memory."
+    - type: uint32_t
+      name: maxBusWidth
+      desc: "[out] Maximum bus width between device and memory."
+    - type: uint64_t
+      name: totalSize
+      desc: "[out] Total memory size in bytes that is available to the device."
+    - type: char
+      name: "name[$X_MAX_DEVICE_NAME]"
+      desc: "[out] Memory name"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves local memory properties of the device."
+class: $xDevice
+name: GetMemoryProperties
+ordinal: "1"
+analogue:
+    - clGetDeviceInfo
+details:
+    - "Properties are reported for each physical memory type supported by the device."
+    - "Multiple calls to this function will return properties in the same order."
+    - "The order in which the properties are returned defines the device's local memory ordinal."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of memory properties.
+            if count is zero, then the driver shall update the value with the total number of memory properties available.
+            if count is greater than the number of memory properties available, then the driver shall update the value with the correct number of memory properties available.
+    - type: "$x_device_memory_properties_t*"
+      name: pMemProperties
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for memory properties.
+            if count is less than the number of memory properties available, then driver shall only retrieve that number of memory properties.
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory access capability flags"
+class: $xDevice
+name: $x_memory_access_cap_flags_t
+details:
+    - "Supported access capabilities for different types of memory allocations"
+etors:
+    - name: RW
+      desc: "Supports load/store access"
+    - name: ATOMIC
+      desc: "Supports atomic access"
+    - name: CONCURRENT
+      desc: "Supports concurrent access"
+    - name: CONCURRENT_ATOMIC
+      desc: "Supports concurrent atomic access"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device memory access properties queried using $xDeviceGetMemoryAccessProperties"
+class: $xDevice
+name: $x_device_memory_access_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_memory_access_cap_flags_t
+      name: hostAllocCapabilities
+      desc: |
+            [out] host memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
+    - type: $x_memory_access_cap_flags_t
+      name: deviceAllocCapabilities
+      desc: |
+            [out] device memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
+    - type: $x_memory_access_cap_flags_t
+      name: sharedSingleDeviceAllocCapabilities
+      desc: |
+            [out] shared, single-device memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
+    - type: $x_memory_access_cap_flags_t
+      name: sharedCrossDeviceAllocCapabilities
+      desc: |
+            [out] shared, cross-device memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
+    - type: $x_memory_access_cap_flags_t
+      name: sharedSystemAllocCapabilities
+      desc: |
+            [out] shared, system memory capabilities.
+            returns 0 (unsupported) or a combination of $x_memory_access_cap_flag_t.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves memory access properties of the device."
+class: $xDevice
+name: GetMemoryAccessProperties
+ordinal: "1"
+analogue:
+    - clGetDeviceInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_memory_access_properties_t*"
+      name: pMemAccessProperties
+      desc: "[in,out] query result for memory access properties"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported cache control property flags"
+class: $xDevice
+name: $x_device_cache_property_flags_t
+etors:
+     - name: USER_CONTROL
+       desc: "Device support User Cache Control (i.e. SLM section vs Generic Cache)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device cache properties queried using $xDeviceGetCacheProperties"
+class: $xDevice
+name: $x_device_cache_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_device_cache_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $x_device_cache_property_flag_t"
+    - type: size_t
+      name: cacheSize
+      desc: "[out] Per-cache size, in bytes"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves cache properties of the device"
+class: $xDevice
+name: GetCacheProperties
+ordinal: "1"
+analogue:
+    - clGetDeviceInfo
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of cache properties.
+            if count is zero, then the driver shall update the value with the total number of cache properties available.
+            if count is greater than the number of cache properties available, then the driver shall update the value with the correct number of cache properties available.
+    - type: "$x_device_cache_properties_t*"
+      name: pCacheProperties
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of query results for cache properties.
+            if count is less than the number of cache properties available, then driver shall only retrieve that number of cache properties.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device image properties queried using $xDeviceGetImageProperties"
+class: $xDevice
+name: $x_device_image_properties_t
+base: $x_base_properties_t
+members:
+    - type: uint32_t
+      name: maxImageDims1D
+      desc: "[out] Maximum image dimensions for 1D resources. if 0, then 1D images are unsupported."
+    - type: uint32_t
+      name: maxImageDims2D
+      desc: "[out] Maximum image dimensions for 2D resources. if 0, then 2D images are unsupported."
+    - type: uint32_t
+      name: maxImageDims3D
+      desc: "[out] Maximum image dimensions for 3D resources. if 0, then 3D images are unsupported."
+    - type: uint64_t
+      name: maxImageBufferSize
+      desc: "[out] Maximum image buffer size in bytes. if 0, then buffer images are unsupported."
+    - type: uint32_t
+      name: maxImageArraySlices
+      desc: "[out] Maximum image array slices. if 0, then image arrays are unsupported."
+    - type: uint32_t
+      name: maxSamplers
+      desc: "[out] Max samplers that can be used in kernel. if 0, then sampling is unsupported."
+    - type: uint32_t
+      name: maxReadImageArgs
+      desc: "[out] Returns the maximum number of simultaneous image objects that can be read from by a kernel. if 0, then reading images is unsupported."
+    - type: uint32_t
+      name: maxWriteImageArgs
+      desc: "[out] Returns the maximum number of simultaneous image objects that can be written to by a kernel. if 0, then writing images is unsupported."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves image properties of the device"
+class: $xDevice
+name: GetImageProperties
+ordinal: "1"
+details:
+    - "See $xImageGetProperties for format-specific capabilities."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_image_properties_t*"
+      name: pImageProperties
+      desc: "[in,out] query result for image properties"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device external memory import and export properties"
+class: $xDevice
+name: $x_device_external_memory_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: memoryAllocationImportTypes
+      desc: "[out] Supported external memory import types for memory allocations."
+    - type: $x_external_memory_type_flags_t
+      name: memoryAllocationExportTypes
+      desc: "[out] Supported external memory export types for memory allocations."
+    - type: $x_external_memory_type_flags_t
+      name: imageImportTypes
+      desc: "[out] Supported external memory import types for images."
+    - type: $x_external_memory_type_flags_t
+      name: imageExportTypes
+      desc: "[out] Supported external memory export types for images."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves external memory import and export of the device"
+class: $xDevice
+name: GetExternalMemoryProperties
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "$x_device_external_memory_properties_t*"
+      name: pExternalMemoryProperties
+      desc: "[in,out] query result for external memory properties"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device peer-to-peer property flags"
+class: $xDevice
+name: $x_device_p2p_property_flags_t
+etors:
+    - name: ACCESS
+      desc: "Device supports access between peer devices."
+    - name: ATOMICS
+      desc: "Device supports atomics between peer devices."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device peer-to-peer properties queried using $xDeviceGetP2PProperties"
+class: $xDevice
+name: $x_device_p2p_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_device_p2p_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $x_device_p2p_property_flag_t"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves peer-to-peer properties between one device and a peer devices"
+class: $xDevice
+name: GetP2PProperties
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "$x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device with the allocation"
+    - type: "$x_device_p2p_properties_t*"
+      name: pP2PProperties
+      desc: "[in,out] Peer-to-Peer properties between source and peer device"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries if one device can directly access peer device allocations"
+class: $xDevice
+name: CanAccessPeer
+ordinal: "2"
+details:
+    - "Any device can access any other device within a node through a scale-up fabric."
+    - "The following are conditions for CanAccessPeer query.":
+        - "If both device and peer device are the same then return true."
+        - "If both sub-device and peer sub-device are the same then return true."
+        - "If both are sub-devices and share the same parent device then return true."
+        - "If both device and remote device are connected by a direct or indirect scale-up fabric or over PCIe (same root complex or shared PCIe switch) then true."
+        - "If both sub-device and remote parent device (and vice-versa) are connected by a direct or indirect scale-up fabric or over PCIe (same root complex or shared PCIe switch) then true."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device performing the access"
+    - type: "$x_device_handle_t"
+      name: hPeerDevice
+      desc: "[in] handle of the peer device with the allocation"
+    - type: "$x_bool_t*"
+      name: value
+      desc: "[out] returned access capability"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns current status of the device."
+class: $xDevice
+name: GetStatus
+details:
+    - "Once a device is reset, this call will update the OS handle attached to the device handle."
+    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+returns:
+    - $X_RESULT_SUCCESS:
+        - "Device is available for use."
+    - $X_RESULT_ERROR_DEVICE_LOST:
+        - "Device is lost; must be reset for use."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns synchronized Host and device global timestamps."
+version: "1.1"
+class: $xDevice
+name: GetGlobalTimestamps
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "uint64_t*"
+      name: hostTimestamp
+      desc: "[out] value of the Host's global timestamp that correlates with the Device's global timestamp value"
+    - type: "uint64_t*"
+      name: deviceTimestamp
+      desc: "[out] value of the Device's global timestamp that correlates with the Host's global timestamp value"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a device"
+name: $xDevice
+attribute: singleton
+owner: $xDriver
+members:
+    - type: $x_device_handle_t
+      name: handle
+      desc: "[in] handle of device object"
+    - type: $xDriver*
+      name: pDriver
+      desc: "[in] pointer to owner object"

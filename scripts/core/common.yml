@@ -1,0 +1,572 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero API common types"
+ordinal: "0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Generates generic $OneApi API versions"
+name: "$X_MAKE_VERSION( _major, _minor )"
+value: "(( _major << 16 )|( _minor & 0x0000ffff))"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Extracts $OneApi API major version"
+name: "$X_MAJOR_VERSION( _ver )"
+value: "( _ver >> 16 )"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Extracts $OneApi API minor version"
+name: "$X_MINOR_VERSION( _ver )"
+value: "( _ver & 0x0000ffff )"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Calling convention for all API functions"
+condition: "defined(_WIN32)"
+name: $X_APICALL
+value: __cdecl
+altvalue: ""
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Microsoft-specific dllexport storage-class attribute"
+condition: "defined(_WIN32)"
+name: $X_APIEXPORT
+value: __declspec(dllexport)
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "GCC-specific dllexport storage-class attribute"
+condition: "__GNUC__ >= 4"
+name: $X_APIEXPORT
+value: __attribute__ ((visibility ("default")))
+altvalue: ""
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Microsoft-specific dllexport storage-class attribute"
+condition: "defined(_WIN32)"
+name: $X_DLLEXPORT
+value: __declspec(dllexport)
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "GCC-specific dllexport storage-class attribute"
+condition: "__GNUC__ >= 4"
+name: $X_DLLEXPORT
+value: __attribute__ ((visibility ("default")))
+altvalue: ""
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "compiler-independent type"
+name: $x_bool_t
+value: uint8_t
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of a driver instance"
+class: $xDriver
+name: "$x_driver_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's device object"
+class: $xDevice
+name: "$x_device_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's context object"
+class: $xContext
+name: "$x_context_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's command queue object"
+class: $xCommandQueue
+name: "$x_command_queue_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's command list object"
+class: $xCommandList
+name: "$x_command_list_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's fence object"
+class: $xFence
+name: "$x_fence_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's event pool object"
+class: $xEventPool
+name: "$x_event_pool_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's event object"
+class: $xEvent
+name: "$x_event_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's image object"
+class: $xImage
+name: "$x_image_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's module object"
+class: $xModule
+name: "$x_module_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of module's build log object"
+class: $xModuleBuildLog
+name: "$x_module_build_log_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's kernel object"
+class: $xKernel
+name: "$x_kernel_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's sampler object"
+class: $xSampler
+name: "$x_sampler_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of physical memory object"
+class: $xPhysicalMem
+name: "$x_physical_mem_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's command graph object"
+version: "2.0"
+class: $xCommandGraphExp
+name: "$x_command_graph_exp_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's fabric vertex object"
+version: "1.4"
+class: $xFabricVertex
+name: "$x_fabric_vertex_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of driver's fabric edge object"
+version: "1.4"
+class: $xFabricEdge
+name: "$x_fabric_edge_handle_t"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum IPC handle size"
+name: $X_MAX_IPC_HANDLE_SIZE
+value: "64"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "IPC handle to a memory allocation"
+name: "$x_ipc_mem_handle_t"
+members:
+    - type: char
+      name: "data[$X_MAX_IPC_HANDLE_SIZE]"
+      desc: "[out] Opaque data representing an IPC handle"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "IPC handle to a event pool allocation"
+name: "$x_ipc_event_pool_handle_t"
+members:
+    - type: char
+      name: "data[$X_MAX_IPC_HANDLE_SIZE]"
+      desc: "[out] Opaque data representing an IPC handle"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Generic macro for enumerator bit masks"
+name: "$X_BIT( _i )"
+value: "( 1 << _i )"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Defines Return/Error codes"
+name: $x_result_t
+etors:
+    - name: SUCCESS
+      value: "0"
+      desc: "[Core] success"
+    - name: NOT_READY
+      value: "1"
+      desc: "[Core] synchronization primitive not signaled"
+    - name: ERROR_DEVICE_LOST
+      value: "0x70000001"
+      desc: "[Core] device hung, reset, was removed, or driver update occurred"
+    - name: ERROR_OUT_OF_HOST_MEMORY
+      desc: "[Core] insufficient host memory to satisfy call"
+    - name: ERROR_OUT_OF_DEVICE_MEMORY
+      desc: "[Core] insufficient device memory to satisfy call"
+    - name: ERROR_MODULE_BUILD_FAILURE
+      desc: "[Core] error occurred when building module, see build log for details"
+    - name: ERROR_MODULE_LINK_FAILURE
+      desc: "[Core] error occurred when linking modules, see build log for details"
+    - name: ERROR_DEVICE_REQUIRES_RESET
+      desc: "[Core] device requires a reset"
+      version: "1.2"
+    - name: ERROR_DEVICE_IN_LOW_POWER_STATE
+      desc: "[Core] device currently in low power state"
+      version: "1.2"
+    - name: EXP_ERROR_DEVICE_IS_NOT_VERTEX
+      desc: "[Core, Expoerimental] device is not represented by a fabric vertex"
+      version: "1.4"
+      value: "0x7ff00001"
+    - name: EXP_ERROR_VERTEX_IS_NOT_DEVICE
+      desc: "[Core, Experimental] fabric vertex does not represent a device"
+      version: "1.4"
+      value: "0x7ff00002"
+    - name: EXP_ERROR_REMOTE_DEVICE
+      desc: "[Core, Expoerimental] fabric vertex represents a remote device or subdevice"
+      version: "1.4"
+      value: "0x7ff00003"
+    - name: ERROR_INSUFFICIENT_PERMISSIONS
+      value: "0x70010000"
+      desc: "[Sysman] access denied due to permission level"
+    - name: ERROR_NOT_AVAILABLE
+      desc: "[Sysman] resource already in use and simultaneous access not allowed or resource was removed"
+    - name: ERROR_DEPENDENCY_UNAVAILABLE
+      value: "0x70020000"
+      desc: "[Tools] external required dependency is unavailable or missing"
+    - name: WARNING_DROPPED_DATA
+      desc: "[Tools] data may have been dropped"
+      version: "1.4"
+    - name: ERROR_UNINITIALIZED
+      value: "0x78000001"
+      desc: "[Validation] driver is not initialized"
+    - name: ERROR_UNSUPPORTED_VERSION
+      desc: "[Validation] generic error code for unsupported versions"
+    - name: ERROR_UNSUPPORTED_FEATURE
+      desc: "[Validation] generic error code for unsupported features"
+    - name: ERROR_INVALID_ARGUMENT
+      desc: "[Validation] generic error code for invalid arguments"
+    - name: ERROR_INVALID_NULL_HANDLE
+      desc: "[Validation] handle argument is not valid"
+    - name: ERROR_HANDLE_OBJECT_IN_USE
+      desc: "[Validation] object pointed to by handle still in-use by device"
+    - name: ERROR_INVALID_NULL_POINTER
+      desc: "[Validation] pointer argument may not be nullptr"
+    - name: ERROR_INVALID_SIZE
+      desc: "[Validation] size argument is invalid (e.g., must not be zero)"
+    - name: ERROR_UNSUPPORTED_SIZE
+      desc: "[Validation] size argument is not supported by the device (e.g., too large)"
+    - name: ERROR_UNSUPPORTED_ALIGNMENT
+      desc: "[Validation] alignment argument is not supported by the device (e.g., too small)"
+    - name: ERROR_INVALID_SYNCHRONIZATION_OBJECT
+      desc: "[Validation] synchronization object in invalid state"
+    - name: ERROR_INVALID_ENUMERATION
+      desc: "[Validation] enumerator argument is not valid"
+    - name: ERROR_UNSUPPORTED_ENUMERATION
+      desc: "[Validation] enumerator argument is not supported by the device"
+    - name: ERROR_UNSUPPORTED_IMAGE_FORMAT
+      desc: "[Validation] image format is not supported by the device"
+    - name: ERROR_INVALID_NATIVE_BINARY
+      desc: "[Validation] native binary is not supported by the device"
+    - name: ERROR_INVALID_GLOBAL_NAME
+      desc: "[Validation] global variable is not found in the module"
+    - name: ERROR_INVALID_KERNEL_NAME
+      desc: "[Validation] kernel name is not found in the module"
+    - name: ERROR_INVALID_FUNCTION_NAME
+      desc: "[Validation] function name is not found in the module"
+    - name: ERROR_INVALID_GROUP_SIZE_DIMENSION
+      desc: "[Validation] group size dimension is not valid for the kernel or device"
+    - name: ERROR_INVALID_GLOBAL_WIDTH_DIMENSION
+      desc: "[Validation] global width dimension is not valid for the kernel or device"
+    - name: ERROR_INVALID_KERNEL_ARGUMENT_INDEX
+      desc: "[Validation] kernel argument index is not valid for kernel"
+    - name: ERROR_INVALID_KERNEL_ARGUMENT_SIZE
+      desc: "[Validation] kernel argument size does not match kernel"
+    - name: ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE
+      desc: "[Validation] value of kernel attribute is not valid for the kernel or device"
+    - name: ERROR_INVALID_MODULE_UNLINKED
+      desc: "[Validation] module with imports needs to be linked before kernels can be created from it."
+    - name: ERROR_INVALID_COMMAND_LIST_TYPE
+      desc: "[Validation] command list type does not match command queue type"
+    - name: ERROR_OVERLAPPING_REGIONS
+      desc: "[Validation] copy operations do not support overlapping regions of memory"
+    - name: WARNING_ACTION_REQUIRED
+      desc: "[Sysman] an action is required to complete the desired operation"
+    - name: ERROR_UNKNOWN
+      value: "0x7ffffffe"
+      desc: "[Core] unknown or internal error"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Defines structure types"
+name: $x_structure_type_t
+etors:
+    - name: DRIVER_PROPERTIES
+      desc: $x_driver_properties_t
+      value: "0x1"
+    - name: DRIVER_IPC_PROPERTIES
+      desc: $x_driver_ipc_properties_t
+    - name: DEVICE_PROPERTIES
+      desc: $x_device_properties_t
+    - name: DEVICE_COMPUTE_PROPERTIES
+      desc: $x_device_compute_properties_t
+    - name: DEVICE_MODULE_PROPERTIES
+      desc: $x_device_module_properties_t
+    - name: COMMAND_QUEUE_GROUP_PROPERTIES
+      desc: $x_command_queue_group_properties_t
+    - name: DEVICE_MEMORY_PROPERTIES
+      desc: $x_device_memory_properties_t
+    - name: DEVICE_MEMORY_ACCESS_PROPERTIES
+      desc: $x_device_memory_access_properties_t
+    - name: DEVICE_CACHE_PROPERTIES
+      desc: $x_device_cache_properties_t
+    - name: DEVICE_IMAGE_PROPERTIES
+      desc: $x_device_image_properties_t
+    - name: DEVICE_P2P_PROPERTIES
+      desc: $x_device_p2p_properties_t
+    - name: DEVICE_EXTERNAL_MEMORY_PROPERTIES
+      desc: $x_device_external_memory_properties_t
+    - name: CONTEXT_DESC
+      desc: $x_context_desc_t
+    - name: COMMAND_QUEUE_DESC
+      desc: $x_command_queue_desc_t
+    - name: COMMAND_LIST_DESC
+      desc: $x_command_list_desc_t
+    - name: EVENT_POOL_DESC
+      desc: $x_event_pool_desc_t
+    - name: EVENT_DESC
+      desc: $x_event_desc_t
+    - name: FENCE_DESC
+      desc: $x_fence_desc_t
+    - name: IMAGE_DESC
+      desc: $x_image_desc_t
+    - name: IMAGE_PROPERTIES
+      desc: $x_image_properties_t
+    - name: DEVICE_MEM_ALLOC_DESC
+      desc: $x_device_mem_alloc_desc_t
+    - name: HOST_MEM_ALLOC_DESC
+      desc: $x_host_mem_alloc_desc_t
+    - name: MEMORY_ALLOCATION_PROPERTIES
+      desc: $x_memory_allocation_properties_t
+    - name: EXTERNAL_MEMORY_EXPORT_DESC
+      desc: $x_external_memory_export_desc_t
+    - name: EXTERNAL_MEMORY_IMPORT_FD
+      desc: $x_external_memory_import_fd_t
+    - name: EXTERNAL_MEMORY_EXPORT_FD
+      desc: $x_external_memory_export_fd_t
+    - name: MODULE_DESC
+      desc: $x_module_desc_t
+    - name: MODULE_PROPERTIES
+      desc: $x_module_properties_t
+    - name: KERNEL_DESC
+      desc: $x_kernel_desc_t
+    - name: KERNEL_PROPERTIES
+      desc: $x_kernel_properties_t
+    - name: SAMPLER_DESC
+      desc: $x_sampler_desc_t
+    - name: PHYSICAL_MEM_DESC
+      desc: $x_physical_mem_desc_t
+    - name: KERNEL_PREFERRED_GROUP_SIZE_PROPERTIES
+      desc: $x_kernel_preferred_group_size_properties_t
+      version: "1.2"
+    - name: EXTERNAL_MEMORY_IMPORT_WIN32
+      desc: $x_external_memory_import_win32_handle_t
+      version: "1.2"
+    - name: EXTERNAL_MEMORY_EXPORT_WIN32
+      desc: $x_external_memory_export_win32_handle_t
+      version: "1.2"
+    - name: DEVICE_RAYTRACING_EXT_PROPERTIES
+      desc: $x_device_raytracing_ext_properties_t
+      value: "0x00010001"
+      version: "1.0"
+    - name: RAYTRACING_MEM_ALLOC_EXT_DESC
+      desc: $x_raytracing_mem_alloc_ext_desc_t
+      version: "1.0"
+    - name: FLOAT_ATOMIC_EXT_PROPERTIES
+      desc: $x_float_atomic_ext_properties_t
+      version: "1.1"
+    - name: CACHE_RESERVATION_EXT_DESC
+      desc: $x_cache_reservation_ext_desc_t
+      version: "1.2"
+    - name: EU_COUNT_EXT
+      desc: $x_eu_count_ext_t
+      version: "1.3"
+    - name: SRGB_EXT_DESC
+      desc: $x_srgb_ext_desc_t
+      version: "1.3"
+    - name: LINKAGE_INSPECTION_EXT_DESC
+      desc: $x_linkage_inspection_ext_desc_t
+      version: "1.3"
+    - name: PCI_EXT_PROPERTIES
+      desc: $x_pci_ext_properties_t
+      version: "1.3"
+    - name: DRIVER_MEMORY_FREE_EXT_PROPERTIES
+      desc: $x_driver_memory_free_ext_properties_t
+      version: "1.3"
+    - name: MEMORY_FREE_EXT_DESC
+      desc: $x_memory_free_ext_desc_t
+      version: "1.3"
+    - name: MEMORY_COMPRESSION_HINTS_EXT_DESC
+      desc: $x_memory_compression_hints_ext_desc_t
+      version: "1.3"
+    - name: IMAGE_ALLOCATION_EXT_PROPERTIES
+      desc: $x_image_allocation_ext_properties_t
+      version: "1.3"
+    - name: DEVICE_LUID_EXT_PROPERTIES
+      desc: $x_device_luid_ext_properties_t
+      version: "1.4"
+    - name: DEVICE_MEMORY_EXT_PROPERTIES
+      desc: $x_device_memory_ext_properties_t
+      version: "1.4"
+    - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
+      desc: $x_relaxed_allocation_limits_exp_desc_t
+      value: "0x00020001"
+      version: "1.1"
+    - name: MODULE_PROGRAM_EXP_DESC
+      desc: $x_module_program_exp_desc_t
+      value: "0x00020002"
+      version: "1.0"
+    - name: SCHEDULING_HINT_EXP_PROPERTIES
+      desc: $x_scheduling_hint_exp_properties_t
+      value: "0x00020003"
+      version: "1.2"
+    - name: SCHEDULING_HINT_EXP_DESC
+      desc: $x_scheduling_hint_exp_desc_t
+      value: "0x00020004"
+      version: "1.2"
+    - name: IMAGE_VIEW_PLANAR_EXP_DESC
+      desc: $x_image_view_planar_exp_desc_t
+      value: "0x00020005"
+      version: "1.2"
+    - name: DEVICE_PROPERTIES_1_2
+      desc: $x_device_properties_t
+      version: "1.2"
+      value: "0x00020006"
+    - name: IMAGE_MEMORY_EXP_PROPERTIES
+      desc: $x_image_memory_properties_exp_t
+      version: "1.2"
+      value: "0x00020007"
+    - name: POWER_SAVING_HINT_EXP_DESC
+      desc: $x_context_power_saving_hint_exp_desc_t
+      value: "0x00020008"
+      version: "1.2"
+    - name: COPY_BANDWIDTH_EXP_PROPERTIES
+      desc: $x_copy_bandwidth_exp_properties_t
+      version: "1.4"
+      value: "0x00020009"
+    - name: DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES
+      desc: $x_device_p2p_bandwidth_exp_properties_t
+      version: "1.4"
+      value: "0x0002000A"
+    - name: FABRIC_VERTEX_EXP_PROPERTIES
+      desc: $x_fabric_vertex_exp_properties_t
+      version: "1.4"
+      value: "0x0002000B"
+    - name: FABRIC_EDGE_EXP_PROPERTIES
+      desc: $x_fabric_edge_exp_properties_t 
+      version: "1.4"
+      value: "0x0002000C"
+    - name: COMMAND_GRAPH_EXP_DESC
+      desc: $x_command_graph_exp_desc_t
+      version: "2.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "External memory type flags"
+name: $x_external_memory_type_flags_t
+etors:
+    - name: OPAQUE_FD
+      desc: "an opaque POSIX file descriptor handle"
+    - name: DMA_BUF
+      desc: "a file descriptor handle for a Linux dma_buf"
+    - name: OPAQUE_WIN32
+      desc: "an NT handle"
+      version: "1.2"
+    - name: OPAQUE_WIN32_KMT
+      desc: "a global share (KMT) handle"
+      version: "1.2"
+    - name: D3D11_TEXTURE
+      desc: "an NT handle referring to a Direct3D 10 or 11 texture resource"
+      version: "1.2"
+    - name: D3D11_TEXTURE_KMT
+      desc: "a global share (KMT) handle referring to a Direct3D 10 or 11 texture resource"
+      version: "1.2"
+    - name: D3D12_HEAP
+      desc: "an NT handle referring to a Direct3D 12 heap resource"
+      version: "1.2"
+    - name: D3D12_RESOURCE
+      desc: "an NT handle referring to a Direct3D 12 committed resource"
+      version: "1.2"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Bandwidth unit"
+version: "1.4"
+name: $x_bandwidth_unit_t
+etors:
+    - name: UNKNOWN
+      desc: "The unit used for bandwidth is unknown"
+    - name: BYTES_PER_NANOSEC
+      desc: "Bandwidth is provided in bytes/nanosec"
+    - name: BYTES_PER_CLOCK
+      desc: "Bandwidth is provided in bytes/clock"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Latency unit"
+version: "1.4"
+name: $x_latency_unit_t
+etors:
+    - name: UNKNOWN
+      desc: "The unit used for latency is unknown"
+    - name: NANOSEC
+      desc: "Latency is provided in nanosecs"
+    - name: CLOCK
+      desc: "Latency is provided in clocks"
+    - name: HOP
+      desc: "Latency is provided in hops (normalized so that the lowest latency link has a latency of 1 hop)"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum universal unique id (UUID) size in bytes"
+version: "1.4"
+name: $X_MAX_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Universal unique id (UUID)"
+version: "1.4"
+name: "$x_uuid_t"
+members:
+    - type: uint8_t
+      name: "id[$X_MAX_UUID_SIZE]"
+      desc: "[out] opaque data representing a UUID"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all properties types"
+name: $x_base_properties_t
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "void*"
+      name: pNext
+      desc: "[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all descriptor types"
+name: $x_base_desc_t
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Forces driver to only report devices (and sub-devices) as specified by values"
+name: $X_AFFINITY_MASK
+category: "Device"
+values: "Hex String"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Forces driver to report devices from lowest to highest PCI bus ID"
+name: $X_ENABLE_PCI_ID_DEVICE_ORDER
+category: "Device"
+default: "0"
+values: "0, 1"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Forces all shared allocations into device memory"
+name: $X_SHARED_FORCE_DEVICE_ALLOC
+category: "Memory"
+default: "0"
+values: "0, 1"

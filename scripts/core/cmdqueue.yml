@@ -1,0 +1,206 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Command Queue"
+ordinal: "4"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue flags"
+class: $xCommandQueue
+name: $x_command_queue_flags_t
+etors:
+    - name: EXPLICIT_ONLY
+      desc: |
+            command queue should be optimized for submission to a single device engine.
+            driver **must** disable any implicit optimizations for distributing work across multiple engines.
+            this flag should be used when applications want full control over multi-engine submission and scheduling.
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue modes"
+class: $xCommandQueue
+name: $x_command_queue_mode_t
+etors:
+    - name: DEFAULT
+      value: "0"
+      desc: "implicit default behavior; uses driver-based heuristics"
+    - name: SYNCHRONOUS
+      desc: |
+            Device execution always completes immediately on execute;
+            Host thread is blocked using wait on implicit synchronization object
+    - name: ASYNCHRONOUS
+      desc: |
+            Device execution is scheduled and will complete in future;
+            explicit synchronization object must be used to determine completeness
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported command queue priorities"
+class: $xCommandQueue
+name: $x_command_queue_priority_t
+etors:
+    - name: NORMAL
+      value: "0"
+      desc: "[default] normal priority"
+    - name: PRIORITY_LOW
+      desc: "lower priority than normal"
+    - name: PRIORITY_HIGH
+      desc: "higher priority than normal"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Command Queue descriptor"
+class: $xCommandQueue
+name: $x_command_queue_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] command queue group ordinal"
+    - type: uint32_t
+      name: index
+      desc: |
+            [in] command queue index within the group;
+            must be zero if $X_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY is not set
+    - type: $x_command_queue_flags_t
+      name: flags
+      desc: |
+            [in] usage flags.
+            must be 0 (default) or a valid combination of $x_command_queue_flag_t;
+            default behavior may use implicit driver-based heuristics to balance latency and throughput.
+      init: "0"
+    - type: $x_command_queue_mode_t
+      name: mode
+      desc: "[in] operation mode"
+      init: $X_COMMAND_QUEUE_MODE_DEFAULT
+    - type: $x_command_queue_priority_t
+      name: priority
+      desc: "[in] priority"
+      init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a command queue on the context."
+class: $xCommandQueue
+name: Create
+decl: static
+ordinal: "0"
+analogue:
+    - "**clCreateCommandQueue**"
+details:
+    - "A command queue represents a logical input stream to the device, tied to a physical input stream."
+    - "The application must only use the command queue for the device, or its sub-devices, which was provided during creation."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "const $x_command_queue_desc_t*"
+      name: desc
+      desc: "[in] pointer to command queue descriptor"
+    - type: "$x_command_queue_handle_t*"
+      name: phCommandQueue
+      desc: "[out] pointer to handle of command queue object created"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a command queue."
+class: $xCommandQueue
+name: Destroy
+decl: static
+ordinal: "0"
+analogue:
+    - "**clReleaseCommandQueue**"
+details:
+    - "The application must destroy all fence handles created from the command queue before destroying the command queue itself"
+    - "The application must ensure the device is not currently referencing the command queue before it is deleted"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this command queue"
+    - "The application must **not** call this function from simultaneous threads with the same command queue handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in][release] handle of command queue object to destroy"
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Executes a command list in a command queue."
+class: $xCommandQueue
+name: ExecuteCommandLists
+ordinal: "1"
+analogue:
+    - vkQueueSubmit
+details:
+    - "The command lists are submitted to the device in the order they are received, whether from multiple calls (on the same or different threads) or a single call with multiple command lists."
+    - "The application must ensure the command lists are accessible by the device on which the command queue was created."
+    - "The application must ensure the device is not currently referencing the command list since the implementation is allowed to modify the contents of the command list for submission."
+    - "The application must only execute command lists created with an identical command queue group ordinal to the command queue."
+    - "The application must use a fence created using the same command queue."
+    - "The application must ensure the command queue, command list and fence were created on the same context."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: uint32_t
+      name: numCommandLists
+      desc: "[in] number of command lists to execute"
+    - type: "$x_command_list_handle_t*"
+      name: phCommandLists
+      desc: "[in][range(0, numCommandLists)] list of handles of the command lists to execute"
+    - type: $x_fence_handle_t
+      name: hFence
+      desc: "[in][optional] handle of the fence to signal on completion"
+returns:
+    - $X_RESULT_ERROR_INVALID_SIZE:
+       - "`0 == numCommandLists`"
+    - $X_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Synchronizes a command queue by waiting on the host."
+class: $xCommandQueue
+name: Synchronize
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: uint64_t
+      name: timeout
+      desc: |
+            [in] if non-zero, then indicates the maximum time (in nanoseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+            if zero, then immediately returns the status of the command queue;
+            if UINT64_MAX, then function will not return until complete or device is lost.
+            Due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies.
+returns:
+    - $X_RESULT_NOT_READY:
+       - "timeout expired"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for command queue"
+name: $xCommandQueue
+owner: $xDevice
+members:
+    - type: $x_command_queue_handle_t
+      name: handle
+      desc: "[in] handle of command queue object"
+    - type: $xDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"
+    - type: $x_command_queue_desc_t
+      name: desc
+      desc: "[in] descriptor of the command queue object"

@@ -1,0 +1,130 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Standby domains"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Standby hardware components"
+class: $sStandby
+name: $s_standby_type_t
+etors:
+    - name: GLOBAL
+      value: "0"
+      desc: "Control the overall standby policy of the device/sub-device"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Standby hardware component properties"
+class: $sStandby
+name: $s_standby_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_standby_type_t
+      name: "type"
+      desc: "[out] Which standby hardware component this controls"
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Standby promotion modes"
+class: $sStandby
+name: $s_standby_promo_mode_t
+etors:
+    - name: DEFAULT
+      value: "0"
+      desc: "Best compromise between performance and energy savings."
+    - name: NEVER
+      desc: "The device/component will never shutdown. This can improve performance but uses more energy."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of standby controls"
+class: $sDevice
+name: EnumStandbyDomains
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
+    - type: "$s_standby_handle_t*"
+      name: phStandby
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get standby hardware component properties"
+class: $sStandby
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_standby_handle_t
+      name: hStandby
+      desc: "[in] Handle for the component."
+    - type: $s_standby_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain the standby hardware properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the current standby promotion mode"
+class: $sStandby
+name: GetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_standby_handle_t
+      name: hStandby
+      desc: "[in] Handle for the component."
+    - type: $s_standby_promo_mode_t*
+      name: pMode
+      desc: "[in,out] Will contain the current standby mode."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set standby promotion mode"
+class: $sStandby
+name: SetMode
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_standby_handle_t
+      name: hStandby
+      desc: "[in] Handle for the component."
+    - type: $s_standby_promo_mode_t
+      name: mode
+      desc: "[in] New standby mode."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman standby control"
+name: $sStandby
+owner: $sDevice
+members:
+    - type: $s_standby_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

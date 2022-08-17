@@ -1,0 +1,52 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for Module"
+ordinal: "6"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported module debug info formats."
+class: $tModule
+name: $t_module_debug_info_format_t
+etors:
+    - name: ELF_DWARF
+      desc: "Format is ELF/DWARF"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve debug info from module."
+class: $tModule
+name: GetDebugInfo
+details:
+    - "The caller can pass nullptr for pDebugInfo when querying only for size."
+    - "The implementation will copy the native binary into a buffer supplied by the caller."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $t_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: $t_module_debug_info_format_t
+      name: format
+      desc: "[in] debug info format requested"
+    - type: "size_t*"
+      name: pSize
+      desc: "[in,out] size of debug info in bytes"
+    - type: "uint8_t*"
+      name: pDebugInfo
+      desc: "[in,out][optional] byte pointer to debug info"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for module"
+name: $tModule
+base: $xModule
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for kernel"
+name: $tKernel
+base: $xKernel

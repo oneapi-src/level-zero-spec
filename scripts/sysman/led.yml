@@ -1,0 +1,161 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "LED properties"
+class: $sLed
+name: $s_led_properties_t
+base: $s_base_properties_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $x_bool_t
+      name: "canControl"
+      desc: "[out] Indicates if software can control the LED assuming the user has permissions"
+    - type: $x_bool_t
+      name: "haveRGB"
+      desc: "[out] Indicates if the LED is RGB capable"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "LED color"
+class: $sLed
+name: $s_led_color_t
+members:
+    - type: double
+      name: "red"
+      desc: "[in,out][range(0.0, 1.0)] The LED red value. On output, a value less than 0.0 indicates that the color is not known."
+    - type: double
+      name: "green"
+      desc: "[in,out][range(0.0, 1.0)] The LED green value. On output, a value less than 0.0 indicates that the color is not known."
+    - type: double
+      name: "blue"
+      desc: "[in,out][range(0.0, 1.0)] The LED blue value. On output, a value less than 0.0 indicates that the color is not known."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "LED state"
+class: $sLed
+name: $s_led_state_t
+base: $s_base_state_t
+members:
+    - type: $x_bool_t
+      name: isOn
+      desc: "[out] Indicates if the LED is on or off"
+    - type: $s_led_color_t
+      name: color
+      desc: "[out] Color of the LED"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of LEDs"
+class: $sDevice
+name: EnumLeds
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
+    - type: "$s_led_handle_t*"
+      name: phLed
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get LED properties"
+class: $sLed
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
+    - type: $s_led_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain the properties of the LED."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get current state of a LED - on/off, color"
+class: $sLed
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
+    - type: $s_led_state_t*
+      name: pState
+      desc: "[in,out] Will contain the current state of the LED."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Turn the LED on/off"
+class: $sLed
+name: SetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
+    - type: $x_bool_t
+      name: enable
+      desc: "[in] Set to TRUE to turn the LED on, FALSE to turn off."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set the color of the LED"
+class: $sLed
+name: SetColor
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_led_handle_t
+      name: hLed
+      desc: "[in] Handle for the component."
+    - type: const $s_led_color_t*
+      name: pColor
+      desc: "[in] New color of the LED."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "This LED doesn't not support color changes. See $s_led_properties_t.haveRGB."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device LED"
+name: $sLed
+owner: $sDevice
+members:
+    - type: $s_led_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object" 
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"

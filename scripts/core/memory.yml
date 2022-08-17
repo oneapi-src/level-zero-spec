@@ -1,0 +1,478 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Memory"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported memory allocation flags"
+class: $xMem
+name: $x_device_mem_alloc_flags_t
+etors:
+    - name: BIAS_CACHED
+      desc: "device should cache allocation"
+    - name: BIAS_UNCACHED
+      desc: "device should not cache allocation (UC)"
+    - name: BIAS_INITIAL_PLACEMENT
+      desc: "optimize shared allocation for first access on the device"
+      version: "1.2"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device memory allocation descriptor"
+class: $xMem
+name: $x_device_mem_alloc_desc_t
+base: $x_base_desc_t
+members:
+    - type: "$x_device_mem_alloc_flags_t"
+      name: flags
+      desc: |
+            [in] flags specifying additional allocation controls.
+            must be 0 (default) or a valid combination of $x_device_mem_alloc_flag_t;
+            default behavior may use implicit driver-based heuristics.
+      init: "0"
+    - type: uint32_t
+      name: ordinal
+      desc: |
+            [in] ordinal of the device's local memory to allocate from.
+            must be less than the count returned from $xDeviceGetMemoryProperties.
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported host memory allocation flags"
+class: $xMem
+name: $x_host_mem_alloc_flags_t
+etors:
+    - name: BIAS_CACHED
+      desc: "host should cache allocation"
+    - name: BIAS_UNCACHED
+      desc: "host should not cache allocation (UC)"
+    - name: BIAS_WRITE_COMBINED
+      desc: "host memory should be allocated write-combined (WC)"
+    - name: BIAS_INITIAL_PLACEMENT
+      desc: "optimize shared allocation for first access on the host"
+      version: "1.2"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Host memory allocation descriptor"
+class: $xMem
+name: $x_host_mem_alloc_desc_t
+base: $x_base_desc_t
+members:
+    - type: "$x_host_mem_alloc_flags_t"
+      name: flags
+      desc: |
+            [in] flags specifying additional allocation controls.
+            must be 0 (default) or a valid combination of $x_host_mem_alloc_flag_t;
+            default behavior may use implicit driver-based heuristics.
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Allocates shared memory on the context."
+class: $xMem
+name: AllocShared
+decl: static
+details:
+    - "Shared allocations share ownership between the host and one or more devices."
+    - "Shared allocations may optionally be associated with a device by passing a handle to the device."
+    - |
+      Devices supporting only single-device shared access capabilities may access shared memory associated with the device.
+      For these devices, ownership of the allocation is shared between the host and the associated device only.
+    - |
+      Passing nullptr as the device handle does not associate the shared allocation with any device.
+      For allocations with no associated device, ownership of the allocation is shared between the host and all devices supporting cross-device shared access capabilities.
+    - "The application must only use the memory allocation for the context and device, or its sub-devices, which was provided during allocation."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const $x_device_mem_alloc_desc_t*"
+      name: device_desc
+      desc: "[in] pointer to device memory allocation descriptor"
+    - type: "const $x_host_mem_alloc_desc_t*"
+      name: host_desc
+      desc: "[in] pointer to host memory allocation descriptor"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to allocate; must be less-than $x_device_properties_t.maxMemAllocSize."
+    - type: size_t
+      name: alignment
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in][optional] device handle to associate with"
+    - type: "void**"
+      name: pptr
+      desc: "[out] pointer to shared allocation"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
+        - "Must be zero or a power-of-two"
+        - "`0 != (alignment & (alignment - 1))`"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Allocates device memory on the context."
+class: $xMem
+name: AllocDevice
+decl: static
+details:
+    - "Device allocations are owned by a specific device."
+    - "In general, a device allocation may only be accessed by the device that owns it."
+    - "The application must only use the memory allocation for the context and device, or its sub-devices, which was provided during allocation."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const $x_device_mem_alloc_desc_t*"
+      name: device_desc
+      desc: "[in] pointer to device memory allocation descriptor"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to allocate; must be less-than $x_device_properties_t.maxMemAllocSize."
+    - type: size_t
+      name: alignment
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "void**"
+      name: pptr
+      desc: "[out] pointer to device allocation"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
+        - "Must be zero or a power-of-two"
+        - "`0 != (alignment & (alignment - 1))`"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Allocates host memory on the context."
+class: $xMem
+name: AllocHost
+decl: static
+details:
+    - "Host allocations are owned by the host process."
+    - "Host allocations are accessible by the host and all devices within the driver's context."
+    - "Host allocations are frequently used as staging areas to transfer data to or from devices."
+    - "The application must only use the memory allocation for the context which was provided during allocation."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const $x_host_mem_alloc_desc_t*"
+      name: host_desc
+      desc: "[in] pointer to host memory allocation descriptor"
+    - type: size_t
+      name: size
+      desc: "[in] size in bytes to allocate; must be less-than $x_device_properties_t.maxMemAllocSize."
+    - type: size_t
+      name: alignment
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
+    - type: "void**"
+      name: pptr
+      desc: "[out] pointer to host allocation"
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
+        - "`0 == size`"
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
+        - "Must be zero or a power-of-two"
+        - "`0 != (alignment & (alignment - 1))`"
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Frees allocated host memory, device memory, or shared memory on the context."
+class: $xMem
+name: Free
+decl: static
+details:
+    - "The application must ensure the device is not currently referencing the memory before it is freed"
+    - "The implementation of this function may immediately free all Host and Device allocations associated with this memory"
+    - "The application must **not** call this function from simultaneous threads with the same pointer."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "void*"
+      name: ptr
+      desc: "[in][release] pointer to memory to free"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Memory allocation type"
+class: $xMem
+name: $x_memory_type_t
+etors:
+    - name: UNKNOWN
+      value: "0"
+      desc: "the memory pointed to is of unknown type"
+    - name: HOST
+      desc: "the memory pointed to is a host allocation"
+    - name: DEVICE
+      desc: "the memory pointed to is a device allocation"
+    - name: SHARED
+      desc: "the memory pointed to is a shared ownership allocation"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Memory allocation properties queried using $xMemGetAllocProperties"
+class: $xMem
+name: $x_memory_allocation_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_memory_type_t
+      name: type
+      desc: "[out] type of allocated memory"
+    - type: uint64_t
+      name: id
+      desc: "[out] identifier for this allocation"
+    - type: uint64_t
+      name: pageSize
+      desc: "[out] page size used for allocation"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves attributes of a memory allocation"
+class: $xMem
+name: GetAllocProperties
+decl: static
+details:
+    - "The application may call this function from simultaneous threads."
+    - |
+      The application may query attributes of a memory allocation unrelated to the context.
+      When this occurs, the returned allocation type will be $X_MEMORY_TYPE_UNKNOWN, and the returned identifier and associated device is unspecified.
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] memory pointer to query"
+    - type: "$x_memory_allocation_properties_t*"
+      name: pMemAllocProperties
+      desc: "[in,out] query result for memory allocation properties"
+    - type: "$x_device_handle_t*"
+      name: phDevice
+      desc: "[out][optional] device associated with this allocation"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves the base address and/or size of an allocation"
+class: $xMem
+name: GetAddressRange
+decl: static
+details:
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] memory pointer to query"
+    - type: "void**"
+      name: pBase
+      desc: "[in,out][optional] base address of the allocation"
+    - type: size_t*
+      name: pSize
+      desc: "[in,out][optional] size of the allocation"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an IPC memory handle for the specified allocation"
+class: $xMem
+name: GetIpcHandle
+decl: static
+details:
+    - "Takes a pointer to a device memory allocation and creates an IPC memory handle for exporting it for use in another process."
+    - "The pointer must be base pointer of the device memory allocation; i.e. the value returned from $xMemAllocDevice."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] pointer to the device memory allocation"
+    - type: $x_ipc_mem_handle_t*
+      name: pIpcHandle
+      desc: "[out] Returned IPC memory handle"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported IPC memory flags"
+class: $xMem
+name: $x_ipc_memory_flags_t
+etors:
+    - name: BIAS_CACHED
+      desc: "device should cache allocation"
+      version: "1.2"
+    - name: BIAS_UNCACHED
+      desc: "device should not cache allocation (UC)"
+      version: "1.2"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Opens an IPC memory handle to retrieve a device pointer on the context."
+class: $xMem
+name: OpenIpcHandle
+decl: static
+details:
+    - "Takes an IPC memory handle from a remote process and associates it with a device pointer usable in this process."
+    - "The device pointer in this process should not be freed with $xMemFree, but rather with $xMemCloseIpcHandle."
+    - "Multiple calls to this function with the same IPC handle will return unique pointers."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device to associate with the IPC memory handle"
+    - type: $x_ipc_mem_handle_t
+      name: handle
+      desc: "[in] IPC memory handle"
+    - type: $x_ipc_memory_flags_t
+      name: flags
+      desc: |
+            [in] flags controlling the operation.
+            must be 0 (default) or a valid combination of $x_ipc_memory_flag_t.
+      init: "0"
+    - type: "void**"
+      name: pptr
+      desc: "[out] pointer to device allocation in this process"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Closes an IPC memory handle"
+class: $xMem
+name: CloseIpcHandle
+decl: static
+details:
+    - "Closes an IPC memory handle by unmapping memory that was opened in this process using $xMemOpenIpcHandle."
+    - "The application must **not** call this function from simultaneous threads with the same pointer."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: ptr
+      desc: "[in][release] pointer to device allocation in this process"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Additional allocation descriptor for exporting external memory"
+class: $xMem
+name: $x_external_memory_export_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying memory export types for this allocation.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+details:
+    - "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to indicate an exportable memory allocation."
+    - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to indicate an exportable image."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Additional allocation descriptor for importing external memory as a file descriptor"
+class: $xMem
+name: $x_external_memory_import_fd_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying the memory import type for the file descriptor.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+    - type: int
+      name: fd
+      desc: "[in] the file descriptor handle to import"
+details:
+    - "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to import memory from a file descriptor."
+    - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to import memory from a file descriptor."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Exports an allocation as a file descriptor"
+class: $xMem
+name: $x_external_memory_export_fd_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying the memory export type for the file descriptor.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+    - type: int
+      name: fd
+      desc: "[out] the exported file descriptor handle representing the allocation."
+details:
+    - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a file descriptor."
+    - "This structure may be passed to $xImageGetAllocPropertiesExt, via the `pNext` member of $x_image_allocation_ext_properties_t, to export an image as a file descriptor."
+    - "The requested memory export type must have been specified when the allocation was made."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Additional allocation descriptor for importing external memory as a Win32 handle"
+version: "1.2"
+class: $xMem
+name: $x_external_memory_import_win32_handle_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying the memory import type for the Win32 handle.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+    - type: void*
+      name: handle
+      desc: "[in][optional] the Win32 handle to import"
+    - type: const void*
+      name: name
+      desc: "[in][optional] name of a memory object to import"
+details:
+    - "When `handle` is `nullptr`, `name` must not be `nullptr`."
+    - "When `name` is `nullptr`, `handle` must not be `nullptr`."
+    - "When `flags` is $X_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_WIN32_KMT, `name` must be `nullptr`."
+    - "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to import memory from a Win32 handle."
+    - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to import memory from a Win32 handle."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Exports an allocation as a Win32 handle"
+version: "1.2"
+class: $xMem
+name: $x_external_memory_export_win32_handle_t
+base: $x_base_desc_t
+members:
+    - type: $x_external_memory_type_flags_t
+      name: flags
+      desc: |
+            [in] flags specifying the memory export type for the Win32 handle.
+            must be 0 (default) or a valid combination of $x_external_memory_type_flags_t
+      init: "0"
+    - type: void*
+      name: handle
+      desc: "[out] the exported Win32 handle representing the allocation."
+details:
+    - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a Win32 handle."
+    - "This structure may be passed to $xImageGetAllocPropertiesExt, via the `pNext` member of $x_image_allocation_ext_properties_t, to export an image as a Win32 handle."
+    - "The requested memory export type must have been specified when the allocation was made."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for memory allocation"
+name: $xMem
+owner: $xContext

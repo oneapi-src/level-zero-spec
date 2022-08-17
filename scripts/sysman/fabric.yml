@@ -1,0 +1,318 @@
+#
+# Copyright (C) 2019-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Firmware management"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum Fabric port model string size"
+name: $S_MAX_FABRIC_PORT_MODEL_SIZE
+value: "256"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum size of the buffer that will return information about link types"
+name: $S_MAX_FABRIC_LINK_TYPE_SIZE
+value: "256"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric port status"
+class: $sFabricPort
+name: $s_fabric_port_status_t
+etors:
+    - name: UNKNOWN
+      value: "0"
+      desc: "The port status cannot be determined"
+    - name: HEALTHY
+      desc: "The port is up and operating as expected"
+    - name: DEGRADED
+      desc: "The port is up but has quality and/or speed degradation"
+    - name: FAILED
+      desc: "Port connection instabilities are preventing workloads making forward progress"
+    - name: DISABLED
+      desc: "The port is configured down"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric port quality degradation reasons"
+class: $sFabricPort
+name: $s_fabric_port_qual_issue_flags_t
+etors:
+    - name: LINK_ERRORS
+      desc: "Excessive link errors are occurring"
+    - name: SPEED
+      desc: "There is a degradation in the bitrate and/or width of the link"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Fabric port failure reasons"
+class: $sFabricPort
+name: $s_fabric_port_failure_flags_t
+etors:
+    - name: FAILED
+      desc: "A previously operating link has failed. Hardware will automatically retrain this port. This state will persist until either the physical connection is removed or the link trains successfully."
+    - name: TRAINING_TIMEOUT
+      desc: "A connection has not been established within an expected time. Hardware will continue to attempt port training. This status will persist until either the physical connection is removed or the link successfully trains."
+    - name: FLAPPING
+      desc: "Port has excessively trained and then transitioned down for some period of time. Driver will allow port to continue to train, but will not enable the port for use until the port has been disabled and subsequently re-enabled using $sFabricPortSetConfig()."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Unique identifier for a fabric port"
+class: $sFabricPort
+name: $s_fabric_port_id_t
+details:
+    - "This not a universal identifier. The identified is garanteed to be unique for the current hardware configuration of the system. Changes in the hardware may result in a different identifier for a given port."
+    - "The main purpose of this identifier to build up an instantaneous topology map of system connectivity. An application should enumerate all fabric ports and match $s_fabric_port_state_t.remotePortId to $s_fabric_port_properties_t.portId."
+members:
+    - type: uint32_t
+      name: "fabricId"
+      desc: "[out] Unique identifier for the fabric end-point"
+    - type: uint32_t
+      name: "attachId"
+      desc: "[out] Unique identifier for the device attachment point"
+    - type: uint8_t
+      name: "portNumber"
+      desc: "[out] The logical port number (this is typically marked somewhere on the physical device)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric port speed in one direction"
+class: $sFabricPort
+name: $s_fabric_port_speed_t
+members:
+    - type: int64_t
+      name: "bitRate"
+      desc: "[out] Bits/sec that the link is operating at. A value of -1 means that this property is unknown."
+    - type: int32_t
+      name: "width"
+      desc: "[out] The number of lanes. A value of -1 means that this property is unknown."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric port properties"
+class: $sFabricPort
+name: $s_fabric_port_properties_t
+base: $s_base_properties_t
+members:
+    - type: char
+      name: "model[$S_MAX_FABRIC_PORT_MODEL_SIZE]"
+      desc: "[out] Description of port technology. Will be set to the string \"unkown\" if this cannot be determined for this port."
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the port is located on a sub-device; false means that the port is on the device of the calling Sysman handle"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+    - type: $s_fabric_port_id_t
+      name: "portId"
+      desc: "[out] The unique port identifier"
+    - type: $s_fabric_port_speed_t
+      name: "maxRxSpeed"
+      desc: "[out] Maximum speed supported by the receive side of the port (sum of all lanes)"
+    - type: $s_fabric_port_speed_t
+      name: "maxTxSpeed"
+      desc: "[out] Maximum speed supported by the transmit side of the port (sum of all lanes)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Provides information about the fabric link attached to a port"
+class: $sFabricPort
+name: $s_fabric_link_type_t
+members:
+    - type: char
+      name: "desc[$S_MAX_FABRIC_LINK_TYPE_SIZE]"
+      desc: "[out] Description of link technology. Will be set to the string \"unkown\" if this cannot be determined for this link."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric port configuration"
+class: $sFabricPort
+name: $s_fabric_port_config_t
+base: $s_base_config_t
+members:
+    - type: $x_bool_t
+      name: "enabled"
+      desc: "[in,out] Port is configured up/down"
+    - type: $x_bool_t
+      name: "beaconing"
+      desc: "[in,out] Beaconing is configured on/off"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric port state"
+class: $sFabricPort
+name: $s_fabric_port_state_t
+base: $s_base_state_t
+members:
+    - type: $s_fabric_port_status_t
+      name: "status"
+      desc: "[out] The current status of the port"
+    - type: $s_fabric_port_qual_issue_flags_t
+      name: "qualityIssues"
+      desc: |
+            [out] If status is $S_FABRIC_PORT_STATUS_DEGRADED,
+            then this gives a combination of $s_fabric_port_qual_issue_flag_t for quality issues that have been detected;
+            otherwise, 0 indicates there are no quality issues with the link at this time.
+    - type: $s_fabric_port_failure_flags_t
+      name: "failureReasons"
+      desc: |
+            [out] If status is $S_FABRIC_PORT_STATUS_FAILED,
+            then this gives a combination of $s_fabric_port_failure_flag_t for reasons for the connection instability;
+            otherwise, 0 indicates there are no connection stability issues at this time.
+    - type: $s_fabric_port_id_t
+      name: "remotePortId"
+      desc: "[out] The unique port identifier for the remote connection point if status is $S_FABRIC_PORT_STATUS_HEALTHY, $S_FABRIC_PORT_STATUS_DEGRADED or $S_FABRIC_PORT_STATUS_FAILED"
+    - type: $s_fabric_port_speed_t
+      name: "rxSpeed"
+      desc: "[out] Current maximum receive speed (sum of all lanes)"
+    - type: $s_fabric_port_speed_t
+      name: "txSpeed"
+      desc: "[out] Current maximum transmit speed (sum of all lanes)"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Fabric port throughput."
+class: $sFabricPort
+name: $s_fabric_port_throughput_t
+members:
+    - type: uint64_t
+      name: "timestamp"
+      desc: |
+            [out] Monotonic timestamp counter in microseconds when the measurement was made.
+            This timestamp should only be used to calculate delta time between snapshots of this structure.
+            Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
+            The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
+    - type: uint64_t
+      name: "rxCounter"
+      desc: "[out] Monotonic counter for the number of bytes received (sum of all lanes). This includes all protocol overhead, not only the GPU traffic."
+    - type: uint64_t
+      name: "txCounter"
+      desc: "[out] Monotonic counter for the number of bytes transmitted (sum of all lanes). This includes all protocol overhead, not only the GPU traffic."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of Fabric ports in a device"
+class: $sDevice
+name: EnumFabricPorts
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
+    - type: "$s_fabric_port_handle_t*"
+      name: phPort
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port properties"
+class: $sFabricPort
+name: GetProperties
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $s_fabric_port_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain properties of the Fabric Port."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port link type"
+class: $sFabricPort
+name: GetLinkType
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $s_fabric_link_type_t*
+      name: pLinkType
+      desc: "[in,out] Will contain details about the link attached to the Fabric port."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port configuration"
+class: $sFabricPort
+name: GetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $s_fabric_port_config_t*
+      name: pConfig
+      desc: "[in,out] Will contain configuration of the Fabric Port."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set Fabric port configuration"
+class: $sFabricPort
+name: SetConfig
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: const $s_fabric_port_config_t*
+      name: pConfig
+      desc: "[in] Contains new configuration of the Fabric Port."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port state - status (health/degraded/failed/disabled), reasons for link degradation or instability, current rx/tx speed"
+class: $sFabricPort
+name: GetState
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $s_fabric_port_state_t*
+      name: pState
+      desc: "[in,out] Will contain the current state of the Fabric Port"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port throughput"
+class: $sFabricPort
+name: GetThroughput
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_fabric_port_handle_t
+      name: hPort
+      desc: "[in] Handle for the component."
+    - type: $s_fabric_port_throughput_t*
+      name: pThroughput
+      desc: "[in,out] Will contain the Fabric port throughput counters."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to query this telemetry."
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman device Fabric port"
+name: $sFabricPort
+owner: $sDevice
+members:
+    - type: $s_fabric_port_handle_t
+      name: handle
+      desc: "[in] handle of Sysman object"
+      init: nullptr
+    - type: $sDevice*
+      name: pDevice
+      desc: "[in] pointer to owner object"
