@@ -41,7 +41,7 @@ params:
       desc: "[in] handle of the context object"
     - type: "const void*"
       name: pStart
-      desc: "[in] pointer to start of region to reserve. If nullptr then implementation will choose a start address."
+      desc: "[in][optional] pointer to start of region to reserve. If nullptr then implementation will choose a start address."
     - type: size_t
       name: size
       desc: "[in] size in bytes to reserve; must be page aligned."
