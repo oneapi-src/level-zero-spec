@@ -81,8 +81,10 @@ params:
       name: phDevices
       desc: |
             [in][optional][range(0, numDevices)] array of device handles which context has visibility.
-            if nullptr, then all devices supported by the driver instance are visible to the context.
-            otherwise, context only has visibility to devices in this array.
+            if nullptr, then all devices and any sub-devices supported by the driver instance are
+            visible to the context.
+            otherwise, the context only has visibility to the devices and any sub-devices of the
+            devices in this array.
     - type: $x_context_handle_t*
       name: phContext
       desc: "[out] pointer to handle of context object created"
