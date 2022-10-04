@@ -19,7 +19,9 @@ etors:
     - name: IPC
       desc: "signals and waits may be shared across processes"
     - name: KERNEL_TIMESTAMP
-      desc: "Indicates all events in pool will contain kernel timestamps; cannot be combined with $X_EVENT_POOL_FLAG_IPC"
+      desc:
+            "1.0": "Indicates all events in pool will contain kernel timestamps; cannot be combined with $X_EVENT_POOL_FLAG_IPC"
+            "1.5": "Indicates all events in pool will contain kernel timestamps"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
