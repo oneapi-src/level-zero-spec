@@ -665,6 +665,27 @@ include the **LinkOnceODR** linkage type.
 
 %endif
 
+%if ver >= 1.5:
+Bfloat16 Conversions
+--------------------
+
+${OneApi} Level-Zero API environments supporting the extension
+**${X}_extension_bfloat16_conversions** must must accept SPIR-V modules that
+declare use of the ``SPV_INTEL_bloat16_conversion`` extension via
+**OpExtension**.
+
+When use of the ``SPV_INTEL_bloat16_conversion`` extension is declared in the
+module via **OpExtension**, the environment must accept modules that
+declare the **Bfloat16ConversionINTEL** capability.
+
+For the instructions **OpConvertFToBF16INTEL** and **OpConvertBF16ToFINTEL**
+added by the extension:
+
+- Valid types for *Result Type*, *Float Value*, and *Bfloat16 Value* are Scalars
+  and **OpTypeVectors** with 2, 3, 4, 8, or 16 *Component Count* components
+
+%endif
+
 Numerical Compliance
 ====================
 
