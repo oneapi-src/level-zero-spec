@@ -26,6 +26,10 @@ The following environment variables are required to be enabled during ${x}Init f
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
 | Tools           | ${T}_ENABLE_API_TRACING_EXP          | {**0**, 1} | Enables driver instrumentation for API tracing                                    |
+%if ver >= 1.5:
+|                 |                                     |            | **Note**: This tracing environment variable is **deprecated**. Please use the     |
+|                 |                                     |            | tracing loader layer instead.                                                     |
+%endif
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
 |                 | ${T}_ENABLE_METRICS                  | {**0**, 1} | Enables driver instrumentation and dependencies for device metrics                |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
