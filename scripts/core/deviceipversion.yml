@@ -1,0 +1,44 @@
+#
+# Copyright (C) 2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Device IP Version"
+version: "1.5"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Device IP Version Extension Name"
+version: "1.5"
+name: $X_DEVICE_IP_VERSION_EXT_NAME
+value: '"$X_extension_device_ip_version"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Device IP Version Extension Version(s)"
+version: "1.5"
+name: $x_device_ip_version_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device IP version queried using $xDeviceGetProperties"
+version: "1.5"
+class: $xDevice
+name: $x_device_ip_version_ext_t
+base: $x_base_desc_t
+members:
+    - type: uint32_t
+      name: ipVersion
+      desc: |
+            [out] Device IP version. The meaning of the device IP version is
+            implementation-defined, but newer devices should have a higher
+            version than older devices.
+
+details:
+    - "This structure may be returned from $xDeviceGetProperties via `pNext` member of $x_device_properties_t"
+  
