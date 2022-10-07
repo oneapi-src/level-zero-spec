@@ -458,6 +458,10 @@ etors:
       desc: $x_fabric_edge_exp_properties_t 
       version: "1.4"
       value: "0x0002000C"
+    - name: MEMORY_SUB_ALLOCATIONS_EXP_PROPERTIES
+      desc: $x_memory_sub_allocations_exp_properties_t
+      version: "1.5"
+      value: "0x0002000D"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
