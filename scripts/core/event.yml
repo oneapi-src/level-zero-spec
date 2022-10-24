@@ -69,8 +69,6 @@ params:
       name: phEventPool
       desc: "[out] pointer handle of event pool object created"
 returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`0 == desc->count`"
         - "`(nullptr == phDevices) && (0 < numDevices)`"
@@ -157,8 +155,6 @@ params:
     - type: "$x_event_handle_t*"
       name: phEvent
       desc: "[out] pointer to handle of event object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."

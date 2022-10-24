@@ -51,8 +51,6 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == size`"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Free pages in a reserved virtual address range."
@@ -157,7 +155,6 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == desc->size`"
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 --- #--------------------------------------------------------------------------
 type: function
@@ -215,8 +212,6 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == size`"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
 --- #--------------------------------------------------------------------------
 type: function
@@ -240,8 +235,6 @@ params:
       name: size
       desc: "[in] size in bytes to unmap; must be page aligned."
 returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
         - "Address must be page aligned"
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:

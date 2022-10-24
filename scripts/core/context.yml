@@ -52,9 +52,6 @@ params:
     - type: $x_context_handle_t*
       name: phContext
       desc: "[out] pointer to handle of context object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a context for the driver."
@@ -89,8 +86,6 @@ params:
       name: phContext
       desc: "[out] pointer to handle of context object created"
 returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`(nullptr == phDevices) && (0 < numDevices)`"
 --- #--------------------------------------------------------------------------

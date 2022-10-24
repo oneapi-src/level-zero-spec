@@ -116,8 +116,6 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Must be zero or a power-of-two"
         - "`0 != (alignment & (alignment - 1))`"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates device memory on the context."
@@ -155,8 +153,6 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Must be zero or a power-of-two"
         - "`0 != (alignment & (alignment - 1))`"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allocates host memory on the context."
@@ -192,8 +188,6 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Must be zero or a power-of-two"
         - "`0 != (alignment & (alignment - 1))`"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Frees allocated host memory, device memory, or shared memory on the context."
