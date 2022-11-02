@@ -24,7 +24,13 @@ High-level overview
 Environment Variables
 ---------------------
 
+%if ver >= 1.5:
+The System Resource Management library may now be initialized without using environment variables by calling ${s}Init.
+
+For compatibility, the following environment variables may also be enabled during initialization for the respective feature.
+%else:
 The following environment variables are required to be enabled during initialization for the respective feature.
+%endif
 
 ## --validate=off
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
@@ -39,12 +45,51 @@ The following environment variables are required to be enabled during initializa
 Initialization
 --------------
 
+%if ver >= 1.5:
+An application wishing to manage power and performance for devices may
+use the System Resource Management library to enumerate system management
+driver and device handles.
+
+The following pseudo-code demonstrates a basic initialization and device discovery sequence:
+
+.. parsed-literal::
+
+   function main( ... )
+       if (${s}Init(0) != ${X}_RESULT_SUCCESS)
+           output("Can't initialize the API")
+       else
+           # Discover all the drivers
+           uint32_t driversCount = 0
+           ${s}DriverGet(&driversCount, nullptr)
+           ${s}_driver_handle_t* allDrivers = allocate(driversCount * sizeof(${s}_driver_handle_t))
+           ${s}DriverGet(&driversCount, allDrivers)
+
+           ${s}_driver_handle_t hDriver = nullptr
+           for(i = 0 .. driversCount-1)
+               # Discover devices in a driver
+               uint32_t deviceCount = 0
+               ${s}DeviceGet(allDrivers[i], &deviceCount, nullptr)
+
+               ${s}_device_handle_t* hSysmanHandles =
+                   allocate_memory(deviceCount * sizeof(${s}_device_handle_t))
+               ${s}DeviceGet(allDrivers[i], &deviceCount, hSysmanHandles)
+
+               # Use the hSymanHandles to manage the devices
+
+       free_memory(...)
+
+For compatibility, an application may also use the Level0 Core API to
+enumerate through available accelerator devices in the system. For
+each device handle, an application can cast it to a sysman device handle
+to manage the system resources of the device.
+%else:
 An application wishing to manage power and performance for devices first
 needs to use the Level0 Core API to enumerate through available
 accelerator devices in the system and select those of interest.
 
 For each selected device handle, applications can cast it to a
 **Sysman device handle** to manage system resources of the device.
+%endif
 
 .. image:: ../images/tools_sysman_object_hierarchy.png
 

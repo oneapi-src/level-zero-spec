@@ -27,8 +27,7 @@ name: Init
 decl: static
 ordinal: "0"
 details: 
-    # Note: Using $S_ENABLE_SYSMAN here does not link properly.
-    - "The application must call this function or $xInit with the ZES_ENABLE_SYSMAN environment variable set before calling any other sysman function."
+    - "The application must call this function or $xInit with the $S_ENABLE_SYSMAN environment variable set before calling any other sysman function."
     - "If this function is not called then all other sysman functions will return $X_RESULT_ERROR_UNINITIALIZED."
     - "Only one instance of sysman will be initialized per process."
     - "The application must call this function after forking new processes. Each forked process must call this function."
