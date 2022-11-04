@@ -73,9 +73,6 @@ params:
     - type: $x_command_list_handle_t*
       name: phCommandList
       desc: "[out] pointer to handle of command list object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an immediate command list on the context."
@@ -103,9 +100,6 @@ params:
     - type: $x_command_list_handle_t*
       name: phCommandList
       desc: "[out] pointer to handle of command list object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a command list."

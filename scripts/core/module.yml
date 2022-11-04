@@ -113,8 +113,6 @@ returns:
     - $X_RESULT_ERROR_INVALID_NATIVE_BINARY
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`0 == desc->inputSize`"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
     - $X_RESULT_ERROR_MODULE_BUILD_FAILURE
 --- #--------------------------------------------------------------------------
 type: function

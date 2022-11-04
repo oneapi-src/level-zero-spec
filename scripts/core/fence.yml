@@ -53,9 +53,6 @@ params:
     - type: "$x_fence_handle_t*"
       name: phFence
       desc: "[out] pointer to handle of fence object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes a fence object."

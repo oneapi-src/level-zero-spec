@@ -59,8 +59,6 @@ params:
     - type: $t_tracer_exp_handle_t*
       name: phTracer
       desc: "[out] pointer to handle of tracer object created"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a tracer."

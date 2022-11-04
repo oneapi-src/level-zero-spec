@@ -79,8 +79,6 @@ params:
     - type: "$x_sampler_handle_t*"
       name: phSampler
       desc: "[out] handle of the sampler"
-returns:
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys sampler object"

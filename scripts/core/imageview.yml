@@ -61,5 +61,3 @@ params:
       desc: "[out] pointer to handle of image object created for view"
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
-    - $X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
