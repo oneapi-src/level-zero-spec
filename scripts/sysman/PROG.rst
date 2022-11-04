@@ -46,8 +46,6 @@ accelerator devices in the system and select those of interest.
 For each selected device handle, applications can cast it to a
 **Sysman device handle** to manage system resources of the device.
 
-.. image:: ../images/tools_sysman_object_hierarchy.png
-
 There is a unique handle for each device. Multiple threads can use the
 handle. If concurrent accesses are made to the same device property
 through the handle, the last request wins.
