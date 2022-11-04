@@ -29,6 +29,8 @@ ordinal: "0"
 details: 
     - "The application must call this function or $xInit with the $S_ENABLE_SYSMAN environment variable set before calling any other sysman function."
     - "If this function is not called then all other sysman functions will return $X_RESULT_ERROR_UNINITIALIZED."
+    - "This function will only initialize sysman. To initialize other functions, call $xInit."
+    - "There is no requirement to call this function before or after $xInit."
     - "Only one instance of sysman will be initialized per process."
     - "The application must call this function after forking new processes. Each forked process must call this function."
     - "The application may call this function from simultaneous threads."
