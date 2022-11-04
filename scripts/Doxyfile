@@ -1789,7 +1789,6 @@ LATEX_EXTRA_FILES      = ../docs/source/images/core_device.png \
                          ../docs/source/images/tools_sysman_fan_flow.png \
                          ../docs/source/images/tools_sysman_freq_flow.png \
                          ../docs/source/images/tools_sysman_freq_subdevices.png \
-                         ../docs/source/images/tools_sysman_object_hierarchy.png \
                          ../docs/source/images/tools_sysman_oc.png \
                          ../docs/source/images/tools_sysman_resprops.png \
                          ../docs/source/images/A21_Vertex.png \
