@@ -19,6 +19,7 @@ decl: static
 ordinal: "0"
 details:
     - "Multiple calls to this function will return identical sysman device handles, in the same order."
+    - "The number and order of handles returned from this function is NOT affected by the $X_AFFINITY_MASK or $X_ENABLE_PCI_ID_DEVICE_ORDER environment variables."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
