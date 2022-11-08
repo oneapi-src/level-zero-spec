@@ -423,6 +423,28 @@ def _filter_version(d, max_ver):
             d['desc'] = desc
         return d
 
+    # Start of new code:
+    def __filter_detail(det):
+        if isinstance(det, dict):
+            detail = None
+            for k, v in det.items():
+                try:
+                    version = float(k)
+                except:
+                    continue
+                if version <= max_ver:
+                    detail = v
+            if detail:
+                return detail
+        return det
+
+    if 'details' in d:
+        flt = []
+        for det in d['details']:
+            flt.append(__filter_detail(det))
+        d['details'] = flt
+    # End of new code.
+
     flt = []
     type = d['type']
     if 'enum' == type:
