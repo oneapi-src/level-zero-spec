@@ -911,7 +911,8 @@ A special type of command list can be used for very low-latency submission usage
 
 - An immediate command list is both a command list and an implicit command queue.
 - An immediate command list is created using a command queue descriptor.
-- Commands submitted to an immediate command list are immediately executed on the device.
+- Commands appended into an immediate command list are immediately executed on the device.
+- Commands appended into an immediate command list may execute synchronously, by blocking until the command is complete.
 - An immediate command list is not required to be closed or reset. However, usage will be honored, and expected behaviors will be followed.
 
 The following pseudo-code demonstrates a basic sequence for creation and usage of immediate command lists:
