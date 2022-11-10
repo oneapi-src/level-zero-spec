@@ -423,7 +423,6 @@ def _filter_version(d, max_ver):
             d['desc'] = desc
         return d
 
-    # Start of new code:
     def __filter_detail(det):
         if isinstance(det, dict):
             detail = None
@@ -444,7 +443,6 @@ def _filter_version(d, max_ver):
             if fd:
                 flt.append(fd)
         d['details'] = flt
-    # End of new code.
 
     flt = []
     type = d['type']
