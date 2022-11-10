@@ -431,17 +431,18 @@ def _filter_version(d, max_ver):
                 try:
                     version = float(k)
                 except:
-                    continue
+                    return det
                 if version <= max_ver:
                     detail = v
-            if detail:
-                return detail
+            return detail
         return det
 
     if 'details' in d:
         flt = []
         for det in d['details']:
-            flt.append(__filter_detail(det))
+            fd = __filter_detail(det)
+            if fd:
+                flt.append(fd)
         d['details'] = flt
     # End of new code.
 

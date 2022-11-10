@@ -39,6 +39,8 @@ details:
       "1.6": "This detail would be valid in version 1.6."
     - "1.0": "This is another detail that is valid in version 1.0."
       "1.2": "This is another detail that is valid in version 1.2."
+    - "1.5": "This detail is only valid in version 1.5."
+    - "1.6": "This detail would only be valid in version 1.6."
 params:
     - type: $x_init_flags_t
       name: flags
