@@ -14,6 +14,10 @@ from templates import helper as th
  Image View Planar Extension
 =============================
 
+%if ver >= 1.5:
+This experimental extension is deprecated and replaced by the ${X}_extension_image_view_planar standard extension.
+%endif
+
 API
 ----
 
