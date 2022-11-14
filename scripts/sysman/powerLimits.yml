@@ -85,7 +85,7 @@ name: GetLimitsExt
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "This function returns all the power limits assocaited with the supplied power domain."
+    - "This function returns all the power limits associated with the supplied power domain."
 params:
     - type: $s_pwr_handle_t
       name: hPower
@@ -102,9 +102,9 @@ desc: "Set power limits"
 class: $sPower
 name: SetLimitsExt
 details:
-    - "The application can only modify unlocked members of the limit descriptors returned by ${s}PowerGetLimitsExt."
-    - "Not all the limits returned by ${s}PowerGetLimitsExt need to be supplied to this function."
-    - "Limits do not have to be supplied in the same order as returned by ${s}PowerGetLimitsExt."
+    - "The application can only modify unlocked members of the limit descriptors returned by $sPowerGetLimitsExt."
+    - "Not all the limits returned by $sPowerGetLimitsExt need to be supplied to this function."
+    - "Limits do not have to be supplied in the same order as returned by $sPowerGetLimitsExt."
     - "The same limit can be supplied multiple times. Limits are applied in the order in which they are supplied."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
