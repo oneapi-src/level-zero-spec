@@ -10,6 +10,34 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Device management"
 ordinal: "2"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves sysman devices within a sysman driver"
+version: "1.5"
+class: $sDevice
+name: Get
+decl: static
+ordinal: "0"
+details:
+    - "Multiple calls to this function will return identical sysman device handles, in the same order."
+    - "The number and order of handles returned from this function is NOT affected by the $X_AFFINITY_MASK or $X_ENABLE_PCI_ID_DEVICE_ORDER environment variables."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the sysman driver instance"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of sysman devices.
+            if count is zero, then the driver shall update the value with the total number of sysman devices available.
+            if count is greater than the number of sysman devices available, then the driver shall update the value with the correct number of sysman devices available.
+    - type: "$s_device_handle_t*"
+      name: phDevices
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of sysman devices.
+            if count is less than the number of sysman devices available, then driver shall only retrieve that number of sysman devices.
+--- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum number of characters in string properties."
 name: $S_STRING_PROPERTY_SIZE

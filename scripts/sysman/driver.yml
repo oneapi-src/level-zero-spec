@@ -1,0 +1,72 @@
+#
+# Copyright (C) 2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman)"
+ordinal: "1"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported sysman initialization flags"
+version: "1.5"
+class: $s
+name: $s_init_flags_t
+etors:
+    - name: PLACEHOLDER
+      desc: "placeholder for future use"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Initialize $OneApi System Resource Management (sysman)"
+version: "1.5"
+class: $s
+name: Init
+decl: static
+ordinal: "0"
+details: 
+    - "The application must call this function or $xInit with the $S_ENABLE_SYSMAN environment variable set before calling any other sysman function."
+    - "If this function is not called then all other sysman functions will return $X_RESULT_ERROR_UNINITIALIZED."
+    - "This function will only initialize sysman. To initialize other functions, call $xInit."
+    - "There is no requirement to call this function before or after $xInit."
+    - "Only one instance of sysman will be initialized per process."
+    - "The application must call this function after forking new processes. Each forked process must call this function."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe for scenarios where multiple libraries may initialize sysman simultaneously."
+params:
+    - type: $s_init_flags_t
+      name: flags
+      desc: |
+            [in] initialization flags.
+            currently unused, must be 0 (default).
+      init: "0"
+returns:
+    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves sysman driver instances"
+version: "1.5"
+class: $sDriver
+name: Get
+decl: static
+ordinal: "0"
+details:
+    - "A sysman driver represents a collection of physical devices."
+    - "Multiple calls to this function will return identical sysman driver handles, in the same order."
+    - "The application may pass nullptr for pDrivers when only querying the number of sysman drivers."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of sysman driver instances.
+            if count is zero, then the loader shall update the value with the total number of sysman drivers available.
+            if count is greater than the number of sysman drivers available, then the loader shall update the value with the correct number of sysman drivers available.
+    - type: "$s_driver_handle_t*"
+      name: phDrivers
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of sysman driver instance handles.
+            if count is less than the number of sysman drivers available, then the loader shall only retrieve that number of sysman drivers.
