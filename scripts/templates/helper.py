@@ -768,6 +768,8 @@ def make_details_lines(namespace, tags, obj):
                 for line in split_line(subt(namespace, tags, item, True), 70):
                         lines.append("%s %s"%(prologue, line))
                         prologue = "     "
+    if 'version' in obj:
+        lines.append("    - Added in specification v%s" %obj['version'])
     if 'analogue' in obj:
         lines.append("")
         lines.append("@remarks")
