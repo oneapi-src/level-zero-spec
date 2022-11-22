@@ -611,7 +611,11 @@ External memory handles may be imported from other APIs, or exported for use in 
 Importing and exporting external memory is an optional feature.
 Devices may describe the types of external memory handles they support using ${x}DeviceGetExternalMemoryProperties.
 
+%if ver >= 1.5:
+Importing and exporting external memory is supported for device and host memory allocations and images.
+%else:
 Importing and exporting external memory is supported for device memory allocations and images.
+%endif
 
 The following pseudo-code demonstrates how to allocate and export an external memory handle for a device memory allocation as a Linux dma_buf:
 
