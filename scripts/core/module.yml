@@ -863,7 +863,7 @@ params:
       desc: "[in][range(0, numKernels)] handles of the kernel objects"
     - type: "const uint32_t*"
       name: pCountBuffer
-      desc: "[in] pointer to device memory location that will contain the actual number of kernels to launch; value must be less-than or equal-to numKernels"
+      desc: "[in] pointer to device memory location that will contain the actual number of kernels to launch; value must be less than or equal to numKernels"
     - type: "const $x_group_count_t*"
       name: pLaunchArgumentsBuffer
       desc: "[in][range(0, numKernels)] pointer to device buffer that will contain a contiguous array of thread group launch arguments"

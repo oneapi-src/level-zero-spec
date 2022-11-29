@@ -115,7 +115,7 @@ base: $x_base_desc_t
 members:
     - type: uint32_t
       name: index
-      desc: "[in] index of the event within the pool; must be less-than the count specified during pool creation"
+      desc: "[in] index of the event within the pool; must be less than the count specified during pool creation"
     - type: $x_event_scope_flags_t
       name: signal
       desc: |
