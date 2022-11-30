@@ -221,7 +221,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $s_mem_bandwidth_t*
       name: pBandwidth
-      desc: "[in,out] Will contain the current health, free memory, total memory size."
+      desc: "[in,out] Will contain the total number of bytes read from and written to memory, as well as the current maximum bandwidth."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
