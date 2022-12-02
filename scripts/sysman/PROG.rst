@@ -28,7 +28,8 @@ Environment Variables
 The System Resource Management library may now be initialized without using environment variables by calling ${s}Init.
 
 For compatibility, the following environment variables may also be enabled during initialization for the respective feature.
-%else:
+%endif
+%if ver < 1.5:
 The following environment variables are required to be enabled during initialization for the respective feature.
 %endif
 
@@ -82,7 +83,8 @@ For compatibility, an application may also use the Level0 Core API to
 enumerate through available accelerator devices in the system. For
 each device handle, an application can cast it to a sysman device handle
 to manage the system resources of the device.
-%else:
+%endif
+%if ver < 1.5:
 An application wishing to manage power and performance for devices first
 needs to use the Level0 Core API to enumerate through available
 accelerator devices in the system and select those of interest.
