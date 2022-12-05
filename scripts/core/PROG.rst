@@ -1096,7 +1096,7 @@ A kernel timestamp event is a special type of event that records device timestam
 %if ver >= 1.1:
        const double timestampFreq = NS_IN_SEC / device_properties.timerResolution;
 %endif
-%if ver < 1.5:
+%if ver < 1.1:
        const uint64_t timestampFreq = device_properties.timerResolution;
 %endif
        const uint64_t timestampMaxValue = ~(-1 << device_properties.kernelTimestampValidBits);
