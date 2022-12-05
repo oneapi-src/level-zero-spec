@@ -613,7 +613,8 @@ Devices may describe the types of external memory handles they support using ${x
 
 %if ver >= 1.5:
 Importing and exporting external memory is supported for device and host memory allocations and images.
-%else:
+%endif
+%if ver < 1.5:
 Importing and exporting external memory is supported for device memory allocations and images.
 %endif
 
@@ -1094,7 +1095,8 @@ A kernel timestamp event is a special type of event that records device timestam
        // Get timestamp frequency
 %if ver >= 1.1:
        const double timestampFreq = NS_IN_SEC / device_properties.timerResolution;
-%else:
+%endif
+%if ver < 1.1:
        const uint64_t timestampFreq = device_properties.timerResolution;
 %endif
        const uint64_t timestampMaxValue = ~(-1 << device_properties.kernelTimestampValidBits);

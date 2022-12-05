@@ -24,7 +24,7 @@ RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
 RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
 RE_VERSION_BEGIN    = r"\%if\s+(ver\s+[\<\=\>]+\s+[-+]?\d*\.\d+|\d+).*"
-RE_VERSION_END      = r"\%endif\s+#\s+.*"
+RE_VERSION_END      = r"\%endif.*"
 
 
 """
