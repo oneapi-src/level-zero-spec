@@ -410,6 +410,9 @@ etors:
     - name: DEVICE_IP_VERSION_EXT
       desc: $x_device_ip_version_ext_t
       version: "1.5"
+    - name: IMAGE_VIEW_PLANAR_EXT_DESC
+      desc: $x_image_view_planar_ext_desc_t
+      version: "1.5"
     - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
       desc: $x_relaxed_allocation_limits_exp_desc_t
       value: "0x00020001"

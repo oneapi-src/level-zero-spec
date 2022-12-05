@@ -8,15 +8,11 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZE_experimental_image_view:
+.. _ZE_extension_image_view:
 
 =========================
  Image View Extension
 =========================
-
-%if ver >= 1.5:
-This experimental extension is deprecated and replaced by the ${X}_extension_image_view standard extension.
-%endif
 
 API
 ----
@@ -24,11 +20,11 @@ API
 * Functions
 
 
-    * ${x}ImageViewCreateExp
+    * ${x}ImageViewCreateExt
 
- 
+
 * Enumerations
 
 
-    * ${x}_image_view_exp_version_t
+    * ${x}_image_view_ext_version_t
 
