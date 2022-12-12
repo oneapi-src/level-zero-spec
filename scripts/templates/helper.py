@@ -294,12 +294,20 @@ class value_traits:
     Extracts traits from a parameter object
 """
 class param_traits:
+    RE_MBZ      = r".*\[mbz\].*"
     RE_IN       = r"^\[in\].*"
     RE_OUT      = r"^\[out\].*"
     RE_INOUT    = r"^\[in,out\].*"
     RE_OPTIONAL = r".*\[optional\].*"
     RE_RANGE    = r".*\[range\((.+),\s*(.+)\)\][\S\s]*"
     RE_RELEASE  = r".*\[release\].*"
+
+    @classmethod
+    def is_mbz(cls, item):
+        try:
+            return True if re.match(cls.RE_MBZ, item['desc']) else False
+        except:
+            return False
 
     @classmethod
     def is_input(cls, item):
