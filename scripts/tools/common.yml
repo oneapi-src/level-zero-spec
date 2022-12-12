@@ -175,3 +175,21 @@ members:
     - type: $t_value_t
       name: "value"
       desc: "[out] value"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Enables driver instrumentation and dependencies for device metrics"
+name: $T_ENABLE_METRICS
+category: "Driver"
+values: "0, 1"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Enables driver instrumentation and dependencies for program instrumentation"
+name: $T_ENABLE_PROGRAM_INSTRUMENTATION
+category: "Driver"
+values: "0, 1"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Enables driver instrumentation and dependencies for program debugging"
+name: $T_ENABLE_PROGRAM_DEBUGGING
+category: "Driver"
+values: "0, 1"
