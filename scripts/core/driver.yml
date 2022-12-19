@@ -95,6 +95,14 @@ etors:
       value: "$X_MAKE_VERSION( 1, 4 )"
       desc: "version 1.4"
       version: "1.4"
+    - name: "1_5"
+      value: "$X_MAKE_VERSION( 1, 5 )"
+      desc: "version 1.5"
+      version: "1.5"  
+    - name: "1_6"
+      value: "$X_MAKE_VERSION( 1, 6 )"
+      desc: "version 1.6"
+      version: "1.6"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the API version supported by the specified driver"

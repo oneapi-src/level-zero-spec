@@ -14,7 +14,7 @@ import copy
 from templates.helper import param_traits, type_traits, value_traits
 
 default_version = "1.0"
-all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "2.0"]
+all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "2.0"]
 
 """
     preprocess object
