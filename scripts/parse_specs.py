@@ -684,7 +684,7 @@ def _generate_returns(obj, meta):
             if not param_traits.is_optional(item):
                 typename = type_traits.base(item['type'])
 
-                if type_traits.is_pointer(item['type']):
+                if type_traits.is_pointer(item['type']) and not param_traits.is_mbz(item):
                     _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s`"%item['name'])
 
                 elif type_traits.is_handle(item['type']) and not type_traits.is_ipc_handle(item['type']):
