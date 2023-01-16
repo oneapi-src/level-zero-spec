@@ -123,7 +123,8 @@ system and create Sysman handles for them:
                ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices)
 
                for(devIndex = 0 .. deviceCount-1)
-                   ${x}_device_properties_t device_properties
+                   ${x}_device_properties_t device_properties {}
+                   device_properties.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
                    ${x}DeviceGetProperties(allDevices[devIndex], &device_properties)
                    if(${X}_DEVICE_TYPE_GPU != device_properties.type)
                        next
@@ -516,7 +517,8 @@ device:
 .. parsed-literal::
 
   function ShowDeviceInfo(${s}_device_handle_t hSysmanDevice)
-      ${s}_device_properties_t devProps
+      ${s}_device_properties_t devProps {}
+      devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
       ${s}_device_state_t devState
       if (${s}DeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
           output("    UUID:           %s", devProps.core.uuid.id)
