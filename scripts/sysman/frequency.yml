@@ -19,6 +19,8 @@ etors:
       desc: "GPU Core Domain."
     - name: MEMORY
       desc: "Local Memory Domain."
+    - name: MEDIA
+      desc: "GPU Media Domain."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency properties"
