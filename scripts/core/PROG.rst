@@ -79,7 +79,8 @@ The following pseudo-code demonstrates a basic initialization and device discove
            ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices);
 
            for(d = 0; d < deviceCount; ++d) {
-               ${x}_device_properties_t device_properties;
+               ${x}_device_properties_t device_properties {};
+               device_properties.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
                ${x}DeviceGetProperties(allDevices[d], &device_properties);
 
                if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
@@ -1772,7 +1773,8 @@ or sub-device using ${x}DeviceGetProperties.
        ${x}_device_handle_t hSubdevice = allSubDevices[2];
 
        // Query sub-device properties.
-       ${x}_device_properties_t subdeviceProps;
+       ${x}_device_properties_t subdeviceProps {};
+       subDeviceProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
        ${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
 
        assert(subdeviceProps.flags & ${X}_DEVICE_PROPERTY_FLAG_SUBDEVICE); // Ensure that we have a handle to a sub-device.

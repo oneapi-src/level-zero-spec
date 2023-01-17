@@ -760,7 +760,8 @@ The total number of threads on a device can be computed using device properties 
 
 .. parsed-literal::
 
-    ${x}_device_properties_t properties;
+    ${x}_device_properties_t properties {};
+    properties.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
     uint64_t num_threads;
 
     ${x}DeviceGetProperties(hDevice, &properties);
