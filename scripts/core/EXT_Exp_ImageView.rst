@@ -15,7 +15,7 @@ from templates import helper as th
 =========================
 
 %if ver >= 1.5:
-This experimental extension is deprecated and replaced by the ${X}_extension_image_view standard extension.
+This experimental extension is deprecated and replaced by the ${x}_extension_image_view standard extension.
 %endif
 
 API

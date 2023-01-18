@@ -414,7 +414,7 @@ Floating-Point Atomics
 ----------------------
 
 ${OneApi} Level-Zero API environments supporting the extension
-**${X}_extension_float_atomics** must support additional atomic instructions,
+**${x}_extension_float_atomics** must support additional atomic instructions,
 capabilities, and types.
 
 Atomic Load, Store, and Exchange
