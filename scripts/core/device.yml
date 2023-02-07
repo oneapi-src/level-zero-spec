@@ -130,7 +130,7 @@ members:
       name: deviceId
       desc: |
             [out] device id from PCI configuration
-            Note, the least-significant 16-bits contain the device id.
+            Note, the device id uses little-endian format.
     - type: $x_device_property_flags_t
       name: flags
       desc: "[out] 0 (none) or a valid combination of $x_device_property_flag_t"
