@@ -24,6 +24,8 @@ etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
+details:
+    - "1.6": "Note: This enum is getting deprecated at 2.0 version."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device power/current limit descriptor."
@@ -59,6 +61,8 @@ members:
     - type: int32_t
       name: limit
       desc: "[in,out] limit value. If limitValueLocked is true, this value is ignored. The value should be provided in the unit specified by limitUnit."
+details:
+    - "1.6": "Note: This structure is getting  deprecated at 2.0 version."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Extension properties related to device power settings"
@@ -77,6 +81,7 @@ details:
     - "This structure may be returned from $sPowerGetProperties via the `pNext` member of $s_power_properties_t."
     - "This structure may also be returned from $sPowerGetProperties via the `pNext` member of $s_power_ext_properties_t"
     - "Used for determining the power domain level, i.e. card-level v/s package-level v/s stack-level & the factory default power limits."
+    - "1.6": "Note: This structure is getting deprecated at 2.0 version."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power limits"
@@ -86,6 +91,7 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "This function returns all the power limits associated with the supplied power domain."
+    - "1.6": "Note: This function is getting deprecated at 2.0 version."
 params:
     - type: $s_pwr_handle_t
       name: hPower
@@ -108,6 +114,7 @@ details:
     - "The same limit can be supplied multiple times. Limits are applied in the order in which they are supplied."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "1.6": "Note: This function is getting deprecated at 2.0 version."
 params:
     - type: $s_pwr_handle_t
       name: hPower
