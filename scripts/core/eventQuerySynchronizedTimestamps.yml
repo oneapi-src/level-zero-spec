@@ -1,0 +1,66 @@
+#
+# Copyright (C) 2021-2022 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting event query synchronized timestamps."
+version: "1.5"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Event Query Synchronized Timestamps Extension Name"
+version: "1.5"
+name: $X_EVENT_QUERY_SYNCHRONIZED_TIMESTAMPS_EXP_NAME
+value: '"$X_experimental_event_query_synchronized_timestamps"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Event Query Synchronized Timestamps Extension Version(s)"
+version: "1.5"
+name: $x_event_query_synchronized_timestamps_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Query synchronized event timestamps for Host and Device or Sub-device."
+version: "1.5"
+class: $xEvent
+name: QuerySynchronizedTimestampsExp
+decl: static
+ordinal: "0"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+    - "The implementation must support $X_experimental_event_query_synchronized_timestamps."
+    - "The implementation must return all timestamps for the specified event and device pair."
+    - "The implementation must return all timestamps for all sub-devices when device handle is parent device."
+    - "The implementation may return all timestamps for sub-devices when device handle is sub-device or may return 0 for count."
+analogue:
+    - None
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device to query"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of timestamp results.
+            if count is zero, then the driver shall update the value with the total number of timestamps available.
+            if count is greater than the number of timestamps available, then the driver shall update the value with the correct number of timestamps available.
+    - type: "uint64_t*"
+      name: pHostTimestamps
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of host timestamps that correlate with the device's timestamps.
+            if count is less than the number of timestamps available, then driver shall only retrieve that number of host timestamps.
+    - type: "uint64_t*"
+      name: pDeviceTimestamps
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of device timestamps that correlate with the host's timestamps.
+            if count is less than the number of timestamps available, then driver shall only retrieve that number of device timestamps.
