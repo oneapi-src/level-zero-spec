@@ -1805,7 +1805,12 @@ such as multiple levels of indirection, there are two methods available:
 
     + If the driver is unable to make all allocations resident, then the call to ${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
-2. Explcit ${x}ContextMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
+%if ver >= 1.6:
+2. Explicit ${x}ContextMakeMemoryResident APIs are included for the application to dynamically change residency as needed.
+%endif
+%if ver < 1.6:
+2. Explicit ${x}ContextMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
+%endif
 
     + If the application over-commits device memory, then a call to ${x}ContextMakeMemoryResident will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
