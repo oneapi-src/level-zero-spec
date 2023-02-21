@@ -43,7 +43,7 @@ Each view requires unique backing, provided by the caller.
 **Notes**
 
 - There is a slight performance implication to consider when requesting normalized timestamp data as the runtime must perform some calculations on behalf of the caller.
-- This extension is designed to compliment and eventually replace all usages of ${x}EventQueryTimestampsExp and ${x}EventQueryKernelTimestamp.
+- This extension is designed to complement and eventually replace all usages of ${x}EventQueryTimestampsExp and ${x}EventQueryKernelTimestamp.
 
 .. parsed-literal::
 
