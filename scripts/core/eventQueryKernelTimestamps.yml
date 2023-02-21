@@ -11,36 +11,31 @@ desc: "Intel $OneApi Level-Zero Extension for supporting event query synchronize
 version: "1.5"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Event Query Synchronized Timestamps Extension Name"
+desc: "Event Query Kernel Timestamps Extension Name"
 version: "1.5"
-name: $X_EVENT_QUERY_SYNCHRONIZED_TIMESTAMPS_EXP_NAME
-value: '"$X_experimental_event_query_synchronized_timestamps"'
+name: $X_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_NAME
+value: '"$X_extension_event_query_kernel_timestamps"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Event Query Synchronized Timestamps Extension Version(s)"
+desc: "Event Query Kernel Timestamps Extension Version(s)"
 version: "1.5"
-name: $x_event_query_synchronized_timestamps_exp_version_t
+name: $x_event_query_kernel_timestamps_ext_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query synchronized event timestamps for Host and Device or Sub-device."
+desc: "Query an event's timestamp value on the host, with domain preference."
 version: "1.5"
 class: $xEvent
-name: QuerySynchronizedTimestampsExp
-decl: static
-ordinal: "0"
+name: QueryKernelTimestampsExt
 details:
+    - "The application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The destination memory will be unmodified if the event has not been signaled."
     - "The application may call this function from simultaneous threads."
-    - "The implementation of this function must be thread-safe."
-    - "The implementation must support $X_experimental_event_query_synchronized_timestamps."
-    - "The implementation must return all timestamps for the specified event and device pair."
-    - "The implementation must return all timestamps for all sub-devices when device handle is parent device."
-    - "The implementation may return all timestamps for sub-devices when device handle is sub-device or may return 0 for count."
-analogue:
-    - None
+    - "The implementation of this function should be lock-free."
+    - "The implementation must support $X_extension_event_query_kernel_timestamps."
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -63,4 +58,9 @@ params:
       name: pDeviceTimestamps
       desc: |
             [in,out][optional][range(0, *pCount)] array of device timestamps that correlate with the host's timestamps.
+            if count is less than the number of timestamps available, then driver shall only retrieve that number of (host-correlated) device timestamps.
+    - type: "$x_kernel_timestamp_result_t*"
+      name: pTimestamps
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of device timestamp results.
             if count is less than the number of timestamps available, then driver shall only retrieve that number of device timestamps.
