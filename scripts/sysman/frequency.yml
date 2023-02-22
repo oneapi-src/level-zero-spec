@@ -21,6 +21,7 @@ etors:
       desc: "Local Memory Domain."
     - name: MEDIA
       desc: "GPU Media Domain."
+      version: "1.6"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency properties"
