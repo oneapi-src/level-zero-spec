@@ -150,7 +150,7 @@ members:
     - type: uint64_t
       name: timestamp
       desc: |
-            [out] The timestamp when these measurements were sampled.
+            [out] The timestamp in microseconds when these measurements were sampled.
             This timestamp should only be used to calculate delta time between snapshots of this structure.
             Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
             The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
