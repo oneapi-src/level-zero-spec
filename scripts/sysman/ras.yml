@@ -53,7 +53,7 @@ etors:
 type: macro
 desc: "The maximum number of categories"
 name: $S_MAX_RAS_ERROR_CATEGORY_COUNT
-value: "7"
+value: "10"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS properties"
