@@ -19,7 +19,10 @@ Global Metrics Timestamps Extension
 API
 ----
 
-* Functions
+* Structures
 
+    * ${t}_metric_timestamps_resolution_exp_t
+
+* Functions
 
     * ${t}MetricGroupGetTimestampsExp

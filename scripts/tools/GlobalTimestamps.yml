@@ -7,26 +7,43 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Tool Experimental Extension for Global Metrics Timestamps"
+desc: "Intel $OneApi Level-Zero Tool Experimental Extension for Global Metric Timestamps"
 version: "1.5"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Global Metrics Timestamps Experimental Extension Name"
+desc: "Global Metric Timestamps Experimental Extension Name"
 version: "1.5"
-name: $T_GLOBAL_METRICS_TIMESTAMPS_EXP_NAME
-value: '"$XT_experimental_global_metrics_timestamps"'
+name: $T_GLOBAL_METRIS_TIMESTAMPS_EXP_NAME
+value: '"$T_experimental_global_metric_timestamps"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Global Metrics Timestamps Experimental Extension Version(s)"
+desc: "Global Metric Timestamps Experimental Extension Version(s)"
 version: "1.5"
-name: $x_global_metrics_timestamps_exp_version_t
+name: $t_global_metric_timestamps_exp_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Metric timestamps resolution"
+version: "1.5"
+class: $tMetric
+name: $x_metric_timestamps_resolution_exp_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: timerResolution
+      desc: Returns the resolution of device timer in nanoseconds used for timestamps.
+    - type: uint64_t
+      name: timestampValidBits
+      desc: "[out] Returns the number of valid bits in the timestamp value."
+details:
+    - "This structure may be returned from $tMetricGroupGetProperties via `pNext` member of $t_metric_group_properties_t"
+    - "Used for determining the total number of EUs available on device."
+--- #--------------------------------------------------------------------------
 type: function
-desc: "Returns global device timestamps synchronized with metrics timesstamps, optionally mapped to host."
+desc: "Returns metric timestamps synchronized with global device timestamps, optionally synchronized with host"
 class: $tMetricGroup
 name: GetTimestampsExp
 decl: static
@@ -37,22 +54,14 @@ params:
       name: hMetricGroup
       desc: "[in] handle of the metric group"
     - type: "$x_bool_t"
-      name: mappedToHost
-      desc: "[in] Are timestamps and metrics mapped to host, or device."
+      name: synchronizedWithHost
+      desc: "[in] Return host synchronized or device synchronized metric timestamp."
       init: "false"
-    - type: uint32_t*
-      name: pCount
+    - type: "uint64_t"
+      name: globalTimestamp
       desc: |
-            [in,out] pointer to the number of timestamps.
-            if count is zero, then the driver shall update the value with the total number of timestamps available.
-            if count is greater than the number of timestamps available, then the driver shall update the value with the correct number of timestamps.
-    - type: "uint64_t*"
-      name: globalTimestamps
+            [out] Timestamp synchronized to host or device.
+    - type: "uint64_t"
+      name: metricTimestamp
       desc: |
-            [in,out][optional][range(0, *pCount)] array of timestamp results.
-            if count is less than the number of timestamps available, then driver shall only retrieve that number of timestamps.
-    - type: "uint64_t*"
-      name: metricTimestamps
-      desc: |
-            [in,out][optional][range(0, *pCount)] array of timestamp results.
-            if count is less than the number of timestamps available, then driver shall only retrieve that number of timestamps.
+            [out] Metric timestamp.
