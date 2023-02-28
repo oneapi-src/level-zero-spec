@@ -58,11 +58,11 @@ params:
       name: synchronizedWithHost
       desc: "[in] Returns the timestamps synchronized to the host or the device."
       init: "false"
-    - type: "uint64_t"
+    - type: "uint64_t*"
       name: globalTimestamp
       desc: |
             [out] Device timestamp.
-    - type: "uint64_t"
+    - type: "uint64_t*"
       name: metricTimestamp
       desc: |
             [out] Metric timestamp.
