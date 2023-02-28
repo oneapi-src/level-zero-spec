@@ -49,7 +49,7 @@ The following psuedo-code demonstrates a sequence for obtaining the BDF address 
 
        ...
        // Create a PCI address struct
-       {x}_pci_address_ext_t devAddr = {
+       ${x}_pci_address_ext_t devAddr = {
            0, // domain
            0, // bus
            0, // device
