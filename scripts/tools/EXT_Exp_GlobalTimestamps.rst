@@ -10,7 +10,7 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZET_experimental_get_global_metrics_timestamps:
+.. _ZET_experimental_global_metric_timestamps:
 
 ==========================================
 Global Metrics Timestamps Extension
@@ -21,8 +21,8 @@ API
 
 * Structures
 
-    * ${t}_metric_timestamps_resolution_exp_t
+    * ${t}_metric_global_timestamps_resolution_exp_t
 
 * Functions
 
-    * ${t}MetricGroupGetTimestampsExp
+    * ${t}MetricGroupGetGlobalTimestampsExp

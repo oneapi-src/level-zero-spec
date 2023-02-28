@@ -13,13 +13,13 @@ version: "1.5"
 type: macro
 desc: "Global Metric Timestamps Experimental Extension Name"
 version: "1.5"
-name: $T_GLOBAL_METRIS_TIMESTAMPS_EXP_NAME
-value: '"$T_experimental_global_metric_timestamps"'
+name: $T_GLOBAL_METRICS_TIMESTAMPS_EXP_NAME
+value: '"$XT_experimental_global_metric_timestamps"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Global Metric Timestamps Experimental Extension Version(s)"
 version: "1.5"
-name: $t_global_metric_timestamps_exp_version_t
+name: $x_metric_global_timestamps_exp_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
@@ -29,7 +29,7 @@ type: struct
 desc: "Metric timestamps resolution"
 version: "1.5"
 class: $tMetric
-name: $x_metric_timestamps_resolution_exp_t
+name: $t_metric_global_timestamps_resolution_exp_t
 base: $x_base_desc_t
 members:
     - type: uint64_t
@@ -45,7 +45,7 @@ details:
 type: function
 desc: "Returns metric timestamps synchronized with global device timestamps, optionally synchronized with host"
 class: $tMetricGroup
-name: GetTimestampsExp
+name: GetGlobalTimestampsExp
 decl: static
 details:
     - "The application may call this function from simultaneous threads."
