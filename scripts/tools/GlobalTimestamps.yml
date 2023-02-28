@@ -34,13 +34,13 @@ base: $x_base_desc_t
 members:
     - type: uint64_t
       name: timerResolution
-      desc: Returns the resolution of device timer in nanoseconds used for timestamps.
+      desc: "[out] Returns the resolution of device timer in nanoseconds used for timestamps."
     - type: uint64_t
       name: timestampValidBits
       desc: "[out] Returns the number of valid bits in the timestamp value."
 details:
     - "This structure may be returned from $tMetricGroupGetProperties via `pNext` member of $t_metric_group_properties_t"
-    - "Used for determining the total number of EUs available on device."
+    - "Used for mapping metric timestamps to other timers."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns metric timestamps synchronized with global device timestamps, optionally synchronized with host"
@@ -49,18 +49,19 @@ name: GetTimestampsExp
 decl: static
 details:
     - "The application may call this function from simultaneous threads."
+    - "By default, the global and metrics timestamps are synchronized to the device."
 params:
     - type: "$t_metric_group_handle_t"
       name: hMetricGroup
       desc: "[in] handle of the metric group"
     - type: "$x_bool_t"
       name: synchronizedWithHost
-      desc: "[in] Return host synchronized or device synchronized metric timestamp."
+      desc: "[in] Returns the timestamps synchronized to the host or the device."
       init: "false"
     - type: "uint64_t"
       name: globalTimestamp
       desc: |
-            [out] Timestamp synchronized to host or device.
+            [out] Device timestamp.
     - type: "uint64_t"
       name: metricTimestamp
       desc: |
