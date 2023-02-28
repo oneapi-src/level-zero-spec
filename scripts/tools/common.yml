@@ -102,6 +102,9 @@ etors:
       desc: $t_debug_memory_space_desc_t
     - name: DEBUG_REGSET_PROPERTIES
       desc: $t_debug_regset_properties_t
+    - name: GLOBAL_METRICS_TIMESTAMPS_EXP_PROPERTIES
+      desc: $t_metric_global_timestamps_resolution_exp_t
+      version: "1.5"
     - name: TRACER_EXP_DESC
       desc: $t_tracer_exp_desc_t
       value: "0x00010001"
