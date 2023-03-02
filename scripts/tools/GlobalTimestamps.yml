@@ -44,6 +44,7 @@ details:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns metric timestamps synchronized with global device timestamps, optionally synchronized with host"
+version: "1.5"
 class: $tMetricGroup
 name: GetGlobalTimestampsExp
 decl: static
