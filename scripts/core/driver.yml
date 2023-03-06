@@ -291,6 +291,3 @@ params:
     - type: "const char**"
       name: ppString
       desc: "[in,out] pointer to an array of characters containing message associated with the last call."
-    - type: "size_t*"
-      name: pSize
-      desc: "[in,out][optional] size of message string pointed by ppString."
