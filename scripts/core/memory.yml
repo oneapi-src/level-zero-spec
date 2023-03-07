@@ -305,6 +305,29 @@ params:
       name: pIpcHandle
       desc: "[out] Returned IPC memory handle"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Returns an IPC memory handle to the driver"
+version: "1.6"
+class: $xMem
+name: PutIpcHandle
+decl: static
+details:
+    - |
+      This call may be used for IPC handles previously obtained with either $xMemGetIpcHandle or with $x_external_memory_export_fd_t via $xMemGetAllocProperties.
+    - |
+      Upon call, driver may release any underlying resources associated with the IPC handle.
+      For instance, it may close the file descriptor contained in the IPC handle, if such type of handle is being used by the driver.
+    - "This call does not free the original allocation for which the IPC handle was created."
+    - "This function may **not** be called from simultaneous threads with the same IPC handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_ipc_mem_handle_t
+      name: handle
+      desc: "[in] IPC memory handle"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported IPC memory flags"
 class: $xMem
