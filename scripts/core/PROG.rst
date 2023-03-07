@@ -1936,6 +1936,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 
        // Method of sending to receiving process is not defined by Level-Zero:
        send_to_receiving_process(hIPC);
+       
 
 2. Next, the allocation is received and un-packaged on the receiving
    process:
@@ -1948,6 +1949,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 
        void* dptr = nullptr;
        ${x}MemOpenIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
+       
 
 3. Each process may now refer to the same device memory allocation via its ``dptr``.
    Note, there is no guaranteed address equivalence for the values of ``dptr`` in each process.
@@ -1957,11 +1959,22 @@ The following code examples demonstrate how to use the memory IPC APIs:
 .. parsed-literal::
 
        ${x}MemCloseIpcHandle(hContext, dptr);
+       
 
+%if ver >= 1.6:
+5. Finally, return the IPC handle to the driver with  ${x}MemPutIpcHandle and
+   free the device pointer in the sending process. If ${x}MemPutIpcHandle is not called,
+   any actions performed by that call are eventually done by ${x}MemFree.
+%endif
+%if ver < 1.6:
 5. Finally, free the device pointer in the sending process:
+%endif
 
 .. parsed-literal::
 
+%if ver >= 1.6:
+       ${x}MemPutIpcHandle(hContext, hIpc);
+%endif
        ${x}MemFree(hContext, dptr);
 
 .. _events-1:
@@ -2004,7 +2017,7 @@ The following code examples demonstrate how to use the event IPC APIs:
 
 3. Each process may now refer to the same device event allocation via its handle:
 
-   a. Receiving process creates event at location
+Receiving process creates event at location
 
 .. parsed-literal::
 
@@ -2023,7 +2036,7 @@ The following code examples demonstrate how to use the event IPC APIs:
        ${x}CommandListClose(hCommandList);
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
-   b. Sending process creates event at same location
+Sending process creates event at same location
 
 .. parsed-literal::
 
@@ -2039,7 +2052,8 @@ The following code examples demonstrate how to use the event IPC APIs:
 
        ${x}EventHostSynchronize(hEvent, UINT32_MAX);
 
-   Note, there is no guaranteed address equivalence for the values of ``hEvent`` in each process.
+
+Note, there is no guaranteed address equivalence for the values of ``hEvent`` in each process.
 
 4. To cleanup, first close the pool handle in the receiving process:
 
@@ -2048,11 +2062,21 @@ The following code examples demonstrate how to use the event IPC APIs:
        ${x}EventDestroy(hEvent);
        ${x}EventPoolCloseIpcHandle(&hEventPool);
 
+%if ver >= 1.6:
+5. Finally, return the IPC handle to the driver with ${x}EventPoolPutIpcHandle and
+   free the event pool in the sending process. If ${x}EventPoolPutIpcHandle is not called,
+   any actions performed by that call are eventually done by ${x}EventPoolDestroy.
+%endif
+%if ver < 1.6:
 5. Finally, free the event pool handle in the sending process:
+%endif
 
 .. parsed-literal::
 
        ${x}EventDestroy(hEvent);
+%if ver >= 1.6:
+       ${x}EventPoolPutIpcHandle(hContext, hIpcEventPool);
+%endif
        ${x}EventPoolDestroy(hEventPool);
 
 Peer-to-Peer Access and Queries
