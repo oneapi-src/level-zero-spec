@@ -273,15 +273,15 @@ members:
       desc: "[in] handle of the driver instance"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Retrieves a message associated with the last error code returned by the driver in the current thread."
+desc: "Retrieves a string describing the last error code returned by the driver in the current thread."
 version: "1.6"
 class: $xDriver
-name: GetLastErrorString
+name: GetLastErrorDescription
 details:
     - "String returned is thread local."
     - "String is only updated on calls returning an error, i.e., not on calls returning $X_RESULT_SUCCESS."
     - "String may be empty if driver considers error code is already explicit enough to describe cause."
-    - "Memory pointed to by ppString is owned by driver."
+    - "Memory pointed to by ppString is owned by the driver."
     - "String returned is null-terminated."
 params:
     - type: $x_driver_handle_t
@@ -289,4 +289,4 @@ params:
       desc: "[in] handle of the driver instance"
     - type: "const char**"
       name: ppString
-      desc: "[in,out] pointer to an null-terminated array of characters containing message associated with the last call."
+      desc: "[in,out] pointer to a null-terminated array of characters describing cause of error."
