@@ -568,6 +568,53 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
            free(phMetrics);
        }
 
+Calculating Multiple Metrics
+-----------
+
+${t}MetricGroupCalculateMultipleMetricValues can be used to calculate one or more sets of metric values from raw data.
+Sample below shows how to calculate and process multiple metric values.
+
+.. parsed-literal::
+
+       // Get data count and total metric count
+       uint32_t setCount = 0;
+       uint32_t metricValueCount = 0;
+       ${t}MetricGroupCalculateMultipleMetricValues(hMetricGroup, type, rawDataSize, pRawData, &setCount, &metricValueCount, nullptr, nullptr);
+
+       // Get metric counts and metric values
+       std::vector<uint32_t> metricCountPerSet(setCount);
+       std::vector<${t}_typed_value_t> metricValues(metricValueCount);
+       ${t}MetricGroupCalculateMultipleMetricValues(hMetricGroup, type, rawDataSize, pRawData, &setCount, &metricValueCount, metricCountPerSet.data(), metricValues.data());
+
+       // Example showing how to process the metric values
+
+       // Setup
+       uint32_t metricCount = 0;
+       ${t}MetricGet(hMetricGroup, &metricCount, nullptr);
+
+       ${t}_metric_handle_t* phMetrics = malloc(metricCount * sizeof(${t}_metric_handle_t));
+       ${t}MetricGet(hMetricGroup, &metricCount, phMetrics);
+
+       // This loop over metric data is new for this extension
+       uint32_t startIndex = 0;
+       for (uint32_t dataIndex = 0; dataIndex < setCount; dataIndex++) {
+
+           // Processing each metric data is the same as for the single
+           // calculate metric values
+           const uint32_t metricCountForDataIndex = metricCountPerSet[dataIndex];
+           const uint32_t reportCount = metricCountForDataIndex / metricCount;
+           for (uint32_t report = 0; report < reportCount; report++) {
+               for (uint32_t metric = 0; metric < metricCount ; metric++) {
+                   const size_t metricIndex = report * metricCount + metric;
+                   process_metric_value(metricValues[startIndex + metricIndex]));
+               }
+           }
+
+           startIndex += metricCountForDataIndex;
+       }
+       assert(startIndex == metricValueCount);
+
+
 
 Program Instrumentation
 =======================
