@@ -131,6 +131,7 @@ class: $tMetricGroup
 name: CalculateMetricValues
 decl: static
 details:
+    - "1.6": "Note: This function is deprecated and replaced by $tMetricGroupCalculateMultipleMetricValues."
     - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_group_handle_t"
@@ -156,6 +157,53 @@ params:
       desc: |
             [in,out][optional][range(0, *pMetricValueCount)] buffer of calculated metrics.
             if count is less than the number available in the raw data buffer, then driver shall only calculate that number of metric values.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Calculate one or more sets of metric values from raw data."
+version: "1.6"
+class: $tMetricGroup
+name: CalculateMultipleMetricValues
+decl: static
+details:
+    - "This function calculates more than one set of metric values from a single data buffer.  There may be one set of metric values for each sub-device, for example."
+    - "Each set of metric values may consist of a different number of metric values, returned as the metric value count."
+    - "All metric values are calculated into a single buffer; use the metric counts to determine which metric values belong to which set."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: "$t_metric_group_handle_t"
+      name: hMetricGroup
+      desc: "[in] handle of the metric group"
+    - type: "$t_metric_group_calculation_type_t"
+      name: type
+      desc: "[in] calculation type to be applied on raw data"
+    - type: size_t
+      name: rawDataSize
+      desc: "[in] size in bytes of raw data buffer"
+    - type: "const uint8_t*"
+      name: pRawData
+      desc: "[in][range(0, rawDataSize)] buffer of raw data to calculate"
+    - type: uint32_t*
+      name: pSetCount
+      desc: |
+            [in,out] pointer to number of metric sets.
+            if *pSetCount is zero, then the driver shall update the value with the total number of metric sets to be calculated.
+            if *pSetCount is greater than the number available in the raw data buffer, then the driver shall update the value with the actual number of metric sets to be calculated.
+            if *pSetCount is is less than the number available in the raw data buffer, then the driver shall calculate the metrics for up to that number of sub-devices.
+    - type: uint32_t*
+      name: pTotalMetricValueCount
+      desc: |
+            [in,out] pointer to number of the total number of metric values calculated, for all metric sets.
+            if *pSetCount is zero, then the driver shall update the value with the total number of metric values to be calculated.
+            if *pSetCount is greater than the number available in the raw data buffer, then the driver shall update the value with the actual number of metric values to be calculated.
+    - type: uint32_t*
+      name: pMetricCounts
+      desc: |
+            [in,out][optional][range(0, *pSetCount)] buffer of metric counts per metric set.
+    - type: "$t_typed_value_t*"
+      name: pMetricValues
+      desc: |
+            [in,out][optional][range(0, *pTotalMetricValueCount)] buffer of calculated metrics.
+            if *pSetCount is less than the number available in the raw data buffer, then driver shall only calculate that number of metric values.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves metric from a metric group."

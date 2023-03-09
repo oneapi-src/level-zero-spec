@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2022 Intel Corporation
+# Copyright (C) 2021-2023 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -32,6 +32,7 @@ class: $tMetricGroup
 name: CalculateMultipleMetricValuesExp
 decl: static
 details:
+    - "1.6": "Note: This extension is deprecated and has now been promoted to $tMetricGroupCalculateMultipleMetricValues. It is expected to be removed on next minor version update."
     - "This function is similar to $tMetricGroupCalculateMetricValues except it may calculate more than one set of metric values from a single data buffer.  There may be one set of metric values for each sub-device, for example."
     - "Each set of metric values may consist of a different number of metric values, returned as the metric value count."
     - "All metric values are calculated into a single buffer; use the metric counts to determine which metric values belong to which set."
