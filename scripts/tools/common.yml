@@ -108,6 +108,9 @@ etors:
     - name: TRACER_EXP_DESC
       desc: $t_tracer_exp_desc_t
       value: "0x00010001"
+    - name: METRICS_CALCULATE_DESC_EXP
+      desc: $t_metric_calculate_exp_desc_t
+      version: "1.6"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
@@ -147,6 +150,12 @@ etors:
       desc: "64-bit floating-point"
     - name: BOOL8
       desc: "8-bit boolean"
+    - name: STRING
+      desc: "C string"
+    - name: UINT8
+      desc: "8-bit unsigned-integer"
+    - name: UINT16
+      desc: "16-bit unsigned-integer"
 --- #--------------------------------------------------------------------------
 type: union
 desc: "Union of values"
