@@ -47,6 +47,14 @@ The following diagram illustrates the relationship between the driver, device an
 
 .. image:: ../images/core_device.png
 
+%if ver >= 1.7:
+Level Zero device model hierarchy is composed of **Root Devices** and **Sub-Devices**: A root-device may contain two or more sub-devices and a sub-device shall belong to a single root-device.
+A root-device may not contain a single sub-device, as that would be the same root-device. A root device may also be a device with no sub-devices.
+
+Sub-devices belonging to a root-device may be queried using ${x}DeviceGetSubDevices. The root-device of a sub-device may be queried using ${x}DeviceGetRootDevice.
+The definition of what a root-device and a sub-device is for a specific device is implementation specific.
+%endif
+
 Initialization and Discovery
 ----------------------------
 
@@ -1704,6 +1712,7 @@ Environment Variables
 
 The following table documents the supported knobs for overriding default functional behavior.
 
+%if ver < 1.7:
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
@@ -1713,6 +1722,39 @@ The following table documents the supported knobs for overriding default functio
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
+
+%endif
+
+%if ver >= 1.7:
++-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
+| Category        | Name                                | Values          | Description                                                                       |
++=================+=====================================+=================+===================================================================================+
+| Device          | ${X}_FLAT_DEVICE_HIERARCHY          | {**0**, 1, 2}   | Defines device hierarchy model exposed by Level Zero driver implementation        |
++                 +-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
+|                 | ${X}_AFFINITY_MASK                  | list            | Forces driver to only report devices (and sub-devices) as specified by values     |
++                 +-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
+|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER     | {**0**, 1}      | Forces driver to report devices from lowest to highest PCI bus ID                 |
++-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
+| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC      | {**0**, 1}      | Forces all shared allocations into device memory                                  |
++-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
+%endif
+
+%if ver >= 1.7:
+
+Device Hierarchy
+~~~~~~~~~~~~~
+
+${X}_FLAT_DEVICE_HIERARCHY allows users to select the device hierarchy model with which the underlying hardware is exposed and the types of devices returned with ${x}DeviceGet.
+
+With a value of `0`, ${x}DeviceGet returns all the devices that do not have a root-device. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
+
+With a value of `1`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is **not** possible, with ${x}DeviceGetSubDevices returning always a count of 0 device handles and and ${x}DeviceGetRootDevice returning nullptr. This mode allows Level Zero driver implementations to optimize execution and memory allocations by removing any overhead required to account for simultaneous use of root-devices and sub-devices in the same application.
+
+With a value of `2`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
+
+Devices returned by SYSMAN APIs are not affected by ${X}_FLAT_DEVICE_HIERARCHY and always return the top-level device handles corresponding to the physical devices.
+
+%endif
 
 Affinity Mask
 ~~~~~~~~~~~~~
@@ -1724,10 +1766,24 @@ The values are specific to system configuration; e.g., the number of devices and
 The values are specific to the order in which devices are reported by the driver; i.e., the first device maps to ordinal 0, the second device to ordinal 1, and so forth.
 If the affinity mask is not set, then all devices and sub-devices are reported; as is the default behavior.
 
+%if ver >= 1.7:
+The affinity mask masks the devices as defined by value set in the ${X}_FLAT_DEVICE_HIERARCHY environment variable, i.e., a Level Zero driver shall read
+first ${X}_FLAT_DEVICE_HIERARCHY to determine the device handles to be used by the application and then interpret the values passed in ${X}_AFFINITY_MASK
+based on the device model selected.
+%endif
+
 The order of the devices reported by the ${x}DeviceGet is implementation-specific and not affected by the order of devices in the affinity mask.
+
 The order of the devices reported by the ${x}DeviceGet can be forced to be consistent by setting the ${X}_ENABLE_PCI_ID_DEVICE_ORDER environment variable.
 
+%if ver < 1.7:
 The following examples demonstrate proper usage for a system configuration of two devices, each with four sub-devices:
+%endif
+
+%if ver >= 1.7:
+The following examples demonstrate proper usage for a system configuration of two devices, each with four sub-devices, when setting
+the ${X}_AFFINITY_MASK with different values, and ${X}_FLAT_DEVICE_HIERARCHY to 0:
+%endif
 
 - `0, 1`: all devices and sub-devices are reported (same as default)
 - `0`: only device 0 is reported;with all its sub-devices
@@ -1735,6 +1791,16 @@ The following examples demonstrate proper usage for a system configuration of tw
 - `0.0`: only device 0, sub-device 0 is reported as device 0
 - `1.1, 1.2`: only device 1 is reported as device 0; with its sub-devices 1 and 2 reported as sub-devices 0 and 1, respectively
 - `0.2, 1.3, 1.0, 0.3`: both device 0 and 1 are reported; device 0 reports sub-devices 2 and 3 as sub-devices 0 and 1, respectively; device 1 reports sub-devices 0 and 3 as sub-devices 0 and 1, respectively; the order is unchanged.
+
+%if ver >= 1.7:
+The following examples show the use of different values in the ${X}_AFFINITY_MASK when setting ${X}_FLAT_DEVICE_HIERARCHY to 1, in the
+same system with two devices and four sub-devices.
+
+- `0, 1, 2, 4`: all sub-devices are reported by ${x}DeviceGet (same as default)
+- `0`: only sub-device 0 in the first device is reported
+- `1`: only sub-device 0 in the first device is reported
+- `0.0`: is not valid, as with ${X}_FLAT_DEVICE_HIERARCHY set to 1, the device handles reported by ${x}DeviceGet sit at the bottom of the hierarchy and do not contain further sub-devices.
+%endif
 
 Sub-Device Support
 ------------------
