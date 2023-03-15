@@ -42,7 +42,7 @@ The following code shows how to export metrics raw data.
     ${t}MetricGroupGetExportDataExp (hMetricGroup, rawData, rawDataSize,
                                 &exportDataSize, &exportDataFormatCount, nullptr, nullptr);
 
-    // Allocate for export data and data format
+    // Allocate buffer for export data and data format
     uint8_t* pExportData = malloc(exportDataSize);
     ${t}_metric_export_data_format_exp_t* pExportFormatData =
                             malloc(sizeof(${t}_metric_export_data_format_exp_t) * exportDataFormatCount);
@@ -53,7 +53,7 @@ The following code shows how to export metrics raw data.
 
 
 
-The following code shows how to perform machine independent calculation using the exported data.
+The following code shows how to perform metrics calculation of collected data, which can be done in a different system.
 
 .. parsed-literal::
 

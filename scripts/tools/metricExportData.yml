@@ -70,13 +70,13 @@ members:
       desc: "[in] number of reports to skip during calculation"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Export Metrics Data for machine independent calculation."
+desc: "Export Metrics Data for system independent calculation."
 version: "1.6"
 class: $tMetricGroup
 name: GetExportDataExp
 decl: static
 details:
-    - "This function exports or stores raw data and necessary information to perform machine independent calculation."
+    - "This function exports raw data and necessary information to perform metrics calculation of collected data in a different system which may or may not have accelerators."
     - "Optionally, the function returns the format of exported data as an array of $t_metric_export_data_format_exp_t."
     - "The application may call this function from simultaneous threads."
 params:
@@ -117,8 +117,9 @@ class: $xDriver
 name: CalculateMetricExportDataExp
 decl: static
 details:
+    - "Calculate metrics values using exported data returned by $tMetricGroupGetExportDataExp."
     - "This function is similar to $tMetricGroupCalculateMultipleMetricValuesExp except it would calculate from exported metric data."
-    - "This function could be used to calculate metrics on a machine different from where the metric raw data was collected"
+    - "This function could be used to calculate metrics on a system different from where the metric raw data was collected."
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_driver_handle_t
