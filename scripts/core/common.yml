@@ -471,6 +471,10 @@ etors:
       desc: $x_memory_sub_allocations_exp_properties_t
       version: "1.5"
       value: "0x0002000D"
+    - name: DEVICE_GROUP_ALGORITHM_MEMORY_EXP_PROPERTIES
+      desc: $x_device_group_algorithm_memory_exp_properties_t
+      version: "1.6"
+      value: "0x0002000E"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
