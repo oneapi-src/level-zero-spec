@@ -53,7 +53,7 @@ The following code shows how to export metrics raw data.
 
 
 
-The following code shows how to perform metrics calculation of collected data, which can be done in a different system.
+The following code shows how to perform metrics calculation of collected data, which can be done in a different system than where data was collected.
 
 .. parsed-literal::
 

@@ -76,7 +76,7 @@ class: $tMetricGroup
 name: GetExportDataExp
 decl: static
 details:
-    - "This function exports raw data and necessary information to perform metrics calculation of collected data in a different system which may or may not have accelerators."
+    - "This function exports raw data and necessary information to perform metrics calculation of collected data in a different system than where data was collected, which may or may not have accelerators."
     - "Optionally, the function returns the format of exported data as an array of $t_metric_export_data_format_exp_t."
     - "The application may call this function from simultaneous threads."
 params:
