@@ -86,7 +86,8 @@ version: "1.6"
 class: $xEvent
 name: QueryKernelTimestampsExt
 details:
-    - "The application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "For collecting *only* raw timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "For collecting synchronized timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag. Raw timestamps are also available from this type of event pool."
     - "The destination memory will be unmodified if the event has not been signaled."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."

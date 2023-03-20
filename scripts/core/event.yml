@@ -22,6 +22,9 @@ etors:
       desc:
             "1.0": "Indicates all events in pool will contain kernel timestamps; cannot be combined with $X_EVENT_POOL_FLAG_IPC"
             "1.5": "Indicates all events in pool will contain kernel timestamps"
+    - name: KERNEL_MAPPED_TIMESTAMP
+      desc:
+            "1.6": "Indicates all events in pool will contain kernel timestamps synchronized to host time domain; cannot be combined with $X_EVENT_POOL_FLAG_IPC or $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
