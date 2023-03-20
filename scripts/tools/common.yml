@@ -108,7 +108,7 @@ etors:
     - name: TRACER_EXP_DESC
       desc: $t_tracer_exp_desc_t
       value: "0x00010001"
-    - name: METRICS_CALCULATE_DESC_EXP
+    - name: METRICS_CALCULATE_EXP_DESC
       desc: $t_metric_calculate_exp_desc_t
       version: "1.6"
 --- #--------------------------------------------------------------------------
