@@ -17,6 +17,15 @@ from templates import helper as th
 API
 ----
 
+* Structures
+
+
+    * ${x}_event_query_kernel_timestamps_ext_properties_t
+    * ${x}_event_query_kernel_timestamps_ext_desc_t
+    * ${x}_event_query_kernel_timestamps_raw_ext_desc_t
+    * ${x}_event_query_kernel_timestamps_synchronized_ext_desc_t
+
+
 * Functions
 
 
@@ -27,53 +36,74 @@ API
 
 
     * ${x}_event_query_kernel_timestamps_ext_version_t
+    * ${x}_event_query_kernel_timestamps_ext_flags_t
 
 
 Event Query Kernel Timestamps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This extension enables the query of event timestamps to provide up to three views of the data, for a given event on a given device:
+This extension enables the querying of synchronized event timestamps.
 
-1. Host timestamps, normalized with Device timestamps
-2. Device timestamps, normalized with Host timestamps
-3. Raw device timestamps
-
-Each view requires unique backing, provided by the caller.
+- *Synchronized event timestamps* are raw Device timestamps synchronized to Host time domain.
 
 **Notes**
 
-- There is a slight performance implication to consider when requesting normalized timestamp data as the runtime must perform some calculations on behalf of the caller.
+- The querying of synchronized event timestamps has a performance cost.
 - This extension is designed to complement and eventually replace all usages of ${x}EventQueryTimestampsExp and ${x}EventQueryKernelTimestamp.
+- The value returned by the `pCount` parameter of ${x}EventQueryKernelTimestampsExt is implementation specific.
 
 .. parsed-literal::
 
-    // Storage for normalized Host timestamps that correlate with Device timestamps, in nanoseconds
-    std::vector<uint64_t> hostTimestamps;
+    ${x}_device_module_properties_t modProps;
+    ${x}_event_query_kernel_timestamps_ext_properties_t tsProps;
 
-    // Storage for normalized Device timestamps that correlate with Host timestamps, in nanoseconds
-    std::vector<uint64_t> deviceTimestamps;
+    modProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIES;
+    modProps.pNext = &tsProps;
 
-    // Storage for raw device timestamps
-    std::vector<${x}_kernel_timestamp_result_t> rawDeviceTimestamps;
+    tsProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIES;
+    tsProps.pNext = nullptr;
+
+    // Determine the level of support by getting the module properties
+    ${x}DeviceGetModuleProperties(hDevice, &modProps);
+
+    const bool supportsRaw = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_RAW));
+    const bool supportsSynchronized = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_HOST_TIME_DOMAIN_SYNCHRONIZED));
 
     // ...
     // launch kernel
     // synchronize host
     // ...
 
-    // Number of event timestamps
-    uint32_t count = 0;
+    if (supportsRaw && supportsSynchronized) {
+        // Number of event timestamps
+        uint32_t count = 0;
 
-    // Get the number of timestamps associated with the event.
-    ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, nullptr, nullptr, nullptr);
+        // Get the number of timestamps associated with the event.
+        ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, nullptr);
 
-    // Allocate storage for timestamp data
-    hostTimestamps.resize(count);
-    deviceTimestamps.resize(count);
-    rawDeviceTimestamps.resize(count);
+        // Allocate storage for raw device timestamps
+        std::vector<${x}_kernel_timestamp_result_t> rawDeviceTimestamps(count);
 
-    // Query the event timestamps
-    ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count,
-        hostTimestamps.data(),          /\* [optional] normalized event host timestamp data that correlates to device timestamps \*/
-        deviceTimestamps.data(),        /\* [optional] normalized event device timestamp data that correlates to host timestamps \*/
-        rawDeviceTimestamps.data());    /\* [optional] raw event device timestamp data \*/
+        // Allocate storage for synchronized event timestamps, in nanoseconds
+        std::vector<uint64_t> synchronizedEventTimestamps(count);
+
+        // Build event query kernel timestamps descriptors
+        ${x}_event_query_kernel_timestamps_ext_desc_t desc;
+        ${x}_event_query_kernel_timestamps_raw_ext_desc_t rawDesc;
+        ${x}_event_query_kernel_timestamps_synchronized_ext_desc_t syncDesc;
+
+        desc.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_DESC;
+        desc.pNext = &rawDesc;
+        desc.reserved = 0;
+
+        rawDesc.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RAW_EXT_DESC;
+        rawDesc.pNext = &syncDesc;
+        rawDesc.pBuffer = rawDeviceTimestamps.data();
+
+        syncDesc.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_SYNCHRONIZED_EXT_DESC;
+        syncDesc.pNext = nullptr;
+        syncDesc.pBuffer = synchronizedEventTimestamps.data();
+
+        // Query the event timestamps
+        ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, &desc);
+    }
