@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2023 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -173,10 +173,14 @@ name: $x_image_format_t
 members:
     - type: $x_image_format_layout_t
       name: layout
-      desc: "[in] image format component layout"
+      desc:
+            "1.0": "[in] image format component layout"
+            "1.6": "[in] image format component layout (e.g. N-component layouts and media formats)"
     - type: $x_image_format_type_t
       name: type
-      desc: "[in] image format type. Media formats can't be used for $X_IMAGE_TYPE_BUFFER."
+      desc:
+            "1.0": "[in] image format type. Media formats can't be used for $X_IMAGE_TYPE_BUFFER."
+            "1.6": "[in] image format type"
     - type: $x_image_format_swizzle_t
       name: x
       desc: "[in] image component swizzle into channel x"
@@ -204,7 +208,9 @@ members:
             default is read-only, cached access.
     - type: $x_image_type_t
       name: type
-      desc: "[in] image type"
+      desc:
+            "1.0": "[in] image type"
+            "1.6": "[in] image type. Media format layouts are unsupported for $X_IMAGE_TYPE_BUFFER"
     - type: $x_image_format_t
       name: format
       desc: "[in] image format"
