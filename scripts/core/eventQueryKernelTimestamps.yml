@@ -31,10 +31,10 @@ version: "1.6"
 class: $xEvent
 name: $x_event_query_kernel_timestamps_ext_flags_t
 etors:
-    - name: "RAW"
-      desc: "Raw device event timestamps"
-    - name: "HOST_SYNCHRONIZED"
-      desc: "Device event timestamps synchronized to Host time domain"
+    - name: "KERNEL"
+      desc: "Kernel timestamp results"
+    - name: "SYNCHRONIZED"
+      desc: "Device event timestamps synchronized to the host time domain"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event query kernel timestamps properties"
@@ -49,13 +49,13 @@ details:
     - "This structure may be returned from $xDeviceGetProperties, via `pNext` member of $x_device_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event query kernel timestamps data properties"
+desc: "Event query kernel timestamps results properties"
 version: "1.6"
-name: $x_event_query_kernel_timestamps_data_ext_properties_t
+name: $x_event_query_kernel_timestamps_results_ext_properties_t
 base: $x_base_properties_t
 members:
     - type: $x_kernel_timestamp_result_t*
-      name: pRawTimestampsBuffer
+      name: pTimestampsBuffer
       desc: "[in][optional][range(0, *pCount)] pointer to destination buffer"
       init: nullptr
     - type: uint64_t*
@@ -69,8 +69,8 @@ version: "1.6"
 class: $xEvent
 name: QueryKernelTimestampsExt
 details:
-    - "For collecting *only* raw timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "For collecting synchronized timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag. Raw timestamps are also available from this type of event pool, but there is a performance cost."
+    - "For collecting *only* kernel timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "For collecting synchronized timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag. Kernel timestamps are also available from this type of event pool, but there is a performance cost."
     - "The destination memory will be unmodified if the event has not been signaled."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
@@ -93,9 +93,9 @@ params:
                 - This value is implementation specific.
                 - if `*pCount` is zero, then the driver shall update the value with the total number of event packets available.
                 - if `*pCount` is greater than the number of event packets available, the driver shall update the value with the correct value.
-                - Buffer(s) for query data must be sized by the application to accommodate a minimum of `*pCount` elements.
-    - type: $x_event_query_kernel_timestamps_data_ext_properties_t*
-      name: pData
+                - Buffer(s) for query results must be sized by the application to accommodate a minimum of `*pCount` elements.
+    - type: $x_event_query_kernel_timestamps_results_ext_properties_t*
+      name: pResults
       desc: |
             [in][optional] pointer to event query properties structure(s).
                 - This parameter may be null when `*pCount` is zero.

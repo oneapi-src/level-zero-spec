@@ -28,7 +28,7 @@ API
 
 
     * ${x}_event_query_kernel_timestamps_ext_properties_t
-    * ${x}_event_query_kernel_timestamps_data_ext_properties_t
+    * ${x}_event_query_kernel_timestamps_results_ext_properties_t
 
 
 * Functions
@@ -64,8 +64,8 @@ This extension enables the querying of synchronized event timestamps.
     // Determine the level of support by getting the module properties
     ${x}DeviceGetProperties(hDevice, &devProps);
 
-    const bool supportsRaw = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_RAW));
-    const bool supportsSynchronized = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_HOST_SYNCHRONIZED));
+    const bool supportsKernel = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_KERNEL));
+    const bool supportsSynchronized = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_SYNCHRONIZED));
 
     // Assumption: hEvent was created with ${X}_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP
 
@@ -74,27 +74,27 @@ This extension enables the querying of synchronized event timestamps.
     // synchronize host
     // ...
 
-    if (supportsRaw && supportsSynchronized) {
+    if (supportsKernel && supportsSynchronized) {
         // Number of event timestamps
         uint32_t count = 0;
 
         // Get the number of timestamps associated with the event.
         ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, nullptr);
 
-        // Allocate storage for raw device timestamps
-        std::vector<${x}_kernel_timestamp_result_t> rawTimestamps(count);
+        // Allocate storage for kernel timestamp results
+        std::vector<${x}_kernel_timestamp_result_t> timestamps(count);
 
-        // Allocate storage for synchronized event timestamps, in nanoseconds
+        // Allocate storage for synchronized timestamp results, in nanoseconds
         std::vector<uint64_t> synchronizedTimestamps(count);
 
         // Build event query kernel timestamps descriptors
-        ${x}_event_query_kernel_timestamps_data_ext_properties_t dataProps;
+        ${x}_event_query_kernel_timestamps_results_ext_properties_t resultsProps;
 
-        dataProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_DATA_EXT_PROPERTIES;
-        dataProps.pNext = nullptr;
-        dataProps.pRawTimestampsBuffer = rawTimestamps.data();
-        dataProps.pSynchronizedTimestampsBuffer = synchronizedTimestamps.data();
+        resultsProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIES;
+        resultsProps.pNext = nullptr;
+        resultsProps.pTimestampsBuffer = timestamps.data();
+        resultsProps.pSynchronizedTimestampsBuffer = synchronizedTimestamps.data();
 
         // Query the event timestamps
-        ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, &dataProps);
+        ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, &resultsProps);
     }
