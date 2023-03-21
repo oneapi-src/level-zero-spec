@@ -1,0 +1,88 @@
+#
+# Copyright (C) 2023 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for shared contexts."
+version: "1.6"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Shared Contexts Extension Name"
+version: "1.6"
+name: $X_SHARED_CONTEXTS_EXP_NAME
+value: '"$X_experimental_shared_contexts"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Shared Contexts Extension Version(s)"
+version: "1.6"
+name: $x_shared_contexts_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Defines a shared context for a set of context handles."
+version: "1.6"
+class: $xDriver
+name: GetSharedContextExp
+details:
+    -  |
+       If a shared context has been previously created for the contexts passed in the array,
+       and the shared-context is the same for all, then that one is returned.
+    -  |
+       If none of the contexts in the array belong to a shared context, then a shared context is created
+       encompassing all the contexts in the array.
+    -  |
+       If some of the contexts in the array are not yet associated with any shared context, and the rest
+       belong to a single shared context, then all are added to the same shared context.
+    -  |
+       If some of the contexts in the array already belong to different shared contexts,
+       then nullptr is returned.
+    -  |
+       If only one context is passed, then its shared context is returned if it already exists.
+       If not, then a new shared context is created and returned. Additional contexts
+       can then later be added to this one using $xDriverAddContextToSharedExp.
+    - "If only one context is passed, and that context is a shared context, then the same is returned."
+    - "The application may call this function from simultaneous threads with the same context handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of driver object"
+    - type: uint32_t
+      name: count
+      desc: "[in] number of context passed in hContexts array"
+    - type: "$x_context_handle_t*"
+      name: phContexts
+      desc: "[in][range(0, count)] array of contexts to create the new shared-context with"
+    - type: "$x_context_handle_t*"
+      name: phSharedContext
+      desc: "[out] pointer to the shared context object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Adds a context to an existing shared context."
+version: "1.6"
+class: $xDriver
+name: AddContextToSharedExp
+details:
+    -  |
+       The context must not belong already to another shared context. If so, $X_RESULT_ERROR_INVALID_ARGUMENT
+       is returned.
+    - "The application may call this function from simultaneous threads with the same context handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of driver object"
+    - type: "$x_context_handle_t"
+      name: hSharedContext
+      desc: "[in] shared context to associate hContext with"
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context object"
+    

@@ -263,6 +263,37 @@ params:
       desc: "[out][optional] device associated with this allocation"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Retrieves attributes of a memory allocation"
+version: "1.6"
+class: $xMem
+name: GetAllocPropertiesExp
+details:
+    - |
+      This is an experimental function that extends $xMemGetAllocProperties by returning
+      also the context used to create the allocation, in addition to all the properties
+      that $xMemGetAllocProperties typically returns.
+    - "The application may call this function from simultaneous threads."
+    - |
+      The application may query attributes of a memory allocation unrelated to the context.
+      When this occurs, the returned allocation type will be $X_MEMORY_TYPE_UNKNOWN, and the returned identifier and associated device is unspecified.
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] memory pointer to query"
+    - type: "$x_memory_allocation_properties_t*"
+      name: pMemAllocProperties
+      desc: "[in,out] query result for memory allocation properties"
+    - type: "$x_context_handle_t*"
+      name: phContext
+      desc: "[out][optional] context associated with this allocation"
+    - type: "$x_device_handle_t*"
+      name: phDevice
+      desc: "[out][optional] device associated with this allocation"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Retrieves the base address and/or size of an allocation"
 class: $xMem
 name: GetAddressRange
