@@ -32,8 +32,8 @@ class: $xEvent
 name: $x_event_query_kernel_timestamps_ext_flags_t
 etors:
     - name: "RAW"
-      desc: "Raw Device event timestamps"
-    - name: "HOST_TIME_DOMAIN_SYNCHRONIZED"
+      desc: "Raw device event timestamps"
+    - name: "HOST_SYNCHRONIZED"
       desc: "Device event timestamps synchronized to Host time domain"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -46,7 +46,7 @@ members:
       name: flags
       desc: "[out] 0 or some combination of $x_event_query_kernel_timestamps_ext_flag_t flags"
 details:
-    - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
+    - "This structure may be returned from $xDeviceGetProperties, via `pNext` member of $x_device_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event query kernel timestamps data properties"
@@ -54,31 +54,14 @@ version: "1.6"
 name: $x_event_query_kernel_timestamps_data_ext_properties_t
 base: $x_base_properties_t
 members:
-    - type: uint32_t
-      name: reserved
-      desc: "[in] unused/reserved field"
-details:
-    - "Data for one or more types of event query timestamps may be requested via `pNext` member of $x_base_properties_t."
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Event query kernel timestamps raw data properties"
-version: "1.6"
-name: $x_event_query_kernel_timestamps_data_raw_ext_properties_t
-base: $x_base_properties_t
-members:
-    - type: "$x_kernel_timestamp_result_t*"
-      name: pBuffer
-      desc: "[in] pointer to destination buffer"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Event query kernel timestamps synchronized data properties"
-version: "1.6"
-name: $x_event_query_kernel_timestamps_data_synchronized_ext_properties_t
-base: $x_base_properties_t
-members:
+    - type: $x_kernel_timestamp_result_t*
+      name: pRawTimestampsBuffer
+      desc: "[in][optional][range(0, *pCount)] pointer to destination buffer"
+      init: nullptr
     - type: uint64_t*
-      name: pBuffer
-      desc: "[in] pointer to destination buffer"
+      name: pSynchronizedTimestampsBuffer
+      desc: "[in][optional][range(0, *pCount)] pointer to destination buffer"
+      init: nullptr
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query an event's timestamp value on the host, with domain preference."
@@ -87,7 +70,7 @@ class: $xEvent
 name: QueryKernelTimestampsExt
 details:
     - "For collecting *only* raw timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
-    - "For collecting synchronized timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag. Raw timestamps are also available from this type of event pool."
+    - "For collecting synchronized timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag. Raw timestamps are also available from this type of event pool, but there is a performance cost."
     - "The destination memory will be unmodified if the event has not been signaled."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."

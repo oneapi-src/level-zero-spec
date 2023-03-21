@@ -419,12 +419,6 @@ etors:
     - name: EVENT_QUERY_KERNEL_TIMESTAMPS_DATA_EXT_PROPERTIES
       desc: $x_event_query_kernel_timestamps_data_ext_properties_t
       version: "1.6"
-    - name: EVENT_QUERY_KERNEL_TIMESTAMPS_DATA_RAW_EXT_PROPERTIES
-      desc: $x_event_query_kernel_timestamps_raw_ext_properties_t
-      version: "1.6"
-    - name: EVENT_QUERY_KERNEL_TIMESTAMPS_DATA_SYNCHRONIZED_EXT_PROPERTIES
-      desc: $x_event_query_kernel_timestamps_synchronized_ext_properties_t
-      version: "1.6"
     - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
       desc: $x_relaxed_allocation_limits_exp_desc_t
       value: "0x00020001"
