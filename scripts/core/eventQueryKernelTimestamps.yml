@@ -56,11 +56,11 @@ base: $x_base_properties_t
 members:
     - type: $x_kernel_timestamp_result_t*
       name: pTimestampsBuffer
-      desc: "[in][optional][range(0, *pCount)] pointer to destination buffer"
+      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer"
       init: nullptr
     - type: uint64_t*
       name: pSynchronizedTimestampsBuffer
-      desc: "[in][optional][range(0, *pCount)] pointer to destination buffer"
+      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer"
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function

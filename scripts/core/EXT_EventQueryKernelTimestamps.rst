@@ -55,7 +55,7 @@ This extension enables the querying of synchronized event timestamps.
     ${x}_device_properties_t devProps;
     ${x}_event_query_kernel_timestamps_ext_properties_t tsProps;
 
-    devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIES;
+    devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
     devProps.pNext = &tsProps;
 
     tsProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIES;
