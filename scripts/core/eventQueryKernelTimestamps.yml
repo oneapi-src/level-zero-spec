@@ -55,12 +55,12 @@ name: $x_event_query_kernel_timestamps_results_ext_properties_t
 base: $x_base_properties_t
 members:
     - type: $x_kernel_timestamp_result_t*
-      name: pTimestampsBuffer
-      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer"
+      name: pKernelTimestampsBuffer
+      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer of kernel timestamp results"
       init: nullptr
-    - type: uint64_t*
+    - type: $x_kernel_timestamp_result_t*
       name: pSynchronizedTimestampsBuffer
-      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer"
+      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer of synchronized timestamp results"
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: function

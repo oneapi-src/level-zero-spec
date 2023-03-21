@@ -64,8 +64,8 @@ This extension enables the querying of synchronized event timestamps.
     // Determine the level of support by getting the module properties
     ${x}DeviceGetProperties(hDevice, &devProps);
 
-    const bool supportsKernel = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_KERNEL));
-    const bool supportsSynchronized = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_SYNCHRONIZED));
+    const bool supportsKernelTimestamps = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_KERNEL));
+    const bool supportsSynchronizedTimestamps = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_SYNCHRONIZED));
 
     // Assumption: hEvent was created with ${X}_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP
 
@@ -74,7 +74,7 @@ This extension enables the querying of synchronized event timestamps.
     // synchronize host
     // ...
 
-    if (supportsKernel && supportsSynchronized) {
+    if (supportsKernelTimestamps || supportsSynchronizedTimestamps) {
         // Number of event timestamps
         uint32_t count = 0;
 
@@ -82,18 +82,18 @@ This extension enables the querying of synchronized event timestamps.
         ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, nullptr);
 
         // Allocate storage for kernel timestamp results
-        std::vector<${x}_kernel_timestamp_result_t> timestamps(count);
+        std::vector<${x}_kernel_timestamp_result_t> kernelTimestamps(count);
 
-        // Allocate storage for synchronized timestamp results, in nanoseconds
-        std::vector<uint64_t> synchronizedTimestamps(count);
+        // Allocate storage for synchronized timestamp results
+        std::vector<${x}_kernel_timestamp_result_t> synchronizedTimestamps(count);
 
         // Build event query kernel timestamps descriptors
         ${x}_event_query_kernel_timestamps_results_ext_properties_t resultsProps;
 
         resultsProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIES;
         resultsProps.pNext = nullptr;
-        resultsProps.pTimestampsBuffer = timestamps.data();
-        resultsProps.pSynchronizedTimestampsBuffer = synchronizedTimestamps.data();
+        resultsProps.pKernelTimestampsBuffer = supportsKernelTimestamps ? kernelTimestamps.data() : nullptr;
+        resultsProps.pSynchronizedTimestampsBuffer = supportsSynchronizedTimestamps ? synchronizedTimestamps.data() : nullptr;
 
         // Query the event timestamps
         ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, &resultsProps);
