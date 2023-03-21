@@ -21,9 +21,9 @@ API
 
 
     * ${x}_event_query_kernel_timestamps_ext_properties_t
-    * ${x}_event_query_kernel_timestamps_ext_desc_t
-    * ${x}_event_query_kernel_timestamps_raw_ext_desc_t
-    * ${x}_event_query_kernel_timestamps_synchronized_ext_desc_t
+    * ${x}_event_query_kernel_timestamps_data_ext_properties_t
+    * ${x}_event_query_kernel_timestamps_data_raw_ext_properties_t
+    * ${x}_event_query_kernel_timestamps_data_synchronized_ext_properties_t
 
 
 * Functions
@@ -69,6 +69,8 @@ This extension enables the querying of synchronized event timestamps.
     const bool supportsRaw = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_RAW));
     const bool supportsSynchronized = (0 != (tsProps.flags & ${X}_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_HOST_TIME_DOMAIN_SYNCHRONIZED));
 
+    // Assume hEvent was created with ${X}_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP
+
     // ...
     // launch kernel
     // synchronize host
@@ -88,22 +90,22 @@ This extension enables the querying of synchronized event timestamps.
         std::vector<uint64_t> synchronizedEventTimestamps(count);
 
         // Build event query kernel timestamps descriptors
-        ${x}_event_query_kernel_timestamps_ext_desc_t desc;
-        ${x}_event_query_kernel_timestamps_raw_ext_desc_t rawDesc;
-        ${x}_event_query_kernel_timestamps_synchronized_ext_desc_t syncDesc;
+        ${x}_event_query_kernel_timestamps_data_ext_properties_t dataProps;
+        ${x}_event_query_kernel_timestamps_data_raw_ext_properties_t rawDataProps;
+        ${x}_event_query_kernel_timestamps_data_synchronized_ext_properties_t syncDataProps;
 
-        desc.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_DESC;
-        desc.pNext = &rawDesc;
-        desc.reserved = 0;
+        dataProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_DATA_EXT_PROPERTIES;
+        dataProps.pNext = &rawDataProps;
+        dataProps.reserved = 0;
 
-        rawDesc.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RAW_EXT_DESC;
-        rawDesc.pNext = &syncDesc;
-        rawDesc.pBuffer = rawDeviceTimestamps.data();
+        rawDataProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_DATA_RAW_EXT_PROPERTIES;
+        rawDataProps.pNext = &syncDataProps;
+        rawDataProps.pBuffer = rawDeviceTimestamps.data();
 
-        syncDesc.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_SYNCHRONIZED_EXT_DESC;
-        syncDesc.pNext = nullptr;
-        syncDesc.pBuffer = synchronizedEventTimestamps.data();
+        syncDataProps.stype = ${X}_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_DATA_SYNCHRONIZED_EXT_PROPERTIES;
+        syncDataProps.pNext = nullptr;
+        syncDataProps.pBuffer = synchronizedEventTimestamps.data();
 
         // Query the event timestamps
-        ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, &desc);
+        ${x}EventQueryKernelTimestampsExt(hEvent, hDevice, &count, &dataProps);
     }

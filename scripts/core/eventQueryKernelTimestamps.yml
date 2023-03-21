@@ -49,32 +49,32 @@ details:
     - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event query kernel timestamps descriptor"
+desc: "Event query kernel timestamps data properties"
 version: "1.6"
-name: $x_event_query_kernel_timestamps_ext_desc_t
-base: $x_base_desc_t
+name: $x_event_query_kernel_timestamps_data_ext_properties_t
+base: $x_base_properties_t
 members:
     - type: uint32_t
       name: reserved
       desc: "[in] unused/reserved field"
 details:
-    - "Results of one or more types of event query timestamps may be requested via `pNext` member of $x_base_desc_t."
+    - "Data for one or more types of event query timestamps may be requested via `pNext` member of $x_base_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event query kernel timestamps raw descriptor"
+desc: "Event query kernel timestamps raw data properties"
 version: "1.6"
-name: $x_event_query_kernel_timestamps_raw_ext_desc_t
-base: $x_base_desc_t
+name: $x_event_query_kernel_timestamps_data_raw_ext_properties_t
+base: $x_base_properties_t
 members:
     - type: "$x_kernel_timestamp_result_t*"
       name: pBuffer
       desc: "[in] pointer to destination buffer"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event query kernel timestamps synchronized descriptor"
+desc: "Event query kernel timestamps synchronized data properties"
 version: "1.6"
-name: $x_event_query_kernel_timestamps_synchronized_ext_desc_t
-base: $x_base_desc_t
+name: $x_event_query_kernel_timestamps_data_synchronized_ext_properties_t
+base: $x_base_properties_t
 members:
     - type: uint64_t*
       name: pBuffer
@@ -108,9 +108,13 @@ params:
       desc: |
             [in,out] pointer to the number of event packets available.
                 - This value is implementation specific.
-                - if count is zero, then the driver shall update the value with the total number of event packets available.
-                - if count is greater than the number of event packets available, the driver shall update the value with the correct value.
-                - Buffer(s) for query results must be sized to accommodate a minimum of `*pCount` elements.
-    - type: $x_event_query_kernel_timestamps_ext_desc_t*
-      name: pDesc
-      desc: "[in][optional] pointer to event query descriptor(s). This may be NULL when `*pCount` is zero."
+                - if `*pCount` is zero, then the driver shall update the value with the total number of event packets available.
+                - if `*pCount` is greater than the number of event packets available, the driver shall update the value with the correct value.
+                - Buffer(s) for query data must be sized by the application to accommodate a minimum of `*pCount` elements.
+    - type: $x_event_query_kernel_timestamps_data_ext_properties_t*
+      name: pData
+      desc: |
+            [in][optional] pointer to event query properties structure(s).
+                - This parameter may be null when `*pCount` is zero.
+                - if `*pCount` is less than the number of event packets available, the driver may only update `*pCount` elements, starting at element zero.
+                - if `*pCount` is greater than the number of event packets available, the driver may only update the valid elements.
