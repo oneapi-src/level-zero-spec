@@ -49,6 +49,32 @@ details:
     - "This structure may be returned from $xDeviceGetProperties, via `pNext` member of $x_device_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Kernel timestamp clock data synchronized to the host time domain"
+version: "1.6"
+class: $xEvent
+name: $x_synchronized_timestamp_data_ext_t
+members:
+    - type: uint64_t
+      name: kernelStart
+      desc: "[out] synchronized clock at start of kernel execution"
+    - type: uint64_t
+      name: kernelEnd
+      desc: "[out] synchronized clock at end of kernel execution"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Synchronized kernel timestamp result"
+version: "1.6"
+class: $xEvent
+name: $x_synchronized_timestamp_result_ext_t
+members:
+    - type: $x_synchronized_timestamp_data_ext_t
+      name: global
+      desc: "[out] wall-clock data"
+    - type: $x_synchronized_timestamp_data_ext_t
+      name: context
+      desc: "[out] context-active data; only includes clocks while device context was actively executing."
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Event query kernel timestamps results properties"
 version: "1.6"
 name: $x_event_query_kernel_timestamps_results_ext_properties_t
@@ -58,7 +84,7 @@ members:
       name: pKernelTimestampsBuffer
       desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer of kernel timestamp results"
       init: nullptr
-    - type: $x_kernel_timestamp_result_t*
+    - type: $x_synchronized_timestamp_result_ext_t*
       name: pSynchronizedTimestampsBuffer
       desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer of synchronized timestamp results"
       init: nullptr

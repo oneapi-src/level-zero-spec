@@ -29,6 +29,8 @@ API
 
     * ${x}_event_query_kernel_timestamps_ext_properties_t
     * ${x}_event_query_kernel_timestamps_results_ext_properties_t
+    * ${x}_synchronized_timestamp_data_ext_t
+    * ${x}_synchronized_timestamp_result_ext_t
 
 
 * Functions
@@ -85,7 +87,7 @@ This extension enables the querying of synchronized event timestamps.
         std::vector<${x}_kernel_timestamp_result_t> kernelTimestamps(count);
 
         // Allocate storage for synchronized timestamp results
-        std::vector<${x}_kernel_timestamp_result_t> synchronizedTimestamps(count);
+        std::vector<${x}_synchronized_timestamp_result_ext_t> synchronizedTimestamps(count);
 
         // Build event query kernel timestamps descriptors
         ${x}_event_query_kernel_timestamps_results_ext_properties_t resultsProps;
