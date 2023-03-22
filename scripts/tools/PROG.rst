@@ -576,12 +576,12 @@ Sample below shows how to calculate and process multiple metric values.
 
 .. parsed-literal::
 
-       // Get data count and total metric count
+       // Get metrics set count and total metrics count
        uint32_t setCount = 0;
        uint32_t metricValueCount = 0;
        ${t}MetricGroupCalculateMultipleMetricValues(hMetricGroup, type, rawDataSize, pRawData, &setCount, &metricValueCount, nullptr, nullptr);
 
-       // Get metric counts and metric values
+       // Get the metrics count per set and metrics values
        std::vector<uint32_t> metricCountPerSet(setCount);
        std::vector<${t}_typed_value_t> metricValues(metricValueCount);
        ${t}MetricGroupCalculateMultipleMetricValues(hMetricGroup, type, rawDataSize, pRawData, &setCount, &metricValueCount, metricCountPerSet.data(), metricValues.data());
@@ -595,13 +595,13 @@ Sample below shows how to calculate and process multiple metric values.
        ${t}_metric_handle_t* phMetrics = malloc(metricCount * sizeof(${t}_metric_handle_t));
        ${t}MetricGet(hMetricGroup, &metricCount, phMetrics);
 
-       // This loop over metric data is new for this extension
+       // Loop over the collected metrics
        uint32_t startIndex = 0;
-       for (uint32_t dataIndex = 0; dataIndex < setCount; dataIndex++) {
+       for (uint32_t setIndex = 0; setIndex < setCount; setIndex++) {
 
            // Processing each metric data is the same as for the single
            // calculate metric values
-           const uint32_t metricCountForDataIndex = metricCountPerSet[dataIndex];
+           const uint32_t metricCountForDataIndex = metricCountPerSet[setIndex];
            const uint32_t reportCount = metricCountForDataIndex / metricCount;
            for (uint32_t report = 0; report < reportCount; report++) {
                for (uint32_t metric = 0; metric < metricCount ; metric++) {
