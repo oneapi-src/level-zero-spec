@@ -187,7 +187,9 @@ name: HostSynchronize
 version: "1.6"
 details:
     - "The application must call this function only with command lists created with $xCommandListCreateImmediate."
-    - "Waiting on one immediate command list shall not block the concurrent execution of commands appended to other immediate command lists."
+    - |
+      Waiting on one immediate command list shall not block the concurrent execution of commands appended to other
+      immediate command lists created with either a different ordinal or different index.
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
