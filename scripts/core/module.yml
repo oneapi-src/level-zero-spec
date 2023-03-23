@@ -67,6 +67,7 @@ members:
                    - Use 64-bit offset calculations for buffers.
               - "-$x-opt-large-register-file"
                    - Increase number of registers available to threads.
+                   - Compiler may ignore this option if large GRF mode is not supported. If compiler ignores this option, a warning shall be emitted.
               - "-$x-opt-has-buffer-offset-arg"
                    - Extend stateless to stateful optimization to more
                      cases with the use of additional offset (e.g. 64-bit
