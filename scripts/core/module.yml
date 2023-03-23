@@ -55,7 +55,7 @@ members:
     - type: "const char*"
       name: pBuildFlags
       desc: |
-            [in][optional] string containing compiler flags. Following options are supported.
+            [in][optional] string containing one or more (comma-separated) compiler flags. If unsupported, flag is ignored with a warning.
               - "-$x-opt-disable"
                    - Disable optimizations
               - "-$x-opt-level"
@@ -67,7 +67,6 @@ members:
                    - Use 64-bit offset calculations for buffers.
               - "-$x-opt-large-register-file"
                    - Increase number of registers available to threads.
-                   - If unsupported, option is ignored with a warning.
               - "-$x-opt-has-buffer-offset-arg"
                    - Extend stateless to stateful optimization to more
                      cases with the use of additional offset (e.g. 64-bit
