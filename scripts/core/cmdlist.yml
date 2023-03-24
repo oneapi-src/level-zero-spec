@@ -180,6 +180,35 @@ returns:
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Synchronizes an immediate command list by waiting on the host for the completion of all commands previously submitted to it."
+class: $xCommandList
+name: HostSynchronize
+version: "1.6"
+details:
+    - "The application must call this function only with command lists created with $xCommandListCreateImmediate."
+    - |
+      Waiting on one immediate command list shall not block the concurrent execution of commands appended to other
+      immediate command lists created with either a different ordinal or different index.
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the immediate command list"
+    - type: uint64_t
+      name: timeout
+      desc: |
+            [in] if non-zero, then indicates the maximum time (in nanoseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
+            if zero, then immediately returns the status of the immediate command list;
+            if UINT64_MAX, then function will not return until complete or device is lost.
+            Due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies.
+returns:
+    - $X_RESULT_NOT_READY:
+       - "timeout expired"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "handle does not correspond to an immediate command list"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command list"
 name: $xCommandList
