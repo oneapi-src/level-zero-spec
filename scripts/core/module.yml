@@ -55,7 +55,7 @@ members:
     - type: "const char*"
       name: pBuildFlags
       desc: |
-            [in][optional] string containing compiler flags. Following options are supported.
+            [in][optional] string containing one or more (comma-separated) compiler flags. If unsupported, flag is ignored with a warning.
               - "-$x-opt-disable"
                    - Disable optimizations
               - "-$x-opt-level"
