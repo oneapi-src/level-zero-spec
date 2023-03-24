@@ -22,6 +22,9 @@ etors:
       desc:
             "1.0": "Indicates all events in pool will contain kernel timestamps; cannot be combined with $X_EVENT_POOL_FLAG_IPC"
             "1.5": "Indicates all events in pool will contain kernel timestamps"
+    - name: KERNEL_MAPPED_TIMESTAMP
+      desc: "Indicates all events in pool will contain kernel timestamps synchronized to host time domain; cannot be combined with $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP"
+      version: "1.6"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event pool descriptor"
@@ -257,7 +260,7 @@ analogue:
     - vkCmdSetEvent
 details:
     - "The application must ensure the events are accessible by the device on which the command list was created."
-    - "The duration of an event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
+    - "The duration of an event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP or $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flags is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
@@ -300,7 +303,7 @@ name: HostSignal
 analogue:
     - clSetUserEventStatus
 details:
-    - "The duration of an event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
+    - "The duration of an event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP or $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flags is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -423,7 +426,7 @@ desc: "Queries an event's timestamp value on the host."
 class: $xEvent
 name: QueryKernelTimestamp
 details:
-    - "The application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP or $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag."
     - "The destination memory will be unmodified if the event has not been signaled."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."

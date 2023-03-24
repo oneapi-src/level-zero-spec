@@ -413,6 +413,12 @@ etors:
     - name: IMAGE_VIEW_PLANAR_EXT_DESC
       desc: $x_image_view_planar_ext_desc_t
       version: "1.5"
+    - name: EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIES
+      desc: $x_event_query_kernel_timestamps_ext_properties_t
+      version: "1.6"
+    - name: EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIES
+      desc: $x_event_query_kernel_timestamps_results_ext_properties_t
+      version: "1.6"
     - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
       desc: $x_relaxed_allocation_limits_exp_desc_t
       value: "0x00020001"

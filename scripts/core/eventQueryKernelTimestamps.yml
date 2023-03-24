@@ -1,0 +1,128 @@
+#
+# Copyright (C) 2021-2023 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting the querying of synchronized event timestamps."
+version: "1.6"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Event Query Kernel Timestamps Extension Name"
+version: "1.6"
+name: $X_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_NAME
+value: '"$X_extension_event_query_kernel_timestamps"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Event Query Kernel Timestamps Extension Version(s)"
+version: "1.6"
+name: $x_event_query_kernel_timestamps_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Event query kernel timestamps flags"
+version: "1.6"
+class: $xEvent
+name: $x_event_query_kernel_timestamps_ext_flags_t
+etors:
+    - name: "KERNEL"
+      desc: "Kernel timestamp results"
+    - name: "SYNCHRONIZED"
+      desc: "Device event timestamps synchronized to the host time domain"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event query kernel timestamps properties"
+version: "1.6"
+name: $x_event_query_kernel_timestamps_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_event_query_kernel_timestamps_ext_flags_t
+      name: flags
+      desc: "[out] 0 or some combination of $x_event_query_kernel_timestamps_ext_flag_t flags"
+details:
+    - "This structure may be returned from $xDeviceGetProperties, via `pNext` member of $x_device_properties_t."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Kernel timestamp clock data synchronized to the host time domain"
+version: "1.6"
+class: $xEvent
+name: $x_synchronized_timestamp_data_ext_t
+members:
+    - type: uint64_t
+      name: kernelStart
+      desc: "[out] synchronized clock at start of kernel execution"
+    - type: uint64_t
+      name: kernelEnd
+      desc: "[out] synchronized clock at end of kernel execution"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Synchronized kernel timestamp result"
+version: "1.6"
+class: $xEvent
+name: $x_synchronized_timestamp_result_ext_t
+members:
+    - type: $x_synchronized_timestamp_data_ext_t
+      name: global
+      desc: "[out] wall-clock data"
+    - type: $x_synchronized_timestamp_data_ext_t
+      name: context
+      desc: "[out] context-active data; only includes clocks while device context was actively executing."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event query kernel timestamps results properties"
+version: "1.6"
+name: $x_event_query_kernel_timestamps_results_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_kernel_timestamp_result_t*
+      name: pKernelTimestampsBuffer
+      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer of kernel timestamp results"
+      init: nullptr
+    - type: $x_synchronized_timestamp_result_ext_t*
+      name: pSynchronizedTimestampsBuffer
+      desc: "[in,out][optional][range(0, *pCount)] pointer to destination buffer of synchronized timestamp results"
+      init: nullptr
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Query an event's timestamp value on the host, with domain preference."
+version: "1.6"
+class: $xEvent
+name: QueryKernelTimestampsExt
+details:
+    - "For collecting *only* kernel timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "For collecting synchronized timestamps, the application must ensure the event was created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag. Kernel timestamps are also available from this type of event pool, but there is a performance cost."
+    - "The destination memory will be unmodified if the event has not been signaled."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+    - "The implementation must support $X_extension_event_query_kernel_timestamps."
+    - "The implementation must return all timestamps for the specified event and device pair."
+    - "The implementation must return all timestamps for all sub-devices when device handle is parent device."
+    - "The implementation may return all timestamps for sub-devices when device handle is sub-device or may return 0 for count."
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device to query"
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of event packets available.
+                - This value is implementation specific.
+                - if `*pCount` is zero, then the driver shall update the value with the total number of event packets available.
+                - if `*pCount` is greater than the number of event packets available, the driver shall update the value with the correct value.
+                - Buffer(s) for query results must be sized by the application to accommodate a minimum of `*pCount` elements.
+    - type: $x_event_query_kernel_timestamps_results_ext_properties_t*
+      name: pResults
+      desc: |
+            [in][optional] pointer to event query properties structure(s).
+                - This parameter may be null when `*pCount` is zero.
+                - if `*pCount` is less than the number of event packets available, the driver may only update `*pCount` elements, starting at element zero.
+                - if `*pCount` is greater than the number of event packets available, the driver may only update the valid elements.
