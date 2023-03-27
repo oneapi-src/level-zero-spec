@@ -306,6 +306,49 @@ params:
       desc: "[out] Returned IPC memory handle"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Creates an IPC memory handle out of a file descriptor"
+version: "1.6"
+class: $xMem
+name: GetIpcHandleFromFileDescriptorExp
+decl: static
+details:
+    - "Handle passed must be a valid file descriptor obtained with $x_external_memory_export_fd_t via $xMemGetAllocProperties."
+    - "Returned IPC handle may contain metadata in addition to the file descriptor."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: uint64_t
+      name: handle
+      desc: "[in] file descriptor"
+    - type: $x_ipc_mem_handle_t*
+      name: pIpcHandle
+      desc: "[out] Returned IPC memory handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the file descriptor contained in an IPC memory handle"
+version: "1.6"
+class: $xMem
+name: GetFileDescriptorFromIpcHandleExp
+decl: static
+details:
+    - "IPC memory handle must be a valid handle obtained with $xMemGetIpcHandle."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_ipc_mem_handle_t
+      name: ipcHandle
+      desc: "[in] IPC memory handle"
+    - type: uint64_t*
+      name: pHandle
+      desc: "[out] Returned file descriptor"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Returns an IPC memory handle to the driver"
 version: "1.6"
 class: $xMem
