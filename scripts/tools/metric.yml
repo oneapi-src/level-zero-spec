@@ -165,7 +165,7 @@ class: $tMetricGroup
 name: CalculateMultipleMetricValues
 decl: static
 details:
-    - "Application must call firstly pSetCount and pMetricValueCount to know the size to allocate for pMetricCountPerSet and pMetricValues, respectively."
+    - "Application must query the values of pSetCount and pMetricValueCount to know the sizes to allocate for pMetricCountPerSet and pMetricValues, respectively."
     - "This function calculates more than one set of metric values from a single data buffer.  There may be one set of metric values for each sub-device, for example."
     - "Each set of metric values may consist of a different number of metric values, returned as the metric value count."
     - "All metric values are calculated into a single buffer; use the metric counts to determine which metric values belong to which set."
@@ -202,9 +202,9 @@ params:
             [in,out][optional][range(0, *pSetCount)] buffer of metric counts per metric set.
             Driver shall update the value with the number of metric values calculated for that set.
             If count for a given set is greater than the number of metric values available in the raw data buffer in that set, then the driver
-            shall update the value with the actual number of metric values to be calculated for that set.
-            if count for a given set is less than the number of metric values available in the raw data buffer in that set, then driver shall
-            only calculate that number of metric values for that set.
+            shall update the value with the actual number of metric values calculated for that set.
+            If count for a given set is less than the number of metric values available in the raw data buffer in that set (count must be
+            multiple of the number of metrics in the metric group), then driver shall only calculate that number of metric values for that set.
     - type: "$t_typed_value_t*"
       name: pMetricValues
       desc: |

@@ -589,23 +589,22 @@ Sample below shows how to calculate and process multiple metric values.
        // Example showing how to process the metric values
 
        // Setup
-       uint32_t metricCount = 0;
+       uint32_t metricCountInMetricGroup= 0;
        ${t}MetricGet(hMetricGroup, &metricCount, nullptr);
 
-       ${t}_metric_handle_t* phMetrics = malloc(metricCount * sizeof(${t}_metric_handle_t));
+       ${t}_metric_handle_t* phMetrics = malloc(metricCountInMetricGroup* sizeof(${t}_metric_handle_t));
        ${t}MetricGet(hMetricGroup, &metricCount, phMetrics);
 
        // Loop over the collected metrics
        uint32_t startIndex = 0;
        for (uint32_t setIndex = 0; setIndex < setCount; setIndex++) {
 
-           // Processing each metric data is the same as for the single
-           // calculate metric values
-           const uint32_t metricCountForDataIndex = metricCountPerSet[setIndex];
-           const uint32_t reportCount = metricCountForDataIndex / metricCount;
+           // Process each metric value for every report collected
+           const uint32_t metricsCountInSet= metricCountPerSet[setIndex];
+           const uint32_t reportCount = metricsCountInSet/ metricCount;
            for (uint32_t report = 0; report < reportCount; report++) {
-               for (uint32_t metric = 0; metric < metricCount ; metric++) {
-                   const size_t metricIndex = report * metricCount + metric;
+               for (uint32_t metric = 0; metric < metricCountInMetricGroup; metric++) {
+                   const size_t metricIndex = report * metricCountInMetricGroup+ metric;
                    process_metric_value(metricValues[startIndex + metricIndex]));
                }
            }
