@@ -38,27 +38,6 @@ name: $T_MAX_METRIC_EXPORT_DATA_ELEMENT_DESCRIPTION_EXP
 value: "256"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Export Data format"
-version: "1.6"
-class: $tMetric
-name: $t_metric_export_data_format_exp_t
-members:
-    - type: char
-      name: "name[$T_MAX_METRIC_EXPORT_DATA_ELEMENT_NAME_EXP]"
-      desc: "[out] export data format element name"
-    - type: char
-      name: "description[$T_MAX_METRIC_EXPORT_DATA_ELEMENT_DESCRIPTION_EXP]"
-      desc: "[out] export data format element description"
-    - type: size_t
-      name: "lengthInBytes"
-      desc: "[out] length of the data format element in bytes"
-    - type: $t_value_type_t
-      name: "type"
-      desc: "[out] value type in the data format element"
-details:
-    - "This structure describes the export data format."
---- #--------------------------------------------------------------------------
-type: struct
 desc: "Metrics calculation descriptor"
 version: "1.6"
 class: $tMetric
@@ -77,7 +56,7 @@ name: GetExportDataExp
 decl: static
 details:
     - "This function exports raw data and necessary information to perform metrics calculation of collected data in a different system than where data was collected, which may or may not have accelerators."
-    - "Optionally, the function returns the format of exported data as an array of $t_metric_export_data_format_exp_t."
+    - "Implementations can choose to describe the data arrangement of the exported data, using any mechanism which allows users to read and process them."
     - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_metric_group_handle_t"
@@ -95,20 +74,10 @@ params:
             [in,out] size in bytes of export data buffer
             if size is zero, then the driver shall update the value with the number of bytes necessary to store the exported data.
             if size is greater than required, then the driver shall update the value with the actual number of bytes necessary to store the exported data.
-    - type: "uint32_t*"
-      name: pExportDataFormatCount
-      desc: |
-            [in,out] count of $t_metric_export_data_format_exp_t elements which describes the format of exported data.
-            if count is zero, then the driver shall update the value with the count of $t_metric_export_data_format_exp_t elements necessary to describe the exported data.
-            if count is greater than required, then the driver shall update the value with the actual number of count necessary to describe the exported data.
     - type: "uint8_t *"
       name: pExportData
       desc: |
             [in,out][optional][range(0, *pExportDataSize)] buffer of exported data.
-    - type: "$t_metric_export_data_format_exp_t *"
-      name: pExportFormatData
-      desc: |
-            [in,out][optional][range(0, *pExportDataFormatCount)] buffer of exported data format
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Calculate one or more sets of metric values from exported raw data."
