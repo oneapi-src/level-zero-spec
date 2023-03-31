@@ -19,7 +19,7 @@ value: '"$XT_experimental_metric_export_data"'
 type: enum
 desc: "Exporting Metrics Data Experimental Extension Version(s)"
 version: "1.6"
-name: $x_export_metric_data_exp_version_t
+name: $t_export_metric_data_exp_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
