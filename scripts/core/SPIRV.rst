@@ -1,4 +1,7 @@
-﻿
+﻿<%
+import re
+from templates import helper as th
+%>
 <%
     OneApi=tags['$OneApi']
     x=tags['$x']
@@ -414,13 +417,12 @@ Floating-Point Atomics
 ----------------------
 
 ${OneApi} Level-Zero API environments supporting the extension
-**${x}_extension_float_atomics** must support additional atomic instructions,
-capabilities, and types.
+**${th.subt(namespace, tags, X)}_extension_float_atomics** must support additional atomic instructions, capabilities, and types.
 
 Atomic Load, Store, and Exchange
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the ${OneApi} Level-Zero API environment supports the extension **${X}_extension_float_atomics** and ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_LOAD_STORE or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_LOAD_STORE, then for the **Atomic Instructions** **OpAtomicLoad**, **OpAtomicStore**, and **OpAtomicExchange**:
+If the ${OneApi} Level-Zero API environment supports the extension **${th.subt(namespace, tags, X)}_extension_float_atomics** and ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_LOAD_STORE or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_LOAD_STORE, then for the **Atomic Instructions** **OpAtomicLoad**, **OpAtomicStore**, and **OpAtomicExchange**:
 
 -  16-bit floating-point types are supported for the *Result Type* and type of
    *Value*.
@@ -430,7 +432,7 @@ If the ${OneApi} Level-Zero API environment supports the extension **${X}_extens
 Atomic Add and Subtract
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-If the ${OneApi} Level-Zero API environment supports the extension **${X}_extension_float_atomics** and ${x}_device_fp_atomic_ext_flags_t.fp16Flags, ${x}_device_fp_atomic_ext_flags_t.fp32Flags, or ${x}_device_fp_atomic_ext_flags_t.fp64Flags include ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, then the environment must accept modules that declare use of the extensions ``SPV_EXT_shader_atomic_float_add`` and ``SPV_EXT_shader_atomic_float16_add``.
+If the ${OneApi} Level-Zero API environment supports the extension **${th.subt(namespace, tags, X)}_extension_float_atomics** and ${x}_device_fp_atomic_ext_flags_t.fp16Flags, ${x}_device_fp_atomic_ext_flags_t.fp32Flags, or ${x}_device_fp_atomic_ext_flags_t.fp64Flags include ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, then the environment must accept modules that declare use of the extensions ``SPV_EXT_shader_atomic_float_add`` and ``SPV_EXT_shader_atomic_float16_add``.
 Additionally:
 
 -  When ${x}_device_fp_atomic_ext_flags_t.fp16Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_ADD, the **AtomicFloat16AddEXT** capability must be supported.
@@ -444,7 +446,7 @@ Additionally:
 Atomic Min and Max
 ~~~~~~~~~~~~~~~~~~
 
-If the ${OneApi} Level-Zero API environment supports the extension **${X}_extension_float_atomics** and the ${x}_device_fp_atomic_ext_flags_t.fp32Flags, ${x}_device_fp_atomic_ext_flags_t.fp64Flags, or ${x}_device_fp_atomic_ext_flags_t.fp16Flags bitfields include ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, then the environment must accept modules that declare use of the extension ``SPV_EXT_shader_atomic_float_min_max``.
+If the ${OneApi} Level-Zero API environment supports the extension **${th.subt(namespace, tags, X)}_extension_float_atomics** and the ${x}_device_fp_atomic_ext_flags_t.fp32Flags, ${x}_device_fp_atomic_ext_flags_t.fp64Flags, or ${x}_device_fp_atomic_ext_flags_t.fp16Flags bitfields include ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, then the environment must accept modules that declare use of the extension ``SPV_EXT_shader_atomic_float_min_max``.
 Additionally:
 
 -  When ${x}_device_fp_atomic_ext_flags_t.fp32Flags includes ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_MIN_MAX or ${X}_DEVICE_FP_ATOMIC_EXT_FLAG_LOCAL_MIN_MAX, the **AtomicFloat32MinMaxEXT** capability must be supported.
@@ -462,8 +464,7 @@ Extended Subgroups
 ------------------
 
 ${OneApi} Level-Zero API environments supporting the extension
-**${X}_extension_subgroups** must support additional subgroup instructions,
-capabilities, and types.
+**${th.subt(namespace, tags, X)}_extension_subgroups** must support additional subgroup instructions, capabilities, and types.
 
 Extended Types
 ~~~~~~~~~~~~~~
@@ -655,9 +656,7 @@ Linkonce ODR
 ------------
 
 ${OneApi} Level-Zero API environments supporting the extension
-**${X}_extension_linkonce_odr** must must accept SPIR-V modules that
-declare use of the ``SPV_KHR_linkonce_odr`` extension via
-**OpExtension**.
+**${th.subt(namespace, tags, X)}_extension_linkonce_odr** must must accept SPIR-V modules that declare use of the ``SPV_KHR_linkonce_odr`` extension via **OpExtension**.
 
 When use of the ``SPV_KHR_linkonce_odr`` extension is declared in the
 module via **OpExtension**, the environment must accept modules that
@@ -670,9 +669,7 @@ Bfloat16 Conversions
 --------------------
 
 ${OneApi} Level-Zero API environments supporting the extension
-**${X}_extension_bfloat16_conversions** must must accept SPIR-V modules that
-declare use of the ``SPV_INTEL_bloat16_conversion`` extension via
-**OpExtension**.
+**${th.subt(namespace, tags, X)}_extension_bfloat16_conversions** must must accept SPIR-V modules that declare use of the ``SPV_INTEL_bloat16_conversion`` extension via **OpExtension**.
 
 When use of the ``SPV_INTEL_bloat16_conversion`` extension is declared in the
 module via **OpExtension**, the environment must accept modules that

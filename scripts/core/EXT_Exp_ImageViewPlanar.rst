@@ -15,7 +15,7 @@ from templates import helper as th
 =============================
 
 %if ver >= 1.5:
-This experimental extension is deprecated and replaced by the ${x}_extension_image_view_planar standard extension.
+This experimental extension is deprecated and replaced by the :ref:`${th.subt(namespace, tags, X)}_extension_image_view_planar <${th.subt(namespace, tags, X)}_extension_image_view_planar>` standard extension.
 %endif
 
 API
