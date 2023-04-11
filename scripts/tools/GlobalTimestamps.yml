@@ -34,7 +34,7 @@ base: $x_base_desc_t
 members:
     - type: uint64_t
       name: timerResolution
-      desc: "[out] Returns the resolution of device timer in nanoseconds used for timestamps."
+      desc: "[out] Returns the resolution of metrics timer (used for timestamps) in cycles/sec."
     - type: uint64_t
       name: timestampValidBits
       desc: "[out] Returns the number of valid bits in the timestamp value."
