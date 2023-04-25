@@ -196,9 +196,6 @@ etors:
     - name: OVERCLOCK_PROPERTIES
       desc: $s_overclock_properties_t
       version: "1.5"
-    - name: FABRIC_PORT_ERROR_COUNTERS
-      desc: $s_fabric_port_error_counters_t
-      version: "1.5"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
