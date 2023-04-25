@@ -21,7 +21,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Level Zero Specification'
-copyright = u'2022, Intel'
+copyright = u'2023, Intel'
 author = u'Intel'
 
 # The short X.Y version
