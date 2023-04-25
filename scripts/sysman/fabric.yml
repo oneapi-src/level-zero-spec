@@ -185,26 +185,6 @@ members:
       name: "txCounter"
       desc: "[out] Monotonic counter for the number of bytes transmitted (sum of all lanes). This includes all protocol overhead, not only the GPU traffic."
 --- #--------------------------------------------------------------------------
-type: struct
-desc: "Fabric Port Error Counters"
-class: $sFabricPort
-name: $s_fabric_port_error_counters_t
-base: $s_base_properties_t
-version: "1.5"
-members:
-    - type: uint64_t
-      name: "linkFailureCount"
-      desc: "[out] Link Failure Error Count"
-    - type: uint64_t
-      name: "fwCommErrorCount"
-      desc: "[out] Firmware Communication Error Count"
-    - type: uint64_t
-      name: "fwErrorCount"
-      desc: "[out] Firmware reported Error Count"
-    - type: uint64_t
-      name: "linkDegradeCount"
-      desc: "[out] Link Degrade Error Count"
---- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of Fabric ports in a device"
 class: $sDevice
@@ -320,25 +300,6 @@ params:
     - type: $s_fabric_port_throughput_t*
       name: pThroughput
       desc: "[in,out] Will contain the Fabric port throughput counters."
-returns:
-    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
-        - "User does not have permissions to query this telemetry."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get Fabric Port Error Counters"
-class: $sFabricPort
-name: GetFabricErrorCounters
-version: "1.5"
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_fabric_port_handle_t
-      name: hPort
-      desc: "[in] Handle for the component."
-    - type: $s_fabric_port_error_counters_t*
-      name: pErrors
-      desc: "[in,out] Will contain the Fabric port Error counters."
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
