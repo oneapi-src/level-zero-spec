@@ -82,7 +82,7 @@ params:
 type: function
 desc: "Calculate one or more sets of metric values from exported raw data."
 version: "1.6"
-class: $xDriver
+class: $tMetricGroup
 name: CalculateMetricExportDataExp
 decl: static
 details:

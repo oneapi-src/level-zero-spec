@@ -26,7 +26,7 @@ API
 * Functions
 
     * ${t}MetricGroupGetExportDataExp
-    * ${x}DriverCalculateMetricExportDataExp
+    * ${t}MetricGroupCalculateMetricExportDataExp
 
 Sample Code
 ------------
@@ -58,12 +58,12 @@ The following code shows how to perform metrics calculation of collected data, w
     ${t}_metric_group_calculation_type_t type = ${T}_METRIC_GROUP_CALCULATION_TYPE_METRIC_VALUES;
     ${t}_metric_calculate_exp_desc_t calculateDesc;
     calculateDesc.rawReportSkipCount = 0;
-    ${x}DriverCalculateMetricExportDataExp(hDriver, type, exportDataSize, pExportData, &calculateDesc,
+    ${t}MetricGroupCalculateMetricExportDataExp(hDriver, type, exportDataSize, pExportData, &calculateDesc,
                         &dataCount, &totalMetricCount, nullptr, nullptr);
 
     void* pMetricCounts = malloc(dataCount * sizeof(uint32_t));
     void* pMetricValues = malloc(totalMetricCount * sizeof(zet_typed_value_t));
 
     // Get metric counts and metric values
-    ${x}DriverCalculateMetricExportDataExp(hDriver, type, exportDataSize, pExportData, &calculateDesc,
+    ${t}MetricGroupCalculateMetricExportDataExp(hDriver, type, exportDataSize, pExportData, &calculateDesc,
                         &dataCount, &totalMetricCount, pMetricCounts, pMetricValues);
