@@ -21,7 +21,6 @@ API
 
 * Functions
 
-
     * ${t}MetricGroupCalculateMultipleMetricValuesExp
 
 Sample Code
