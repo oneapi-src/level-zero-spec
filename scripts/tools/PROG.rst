@@ -143,7 +143,7 @@ The following pseudo-code demonstrates a basic usage of API tracing:
        void TracingExample( ... )
        {
            my_tracer_data_t tracer_data = {};
-           ${t}_tracer_exp_desc_t tracer_desc;
+           ${t}_tracer_exp_desc_t tracer_desc {};
            tracer_desc.stype = ${T}_STRUCTURE_TYPE_TRACER_EXP_DESC;
            tracer_desc.pUserData = &tracer_data;
            ${t}_tracer_exp_handle_t hTracer;
@@ -292,7 +292,8 @@ measurements.
            for( i = 0; i < metricGroupCount; i++ )
            {   
                // Get metric group under index 'i' and its properties
-               ${t}_metric_group_properties_t metricGroupProperties;
+               ${t}_metric_group_properties_t metricGroupProperties {};
+               metricGroupProperties.stype = ${T}_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES;
                ${t}MetricGroupGetProperties( phMetricGroups[i], &metricGroupProperties );
 
                printf("Metric Group: %s\n", metricGroupProperties.name);
@@ -437,12 +438,12 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
        {
            ${t}_metric_group_handle_t      hMetricGroup          = nullptr;
            ${x}_event_handle_t             hCompletionEvent      = nullptr;
-           ${x}_event_pool_desc_t          eventPoolDesc         = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC};
-           ${x}_event_desc_t               eventDesc             = {${X}_STRUCTURE_TYPE_EVENT_DESC};
+           ${x}_event_pool_desc_t          eventPoolDesc         = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr};
+           ${x}_event_desc_t               eventDesc             = {${X}_STRUCTURE_TYPE_EVENT_DESC, nullptr};
            ${x}_event_pool_handle_t        hEventPool            = nullptr;
            ${t}_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
            ${t}_metric_query_handle_t      hMetricQuery          = nullptr;
-           ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC};
+           ${t}_metric_query_pool_desc_t   queryPoolDesc         = {${T}_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC, nullptr};
        
            // Find a "ComputeBasic" metric group suitable for Event Based collection
            FindMetricGroup( hDevice, "ComputeBasic", ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASED, &hMetricGroup );
@@ -533,7 +534,8 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
                {
                    ${t}_typed_value_t data = metricValues[report * metricCount + metric];
 
-                   ${t}_metric_properties_t metricProperties;
+                   ${t}_metric_properties_t metricProperties {};
+                   metricProperties.stype = ${T}_STRUCTURE_TYPE_METRIC_PROPERTIES;
                    ${t}MetricGetProperties( phMetrics[ metric ], &metricProperties );
 
                    printf("Metric: %s\n", metricProperties.name );
@@ -675,7 +677,8 @@ Support for attaching debuggers is indicated by the ${T}_DEVICE_DEBUG_PROPERTY_F
 
 .. parsed-literal::
 
-    ${t}_device_debug_properties_t props;
+    ${t}_device_debug_properties_t props {};
+    props.stype = ${T}_STRUCTURE_TYPE_DEVICE_DEBUG_PROPERTIES;
     ${t}DeviceGetDebugProperties(hDevice, &props);
 
     if (${T}_DEVICE_DEBUG_PROPERTY_FLAG_ATTACH & props.flags == 0)
