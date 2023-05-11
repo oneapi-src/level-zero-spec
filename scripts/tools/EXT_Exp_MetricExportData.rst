@@ -37,15 +37,16 @@ The following code shows how to export metrics raw data for a metric group.
 
     // Get size for export data
     size_t exportDataSize = 0;
-    ${t}MetricGroupGetExportDataExp (hMetricGroup, rawData, rawDataSize,
-                                    &exportDataSize, nullptr);
+    uint32_t dataCount = 0;
+    uint32_t totalMetricCount = 0;
+    ${t}_metric_group_calculation_type_t type = ${T}_METRIC_GROUP_CALCULATION_TYPE_METRIC_VALUES;
+    ${t}MetricGroupCalculateMetricExportDataExp (hDriver, type, &exportDataSize, nullptr, nullptr, &dataCount, &totalMetricCount, nullptr, nullptr);
 
     // Allocate buffer for export data
     uint8_t* pExportData = malloc(exportDataSize);
 
     // Retrieve export data and data format
-    ${t}MetricGroupGetExportDataExp (hMetricGroup, rawData, rawDataSize,
-                                    &exportDataSize, pExportData);
+    ${t}MetricGroupCalculateMetricExportDataExp (hDriver, type, &exportDataSize, pExportData, nullptr, &dataCount, &totalMetricCount, nullptr, nullptr);
 
 
 The following code shows how to perform metrics calculation of collected data, which can be done in a different system than where data was collected.
@@ -53,8 +54,6 @@ The following code shows how to perform metrics calculation of collected data, w
 .. parsed-literal::
 
     // Get data count and total metric count
-    uint32_t dataCount = 0;
-    uint32_t totalMetricCount = 0;
     ${t}_metric_group_calculation_type_t type = ${T}_METRIC_GROUP_CALCULATION_TYPE_METRIC_VALUES;
     ${t}_metric_calculate_exp_desc_t calculateDesc;
     calculateDesc.rawReportSkipCount = 0;
