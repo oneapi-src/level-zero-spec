@@ -122,7 +122,7 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "The application must destroy all kernel and build log handles created from the module before destroying the module itself."
+    - "The application must destroy all kernel handles created from the module before destroying the module itself."
     - "The application must ensure the device is not currently referencing the module before it is deleted."
     - "The implementation of this function may immediately free all Host and Device allocations associated with this module."
     - "The application must **not** call this function from simultaneous threads with the same module handle."
