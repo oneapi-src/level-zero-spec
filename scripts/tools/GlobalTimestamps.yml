@@ -30,7 +30,7 @@ desc: "Metric timestamps resolution"
 version: "1.5"
 class: $tMetric
 name: $t_metric_global_timestamps_resolution_exp_t
-base: $x_base_desc_t
+base: $t_base_desc_t
 members:
     - type: uint64_t
       name: timerResolution
