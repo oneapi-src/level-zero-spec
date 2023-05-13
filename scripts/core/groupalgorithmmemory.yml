@@ -64,12 +64,12 @@ members:
     - type: $x_group_algorithm_memory_scope_exp_t
       name: "memoryScope"
       desc: "[in] Memory scope of group algorithm"
-    - type: size_t*
-      name: "pGlobalMemorySize"
-      desc: "[out][optional] pointer to global memory size"
-    - type: size_t*
-      name: "pSharedLocalMemorySize"
-      desc: "[out][optional] pointer to shared local memory size"
+    - type: size_t
+      name: "globalMemorySize"
+      desc: "[out] global memory size"
+    - type: size_t
+      name: "sharedLocalMemorySize"
+      desc: "[out] shared local memory size"
 details:
     - "This structure must be passed to $xDeviceGetGroupAlgorithmMemoryPropertiesExp to obtain the memory properties of a group algorithm."
 --- #--------------------------------------------------------------------------
