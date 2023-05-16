@@ -43,6 +43,11 @@ desc: "Maximum number of characters in string properties."
 name: $S_STRING_PROPERTY_SIZE
 value: "64"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device universal unique id (UUID) size in bytes."
+name: $S_MAX_DEVICE_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Types of accelerator engines"
 class: $sDevice
@@ -84,6 +89,18 @@ etors:
     - name: REPAIR
       desc: "The device needs to be reset in order to complete in-field repairs"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Device reset type"
+class: $sDevice
+name: $s_reset_type_t
+etors:
+    - name: WARM
+      desc: "Apply warm reset"
+    - name: COLD
+      desc: "Apply cold reset"
+    - name: FLR
+      desc: "Apply FLR reset"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device state"
 class: $sDevice
@@ -100,6 +117,32 @@ members:
       desc: "[out] Indicates if the device has been repaired"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Device reset properties"
+class: $sDevice
+name: $s_reset_properties_t
+base: $s_base_properties_t
+members:
+    - type: ze_bool_t
+      name: force
+      desc: |
+            [in] If set to true, all applications that are currently using the device will be forcibly killed.
+    - type: $s_reset_type_t
+      name: reset_type
+      desc: "[in] Type of reset needs to be performed"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device universal unique id (UUID)"
+version: "1.7"
+class: $sDevice
+name: $s_uuid_t
+base: $s_base_properties_t
+members:
+   - type: uint8_t
+     name: "id[$S_MAX_DEVICE_UUID_SIZE]"
+     desc: "[out] opaque data representing a device UUID"
+
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Device properties"
 class: $sDevice
 name: $s_device_properties_t
@@ -107,7 +150,7 @@ base: $s_base_properties_t
 members:
     - type: $x_device_properties_t
       name: core
-      desc: "[out] Core device properties"
+      desc: "[out] (Deprecated, use $s_uuid_t in the extended structure) Core device properties"
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices. A value of 0 indicates that this device doesn't have sub-devices."
@@ -129,6 +172,17 @@ members:
     - type: char
       name: "driverVersion[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Installed driver version (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties"
+version: "1.7"
+class: $sDevice
+name: $s_device_ext_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier. Note: Subdevices will have their own uuid."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties about the device"
@@ -182,6 +236,31 @@ returns:
     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
         - "Reset cannot be performed because applications are using this device."
     - $X_RESULT_ERROR_UNKNOWN:
+        - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
+
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reset device extension"
+class: $sDevice
+name: ResetExt
+details:
+    - "Performs a PCI bus reset of the device. This will result in all current device state being lost."
+    - "All applications using the device should be stopped before calling this function."
+    - "If the force argument is specified, all applications using the device will be forcibly killed."
+    - "The function will block until the device has restarted or a timeout occurred waiting for the reset to complete."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle for the device"
+    - type: "$s_reset_properties_t*"
+      name: pProperties
+      desc: "[in] Device reset properties to apply"
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to perform this operation."
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+        - "Reset cannot be performed because applications are using this device."
+    - $X_RESULT_ERROR_UNKNOWN
         - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
 
 --- #--------------------------------------------------------------------------
