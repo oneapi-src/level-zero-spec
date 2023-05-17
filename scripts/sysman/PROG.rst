@@ -382,7 +382,8 @@ supported:
                allocate_memory(numFreqDomains * sizeof(${s}_freq_handle_t))
            if (${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
                for (index = 0 .. numFreqDomains-1)
-                   ${s}_freq_properties_t props
+                   ${s}_freq_properties_t props {};
+                   props.stype = ${S}_STRUCTURE_TYPE_FREQ_PROPERTIES;
                    if (${s}FrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
                        # Only change the frequency of the domain if:
                        # 1. The domain controls a GPU accelerator
@@ -424,7 +425,8 @@ sub-device (notice the additional sub-device check):
                allocate_memory(numFreqDomains * sizeof(${s}_freq_handle_t))
            if (${s}DeviceEnumFrequencyDomains(hSysmanDevice, &numFreqDomains, pFreqHandles) == ${X}_RESULT_SUCCESS)
                for (index = 0 .. numFreqDomains-1)
-                   ${s}_freq_properties_t props
+                   ${s}_freq_properties_t props {};
+                   props.stype = ${S}_STRUCTURE_TYPE_FREQ_PROPERTIES;
                    if (${s}FrequencyGetProperties(pFreqHandles[index], &props) == ${X}_RESULT_SUCCESS)
                        # Only change the frequency of the domain if:
                        # 1. The domain controls a GPU accelerator
@@ -597,7 +599,8 @@ The pseudo code below shows how to output the PCI BDF address:
 .. parsed-literal::
 
    function ShowPciInfo(${s}_device_handle_t hSysmanDevice)
-       ${s}_pci_properties_t pciProps;
+       ${s}_pci_properties_t pciProps {};
+       pciProps.stype = ${S}_STRUCTURE_TYPE_PCI_PROPERTIES;
        if (${s}DevicePciGetProperties(hSysmanDevice, &pciProps) == ${X}_RESULT_SUCCESS)
            output("    PCI address:        %04u:%02u:%02u.%u",
                pciProps.address.domain,
@@ -792,7 +795,8 @@ domain on a device:
                allocate_memory(numPowerDomains * sizeof(${s}_pwr_handle_t))
            if (${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, phPower) == ${X}_RESULT_SUCCESS)
                for (pwrIndex = 0 .. numPowerDomains-1)
-                   ${s}_power_properties_t props
+                   ${s}_power_properties_t props {};
+                   props.stype = ${S}_STRUCTURE_TYPE_POWER_PROPERTIES;
                    if (${s}PowerGetProperties(phPower[pwrIndex], &props) == ${X}_RESULT_SUCCESS)
                        if (props.onSubdevice)
                            output("Sub-device %u power:\n", props.subdeviceId)
@@ -808,7 +812,7 @@ domain on a device:
    function ShowPowerLimits(${s}_pwr_handle_t hPower)
        uint32_t limitCount = 0
        if (${s}PowerGetLimitsExt(hPower, &limitCount, nullptr) == ${X}_RESULT_SUCCESS)
-           ${s}_power_limit_ext_desc_t * allLimits = allocate(limitCount * sizeof(${s}_power_limit_ext_desc_t))
+           ${s}_power_limit_ext_desc_t * allLimits = allocate(limitCount * sizeof(${s}_power_limit_ext_desc_t));
            if (${s}PowerGetLimitsExt(hPower, &numLimits, allLimits) == ${X}_RESULT_SUCCESS)
 
                for (i = 0; i < limitCount; ++i)
@@ -827,11 +831,12 @@ domain found on a device:
                allocate_memory(numPowerDomains * sizeof(${s}_pwr_handle_t))
            if (${s}DeviceEnumPowerDomains(hSysmanDevice, &numPowerDomains, phPower) == ${X}_RESULT_SUCCESS)
                for (pwrIndex = 0 .. numPowerDomains-1)
-                   ${s}_power_properties_t props
+                   ${s}_power_properties_t props {};
+                   props.stype = ${S}_STRUCTURE_TYPE_POWER_PROPERTIES;
                    if (${s}PowerGetProperties(phPower[pwrIndex], &props) == ${X}_RESULT_SUCCESS)
                        uint32_t limitCount = 0
                        if (${s}PowerGetLimitsExt(hPower, &limitCount, nullptr) == ${X}_RESULT_SUCCESS)
-                           ${s}_power_limit_ext_desc_t * allLimits = allocate(limitCount * sizeof(${s}_power_limit_ext_desc_t))
+                           ${s}_power_limit_ext_desc_t * allLimits = allocate(limitCount * sizeof(${s}_power_limit_ext_desc_t));
                            if (${s}PowerGetLimitsExt(hPower, &numLimits, allLimits) == ${X}_RESULT_SUCCESS)
                                for (i = 0; i < limitCount; ++i)
                                    if (allLimits[i].level == ${S}_POWER_LEVEL_SUSTAINED)
@@ -1586,7 +1591,8 @@ the device and sub-devices:
        free_memory(...)
 
    function ShowFabricPortInfo(${s}_fabric_port_handle_t hPort)
-       ${s}_fabric_port_properties_t props
+       ${s}_fabric_port_properties_t props {};
+       props.stype = ${S}_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIES;
        if (${s}FabricPortGetProperties(hPort, &props) == ${X}_RESULT_SUCCESS)
            ${s}_fabric_port_state_t state
            if (${s}FabricPortGetState(hPort, &state) == ${X}_RESULT_SUCCESS)
@@ -1826,7 +1832,8 @@ value in RPM, but only if control is permitted:
                speedRequest.speed = SpeedRpm
                speedRequest.speedUnits = ${S}_FAN_SPEED_UNITS_RPM
                for (fanIndex = 0 .. numFans-1)
-                   ${s}_fan_properties_t fanprops
+                   ${s}_fan_properties_t fanprops {};
+                   fanprops.stype = ${S}_STRUCTURE_TYPE_FAN_PROPERTIES;
                    if (${s}FanGetProperties(phFans[fanIndex], &fanprops) == ${X}_RESULT_SUCCESS)
                        if (fanprops.canControl)
                            ${s}FanSetFixedSpeedMode(phFans[fanIndex], &speedRequest)
@@ -2024,7 +2031,8 @@ current state of RAS errors:
                allocate_memory(numRasErrorSets * sizeof(${s}_ras_handle_t))
            if (${s}DeviceEnumRasErrorSets(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == ${X}_RESULT_SUCCESS)
                for (rasIndex = 0 .. numRasErrorSets)
-                   ${s}_ras_properties_t props
+                   ${s}_ras_properties_t props {};
+                   props.stype = ${S}_STRUCTURE_TYPE_RAS_PROPERTIES;
                    if (${s}RasGetProperties(phRasErrorSets[rasIndex], &props) == ${X}_RESULT_SUCCESS)
                        var pErrorType
                        switch (props.type)
@@ -2146,7 +2154,8 @@ tests in each:
                for (suiteIndex = 0 .. numTestSuites-1)
                    uint32_t numTests = 0
                    ${s}_diag_test_t* pTests
-                   ${s}_diag_properties_t suiteProps
+                   ${s}_diag_properties_t suiteProps {};
+                   suiteProps.stype = ${S}_STRUCTURE_TYPE_DIAG_PROPERTIES;
                    if (${s}DiagnosticsGetProperties(phTestSuites[suiteIndex], &suiteProps) != ${X}_RESULT_SUCCESS)
                        next_loop(suiteIndex)
                    output("Diagnostic test suite %s:", suiteProps.name)

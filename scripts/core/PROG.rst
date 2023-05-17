@@ -728,6 +728,8 @@ The following pseudo-code demonstrates a basic sequence for discovery of command
 
     ${x}_command_queue_group_properties_t* cmdqueueGroupProperties = (${x}_command_queue_group_properties_t*)
         allocate(cmdqueueGroupCount * sizeof(${x}_command_queue_group_properties_t));
+    cmdqueueGroupProperties[ i ].stype = ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES;
+    cmdqueueGroupProperties[ i ].pNext = nullptr;
     ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, cmdqueueGroupProperties);
 
 
@@ -1891,6 +1893,8 @@ The following pseudo-code demonstrates interoperability with OpenCL *from* a Ope
         clGetProgramInfo(cl_program, CL_PROGRAM_BINARIES, clDeviceBinary, &clDeviceBinarySize);
 
         ${x}_module_desc_t desc = {
+            ${X}_STRUCTURE_TYPE_MODULE_DESC,
+            nullptr,
             ${X}_MODULE_FORMAT_NATIVE,
             clDeviceBinarySize,
             clDeviceBinary

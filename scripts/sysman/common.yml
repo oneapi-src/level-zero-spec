@@ -206,7 +206,7 @@ members:
       desc: "[in] type of this structure"
     - type: "void*"
       name: pNext
-      desc: "[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      desc: "[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: struct
@@ -218,7 +218,7 @@ members:
       desc: "[in] type of this structure"
     - type: "const void*"
       name: pNext
-      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: struct
@@ -230,7 +230,7 @@ members:
       desc: "[in] type of this structure"
     - type: "const void*"
       name: pNext
-      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: struct
@@ -242,7 +242,7 @@ members:
       desc: "[in] type of this structure"
     - type: "const void*"
       name: pNext
-      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
       init: nullptr
 --- #--------------------------------------------------------------------------
 type: struct
@@ -254,5 +254,5 @@ members:
       desc: "[in] type of this structure"
     - type: "const void*"
       name: pNext
-      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
       init: nullptr

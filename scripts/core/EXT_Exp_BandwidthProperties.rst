@@ -92,9 +92,9 @@ The following pseudo-code demonstrates a sequence for obtaining the copy bandwid
     ${x}_copy_bandwidth_exp_properties_t* cmdqueueGroupBandwidth = (${x}_copy_bandwidth_exp_properties_t*)
             allocate(cmdqueueGroupCount * sizeof(${x}_copy_bandwidth_exp_properties_t));
     for( uint32_t i = 0; i < cmdqueueGroupCount; ++i ) {
-        cmdqueueGroupProperties[i].stype = ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES;
+        cmdqueueGroupProperties[i].stype = ${X}_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES;
         cmdqueueGroupProperties[i].pNext = &cmdqueueGroupBandwidth[i];
-        cmdqueueGroupBandwidth[i].stype = ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXT_PROPERTIES;
+        cmdqueueGroupBandwidth[i].stype = ${X}_STRUCTURE_TYPE_COPY_BANDWIDTH_EXP_PROPERTIES;
         cmdqueueGroupBandwidth[i].pNext = nullptr;
     }
     ${x}DeviceGetCommandQueueGroupProperties(hDevice, &cmdqueueGroupCount, cmdqueueGroupProperties);
