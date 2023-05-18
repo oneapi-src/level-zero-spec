@@ -61,7 +61,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Extension properties related Engine group properties"
+desc: "Extension properties related to Engine Groups"
 version: "1.7"
 class: $sEngine
 name: $s_engine_ext_properties_t
@@ -69,10 +69,9 @@ base: $s_base_properties_t
 members:
     - type: uint32_t
       name: "countOfVirtualFunctionInstance"
-      desc: "[out] Number of VirtualFunction(VF) interface associated with engine to monitor the global utilization of HW across all VF's from a Physical Function (PF) interface. These global and VF-by-VF views should provide engine group and individual engine level granularity."
+      desc: "[out] Number of Virtual Function(VF) instances associated with engine to monitor the global utilization of hardware across all Virtual Function from a Physical Function (PF) instance. These global and VF-by-VF views should provide engine group and individual engine level granularity."
 details:
     - "This structure may be returned from $sEngineGetProperties via the `pNext` member of $s_engine_properties_t."
-    - "This structure may also be returned from $sEngineGetProperties via the `pNext` member of $s_engine_ext_properties_t"
     - "Used for SRIOV per Virtual Function device utilization by $s_engine_group_t"
 --- #--------------------------------------------------------------------------
 
@@ -133,10 +132,11 @@ params:
       desc: "[in,out] The properties for the specified engine group."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the activity stats for an engine group. This function also returns the engine activity inside a Virtual Machine (VM), in the presence of HW Virtualization (SRIOV)"
+desc: "Get the activity stats for an engine group."
 class: $sEngine
 name: GetActivity
 details:
+    - "This function also returns the engine activity inside a Virtual Machine (VM), in the presence of hardware virtualization (SRIOV)"
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -160,10 +160,15 @@ params:
       desc: "[in] Handle for the component."
     - type: uint32_t*
       name: pCount
-      desc: "[in,out] Pointer to the number of engine stats descriptors. The driver shall update the value with the total number of components of this type as provided in the count."
+      desc: |
+            [in,out] Pointer to the number of engine stats descriptors.
+              - if count is zero, the driver shall update the value with the total number of components of this type.
+              - if count is greater than the total number of components available, the driver shall update the value with the correct number of components available.
     - type: $s_engine_stats_t*
       name: pStats
-      desc: "[in,out] Will contain a snapshot of the engine group activity counters."
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of engine group activity counters.
+              - if count is less than the total number of components available, the driver shall only retrieve that number of components.
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device engine group"

@@ -137,7 +137,7 @@ class: $sMemory
 name: $s_mem_bandwidth_t
 details:
     - "Percent bandwidth is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) + (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
-    - "Counter is a 32 bit or 64 bit depends on the platform and rolls over when the count reaches 2^32 or 2^64. Rollover needs to be handled by comparing the current read against the previous read"
+    - "Counter may be 32 bit or 64 bit depends on the platform and rolls over when the count reaches 2^32 or 2^64. Rollover needs to be handled by comparing the current read against the previous read"
     - "Counter is a 32 byte transaction count, which means the calculated delta (delta = current_value - previous_value or delta = 2^32 - previous_value + current_value in case of rollover) needs to be multiplied by 32 to get delta between samples in actual byte count"
     - "To calculate the bandwidth, take the delta in bytes and divide it by the elapsed time between the two samples"
 
