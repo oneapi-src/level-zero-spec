@@ -45,7 +45,7 @@ value: "64"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum device universal unique id (UUID) size in bytes."
-name: $S_MAX_DEVICE_UUID_SIZE
+name: $S_MAX_UUID_SIZE
 value: "16"
 --- #--------------------------------------------------------------------------
 type: enum
@@ -127,7 +127,7 @@ members:
       desc: |
             [in] If set to true, all applications that are currently using the device will be forcibly killed.
     - type: $s_reset_type_t
-      name: reset_type
+      name: resetType
       desc: "[in] Type of reset needs to be performed"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -135,10 +135,9 @@ desc: "Device universal unique id (UUID)"
 version: "1.7"
 class: $sDevice
 name: $s_uuid_t
-base: $s_base_properties_t
 members:
    - type: uint8_t
-     name: "id[$S_MAX_DEVICE_UUID_SIZE]"
+     name: "id[$S_MAX_UUID_SIZE]"
      desc: "[out] opaque data representing a device UUID"
 
 --- #--------------------------------------------------------------------------
@@ -245,7 +244,7 @@ class: $sDevice
 name: ResetExt
 details:
     - "Performs a PCI bus reset of the device. This will result in all current device state being lost."
-    - "All applications using the device should be stopped before calling this function."
+    - "Prior to calling this function, user is responsible for closing applications using the device unless force argument is specified."
     - "If the force argument is specified, all applications using the device will be forcibly killed."
     - "The function will block until the device has restarted or a timeout occurred waiting for the reset to complete."
 params:
@@ -258,9 +257,9 @@ params:
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
-    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
         - "Reset cannot be performed because applications are using this device."
-    - $X_RESULT_ERROR_UNKNOWN
+    - $X_RESULT_ERROR_UNKNOWN:
         - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
 
 --- #--------------------------------------------------------------------------
