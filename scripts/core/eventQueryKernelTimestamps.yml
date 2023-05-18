@@ -46,7 +46,7 @@ members:
       name: flags
       desc: "[out] 0 or some combination of $x_event_query_kernel_timestamps_ext_flag_t flags"
 details:
-    - "This structure may be returned from $xDeviceGetProperties, via `pNext` member of $x_device_properties_t."
+    - "This structure may be returned from $xDeviceGetProperties, via the `pNext` member of $x_device_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel timestamp clock data synchronized to the host time domain"

@@ -145,7 +145,7 @@ returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "This LED doesn't not support color changes. See $s_led_properties_t.haveRGB."
+        - "This LED doesn't not support color changes. See the `haveRGB` member of $s_led_properties_t."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device LED"

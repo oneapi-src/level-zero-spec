@@ -129,7 +129,7 @@ members:
       desc: "[out] The free memory in bytes"
     - type: uint64_t
       name: size
-      desc: "[out] The total allocatable memory in bytes (can be less than $s_mem_properties_t.physicalSize)"
+      desc: "[out] The total allocatable memory in bytes (can be less than the `physicalSize` member of $s_mem_properties_t)"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory bandwidth"

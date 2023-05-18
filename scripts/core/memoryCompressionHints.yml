@@ -50,6 +50,6 @@ members:
             Must be set to one of the $x_memory_compression_hints_ext_flag_t;
       init: "0"
 details:
-    - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t."
-    - "This structure may be passed to $xMemAllocHost, via `pNext` member of $x_host_mem_alloc_desc_t."
-    - "This structure may be passed to $xImageCreate, via `pNext` member of $x_image_desc_t."
+    - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t."
+    - "This structure may be passed to $xMemAllocHost, via the `pNext` member of $x_host_mem_alloc_desc_t."
+    - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t."

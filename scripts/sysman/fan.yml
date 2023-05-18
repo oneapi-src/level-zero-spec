@@ -204,7 +204,7 @@ returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Fixing the fan speed not supported by the hardware or the fan speed units are not supported. See $s_fan_properties_t.supportedModes and $s_fan_properties_t.supportedUnits."
+        - "Fixing the fan speed not supported by the hardware or the fan speed units are not supported. See the `supportedModes` and `supportedUnits` members of $s_fan_properties_t."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Configure the fan to adjust speed based on a temperature/speed table (set mode to $S_FAN_SPEED_MODE_TABLE)"
@@ -226,7 +226,7 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "The temperature/speed pairs in the array are not sorted on temperature from lowest to highest."
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Fan speed table not supported by the hardware or the fan speed units are not supported. See $s_fan_properties_t.supportedModes and $s_fan_properties_t.supportedUnits."
+        - "Fan speed table not supported by the hardware or the fan speed units are not supported. See the `supportedModes` and `supportedUnits` members of $s_fan_properties_t."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get current state of a fan - current mode and speed"
@@ -247,7 +247,7 @@ params:
       desc: "[in,out] Will contain the current speed of the fan in the units requested. A value of -1 indicates that the fan speed cannot be measured."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "The requested fan speed units are not supported. See $s_fan_properties_t.supportedUnits."
+        - "The requested fan speed units are not supported. See the `supportedUnits` member of $s_fan_properties_t."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device fan"

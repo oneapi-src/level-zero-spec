@@ -40,5 +40,5 @@ members:
             version than older devices.
 
 details:
-    - "This structure may be returned from $xDeviceGetProperties via `pNext` member of $x_device_properties_t"
+    - "This structure may be returned from $xDeviceGetProperties via the `pNext` member of $x_device_properties_t"
   

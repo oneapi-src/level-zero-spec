@@ -39,7 +39,7 @@ members:
       name: timestampValidBits
       desc: "[out] Returns the number of valid bits in the timestamp value."
 details:
-    - "This structure may be returned from $tMetricGroupGetProperties via `pNext` member of $t_metric_group_properties_t"
+    - "This structure may be returned from $tMetricGroupGetProperties via the `pNext` member of $t_metric_group_properties_t."
     - "Used for mapping metric timestamps to other timers."
 --- #--------------------------------------------------------------------------
 type: function

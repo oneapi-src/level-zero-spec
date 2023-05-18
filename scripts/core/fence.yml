@@ -92,7 +92,7 @@ params:
       desc: |
             [in] if non-zero, then indicates the maximum time (in nanoseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then operates exactly like $xFenceQueryStatus;
-            if UINT64_MAX, then function will not return until complete or device is lost.
+            if `UINT64_MAX`, then function will not return until complete or device is lost.
             Due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies.
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT

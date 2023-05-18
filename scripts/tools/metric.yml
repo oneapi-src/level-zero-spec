@@ -364,7 +364,7 @@ params:
       name: maxReportCount
       desc: |
             [in] the maximum number of reports the application wants to receive.
-            if UINT32_MAX, then function will retrieve all reports available
+            if `UINT32_MAX`, then function will retrieve all reports available
     - type: size_t*
       name: pRawDataSize
       desc: |
@@ -376,7 +376,7 @@ params:
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing streamer reports in raw format"
 returns:
-    - $X_RESULT_WARNING_DROPPED_DATA
+    - $X_RESULT_WARNING_DROPPED_DATA:
         - "Metric streamer data may have been dropped. Reduce sampling period."
 --- #--------------------------------------------------------------------------
 type: enum

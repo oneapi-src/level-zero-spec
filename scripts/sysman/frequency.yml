@@ -336,7 +336,7 @@ params:
       desc: "[in] Handle for the component."
     - type: $s_oc_capabilities_t*
       name: pOcCapabilities
-      desc: "[in,out] Pointer to the capabilities structure $s_oc_capabilities_t."
+      desc: "[in,out] Pointer to the capabilities structure."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current overclocking frequency target, if extended moded is supported, will returned in 1 Mhz granularity."
@@ -351,14 +351,14 @@ params:
       desc: "[in] Handle for the component."
     - type: double*
       name: pCurrentOcFrequency
-      desc: "[out] Overclocking Frequency in MHz, if extended moded is supported, will returned in 1 Mhz granularity, else, in multiples of 50 Mhz. This cannot be greater than $s_oc_capabilities_t.maxOcFrequency."
+      desc: "[out] Overclocking Frequency in MHz, if extended moded is supported, will returned in 1 Mhz granularity, else, in multiples of 50 Mhz. This cannot be greater than the `maxOcFrequency` member of $s_oc_capabilities_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
-        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see the `maxOcFrequency`, `maxOcVoltage`, `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t)."
+        - "Requested voltage overclock is very high but the `isHighVoltModeEnabled` member of $s_oc_capabilities_t is not enabled for the device."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
@@ -375,14 +375,14 @@ params:
       desc: "[in] Handle for the component."
     - type: double
       name: CurrentOcFrequency
-      desc: "[in] Overclocking Frequency in MHz, if extended moded is supported, it could be set in 1 Mhz granularity, else, in multiples of 50 Mhz. This cannot be greater than $s_oc_capabilities_t.maxOcFrequency."
+      desc: "[in] Overclocking Frequency in MHz, if extended moded is supported, it could be set in 1 Mhz granularity, else, in multiples of 50 Mhz. This cannot be greater than the `maxOcFrequency` member of $s_oc_capabilities_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
-        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see the `maxOcFrequency`, `maxOcVoltage`, `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t)."
+        - "Requested voltage overclock is very high but the `isHighVoltModeEnabled` member of $s_oc_capabilities_t is not enabled for the device."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."      
 --- #--------------------------------------------------------------------------
@@ -399,17 +399,17 @@ params:
       desc: "[in] Handle for the component."
     - type: double*
       name: pCurrentVoltageTarget
-      desc: "[out] Overclock voltage in Volts. This cannot be greater than $s_oc_capabilities_t.maxOcVoltage."
+      desc: "[out] Overclock voltage in Volts. This cannot be greater than the `maxOcVoltage` member of $s_oc_capabilities_t."
     - type: double*
       name: pCurrentVoltageOffset
-      desc: "[out] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+      desc: "[out] This voltage offset is applied to all points on the voltage/frequency curve, including the new overclock voltageTarget. Valid range is between the `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
-        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see the `maxOcFrequency`, `maxOcVoltage`, `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t)."
+        - "Requested voltage overclock is very high but the `isHighVoltModeEnabled` member of $s_oc_capabilities_t is not enabled for the device."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."      
 --- #--------------------------------------------------------------------------
@@ -426,17 +426,17 @@ params:
       desc: "[in] Handle for the component."
     - type: double
       name: CurrentVoltageTarget
-      desc: "[in] Overclock voltage in Volts. This cannot be greater than $s_oc_capabilities_t.maxOcVoltage."
+      desc: "[in] Overclock voltage in Volts. This cannot be greater than the `maxOcVoltage` member of $s_oc_capabilities_t."
     - type: double
       name: CurrentVoltageOffset
-      desc: "[in] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. It can be in the range ($s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
+      desc: "[in] This voltage offset is applied to all points on the voltage/frequency curve, include the new overclock voltageTarget. Valid range is between the `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
-        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see the `maxOcFrequency`, `maxOcVoltage`, `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t)."
+        - "Requested voltage overclock is very high but the `isHighVoltModeEnabled` member of $s_oc_capabilities_t is not enabled for the device."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."      
 --- #--------------------------------------------------------------------------
@@ -456,11 +456,11 @@ params:
       desc: "[in] Current Overclocking Mode $s_oc_mode_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
-        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see the `maxOcFrequency`, `maxOcVoltage`, `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t)."
+        - "Requested voltage overclock is very high but the `isHighVoltModeEnabled` member of $s_oc_capabilities_t is not enabled for the device."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."       
 --- #--------------------------------------------------------------------------
@@ -480,11 +480,11 @@ params:
       desc: "[out] Current Overclocking Mode $s_oc_mode_t."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see $s_oc_capabilities_t.maxOcFrequency, $s_oc_capabilities_t.maxOcVoltage, $s_oc_capabilities_t.minOcVoltageOffset, $s_oc_capabilities_t.maxOcVoltageOffset)."
-        - "Requested voltage overclock is very high but $s_oc_capabilities_t.isHighVoltModeEnabled is not enabled for the device."
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The specified voltage and/or frequency overclock settings exceed the hardware values (see the `maxOcFrequency`, `maxOcVoltage`, `minOcVoltageOffset` and `maxOcVoltageOffset` members of $s_oc_capabilities_t)."
+        - "Requested voltage overclock is very high but the `isHighVoltModeEnabled` member of $s_oc_capabilities_t is not enabled for the device."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."      
 --- #--------------------------------------------------------------------------
@@ -504,8 +504,8 @@ params:
       desc: "[in,out] Will contain the maximum current limit in Amperes on successful return."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "Capability $s_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "Capability the `isIccMaxSupported` member of $s_oc_capabilities_t is false for this frequency domain."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change the maximum current limit setting."
@@ -524,12 +524,12 @@ params:
       desc: "[in] The new maximum current limit in Amperes."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "Capability $s_oc_capabilities_t.isIccMaxSupported is false for this frequency domain"
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The `isIccMaxSupported` member of $s_oc_capabilities_t is false for this frequency domain."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "The specified current limit is too low or too high"
+        - "The specified current limit is too low or too high."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------
@@ -549,7 +549,7 @@ params:
       desc: "[in,out] Will contain the maximum temperature limit in degrees Celsius on successful return."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Change the maximum temperature limit setting."
@@ -568,12 +568,12 @@ params:
       desc: "[in] The new maximum temperature limit in degrees Celsius."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Overclocking is not supported on this frequency domain ($s_oc_capabilities_t.isOcSupported)"
-        - "Capability $s_oc_capabilities_t.isTjMaxSupported is false for this frequency domain"
+        - "Overclocking is not supported on this frequency domain (see the `isOcSupported` member of $s_oc_capabilities_t)."
+        - "The `isTjMaxSupported` member of $s_oc_capabilities_t is false for this frequency domain."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
-        - "Overclocking feature is locked on this frequency domain"
+        - "Overclocking feature is locked on this frequency domain."
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "The specified temperature limit is too high"
+        - "The specified temperature limit is too high."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to make these modifications."
 --- #--------------------------------------------------------------------------

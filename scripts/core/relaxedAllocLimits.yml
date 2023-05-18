@@ -32,7 +32,7 @@ class: $xMem
 name: $x_relaxed_allocation_limits_exp_flags_t
 etors:
     - name: MAX_SIZE
-      desc: "Allocation size may exceed $x_device_properties_t.maxMemAllocSize"
+      desc: "Allocation size may exceed the `maxMemAllocSize` member of $x_device_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Relaxed limits memory allocation descriptor"
@@ -48,5 +48,5 @@ members:
             must be 0 (default) or a valid combination of $x_relaxed_allocation_limits_exp_flag_t;
       init: "0"
 details:
-    - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t."
-    - "This structure may also be passed to $xMemAllocHost, via `pNext` member of $x_host_mem_alloc_desc_t."
+    - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t."
+    - "This structure may also be passed to $xMemAllocHost, via the `pNext` member of $x_host_mem_alloc_desc_t."

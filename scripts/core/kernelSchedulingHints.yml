@@ -51,7 +51,7 @@ members:
             [out] Supported kernel scheduling hints.
             May be 0 (none) or a valid combination of $x_scheduling_hint_exp_flag_t.
 details:
-    - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
+    - "This structure may be returned from $xDeviceGetModuleProperties, via the `pNext` member of $x_device_module_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel scheduling hint descriptor"

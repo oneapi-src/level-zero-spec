@@ -57,4 +57,4 @@ members:
             [in,out][optional][range(0, *pCount)] array of properties for sub-allocations.
             if count is less than the number of sub-allocations available, then driver shall only retrieve properties for that number of sub-allocations.
 details:
-    - "This structure may be passed to $xMemGetAllocProperties, via `pNext` member of $x_memory_allocation_properties_t."
+    - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t."

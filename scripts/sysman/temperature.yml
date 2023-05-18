@@ -141,8 +141,8 @@ params:
       desc: "[in,out] Returns current configuration."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL"
-        - "One or both of the thresholds is not supported - check $s_temp_properties_t.isThreshold1Supported and $s_temp_properties_t.isThreshold2Supported"
+        - "Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL."
+        - "One or both of the thresholds is not supported. Check the `isThreshold1Supported` and `isThreshold2Supported` members of $s_temp_properties_t."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
@@ -165,9 +165,9 @@ params:
       desc: "[in] New configuration."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL"
-        - "Enabling the critical temperature event is not supported - check $s_temp_properties_t.isCriticalTempSupported"
-        - "One or both of the thresholds is not supported - check $s_temp_properties_t.isThreshold1Supported and $s_temp_properties_t.isThreshold2Supported"
+        - "Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor $S_TEMP_SENSORS_GLOBAL."
+        - "Enabling the critical temperature event is not supported. Check the `isCriticalTempSupported` member of $s_temp_properties_t."
+        - "One or both of the thresholds is not supported. Check the `isThreshold1Supported` and `isThreshold2Supported` members of $s_temp_properties_t."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_NOT_AVAILABLE:

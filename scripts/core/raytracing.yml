@@ -51,7 +51,7 @@ members:
       name: maxBVHLevels
       desc: "[out] Maximum number of BVH levels supported"
 details:
-    - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
+    - "This structure may be returned from $xDeviceGetModuleProperties, via the `pNext` member of $x_device_module_properties_t."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported raytracing memory allocation flags"
@@ -77,4 +77,4 @@ members:
             default behavior may use implicit driver-based heuristics.
       init: "0"
 details:
-    - "This structure must be passed to $xMemAllocShared or $xMemAllocDevice, via `pNext` member of $x_device_mem_alloc_desc_t, for any memory allocation that is to be accessed by raytracing fixed-function of the device."
+    - "This structure must be passed to $xMemAllocShared or $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, for any memory allocation that is to be accessed by raytracing fixed-function of the device."

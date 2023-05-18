@@ -84,7 +84,7 @@ class: $sDevice
 name: EnumSchedulers
 details:
     - "Each scheduler component manages the distribution of work across one or more accelerator engines."
-    - "If an application wishes to change the scheduler behavior for all accelerator engines of a specific type (e.g. compute), it should select all the handles where the structure member $s_sched_properties_t.engines contains that type."
+    - "If an application wishes to change the scheduler behavior for all accelerator engines of a specific type (e.g. compute), it should select all the handles where the `engines` member $s_sched_properties_t contains that type."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
