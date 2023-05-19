@@ -179,9 +179,9 @@ params:
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."
-    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
         - "Reset cannot be performed because applications are using this device."
-    - $X_RESULT_ERROR_UNKNOWN
+    - $X_RESULT_ERROR_UNKNOWN:
         - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
 
 --- #--------------------------------------------------------------------------
@@ -281,13 +281,13 @@ members:
       desc: "[out] Fastest port configuration supported by the device (sum of all lanes)"
     - type: $x_bool_t
       name: "haveBandwidthCounters"
-      desc: "[out] Indicates if $s_pci_stats_t.rxCounter and $s_pci_stats_t.txCounter will have valid values"
+      desc: "[out] Indicates whether the `rxCounter` and `txCounter` members of $s_pci_stats_t will have valid values"
     - type: $x_bool_t
       name: "havePacketCounters"
-      desc: "[out] Indicates if $s_pci_stats_t.packetCounter will have valid values"
+      desc: "[out] Indicates whether the `packetCounter` member of $s_pci_stats_t will have a valid value"
     - type: $x_bool_t
       name: "haveReplayCounters"
-      desc: "[out] Indicates if $s_pci_stats_t.replayCounter will have valid values"
+      desc: "[out] Indicates whether the `replayCounter` member of $s_pci_stats_t will have a valid value"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link status"
@@ -422,16 +422,16 @@ members:
             The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
     - type: uint64_t
       name: "replayCounter"
-      desc: "[out] Monotonic counter for the number of replay packets (sum of all lanes). Will always be 0 if $s_pci_properties_t.haveReplayCounters is FALSE."
+      desc: "[out] Monotonic counter for the number of replay packets (sum of all lanes). Will always be 0 when the `haveReplayCounters` member of $s_pci_properties_t is FALSE."
     - type: uint64_t
       name: "packetCounter"
-      desc: "[out] Monotonic counter for the number of packets (sum of all lanes). Will always be 0 if $s_pci_properties_t.havePacketCounters is FALSE."
+      desc: "[out] Monotonic counter for the number of packets (sum of all lanes). Will always be 0 when the `havePacketCounters` member of $s_pci_properties_t is FALSE."
     - type: uint64_t
       name: "rxCounter"
-      desc: "[out] Monotonic counter for the number of bytes received (sum of all lanes). Will always be 0 if $s_pci_properties_t.haveBandwidthCounters is FALSE."
+      desc: "[out] Monotonic counter for the number of bytes received (sum of all lanes). Will always be 0 when the `haveBandwidthCounters` member of $s_pci_properties_t is FALSE."
     - type: uint64_t
       name: "txCounter"
-      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays) (sum of all lanes). Will always be 0 if $s_pci_properties_t.haveBandwidthCounters is FALSE."
+      desc: "[out] Monotonic counter for the number of bytes transmitted (including replays) (sum of all lanes). Will always be 0 when the `haveBandwidthCounters` member of $s_pci_properties_t is FALSE."
     - type: $s_pci_speed_t
       name: "speed"
       desc: "[out] The current speed of the link (sum of all lanes)"

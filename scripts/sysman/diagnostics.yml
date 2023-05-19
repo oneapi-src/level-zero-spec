@@ -104,11 +104,11 @@ params:
       desc: "[in,out] Structure describing the properties of a diagnostics test suite"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get individual tests that can be run separately. Not all test suites permit running individual tests - check $s_diag_properties_t.haveTests"
+desc: "Get individual tests that can be run separately. Not all test suites permit running individual tests, check the `haveTests` member of $s_diag_properties_t."
 class: $sDiagnostics
 name: GetTests
 details:
-    - "The list of available tests is returned in order of increasing test index $s_diag_test_t.index."
+    - "The list of available tests is returned in order of increasing test index (see the `index` member of $s_diag_test_t)."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -124,7 +124,7 @@ params:
     - type: "$s_diag_test_t*"
       name: pTests
       desc: |
-            [in,out][optional][range(0, *pCount)] array of information about individual tests sorted by increasing value of $s_diag_test_t.index.
+            [in,out][optional][range(0, *pCount)] array of information about individual tests sorted by increasing value of the `index` member of $s_diag_test_t.
             if count is less than the number of tests that are available, then the driver shall only retrieve that number of tests.
 --- #--------------------------------------------------------------------------
 type: function
@@ -134,7 +134,7 @@ name: RunTests
 details:
     - "WARNING: Running diagnostics may destroy current device state information. Gracefully close any running workloads before initiating."
     - "To run all tests in a test suite, set start = $S_DIAG_FIRST_TEST_INDEX and end = $S_DIAG_LAST_TEST_INDEX."
-    - "If the test suite permits running individual tests, $s_diag_properties_t.haveTests will be true. In this case, the function $sDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
+    - "If the test suite permits running individual tests, the `haveTests` member of $s_diag_properties_t will be true. In this case, the function $sDiagnosticsGetTests() can be called to get the list of tests and corresponding indices that can be supplied to the arguments start and end in this function."
     - "This function will block until the diagnostics have completed and force reset based on result"
 params:
     - type: $s_diag_handle_t

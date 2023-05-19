@@ -235,7 +235,7 @@ params:
       name: size
       desc: "[in] size in bytes to unmap; must be page aligned."
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Address must be page aligned"
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == size`"
@@ -264,7 +264,7 @@ params:
       name: access
       desc: "[in] specifies page access attributes to apply to the virtual address range."
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Address must be page aligned"
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == size`"
@@ -297,7 +297,7 @@ params:
       name: outSize
       desc: "[out] query result for size of virtual address range, starting at ptr, that shares same access attribute."
 returns:
-    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
+    - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT:
         - "Address must be page aligned"
     - $X_RESULT_ERROR_UNSUPPORTED_SIZE:
         - "`0 == size`"

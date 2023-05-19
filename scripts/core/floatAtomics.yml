@@ -62,4 +62,4 @@ members:
       name: fp64Flags
       desc: "[out] Capabilities for double-precision floating-point atomic operations"
 details:
-    - "This structure may be returned from $xDeviceGetModuleProperties, via `pNext` member of $x_device_module_properties_t."
+    - "This structure may be returned from $xDeviceGetModuleProperties, via the `pNext` member of $x_device_module_properties_t."

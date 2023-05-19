@@ -315,7 +315,7 @@ params:
       desc: "[in,out] Returns information about the energy threshold setting - enabled/energy threshold/process ID."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Energy threshold not supported on this power domain (check $s_power_properties_t.isEnergyThresholdSupported)."
+        - "Energy threshold not supported on this power domain (check the `isEnergyThresholdSupported` member of $s_power_properties_t)."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
@@ -339,7 +339,7 @@ params:
       desc: "[in] The energy threshold to be set in joules."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "Energy threshold not supported on this power domain (check $s_power_properties_t.isEnergyThresholdSupported)."
+        - "Energy threshold not supported on this power domain (check the `isEnergyThresholdSupported` member of $s_power_properties_t)."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_NOT_AVAILABLE:

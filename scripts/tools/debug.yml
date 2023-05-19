@@ -240,7 +240,7 @@ params:
       desc: |
             [in] if non-zero, then indicates the maximum time (in milliseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then immediately returns the status of the event;
-            if UINT64_MAX, then function will not return until complete or device is lost.
+            if `UINT64_MAX`, then function will not return until complete or device is lost.
             Due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies.
     - type: "$t_debug_event_t*"
       name: event
@@ -474,10 +474,10 @@ params:
       desc: "[in] register set type"
     - type: uint32_t
       name: start
-      desc: "[in] the starting offset into the register state area; must be less than $t_debug_regset_properties_t.count for the type"
+      desc: "[in] the starting offset into the register state area; must be less than the `count` member of $t_debug_regset_properties_t for the type"
     - type: uint32_t
       name: count
-      desc: "[in] the number of registers to read; start+count must be <= zet_debug_register_group_properties_t.count for the type"
+      desc: "[in] the number of registers to read; start+count must be less than or equal to the `count` member of $t_debug_register_group_properties_t for the type"
     - type: "void*"
       name: pRegisterValues
       desc: "[in,out][optional][range(0, count)] buffer of register values"
@@ -501,10 +501,10 @@ params:
       desc: "[in] register set type"
     - type: uint32_t
       name: start
-      desc: "[in] the starting offset into the register state area; must be less than $t_debug_regset_properties_t.count for the type"
+      desc: "[in] the starting offset into the register state area; must be less than the `count` member of $t_debug_regset_properties_t for the type"
     - type: uint32_t
       name: count
-      desc: "[in] the number of registers to write; start+count must be <= zet_debug_register_group_properties_t.count for the type"
+      desc: "[in] the number of registers to write; start+count must be less than or equal to the `count` member of $t_debug_register_group_properties_t for the type"
     - type: "void*"
       name: pRegisterValues
       desc: "[in,out][optional][range(0, count)] buffer of register values"

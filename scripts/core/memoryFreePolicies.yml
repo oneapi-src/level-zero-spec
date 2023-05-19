@@ -50,7 +50,7 @@ members:
             must be 0 or a combination of $x_driver_memory_free_policy_ext_flag_t.
 details:
     - "All drivers must support an immediate free policy, which is the default free policy."
-    - "This structure may be returned from $xDriverGetProperties, via `pNext` member of $x_driver_properties_t."
+    - "This structure may be returned from $xDriverGetProperties, via the `pNext` member of $x_driver_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory free descriptor with free policy"

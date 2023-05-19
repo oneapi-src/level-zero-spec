@@ -61,7 +61,7 @@ def _find_enum_from_etor(etor, meta):
 """
     make restructedtext reference from symbol.
 """
-def _make_ref(symbol, symbol_type, meta):
+def _make_ref(fin, iline, symbol, symbol_type, meta):
     if not re.match(r"function|struct|union|enum|etor", symbol_type):
         return ""
 
@@ -134,7 +134,7 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                             print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['params'])))
                             print("line = %s"%line)
 
-                    ref = _make_ref(symbol, symbol_type, meta)
+                    ref = _make_ref(fin, iline, symbol, symbol_type, meta)
                     if ref:
                         tuple = line.partition(word)
 

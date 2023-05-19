@@ -331,7 +331,7 @@ params:
       desc: |
             [in] if non-zero, then indicates the maximum time (in nanoseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then operates exactly like $xEventQueryStatus;
-            if UINT64_MAX, then function will not return until complete or device is lost.
+            if `UINT64_MAX`, then function will not return until complete or device is lost.
             Due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies.
 returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
@@ -399,8 +399,8 @@ desc: "Kernel timestamp clock data"
 class: $xEvent
 name: $x_kernel_timestamp_data_t
 details:
-    - "The timestamp frequency can be queried from $x_device_properties_t.timerResolution."
-    - "The number of valid bits in the timestamp value can be queried from $x_device_properties_t.kernelTimestampValidBits."
+    - "The timestamp frequency can be queried from the `timerResolution` member of $x_device_properties_t."
+    - "The number of valid bits in the timestamp value can be queried from the `kernelTimestampValidBits` member of $x_device_properties_t."
 members:
     - type: uint64_t
       name: kernelStart

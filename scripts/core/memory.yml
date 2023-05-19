@@ -100,10 +100,10 @@ params:
       desc: "[in] pointer to host memory allocation descriptor"
     - type: size_t
       name: size
-      desc: "[in] size in bytes to allocate; must be less than or equal to $x_device_properties_t.maxMemAllocSize."
+      desc: "[in] size in bytes to allocate; must be less than or equal to the `maxMemAllocSize` member of $x_device_properties_t"
     - type: size_t
       name: alignment
-      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in][optional] device handle to associate with"
@@ -137,10 +137,10 @@ params:
       desc: "[in] pointer to device memory allocation descriptor"
     - type: size_t
       name: size
-      desc: "[in] size in bytes to allocate; must be less than or equal to $x_device_properties_t.maxMemAllocSize."
+      desc: "[in] size in bytes to allocate; must be less than or equal to the `maxMemAllocSize` member of $x_device_properties_t"
     - type: size_t
       name: alignment
-      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two"
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] handle of the device"
@@ -175,10 +175,10 @@ params:
       desc: "[in] pointer to host memory allocation descriptor"
     - type: size_t
       name: size
-      desc: "[in] size in bytes to allocate; must be less than or equal to $x_device_properties_t.maxMemAllocSize."
+      desc: "[in] size in bytes to allocate; must be less than or equal to the `maxMemAllocSize` member of $x_device_properties_t"
     - type: size_t
       name: alignment
-      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two."
+      desc: "[in] minimum alignment in bytes for the allocation; must be a power of two"
     - type: "void**"
       name: pptr
       desc: "[out] pointer to host allocation"

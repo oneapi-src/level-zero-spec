@@ -218,31 +218,31 @@ members:
       name: width
       desc: |
             [in] width dimension.
-            $X_IMAGE_TYPE_BUFFER: size in bytes; see $x_device_image_properties_t.maxImageBufferSize for limits.
-            $X_IMAGE_TYPE_1D, $X_IMAGE_TYPE_1DARRAY: width in pixels; see $x_device_image_properties_t.maxImageDims1D for limits.
-            $X_IMAGE_TYPE_2D, $X_IMAGE_TYPE_2DARRAY: width in pixels; see $x_device_image_properties_t.maxImageDims2D for limits.
-            $X_IMAGE_TYPE_3D: width in pixels; see $x_device_image_properties_t.maxImageDims3D for limits.
+            $X_IMAGE_TYPE_BUFFER: size in bytes; see the `maxImageBufferSize` member of $x_device_image_properties_t for limits.
+            $X_IMAGE_TYPE_1D, $X_IMAGE_TYPE_1DARRAY: width in pixels; see the `maxImageDims1D` member of $x_device_image_properties_t for limits.
+            $X_IMAGE_TYPE_2D, $X_IMAGE_TYPE_2DARRAY: width in pixels; see the `maxImageDims2D` member of $x_device_image_properties_t for limits.
+            $X_IMAGE_TYPE_3D: width in pixels; see the `maxImageDims3D` member of $x_device_image_properties_t for limits.
       init: "0"
     - type: uint32_t
       name: height
       desc: |
             [in] height dimension.
-            $X_IMAGE_TYPE_2D, $X_IMAGE_TYPE_2DARRAY: height in pixels; see $x_device_image_properties_t.maxImageDims2D for limits.
-            $X_IMAGE_TYPE_3D: height in pixels; see $x_device_image_properties_t.maxImageDims3D for limits.
+            $X_IMAGE_TYPE_2D, $X_IMAGE_TYPE_2DARRAY: height in pixels; see the `maxImageDims2D` member of $x_device_image_properties_t for limits.
+            $X_IMAGE_TYPE_3D: height in pixels; see the `maxImageDims3D` member of $x_device_image_properties_t for limits.
             other: ignored.
       init: "0"
     - type: uint32_t
       name: depth
       desc: |
             [in] depth dimension.
-            $X_IMAGE_TYPE_3D: depth in pixels; see $x_device_image_properties_t.maxImageDims3D for limits.
+            $X_IMAGE_TYPE_3D: depth in pixels; see the `maxImageDims3D` member of $x_device_image_properties_t for limits.
             other: ignored.
       init: "0"
     - type: uint32_t
       name: arraylevels
       desc: |
             [in] array levels.
-            $X_IMAGE_TYPE_1DARRAY, $X_IMAGE_TYPE_2DARRAY: see $x_device_image_properties_t.maxImageArraySlices for limits.
+            $X_IMAGE_TYPE_1DARRAY, $X_IMAGE_TYPE_2DARRAY: see the `maxImageArraySlices` member of $x_device_image_properties_t for limits.
             other: ignored.
       init: "1"
     - type: uint32_t

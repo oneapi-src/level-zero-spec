@@ -32,11 +32,27 @@ class: $xDevice
 name: $x_cache_ext_region_t
 etors:
     - name: $X_CACHE_REGION_DEFAULT
-      desc: "utilize driver default scheme"
+      desc:
+            "1.6": "utilize driver default scheme"
+            "1.7": "[DEPRECATED] utilize driver default scheme. Use $X_CACHE_EXT_REGION_DEFAULT."
     - name: $X_CACHE_RESERVE_REGION
-      desc: "Utilize reserver region"
+      desc:
+            "1.6": "utilize reserved region"
+            "1.7": "[DEPRECATED] utilize reserved region. Use $X_CACHE_EXT_REGION_RESERVED."
     - name: $X_CACHE_NON_RESERVED_REGION
-      desc: "Utilize non-reserverd region"
+      desc:
+            "1.6": "utilize non-reserverd region"
+            "1.7": "[DEPRECATED] utilize non-reserverd region. Use $X_CACHE_EXT_REGION_NON_RESERVED."
+    - name: DEFAULT
+      desc: "utilize driver default scheme"
+      version: "1.7"
+      value: "0"
+    - name: RESERVED
+      desc: "utilize reserved region"
+      version: "1.7"
+    - name: NON_RESERVED
+      desc: "utilize non-reserverd region"
+      version: "1.7"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "CacheReservation structure"
@@ -49,7 +65,7 @@ members:
       name: maxCacheReservationSize
       desc: "[out] max cache reservation size"
 details:
-    - "This structure must be passed to $xDeviceGetCacheProperties via `pNext` member of $x_device_cache_properties_t"
+    - "This structure must be passed to $xDeviceGetCacheProperties via the `pNext` member of $x_device_cache_properties_t"
     - "Used for determining the max cache reservation allowed on device. Size of zero means no reservation available."
 --- #--------------------------------------------------------------------------
 type: function

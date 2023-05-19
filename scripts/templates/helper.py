@@ -595,7 +595,7 @@ def make_etor_lines(namespace, tags, obj, py=False, meta=None):
 
         comment_style = "##" if py else "///<"
         for line in split_line(subt(namespace, tags, item['desc'], True), 70):
-            lines.append("%s%s %s"%(append_ws(prologue, 48), comment_style, line))
+            lines.append("%s%s %s"%(append_ws(prologue, 72), comment_style, line))
             prologue = ""
 
     if not py:
@@ -678,7 +678,7 @@ def make_member_lines(namespace, tags, obj, prefix="", py=False, meta=None):
             prologue = "%s %s;"%(tname, name)
 
         comment_style = "##" if py else "///<"
-        ws_count = 64 if py else 48
+        ws_count = 64 if py else 72
         for line in split_line(subt(namespace, tags, item['desc'], True), 70):
             lines.append("%s%s %s"%(append_ws(prologue, ws_count), comment_style, line))
             prologue = ""
@@ -726,7 +726,7 @@ def make_param_lines(namespace, tags, obj, py=False, decl=False, meta=None, form
         if "desc" in format:
             desc = item['desc']
             for line in split_line(subt(namespace, tags, desc, True), 70):
-                lines.append("%s///< %s"%(append_ws(prologue, 48), line))
+                lines.append("%s///< %s"%(append_ws(prologue, 72), line))
                 prologue = ""
         else:
             lines.append(prologue)

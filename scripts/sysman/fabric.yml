@@ -64,7 +64,7 @@ class: $sFabricPort
 name: $s_fabric_port_id_t
 details:
     - "This not a universal identifier. The identified is garanteed to be unique for the current hardware configuration of the system. Changes in the hardware may result in a different identifier for a given port."
-    - "The main purpose of this identifier to build up an instantaneous topology map of system connectivity. An application should enumerate all fabric ports and match $s_fabric_port_state_t.remotePortId to $s_fabric_port_properties_t.portId."
+    - "The main purpose of this identifier to build up an instantaneous topology map of system connectivity. An application should enumerate all fabric ports and match the `remotePortId` member of $s_fabric_port_state_t to the `portId` member of $s_fabric_port_properties_t."
 members:
     - type: uint32_t
       name: "fabricId"

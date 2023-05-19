@@ -77,7 +77,7 @@ params:
       desc: |
             [in] if non-zero, then indicates the maximum time (in milliseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then will check status and return immediately;
-            if UINT32_MAX, then function will not return until events arrive.
+            if `UINT32_MAX`, then function will not return until events arrive.
     - type: uint32_t
       name: count
       desc: "[in] Number of device handles in phDevices."
@@ -117,7 +117,7 @@ params:
       desc: |
             [in] if non-zero, then indicates the maximum time (in milliseconds) to yield before returning $X_RESULT_SUCCESS or $X_RESULT_NOT_READY;
             if zero, then will check status and return immediately;
-            if UINT64_MAX, then function will not return until events arrive.
+            if `UINT64_MAX`, then function will not return until events arrive.
     - type: uint32_t
       name: count
       desc: "[in] Number of device handles in phDevices."
