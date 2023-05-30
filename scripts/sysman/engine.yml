@@ -28,6 +28,7 @@ etors:
     - name: RENDER_SINGLE
       desc: "Access information about a single render engine - this is an engine that can process both 3D content and compute kernels. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_3D_RENDER_COMPUTE_ALL for that."
     - name: MEDIA_CODEC_SINGLE
+      version: "1.7"
       desc: "Access information about a single media  engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
     - name: MEDIA_DECODE_SINGLE
       desc: "1.0": "Access information about a single media decode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
