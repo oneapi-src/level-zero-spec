@@ -333,7 +333,6 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "The memory backing the arrays for phPorts and ppThroughputs must be allocated in system memory by the user who is also responsible for releasing them when they are no longer needed."
-    - "The size of array to allocate is in numPorts"
 params:
     - type: $s_fabric_port_handle_t
       name: hPort
@@ -352,7 +351,7 @@ name: GetMultiPortThroughput
 details:
     - type: uint32_t
       name: numPorts
-      desc: "[in] Number of ports enumerated in function zesDeviceEnumFabricPorts"
+      desc: "[in] Number of ports enumerated in function $sDeviceEnumFabricPorts"
     - type: "$s_fabric_port_handle_t*"
       name: phPort
       desc: |
