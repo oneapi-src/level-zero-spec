@@ -139,8 +139,6 @@ details:
     - "Percent bandwidth is calculated by taking two snapshots (s1, s2) and using the equation: %bw = 10^6 * ((s2.readCounter - s1.readCounter) + (s2.writeCounter - s1.writeCounter)) / (s2.maxBandwidth * (s2.timestamp - s1.timestamp))"
     - "Counter can roll over and rollover needs to be handled by comparing the current read against the previous read"
     - "Counter is a 32 byte transaction count, which means the calculated delta (delta = current_value - previous_value or delta = 2^32 - previous_value + current_value in case of rollover) needs to be multiplied by 32 to get delta between samples in actual byte count"
-    - "To calculate the bandwidth, take the delta in bytes and divide it by the elapsed time between the two samples"
-
 members:
     - type: uint64_t
       name: readCounter
@@ -159,6 +157,19 @@ members:
             Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
             The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Extension properties for Memory bandwidth"
+version: "1.7"
+class: $sMemory
+name: $s_mem_ext_bandwidth_t
+details:
+    - "Number of counter bits"
+members:
+    - type: uint32_t
+      name: memoryTimestampValidBits
+      desc: "[out] Returns the number of valid bits in the timestamp values"
+--- #--------------------------------------------------------------------------
+      
 type: function
 desc: "Get handle of memory modules"
 class: $sDevice
