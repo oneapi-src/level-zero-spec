@@ -69,7 +69,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "RAS error details"
+desc: "RAS error details - Note: This structure is deprecated and replaced by $s_ras_ext_state_t"
 class: $sRas
 name: $s_ras_state_t
 base: $s_base_state_t
@@ -193,7 +193,7 @@ returns:
         - "Don't have permissions to set thresholds."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the number of RAS error category associated with the error set handle"
+desc: "Retrieve number of RAS categories associated with a RAS error handle"
 version: "1.7"
 class: $sRas
 name: EnumRasErrorCategory
