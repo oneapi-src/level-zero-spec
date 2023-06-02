@@ -1320,8 +1320,9 @@ measure the total execution time at the level of the hardware accelerator
 rather than at the level of the individual engines. For example, the API
 may enumerate multiple engine groups of type ${S}_ENGINE_GROUP_COMPUTE_SINGLE
 which will permit measuring the activity of each individual engine. However,
-to measure the overall activity of the shared compute resourses, the API
-will enumerate an engine group of type ${S}_ENGINE_GROUP_COMPUTE_ALL.
+to measure the overall activity of the shared compute resources, the API
+will enumerate an engine group of type ${S}_ENGINE_GROUP_COMPUTE_ALL. In this case,
+the activity report is for when any of the compute engines are active between two snapshots.
 
 By taking two snapshots of the activity counters, it is possible to
 calculate the average utilization of different parts of the device.
