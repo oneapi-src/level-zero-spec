@@ -189,7 +189,7 @@ type: struct
 desc: "Fabric Port Error Counters"
 class: $sFabricPort
 name: $s_fabric_port_error_counters_t
-base: $s_structure_type_t
+base: $s_base_properties_t
 version: "1.7"
 members:
     - type: uint64_t
