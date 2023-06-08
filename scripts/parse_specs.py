@@ -229,6 +229,7 @@ def _validate_doc(f, d, tags, line_num):
         valid_names = [
             "%s_base_desc_t"%namespace,
             "%s_base_properties_t"%namespace,
+            "%s_base_cb_params_t"%namespace,
             "%s_driver_extension_properties_t"%namespace
             ]
         if d['name'] not in valid_names:
@@ -237,6 +238,9 @@ def _validate_doc(f, d, tags, line_num):
 
             elif type_traits.is_properties(d['name']) and not d.get('base', "").endswith("base_properties_t"):
                 raise Exception("'base' must be '%s_base_properties_t': %s"%(namespace, d['name']))
+
+            elif type_traits.is_cb_params(d['name']) and not d.get('base', "").endswith("base_cb_params_t"):
+                raise Exception("'base' must be '%s_base_cb_params_t': %s"%(namespace, d['name']))
 
     def __validate_members(d, tags):
         if 'members' not in d:

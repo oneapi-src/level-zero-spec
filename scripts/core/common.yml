@@ -205,17 +205,24 @@ etors:
       desc: "[Core] device currently in low power state"
       version: "1.2"
     - name: EXP_ERROR_DEVICE_IS_NOT_VERTEX
-      desc: "[Core, Expoerimental] device is not represented by a fabric vertex"
+      desc: "[Core, Experimental] device is not represented by a fabric vertex"
       version: "1.4"
       value: "0x7ff00001"
     - name: EXP_ERROR_VERTEX_IS_NOT_DEVICE
       desc: "[Core, Experimental] fabric vertex does not represent a device"
       version: "1.4"
-      value: "0x7ff00002"
     - name: EXP_ERROR_REMOTE_DEVICE
-      desc: "[Core, Expoerimental] fabric vertex represents a remote device or subdevice"
+      desc: "[Core, Experimental] fabric vertex represents a remote device or subdevice"
       version: "1.4"
-      value: "0x7ff00003"
+    - name: EXP_ERROR_OPERANDS_INCOMPATIBLE
+      desc: "[Core, Experimental] operands of comparison are not compatible"
+      version: "1.7"
+    - name: EXP_RTAS_BUILD_RETRY
+      desc: "[Core, Experimental] ray tracing acceleration structure build operation failed due to insufficient resources, retry with a larger acceleration structure buffer allocation"
+      version: "1.7"
+    - name: EXP_RTAS_BUILD_DEFERRED
+      desc: "[Core, Experimental] ray tracing acceleration structure build operation deferred to parallel operation join"
+      version: "1.7"
     - name: ERROR_INSUFFICIENT_PERMISSIONS
       value: "0x70010000"
       desc: "[Sysman] access denied due to permission level"
@@ -223,8 +230,11 @@ etors:
       desc: "[Sysman] resource already in use and simultaneous access not allowed or resource was removed"
     - name: ERROR_DEPENDENCY_UNAVAILABLE
       value: "0x70020000"
-      desc: "[Tools] external required dependency is unavailable or missing"
+      desc:
+            "1.6": "[Tools] external required dependency is unavailable or missing"
+            "1.7": "[Common] external required dependency is unavailable or missing"
     - name: WARNING_DROPPED_DATA
+      value: "0x70020001"
       desc: "[Tools] data may have been dropped"
       version: "1.4"
     - name: ERROR_UNINITIALIZED
@@ -471,6 +481,30 @@ etors:
       desc: $x_memory_sub_allocations_exp_properties_t
       version: "1.5"
       value: "0x0002000D"
+    - name: RTAS_BUILDER_EXP_DESC
+      desc: $x_rtas_builder_exp_desc_t
+      version: "1.7"
+      value: "0x0002000E"
+    - name: RTAS_BUILDER_BUILD_OP_EXP_DESC
+      desc: $x_rtas_builder_build_op_exp_desc_t
+      version: "1.7"
+      value: "0x0002000F"
+    - name: RTAS_BUILDER_EXP_PROPERTIES
+      desc: $x_rtas_builder_exp_properties_t
+      version: "1.7"
+      value: "0x00020010"
+    - name: RTAS_PARALLEL_OPERATION_EXP_PROPERTIES
+      desc: $x_rtas_parallel_operation_exp_properties_t
+      version: "1.7"
+      value: "0x00020011"
+    - name: RTAS_DEVICE_EXP_PROPERTIES
+      desc: $x_rtas_device_exp_properties_t
+      version: "1.7"
+      value: "0x00020012"
+    - name: RTAS_GEOMETRY_AABBS_EXP_CB_PARAMS
+      desc: $x_rtas_geometry_aabbs_exp_cb_params_t
+      version: "1.7"
+      value: "0x00020013"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
@@ -542,6 +576,18 @@ members:
     - type: uint8_t
       name: "id[$X_MAX_UUID_SIZE]"
       desc: "[out] opaque data representing a UUID"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Base for all callback function parameter types"
+name: $x_base_cb_params_t
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+    - type: "void*"
+      name: pNext
+      desc: "[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains sType and pNext)."
+      init: nullptr
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

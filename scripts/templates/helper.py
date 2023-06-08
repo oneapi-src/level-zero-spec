@@ -91,6 +91,7 @@ class type_traits:
     RE_POINTER  = r"(.*\w+)\*+"
     RE_DESC     = r"(.*)desc_t.*"
     RE_PROPS    = r"(.*)properties_t.*"
+    RE_PARAMS   = r"(.*)cb_params_t.*"
     RE_FLAGS    = r"(.*)flags_t"
 
     @staticmethod
@@ -137,6 +138,13 @@ class type_traits:
     def is_properties(cls, name):
         try:
             return True if re.match(cls.RE_PROPS, name) else False
+        except:
+            return False
+
+    @classmethod
+    def is_cb_params(cls, name):
+        try:
+            return True if re.match(cls.RE_PARAMS, name) else False
         except:
             return False
 
@@ -385,7 +393,7 @@ class function_traits:
 
 """
 Public:
-    substitues each tag['key'] with tag['value']
+    substitutes each tag['key'] with tag['value']
     if comment, then insert doxygen '::' notation at beginning (for autogen links)
 """
 def subt(namespace, tags, string, comment=False, remove_namespace=False):
