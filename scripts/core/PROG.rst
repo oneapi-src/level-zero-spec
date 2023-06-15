@@ -798,7 +798,7 @@ Execution
 
 - Command lists submitted to a command queue are **immediately** submitted to the device for execution.
 - Submitting multiple commands lists in a single submission allows an implementation the opportunity to optimize across command lists.
-- Command queue submission is free-treaded, allowing multiple Host threads to share the same command queue.
+- Command queue submission is free-threaded, allowing multiple Host threads to share the same command queue.
 - If multiple Host threads enter the same command queue simultaneously, then execution order is undefined.
 - Command lists can only be executed on a command queue with an identical command queue group ordinal.
 - If a device contains multiple sub-devices, then command lists submitted to a device-level command queue
