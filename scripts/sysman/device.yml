@@ -139,7 +139,39 @@ members:
    - type: uint8_t
      name: "id[$S_MAX_UUID_SIZE]"
      desc: "[out] opaque data representing a device UUID"
-
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device types"
+version: "1.7"
+class: $sDevice
+name: $s_device_type_t
+etors:
+    - name: GPU
+      value: "1"
+      desc: "Graphics Processing Unit"
+    - name: CPU
+      desc: "Central Processing Unit"
+    - name: FPGA
+      desc: "Field Programmable Gate Array"
+    - name: MCA
+      desc: "Memory Copy Accelerator"
+    - name: VPU
+      desc: "Vision Processing Unit"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device property flags"
+version: "1.7"
+class: $sDevice
+name: $s_device_property_flags_t
+etors:
+    - name: INTEGRATED
+      desc: "Device is integrated with the Host."
+    - name: SUBDEVICE
+      desc: "Device handle used for query represents a sub-device."
+    - name: ECC
+      desc: "Device supports error correction memory access."
+    - name: ONDEMANDPAGING
+      desc: "Device supports on-demand page-faulting."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties"
@@ -182,6 +214,12 @@ members:
     - type: $s_uuid_t
       name: uuid
       desc: "[out] universal unique identifier. Note: uuid obtained from Sysman API is the same as from core API. Subdevices will have their own uuid."
+    - type: $s_device_type_t
+      name: type
+      desc: "[out] generic device type"
+    - type: $s_device_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $s_device_property_flag_t"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties about the device"
