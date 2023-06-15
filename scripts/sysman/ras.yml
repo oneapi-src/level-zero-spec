@@ -69,7 +69,7 @@ members:
       desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "RAS error details - Note: This structure is deprecated and replaced by $s_ras_ext_state_t"
+desc: "RAS error details"
 class: $sRas
 name: $s_ras_state_t
 base: $s_base_state_t
@@ -77,20 +77,6 @@ members:
     - type: uint64_t
       name: "category[$S_MAX_RAS_ERROR_CATEGORY_COUNT]"
       desc: "[in][out] Breakdown of error by category"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Extension properties related to RAS error details"
-version: "1.7"
-class: $sRas
-name: $s_ras_ext_state_t
-base: $s_base_state_t
-members:
-  - type: uint32_t
-    name: numCategory
-    desc: "[in] Number of error category enumerated in function $sRasEnumRasErrorCategory()"
-  - type: "uint64_t**"
-    name: pCategory
-    desc: "[out] Will contain error count breakdown by category. The memory backing the arrays for pCategory must be allocated in system memory by the user who is also responsible for releasing them when they are no longer needed."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "RAS error configuration - thresholds used for triggering RAS events ($S_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS, $S_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS)"
@@ -191,27 +177,6 @@ returns:
         - "Another running process is controlling these settings."
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "Don't have permissions to set thresholds."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Retrieve number of RAS categories associated with a RAS error handle"
-version: "1.7"
-class: $sRas
-name: EnumRasErrorCategory
-details:
-    - "A RAS error set has a varying number of RAS error category associated depends on the platform type(see $s_ras_state_t for a breakdown)"
-    - "If the function completes successfully but pCount is set to 0, RAS error category is not available on handle."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_ras_handle_t
-      name: hRas
-      desc: "[in] Handle for the component."
-    - type: "uint32_t*"
-      name: pCount
-      desc: |
-            [in,out] pointer to the number of RAS error category.
-            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
-            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the current value of RAS error counters for a particular error set"
