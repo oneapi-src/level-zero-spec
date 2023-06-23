@@ -91,6 +91,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Device reset type"
+version: "1.7"
 class: $sDevice
 name: $s_reset_type_t
 etors:
@@ -118,6 +119,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device reset properties"
+version: "1.7"
 class: $sDevice
 name: $s_reset_properties_t
 base: $s_base_properties_t
@@ -182,6 +184,7 @@ members:
     - type: $x_device_properties_t
       name: core
       desc: "[out] (Deprecated, use $s_uuid_t in the extended structure) Core device properties"
+      version: "1.7"
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices. A value of 0 indicates that this device doesn't have sub-devices."
@@ -278,6 +281,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Reset device extension"
+version: "1.7"
 class: $sDevice
 name: ResetExt
 details:

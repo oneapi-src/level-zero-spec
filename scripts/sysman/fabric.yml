@@ -346,6 +346,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get Fabric port throughput from multiple ports in a single call"
+version: "1.7"
 class: $sFabricPort
 name: GetMultiPortThroughput
 details:

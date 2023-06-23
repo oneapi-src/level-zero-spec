@@ -133,6 +133,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the activity stats for an engine group."
+version: "1.7"
 class: $sEngine
 name: GetActivity
 details:
