@@ -150,6 +150,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the activity stats for each Virtual Function (VF) associated with engine group. This function is used from a Physical Function (PF) interface when GPU is virtualized (SRIOV) into Virtual Function and Physical Function devices"
+version: "1.7"
 class: $sEngine
 name: GetActivityExt
 details:

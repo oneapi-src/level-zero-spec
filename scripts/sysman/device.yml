@@ -183,8 +183,9 @@ base: $s_base_properties_t
 members:
     - type: $x_device_properties_t
       name: core
-      desc: "[out] (Deprecated, use $s_uuid_t in the extended structure) Core device properties"
-      version: "1.7"
+      desc:
+            "1.0": "[out] Core device properties"
+            "1.7": "[out] (Deprecated, use $s_uuid_t in the extended structure) Core device properties"
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices. A value of 0 indicates that this device doesn't have sub-devices."
