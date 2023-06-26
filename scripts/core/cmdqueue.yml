@@ -143,6 +143,7 @@ details:
     - "The application must only execute command lists created with an identical command queue group ordinal to the command queue."
     - "The application must use a fence created using the same command queue."
     - "The application must ensure the command queue, command list and fence were created on the same context."
+    - "The application must ensure the command lists being executed are not immediate command lists."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
