@@ -83,6 +83,7 @@ ordinal: "0"
 details:
     - "An immediate command list is used for low-latency submission of commands."
     - "An immediate command list creates an implicit command queue."
+    - "Immediate command lists must not be passed to $xCommandQueueExecuteCommandLists."
     - "Commands appended into an immediate command list may execute synchronously, by blocking until the command is complete."
     - "The command list is created in the 'open' state and never needs to be closed."
     - "The application must only use the command list for the device, or its sub-devices, which was provided during creation."
