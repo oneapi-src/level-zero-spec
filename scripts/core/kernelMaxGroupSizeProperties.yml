@@ -37,3 +37,9 @@ members:
       desc: "[out] maximum group size that can be used to execute the kernel. This value may be less than or equal to the `maxTotalGroupSize` member of $x_device_compute_properties_t."
 details:
     - "This structure may be passed to $xKernelGetProperties, via the `pNext` member of $x_kernel_properties_t, to query additional kernel max group size properties."
+--- #--------------------------------------------------------------------------
+type: typedef
+desc: "compiler-independent type"
+name: $x_kernel_max_group_size_ext_properties_t
+version: "1.7"
+value: $x_kernel_max_group_size_properties_ext_t
