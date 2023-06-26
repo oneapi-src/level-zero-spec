@@ -199,6 +199,18 @@ etors:
     - name: FABRIC_PORT_ERROR_COUNTERS
       desc: $s_fabric_port_error_counters_t
       version: "1.7"      
+    - name: ENGINE_EXT_PROPERTIES
+      desc: $s_engine_ext_properties_t
+      version: "1.7"
+    - name: RESET_PROPERTIES
+      desc: $s_reset_properties_t
+      version: "1.7"
+    - name: DEVICE_EXT_PROPERTIES
+      desc: $s_device_ext_properties_t
+      version: "1.7"
+    - name: DEVICE_UUID
+      desc: $s_uuid_t
+      version: "1.7"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

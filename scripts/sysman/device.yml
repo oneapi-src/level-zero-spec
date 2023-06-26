@@ -43,6 +43,11 @@ desc: "Maximum number of characters in string properties."
 name: $S_STRING_PROPERTY_SIZE
 value: "64"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device universal unique id (UUID) size in bytes."
+name: $S_MAX_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Types of accelerator engines"
 class: $sDevice
@@ -84,6 +89,19 @@ etors:
     - name: REPAIR
       desc: "The device needs to be reset in order to complete in-field repairs"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Device reset type"
+version: "1.7"
+class: $sDevice
+name: $s_reset_type_t
+etors:
+    - name: WARM
+      desc: "Apply warm reset"
+    - name: COLD
+      desc: "Apply cold reset"
+    - name: FLR
+      desc: "Apply FLR reset"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Device state"
 class: $sDevice
@@ -100,6 +118,64 @@ members:
       desc: "[out] Indicates if the device has been repaired"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Device reset properties"
+version: "1.7"
+class: $sDevice
+name: $s_reset_properties_t
+base: $s_base_properties_t
+members:
+    - type: ze_bool_t
+      name: force
+      desc: |
+            [in] If set to true, all applications that are currently using the device will be forcibly killed.
+    - type: $s_reset_type_t
+      name: resetType
+      desc: "[in] Type of reset needs to be performed"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device universal unique id (UUID)"
+version: "1.7"
+class: $sDevice
+name: $s_uuid_t
+members:
+   - type: uint8_t
+     name: "id[$S_MAX_UUID_SIZE]"
+     desc: "[out] opaque data representing a device UUID"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device types"
+version: "1.7"
+class: $sDevice
+name: $s_device_type_t
+etors:
+    - name: GPU
+      value: "1"
+      desc: "Graphics Processing Unit"
+    - name: CPU
+      desc: "Central Processing Unit"
+    - name: FPGA
+      desc: "Field Programmable Gate Array"
+    - name: MCA
+      desc: "Memory Copy Accelerator"
+    - name: VPU
+      desc: "Vision Processing Unit"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device property flags"
+version: "1.7"
+class: $sDevice
+name: $s_device_property_flags_t
+etors:
+    - name: INTEGRATED
+      desc: "Device is integrated with the Host."
+    - name: SUBDEVICE
+      desc: "Device handle used for query represents a sub-device."
+    - name: ECC
+      desc: "Device supports error correction memory access."
+    - name: ONDEMANDPAGING
+      desc: "Device supports on-demand page-faulting."
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Device properties"
 class: $sDevice
 name: $s_device_properties_t
@@ -107,7 +183,9 @@ base: $s_base_properties_t
 members:
     - type: $x_device_properties_t
       name: core
-      desc: "[out] Core device properties"
+      desc:
+            "1.0": "[out] Core device properties"
+            "1.7": "[out] (Deprecated, use $s_uuid_t in the extended structure) Core device properties"
     - type: uint32_t
       name: "numSubdevices"
       desc: "[out] Number of sub-devices. A value of 0 indicates that this device doesn't have sub-devices."
@@ -129,6 +207,23 @@ members:
     - type: char
       name: "driverVersion[$S_STRING_PROPERTY_SIZE]"
       desc: "[out] Installed driver version (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device properties"
+version: "1.7"
+class: $sDevice
+name: $s_device_ext_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier. Note: uuid obtained from Sysman API is the same as from core API. Subdevices will have their own uuid."
+    - type: $s_device_type_t
+      name: type
+      desc: "[out] generic device type"
+    - type: $s_device_property_flags_t
+      name: flags
+      desc: "[out] 0 (none) or a valid combination of $s_device_property_flag_t"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get properties about the device"
@@ -168,7 +263,7 @@ details:
     - "Performs a PCI bus reset of the device. This will result in all current device state being lost."
     - "All applications using the device should be stopped before calling this function."
     - "If the force argument is specified, all applications using the device will be forcibly killed."
-    - "The function will block until the device has restarted or a timeout occurred waiting for the reset to complete."
+    - "The function will block until the device has restarted or an implementation defined timeout occurred waiting for the reset to complete."
 params:
     - type: $s_device_handle_t
       name: hDevice
@@ -176,6 +271,32 @@ params:
     - type: $x_bool_t
       name: force
       desc: "[in] If set to true, all applications that are currently using the device will be forcibly killed."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to perform this operation."
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
+        - "Reset cannot be performed because applications are using this device."
+    - $X_RESULT_ERROR_UNKNOWN:
+        - "There were problems unloading the device driver, performing a bus reset or reloading the device driver."
+
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Reset device extension"
+version: "1.7"
+class: $sDevice
+name: ResetExt
+details:
+    - "Performs a PCI bus reset of the device. This will result in all current device state being lost."
+    - "Prior to calling this function, user is responsible for closing applications using the device unless force argument is specified."
+    - "If the force argument is specified, all applications using the device will be forcibly killed."
+    - "The function will block until the device has restarted or a implementation specific timeout occurred waiting for the reset to complete."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle for the device"
+    - type: "$s_reset_properties_t*"
+      name: pProperties
+      desc: "[in] Device reset properties to apply"
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to perform this operation."

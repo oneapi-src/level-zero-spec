@@ -332,6 +332,7 @@ version: "1.7"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "The memory backing the arrays for phPorts and ppThroughputs must be allocated in system memory by the user who is also responsible for releasing them when they are no longer needed."
 params:
     - type: $s_fabric_port_handle_t
       name: hPort
@@ -342,6 +343,24 @@ params:
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "User does not have permissions to query this telemetry."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get Fabric port throughput from multiple ports in a single call"
+version: "1.7"
+class: $sFabricPort
+name: GetMultiPortThroughput
+details:
+    - type: uint32_t
+      name: numPorts
+      desc: "[in] Number of ports enumerated in function $sDeviceEnumFabricPorts"
+    - type: "$s_fabric_port_handle_t*"
+      name: phPort
+      desc: |
+            [in][range(0, numPorts)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+    - type: $s_fabric_port_throughput_t**
+      name: pThroughput
+      desc: "[out] Will contain the Fabric port throughput counters from multiple ports."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device Fabric port"
