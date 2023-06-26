@@ -112,7 +112,13 @@ etors:
     - name: RAW
       desc: "Metric type: raw"
     - name: IP_EXP
+      desc:
+            "1.6": "Metric type: instruction pointer"
+            "1.7": "Metric type: instruction pointer. Deprecated, use $T_METRIC_TYPE_IP."
+      value: "0x7ffffffe"
+    - name: IP
       desc: "Metric type: instruction pointer"
+      version: "1.7"
       value: "0x7ffffffe"
 --- #--------------------------------------------------------------------------
 type: enum
