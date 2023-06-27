@@ -109,8 +109,15 @@ etors:
       desc: $t_tracer_exp_desc_t
       value: "0x00010001"
     - name: METRICS_CALCULATE_EXP_DESC
-      desc: $t_metric_calculate_exp_desc_t
+      desc:
+            "1.6": $t_metric_calculate_exp_desc_t
+            "1.7": $t_metric_calculate_exp_desc_t. Deprecated, use $T_STRUCTURE_TYPE_METRIC_CALCULATE_EXP_DESC.
       version: "1.6"
+      value: "0x00010002"
+    - name: METRIC_CALCULATE_EXP_DESC
+      desc: $t_metric_calculate_exp_desc_t
+      version: "1.7"
+      value: "0x00010002"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
