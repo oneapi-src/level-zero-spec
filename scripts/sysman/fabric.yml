@@ -350,6 +350,12 @@ version: "1.7"
 class: $sFabricPort
 name: GetMultiPortThroughput
 details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
     - type: uint32_t
       name: numPorts
       desc: "[in] Number of ports enumerated in function $sDeviceEnumFabricPorts"
@@ -357,10 +363,12 @@ details:
       name: phPort
       desc: |
             [in][range(0, numPorts)] array of handle of components of this type.
-            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+            if numPorts is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+            if numPorts is greater than the number of components of this type that are available, then the driver shall only retrieve up to correct number of available ports enumerated in $sDeviceEnumFabricPorts.
     - type: $s_fabric_port_throughput_t**
       name: pThroughput
-      desc: "[out] Will contain the Fabric port throughput counters from multiple ports."
+      desc: |
+            [out][range(0, numPorts)] array of Fabric port throughput counters from multiple ports of type $s_fabric_port_throughput_t.
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device Fabric port"
