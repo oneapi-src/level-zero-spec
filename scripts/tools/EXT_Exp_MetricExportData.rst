@@ -37,8 +37,7 @@ The following code shows how to export metrics raw data for a metric group.
 
     // Get size for export data
     size_t exportDataSize = 0;
-    ${t}MetricGroupGetExportDataExp(hMetricGroup, rawData, rawDataSize,
-                                    &exportDataSize, nullptr);
+    ${t}MetricGroupGetExportDataExp(hMetricGroup, rawData, rawDataSize, &exportDataSize, nullptr);
 
     // Allocate buffer for export data
     uint8_t* pExportData = malloc(exportDataSize);
