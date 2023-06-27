@@ -1713,6 +1713,7 @@ Environment Variables
 The following table documents the supported knobs for overriding default functional behavior.
 
 %if ver < 1.7:
+
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
@@ -1726,29 +1727,28 @@ The following table documents the supported knobs for overriding default functio
 %endif
 
 %if ver >= 1.7:
+
 +-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values          | Description                                                                       |
 +=================+=====================================+=================+===================================================================================+
-| Device          | ${X}_FLAT_DEVICE_HIERARCHY          | {**0**, 1, 2}   | Defines device hierarchy model exposed by Level Zero driver implementation        |
+| Device          | ${X}_FLAT_DEVICE_HIERARCHY            | {**0**, 1, 2}   | Defines device hierarchy model exposed by Level Zero driver implementation        |
 +                 +-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_AFFINITY_MASK                  | list            | Forces driver to only report devices (and sub-devices) as specified by values     |
+|                 | ${X}_AFFINITY_MASK                    | list            | Forces driver to only report devices (and sub-devices) as specified by values     |
 +                 +-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER     | {**0**, 1}      | Forces driver to report devices from lowest to highest PCI bus ID                 |
+|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1}      | Forces driver to report devices from lowest to highest PCI bus ID                 |
 +-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC      | {**0**, 1}      | Forces all shared allocations into device memory                                  |
+| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1}      | Forces all shared allocations into device memory                                  |
 +-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-%endif
 
-%if ver >= 1.7:
 
 Device Hierarchy
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 ${X}_FLAT_DEVICE_HIERARCHY allows users to select the device hierarchy model with which the underlying hardware is exposed and the types of devices returned with ${x}DeviceGet.
 
 With a value of `0`, ${x}DeviceGet returns all the devices that do not have a root-device. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
 
-With a value of `1`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is **not** possible, with ${x}DeviceGetSubDevices returning always a count of 0 device handles and and ${x}DeviceGetRootDevice returning nullptr. This mode allows Level Zero driver implementations to optimize execution and memory allocations by removing any overhead required to account for simultaneous use of root-devices and sub-devices in the same application.
+With a value of `1`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is **not** possible, with ${x}DeviceGetSubDevices returning always a count of 0 device handles and ${x}DeviceGetRootDevice returning nullptr. This mode allows Level Zero driver implementations to optimize execution and memory allocations by removing any overhead required to account for simultaneous use of root-devices and sub-devices in the same application.
 
 With a value of `2`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
 
@@ -1778,12 +1778,6 @@ The order of the devices reported by the ${x}DeviceGet can be forced to be consi
 
 %if ver < 1.7:
 The following examples demonstrate proper usage for a system configuration of two devices, each with four sub-devices:
-%endif
-
-%if ver >= 1.7:
-The following examples demonstrate proper usage for a system configuration of two devices, each with four sub-devices, when setting
-the ${X}_AFFINITY_MASK with different values, and ${X}_FLAT_DEVICE_HIERARCHY to 0:
-%endif
 
 - `0, 1`: all devices and sub-devices are reported (same as default)
 - `0`: only device 0 is reported;with all its sub-devices
@@ -1792,14 +1786,272 @@ the ${X}_AFFINITY_MASK with different values, and ${X}_FLAT_DEVICE_HIERARCHY to 
 - `1.1, 1.2`: only device 1 is reported as device 0; with its sub-devices 1 and 2 reported as sub-devices 0 and 1, respectively
 - `0.2, 1.3, 1.0, 0.3`: both device 0 and 1 are reported; device 0 reports sub-devices 2 and 3 as sub-devices 0 and 1, respectively; device 1 reports sub-devices 0 and 3 as sub-devices 0 and 1, respectively; the order is unchanged.
 
-%if ver >= 1.7:
-The following examples show the use of different values in the ${X}_AFFINITY_MASK when setting ${X}_FLAT_DEVICE_HIERARCHY to 1, in the
-same system with two devices and four sub-devices.
+%endif
 
-- `0, 1, 2, 4`: all sub-devices are reported by ${x}DeviceGet (same as default)
-- `0`: only sub-device 0 in the first device is reported
-- `1`: only sub-device 0 in the first device is reported
-- `0.0`: is not valid, as with ${X}_FLAT_DEVICE_HIERARCHY set to 1, the device handles reported by ${x}DeviceGet sit at the bottom of the hierarchy and do not contain further sub-devices.
+%if ver >= 1.7:
+The following examples demonstrate proper usage for a system configuration composed of two physical devices, each of which can be further
+sub-divided into four smaller devices. For the purpose of these examples, we will refer to the two physical devices as `parent devices`
+and to the smaller sub-devices as `tiles`.
+
+When setting the ${X}_AFFINITY_MASK with different values, and ${X}_FLAT_DEVICE_HIERARCHY to 0, the following scenarios may occur:
+
+${X}_AFFINITY_MASK = `0, 1`: all parent devices and tiles are reported (same as default):
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  Yes    | Device handle 0, sub-device handle 0   |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  Yes    | Device handle 0, sub-device handle 1   |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  Yes    | Device handle 0, sub-device handle 2   |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  Yes    | Device handle 0, sub-device handle 3   |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  Yes    | Device handle 1, sub-device handle 0   |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  Yes    | Device handle 1, sub-device handle 1   |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  Yes    | Device handle 1, sub-device handle 2   |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  Yes    | Device handle 1, sub-device handle 3   |
++---------------+------+---------+----------------------------------------+
+
+${X}_AFFINITY_MASK = `0`: only parent device 0 is reported as device handle 0, with all its tiles reported as sub-device handles:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  Yes    | Device handle 0, sub-device handle 0   |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  Yes    | Device handle 0, sub-device handle 1   |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  Yes    | Device handle 0, sub-device handle 2   |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  Yes    | Device handle 0, sub-device handle 3   |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `1`: only parent device 1 is reported as device handle 0, with all its tiles reported as sub-device handles:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  Yes    | Device handle 0, sub-device handle 0   |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  Yes    | Device handle 0, sub-device handle 1   |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  Yes    | Device handle 0, sub-device handle 2   |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  Yes    | Device handle 0, sub-device handle 3   |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `0.0`: only tile 0 in parent device 0 is reported as device handle 0:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  Yes    | Device handle 0                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `1.1, 1.2`: only parent device 1 is reported as device handle 0; with its tiles 1 and 2 reported as its sub-devices 0 and 1, respectively:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  Yes    | Device handle 0, sub-device handle 0   |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  Yes    | Device handle 0, sub-device handle 1   |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `0.2, 1.3, 1.0, 0.3`: both parent devices 0 and 1 are reported as device handles 0 and 1, respectively; parent device 0 reports its tiles 2 and 3 as sub-devices 0 and 1, respectively; parent device 1 reports tiles 0 and 3 as sub-devices 0 and 1, respectively; the order is unchanged:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  Yes    | Device handle 0, sub-device handle 0   |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  Yes    | Device handle 0, sub-device handle 1   |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  Yes    | Device handle 1, sub-device handle 0   |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  Yes    | Device handle 1, sub-device handle 1   |
++---------------+------+---------+----------------------------------------+
+
+
+The following examples show the use of different values in the ${X}_AFFINITY_MASK when setting ${X}_FLAT_DEVICE_HIERARCHY to 1, in the
+same system with two parent devices and four tiles each. When setting ${X}_FLAT_DEVICE_HIERARCHY to 1, only the tiles are reported by
+${x}DeviceGet, which means that in this system ${x}DeviceGet would report up to 8 device handles, with device handles 0 to 3 corresponding
+to the four tiles in parent device 0, and device handles 4 to 5 corresponding to the four tiles in parent device 1:
+
+${X}_AFFINITY_MASK = `0, 1, 2, 3, 4, 5, 6, 7`: all tiles are reported as device handles by ${x}DeviceGet (same as default):
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  Yes    | Device handle 0                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  Yes    | Device handle 1                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  Yes    | Device handle 2                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  Yes    | Device handle 3                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  Yes    | Device handle 4                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  Yes    | Device handle 5                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  Yes    | Device handle 6                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  Yes    | Device handle 7                        |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `0`: only tile 0 in parent device 0 is reported as device handle 0:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  Yes    | Device handle 0                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `1`: only tile 1 in parent device 0 is reported as device handle 0.
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  Yes    | Device handle 0                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `0, 4`: tile 0 from parent device 0 is reported as device handle 0 and tile 0 in parent device 1 is reported as device handle 1:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  Yes    | Device handle 0                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  Yes    | Device handle 1                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+
+
+${X}_AFFINITY_MASK = `1, 2, 7`: tile 1 from parent device 0 is reported as device handle 0, tile 2 in parent device 0 is reported as device handle 1, and tile 3 in parent device 1 is reported as device handle 2:
+
++---------------+------+---------+----------------------------------------+
+| Parent Device | Tile | Exposed | Device Handle Used                     |
++===============+======+=========+========================================+
+|       0       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  1   |  Yes    | Device handle 0                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  2   |  Yes    | Device handle 1                        |
++---------------+------+---------+----------------------------------------+
+|       0       |  3   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  0   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  1   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  2   |  No     |                                        |
++---------------+------+---------+----------------------------------------+
+|       1       |  3   |  Yes    | Device handle 2                        |
++---------------+------+---------+----------------------------------------+
+
+${X}_AFFINITY_MASK = `0.0`: is not valid, as with ${X}_FLAT_DEVICE_HIERARCHY set to 1, the device handles reported by ${x}DeviceGet are those which do not contain further sub-devices.
 %endif
 
 Sub-Device Support
