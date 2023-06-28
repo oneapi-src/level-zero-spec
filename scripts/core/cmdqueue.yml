@@ -20,6 +20,14 @@ etors:
             command queue should be optimized for submission to a single device engine.
             driver **must** disable any implicit optimizations for distributing work across multiple engines.
             this flag should be used when applications want full control over multi-engine submission and scheduling.
+    - name: IN_ORDER
+      version: "1.7"
+      desc: |
+            To be used only when creating immediate command lists. Commands appended to the immediate command
+            list are executed in-order, with driver implementation enforcing dependencies between them.
+            Application is not required to have the signal event of a given command being the wait event of
+            the next to define an in-order list, and application is allowed to pass signal and wait events
+            to each appended command to implement more complex dependency graphs.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"
