@@ -446,19 +446,25 @@ etors:
       value: "0"
       desc: "hint that memory will be read from frequently and written to rarely"
     - name: CLEAR_READ_MOSTLY
-      desc: "removes the affect of $X_MEMORY_ADVICE_SET_READ_MOSTLY"
+      desc: "removes the effect of $X_MEMORY_ADVICE_SET_READ_MOSTLY"
     - name: SET_PREFERRED_LOCATION
       desc: "hint that the preferred memory location is the specified device"
     - name: CLEAR_PREFERRED_LOCATION
-      desc: "removes the affect of $X_MEMORY_ADVICE_SET_PREFERRED_LOCATION"
+      desc: "removes the effect of $X_MEMORY_ADVICE_SET_PREFERRED_LOCATION"
     - name: SET_NON_ATOMIC_MOSTLY
       desc: "hints that memory will mostly be accessed non-atomically"
     - name: CLEAR_NON_ATOMIC_MOSTLY
-      desc: "removes the affect of $X_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY"
+      desc: "removes the effect of $X_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY"
     - name: BIAS_CACHED
       desc: "hints that memory should be cached"
     - name: BIAS_UNCACHED
       desc: "hints that memory should be not be cached"
+    - name: SET_SYSTEM_MEMORY_PREFERRED_LOCATION
+      version: "1.7"
+      desc: "hint that the preferred memory location is host memory"
+    - name: CLEAR_SYSTEM_MEMORY_PREFERRED_LOCATION
+      version: "1.7"
+      desc: "removes the effect of $X_MEMORY_ADVICE_SET_SYSTEM_MEMORY_PREFERRED_LOCATION"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Provides advice about the use of a shared memory range"
