@@ -1728,17 +1728,17 @@ The following table documents the supported knobs for overriding default functio
 
 %if ver >= 1.7:
 
-+-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-| Category        | Name                                | Values          | Description                                                                       |
-+=================+=====================================+=================+===================================================================================+
-| Device          | ${X}_FLAT_DEVICE_HIERARCHY            | {**0**, 1, 2}   | Defines device hierarchy model exposed by Level Zero driver implementation        |
-+                 +-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_AFFINITY_MASK                    | list            | Forces driver to only report devices (and sub-devices) as specified by values     |
-+                 +-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1}      | Forces driver to report devices from lowest to highest PCI bus ID                 |
-+-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
-| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1}      | Forces all shared allocations into device memory                                  |
-+-----------------+-------------------------------------+-----------------+-----------------------------------------------------------------------------------+
++-----------------+-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
+| Category        | Name                                | Values                            | Description                                                                       |
++=================+=====================================+===================================+===================================================================================+
+| Device          | ${X}_FLAT_DEVICE_HIERARCHY            | {**COMPOSITE**, FLAT, COMBINED}   | Defines device hierarchy model exposed by Level Zero driver implementation        |
++                 +-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
+|                 | ${X}_AFFINITY_MASK                    | list                              | Forces driver to only report devices (and sub-devices) as specified by values     |
++                 +-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
+|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1}                        | Forces driver to report devices from lowest to highest PCI bus ID                 |
++-----------------+-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
+| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1}                        | Forces all shared allocations into device memory                                  |
++-----------------+-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
 
 
 Device Hierarchy
@@ -1746,11 +1746,11 @@ Device Hierarchy
 
 ${X}_FLAT_DEVICE_HIERARCHY allows users to select the device hierarchy model with which the underlying hardware is exposed and the types of devices returned with ${x}DeviceGet.
 
-With a value of `0`, ${x}DeviceGet returns all the devices that do not have a root-device. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
+When setting to `COMPOSITE`, ${x}DeviceGet returns all the devices that do not have a root-device. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
 
-With a value of `1`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is **not** possible, with ${x}DeviceGetSubDevices returning always a count of 0 device handles and ${x}DeviceGetRootDevice returning nullptr. This mode allows Level Zero driver implementations to optimize execution and memory allocations by removing any overhead required to account for simultaneous use of root-devices and sub-devices in the same application.
+When setting to `FLAT`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is **not** possible, with ${x}DeviceGetSubDevices returning always a count of 0 device handles and ${x}DeviceGetRootDevice returning nullptr. This mode allows Level Zero driver implementations to optimize execution and memory allocations by removing any overhead required to account for simultaneous use of root-devices and sub-devices in the same application.
 
-With a value of `2`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
+When setting to `COMBINED`, ${x}DeviceGet returns all the devices that do not have sub-devices. Traversing the device hierarchy is possible by querying sub-devices with ${x}DeviceGetSubDevices and root-devices with ${x}DeviceGetRootDevice. Driver implementation may perform implicit optimizations to submissions and allocations done in the root-devices.
 
 Devices returned by SYSMAN APIs are not affected by ${X}_FLAT_DEVICE_HIERARCHY and always return the top-level device handles corresponding to the physical devices.
 
@@ -1793,7 +1793,7 @@ The following examples demonstrate proper usage for a system configuration compo
 sub-divided into four smaller devices. For the purpose of these examples, we will refer to the two physical devices as `parent devices`
 and to the smaller sub-devices as `tiles`.
 
-When setting the ${X}_AFFINITY_MASK with different values, and ${X}_FLAT_DEVICE_HIERARCHY to 0, the following scenarios may occur:
+When setting the ${X}_AFFINITY_MASK with different values, and ${X}_FLAT_DEVICE_HIERARCHY to `COMPOSITE`, the following scenarios may occur:
 
 ${X}_AFFINITY_MASK = `0, 1`: all parent devices and tiles are reported (same as default):
 
@@ -1932,7 +1932,7 @@ ${X}_AFFINITY_MASK = `0.2, 1.3, 1.0, 0.3`: both parent devices 0 and 1 are repor
 +---------------+------+---------+----------------------------------------+
 
 
-The following examples show the use of different values in the ${X}_AFFINITY_MASK when setting ${X}_FLAT_DEVICE_HIERARCHY to 1, in the
+The following examples show the use of different values in the ${X}_AFFINITY_MASK when setting ${X}_FLAT_DEVICE_HIERARCHY to `FLAT`, in the
 same system with two parent devices and four tiles each. When setting ${X}_FLAT_DEVICE_HIERARCHY to 1, only the tiles are reported by
 ${x}DeviceGet, which means that in this system ${x}DeviceGet would report up to 8 device handles, with device handles 0 to 3 corresponding
 to the four tiles in parent device 0, and device handles 4 to 5 corresponding to the four tiles in parent device 1:

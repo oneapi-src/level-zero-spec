@@ -595,4 +595,4 @@ desc: "Defines the device hierarchy model exposed by Level Zero driver implement
 name: $X_FLAT_DEVICE_HIERARCHY
 category: "Device"
 version: "1.7"
-values: "0,1,2"
+values: "String"
