@@ -540,3 +540,87 @@ type: class
 desc: "C++ wrapper for memory allocation"
 name: $xMem
 owner: $xContext
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "atomic access attribute flags"
+class: $xMem
+name: $x_memory_atomic_attr_exp_flags_t
+version: "1.7"
+etors:
+    - name: NONE
+      desc: "No atomics performed on the pointer"
+    - name: HOST_ATOMIC
+      desc: "Atomics may be performed on the host"
+    - name: DEVICE_ATOMIC
+      desc: "Atomics may be performed on the device"
+    - name: SYSTEM_ATOMIC
+      desc: "Atomics may be performed on the host or the device"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets atomic access attributes for a shared allocation"
+class: $xMem
+name: SetAtomicAccessAttributeExp
+version: "1.7"
+details:
+    - |
+      If the shared-allocation is owned by multiple devices (i.e. nullptr
+      was passed to $xMemAllocShared when creating it), then hDevice may be
+      passed to set the attributes in that specific device. If nullptr is
+      passed in hDevice, then the atomic attributes are set in all devices
+      associated with the allocation.
+    - |
+      If the atomic access attribute select is not supported by the driver,
+      $X_RESULT_INVALID_ARGUMENT is returned.
+    - |
+      The atomic access attribute may be only supported at a device-specific
+      granularity, such as at a page boundary. In this case, the memory range
+      may be expanded such that the start and end of the range satisfy granularity
+      requirements.
+    - |
+      The application must not call this function for shared-allocations currently
+      being used by the device.
+    - |
+      The application must **not** call this function from simultaneous threads
+      with the same pointer.
+    - |
+      The implementation of this function should be lock-free.
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context"
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] device associated with the memory advice"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] Pointer to the start of the memory range"
+    - type: size_t
+      name: size
+      desc: "[in] Size in bytes of the memory range"
+    - type: $x_memory_atomic_attr_exp_flags_t
+      name: attr
+      desc: |
+            [in] Atomic access attributes to set for the specified range.
+            Must be 0 (default) or a valid combination of $x_memory_atomic_attr_exp_flag_t;
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves the atomic access attributes previously set for a shared allocation"
+class: $xMem
+name: GetAtomicAccessAttributeExp
+version: "1.7"
+details:
+    - |
+      The application may call this function from simultaneous threads
+      with the same pointer.
+    - |
+      The implementation of this function should be lock-free.
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of context"
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] device associated with the memory advice"
+    - type: "$x_memory_atomic_attr_exp_flags_t*"
+      name: pAttr
+      desc: "[out] Atomic access attributes for the specified range"
