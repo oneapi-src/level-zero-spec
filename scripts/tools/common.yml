@@ -103,8 +103,15 @@ etors:
     - name: DEBUG_REGSET_PROPERTIES
       desc: $t_debug_regset_properties_t
     - name: GLOBAL_METRICS_TIMESTAMPS_EXP_PROPERTIES
-      desc: $t_metric_global_timestamps_resolution_exp_t
+      desc:
+            "1.5": $t_metric_global_timestamps_resolution_exp_t
+            "1.7": $t_metric_global_timestamps_resolution_exp_t. Deprecated, use $T_STRUCTURE_TYPE_METRIC_GLOBAL_TIMESTAMPS_RESOLUTION_EXP.
       version: "1.5"
+      value: "0x9"
+    - name: METRIC_GLOBAL_TIMESTAMPS_RESOLUTION_EXP
+      desc: $t_metric_global_timestamps_resolution_exp_t
+      version: "1.7"
+      value: "0x9"
     - name: TRACER_EXP_DESC
       desc: $t_tracer_exp_desc_t
       value: "0x00010001"
