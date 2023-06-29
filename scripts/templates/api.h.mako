@@ -71,6 +71,13 @@ extern "C" {
 ## TYPEDEF ####################################################################
 %elif re.match(r"typedef", obj['type']):
 typedef ${th.subt(n, tags, obj['value'])} ${th.make_type_name(n, tags, obj)};
+## CALLBACK ####################################################################
+%elif re.match(r"callback", obj['type']):
+typedef ${th.subt(n, tags, obj['returntype'])} (*${th.subt(n, tags, obj['name'])})(
+        %for line in th.make_param_lines(n, tags, obj):
+        ${line}
+        %endfor
+    );
 ## ENUM #######################################################################
 %elif re.match(r"enum", obj['type']):
 %if th.type_traits.is_flags(obj['name']):

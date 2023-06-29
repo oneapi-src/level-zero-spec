@@ -84,3 +84,6 @@ out/
 # IDE Files
 /.vscode
 /.devcontainer
+
+# Python Virtual Environment
+/.venv
