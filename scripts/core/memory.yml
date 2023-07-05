@@ -627,6 +627,12 @@ params:
     - type: "$x_device_handle_t"
       name: hDevice
       desc: "[in] device associated with the memory advice"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] Pointer to the start of the memory range"
+    - type: size_t
+      name: size
+      desc: "[in] Size in bytes of the memory range"
     - type: "$x_memory_atomic_attr_exp_flags_t*"
       name: pAttr
       desc: "[out] Atomic access attributes for the specified range"
