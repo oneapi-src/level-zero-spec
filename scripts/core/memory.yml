@@ -548,19 +548,19 @@ name: $x_memory_atomic_attr_exp_flags_t
 version: "1.7"
 etors:
     - name: NO_ATOMICS
-      desc: "No atomics performed on the pointer"
+      desc: "Atomics on the pointer are not allowed"
     - name: NO_HOST_ATOMICS
-      desc: "Atomics are not performed on the pointer by the host"
+      desc: "Host atomics on the pointer are not allowed"
     - name: HOST_ATOMICS
-      desc: "Atomics may be performed on the pointer by the host"
+      desc: "Host atomics on the pointer are allowed"
     - name: NO_DEVICE_ATOMICS
-      desc: "Atomics are not performed on the pointer by the device"
+      desc: "Device atomics on the pointer are not allowed"
     - name: DEVICE_ATOMICS
-      desc: "Atomics may be performed on the pointer by device"
+      desc: "Device atomics on the pointer are allowed"
     - name: NO_SYSTEM_ATOMICS
-      desc: "Atomics are not performed concurrently on the pointer by both host and device"
+      desc: "Concurrent atomics on the pointer from both host and device are not allowed"
     - name: SYSTEM_ATOMICS
-      desc: "Atomics may be performed concurrently on the pointer by both host and device. Requires $X_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC returned by $xDeviceGetMemoryAccessProperties."
+      desc: "Concurrent atomics on the pointer from both host and device are allowed. Requires $X_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC returned by $xDeviceGetMemoryAccessProperties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Sets atomic access attributes for a shared allocation"
