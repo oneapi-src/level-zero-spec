@@ -552,11 +552,11 @@ etors:
     - name: NO_HOST_ATOMICS
       desc: "Host atomics on the pointer are not allowed"
     - name: HOST_ATOMICS
-      desc: "Host atomics on the pointer are allowed"
+      desc: "Host atomics on the pointer are allowed. Requires $X_MEMORY_ACCESS_CAP_FLAG_ATOMIC returned by $xDeviceGetMemoryAccessProperties."
     - name: NO_DEVICE_ATOMICS
       desc: "Device atomics on the pointer are not allowed"
     - name: DEVICE_ATOMICS
-      desc: "Device atomics on the pointer are allowed"
+      desc: "Device atomics on the pointer are allowed. Requires $X_MEMORY_ACCESS_CAP_FLAG_ATOMIC returned by $xDeviceGetMemoryAccessProperties."
     - name: NO_SYSTEM_ATOMICS
       desc: "Concurrent atomics on the pointer from both host and device are not allowed"
     - name: SYSTEM_ATOMICS
