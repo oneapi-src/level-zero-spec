@@ -46,6 +46,10 @@ ordinal: "1"
 details:
     - "When the device handle passed does not belong to any root-device, nullptr is returned."
     - "Multiple calls to this function will return the same device handle."
+    - |
+       The root-device handle returned by this function does not have access automatically to the resources
+       created with the associated sub-device, unless those resources have been created with a context
+       explicitly containing both handles.
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
