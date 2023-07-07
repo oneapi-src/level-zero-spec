@@ -635,3 +635,10 @@ name: $X_SHARED_FORCE_DEVICE_ALLOC
 category: "Memory"
 default: "0"
 values: "0, 1"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Defines the device hierarchy model exposed by Level Zero driver implementation"
+name: $X_FLAT_DEVICE_HIERARCHY
+category: "Device"
+version: "1.7"
+values: "String"
