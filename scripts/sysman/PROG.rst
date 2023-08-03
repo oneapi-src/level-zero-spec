@@ -1,5 +1,4 @@
-﻿
-<%
+﻿<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -1974,6 +1973,26 @@ in the structure ${s}_ras_state_t. The table below describes the categories:
 |                                                                   | that have occurred in                                        | that have occurred in                                          |
 |                                                                   | the display.                                                 | the display.                                                   |
 +-------------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ${S}_RAS_ERROR_CAT_MEMORY_ERRORS      | Number of ECC                                                | Number of ECC                                                  |
+|                                                                   | correctable errors                                           | uncorrectable errors                                           |
+|                                                                   | that have occurred in                                        | that have occurred in                                          |
+|                                                                   | memory - GDDR/HBM.                                           | memory - GDDR/HBM                                              |
++-------------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ${S}_RAS_ERROR_CAT_SCALE_ERRORS       | Number of                                                    | Number of ECC                                                  |
+|                                                                   | correctable errors                                           | uncorrectable errors                                           |
+|                                                                   | that have occurred in                                        | that have occurred in                                          |
+|                                                                   | scale fabric.                                                | scale fabric.                                                  |
++-------------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+| ${S}_RAS_ERROR_CAT_L3FABRIC_ERRORS    | Number of ECC                                                | Number of ECC                                                  |
+|                                                                   | correctable errors                                           | uncorrectable errors                                           |
+|                                                                   | that have occurred in                                        | that have occurred in                                          |
+|                                                                   | L3 Fabric.                                                   | L3 Fabric.                                                     |
++-------------------------------------------------------------------+--------------------------------------------------------------+----------------------------------------------------------------+
+
+RAS errors up to ${S}_RAS_ERROR_CAT_DISPLAY_ERRORS are discoverable using existing mechanism via ${s}RasGetState.
+New error categories added following 1.7 spec versions are discoverable only via the extension mechanism ${s}RasGetStateExp.
+Note that ${s}RasGetStateExp is intended to eventually replace existing ${s}RasGetState functionality, therefore
+it also reports the existing RAS error categories.
 
 Each RAS error type can trigger events when the error counters exceed
 thresholds. The events are listed in the table below. Software can use

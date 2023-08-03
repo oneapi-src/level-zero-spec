@@ -40,6 +40,15 @@ etors:
       desc: "The number of errors that have occurred in caches (L1/L3/register file/shared local memory/sampler)"
     - name: DISPLAY_ERRORS
       desc: "The number of errors that have occurred in the display"
+    - name: MEMORY_ERRORS
+      desc: "The number of errors that have occurred in Memory"
+      version: "1.7"
+    - name: SCALE_ERRORS
+      desc: "The number of errors that have occurred in Scale Fabric"
+      version: "1.7"
+    - name: L3FABRIC_ERRORS
+      desc: "The number of errors that have occurred in L3 Fabric"
+      version: "1.7"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "The maximum number of categories"
