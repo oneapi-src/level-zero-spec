@@ -1632,6 +1632,25 @@ the device and sub-devices:
                        else
                            output("        Config:                DOWN")
 
+${s}FabricPortGetMultiPortThroughput provides mechanism for user to gather throughput
+values for multiple ports together in a single call.
+
+The following pseudo-code describes how API is used to gather throughput:
+
+.. parsed-literal::
+    // Enumerate fabric ports
+    uint32_t numPorts = 0;
+    ${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, NULL);
+    ${s}_fabric_port_handle_t* phPorts =
+        allocate_memory(numPorts * sizeof(${s}_fabric_port_handle_t));
+    ${s}DeviceEnumFabricPorts(hSysmanDevice, &numPorts, phPorts);
+
+    // Gather throughput for all fabric ports together
+    ${s}_fabric_port_throughput_t* pThroughput =
+        allocate_memory(numPorts * sizeof(${s}_fabric_port_throughput_t));
+    ${s}FabricPortGetMultiPortThroughput(hSysmanDevice, numPorts, phPorts, &pThroughput);
+
+
 .. _Temperature:
 
 Querying temperature
