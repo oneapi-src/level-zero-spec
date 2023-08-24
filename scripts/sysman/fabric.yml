@@ -362,13 +362,11 @@ params:
     - type: "$s_fabric_port_handle_t*"
       name: phPort
       desc: |
-            [in][range(0, numPorts)] array of handle of components of this type.
-            if numPorts is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
-            if numPorts is greater than the number of components of this type that are available, then the driver shall only retrieve up to correct number of available ports enumerated in $sDeviceEnumFabricPorts.
+            [in][range(0, numPorts)] array of fabric port handles provided by user to gather throughput values. 
     - type: $s_fabric_port_throughput_t**
       name: pThroughput
       desc: |
-            [out][range(0, numPorts)] array of Fabric port throughput counters from multiple ports of type $s_fabric_port_throughput_t.
+            [out][range(0, numPorts)] array of fabric port throughput counters from multiple ports of type $s_fabric_port_throughput_t.
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device Fabric port"
