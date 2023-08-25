@@ -9,8 +9,6 @@
 type: header
 desc: "Intel $OneApi Level-Zero Sysman Extension APIs for Power Limits"
 version: "1.4"
-details:
-    - "1.7": "Note: This extension is deprecated and merged to $sPower."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Power Limits Extension Name"
@@ -61,8 +59,6 @@ members:
     - type: int32_t
       name: limit
       desc: "[in,out] limit value. If limitValueLocked is true, this value is ignored. The value should be provided in the unit specified by limitUnit."
-details:
-    - "1.7": "Note: This structure is deprecated and functionality is provided by $s_power_new_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Extension properties related to device power settings"
@@ -81,7 +77,6 @@ details:
     - "This structure may be returned from $sPowerGetProperties via the `pNext` member of $s_power_properties_t."
     - "This structure may also be returned from $sPowerGetProperties via the `pNext` member of $s_power_ext_properties_t"
     - "Used for determining the power domain level, i.e. card-level v/s package-level v/s stack-level & the factory default power limits."
-    - "1.7": "Note: This structure is deprecated and functionality is provided by $s_power_new_properties_t."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get power limits"
@@ -91,7 +86,6 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "This function returns all the power limits associated with the supplied power domain."
-    - "1.7": "Note: This function is deprecated and functionality is provided by $sPowerGetPowerLimits."
 params:
     - type: $s_pwr_handle_t
       name: hPower
@@ -114,7 +108,6 @@ details:
     - "The same limit can be supplied multiple times. Limits are applied in the order in which they are supplied."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "Note: This function is deprecated and functionality is provided by $sPowerSetPowerLimits."
 params:
     - type: $s_pwr_handle_t
       name: hPower
