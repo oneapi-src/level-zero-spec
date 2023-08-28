@@ -1,5 +1,4 @@
-﻿
-<%
+﻿<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
