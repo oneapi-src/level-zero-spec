@@ -1,4 +1,5 @@
-﻿<%
+﻿
+<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
@@ -1631,8 +1632,7 @@ the device and sub-devices:
                        else
                            output("        Config:                DOWN")
 
-${s}FabricPortGetMultiPortThroughput provides mechanism for user to gather throughput
-values for multiple ports together in a single call.
+The function ${s}FabricPortGetMultiPortThroughput provides a mechanism for the user to gather throughput values for multiple ports together in a single call.
 
 The following pseudo-code describes how API is used to gather throughput:
 
