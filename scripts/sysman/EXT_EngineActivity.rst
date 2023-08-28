@@ -32,7 +32,7 @@ Engine Activity
 
 This extension provides capability to user to gather the activity stats for each Virtual Function (VF) associated with engine group.
 Intended use case of the feature is to query utilization stats from Physical Function (PF) interface. However, the extension
-may return error code $X_RESULT_ERROR_UNSUPPORTED_FEATURE if an environment does not support it.
+may return error code ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE if an environment does not support it.
 If VF has no activity value to report, then implementation shall reflect that appropriately in ${s}_engine_stats_t struct so that percentage
 calculation results in value of 0.
 If PF has no activity value to report, then implementation shall reflect that appropriately in ${s}_engine_stats_t struct which is
