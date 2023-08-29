@@ -113,15 +113,15 @@ version: "1.7"
 class: $tMetricProgrammable
 name: $t_metric_programmable_param_type_exp_t
 etors:
-    - name: DISAGGREGATION
+    - name: ETOR_DISAGGREGATION
       desc: "Metric is disaggregated."
-    - name: LATENCY
+    - name: ETOR_LATENCY
       desc: "Metric for latency measurement."
-    - name: NORMALIZATION_UTILIZATION
-      desc: "Produces normalization in percent using raw_metric * 100 / cycles / instance_count."
-    - name: NORMALIZATION_AVERAGE
-      desc: "Produces normalization using raw_metric / instance_count."
-    - name: NORMALIZATION_RATE
+    - name: ETOR_NORMALIZATION_UTILIZATION
+      desc: "Produces normalization in percent using raw_metric * 100 / cycles / HW instance_count."
+    - name: ETOR_NORMALIZATION_AVERAGE
+      desc: "Produces normalization using raw_metric / HW instance_count."
+    - name: ETOR_NORMALIZATION_RATE
       desc: "Produces normalization average using raw_metric / timestamp."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -246,14 +246,14 @@ members:
       desc: "[in] parameter value"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query the available metric programmable handles."
+desc: "Query and get the available metric programmable handles."
 version: "1.7"
 class: $tMetricProgrammable
 name: GetExp
 decl: static
 details:
     - "Query the available programmable handles using *pCount = 0."
-    - "Return all programmable metric handles available in the device."
+    - "Returns all programmable metric handles available in the device."
     - "The application may call this function from simultaneous threads."
 params:
     - type: "$t_device_handle_t"
@@ -294,7 +294,7 @@ class: $tMetricProgrammable
 name: GetParamDescriptionExp
 decl: static
 details:
-    - "Returns description for the parameter at the specific ordinal of the metric programmable handle."
+    - "Returns descriptions for the parameters of the metric programmable handle."
 params:
     - type: $t_metric_programmable_exp_handle_t
       name: hMetricProgrammable
@@ -317,7 +317,7 @@ class: $tMetricProgrammable
 name: GetParamValueDescriptionExp
 decl: static
 details:
-    - "Returns description for the parameter value at the specific ordinal of the metric programmable handle."
+    - "Returns the value-description for the parameter at the specific ordinal of the metric programmable handle."
 params:
     - type: $t_metric_programmable_exp_handle_t
       name: hMetricProgrammable
@@ -337,14 +337,14 @@ params:
             if pValueDescriptionCount is less than the number of value descriptions available, then driver shall only retrieve that number of value descriptions.
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create multiple metric handles by Applying Parameter values on the metric programmable handle."
+desc: "Create metric handles by applying parameter values on the metric programmable handle."
 version: "1.7"
 class: $tMetric
 name: CreateFromProgrammableExp
 decl: static
 details:
-    - "Multiple Parameter values could be used to prepare a metric."
-    - "parameterCount = 0 means default value of the metric programmable would be used for all parameters"
+    - "Multiple parameter values could be used to prepare a metric."
+    - "If parameterCount = 0, the default value of the metric programmable would be used for all parameters"
     - "Parameter values are updated to pParameterValues in the same order as retrieved using $tMetricProgrammableGetParamDescriptionExp"
     - "If multiple metrics are generated, then implementation defined C string will be post-fixed to metric name and description"
 params:
@@ -357,23 +357,23 @@ params:
     - type: uint32_t
       name: parameterCount
       desc: "[in] Count of parameters to set."
-    - type: char 
+    - type: const char
       name: "name[ZET_MAX_METRIC_NAME]"
       desc: "[in] Metric name to be used."
-    - type: char 
+    - type: const char
       name: "description[ZET_MAX_METRIC_DESCRIPTION]"
       desc: "[in] Metric description to be used."
     - type: "uint32_t*"
       name: pMetricHandleCount
       desc: |
-            [in,out] pointer to the number of metric handles.
-            if count is zero, then the driver shall update the value with the total number of metric handles available.
+            [in,out] Pointer to the number of metric handles.
+            if count is zero, then the driver shall update the value with the number of metric handles available for this programmable.
             if count is greater than the number of metric handles available, then the driver shall update the value with the correct number of metric handles available.
     - type: "$t_metric_handle_t*"
       name: phMetricHandles
       desc: |
-            [in,out][optional][range(0,*pCount)] array of handle of metrics.
-            if count is less than the number of metrics available, then driver shall only retrieve that number of metrics.
+            [in,out][optional][range(0,*pMetricHandleCount)] array of handle of metrics.
+            if count is less than the number of metrics available, then driver shall only retrieve that number of metric handles.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create metric group handle."
@@ -382,24 +382,24 @@ class: $tMetricGroup
 name: CreateExp
 decl: static
 details:
-    - "Metrics from multiple domains may be used for a single metric group."
-    - "Metrics from different sourceIds (refer $t_metric_programmable_exp_properties_t) are not allowed in a single metric group."
+    - "Metric handles from multiple domains may be used for a single metric group."
+    - "Metric handles from different sourceIds (refer $t_metric_programmable_exp_properties_t) are not allowed in a single metric group."
 params:
     - type: $t_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: char
+    - type: const char
       name: name[ZET_MAX_METRIC_GROUP_NAME]
       desc: "[in] Metric group name."
-    - type: char
+    - type: const char
       name: description[ZET_MAX_METRIC_GROUP_DESCRIPTION]
-      desc: "[in] Metric group name."
+      desc: "[in] Metric group description."
     - type: $t_metric_group_handle_t*
       name: pMetricGroupHandle
       desc: "[out] Created Metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Add a metric to the metric group handle."
+desc: "Add a metric handle to the metric group handle."
 version: "1.7"
 class: $tMetricGroup
 name: AddMetricExp
@@ -415,12 +415,36 @@ params:
       desc: "[in] Metric to be added to the group."
     - type: "uint32_t*"
       name: pErrorStringSize
-      desc: "[in,out][optional] Size of the error string to query, if an error was reported during adding the metric."
+      desc: "[in,out][optional] Size of the error string to query, if an error was reported during adding the metric handle."
     - type: "char*"
       name: pErrorString
       desc: |
             [in,out][optional][range(0, *pErrorStringSize)] Error string.
             if *pErrorStringSize is less than the length of the error string available, then driver shall only retrieve that length of error string.
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "If a Metric handle from a pre-defined metric group is requested to be added"
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "If the Metric group handle is already activated"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Remove a metric from the metric group handle."
+version: "1.7"
+class: $tMetricGroup
+name: RemoveMetricExp
+decl: static
+details:
+    - "Remove an already added metric handle from the metric group"
+params:
+    - type: $t_metric_group_handle_t
+      name: metricGroupHandle
+      desc: "[in] Handle of the metric group"
+    - type: const $t_metric_handle_t
+      name: hMetric
+      desc: "[in] Metric handle to be removed from the metric group."
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "If trying to remove a metric not previously added to the metric group"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroy a created metric group."
@@ -432,6 +456,9 @@ params:
     - type: $t_metric_group_handle_t 
       name: metricGroupHandle
       desc: "[in] Handle of the metric group to destroy"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "If trying to destroy a pre-defined metric group"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroy a created metric."
@@ -443,3 +470,6 @@ params:
     - type: $t_metric_handle_t
       name: metricHandle
       desc: "[in] Handle of the metric to destroy"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "If trying to destroy a metric from pre-defined metric group"
