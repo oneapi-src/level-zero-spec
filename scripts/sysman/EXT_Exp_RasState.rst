@@ -20,6 +20,7 @@ API
 * Functions
 
     * ${s}RasGetStateExp
+    * ${s}RasClearStateExp
 
 * Enumerations
 
