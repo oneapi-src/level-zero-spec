@@ -21,22 +21,24 @@ API
 * Enumerations
 
     * ${t}_metric_programmable_param_type_exp_t
+    * ${t}_value_info_type_exp_t
+    * ${t}_metric_programmable_exp_version_t
 
 * Structures
 
     * ${t}_metric_programmable_exp_properties_t
-    * ${t}_metric_programmable_param_exp_desc_t
+    * ${t}_metric_programmable_param_info_exp_t
     * ${t}_metric_programmable_param_value_exp_t
-    * ${t}_metric_programmable_param_value_exp_desc_t
-    * ${t}_value_exp_desc_t
+    * ${t}_metric_programmable_param_value_info_exp_t
+    * ${t}_value_info_exp_t
     * ${t}_value_uint64_range_exp_t
 
 * Functions
 
     * ${t}MetricProgrammableGetExp
     * ${t}MetricProgrammableGetPropertiesExp
-    * ${t}MetricProgrammableGetParamDescriptionExp
-    * ${t}MetricProgrammableGetParamValueDescriptionExp
+    * ${t}MetricProgrammableGetParamInfoExp
+    * ${t}MetricProgrammableGetParamValueInfoExp
     * ${t}MetricCreateFromProgrammableExp
     * ${t}MetricGroupCreateExp
     * ${t}MetricGroupAddMetricExp
@@ -49,7 +51,7 @@ Metric Programmable
 
 Application can use ${t}MetricGroupGet to enumerate the list of metric groups and the metrics available for collection.
 However Applications may also want to collect custom metrics which are not listed as part of the enumeration.
-This is made possible by making a list of programmable metrics available to the application, so that it choose different parameter values for the preparing custom metrics.
+This is made possible by making a list of programmable metrics available to the application, so that it may choose different parameter values for preparing custom metrics.
 
 Sample Code
 ------------
@@ -71,27 +73,27 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
     // Create metrics from metric programmable handles
     for(uint32_t i = 0; i < programmableCount; i++){
 
-        ${t}_metric_programmable_exp_handle_t * programmableHandle = metricProgrammableHandles[i];
+        ${t}_metric_programmable_exp_handle_t programmableHandle = metricProgrammableHandles[i];
         ${t}_metric_programmable_exp_properties_t programmableProperties{};
         ${t}MetricProgrammableGetPropertiesExp(programmableHandle, &programmableProperties);
 
         // Choose programmable handle of interest
         if(strcmp(programmableProperties.name, "EU_ACTIVE" ) == 0){
 
-            // Get Parameter descriptions
-            ${t}_metric_programmable_param_exp_desc_t * paramDescription = allocate (sizeof(${t}_metric_programmable_param_exp_desc_t) * programmableProperties.parameterCount);
-            ${t}MetricProgrammableGetParamDescriptionExp(programmableHandle, programmableProperties.parameterCount, paramDescription);
+            // Get Parameter info
+            ${t}_metric_programmable_param_info_exp_t * paramInfo = allocate (sizeof(${t}_metric_programmable_param_info_exp_t) * programmableProperties.parameterCount);
+            ${t}MetricProgrammableGetParamInfoExp(programmableHandle, programmableProperties.parameterCount, paramInfo);
 
-            // Get Parameter Value descriptions for the 0th parameter
-            ${t}_metric_programmable_param_value_exp_desc_t * valueDesc = allocate(sizeof(${t}_metric_programmable_param_value_exp_desc_t) * paramDescription[0].valueDescriptionCount);
-            ${t}MetricProgrammableGetParamValueDescriptionExp(programmableHandle, 0, paramDescription[0].valueDescriptionCount, valueDesc);
+            // Get Parameter Value info for the 0th parameter
+            ${t}_metric_programmable_param_value_info_exp_t * paramValueInfo = allocate(sizeof(${t}_metric_programmable_param_value_info_exp_t) * paramInfo[0].paramValueInforiptionCount);
+            ${t}MetricProgrammableGetParamValueInfoExp(programmableHandle, 0, paramInfo[0].valueInfoCount, paramValueInfo);
 
             // Setting value for the 0th parameter
             ${t}_metric_programmable_param_value_exp_t parameterValue;
-            parameterValue.value = valueDesc[0].valueDesc.ui64;
+            parameterValue.value = paramValueInfo[0].valueInfo.ui64;
 
             // Create Metric
-            ${t}_metric_handle_t metricHandle{};
+            ${t}_metric_handle_t metricHandle;
             char metricName[ZET_MAX_METRIC_NAME] = "eu_active_minimum";
             char metricDescription[ZET_MAX_METRIC_DESCRIPTION] = "eu_active_minimum_desc";
             ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, null_ptr);

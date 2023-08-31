@@ -8,18 +8,18 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool Experimental Extension for Programmable Metrics"
-version: "1.7"
+version: "1.8"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Programmable Metrics Experimental Extension Name"
-version: "1.7"
+version: "1.8"
 name: $T_PROGRAMMABLE_METRICS_EXP_NAME
 value: '"$XT_experimental_programmable_metrics"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Programmable Metrics Experimental Extension Version(s)"
-version: "1.7"
-name: $t_programmable_metrics_exp_version_t
+version: "1.8"
+name: $t_metric_programmable_exp_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
@@ -27,55 +27,55 @@ etors:
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum count of characters in export data element name"
-version: "1.7"
+version: "1.8"
 name: $T_MAX_PROGRAMMABLE_METRICS_ELEMENT_NAME_EXP
 value: "256"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum export data element description string size"
-version: "1.7"
+version: "1.8"
 name: $T_MAX_PROGRAMMABLE_METRICS_ELEMENT_DESCRIPTION_EXP
 value: "256"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum metric programmable name string size"
-version: "1.7"
+version: "1.8"
 name: $T_MAX_METRIC_PROGRAMMABLE_NAME_EXP
 value: "128"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum metric programmable description string size"
-version: "1.7"
+version: "1.8"
 name: $T_MAX_METRIC_PROGRAMMABLE_DESCRIPTION_EXP
 value: "128"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum metric programmable component string size"
-version: "1.7"
+version: "1.8"
 name: $T_MAX_METRIC_PROGRAMMABLE_COMPONENT_EXP
 value: "128"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum metric programmable parameter string size"
-version: "1.7"
+version: "1.8"
 name: $T_MAX_METRIC_PROGRAMMABLE_PARAMETER_NAME_EXP
 value: "128"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Maximum value description string size"
-version: "1.7"
-name: $T_MAX_VALUE_DESCRIPTION_CSTRING_EXP
+desc: "Maximum value information string size"
+version: "1.8"
+name: $T_MAX_VALUE_INFO_CSTRING_EXP
 value: "128"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of metric programmable's object"
-version: "1.7"
+version: "1.8"
 class: $tMetricProgrammable
 name: "$t_metric_programmable_exp_handle_t"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric Programmable properties queried using $tMetricProgrammableGetPropertiesExp"
-version: "1.7"
+version: "1.8"
 class: $tMetricProgrammable
 name: $t_metric_programmable_exp_properties_t
 base: $t_base_properties_t
@@ -109,7 +109,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric Programmable Parameter types"
-version: "1.7"
+version: "1.8"
 class: $tMetricProgrammable
 name: $t_metric_programmable_param_type_exp_t
 etors:
@@ -125,9 +125,9 @@ etors:
       desc: "Produces normalization average using raw_metric / timestamp."
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported value description types"
-version: "1.7"
-name: $t_value_type_exp_desc_t
+desc: "Supported value info types"
+version: "1.8"
+name: $t_value_info_type_exp_t
 etors:
     - name: ETOR_UINT32
       desc: "32-bit unsigned-integer"
@@ -149,8 +149,8 @@ etors:
       desc: "64-bit unsigned-integer range (minimum and maximum)"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Value description of type uint64_t range"
-version: "1.7"
+desc: "Value info of type uint64_t range"
+version: "1.8"
 name: $t_value_uint64_range_exp_t
 members:
     - type: uint64_t
@@ -161,9 +161,9 @@ members:
       desc: "[out] max value of the range"
 --- #--------------------------------------------------------------------------
 type: union
-desc: "Union of value descriptions"
-version: "1.7"
-name: $t_value_exp_desc_t
+desc: "Union of value information"
+version: "1.8"
+name: $t_value_info_exp_t
 base: $t_base_desc_t
 members:
     - type: uint32_t
@@ -188,17 +188,17 @@ members:
       name: "ui16"
       desc: "[out] 16-bit unsigned integer"
     - type: char
-      name: "cString[$T_MAX_VALUE_DESCRIPTION_CSTRING_EXP]"
+      name: "cString[$T_MAX_VALUE_INFO_CSTRING_EXP]"
       desc: "[out] cString"
     - type: $t_value_uint64_range_exp_t
       name: "ui64Range"
       desc: "[out] minimum and maximum value of the range"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Metric Programmable parameter description"
-version: "1.7"
+desc: "Metric Programmable parameter information"
+version: "1.8"
 class: $tMetricProgrammable
-name: $t_metric_programmable_param_exp_desc_t
+name: $t_metric_programmable_param_info_exp_t
 base: $t_base_desc_t
 members:
     - type: $t_metric_programmable_param_type_exp_t
@@ -207,30 +207,30 @@ members:
     - type: char
       name: "name[$T_MAX_METRIC_PROGRAMMABLE_PARAMETER_NAME_EXP]"
       desc: "[out] metric programmable parameter name"
-    - type: $t_value_type_exp_desc_t
-      name: "valueTypeDesc"
-      desc: "[out] value type description"
+    - type: $t_value_info_type_exp_t
+      name: "valueInfoType"
+      desc: "[out] value info type"
     - type: $t_value_t
       name: "defaultValue"
       desc: "[out] default value for the parameter"
     - type: uint32_t
-      name: "valueDescriptionCount"
-      desc: "[out] count of $t_metric_programmable_param_value_exp_desc_t"
+      name: "valueInfoCount"
+      desc: "[out] count of $t_metric_programmable_param_value_info_exp_t"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Metric Programmable parameter value description"
-version: "1.7"
+desc: "Metric Programmable parameter value information"
+version: "1.8"
 class: $tMetricProgrammable
-name: $t_metric_programmable_param_value_exp_desc_t
+name: $t_metric_programmable_param_value_info_exp_t
 base: $t_base_desc_t
 members:
-    - type: $t_value_exp_desc_t
-      name: "valueDesc"
-      desc: "[out] description of the parameter value"
+    - type: $t_value_info_exp_t
+      name: "valueInfo"
+      desc: "[out] information about the parameter value"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric Programmable parameter value"
-version: "1.7"
+version: "1.8"
 class: $tMetricProgrammable
 name: $t_metric_programmable_param_value_exp_t
 members:
@@ -247,7 +247,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Query and get the available metric programmable handles."
-version: "1.7"
+version: "1.8"
 class: $tMetricProgrammable
 name: GetExp
 decl: static
@@ -273,7 +273,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the properties of the metric programmable."
-version: "1.7"
+version: "1.8"
 class: $tMetricProgrammable
 name: GetPropertiesExp
 decl: static
@@ -288,13 +288,13 @@ params:
       desc: "[out] properties of the metric programmable"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the description of the parameters of the metric programmable."
-version: "1.7"
+desc: "Get the information about the parameters of the metric programmable."
+version: "1.8"
 class: $tMetricProgrammable
-name: GetParamDescriptionExp
+name: GetParamInfoExp
 decl: static
 details:
-    - "Returns descriptions for the parameters of the metric programmable handle."
+    - "Returns information about the parameters of the metric programmable handle."
 params:
     - type: $t_metric_programmable_exp_handle_t
       name: hMetricProgrammable
@@ -302,22 +302,22 @@ params:
     - type: "uint32_t*"
       name: pParameterCount
       desc: |
-            [in,out] count of the parameters to retrieve descriptions.
+            [in,out] count of the parameters to retrieve parameter info.
             if value pParameterCount is greater than count of parameters available, then pParameterCount will be updated with count of parameters available.
-    - type: "$t_metric_programmable_param_exp_desc_t*"
-      name: pParameterDescription
+    - type: "$t_metric_programmable_param_info_exp_t*"
+      name: pParameterInfo
       desc: |
-            [out][range(1, *pParameterCount)] array of parameter descriptions.
-            if parameterCount is less than the number of parameters available, then driver shall only retrieve that number of parameter descriptions.
+            [out][range(1, *pParameterCount)] array of parameter info.
+            if parameterCount is less than the number of parameters available, then driver shall only retrieve that number of parameter info.
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get the description of the parameter value of the metric programmable."
-version: "1.7"
+desc: "Get the information about the parameter value of the metric programmable."
+version: "1.8"
 class: $tMetricProgrammable
-name: GetParamValueDescriptionExp
+name: GetParamValueInfoExp
 decl: static
 details:
-    - "Returns the value-description for the parameter at the specific ordinal of the metric programmable handle."
+    - "Returns the value-information about the parameter at the specific ordinal of the metric programmable handle."
 params:
     - type: $t_metric_programmable_exp_handle_t
       name: hMetricProgrammable
@@ -326,26 +326,26 @@ params:
       name: parameterOrdinal
       desc: "[in] ordinal of the parameter in the metric programmable"
     - type: "uint32_t*"
-      name: pValueDescriptionCount
+      name: pValueInfoCount
       desc: |
-            [in,out] count of parameter value descriptions to retrieve.
-            if value at pValueDescriptionCount is greater than count of value descriptions available, then pValueDescriptionCount will be updated with count of value descriptions available.
-    - type: "$t_metric_programmable_param_value_exp_desc_t*"
-      name: pValueDescription
+            [in,out] count of parameter value information to retrieve.
+            if value at pValueInfoCount is greater than count of value info available, then pValueInfoCount will be updated with count of value info available.
+    - type: "$t_metric_programmable_param_value_info_exp_t*"
+      name: pValueInfo
       desc: |
-            [out][range(1, *pValueDescriptionCount)] array of parameter value descriptions.
-            if pValueDescriptionCount is less than the number of value descriptions available, then driver shall only retrieve that number of value descriptions.
+            [out][range(1, *pValueInfoCount)] array of parameter value info.
+            if pValueInfoCount is less than the number of value info available, then driver shall only retrieve that number of value info.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create metric handles by applying parameter values on the metric programmable handle."
-version: "1.7"
+version: "1.8"
 class: $tMetric
 name: CreateFromProgrammableExp
 decl: static
 details:
     - "Multiple parameter values could be used to prepare a metric."
     - "If parameterCount = 0, the default value of the metric programmable would be used for all parameters"
-    - "Parameter values are updated to pParameterValues in the same order as retrieved using $tMetricProgrammableGetParamDescriptionExp"
+    - "Parameter values are updated to pParameterValues in the same order as retrieved using $tMetricProgrammableGetParamInfoExp"
     - "If multiple metrics are generated, then implementation defined C string will be post-fixed to metric name and description"
 params:
     - type: $t_metric_programmable_exp_handle_t
@@ -377,7 +377,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create metric group handle."
-version: "1.7"
+version: "1.8"
 class: $tMetricGroup
 name: CreateExp
 decl: static
@@ -400,7 +400,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Add a metric handle to the metric group handle."
-version: "1.7"
+version: "1.8"
 class: $tMetricGroup
 name: AddMetricExp
 decl: static
@@ -429,7 +429,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Remove a metric from the metric group handle."
-version: "1.7"
+version: "1.8"
 class: $tMetricGroup
 name: RemoveMetricExp
 decl: static
@@ -448,7 +448,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroy a created metric group."
-version: "1.7"
+version: "1.8"
 class: $tMetricGroup
 name: DestroyExp
 decl: static
@@ -462,7 +462,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroy a created metric."
-version: "1.7"
+version: "1.8"
 class: $tMetric
 name: DestroyExp
 decl: static
