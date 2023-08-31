@@ -399,7 +399,7 @@ params:
       desc: "[out] Created Metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Add a metric handle to the metric group handle."
+desc: "Add a metric handle to the metric group handle created using $tMetricGroupCreateExp."
 version: "1.8"
 class: $tMetricGroup
 name: AddMetricExp
@@ -428,7 +428,7 @@ returns:
         - "If the Metric group handle is already activated"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Remove a metric from the metric group handle."
+desc: "Remove a metric from the metric group handle created using $tMetricGroupCreateExp."
 version: "1.8"
 class: $tMetricGroup
 name: RemoveMetricExp
@@ -447,7 +447,22 @@ returns:
         - "If trying to remove a metric not previously added to the metric group"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroy a created metric group."
+desc: "Finalizes a created metric group using $tMetricGroupCreateExp, so that it can be activated."
+version: "1.8"
+class: $tMetricGroup
+name: FinalizeExp
+decl: static
+details:
+    - "Finalize the metric group."
+    - "This is a necessary step for the created metric group, before activation."
+    - "Add / Remove of metrics is possible after Finalize. However, a call to $tMetricGroupFinalizeExp is necessary after modifying the metric group."
+params:
+    - type: $t_metric_group_handle_t
+      name: metricGroupHandle
+      desc: "[in] Handle of the metric group"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroy a metric group created using $tMetricGroupCreateExp."
 version: "1.8"
 class: $tMetricGroup
 name: DestroyExp

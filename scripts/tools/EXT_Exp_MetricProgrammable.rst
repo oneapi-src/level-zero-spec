@@ -43,6 +43,7 @@ API
     * ${t}MetricGroupCreateExp
     * ${t}MetricGroupAddMetricExp
     * ${t}MetricGroupRemoveMetricExp
+    * ${t}MetricGroupFinalizeExp
     * ${t}MetricDestroyExp
     * ${t}MetricGroupDestroyExp
 
