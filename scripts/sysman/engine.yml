@@ -69,12 +69,14 @@ name: $s_engine_stats_t
 members:
     - type: uint64_t
       name: "activeTime"
-      desc: "[out] Monotonic counter for time in microseconds that this resource is actively running workloads."
+      desc: |
+            [out] Monotonic counter where the resource is actively running workloads.
+            Time units are implementation specific since the activeTime value is only intended for calculating utilization percentage as noted above.
     - type: uint64_t
       name: "timestamp"
       desc: |
-            [out] Monotonic timestamp counter in microseconds when activeTime counter was sampled.
-            This timestamp should only be used to calculate delta time between snapshots of this structure.
+            [out] Monotonic counter when activeTime counter was sampled.
+            This timestamp should only be used to calculate delta between snapshots of this structure.
             Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
             The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
 --- #--------------------------------------------------------------------------
