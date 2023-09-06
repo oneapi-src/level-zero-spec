@@ -24,6 +24,9 @@ etors:
       desc: "The PUnit power domain is a package-level power domain."
     - name: STACK
       desc: "The PUnit power domain is a stack-level power domain."
+    - name: MEMORY
+      desc: "The PUnit power domain is a memory-level power domain."
+      version: "1.8"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Power Level Type"
