@@ -988,7 +988,7 @@ Public:
 def get_pfncbtables(specs, meta, namespace, tags):
     tables = []
     for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
-        objs = get_class_function_objs(specs, cname, 1.0)
+        objs = get_class_function_objs(specs, cname)
         if len(objs) > 0:
             name = get_table_name(namespace, tags, {'class': cname})
             table = "%s_%s_callbacks_t"%(namespace, _camel_to_snake(name))
