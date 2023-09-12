@@ -476,7 +476,7 @@ returns:
         - "If trying to destroy a pre-defined metric group"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroy a created metric."
+desc: "Destroy a metric created using $tMetricCreateFromProgrammableExp."
 version: "1.8"
 class: $tMetric
 name: DestroyExp
