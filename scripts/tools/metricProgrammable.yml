@@ -395,7 +395,7 @@ params:
       name: description[ZET_MAX_METRIC_GROUP_DESCRIPTION]
       desc: "[in] Metric group description."
     - type: $t_metric_group_handle_t*
-      name: pMetricGroupHandle
+      name: phMetricGroup
       desc: "[out] Created Metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
@@ -408,10 +408,10 @@ details:
     - "Reasons for failing to add the metric could be queried using pErrorString"
 params:
     - type: $t_metric_group_handle_t 
-      name: metricGroupHandle
+      name: hMetricGroup
       desc: "[in] Handle of the metric group"
-    - type: const $t_metric_handle_t*
-      name: phMetric
+    - type: $t_metric_handle_t
+      name: hMetric
       desc: "[in] Metric to be added to the group."
     - type: "uint32_t*"
       name: pErrorStringSize
@@ -437,9 +437,9 @@ details:
     - "Remove an already added metric handle from the metric group"
 params:
     - type: $t_metric_group_handle_t
-      name: metricGroupHandle
+      name: hMetricGroup
       desc: "[in] Handle of the metric group"
-    - type: const $t_metric_handle_t
+    - type: $t_metric_handle_t
       name: hMetric
       desc: "[in] Metric handle to be removed from the metric group."
 returns:
@@ -458,7 +458,7 @@ details:
     - "Add / Remove of metrics is possible after Finalize. However, a call to $tMetricGroupFinalizeExp is necessary after modifying the metric group."
 params:
     - type: $t_metric_group_handle_t
-      name: metricGroupHandle
+      name: hMetricGroup
       desc: "[in] Handle of the metric group"
 --- #--------------------------------------------------------------------------
 type: function
@@ -469,7 +469,7 @@ name: DestroyExp
 decl: static
 params:
     - type: $t_metric_group_handle_t 
-      name: metricGroupHandle
+      name: hMetricGroup
       desc: "[in] Handle of the metric group to destroy"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
@@ -483,7 +483,7 @@ name: DestroyExp
 decl: static
 params:
     - type: $t_metric_handle_t
-      name: metricHandle
+      name: hMetric
       desc: "[in] Handle of the metric to destroy"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
