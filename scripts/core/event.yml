@@ -198,6 +198,48 @@ returns:
     - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Creates an IPC event pool handle out of a file descriptor"
+version: "1.8"
+class: $xEventPool
+name: GetIpcHandleFromFileDescriptorExp
+decl: static
+details:
+    - "Returned IPC handle may contain metadata in addition to the file descriptor."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: uint64_t
+      name: handle
+      desc: "[in] file descriptor"
+    - type: $x_ipc_event_pool_handle_t*
+      name: phIpc
+      desc: "[out] Returned IPC event handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the file descriptor contained in an IPC event pool handle"
+version: "1.8"
+class: $xEventPool
+name: GetFileDescriptorFromIpcHandleExp
+decl: static
+details:
+    - "IPC event pool handle must be a valid handle obtained with $xEventPoolGetIpcHandle."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_ipc_event_pool_handle_t
+      name: hIpc
+      desc: "[in] IPC event pool handle"
+    - type: uint64_t*
+      name: pHandle
+      desc: "[out] Returned file descriptor"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Returns an IPC event pool handle to the driver"
 version: "1.6"
 class: $xEventPool
