@@ -227,6 +227,13 @@ decl: static
 details:
     - "Multiple calls to this function with the same IPC handle will return unique event pool handles."
     - "The event handle in this process should not be freed with $xEventPoolDestroy, but rather with $xEventPoolCloseIpcHandle."
+    - |
+      The event pool returned by this call must be used only on devices that are at the same device hierarchy level as 
+      the device with which the original event pool was created. For instance, if the original event pool was created with
+      a device handle containing N sub-devices, then $xEventPoolOpenIpcHandle needs to be called for a context containing
+      at least one device that contains also N sub-devices and the returned pool can be used only with those devices. This
+      ensures that using the event pool on the importer is functionally correct for any implementation or optimizations the
+      underlying Level Zero driver uses.
     - "The application may call this function from simultaneous threads."
 params:
     - type: $x_context_handle_t
