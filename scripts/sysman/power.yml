@@ -122,7 +122,7 @@ class: $sPower
 name: $s_power_sustained_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency if the power averaged over a window (typically seconds) exceeds this limit."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 members:
     - type: $x_bool_t
       name: enabled
@@ -140,7 +140,7 @@ class: $sPower
 name: $s_power_burst_limit_t
 details:
     - "The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 > PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 members:
     - type: $x_bool_t
       name: enabled
@@ -156,7 +156,7 @@ name: $s_power_peak_limit_t
 details:
     - "The power controller (Punit) will reactively/proactively throttle the operating frequency of the device when the instantaneous/100usec power exceeds this limit. The limit is known as PL4 or Psys. It expresses the maximum power that can be drawn from the power supply."
     - "If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 members:
     - type: int32_t
       name: powerAC
@@ -212,7 +212,7 @@ name: GetCardPowerDomain
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_device_handle_t
       name: hDevice

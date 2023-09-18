@@ -147,7 +147,7 @@ etors:
     - name: FIXED
       desc: "Overclocking fixed Mode - In this mode, hardware will disable most frequency throttling and lock the frequency and voltage at the specified overclock values. This mode disables OVERRIDE and INTERPOLATIVE modes. This mode can damage the part, most of the protections are disabled on this mode."  
 details:
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking properties"
@@ -156,7 +156,7 @@ name: $s_oc_capabilities_t
 base: $s_base_capability_t
 details:
     - "Provides all the overclocking capabilities and properties supported by the device for the frequency domain."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 members:
     - type: $x_bool_t
       name: isOcSupported
@@ -330,7 +330,7 @@ name: OcGetCapabilities
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -346,7 +346,7 @@ name: OcGetFrequencyTarget
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -371,7 +371,7 @@ name: OcSetFrequencyTarget
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -396,7 +396,7 @@ name: OcGetVoltageTarget
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -424,7 +424,7 @@ name: OcSetVoltageTarget
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -452,7 +452,7 @@ name: OcSetMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -477,7 +477,7 @@ name: OcGetMode
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -502,7 +502,7 @@ name: OcGetIccMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -523,7 +523,7 @@ details:
     - "Setting ocIccMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -549,7 +549,7 @@ name: OcGetTjMax
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -569,7 +569,7 @@ details:
     - "Setting ocTjMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.7": "[DEPRECATED] No longer supported."
+    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
