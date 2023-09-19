@@ -211,6 +211,9 @@ etors:
     - name: DEVICE_UUID
       desc: $s_uuid_t
       version: "1.7"
+    - name: IFWI_VERSION
+      desc: $s_firmware_ifwi_version_exp_t
+      version: "1.8"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

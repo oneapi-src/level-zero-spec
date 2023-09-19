@@ -1,0 +1,51 @@
+#
+# Copyright (C) 2023 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #----------------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Sysman Extension APIs for Intel Firmware Image Version"
+version: "1.8"
+--- #----------------------------------------------------------------------------------
+type: macro
+desc: "Intel Firmware Image Version Name"
+version: "1.8"
+name: $S_FIRMWARE_IFWI_VERSION_EXP_NAME
+value: '"$XS_extension_ifwi_version"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Intel Firmware Image Version Extension Version(s)"
+version: "1.8"
+name: $s_firmware_ifwi_version_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Intel Firmware Image (IFWI) version"
+version: "1.8"
+class: $sFirmware
+name: 
+      $s_firmware_ifwi_version_exp_t
+members:
+   - type: uint16_t
+     name: "productVersion"
+     desc: "[out] data representing firmware product version"
+   - type: uint16_t
+     name: "releaseVersion"
+     desc: "[out] data representing firmware release version"
+   - type: uint16_t
+     name: "buildVersion"
+     desc: "[out] data representing firmware build version"
+   - type: uint16_t
+     name: "hotfixVersion"
+     desc: "[out] data representing firmware hotfix version"
+   - type: uint16_t
+     name: "engineeringVersion"
+     desc: "[out] data representing firmware engineering version"
+details:
+    - "This structure may be returned from $sFirmwareGetProperties, via the `pNext` member of $s_firmware_properties_t"
