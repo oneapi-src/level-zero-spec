@@ -508,6 +508,10 @@ etors:
       desc: $x_rtas_geometry_aabbs_exp_cb_params_t
       version: "1.7"
       value: "0x00020013"
+    - name: COUNTER_BASED_EVENT_EXP_DESC
+      desc: $x_event_counter_based_exp_desc_t
+      version: "1.8"
+      value: "0x00020014"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
