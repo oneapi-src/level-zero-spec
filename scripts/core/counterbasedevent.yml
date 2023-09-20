@@ -32,7 +32,7 @@ name: $x_event_counter_based_exp_flags_t
 etors:
     - name: IMMEDIATE
       desc: "Counter-based event is used for immediate command lists (default)"
-    - name: NON_REGULAR
+    - name: NON_IMMEDIATE
       desc: "Counter-based event is used for non-immediate command lists"
 --- #--------------------------------------------------------------------------
 type: struct
