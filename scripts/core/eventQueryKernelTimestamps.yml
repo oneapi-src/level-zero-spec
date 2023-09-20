@@ -122,7 +122,7 @@ params:
     - type: $x_event_query_kernel_timestamps_results_ext_properties_t*
       name: pResults
       desc: |
-            [in][optional] pointer to event query properties structure(s).
+            [in,out][optional][range(0, *pCount)] pointer to event query properties structure(s).
                 - This parameter may be null when `*pCount` is zero.
                 - if `*pCount` is less than the number of event packets available, the driver may only update `*pCount` elements, starting at element zero.
                 - if `*pCount` is greater than the number of event packets available, the driver may only update the valid elements.

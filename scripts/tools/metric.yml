@@ -289,10 +289,19 @@ base: $t_base_desc_t
 members:
     - type: uint32_t
       name: "notifyEveryNReports"
-      desc: "[in,out] number of collected reports after which notification event will be signalled"
+      desc: >
+            [in,out] number of collected reports after which notification event will be signaled.
+            If the requested value is not supported exactly, then the driver may use a value that
+            is the closest supported approximation and shall update this member during
+            $tMetricStreamerOpen.
+
     - type: uint32_t
       name: "samplingPeriod"
-      desc: "[in,out] streamer sampling period in nanoseconds"
+      desc: >
+            [in,out] streamer sampling period in nanoseconds.
+            If the requested value is not supported exactly, then the driver may use a value that
+            is the closest supported approximation and shall update this member during
+            $tMetricStreamerOpen.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Opens metric streamer for a device."
@@ -487,7 +496,7 @@ returns:
     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Resets a metric query object back to inital state."
+desc: "Resets a metric query object back to initial state."
 class: $tMetricQuery
 name: Reset
 details:
