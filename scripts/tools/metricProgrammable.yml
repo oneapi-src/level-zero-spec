@@ -406,6 +406,7 @@ name: AddMetricExp
 decl: static
 details:
     - "Reasons for failing to add the metric could be queried using pErrorString"
+    - "Multiple additions of same metric would add the metric only once to the hMetricGroup"
 params:
     - type: $t_metric_group_handle_t 
       name: hMetricGroup
@@ -413,7 +414,7 @@ params:
     - type: $t_metric_handle_t
       name: hMetric
       desc: "[in] Metric to be added to the group."
-    - type: "uint32_t*"
+    - type: "size_t *"
       name: pErrorStringSize
       desc: "[in,out][optional] Size of the error string to query, if an error was reported during adding the metric handle."
     - type: "char*"
@@ -424,8 +425,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "If a Metric handle from a pre-defined metric group is requested to be added"
-    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
-        - "If the Metric group handle is already activated"
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+        - "If the metric group is currently activated"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Remove a metric from the metric group handle created using $tMetricGroupCreateExp."
@@ -445,6 +446,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "If trying to remove a metric not previously added to the metric group"
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+        - "If the metric group is currently activated"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Finalizes a created metric group using $tMetricGroupCreateExp, so that it can be activated."
@@ -453,13 +456,17 @@ class: $tMetricGroup
 name: FinalizeExp
 decl: static
 details:
-    - "Finalize the metric group."
-    - "This is a necessary step for the created metric group, before activation."
+    - "Finalizes the $tMetricGroupAddMetricExp and $tMetricGroupRemoveMetricExp operations on the metric group."
+    - "This is a necessary step before activation of the created metric group."
     - "Add / Remove of metrics is possible after Finalize. However, a call to $tMetricGroupFinalizeExp is necessary after modifying the metric group."
+    - "Implementations could add new metrics to the group during Finalize, which are related and might add value to the metrics already added by the application"
 params:
     - type: $t_metric_group_handle_t
       name: hMetricGroup
       desc: "[in] Handle of the metric group"
+returns:
+     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+       - "If the metric group is currently activated"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroy a metric group created using $tMetricGroupCreateExp."
@@ -467,6 +474,9 @@ version: "1.8"
 class: $tMetricGroup
 name: DestroyExp
 decl: static
+details:
+    - "Metric handles created using $tMetricCreateFromProgrammableExp and are part of the metricGroup are not destroyed."
+    - "It is necessary to call $tMetricDestroyExp for each of the metric handles (created from $tMetricCreateFromProgrammableExp) to destroy them."
 params:
     - type: $t_metric_group_handle_t 
       name: hMetricGroup
@@ -474,6 +484,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "If trying to destroy a pre-defined metric group"
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+      - "If trying to destroy an activated metric group"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroy a metric created using $tMetricCreateFromProgrammableExp."

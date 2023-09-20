@@ -86,7 +86,7 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
             ${t}MetricProgrammableGetParamInfoExp(programmableHandle, programmableProperties.parameterCount, paramInfo);
 
             // Get Parameter Value info for the 0th parameter
-            ${t}_metric_programmable_param_value_info_exp_t * paramValueInfo = allocate(sizeof(${t}_metric_programmable_param_value_info_exp_t) * paramInfo[0].paramValueInforiptionCount);
+            ${t}_metric_programmable_param_value_info_exp_t * paramValueInfo = allocate(sizeof(${t}_metric_programmable_param_value_info_exp_t) * paramInfo[0].valueInfoCount);
             ${t}MetricProgrammableGetParamValueInfoExp(programmableHandle, 0, paramInfo[0].valueInfoCount, paramValueInfo);
 
             // Setting value for the 0th parameter
@@ -94,16 +94,15 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
             parameterValue.value = paramValueInfo[0].valueInfo.ui64;
 
             // Create Metric
-            ${t}_metric_handle_t metricHandle;
             char metricName[ZET_MAX_METRIC_NAME] = "eu_active_minimum";
             char metricDescription[ZET_MAX_METRIC_DESCRIPTION] = "eu_active_minimum_desc";
             ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, null_ptr);
-            metricHandles = allocate(sizeof(${t}_metric_handle_t) * metricHandleCount);
+            ${t}_metric_handle_t * metricHandles = allocate(sizeof(${t}_metric_handle_t) * metricHandleCount);
             ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, metricHandles);
         }
 
         //Create Metric Group from metrics
-        uint32_t handlesSize = metricHandlesUsed.size();
+        ${t}_metric_group_handle_t metricGroupHandle{};
         char metricGroupName[ZET_MAX_METRIC_GROUP_NAME] = "eu_active";
         char metricGroupDescription[ZET_MAX_METRIC_GROUP_DESCRIPTION] = "eu_active_desc";
         ${t}MetricGroupCreateExp(device, metricGroupName, metricGroupDescription, &metricGroup);
