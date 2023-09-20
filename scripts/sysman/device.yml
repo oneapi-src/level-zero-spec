@@ -192,22 +192,22 @@ members:
       desc: "[out] Number of sub-devices. A value of 0 indicates that this device doesn't have sub-devices."
     - type: char
       name: "serialNumber[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Manufacturing serial number (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+      desc: "[out] Manufacturing serial number (NULL terminated string value). This value is intended to reflect the Part ID/SoC ID assigned by manufacturer that is unique for a SoC. Will be set to the string \"unknown\" if this cannot be determined for the device."
     - type: char
       name: "boardNumber[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Manufacturing board number (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+      desc: "[out] Manufacturing board number (NULL terminated string value). Alternatively \"boardSerialNumber\", this value is intended to reflect the string printed on board label by manufacturer. Will be set to the string \"unknown\" if this cannot be determined for the device."
     - type: char
       name: "brandName[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Brand name of the device (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+      desc: "[out] Brand name of the device (NULL terminated string value). Will be set to the string \"unknown\" if this cannot be determined for the device."
     - type: char
       name: "modelName[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Model name of the device (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+      desc: "[out] Model name of the device (NULL terminated string value). Will be set to the string \"unknown\" if this cannot be determined for the device."
     - type: char
       name: "vendorName[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Vendor name of the device (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+      desc: "[out] Vendor name of the device (NULL terminated string value). Will be set to the string \"unknown\" if this cannot be determined for the device."
     - type: char
       name: "driverVersion[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] Installed driver version (NULL terminated string value). Will be set to the string \"unkown\" if this cannot be determined for the device."
+      desc: "[out] Installed driver version (NULL terminated string value). Will be set to the string \"unknown\" if this cannot be determined for the device."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device properties"
