@@ -133,9 +133,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Extension properties for Memory State"
-version: "1.7"
+version: "1.8"
 class: $sMemory
-name: $s_mem_ext_state_t
+name: $s_mem_state_ext_t
 details:
     - "Memory Page Offline Metrics"
 members:
