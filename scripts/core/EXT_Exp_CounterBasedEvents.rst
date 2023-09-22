@@ -46,5 +46,5 @@ The following recommendations and restrictions apply to counter-based events:
 - Counter-based events may be reused multiple times without a need for reset.
 - Counter-based events must not be signaled from host, i.e., a call to ${x}EventHostSignal is not allowed.
 - Counter-based events may be used on multiple command lists.
-- Querying a counter-based event returns only the last saved counter value from the last command list that incremented it.
+- Querying a counter-based event queries only the last saved counter value from the last command list that incremented it.
 - Synchronizing on a counter-based event waits only the last saved counter value from the last command list that incremented it.
