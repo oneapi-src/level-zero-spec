@@ -285,7 +285,7 @@ params:
       desc: "[in] handle of the metric programmable"
     - type: "$t_metric_programmable_exp_properties_t*"
       name: pProperties
-      desc: "[out] properties of the metric programmable"
+      desc: "[in,out] properties of the metric programmable"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get the information about the parameters of the metric programmable."
@@ -307,7 +307,7 @@ params:
     - type: "$t_metric_programmable_param_info_exp_t*"
       name: pParameterInfo
       desc: |
-            [out][range(1, *pParameterCount)] array of parameter info.
+            [in,out][range(1, *pParameterCount)] array of parameter info.
             if parameterCount is less than the number of parameters available, then driver shall only retrieve that number of parameter info.
 --- #--------------------------------------------------------------------------
 type: function
@@ -333,7 +333,7 @@ params:
     - type: "$t_metric_programmable_param_value_info_exp_t*"
       name: pValueInfo
       desc: |
-            [out][range(1, *pValueInfoCount)] array of parameter value info.
+            [in,out][range(1, *pValueInfoCount)] array of parameter value info.
             if pValueInfoCount is less than the number of value info available, then driver shall only retrieve that number of value info.
 --- #--------------------------------------------------------------------------
 type: function
@@ -344,9 +344,10 @@ name: CreateFromProgrammableExp
 decl: static
 details:
     - "Multiple parameter values could be used to prepare a metric."
-    - "If parameterCount = 0, the default value of the metric programmable would be used for all parameters"
-    - "Parameter values are updated to pParameterValues in the same order as retrieved using $tMetricProgrammableGetParamInfoExp"
-    - "If multiple metrics are generated, then implementation defined C string will be post-fixed to metric name and description"
+    - "If parameterCount = 0, the default value of the metric programmable would be used for all parameters."
+    - "If multiple metrics are generated, then implementation defined C string will be post-fixed to metric name and description."
+    - "$tMetricProgrammableGetParamInfoExp() returns a list of parameters in a defined order."
+    - "Therefore, the list of values passed in to the API should respect the same order such that the desired parameter is set with expected value"
 params:
     - type: $t_metric_programmable_exp_handle_t
       name: hMetricProgrammable
@@ -382,8 +383,7 @@ class: $tMetricGroup
 name: CreateExp
 decl: static
 details:
-    - "Metric handles from multiple domains may be used for a single metric group."
-    - "Metric handles from different sourceIds (refer $t_metric_programmable_exp_properties_t) are not allowed in a single metric group."
+    - "Metrics from $tMetricCreateFromProgrammableExp() could be added to the created metric group."
 params:
     - type: $t_device_handle_t
       name: hDevice
@@ -396,7 +396,7 @@ params:
       desc: "[in] Metric group description."
     - type: $t_metric_group_handle_t*
       name: phMetricGroup
-      desc: "[out] Created Metric group handle"
+      desc: "[in,out] Created Metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Add a metric handle to the metric group handle created using $tMetricGroupCreateExp."
@@ -407,6 +407,8 @@ decl: static
 details:
     - "Reasons for failing to add the metric could be queried using pErrorString"
     - "Multiple additions of same metric would add the metric only once to the hMetricGroup"
+    - "Metric handles from multiple domains may be used in a single metric group."
+    - "Metric handles from different sourceIds (refer $t_metric_programmable_exp_properties_t) are not allowed in a single metric group."
 params:
     - type: $t_metric_group_handle_t 
       name: hMetricGroup
@@ -416,7 +418,9 @@ params:
       desc: "[in] Metric to be added to the group."
     - type: "size_t *"
       name: pErrorStringSize
-      desc: "[in,out][optional] Size of the error string to query, if an error was reported during adding the metric handle."
+      desc: |
+            [in,out][optional] Size of the error string to query, if an error was reported during adding the metric handle.
+            if *pErrorStringSize is zero, then the driver shall update the value with the size of the error string in bytes.
     - type: "char*"
       name: pErrorString
       desc: |
@@ -424,9 +428,9 @@ params:
             if *pErrorStringSize is less than the length of the error string available, then driver shall only retrieve that length of error string.
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "If a Metric handle from a pre-defined metric group is requested to be added"
-    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
-        - "If the metric group is currently activated"
+        - "If a Metric handle from a pre-defined metric group is requested to be added."
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
+        - "If the metric group is currently activated."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Remove a metric from the metric group handle created using $tMetricGroupCreateExp."
@@ -435,7 +439,7 @@ class: $tMetricGroup
 name: RemoveMetricExp
 decl: static
 details:
-    - "Remove an already added metric handle from the metric group"
+    - "Remove an already added metric handle from the metric group."
 params:
     - type: $t_metric_group_handle_t
       name: hMetricGroup
@@ -446,8 +450,10 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "If trying to remove a metric not previously added to the metric group"
-    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
         - "If the metric group is currently activated"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "If the input metric group is a pre-defined metric group"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Finalizes a created metric group using $tMetricGroupCreateExp, so that it can be activated."
@@ -460,12 +466,15 @@ details:
     - "This is a necessary step before activation of the created metric group."
     - "Add / Remove of metrics is possible after Finalize. However, a call to $tMetricGroupFinalizeExp is necessary after modifying the metric group."
     - "Implementations could add new metrics to the group during Finalize, which are related and might add value to the metrics already added by the application"
+    - "Applications can query the list of metrics in the metric group using $tMetricGet"
 params:
     - type: $t_metric_group_handle_t
       name: hMetricGroup
       desc: "[in] Handle of the metric group"
 returns:
-     - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "If the input metric group is a pre-defined metric group"
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
        - "If the metric group is currently activated"
 --- #--------------------------------------------------------------------------
 type: function
@@ -484,7 +493,7 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "If trying to destroy a pre-defined metric group"
-    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
       - "If trying to destroy an activated metric group"
 --- #--------------------------------------------------------------------------
 type: function

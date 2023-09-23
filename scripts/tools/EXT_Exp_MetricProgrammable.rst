@@ -50,7 +50,7 @@ API
 Metric Programmable
 ~~~~~~~~~~~~~~~~~~~
 
-Application can use ${t}MetricGroupGet to enumerate the list of metric groups and the metrics available for collection.
+Application can use ${t}MetricGroupGet to enumerate the list of metric groups and ${t}MetricGet for the metrics available for collection.
 However Applications may also want to collect custom metrics which are not listed as part of the enumeration.
 This is made possible by making a list of programmable metrics available to the application, so that it may choose different parameter values for preparing custom metrics.
 
@@ -100,14 +100,15 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
             ${t}_metric_handle_t * metricHandles = allocate(sizeof(${t}_metric_handle_t) * metricHandleCount);
             ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, metricHandles);
         }
-
-        //Create Metric Group from metrics
-        ${t}_metric_group_handle_t metricGroupHandle{};
-        char metricGroupName[ZET_MAX_METRIC_GROUP_NAME] = "eu_active";
-        char metricGroupDescription[ZET_MAX_METRIC_GROUP_DESCRIPTION] = "eu_active_desc";
-        ${t}MetricGroupCreateExp(device, metricGroupName, metricGroupDescription, &metricGroup);
-        ${t}MetricGroupAddMetricExp(metricGroup, &metricHandlesUsed[0], null_ptr, null_ptr);
     }
+
+    //Create Metric Group from metrics
+    ${t}_metric_group_handle_t metricGroupHandle{};
+    char metricGroupName[ZET_MAX_METRIC_GROUP_NAME] = "eu_active";
+    char metricGroupDescription[ZET_MAX_METRIC_GROUP_DESCRIPTION] = "eu_active_desc";
+    ${t}MetricGroupCreateExp(device, metricGroupName, metricGroupDescription, &metricGroup);
+    ${t}MetricGroupAddMetricExp(metricGroup, &metricHandles[0], null_ptr, null_ptr);
+    ${t}MetricGroupFinalizeExp(metricGroup);
 
     //Activate Metric group
     //Collect Metric group using available sampling types
