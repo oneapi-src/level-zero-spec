@@ -133,18 +133,14 @@ etors:
       desc: $t_metric_programmable_param_info_exp_t
       version: "1.8"
       value: "0x00010004"
-    - name: METRIC_PROGRAMMABLE_PARAM_VALUE_EXP
-      desc: $t_metric_programmable_param_value_exp_t
-      version: "1.8"
-      value: "0x00010005"
     - name: METRIC_PROGRAMMABLE_PARAM_VALUE_INFO_EXP
       desc: $t_metric_programmable_param_value_info_exp_t
       version: "1.8"
-      value: "0x00010006"
+      value: "0x00010005"
     - name: VALUE_INFO_EXP
       desc: $t_value_info_exp_t
       version: "1.8"
-      value: "0x00010007"
+      value: "0x00010006"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

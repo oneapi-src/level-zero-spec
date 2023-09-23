@@ -234,13 +234,6 @@ version: "1.8"
 class: $tMetricProgrammable
 name: $t_metric_programmable_param_value_exp_t
 members:
-    - type: $t_structure_type_t
-      name: stype
-      desc: "[in] type of this structure"
-    - type: "void*"
-      name: pNext
-      desc: "[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
-      init: nullptr
     - type: $t_value_t
       name: "value"
       desc: "[in] parameter value"
