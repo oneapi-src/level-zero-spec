@@ -338,7 +338,7 @@ decl: static
 details:
     - "Multiple parameter values could be used to prepare a metric."
     - "If parameterCount = 0, the default value of the metric programmable would be used for all parameters."
-    - "If multiple metrics are generated, then implementation defined C string will be post-fixed to metric name and description."
+    - "The implementation can post-fix a C string to the metric name and description, based on the parmeter values chosen."
     - "$tMetricProgrammableGetParamInfoExp() returns a list of parameters in a defined order."
     - "Therefore, the list of values passed in to the API should respect the same order such that the desired parameter is set with expected value"
 params:
