@@ -27,6 +27,9 @@ etors:
     - name: MEMORY
       desc: "The PUnit power domain is a memory-level power domain."
       version: "1.8"
+    - name: GPU
+      desc: "The PUnit power domain is a GPU-level power domain."
+      version: "1.8"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Power Level Type"
