@@ -297,6 +297,7 @@ params:
       desc: |
             [in,out] count of the parameters to retrieve parameter info.
             if value pParameterCount is greater than count of parameters available, then pParameterCount will be updated with count of parameters available.
+            The count of parameters available can be queried using $tMetricProgrammableGetPropertiesExp.
     - type: "$t_metric_programmable_param_info_exp_t*"
       name: pParameterInfo
       desc: |
@@ -323,6 +324,7 @@ params:
       desc: |
             [in,out] count of parameter value information to retrieve.
             if value at pValueInfoCount is greater than count of value info available, then pValueInfoCount will be updated with count of value info available.
+            The count of parameter value info available can be queried using $tMetricProgrammableGetParamInfoExp.
     - type: "$t_metric_programmable_param_value_info_exp_t*"
       name: pValueInfo
       desc: |
