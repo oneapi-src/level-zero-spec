@@ -132,21 +132,6 @@ members:
       desc: "[out] The total allocatable memory in bytes (can be less than the `physicalSize` member of $s_mem_properties_t)"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Extension properties for Memory State"
-version: "1.8"
-class: $sMemory
-name: $s_mem_state_ext_t
-details:
-    - "Memory Page Offline Metrics"
-members:
-    - type: uint32_t
-      name: memoryPageOffline
-      desc: "[out] Returns the number of Memory Pages Offline"
-    - type: uint32_t
-      name: maxMemoryPageOffline
-      desc: "[out] Returns the Allowed Memory Pages Offline"
---- #--------------------------------------------------------------------------
-type: struct
 desc: "Memory bandwidth"
 class: $sMemory
 name: $s_mem_bandwidth_t
