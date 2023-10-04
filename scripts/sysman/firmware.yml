@@ -91,10 +91,10 @@ returns:
         - "User does not have permissions to perform this operation."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Find Firmware Flash Progress"
-version: "1.7"
+desc: "Get Firmware Flash Progress"
+version: "1.8"
 class: $sFirmware
-name: UpdateProgress
+name: GetFlashProgress
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -105,15 +105,12 @@ params:
     - type: "uint32_t*"
       name: pCompletionPercent
       desc: "[in,out] Pointer to the Completion Percentage of Firmware Update"
-returns:
-    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
-        - "User does not have permissions to perform this operation"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Collect Firmware Logs"
-version: "1.7"
+desc: "Get Firmware Logs"
+version: "1.8"
 class: $sFirmware
-name: Logs
+name: GetLog
 details:
     - "The caller can pass nullptr for pFirmwareLog when querying only for size."
     - "The caller must provide memory for Firmware log."
@@ -129,9 +126,6 @@ params:
     - type: "char*"
       name: pFirmwareLog
       desc: "[in,out][optional] pointer to null-terminated string of the log."  
-returns:
-    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
-        - "User does not have permissions to perform this operation."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device firmware"
