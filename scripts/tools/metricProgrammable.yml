@@ -389,6 +389,9 @@ params:
     - type: const char
       name: description[ZET_MAX_METRIC_GROUP_DESCRIPTION]
       desc: "[in] Metric group description."
+    - type: $t_metric_group_sampling_type_flag_t
+      name: samplingType
+      desc: "[in] Sampling type for the metric group."
     - type: $t_metric_group_handle_t*
       name: phMetricGroup
       desc: "[in,out] Created Metric group handle"
@@ -497,6 +500,8 @@ version: "1.8"
 class: $tMetric
 name: DestroyExp
 decl: static
+details:
+    - "If a metric is added to a metric group, the metric has to be removed using $tMetricGroupRemoveMetricExp before it can be destroyed."
 params:
     - type: $t_metric_handle_t
       name: hMetric
@@ -504,3 +509,5 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "If trying to destroy a metric from pre-defined metric group"
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE:
+        - "If trying to destroy a metric currently added to a metric group"

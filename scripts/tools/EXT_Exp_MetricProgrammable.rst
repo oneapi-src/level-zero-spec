@@ -106,7 +106,7 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
     ${t}_metric_group_handle_t metricGroupHandle{};
     char metricGroupName[ZET_MAX_METRIC_GROUP_NAME] = "eu_active";
     char metricGroupDescription[ZET_MAX_METRIC_GROUP_DESCRIPTION] = "eu_active_desc";
-    ${t}MetricGroupCreateExp(device, metricGroupName, metricGroupDescription, &metricGroup);
+    ${t}MetricGroupCreateExp(device, metricGroupName, metricGroupDescription, ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED, &metricGroup);
     ${t}MetricGroupAddMetricExp(metricGroup, &metricHandles[0], null_ptr, null_ptr);
     ${t}MetricGroupFinalizeExp(metricGroup);
 
