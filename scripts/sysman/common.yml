@@ -211,7 +211,7 @@ etors:
     - name: DEVICE_UUID
       desc: $s_uuid_t
       version: "1.7"
-    - name: MEMORY_EXP_STATE
+    - name: MEMORY_STATE_EXP
       value: "0x00020002"
       desc: $s_mem_state_exp_t
       version: "1.8"
