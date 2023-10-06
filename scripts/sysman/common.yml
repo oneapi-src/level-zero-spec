@@ -211,9 +211,9 @@ etors:
     - name: DEVICE_UUID
       desc: $s_uuid_t
       version: "1.7"
-    - name: MEMORY_STATE_EXP
+    - name: MEMORY_PAGE_OFFLINE_STATE_EXP
       value: "0x00020002"
-      desc: $s_mem_state_exp_t
+      desc: $s_mem_page_offline_state_exp_t
       version: "1.8"
 --- #-------------------------------------------------------------------------
 type: struct

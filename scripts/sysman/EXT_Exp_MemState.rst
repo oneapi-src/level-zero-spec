@@ -20,11 +20,11 @@ API
 ----
 * Enumerations
 
-    * ${s}_mem_state_exp_version_t
+    * ${s}_mem_page_offline_state_exp_version_t
    
 * Structures
 
-    * ${s}_mem_state_exp_t
+    * ${s}_mem_page_offline_state_exp_t
    
 Memory State
 ~~~~~~~~~~~~~~~~~~
