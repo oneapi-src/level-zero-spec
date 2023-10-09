@@ -107,7 +107,7 @@ params:
       desc: "[in,out] Pointer to the Completion Percentage of Firmware Update"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get Firmware Logs"
+desc: "Get Firmware Console Logs"
 version: "1.8"
 class: $sFirmware
 name: GetConsoleLogs
