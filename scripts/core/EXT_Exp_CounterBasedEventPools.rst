@@ -8,23 +8,23 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZE_experimental_event_counter_based:
+.. _ZE_experimental_event_pool_counter_based:
 
-=========================
- Counter-Based Events Extension
-=========================
+=====================================
+ Counter-Based Event Pools Extension
+=====================================
 
 API
 ----
  
 * Enumerations
 
-    * ${x}_event_counter_based_exp_flags_t
-    * ${x}_event_counter_based_exp_version_t
+    * ${x}_event_pool_counter_based_exp_flags_t
+    * ${x}_event_pool_counter_based_exp_version_t
 
 * Structures
 
-    * ${x}_event_counter_based_exp_desc_t
+    * ${x}_event_pool_counter_based_exp_desc_t
 
 Counter-Based Events
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -51,3 +51,19 @@ The following recommendations and restrictions apply to counter-based events:
 - Synchronizing on a counter-based event waits only the last saved counter value from the last command list that incremented it.
 - A counter-based event may be passed as signaling event for a new append call without needing to wait for the signaling of
   the last call where it was used.
+
+Counter-based events can be created by passing ${x}_event_pool_counter_based_exp_desc_t to ${x}EventPoolCreate
+as pNext member of ${x}_event_pool_desc_t.
+
+.. parsed-literal::
+
+    uint32_t numEvents = 2;
+    ${x}_event_pool_handle_t eventPool = {};
+    ${x}_event_pool_desc_t eventPoolDesc = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC};
+    eventPoolDesc.count = numEvents;
+
+    ${x}_event_pool_counter_based_exp_desc_t counterBasedDesc = {${X}_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESC};
+    counterBasedDesc.flags = ${X}_EVENT_POOL_COUNTER_BASED_EXP_FLAG_IMMEDIATE;
+    eventPoolDesc.pNext = &counterBasedDesc;
+
+    ${x}_result_t = zeEventPoolCreate(context, &eventPoolDesc, 1, &device, &eventPool));
