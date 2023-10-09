@@ -48,7 +48,7 @@ The following recommendations and restrictions apply to counter-based events:
 - Counter-based events may be used on multiple command lists.
 - Querying a counter-based event queries only the last saved counter value from the last command list that incremented it,
   i.e., a signaled counter-based event always represents the completion of the last call to which it was passed as signal event.
-- Synchronizing on a counter-based event waits only the last saved counter value from the last command list that incremented it.
+- Synchronizing on a counter-based event waits only for the last saved counter value from the last command list that incremented it.
 - A counter-based event may be passed as signaling event for a new append call without needing to wait for the signaling of
   the last call where it was used.
 
