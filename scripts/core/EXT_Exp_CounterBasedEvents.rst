@@ -43,8 +43,11 @@ The following recommendations and restrictions apply to counter-based events:
 - Counter-based events can be used only with in-orders lists, whether those are regular or immediate.
 - Counter-based events must not be reset, i.e., a call to ${x}EventHostReset or ${x}CommandListAppendEventReset
   is not allowed.
-- Counter-based events may be reused multiple times without a need for reset.
 - Counter-based events must not be signaled from host, i.e., a call to ${x}EventHostSignal is not allowed.
+- Counter-based events may be reused multiple times without a need for reset.
 - Counter-based events may be used on multiple command lists.
-- Querying a counter-based event queries only the last saved counter value from the last command list that incremented it.
+- Querying a counter-based event queries only the last saved counter value from the last command list that incremented it,
+  i.e., a signaled counter-based event always represents the completion of the last call to which it was passed as signal event.
 - Synchronizing on a counter-based event waits only the last saved counter value from the last command list that incremented it.
+- A counter-based event may be passed as signaling event for a new append call without needing to wait for the signaling of
+  the last call where it was used.
