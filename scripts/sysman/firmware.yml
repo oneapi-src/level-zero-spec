@@ -110,7 +110,7 @@ type: function
 desc: "Get Firmware Logs"
 version: "1.8"
 class: $sFirmware
-name: GetLog
+name: GetConsoleLogs
 details:
     - "The caller can pass nullptr for pFirmwareLog when querying only for size."
     - "The caller must provide memory for Firmware log."
