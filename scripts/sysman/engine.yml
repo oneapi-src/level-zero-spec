@@ -28,21 +28,34 @@ etors:
     - name: RENDER_SINGLE
       desc: "Access information about a single render engine - this is an engine that can process both 3D content and compute kernels. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_3D_RENDER_COMPUTE_ALL for that."
     - name: MEDIA_DECODE_SINGLE
-      desc: "Access information about a single media decode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+      desc:
+        "1.7": "Access information about a single media decode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+        "1.8": "[DEPRECATED] No longer supported."
     - name: MEDIA_ENCODE_SINGLE
-      desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+      desc: 
+        "1.7": "Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
+        "1.8": "[DEPRECATED] No longer supported."
     - name: COPY_SINGLE
       desc: "Access information about a single media encode engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_COPY_ALL for that."
     - name: MEDIA_ENHANCEMENT_SINGLE
       desc: "Access information about a single media enhancement engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
     - name: 3D_SINGLE
-      desc: "Access information about a single 3D engine - this is an engine that can process 3D content only. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_3D_RENDER_COMPUTE_ALL for that."
+      desc:
+        "1.7": "Access information about a single 3D engine - this is an engine that can process 3D content only. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_3D_RENDER_COMPUTE_ALL for that."
+        "1.8": "[DEPRECATED] No longer supported."
     - name: 3D_RENDER_COMPUTE_ALL
-      desc: "Access information about all 3D/render/compute engines combined."
+      desc:
+        "1.7": "Access information about all 3D/render/compute engines combined."
+        "1.8": "[DEPRECATED] No longer supported."
     - name: RENDER_ALL
       desc: "Access information about all render engines combined. Render engines are those than process both 3D content and compute kernels."
     - name: 3D_ALL
-      desc: "Access information about all 3D engines combined. 3D engines can process 3D content only (no compute kernels)."
+      desc:
+        "1.7": "Access information about all 3D engines combined. 3D engines can process 3D content only (no compute kernels)."
+        "1.8": "[DEPRECATED] No longer supported."
+    - name: MEDIA_CODEC_SINGLE
+      version: "1.8"
+      desc: "Access information about a single media  engine. Note that single engines may share the same underlying accelerator resources as other engines so activity of such an engine may not be indicative of the underlying resource utilization - use $S_ENGINE_GROUP_MEDIA_ALL for that."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Engine group properties"
