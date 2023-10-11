@@ -74,9 +74,10 @@ desc: "Flash a new firmware image"
 class: $sFirmware
 name: Flash
 details:
+    - "WARNING: Gracefully close any running workloads before initiating this API."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "The application may call zesFirmwareGetFlashProgress() to get completion status."
+    - "This is a non-blocking call. Application may call zesFirmwareGetFlashProgress() to get completion status."
 params:
     - type: $s_firmware_handle_t
       name: hFirmware
