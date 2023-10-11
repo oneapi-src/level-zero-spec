@@ -76,6 +76,7 @@ name: Flash
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "The application may call zesFirmwareGetFlashProgress() to get completion status."
 params:
     - type: $s_firmware_handle_t
       name: hFirmware
@@ -112,7 +113,7 @@ version: "1.8"
 class: $sFirmware
 name: GetConsoleLogs
 details:
-    - "The caller can pass nullptr for pFirmwareLog when querying only for size."
+    - "The caller may pass nullptr for pFirmwareLog and set pSize to zero when querying only for size."
     - "The caller must provide memory for Firmware log."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
