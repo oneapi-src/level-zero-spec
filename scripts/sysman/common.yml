@@ -219,6 +219,10 @@ etors:
       value: "0x00020002"
       desc: $s_mem_timestamp_bits_exp_t
       version: "1.8"
+    - name: MEMORY_PAGE_OFFLINE_STATE_EXP
+      value: "0x00020003"
+      desc: $s_mem_page_offline_state_exp_t
+      version: "1.8"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
