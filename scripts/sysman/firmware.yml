@@ -74,10 +74,10 @@ desc: "Flash a new firmware image"
 class: $sFirmware
 name: Flash
 details:
-    - "WARNING: Gracefully close any running workloads before initiating this API."
+    - "Any running workload must be gracefully closed before invoking this function."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "This is a non-blocking call. Application may call zesFirmwareGetFlashProgress() to get completion status."
+    - "This is a non-blocking call. Application may call $sFirmwareGetFlashProgress to get completion status."
 params:
     - type: $s_firmware_handle_t
       name: hFirmware
@@ -107,27 +107,6 @@ params:
     - type: "uint32_t*"
       name: pCompletionPercent
       desc: "[in,out] Pointer to the Completion Percentage of Firmware Update"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Get Firmware Console Logs"
-version: "1.8"
-class: $sFirmware
-name: GetConsoleLogs
-details:
-    - "The caller may pass nullptr for pFirmwareLog and set pSize to zero when querying only for size."
-    - "The caller must provide memory for Firmware log."
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_firmware_handle_t
-      name: hFirmware
-      desc: "[in] Handle for the component."
-    - type: "size_t*"
-      name: pSize
-      desc: "[in,out] size of firmware log"
-    - type: "char*"
-      name: pFirmwareLog
-      desc: "[in,out][optional] pointer to null-terminated string of the log."  
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device firmware"
