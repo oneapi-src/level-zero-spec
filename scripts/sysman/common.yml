@@ -211,8 +211,16 @@ etors:
     - name: DEVICE_UUID
       desc: $s_uuid_t
       version: "1.7"
-    - name: MEMORY_PAGE_OFFLINE_STATE_EXP
+    - name: POWER_DOMAIN_EXP_PROPERTIES
+      value: "0x00020001"
+      desc: $s_power_domain_exp_properties_t
+      version: "1.8"
+    - name: MEM_TIMESTAMP_BITS_EXP
       value: "0x00020002"
+      desc: $s_mem_timestamp_bits_exp_t
+      version: "1.8"
+    - name: MEMORY_PAGE_OFFLINE_STATE_EXP
+      value: "0x00020003"
       desc: $s_mem_page_offline_state_exp_t
       version: "1.8"
 --- #-------------------------------------------------------------------------

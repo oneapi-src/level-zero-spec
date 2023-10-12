@@ -164,6 +164,7 @@ class: $sMemory
 name: $s_mem_ext_bandwidth_t
 details:
     - "Number of counter bits"
+    - "1.8": "[DEPRECATED] No longer supported."
 members:
     - type: uint32_t
       name: memoryTimestampValidBits
