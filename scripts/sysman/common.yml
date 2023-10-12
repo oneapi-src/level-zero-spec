@@ -215,6 +215,10 @@ etors:
       value: "0x00020001"
       desc: $s_power_domain_exp_properties_t
       version: "1.8"
+    - name: MEM_TIMESTAMP_BITS_EXP
+      value: "0x00020002"
+      desc: $s_mem_timestamp_bits_exp_t
+      version: "1.8"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
