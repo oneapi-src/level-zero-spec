@@ -39,5 +39,5 @@ members:
       name: maxMemoryPageOffline
       desc: "[out] Returns the Allowed Memory Pages Offline"
 details:
-    - "This structure may be returned from $sMemGetState via the `pNext` member of $s_mem_state_t"
+    - "This structure may be returned from $sMemoryGetState via the `pNext` member of $s_mem_state_t"
     - "These additional parameters get Memory Page Offline Metrics"
