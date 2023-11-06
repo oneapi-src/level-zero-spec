@@ -43,7 +43,7 @@ API
     * ${t}MetricGroupCreateExp
     * ${t}MetricGroupAddMetricExp
     * ${t}MetricGroupRemoveMetricExp
-    * ${t}MetricGroupFinalizeExp
+    * ${t}MetricGroupCloseExp
     * ${t}MetricDestroyExp
     * ${t}MetricGroupDestroyExp
 
@@ -108,7 +108,7 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
     char metricGroupDescription[ZET_MAX_METRIC_GROUP_DESCRIPTION] = "eu_active_desc";
     ${t}MetricGroupCreateExp(device, metricGroupName, metricGroupDescription, ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED, &metricGroup);
     ${t}MetricGroupAddMetricExp(metricGroup, &metricHandles[0], null_ptr, null_ptr);
-    ${t}MetricGroupFinalizeExp(metricGroup);
+    ${t}MetricGroupCloseExp(metricGroup);
 
     //Activate Metric group
     //Collect Metric group using available sampling types
