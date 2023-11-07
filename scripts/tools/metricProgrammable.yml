@@ -113,15 +113,15 @@ version: "1.8"
 class: $tMetricProgrammable
 name: $t_metric_programmable_param_type_exp_t
 etors:
-    - name: ETOR_DISAGGREGATION
+    - name: DISAGGREGATION
       desc: "Metric is disaggregated."
-    - name: ETOR_LATENCY
+    - name: LATENCY
       desc: "Metric for latency measurement."
-    - name: ETOR_NORMALIZATION_UTILIZATION
+    - name: NORMALIZATION_UTILIZATION
       desc: "Produces normalization in percent using raw_metric * 100 / cycles / HW instance_count."
-    - name: ETOR_NORMALIZATION_AVERAGE
+    - name: NORMALIZATION_AVERAGE
       desc: "Produces normalization using raw_metric / HW instance_count."
-    - name: ETOR_NORMALIZATION_RATE
+    - name: NORMALIZATION_RATE
       desc: "Produces normalization average using raw_metric / timestamp."
 --- #--------------------------------------------------------------------------
 type: enum
@@ -129,23 +129,23 @@ desc: "Supported value info types"
 version: "1.8"
 name: $t_value_info_type_exp_t
 etors:
-    - name: ETOR_UINT32
+    - name: UINT32
       desc: "32-bit unsigned-integer"
-    - name: ETOR_UINT64
+    - name: UINT64
       desc: "64-bit unsigned-integer"
-    - name: ETOR_FLOAT32
+    - name: FLOAT32
       desc: "32-bit floating-point"
-    - name: ETOR_FLOAT64
+    - name: FLOAT64
       desc: "64-bit floating-point"
-    - name: ETOR_BOOL8
+    - name: BOOL8
       desc: "8-bit boolean"
-    - name: ETOR_CSTRING
+    - name: CSTRING
       desc: "C string"
-    - name: ETOR_UINT8
+    - name: UINT8
       desc: "8-bit unsigned-integer"
-    - name: ETOR_UINT16
+    - name: UINT16
       desc: "16-bit unsigned-integer"
-    - name: ETOR_UINT64_RANGE
+    - name: UINT64_RANGE
       desc: "64-bit unsigned-integer range (minimum and maximum)"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -164,7 +164,6 @@ type: union
 desc: "Union of value information"
 version: "1.8"
 name: $t_value_info_exp_t
-base: $t_base_desc_t
 members:
     - type: uint32_t
       name: "ui32"
