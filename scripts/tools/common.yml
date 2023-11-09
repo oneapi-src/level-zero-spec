@@ -169,7 +169,7 @@ etors:
     - name: UINT32
       desc: "32-bit unsigned-integer"
     - name: UINT64
-      desc: "32-bit unsigned-integer"
+      desc: "64-bit unsigned-integer"
     - name: FLOAT32
       desc: "32-bit floating-point"
     - name: FLOAT64
