@@ -357,6 +357,66 @@ returns:
 
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Device Description"
+version: "1.8.1"
+class: $sDevice
+name: $s_device_description_t
+base: $s_base_desc_t
+members:
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the UUID belongs to the sub-device; false means that UUID belongs to the root device"
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
+
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves sysman device and subdevice index for the given UUID and sysman driver"
+version: "1.8.1"
+class: $sDevice
+name: GetByUUID
+details:
+    - "API returns corresponding sysman root device handle and sub device Index for the given UUID and the driver handle". 
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_driver_handle_t
+      name: "hDriver"
+      desc: "[in] handle of the sysman driver instance"
+    - type: $s_uuid_t
+      name: "uuid"
+      desc: "[in] universal unique identifier."           
+    - type: $s_device_handle_t*
+      name: "phDevice"
+      desc: "[out] handle of sysman device."
+    - type: $s_device_description_t*
+      name: "pDeviceDesc"
+      desc: "[out] pointer to the device description struct."
+            
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves UUID for the given sysman device handle and subdevice index"
+version: "1.8.1"
+class: $sDevice
+name: GetSubDeviceUUID
+details:
+    - "API returns the UUID for the given sysman device handle and subdevice index". 
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: "hDevice"
+      desc: "[in] Sysman handle of the device."
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[in] ID of the sub-device"
+    - type: $s_uuid_t
+      name: "uuid"
+      desc: "[out] universal unique identifier." 
+
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "PCI address"
 class: $sDevice
 name: $s_pci_address_t
