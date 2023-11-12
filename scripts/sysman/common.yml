@@ -223,6 +223,10 @@ etors:
       value: "0x00020003"
       desc: $s_mem_page_offline_state_exp_t
       version: "1.8"
+    - name: MEM_BANDWIDTH_COUNTER_BITS_EXP
+      value: "0x00020004"
+      desc: $s_mem_bandwidth_counter_bits_exp_t
+      version: "1.8.1"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
