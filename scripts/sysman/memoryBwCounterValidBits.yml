@@ -8,17 +8,17 @@
 --- #----------------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Sysman Extension APIs for Memory Bandwidth Counter Valid Bits"
-version: "1.8.1"
+version: "1.8"
 --- #----------------------------------------------------------------------------------
 type: macro
 desc: "Memory Bandwidth Counter Valid Bits Extension Name"
-version: "1.8.1"
+version: "1.8"
 name: $S_MEMORY_BANDWIDTH_COUNTER_VALID_BITS_EXP_NAME
 value: '"$XS_extension_mem_bandwidth_counter_valid_bits"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory Bandwidth Counter Valid Bits Extension Version(s)"
-version: "1.8.1"
+version: "1.8"
 name: $s_mem_bandwidth_counter_bits_exp_version_t
 etors:
     - name: "1_0"
@@ -27,7 +27,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Extension properties for reporting valid bit count for memory bandwidth counter value"
-version: "1.8.1"
+version: "1.8"
 class: $sMemory
 name: $s_mem_bandwidth_counter_bits_exp_t
 base: $s_base_properties_t
