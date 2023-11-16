@@ -13,8 +13,8 @@ version: "1.8"
 type: macro
 desc: "Memory Bandwidth Counter Valid Bits Extension Name"
 version: "1.8"
-name: $S_MEMORY_BANDWIDTH_COUNTER_VALID_BITS_EXP_NAME
-value: '"$XS_extension_mem_bandwidth_counter_valid_bits"'
+name: $S_MEMORY_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIES_NAME
+value: '"$XS_extension_mem_bandwidth_counter_bits_properties"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory Bandwidth Counter Valid Bits Extension Version(s)"
@@ -29,7 +29,7 @@ type: struct
 desc: "Extension properties for reporting valid bit count for memory bandwidth counter value"
 version: "1.8"
 class: $sMemory
-name: $s_mem_bandwidth_counter_bits_exp_t
+name: $s_mem_bandwidth_counter_bits_exp_properties_t
 base: $s_base_properties_t
 members:
     - type: uint32_t

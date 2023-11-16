@@ -10,7 +10,7 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZES_extension_mem_bandwidth_counter_valid_bits:
+.. _ZES_extension_mem_bandwidth_counter_bits_properties:
 
 ==============================================
  Memory Bandwidth Counter Valid Bits Extension
@@ -25,4 +25,4 @@ API
 
 * Structures
 
-    * ${s}_mem_bandwidth_counter_bits_exp_t
+    * ${s}_mem_bandwidth_counter_bits_exp_properties_t
