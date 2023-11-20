@@ -358,7 +358,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device Description"
-version: "1.8"
+version: "1.9"
 class: $sDevice
 name: $s_device_description_t
 base: $s_base_desc_t
@@ -373,11 +373,11 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves sysman device and subdevice index for the given UUID and sysman driver"
-version: "1.8"
+version: "1.9"
 class: $sDevice
 name: GetByUUID
 details:
-    - "API returns corresponding sysman root device handle and sub device Index for the given UUID and the driver handle." 
+    - "API returns corresponsing sysman device handle." 
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -389,7 +389,7 @@ params:
       desc: "[in] universal unique identifier."           
     - type: $s_device_handle_t*
       name: "phDevice"
-      desc: "[out] handle of sysman device."
+      desc: "[out] Sysman handle of the device."
     - type: $s_device_description_t*
       name: "pDeviceDesc"
       desc: "[out] pointer to the device description struct."
@@ -397,7 +397,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves UUID for the given sysman device handle and subdevice index"
-version: "1.8"
+version: "1.9"
 class: $sDevice
 name: GetSubDeviceUUID
 details:
