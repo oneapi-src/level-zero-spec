@@ -1,0 +1,41 @@
+#
+# Copyright (C) 2023 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Sysman Extension APIs for Virtual Function Management Properties"
+version: "1.9"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Virtual Function Management Extension Name"
+version: "1.9"
+name: $S_VIRTUAL_FUNCTION_MANAGEMENT_EXP_NAME
+value: '"$XS_extension_virtual_function_management"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Virtual Function Management Extension Version(s)"
+version: "1.9"
+name: $s_virtual_function_management_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Virtual function telemetry information"
+version: "1.4"
+class: $sVFManagement
+name: $s_vf_telem_info_exp_t
+etors:
+    - name: SYSTEM_MEM
+      value: "0"
+      desc: "System memory utilization"
+    - name: DEVICE_MEM
+      desc: "On board local device memory utilization"
+    - name: ENGINE
+      desc: "On board local device memory"
+--- #--------------------------------------------------------------------------

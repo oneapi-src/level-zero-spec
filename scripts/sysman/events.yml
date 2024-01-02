@@ -45,9 +45,8 @@ etors:
     - name: DEVICE_RESET_REQUIRED
       desc: "Event is triggered when the device needs to be reset (use $sDeviceGetState() to determine the reasons for the reset)."
     - name: SURVIVABILITY_MODE_DETECTED
-      desc: 
-            "1.9": "Event is triggered when graphics driver encounter an error condition."
-           
+      desc: "Event is triggered when graphics driver encounter an error condition."
+      version: "1.9"   
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Specify the list of events to listen to for a given device"
