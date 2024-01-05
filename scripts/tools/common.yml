@@ -127,15 +127,15 @@ etors:
       value: "0x00010002"
     - name: METRIC_PROGRAMMABLE_EXP_PROPERTIES
       desc: $t_metric_programmable_exp_properties_t
-      version: "1.8"
+      version: "1.9"
       value: "0x00010003"
     - name: METRIC_PROGRAMMABLE_PARAM_INFO_EXP
       desc: $t_metric_programmable_param_info_exp_t
-      version: "1.8"
+      version: "1.9"
       value: "0x00010004"
     - name: METRIC_PROGRAMMABLE_PARAM_VALUE_INFO_EXP
       desc: $t_metric_programmable_param_value_info_exp_t
-      version: "1.8"
+      version: "1.9"
       value: "0x00010005"
 --- #--------------------------------------------------------------------------
 type: struct
