@@ -139,7 +139,6 @@ version: "1.9"
 class: $sDriver
 name: GetDeviceByUUID
 details:
-    - "API returns corresponsing sysman device handle." 
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
