@@ -1,0 +1,243 @@
+#
+# Copyright (C) 2024 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting compute graphs with dynamic properties."
+version: "1.9"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Mutable Command List Extension Name"
+version: "1.9"
+name: $X_MUTABLE_COMMAND_LIST_EXP_NAME
+value: '"$X_experimental_mutable_command_list"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Mutable Command List Extension Version(s)"
+version: "1.9"
+name: $x_mutable_command_list_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported mutable command identifier flags"
+class: $xCommandList
+name: $x_mutable_command_id_exp_flags_t
+etors:
+    - name: KERNEL_ARGUMENTS
+      desc: "kernel arguments"
+    - name: GROUP_COUNT
+      desc: "kernel group count"
+    - name: GROUP_SIZE
+      desc: "kernel group size"
+    - name: GLOBAL_OFFSET
+      desc: "kernel global offset"
+    - name: SIGNAL_EVENT
+      desc: "command signal event"
+    - name: WAIT_EVENTS
+      desc: "command wait events"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable command identifier descriptor"
+class: $xCommandList
+name: $x_mutable_command_id_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_mutable_command_id_exp_flags_t
+      name: flags
+      desc: |
+            [in] mutable command identifier flags.
+              - must be 0 (default, equivalent to setting all flags), or a valid combination of $x_mutable_command_id_exp_flag_t
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Mutable command list flags"
+class: $xCommandList
+name: $x_mutable_command_list_exp_flags_t
+etors:
+    - name: RESERVED
+      desc: "reserved"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable command list descriptor"
+class: $xCommandList
+name: $x_mutable_command_list_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_mutable_command_list_exp_flags_t
+      name: flags
+      desc: |
+            [in] mutable command list flags.
+              - must be 0 (default) or a valid combination of $x_mutable_command_list_exp_flag_t
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable commands descriptor"
+class: $xCommandList
+name: $x_mutable_commands_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint32_t
+      name: flags
+      desc: "[in] must be 0, this field is reserved for future use"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable kernel argument descriptor"
+class: $xCommandList
+name: $x_mutable_kernel_argument_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: uint32_t
+      name: argIndex
+      desc: "[in] kernel argument index"
+    - type: size_t
+      name: argSize
+      desc: "[in] kernel argument size"
+    - type: "const void*"
+      name: pArgValue
+      desc: "[in] pointer to kernel argument value"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable kernel group count descriptor"
+class: $xCommandList
+name: $x_mutable_group_count_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: "const $x_group_count_t*"
+      name: pGroupCount
+      desc: "[in] pointer to group count"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable kernel group size descriptor"
+class: $xCommandList
+name: $x_mutable_group_size_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: uint32_t
+      name: groupSizeX
+      desc: "[in] group size for X dimension to use for the kernel"
+    - type: uint32_t
+      name: groupSizeY
+      desc: "[in] group size for Y dimension to use for the kernel"
+    - type: uint32_t
+      name: groupSizeZ
+      desc: "[in] group size for Z dimension to use for the kernel"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable kernel global offset descriptor"
+class: $xCommandList
+name: $x_mutable_global_offset_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: uint32_t
+      name: offsetX
+      desc: "[in] global offset for X dimension to use for this kernel"
+    - type: uint32_t
+      name: offsetY
+      desc: "[in] global offset for Y dimension to use for this kernel"
+    - type: uint32_t
+      name: offsetZ
+      desc: "[in] global offset for Z dimension to use for this kernel"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns a unique command identifier for the next command to be appended to a command list."
+class: $xCommandList
+name: GetNextCommandIdExp
+details:
+    - "This function may only be called for a mutable command list."
+    - "This function may not be called on a closed command list."
+    - "If no commands have been appended to the command list, then `0` is written to the `pCommandId` parameter."
+    - "This function may be called from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "const $x_mutable_command_id_exp_desc_t*"
+      name: desc
+      desc: "[in] pointer to mutable command identifier descriptor"
+    - type: uint64_t*
+      name: pCommandId
+      desc: "[out] pointer to mutable command identifier to be written"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Updates mutable commands."
+class: $xCommandList
+name: UpdateMutableCommandsExp
+details:
+    - "This function may only be called for a mutable command list."
+    - "The application must synchronize mutable command list execution before calling this function."
+    - "The application must close a mutable command list after completing all updates."
+    - "This function must not be called from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "const $x_mutable_commands_exp_desc_t*"
+      name: desc
+      desc: "[in] pointer to mutable commands descriptor; multiple descriptors may be chained via `pNext` member"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Updates the signal event for a mutable command in a mutable command list."
+class: $xCommandList
+name: UpdateMutableCommandSignalEventExp
+details:
+    - "This function may only be called for a mutable command list."
+    - "The type, scope and flags of the signal event must match those of the source command."
+    - "Passing a null pointer as the signal event will update the command to not issue a signal."
+    - "The application must synchronize mutable command list execution before calling this function."
+    - "The application must close a mutable command list after completing all updates."
+    - "This function must not be called from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Updates the wait events for a mutable command in a mutable command list."
+class: $xCommandList
+name: UpdateMutableCommandWaitEventsExp
+details:
+    - "This function may only be called for a mutable command list."
+    - "The number of wait events must match that of the source command."
+    - "The type, scope and flags of the wait events must match those of the source command."
+    - "Passing `nullptr` as the wait events will update the command to not wait on any events prior to dispatch."
+    - "Passing `nullptr` as an event on event wait list will remove event dependency from this wait list slot."
+    - "The application must synchronize mutable command list execution before calling this function."
+    - "The application must close a mutable command list after completing all updates."
+    - "This function must not be called from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"

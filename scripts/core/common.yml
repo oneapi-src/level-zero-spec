@@ -512,6 +512,34 @@ etors:
       desc: $x_event_pool_counter_based_exp_desc_t
       version: "1.8"
       value: "0x00020014"
+    - name: MUTABLE_COMMAND_LIST_EXP_DESC
+      desc: $x_mutable_command_list_exp_desc_t
+      version: "1.9"
+      value: "0x00020015"
+    - name: MUTABLE_COMMAND_ID_EXP_DESC
+      desc: $x_mutable_command_id_exp_desc_t
+      version: "1.9"
+      value: "0x00020016"
+    - name: MUTABLE_COMMANDS_EXP_DESC
+      desc: $x_mutable_commands_exp_desc_t
+      version: "1.9"
+      value: "0x00020017"
+    - name: MUTABLE_KERNEL_ARGUMENT_EXP_DESC
+      desc: $x_mutable_kernel_argument_exp_desc_t
+      version: "1.9"
+      value: "0x00020018"
+    - name: MUTABLE_GROUP_COUNT_EXP_DESC
+      desc: $x_mutable_group_count_exp_desc_t
+      version: "1.9"
+      value: "0x00020019"
+    - name: MUTABLE_GROUP_SIZE_EXP_DESC
+      desc: $x_mutable_group_size_exp_desc_t
+      version: "1.9"
+      value: "0x0002001A"
+    - name: MUTABLE_GLOBAL_OFFSET_EXP_DESC
+      desc: $x_mutable_global_offset_exp_desc_t
+      version: "1.9"
+      value: "0x0002001B"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
