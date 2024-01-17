@@ -48,7 +48,7 @@ def update_spec(target):
 """
 def build():
     if "Windows" == platform.system():
-        result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 16 2019" -A x64')
+        result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 17 2022" -A x64')
     else:
         result = os.system('cmake -B ../build/ -S ..')
     if result == 0:
