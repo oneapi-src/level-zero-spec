@@ -38,6 +38,9 @@ etors:
             of a given command being the wait event of the next to define an in-order list, and
             application is allowed to pass signal and wait events to each appended command to implement
             more complex dependency graphs. Cannot be combined with $X_COMMAND_LIST_FLAG_RELAXED_ORDERING.
+    - name: EXP_CLONEABLE
+      version: "1.9"
+      desc: "this command list may be cloned using $xCommandListCreateCloneExp after $xCommandListClose."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command List descriptor"
