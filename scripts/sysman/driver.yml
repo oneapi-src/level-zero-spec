@@ -132,29 +132,3 @@ params:
     - type: "void**"
       name: ppFunctionAddress
       desc: "[out] pointer to function pointer"
---- #--------------------------------------------------------------------------
-type: function
-desc: "Retrieves sysman device and subdevice index for the given UUID and sysman driver"
-version: "1.9"
-class: $sDriver
-name: GetDeviceByUUID
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_driver_handle_t
-      name: "hDriver"
-      desc: "[in] handle of the sysman driver instance"
-    - type: $s_uuid_t
-      name: "uuid"
-      desc: "[in] universal unique identifier."           
-    - type: $s_device_handle_t*
-      name: "phDevice"
-      desc: "[out] Sysman handle of the device."
-    - type: $x_bool_t*
-      name: "onSubdevice"
-      desc: "[out] True if the UUID belongs to the sub-device; false means that UUID belongs to the root device."
-    - type: "uint32_t*"
-      name: "subdeviceId"
-      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device"
-
