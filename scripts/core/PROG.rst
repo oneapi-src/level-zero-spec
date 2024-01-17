@@ -1933,7 +1933,7 @@ ${X}_AFFINITY_MASK = `0.2, 1.3, 1.0, 0.3`: both parent devices 0 and 1 are repor
 
 
 The following examples show the use of different values in the ${X}_AFFINITY_MASK when setting ${X}_FLAT_DEVICE_HIERARCHY to `FLAT`, in the
-same system with two parent devices and four tiles each. When setting ${X}_FLAT_DEVICE_HIERARCHY to 1, only the tiles are reported by
+same system with two parent devices and four tiles each. When setting ${X}_FLAT_DEVICE_HIERARCHY to `FLAT`, only the tiles are reported by
 ${x}DeviceGet, which means that in this system ${x}DeviceGet would report up to 8 device handles, with device handles 0 to 3 corresponding
 to the four tiles in parent device 0, and device handles 4 to 5 corresponding to the four tiles in parent device 1:
 
