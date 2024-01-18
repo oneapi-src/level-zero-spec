@@ -25,4 +25,4 @@ API
  Immediate Command List Append
 ===============================
 
-This extension allows an application to append one or more command lists to an an immediate command list for dispatch.
+This extension allows an application to append one or more command lists to an immediate command list for dispatch.
