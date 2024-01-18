@@ -27,6 +27,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported mutable command identifier flags"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_id_exp_flags_t
 etors:
@@ -45,6 +46,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable command identifier descriptor"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_id_exp_desc_t
 base: $x_base_desc_t
@@ -57,6 +59,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable command list flags"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_list_exp_flags_t
 etors:
@@ -65,6 +68,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable command list descriptor"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_list_exp_desc_t
 base: $x_base_desc_t
@@ -77,6 +81,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable commands descriptor"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_commands_exp_desc_t
 base: $x_base_desc_t
@@ -87,6 +92,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable kernel argument descriptor"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_kernel_argument_exp_desc_t
 base: $x_base_desc_t
@@ -106,6 +112,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable kernel group count descriptor"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_group_count_exp_desc_t
 base: $x_base_desc_t
@@ -119,6 +126,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable kernel group size descriptor"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_group_size_exp_desc_t
 base: $x_base_desc_t
@@ -138,6 +146,7 @@ members:
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable kernel global offset descriptor"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_global_offset_exp_desc_t
 base: $x_base_desc_t
@@ -157,12 +166,12 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a unique command identifier for the next command to be appended to a command list."
+version: "1.9"
 class: $xCommandList
 name: GetNextCommandIdExp
 details:
     - "This function may only be called for a mutable command list."
     - "This function may not be called on a closed command list."
-    - "If no commands have been appended to the command list, then `0` is written to the `pCommandId` parameter."
     - "This function may be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
 params:
@@ -178,6 +187,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Updates mutable commands."
+version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandsExp
 details:
@@ -196,6 +206,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Updates the signal event for a mutable command in a mutable command list."
+version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandSignalEventExp
 details:
@@ -219,6 +230,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Updates the wait events for a mutable command in a mutable command list."
+version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandWaitEventsExp
 details:
