@@ -27,6 +27,7 @@ etors:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends command lists to dispatch from an immediate command list."
+version: "1.9"
 class: $xCommandList
 name: ImmediateAppendCommandListsExp
 details:
