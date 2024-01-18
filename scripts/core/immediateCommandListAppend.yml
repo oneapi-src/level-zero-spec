@@ -1,0 +1,60 @@
+#
+# Copyright (C) 2024 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for supporting compute graphs."
+version: "1.9"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Immediate Command List Append Extension Name"
+version: "1.9"
+name: $X_IMMEDIATE_COMMAND_LIST_APPEND_EXP_NAME
+value: '"$X_experimental_immediate_command_list_append"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Immediate Command List Append Extension Version(s)"
+version: "1.9"
+name: $x_immediate_command_list_append_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends command lists to dispatch from an immediate command list."
+version: "1.9"
+class: $xCommandList
+name: ImmediateAppendCommandListsExp
+details:
+    - "The application must call this function only with command lists created with $xCommandListCreateImmediate."
+    - "The command lists passed to this function in the `phCommandLists` argument must be regular command lists (i.e. not immediate command lists)."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandListImmediate
+      desc: "[in] handle of the immediate command list"
+    - type: uint32_t
+      name: numCommandLists
+      desc: "[in] number of command lists"
+    - type: "$x_command_list_handle_t*"
+      name: phCommandLists
+      desc: "[in] handle(s) of command list(s)"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: |
+            [in][optional] handle of the event to signal on completion
+                - if not null, this event is signaled after the completion of all appended command lists
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before executing appended command lists; must be 0 if nullptr == phWaitEvents"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: |
+            [in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing appended command lists.
+                - if not null, all wait events must be satisfied prior to the start of any appended command list(s)
