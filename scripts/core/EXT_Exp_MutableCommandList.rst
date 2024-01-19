@@ -60,7 +60,7 @@ API
     };
 
     ${x}_driver_properties_t driverProps = {
-        ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
+        ${X}_STRUCTURE_TYPE_DRIVER_PROPERTIES
     };
     driverProps.pNext = &mutCmdListProps;
 
