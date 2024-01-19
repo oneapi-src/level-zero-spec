@@ -19,12 +19,13 @@ API
 
 * Enumerations
 
-    * ${x}_mutable_command_id_exp_flags_t
+    * ${x}_mutable_command_exp_flags_t
     * ${x}_mutable_command_list_exp_flags_t
 
 * Structures
 
     * ${x}_mutable_command_id_exp_desc_t
+    * ${x}_mutable_command_list_exp_properties_t
     * ${x}_mutable_command_list_exp_desc_t
     * ${x}_mutable_commands_exp_desc_t
     * ${x}_mutable_kernel_argument_exp_desc_t
@@ -44,9 +45,28 @@ API
  Mutable Command List
 ======================
 
-A mutable command list is created by supplying a ${x}_mutable_command_list_exp_desc_t object via the `pNext` member of ${x}_command_list_desc_t. Mutable command lists support mutation to **identified** commands *after* being closed with ${x}CommandListClose.
+- A mutable command list is created by supplying a ${x}_mutable_command_list_exp_desc_t object via the `pNext` member of ${x}_command_list_desc_t.
+- Mutable command lists support mutation to **identified** commands *after* being closed with ${x}CommandListClose.
+- Implementation support for mutable commands may be discovered by providing a ${x}_mutable_command_list_exp_properties_t object in the `pNext` member of ${x}_driver_properties_t in a call to ${x}DriverGetProperties.
 
 .. parsed-literal::
+
+    // Discover mutable command list properties
+    ${x}_mutable_command_list_exp_properties_t mutCmdListProps = {
+        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIES,      // stype
+        nullptr,                                                    // pNext
+        0,                                                          // mutableCommandListFlags
+        0                                                           // mutableCommandFlags
+    };
+
+    ${x}_driver_properties_t driverProps = {
+        ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
+    };
+    driverProps.pNext = &mutCmdListProps;
+
+    ${x}DriverGetProperties(hDriver, &driverProps);
+
+    // ...
 
     // Create a mutable command list
     ${x}_mutable_command_list_exp_desc_t mutCmdListDesc = {

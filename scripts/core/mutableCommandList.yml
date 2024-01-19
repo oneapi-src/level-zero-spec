@@ -26,10 +26,10 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported mutable command identifier flags"
+desc: "Mutable command flags"
 version: "1.9"
 class: $xCommandList
-name: $x_mutable_command_id_exp_flags_t
+name: $x_mutable_command_exp_flags_t
 etors:
     - name: KERNEL_ARGUMENTS
       desc: "kernel arguments"
@@ -51,11 +51,11 @@ class: $xCommandList
 name: $x_mutable_command_id_exp_desc_t
 base: $x_base_desc_t
 members:
-    - type: $x_mutable_command_id_exp_flags_t
+    - type: $x_mutable_command_exp_flags_t
       name: flags
       desc: |
-            [in] mutable command identifier flags.
-              - must be 0 (default, equivalent to setting all flags), or a valid combination of $x_mutable_command_id_exp_flag_t
+            [in] mutable command flags.
+              - must be 0 (default, equivalent to setting all flags), or a valid combination of $x_mutable_command_exp_flag_t
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable command list flags"
@@ -65,6 +65,20 @@ name: $x_mutable_command_list_exp_flags_t
 etors:
     - name: RESERVED
       desc: "reserved"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable command list properties"
+version: "1.9"
+class: $xCommandList
+name: $x_mutable_command_list_exp_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_mutable_command_list_exp_flags_t
+      name: mutableCommandListFlags
+      desc: "[out] mutable command list flags"
+    - type: $x_mutable_command_exp_flags_t
+      name: mutableCommandFlags
+      desc: "[out] mutable command flags"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable command list descriptor"
