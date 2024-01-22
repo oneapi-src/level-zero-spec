@@ -102,7 +102,7 @@ members:
       name: "samplingType"
       desc: |
             [out] metric sampling type.
-            returns a combination of $t_metric_group_sampling_type_flags_t.
+            returns a combination of $t_metric_group_sampling_type_flag_t.
     - type: uint32_t
       name: "sourceId"
       desc: "[out] unique metric source identifier(within platform)to identify the HW block where the metric is collected."
@@ -388,7 +388,7 @@ params:
     - type: const char
       name: description[ZET_MAX_METRIC_GROUP_DESCRIPTION]
       desc: "[in] Metric group description."
-    - type: $t_metric_group_sampling_type_flag_t
+    - type: $t_metric_group_sampling_type_flags_t
       name: samplingType
       desc: "[in] Sampling type for the metric group."
     - type: $t_metric_group_handle_t*

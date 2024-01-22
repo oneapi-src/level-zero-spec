@@ -10,7 +10,7 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZET_experimental_programmable_metric:
+.. _ZET_experimental_programmable_metrics:
 
 ==========================================
 Metric Programmable Experimental Extension
