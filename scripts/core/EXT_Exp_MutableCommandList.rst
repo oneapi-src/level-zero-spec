@@ -47,7 +47,7 @@ API
 
 - A mutable command list is created by supplying a ${x}_mutable_command_list_exp_desc_t object via the `pNext` member of ${x}_command_list_desc_t.
 - Mutable command lists support mutation to **identified** commands *after* being closed with ${x}CommandListClose.
-- Implementation support for mutable commands may be discovered by providing a ${x}_mutable_command_list_exp_properties_t object in the `pNext` member of ${x}_driver_properties_t in a call to ${x}DriverGetProperties.
+- Implementation support for mutable commands may be discovered by providing a ${x}_mutable_command_list_exp_properties_t object in the `pNext` member of ${x}_device_properties_t in a call to ${x}DeviceGetProperties.
 
 .. parsed-literal::
 
@@ -59,12 +59,12 @@ API
         0                                                           // mutableCommandFlags
     };
 
-    ${x}_driver_properties_t driverProps = {
-        ${X}_STRUCTURE_TYPE_DRIVER_PROPERTIES
+    ${x}_device_properties_t deviceProps = {
+        ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
     };
-    driverProps.pNext = &mutCmdListProps;
+    deviceProps.pNext = &mutCmdListProps;
 
-    ${x}DriverGetProperties(hDriver, &driverProps);
+    ${x}DeviceGetProperties(hDevice, &deviceProps);
 
     // ...
 
