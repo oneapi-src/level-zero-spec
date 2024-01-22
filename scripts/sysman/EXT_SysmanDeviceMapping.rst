@@ -30,7 +30,7 @@ API
 
 * Structures
 
-    * ${s}_subdevice_properties_exp_t
+    * ${s}_subdevice_exp_properties_t
 
 
 Sysman Device Mapping
@@ -59,7 +59,7 @@ and also how to query sysman device handle from the UUID.
     uint32_t subDeviceCount = 0;
     ${s}DeviceGetSubDevicePropertiesExp(pSysmanDeviceHandle, &subDeviceCount, nullptr);
 
-    ${s}_subdevice_properties_exp_t* subDeviceProperties = (${s}_subdevice_properties_exp_t*) allocate(subDeviceCount * sizeof(${s}_subdevice_properties_exp_t));
+    ${s}_subdevice_exp_properties_t* subDeviceProperties = (${s}_subdevice_exp_properties_t*) allocate(subDeviceCount * sizeof(${s}_subdevice_exp_properties_t));
 
     //Query sub device properties
     ${s}DeviceGetSubDevicePropertiesExp(pSysmanDeviceHandle, &subDeviceCount, subDeviceProperties);
