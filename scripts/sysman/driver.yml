@@ -132,4 +132,3 @@ params:
     - type: "void**"
       name: ppFunctionAddress
       desc: "[out] pointer to function pointer"
-
