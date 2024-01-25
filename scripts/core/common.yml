@@ -544,6 +544,18 @@ etors:
       desc: $x_mutable_global_offset_exp_desc_t
       version: "1.9"
       value: "0x0002001C"
+    - name: PITCHED_ALLOC_DEVICE_EXP_PROPERTIES
+      desc: $x_device_pitched_alloc_exp_properties_t
+      version: "1.9"
+      value: "0x0002001D"
+    - name: BINDLESS_IMAGE_EXP_DESC
+      desc: $x_image_bindless_exp_desc_t
+      version: "1.9"
+      value: "0x0002001E"
+    - name: PITCHED_IMAGE_EXP_DESC
+      desc: $x_image_pitched_exp_desc_t
+      version: "1.9"
+      value: "0x0002001F"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
