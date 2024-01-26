@@ -46,7 +46,9 @@ members:
       desc: |
             [in] image flags.
             must be 0 (default) or a valid value of $x_image_bindless_exp_flag_t
-            default behavior is bindless images are not used when creating handles via $xImageCreate
+            default behavior is bindless images are not used when creating handles via $xImageCreate.
+            When the flag is passed to $xImageCreate, then only the memory for the image is allocated.
+            Additional image handles can be created with $xImageViewCreateExt.
       init: "0"
 --- #--------------------------------------------------------------------------
 type: struct
@@ -91,7 +93,11 @@ details:
     - |
       The application may call this function from simultaneous threads
     - |
+      The implementation of this function must be thread-safe.
+    - |
       The implementation of this function should be lock-free.
+    - |
+      The implementation must support ::ZE_experimental_bindless_image extension.
 params:
     - type: $x_context_handle_t
       name: hContext

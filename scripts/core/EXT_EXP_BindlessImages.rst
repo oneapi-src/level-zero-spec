@@ -50,6 +50,8 @@ In this extension, we propose the following additions:
 A "Bindless image" can be created by passing ${x}_image_bindless_exp_desc_t to pNext member of
 ${x}_image_desc_t and set the flags value as ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS
 
+This extension is complimentary to and may be used in conjunction with *${X}_extension_image_view extension*
+
 Programming example with Bindless images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -84,6 +86,7 @@ Programming example with Bindless images
     imageDesc.pNext = &bindlessImageDesc;
 
     // A bindless image is valid on both host and device and can be passed into kernels
+    // When passing ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS to ${x}ImageCreate, only the backing memory is allocated for Image
     ${x}_image_handle_t hImage;
     ${x}ImageCreate(hContext, hDevice, &imageDesc, &hImage);
 
@@ -95,7 +98,15 @@ Programming example with Bindless images
     // Copy back
     ${x}CommandListAppendImageCopyToMemory(hCommandlist, imageDataHost.data(), hImage, nullptr, nullptr, 0, nullptr);
 
-    // Once all operations are complete we need destroy bindless image handle
+    // Further image views can be created from the existing memory allocated using bindless flags
+    ${x}_image_handle_t hImageView;
+    ${x}ImageViewCreateExt(hContext, hDevice, &imageDesc, hImage, &hImageView);
+
+    // New image view can be separately used by users and destroyed
+    // ...
+
+    // Once all operations are complete we need destroy bindless image handle(s)
+    ${x}ImageDestroy(hImageView);
     ${x}ImageDestroy(hImage);
 
 Programming example with pitched memory usage
