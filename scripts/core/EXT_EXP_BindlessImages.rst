@@ -31,6 +31,7 @@ API
 * Functions
 
     * ${x}MemGetPitchFor2dImage
+    * ${x}ImageGetDeviceOffsetExp
 
 Bindless Images
 ~~~~~~~~~~~~~~~
@@ -50,7 +51,7 @@ In this extension, we propose the following additions:
 A "Bindless image" can be created by passing ${x}_image_bindless_exp_desc_t to pNext member of
 ${x}_image_desc_t and set the flags value as ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS
 
-This extension is complimentary to and may be used in conjunction with *${X}_extension_image_view extension*
+This extension is complimentary to and may be used in conjunction with the `ZE_extension_image_view <https://spec.oneapi.io/level-zero/latest/core/EXT_ImageView.html#image-view-extension>`_ extension
 
 Programming example with Bindless images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,7 +87,7 @@ Programming example with Bindless images
     imageDesc.pNext = &bindlessImageDesc;
 
     // A bindless image is valid on both host and device and can be passed into kernels
-    // When passing ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS to ${x}ImageCreate, only the backing memory is allocated for Image
+    // When passing ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS to zeImageCreate, only the backing memory is allocated for Image
     ${x}_image_handle_t hImage;
     ${x}ImageCreate(hContext, hDevice, &imageDesc, &hImage);
 
@@ -141,7 +142,7 @@ Programming example with pitched memory usage
     ${x}_copy_region_t copyRegion = {0, 0, 0, imageWidth * sizeof(float), imageHeight, 0};
 
     // Copy from host to device
-    ${x}CommandListAppendMemoryCopyRegion(hCommandList, pitchedPtr, &copyRegion, pitchedAllocProperties.rowPitch, 0, imageDataHost.data(), &copyRegion, imageWidth * sizeof(float), 0, nullptr, 0, nullptr);
+    ${x}CommandListAppendMemoryCopyRegion(hCommandList, pitchedPtr, &copyRegion, rowPitch, 0, imageDataHost.data(), &copyRegion, imageWidth * sizeof(float), 0, nullptr, 0, nullptr);
 
     // Single-precision float image format with one channel
     ${x}_image_format_t imageFormat = {
@@ -173,7 +174,7 @@ Programming example with pitched memory usage
     // ...
 
     // Copy from device to host
-    ${x}CommandListAppendMemoryCopyRegion(hCommandList, imageDataHost.data(), &copyRegion, imageWidth * sizeof(float), 0, pitchedPtr, &copyRegion, pitchedAllocProperties.rowPitch, 0, nullptr, 0, nullptr);
+    ${x}CommandListAppendMemoryCopyRegion(hCommandList, imageDataHost.data(), &copyRegion, imageWidth * sizeof(float), 0, pitchedPtr, &copyRegion, rowPitch, 0, nullptr, 0, nullptr);
 
     // Once all operations on the image are complete we need destroy image handle and free memory
     ${x}ImageDestroy(hImage);

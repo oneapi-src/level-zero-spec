@@ -117,3 +117,22 @@ params:
     - type: "size_t *"
       name: rowPitch
       desc: "[out] rowPitch"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get bindless device offset for image"
+version: "1.9"
+class: $xImage
+name: GetDeviceOffsetExp
+decl: static
+details:
+    - "The application may call this function from simultaneous threads"
+    - "The implementation of this function must be thread-safe."
+    - "The implementation of this function should be lock-free."
+    - "The implementation must support ::ZE_experimental_bindless_image extension."
+params:
+    - type: $x_image_handle_t
+      name: hImage
+      desc: "[in] handle of the image"
+    - type: "uint64_t*"
+      name: pDeviceOffset
+      desc: "[out] bindless device offset for image"
