@@ -221,6 +221,90 @@ returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
        - "handle does not correspond to an immediate command list"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the handle of the device on which the command list was created."
+class: $xCommandList
+name: GetDeviceHandle
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_device_handle_t*"
+      name: phDevice
+      desc: "[out] handle of the device on which the command list was created"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the handle of the context on which the command list was created."
+class: $xCommandList
+name: GetContextHandle
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_context_handle_t*"
+      name: phContext
+      desc: "[out] handle of the context on which the command list was created"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the command queue group ordinal to which the command list is submitted."
+class: $xCommandList
+name: GetOrdinal
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "uint32_t*"
+      name: pOrdinal
+      desc: "[out] command queue group ordinal to which command list is submitted"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the command queue index within the group to which the immediate command list is submitted."
+class: $xCommandList
+name: ImmediateGetIndex
+version: "1.9"
+details:
+    - "The application must call this function only with command lists created with $xCommandListCreateImmediate."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandListImmediate
+      desc: "[in] handle of the immediate command list"
+    - type: "uint32_t*"
+      name: pIndex
+      desc: "[out] command queue index within the group to which the immediate command list is submitted"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "handle does not correspond to an immediate command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Query whether a command list is an immediate command list."
+class: $xCommandList
+name: IsImmediate
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_bool_t*"
+      name: pIsImmediate
+      desc: "[out] Boolean indicating whether the command list is an immediate command list (true) or not (false)"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command list"
 name: $xCommandList

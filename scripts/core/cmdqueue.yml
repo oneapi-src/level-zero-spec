@@ -196,6 +196,38 @@ returns:
     - $X_RESULT_NOT_READY:
        - "timeout expired"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the command queue group ordinal."
+class: $xCommandQueue
+name: GetOrdinal
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: "uint32_t*"
+      name: pOrdinal
+      desc: "[out] command queue group ordinal"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the command queue index within the group."
+class: $xCommandQueue
+name: GetIndex
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: "uint32_t*"
+      name: pIndex
+      desc: "[out] command queue index within the group"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command queue"
 name: $xCommandQueue
