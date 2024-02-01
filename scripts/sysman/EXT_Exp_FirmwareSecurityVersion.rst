@@ -8,11 +8,11 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZES_extension_ras_state:
+.. _ZES_experimental_firmware_security_version:
 
-======================================
- Firmware security firmware version
-=====================================
+===========================
+ Firmware Security Version
+===========================
 
 API
 ----
@@ -27,4 +27,4 @@ API
     * ${s}_firmware_security_exp_version_t
 
 Security Version
-~~~~~~~~~~~
+~~~~~~~~~~~~~~~~

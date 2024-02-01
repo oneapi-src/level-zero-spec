@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 Intel Corporation
+# Copyright (C) 2024 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -11,13 +11,13 @@ desc: "Intel $OneApi Level-Zero Sysman Extension APIs for firmware security vers
 version: "1.9"
 --- #----------------------------------------------------------------------------------
 type: macro
-desc: "Anti roll-back security firmware version"
+desc: "Firmware security version"
 version: "1.9"
-name: $S_ANTI_ROLLBACK_SECURITY_VERSION_EXP_NAME
-value: '"$XS_extension_anti_rollback_security_version"'
+name: $S_FIRMWARE_SECURITY_VERSION_EXP_NAME
+value: '"$XS_experimental_firmware_security_version"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Anti rollback security version Extension Version(s)"
+desc: "Firmware security version Extension Version(s)"
 version: "1.9"
 name: $s_firmware_security_exp_version_t
 etors:
@@ -26,7 +26,7 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get anti roll-back security firmware version number of the current running firmware"
+desc: "Get the firmware security version number of the currently running firmware"
 version: "1.9"
 class: $sFirmware
 name: GetSecurityVersionExp
@@ -42,7 +42,7 @@ params:
       desc: "[out] NULL terminated string value. The string \"unknown\" will be returned if this property cannot be determined."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Set anti roll-back security firmware version number"
+desc: "Set the firmware security version number"
 version: "1.9"
 class: $sFirmware
 name: SetSecurityVersionExp
@@ -55,5 +55,4 @@ params:
       desc: "[in] Handle for the component."
     - type: char
       name: "version[$S_STRING_PROPERTY_SIZE]"
-      desc: "[in] NULL terminated string value. Security version number gets updated if it satisfy minimal allowed version in the platform"
---- #--------------------------------------------------------------------------
+      desc: "[in] NULL terminated string value. Security version number gets updated if it satisfies minimal allowed version in the platform"
