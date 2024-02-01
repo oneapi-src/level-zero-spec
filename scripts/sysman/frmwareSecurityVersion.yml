@@ -53,6 +53,3 @@ params:
     - type: $s_firmware_handle_t
       name: hFirmware
       desc: "[in] Handle for the component."
-    - type: char
-      name: "version[$S_STRING_PROPERTY_SIZE]"
-      desc: "[in] NULL terminated string value. Security version number gets updated if it satisfies minimal allowed version in the platform"

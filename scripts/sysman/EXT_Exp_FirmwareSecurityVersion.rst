@@ -28,3 +28,13 @@ API
 
 Security Version
 ~~~~~~~~~~~~~~~~
+This feature helps to prevent flashing of older firmware that have certain security vulnerabilities by using an hardware enforced anti-rollback scheme. 
+User can flash a firmware image and sets its version as the security version number (SVN). Images with lower SVN cannot be applied to device with 
+higher SVN for security considerations.
+
+// Fetch current security version from the fuses
+char* version = allocate(version_size);
+${s}FirmwareGetSecurityVersionExp(firmwareHandle, &version)
+
+// Set security version
+${s}FirmwareSetSecurityVersionExp(firmwareHandle)
