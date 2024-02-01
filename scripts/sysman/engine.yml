@@ -77,21 +77,20 @@ type: struct
 desc: "Engine activity counters"
 details:
     - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeTime - s1.activeTime) / (s2.timestamp - s1.timestamp)"
+    - "The `activeTime` time units are implementation-specific since the value is only intended to be used for calculating utilization percentage."
+    - "The `timestamp` should only be used to calculate delta between snapshots of this structure."
+    - "The application should never take the delta of `timestamp` with the timestamp from a different structure since they are not guaranteed to have the same base."
+    - "When taking the delta, the difference between `timestamp` samples could be `0`, if the frequency of sampling the snapshots is higher than the frequency of the timestamp update."
+    - "The absolute value of `timestamp` is only valid during within the application and may be different on the next execution."
 class: $sEngine
 name: $s_engine_stats_t
 members:
     - type: uint64_t
       name: "activeTime"
-      desc: |
-            [out] Monotonic counter where the resource is actively running workloads.
-            Time units are implementation specific since the activeTime value is only intended for calculating utilization percentage as noted above.
+      desc: "[out] Monotonic counter where the resource is actively running workloads."
     - type: uint64_t
       name: "timestamp"
-      desc: |
-            [out] Monotonic counter when activeTime counter was sampled.
-            This timestamp should only be used to calculate delta between snapshots of this structure.
-            Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base.
-            The absolute value of the timestamp is only valid during within the application and may be different on the next execution.
+      desc: "[out] Monotonic counter when activeTime counter was sampled."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of engine groups"
