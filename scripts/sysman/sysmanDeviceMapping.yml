@@ -14,7 +14,7 @@ type: macro
 desc: "Sysman Device Mapping Extension Name"
 version: "1.9"
 name: $S_SYSMAN_DEVICE_MAPPING_EXP_NAME
-value: '"$XS_extension_sysman_device_mapping"'
+value: '"$XS_experimental_sysman_device_mapping"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Sysman Device Mapping Extension Version(s)"

@@ -10,7 +10,7 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZES_extension_sysman_device_mapping:
+.. _ZES_experimental_sysman_device_mapping:
 
 =====================================
  Sysman Device mapping Extension
