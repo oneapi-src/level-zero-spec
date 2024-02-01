@@ -30,6 +30,9 @@ params:
     - type: size_t
       name: size
       desc: "[in] size in bytes to make resident"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "ptr is not recognized by the implementation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Allows memory to be evicted from the device."
