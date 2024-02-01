@@ -48,6 +48,7 @@ def update_spec(target):
 """
 def build():
     if "Windows" == platform.system():
+        print('INFO: Building with Visual Studio 17 2022', file=sys.stdout)
         result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 17 2022" -A x64')
     else:
         result = os.system('cmake -B ../build/ -S ..')
