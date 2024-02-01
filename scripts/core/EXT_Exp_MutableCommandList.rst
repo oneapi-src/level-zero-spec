@@ -19,6 +19,7 @@ API
 
 * Enumerations
 
+    * ${x}_mutable_command_list_exp_version_t
     * ${x}_mutable_command_exp_flags_t
     * ${x}_mutable_command_list_exp_flags_t
 
