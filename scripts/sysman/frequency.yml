@@ -283,6 +283,7 @@ desc: "Set frequency range between which the hardware can operate."
 class: $sFrequency
 name: SetRange
 details:
+    - "The application may call this function with the frequency range min and max values set to `-1` to request the frequency be (re)set to the default values."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
