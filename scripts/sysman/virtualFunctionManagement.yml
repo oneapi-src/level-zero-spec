@@ -29,7 +29,7 @@ type: enum
 desc: "Virtual function memory types"
 version: "1.9"
 class: $sVFManagement
-name: $s_vf_info_mem_type_exp_t
+name: $s_vf_info_mem_type_exp_flags_t
 etors:
     - name: MEM_TYPE_SYSTEM
       desc: "System memory"
@@ -65,7 +65,7 @@ members:
       name: uuid
       desc: "[out] universal unique identifier of the device"
     - type: $s_vf_info_util_exp_flags_t
-      name: "flag"
+      name: "flags"
       desc: "[out] utilization flags available. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -75,9 +75,9 @@ class: $sVFManagement
 name: $s_vf_util_mem_exp_t
 base: $s_base_state_t
 members:
-    - type: $s_vf_info_mem_type_exp_t
-      name: "memType"
-      desc: "[out] Memory type."
+    - type: $s_vf_info_mem_type_exp_flags_t
+      name: "memTypeFlags"
+      desc: "[out] Memory type flags."
     - type: uint64_t
       name: "free"
       desc: "[out] Free memory size in bytes."
