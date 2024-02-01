@@ -26,7 +26,7 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Virtual function memory type flags"
+desc: "Virtual function memory types"
 version: "1.9"
 class: $sVFManagement
 name: $s_vf_info_mem_type_exp_t
@@ -77,7 +77,7 @@ base: $s_base_state_t
 members:
     - type: $s_vf_info_mem_type_exp_t
       name: "memType"
-      desc: "[out] Memory type flags."
+      desc: "[out] Memory type."
     - type: uint64_t
       name: "free"
       desc: "[out] Free memory size in bytes."
@@ -213,7 +213,7 @@ params:
       name: hVFhandle
       desc: "[in] Sysman handle for the component."
     - type: $s_vf_info_util_exp_flags_t
-      name: "flag"
+      name: "flags"
       desc: "[in] utilization flags to enable or disable. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
     - type: $x_bool_t
       name: "enable"
@@ -247,7 +247,7 @@ owner: $sDevice
 members:
     - type: $s_vf_handle_t
       name: handle
-      desc: "[in] handle of Sysman virtual function object" 
+      desc: "[in] handle of Sysman virtual function object"
       init: nullptr
     - type: $sDevice*
       name: pDevice
