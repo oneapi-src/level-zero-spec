@@ -223,6 +223,10 @@ etors:
       value: "0x00020003"
       desc: $s_mem_page_offline_state_exp_t
       version: "1.8"
+    - name: SUB_DEVICE_EXP_PROPERTIES 
+      value: "0x00020004"
+      desc: $s_subdevice_exp_properties_t
+      version: "1.9"      
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
