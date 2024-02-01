@@ -10,7 +10,7 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZES_extension_virtual_function_management:
+.. _ZES_experimental_virtual_function_management:
 
 ========================================
  Virtual Function Management Extension
@@ -18,20 +18,21 @@ from templates import helper as th
 
 API
 ----
+
 * Functions
 
-    * ${s}EnumActiveVirtualFunctionExp
-    * ${s}GetVFPropertiesExp
-    * ${s}GetVFMemoryUtilizationExp
-    * ${s}GetVFEngineUtilizationExp
-    * ${s}SetVFTelemetryModeExp
-    * ${s}SetVFTelemetrySamplingIntervalExp
+    * ${s}DeviceEnumActiveVFExp
+    * ${s}VFManagementGetVFPropertiesExp
+    * ${s}VFManagementGetVFMemoryUtilizationExp
+    * ${s}VFManagementGetVFEngineUtilizationExp
+    * ${s}VFManagementSetVFTelemetryModeExp
+    * ${s}VFManagementSetVFTelemetrySamplingIntervalExp
 
 * Enumerations
 
     * ${s}_vf_management_exp_version_t
     * ${s}_vf_info_mem_type_exp_t
-    * ${s}_vf_info_util_exp_flag_t
+    * ${s}_vf_info_util_exp_flags_t
    
 * Structures
 
@@ -40,4 +41,4 @@ API
     * ${s}_vf_util_engine_exp_t
    
 Virtual Function Management
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~

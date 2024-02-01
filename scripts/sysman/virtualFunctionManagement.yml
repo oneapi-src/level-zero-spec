@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 Intel Corporation
+# Copyright (C) 2024 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -14,7 +14,7 @@ type: macro
 desc: "Virtual Function Management Extension Name"
 version: "1.9"
 name: $S_VIRTUAL_FUNCTION_MANAGEMENT_EXP_NAME
-value: '"$XS_extension_virtual_function_management"'
+value: '"$XS_experimental_virtual_function_management"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Virtual Function Management Extension Version(s)"
@@ -32,7 +32,6 @@ class: $sVFManagement
 name: $s_vf_info_mem_type_exp_t
 etors:
     - name: MEM_TYPE_SYSTEM
-      value: "0"
       desc: "System memory"
     - name: MEM_TYPE_DEVICE
       desc: "Device local memory"
@@ -41,20 +40,16 @@ type: enum
 desc: "Virtual function utilization flag bit fields"
 version: "1.9"
 class: $sVFManagement
-name: $s_vf_info_util_exp_flag_t
+name: $s_vf_info_util_exp_flags_t
 etors:
     - name: INFO_NONE
-      value: "0"
       desc: "No info associated with virtual function"
     - name: INFO_MEM_CPU
-      value: "1"
       desc: "System memory utilization associated with virtual function"
     - name: INFO_MEM_GPU
       desc: "Device memory utilization associated with virtual function"
-      value: "2"
     - name: INFO_ENGINE
       desc: 'Engine utilization associated with virtual function'
-      value: "4"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Virtual function management properties"
@@ -69,9 +64,9 @@ members:
     - type: $s_uuid_t
       name: uuid
       desc: "[out] universal unique identifier of the device"
-    - type: $s_vf_info_util_flag_exp_t
+    - type: $s_vf_info_util_exp_flags_t
       name: "flag"
-      desc: "[out] Bit field of utilization flags available."
+      desc: "[out] utilization flags available. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides memory utilization values for a virtual function"
@@ -81,7 +76,7 @@ name: $s_vf_util_mem_exp_t
 base: $s_base_state_t
 members:
     - type: $s_vf_info_mem_type_exp_t
-      name: "memtype"
+      name: "memType"
       desc: "[out] Memory type flags."
     - type: uint64_t
       name: "free"
@@ -102,7 +97,7 @@ base: $s_base_state_t
 members:
     - type: $s_engine_group_t
       name: "type"
-      desc: "[out] The engine group"
+      desc: "[out] The engine group."
     - type: uint64_t
       name: "activeCounterValue"
       desc: "[out] Represents active counter."
@@ -115,8 +110,9 @@ members:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of virtual function modules"
+version: "1.9"
 class: $sDevice
-name: EnumActiveVirtualFunctionExp
+name: EnumActiveVFExp
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -131,13 +127,14 @@ params:
             if count is zero, then the driver shall update the value with the total number of components of this type that are available.
             if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
     - type: "$s_vf_handle_t*"
-      name: pVFhandle
+      name: phVFhandle
       desc: |
             [in,out][optional][range(0, *pCount)] array of handle of components of this type.
             if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get virtual function management properties"
+version: "1.9"
 class: $sVFManagement
 name: GetVFPropertiesExp
 details:
@@ -146,13 +143,14 @@ details:
 params:
     - type: $s_vf_handle_t
       name: hVFhandle
-      desc: "[in] Handle for the VF component."
-    - type: $s_vf_properties_exp_t*
+      desc: "[in] Sysman handle for the VF component."
+    - type: $s_vf_exp_properties_t*
       name: pProperties
       desc: "[in,out] Will contain VF properties."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory activity stats for each available memory types associated with Virtual Function (VF)"
+version: "1.9"
 class: $sVFManagement
 name: GetVFMemoryUtilizationExp
 details:
@@ -161,7 +159,7 @@ details:
 params:
     - type: $s_vf_handle_t
       name: hVFhandle
-      desc: "[in] Handle for the component."
+      desc: "[in] Sysman handle for the component."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -178,6 +176,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get engine activity stats for each available engine group associated with Virtual Function (VF)"
+version: "1.9"
 class: $sVFManagement
 name: GetVFEngineUtilizationExp
 details:
@@ -186,7 +185,7 @@ details:
 params:
     - type: $s_vf_handle_t
       name: hVFhandle
-      desc: "[in] Handle for the component."
+      desc: "[in] Sysman handle for the component."
     - type: "uint32_t*"
       name: pCount
       desc: |
@@ -195,7 +194,7 @@ params:
               - if count is greater than the total number of engine stats available, the driver shall update the value with the correct number of engine stats available.
               - The count returned is the sum of number of VF instances currently available and the PF instance.
     - type: $s_vf_util_engine_exp_t*
-      name: pMemUtil
+      name: pEngineUtil
       desc: |
             [in,out][optional][range(0, *pCount)] array of engine group activity counters.
               - if count is less than the total number of engine stats available, then driver shall only retrieve that number of stats.
@@ -203,6 +202,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Configure utilization telemetry enabled or disabled associated with Virtual Function (VF)"
+version: "1.9"
 class: $sVFManagement
 name: SetVFTelemetryModeExp
 details:
@@ -211,16 +211,17 @@ details:
 params:
     - type: $s_vf_handle_t
       name: hVFhandle
-      desc: "[in] Handle for the component."
-    - type: $s_vf_info_util_flag_exp_t
+      desc: "[in] Sysman handle for the component."
+    - type: $s_vf_info_util_exp_flags_t
       name: "flag"
-      desc: "[in] Use bit field of utilization flags to enable or disable."
+      desc: "[in] utilization flags to enable or disable. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
     - type: $x_bool_t
       name: "enable"
       desc: "[in] Enable utilization telemetry."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set sampling interval to monitor for a particular utilization telemetry associated with Virtual Function (VF)"
+version: "1.9"
 class: $sVFManagement
 name: SetVFTelemetrySamplingIntervalExp
 details:
@@ -229,10 +230,10 @@ details:
 params:
     - type: $s_vf_handle_t
       name: hVFhandle
-      desc: "[in] Handle for the component."
-    - type: $s_vf_info_util_flag_exp_t
+      desc: "[in] Sysman handle for the component."
+    - type: $s_vf_info_util_exp_flags_t
       name: "flag"
-      desc: "[in] Use bitf field of utilization flags to set sampling interval."
+      desc: "[in] utilization flags to set sampling interval. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
     - type: uint64_t
       name: "samplingInterval"
       desc: "[in] Sampling interval value."
@@ -240,12 +241,13 @@ params:
 
 type: class
 desc: "C++ wrapper for a Sysman virtual function management  group"
+version: "1.9"
 name: $sVFManagement
 owner: $sDevice
 members:
     - type: $s_vf_handle_t
       name: handle
-      desc: "[in] handle of Sysman object" 
+      desc: "[in] handle of Sysman virtual function object" 
       init: nullptr
     - type: $sDevice*
       name: pDevice
