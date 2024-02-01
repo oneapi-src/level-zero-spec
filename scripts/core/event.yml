@@ -494,6 +494,86 @@ returns:
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the handle of the event pool for the event."
+class: $xEvent
+name: GetEventPool
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+    - type: "$x_event_pool_handle_t*"
+      name: phEventPool
+      desc: "[out] handle of the event pool for the event"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the signal event scope."
+class: $xEvent
+name: GetSignalScope
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+    - type: "$x_event_scope_flags_t*"
+      name: pSignalScope
+      desc: "[out] signal event scope. This is the scope of relevant cache hierarchies that are flushed on a signal action before the event is triggered. May be 0 or a valid combination of $x_event_scope_flag_t."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the wait event scope."
+class: $xEvent
+name: GetWaitScope
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+    - type: "$x_event_scope_flags_t*"
+      name: pWaitScope
+      desc: "[out] wait event scope. This is the scope of relevant cache hierarchies invalidated on a wait action after the event is complete. May be 0 or a valid combination of $x_event_scope_flag_t."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the handle of the context on which the event pool was created."
+class: $xEventPool
+name: GetContextHandle
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_pool_handle_t
+      name: hEventPool
+      desc: "[in] handle of the event pool"
+    - type: "$x_context_handle_t*"
+      name: phContext
+      desc: "[out] handle of the context on which the event pool was created"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the creation flags used to create the event pool."
+class: $xEventPool
+name: GetFlags
+version: "1.9"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_event_pool_handle_t
+      name: hEventPool
+      desc: "[in] handle of the event pool"
+    - type: "$x_event_pool_flags_t*"
+      name: pFlags
+      desc: "[out] creation flags used to create the event pool; may be 0 or a valid combination of $x_event_pool_flag_t"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for event pool"
 name: $xEventPool
