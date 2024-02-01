@@ -31,7 +31,7 @@ API
 * Enumerations
 
     * ${s}_vf_management_exp_version_t
-    * ${s}_vf_info_mem_type_exp_t
+    * ${s}_vf_info_mem_type_exp_flags_t
     * ${s}_vf_info_util_exp_flags_t
    
 * Structures
@@ -51,37 +51,38 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
 
 .. parsed-literal::
 
-// Gather count of VF handles
-uint32_t numVf = 0;
-${s}_vf_exp_properties_t vfProps {};
-${s}DeviceEnumActiveVFExp(hDevice, &numVf, nullptr);
+    // Gather count of VF handles
+    uint32_t numVf = 0;
+    ${s}_vf_exp_properties_t vfProps {};
+    ${s}DeviceEnumActiveVFExp(hDevice, &numVf, nullptr);
 
-//Allocate memory for vf handles and call back in to gather handles
-std::vector<zes_vf_handle_t> vfs(numVf, nullptr);
-${s}DeviceEnumActiveVFExp(hDevice, &numVf, vfs.data());
+    // Allocate memory for vf handles and call back in to gather handles
+    std::vector<${s}_vf_handle_t> vfs(numVf, nullptr);
+    ${s}DeviceEnumActiveVFExp(hDevice, &numVf, vfs.data());
 
-// Gather VF properties
-std::vector <zes_vf_properties_t> vfProps(numVf);
-for (uint32_t i = 0; i < numVf; i++) {
-    ${s}VFManagementGetVFPropertiesExp(vfs[i], &vfProps[i]);
-}
+    // Gather VF properties
+    std::vector <${s}_vf_exp_properties_t> vfProps(numVf);
+    for (uint32_t i = 0; i < numVf; i++) {
+        ${s}VFManagementGetVFPropertiesExp(vfs[i], &vfProps[i]);
+    }
 
-//Detect the info types a particular VF supports
+    // Detect the info types a particular VF supports
 
-//Using VF# 0 to demonstrate how to detect engine info type and query engine util info
-${s}_zes_vf_handle_t activeVf = vfs[0];
-if (vfProps[0].flags & ZES_VF_INFO_ENGINE) {
-    ${s}_vf_util_engine_exp_t engineUtil0 = {};
-    {s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineUtil0);
-    sleep(1)
-    ${s}_vf_util_engine_exp_t engineUtil1 = {};
-    ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineUtil1);
-    // Use formula to calculate engine utilization % based on the 2 snapshots above
-}
+    // Using VF# 0 to demonstrate how to detect engine info type and query engine util info
+    ${s}_vf_handle_t activeVf = vfs[0];
+    uint32_t count = 1;
+    if (vfProps[0].flags & ZES_VF_INFO_ENGINE) {
+        ${s}_vf_util_engine_exp_t engineUtil0 = {};
+        ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil0);
+        sleep(1)
+        ${s}_vf_util_engine_exp_t engineUtil1 = {};
+        ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil1);
+        // Use formula to calculate engine utilization % based on the 2 snapshots above
+    }
 
-// Demonstrate using setter to switch off Engine telemetry for VF0 and then check if Getter returns INVALID
-${s}VFManagementSetVFTelemetryModeExp(activeVf,  ZES_VF_INFO_ENGINE, false); 
-zes_result_t res = ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineUtil0);
-if (res != ZES_RESULT_SUCCESS) {
-    printf("Engine utilization successfully disabled for VF");
-}
+    // Demonstrate using setter to switch off Engine telemetry for VF0 and then check if Getter returns INVALID
+    ${s}VFManagementSetVFTelemetryModeExp(activeVf,  ZES_VF_INFO_ENGINE, false); 
+    ${x}_result_t res = ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil0);
+    if (res != ZES_RESULT_SUCCESS) {
+        printf("Engine utilization successfully disabled for VF");
+    }
