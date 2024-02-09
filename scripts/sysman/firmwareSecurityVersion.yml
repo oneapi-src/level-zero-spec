@@ -31,15 +31,16 @@ version: "1.9"
 class: $sFirmware
 name: GetSecurityVersionExp
 details:
+    - "The application should create a character array of size $S_STRING_PROPERTY_SIZE and reference it for the `pVersion` parameter."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
     - type: $s_firmware_handle_t
       name: hFirmware
       desc: "[in] Handle for the component."
-    - type: char
-      name: "version[$S_STRING_PROPERTY_SIZE]"
-      desc: "[out] NULL terminated string value. The string \"unknown\" will be returned if this property cannot be determined."
+    - type: "char*"
+      name: "pVersion"
+      desc: "[in,out] NULL terminated string value. The string \"unknown\" will be returned if this property cannot be determined."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Set the firmware security version number"
