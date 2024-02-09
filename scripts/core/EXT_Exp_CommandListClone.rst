@@ -17,6 +17,10 @@ from templates import helper as th
 API
 ----
 
+* Enumerations
+
+    * ${x}_command_list_clone_exp_version_t
+
 * Functions
 
     * ${x}CommandListCreateCloneExp

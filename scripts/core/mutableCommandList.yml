@@ -264,6 +264,12 @@ params:
     - type: uint64_t
       name: commandId
       desc: "[in] command identifier"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] the number of wait events"
     - type: "$x_event_handle_t*"
       name: phWaitEvents
       desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SIZE:
+       - "The `numWaitEvents` parameter does not match that of the original command."

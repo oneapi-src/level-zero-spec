@@ -17,6 +17,10 @@ from templates import helper as th
 API
 ----
 
+* Enumerations
+
+    * ${x}_immediate_command_list_append_exp_version_t
+
 * Functions
 
     * ${x}CommandListImmediateAppendCommandListsExp
