@@ -176,7 +176,7 @@ The application may subsequently mutate specific commands, as follows:
     ${x}CommandListUpdateMutableCommandSignalEventExp(hCommandList, commandId, hNewLaunchKernelSignalEvent);
 
     // Update the wait events for the launch kernel command
-    ${x}CommandListUpdateMutableCommandWaitEventsExp(hCommandList, commandId, &hNewLaunchKernelWaitEvent);
+    ${x}CommandListUpdateMutableCommandWaitEventsExp(hCommandList, commandId, 1, &hNewLaunchKernelWaitEvent);
 
     // Close the command list
     ${x}CommandListClose(hCommandList);

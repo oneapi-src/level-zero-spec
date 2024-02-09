@@ -44,7 +44,7 @@ params:
       desc: "[in] number of command lists"
     - type: "$x_command_list_handle_t*"
       name: phCommandLists
-      desc: "[in] handle(s) of command list(s)"
+      desc: "[in][range(0, numCommandLists)] handles of command lists"
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: |

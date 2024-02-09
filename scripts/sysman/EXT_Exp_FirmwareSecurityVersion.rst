@@ -37,7 +37,7 @@ higher SVN for security considerations.
 
     // Fetch current security version from the fuses
     char* version = allocate(version_size);
-    ${s}FirmwareGetSecurityVersionExp(hFirmware, &version);
+    ${s}FirmwareGetSecurityVersionExp(hFirmware, version);
 
     // Set security version
     ${s}FirmwareSetSecurityVersionExp(hFirmware);
