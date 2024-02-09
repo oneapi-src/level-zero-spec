@@ -352,12 +352,12 @@ params:
     - type: uint32_t
       name: parameterCount
       desc: "[in] Count of parameters to set."
-    - type: const char
-      name: "name[ZET_MAX_METRIC_NAME]"
-      desc: "[in] Metric name to be used."
-    - type: const char
-      name: "description[ZET_MAX_METRIC_DESCRIPTION]"
-      desc: "[in] Metric description to be used."
+    - type: "const char*"
+      name: "pName"
+      desc: "[in] pointer to metric name to be used. Must point to a null-terminated character array no longer than $T_MAX_METRIC_NAME."
+    - type: "const char*"
+      name: "pDescription"
+      desc: "[in] pointer to metric description to be used. Must point to a null-terminated character array no longer than $T_MAX_METRIC_DESCRIPTION."
     - type: "uint32_t*"
       name: pMetricHandleCount
       desc: |
@@ -382,12 +382,12 @@ params:
     - type: $t_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
-    - type: const char
-      name: name[ZET_MAX_METRIC_GROUP_NAME]
-      desc: "[in] Metric group name."
-    - type: const char
-      name: description[ZET_MAX_METRIC_GROUP_DESCRIPTION]
-      desc: "[in] Metric group description."
+    - type: "const char*"
+      name: pName
+      desc: "[in] pointer to metric group name. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_NAME."
+    - type: "const char*"
+      name: pDescription
+      desc: "[in] pointer to metric group description. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_DESCRIPTION."
     - type: $t_metric_group_sampling_type_flags_t
       name: samplingType
       desc: "[in] Sampling type for the metric group."
