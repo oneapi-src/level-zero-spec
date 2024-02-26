@@ -69,7 +69,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -91,7 +91,9 @@ html_theme = 'sphinx_book_theme'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'navigation_with_keys': 'false'
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -206,7 +208,7 @@ epub_exclude_files = ['search.html']
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-cpp_index_common_prefix = ['ze::', 'zet::']
+cpp_index_common_prefix = ['ze::', 'zet::', 'zes::']
 
 cpp_id_attributes = ['ZE_APIEXPORT', 'ZE_APICALL']
 
