@@ -94,18 +94,19 @@ def main():
     add_argument(parser, "build", "running cmake to generate and build projects.", True)
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "html", "generation of HTML files.", True)
-    add_argument(parser, "pdf", "generation of PDF file.")
+    add_argument(parser, "pdf", "[deprecated, unsupported] generation of PDF file.")
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
     add_argument(parser, "ignore_git_revision", "use command-line verison (ver) as revision instead of git tag.", False)
     parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
     parser.add_argument("--ver", type=str, default="1.4", required=False, help="specification version to generate.")
 
     args = vars(parser.parse_args())
+
     if (args['ignore_git_revision']):
         args['rev'] = args['ver']
     else:
         args['rev'] = revision()
-    
+
     print("--------------------------------------------")
     print("Building Level Zero Spec Version: %s" % args['rev'])
     print("--------------------------------------------")
@@ -170,16 +171,16 @@ def main():
             print("\nBuild failed, stopping execution!")
             return
 
-    # phase 5: prep for publication of html or pdf
-    if args['html'] or args['pdf']:
+    # phase 5: prep for publication of html
+    if args['html']:
         generate_docs.generate_common(docpath, configParser.sections(), args['ver'], args['rev'])
 
-    # phase 5: publish documentation
+    # phase 6: publish documentation
     if args['html']:
         generate_docs.generate_html(docpath)
 
     if args['pdf']:
-        generate_docs.generate_pdf(docpath)
+        print("\nPDF generation has been deprecated and is no longer supported.")
 
     if args['update_spec']:
         update_spec(args['update_spec'])

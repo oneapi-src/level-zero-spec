@@ -7,6 +7,9 @@
 import os
 import util
 import re
+import glob
+import fnmatch
+from parse_specs import _version_compare_less, _version_compare_equal, _version_compare_greater, _version_compare_lequal, _version_compare_gequal
 
 RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
 RE_DISABLE  = r"^\#\#\s*\-\-validate\s*\=\s*off$"
@@ -23,7 +26,7 @@ RE_CODE_BLOCK_BEGIN = r"\s*..\sparsed-literal::"
 RE_EXTRACT_NAME     = r"\$\{\w\}\w+"
 RE_EXTRACT_PARAMS   = r"\w+\((.*)\)\;"
 
-RE_VERSION_BEGIN    = r"\%if\s+(ver\s+[\<\=\>]+\s+[-+]?\d*\.\d+|\d+).*"
+RE_VERSION_BEGIN    = r"\%if\s+(_version_compare_\w+\(.*\)).*"
 RE_VERSION_END      = r"\%endif.*"
 
 
@@ -59,7 +62,7 @@ def _find_enum_from_etor(etor, meta):
     return None
 
 """
-    make restructedtext reference from symbol.
+    make restructedtext reference from symbol
 """
 def _make_ref(fin, iline, symbol, symbol_type, meta):
     if not re.match(r"function|struct|union|enum|etor", symbol_type):
@@ -83,7 +86,6 @@ def _make_ref(fin, iline, symbol, symbol_type, meta):
     generate a valid reStructuredText file
 """
 def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
-    ver=float(ver)
     enable = True
     code_block = False
 
@@ -96,14 +98,14 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
             enable = True
         elif re.match(RE_DISABLE, line) or re.match(RE_PYCODE_BLOCK_BEGIN, line):
             enable = False
-
         elif re.match(RE_CODE_BLOCK_BEGIN, line):
             code_block = True
         elif re.match(r'^\w', line) and code_block: # code is always indented
             code_block = False
-
         elif re.match(RE_VERSION_BEGIN, line):
-            enable = eval(re.sub(RE_VERSION_BEGIN, r"\1", line))
+            test = re.sub(RE_VERSION_BEGIN, r"\1", line.strip())
+            enable = eval(test)
+            # print("DEBUG %s: enable = %s (ver = %s)" % (test, enable, ver))
         elif re.match(RE_VERSION_END, line):
             enable = True
 
@@ -114,7 +116,8 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
         if re.match(RE_INVALID_TAG_FORMAT, line):
             print("%s(%s) : error : invalid %s tag used"%(fin, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line)))
 
-        newline = line # new line will contain proper tags for reStructuredText if needed.
+        # new line will contain proper tags for reStructuredText if needed
+        newline = line
         if re.match(RE_PROPER_TAG_FORMAT, line):
             words = re.findall(RE_EXTRACT_NAME, line)
 
@@ -140,11 +143,11 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
 
                         newline += tuple[0] + tuple[1].replace(word, ref)
                         if tuple[2] and not re.match(r'\s', tuple[2]):
-                            # reStructuredText requires an escape character after references that are not followed by whitespace.
+                            # reStructuredText requires an escape character after references that are not followed by whitespace
                             newline += "\\"
                         line = tuple[2]
                     else:
-                        # ignore reference links for specific types that have no API documentation for them.
+                        # ignore reference links for specific types that have no API documentation for them
                         if not re.match(r"env|handle|typedef|macro", symbol_type):
                             print("%s(%s) : warning : reference link %s (type=%s) not used."%(fin, iline+1, symbol, symbol_type))
                 else:
@@ -203,6 +206,24 @@ def generate_ref(dstpath, ref):
 
     util.jsonWrite(os.path.join(refpath, "level_zero.json"), ref)
 
+"""
+Entry-point:
+    Post-process Doxygen-generated XML files
+"""
+def _postprocess_generated_xml(pathname='', extension='xml'):
+    globby = '**/*.' + extension
+
+    for fn in glob.iglob(os.path.join(os.path.abspath(pathname), globby), recursive=True):
+        if fnmatch.fnmatch(fn, '*/_*'):
+            continue
+        with open(fn, "r+", encoding="utf-8") as f:
+            data = f.read()
+            data = data.replace("modul3", "module")
+
+            f.seek(0)
+            f.write(data)
+            f.truncate()
+
 def generate_common(dstpath, sections, ver, rev):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
@@ -213,7 +234,7 @@ def generate_common(dstpath, sections, ver, rev):
     util.removePath(xmlpath)
     util.makePath(xmlpath)
 
-    # Generate sphinx configuration file with version.
+    # generate sphinx configuration file with version
     loc = 0
     for fn in ["conf.py", "index.rst", "api.rst", "versions.rst"]:
         loc += util.makoWrite(
@@ -223,10 +244,13 @@ def generate_common(dstpath, sections, ver, rev):
             sourcepath=sourcepath,
             sections=sections)
 
-    # Doxygen generates XML files needed by sphinx breathe plugin for API documentation.
+    # Doxygen generates XML files needed by sphinx breathe plugin for API documentation
     print("Generating doxygen...")
     cmdline = "doxygen Doxyfile"
     os.system(cmdline)
+
+    # workaround for C++ standard keywords redefined due to missing Doxygen options to set the preferred C++ standard
+    _postprocess_generated_xml(xmlpath)
 
 """
 Entry-point:
@@ -238,23 +262,13 @@ def generate_html(dstpath):
     print("Generating HTML...")
     cmdline = "sphinx-build -M html %s ../docs"%sourcepath
     print(cmdline)
+    os.environ["PYTHONWARNINGS"] = "ignore"
     os.system(cmdline)
+    os.environ.pop("PYTHONWARNINGS")
 
 """
 Entry-point:
-    generate PDF file using generated LaTeX files
-"""
-def generate_pdf(dstpath):
-    sourcepath = os.path.join(dstpath, "source")
-
-    print("Generating PDF...")
-    cmdline = "sphinx-build -b pdf %s ../docs/latex"%sourcepath
-    print(cmdline)
-    os.system(cmdline)
-
-"""
-Entry-point:
-    prepare doc folder for documentation.
+    prepare doc folder for documentation
 """
 def prepare(docpath, gen_rst, gen_html, ver):
     if gen_html:

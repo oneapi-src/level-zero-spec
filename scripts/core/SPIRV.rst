@@ -7,6 +7,10 @@ from templates import helper as th
     x=tags['$x']
     X=x.upper()
 %>
+<%!
+    from parse_specs import _version_compare_gequal
+%>
+
 ==========================
  SPIR-V Programming Guide
 ==========================
@@ -412,7 +416,7 @@ The following restrictions apply to the
    words, the write must begin at a 32-bit boundary. There is no
    restriction on the y-component of the coordinate.
 
-%if ver >= 1.1:
+%if _version_compare_gequal(ver, "1.1"):
 Floating-Point Atomics
 ----------------------
 
@@ -459,7 +463,7 @@ Additionally:
 
 %endif
 
-%if ver >= 1.2:
+%if _version_compare_gequal(ver, "1.2"):
 Extended Subgroups
 ------------------
 
@@ -651,7 +655,7 @@ optional *ClusterSize* operand.
 
 %endif
 
-%if ver >= 1.2:
+%if _version_compare_gequal(ver, "1.2"):
 Linkonce ODR
 ------------
 
@@ -664,7 +668,7 @@ include the **LinkOnceODR** linkage type.
 
 %endif
 
-%if ver >= 1.5:
+%if _version_compare_gequal(ver, "1.5"):
 Bfloat16 Conversions
 --------------------
 
