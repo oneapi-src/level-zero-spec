@@ -51,6 +51,9 @@ etors:
       desc: "Event based sampling"
     - name: TIME_BASED
       desc: "Time based sampling"
+    - name: EXP_TRACER_BASED
+      desc: "Experimental Tracer based sampling"
+      version: "1.10"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric group properties queried using $tMetricGroupGetProperties"
@@ -115,10 +118,21 @@ etors:
       desc:
             "1.6": "Metric type: instruction pointer"
             "1.7": "Metric type: instruction pointer. Deprecated, use $T_METRIC_TYPE_IP."
-      value: "0x7ffffffe"
     - name: IP
       desc: "Metric type: instruction pointer"
       version: "1.7"
+    - name: EXP_EVENT_NO_VALUE
+      desc: "Metric type: event with only timestamp and value has no meaning"
+      version: "1.10"
+    - name: EXP_EVENT_START
+      desc: "Metric type: the first event of a start/end event pair"
+      version: "1.10"
+    - name: EXP_EVENT_END
+      desc: "Metric type: the second event of a start/end event pair"
+      version: "1.10"
+    - name: EXP_EVENT_MONOTONIC_WRAPS_VALUE
+      desc: "Metric type: value of the event is a monotonically increasing value that can wrap around"
+      version: "1.10"
       value: "0x7ffffffe"
 --- #--------------------------------------------------------------------------
 type: enum
