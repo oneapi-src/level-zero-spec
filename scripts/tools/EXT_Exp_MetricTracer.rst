@@ -54,7 +54,7 @@ API
     * ${t}MetricDecoderGetDecodableMetricsExp
     * ${t}MetricTracerDecodeExp
 
-Metric MetricTracer
+Metric Tracer
 ~~~~~~~~~~~~~~~~~~~
 
 Support collection of metrics from events produced in an asynchronous mode. Application can use ${t}MetricGroupGet to enumerate the list of metric groups 
@@ -91,7 +91,7 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     ${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
     
     // Create tracer
-    ${t}MetricTracerCreateExp(hContext, hDevice, 1, hMetricGroup , &tracerDescriptor, hNotificationEvent, &hMetricTracer);
+    ${t}MetricTracerCreateExp(hContext, hDevice, 1, &hMetricGroup , &tracerDescriptor, hNotificationEvent, &hMetricTracer);
 
     // create decoder 
     ${t}MetricDecoderCreateExp( hMetricTracer,  &hMetricDecoder);
@@ -112,7 +112,7 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     // Read raw data
     size_t rawDataSize = 0;
     ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, nullptr);
-    uint8_t* rawData = malloc(rawDataSize);
+    std::vector<uint8_t>rawData(rawDataSize);
     ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, rawData.data()); 
 
     // decode
@@ -125,27 +125,27 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
         ${t}_metric_entry_exp_t metricEntry = decodedEntries[index];
         ${t}_metric_properties_t metricProperties = {};
         ${t}MetricGetProperties(decodableMetrics[metricEntry.metricIndex], &metricProperties);
-        printf ("Component: %s .Decodable metric name: %s ", metricProperties.component,  metricProperties.name);
+        std::cout << "Component: " << metricProperties.component ". Decodable metric name: " << metricProperties.name;
         switch (metricProperties.resultType) {
         case ${T}_VALUE_TYPE_UINT32:
         case ${T}_VALUE_TYPE_UINT8:
         case ${T}_VALUE_TYPE_UINT16:
-            printf "\t value: %lu \n" << metricEntry.value.ui32;
+            std::cout << ".\t value: " << metricEntry.value.ui32 << std::endl;
           break;
         case ${T}_VALUE_TYPE_UINT64:
-            printf "\t value: %llu \n" << metricEntry.value.ui64;
+            std::cout << ".\t value: " << metricEntry.value.ui64 << std::endl;
           break;
         case ${T}_VALUE_TYPE_FLOAT32:
-            printf "\t value: %f \n" << metricEntry.value.fp32;
+            std::cout << ".\t value: " << metricEntry.value.fp32 << std::endl;
           break;
         case ${T}_VALUE_TYPE_FLOAT64:
-            printf "\t value: %f \n" << metricEntry.value.fp64;
+            std::cout << ".\t value: " << metricEntry.value.fp64 << std::endl;
           break;
         case ${T}_VALUE_TYPE_BOOL8:
 	        if( metricEntry.value.b8 ){
-                printf(" Value: true\n" );
+                std::cout << ".\t value: true" << std::endl;
             else
-                printf(" Value: false\n" );
+                std::cout << ".\t value: false" << std::endl;
             }
           break;
         default:

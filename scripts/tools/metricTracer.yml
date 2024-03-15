@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 Intel Corporation
+# Copyright (C) 2024 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -69,7 +69,7 @@ details:
     - "The duration of the signal event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application must **not** call this function from simultaneous threads with the same device handle."
     - "The metric tracer is created in disabled state"
-    - "Metric groups must be of the sampling type ZET_METRIC_SAMPLING_TYPE_EXP_FLAG_TRACER_BASED"
+    - "Metric groups must support sampling type ZET_METRIC_SAMPLING_TYPE_EXP_FLAG_TRACER_BASED"
     - "All metric groups must be first activated"
 params:
     - type: $t_context_handle_t
@@ -81,8 +81,8 @@ params:
     - type: uint32_t
       name: "metricGroupCount"
       desc: "[in] metric group count"
-    - type: "$t_metric_group_handle_t"
-      name: "hMetricGroups"
+    - type: "$t_metric_group_handle_t*"
+      name: "phMetricGroups"
       desc: "[in][range(0, metricGroupCount )] handles of the metric groups to trace"
     - type: "$t_metric_tracer_exp_desc_t*"
       name: desc
@@ -116,12 +116,15 @@ name: EnableExp
 details:
     - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
 params:
-    - type: "$t_metric_tracer_exp_handle_t*"
-      name: phMetricTracer
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
       desc: "[in] handle of the metric tracer"
     - type: $x_bool_t
       name: synchronous
-      desc: "[in] request synchronous behavior. Confirmation of successful asynchronous operation is done by calling $tMetricTracerReadDataExp()"
+      desc: |
+            [in] request synchronous behavior. Confirmation of successful asynchronous operation is done by calling $tMetricTracerReadDataExp()
+            and checking the return status: $X_RESULT_NOT_READY will be returned when the tracer is inactive. $X_RESULT_SUCCESS will be returned 
+            when the tracer is active.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Lightweight call that stops the event collections"
@@ -131,12 +134,15 @@ name: DisableExp
 details:
     - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
 params:
-    - type: "$t_metric_tracer_exp_handle_t*"
-      name: phMetricTracer
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
       desc: "[in] handle of the metric tracer"
     - type: $x_bool_t
       name: synchronous
-      desc: "[in] request synchronous behavior. Confirmation of successful asynchronous operation is done by calling $tMetricTracerReadDataExp()"
+      desc: |
+            [in] request synchronous behavior. Confirmation of successful asynchronous operation is done by calling $tMetricTracerReadDataExp()
+            and checking the return status: $X_RESULT_SUCCESS will be returned when the tracer is active or when it is inactive but still has data. 
+            $X_RESULT_NOT_READY will be returned when the tracer is inactive and has no more data to be retrieved.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read data from the metric tracer"
@@ -147,8 +153,8 @@ details:
     - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
     - "Data can be retrieved after tracer is disabled. When buffers are drained $X_RESULT_NOT_READY will be returned"
 params:
-    - type: "$t_metric_tracer_exp_handle_t*"
-      name: phMetricTracer
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
       desc: "[in] handle of the metric tracer"
     - type: size_t*
       name: pRawDataSize
@@ -200,7 +206,7 @@ class: $tMetricDecoder
 name: GetDecodableMetricsExp
 params:
     - type: $t_metric_decoder_exp_handle_t
-      name: phMetricDecoder 
+      name: hMetricDecoder 
       desc: "[in] handle of the metric decoder object"
     - type: uint32_t* 
       name: pCount 
