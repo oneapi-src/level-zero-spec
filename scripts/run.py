@@ -96,12 +96,12 @@ def main():
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "pdf", "generation of PDF file.")
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
-    add_argument(parser, "no_git_version", "use command line verison instead of git tag.", False)
+    add_argument(parser, "ignore_git_revision", "use command-line verison (ver) as revision instead of git tag.", False)
     parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
     parser.add_argument("--ver", type=str, default="1.4", required=False, help="specification version to generate.")
 
     args = vars(parser.parse_args())
-    if (args['no_git_version']):
+    if (args['ignore_git_revision']):
         args['rev'] = args['ver']
     else:
         args['rev'] = revision()
