@@ -102,6 +102,9 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     std::vector<zet_metric_handle_t>decodableMetrics(numDecodableMetrics);
     ${t}MetricDecoderGetDecodableMetricsExp(hMetricDecoder, &numDecodableMetrics, decodableMetrics.data());
 
+    // Enable the tracer
+    ${t}MetricTracerEnableExp(hMetricTracer, true);
+
     // Run your workload 
     Workload(hDevice);
 
