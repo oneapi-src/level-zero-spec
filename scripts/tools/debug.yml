@@ -301,6 +301,9 @@ etors:
       value: "0"
     - name: SLM
       desc: "shared local memory space (GPU-only)"
+    - name: ELF
+      desc: "ELF file memory space"
+      version: "1.10"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device memory space descriptor"
