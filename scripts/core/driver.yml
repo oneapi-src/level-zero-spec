@@ -70,6 +70,82 @@ params:
             if count is less than the number of drivers available, then the loader shall only retrieve that number of drivers.
 --- #--------------------------------------------------------------------------
 type: enum
+desc: "Supported driver initialization type flags"
+class: $x
+name: $x_init_driver_type_flags_t
+version: "1.10"
+details:
+    - "Bit Field which details the driver types to be initialized and returned to the user."
+    - "Value Definition:"
+    - "0, do not init or retrieve any drivers."
+    - "ZE_INIT_DRIVER_TYPE_FLAG_GPU,	GPU Drivers are Init and driver handles retrieved."
+    - "ZE_INIT_DRIVER_TYPE_FLAG_NPU,	NPU Drivers are Init and driver handles retrieved."
+    - "ZE_INIT_DRIVER_TYPE_FLAG_GPU | ZE_INIT_DRIVER_TYPE_FLAG_NPU, NPU & GPU Drivers are Init and driver handles retrieved."
+    - "UINT32_MAX	All Drivers of any type are Init and driver handles retrieved."
+etors:
+    - name: GPU
+      desc: "initialize and retrieve GPU drivers"
+    - name: NPU
+      desc: "initialize and retrieve NPU drivers"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Init Driver Type descriptor"
+class: $x
+name: $x_init_driver_type_desc_t
+version: "1.10"
+base: $x_base_desc_t
+members:
+    - type: $x_init_driver_type_flags_t
+      name: flags
+      desc: |
+            [in] driver type init flags.
+            must be a valid combination of $x_init_driver_type_flag_t or UINT32_MAX;
+            driver types are init and retrieved based on these init flags in zeInitDrivers().
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Initialize the $OneApi driver(s) based on the driver types requested and retrieve the driver handles."
+class: $x
+name: InitDrivers
+version: "1.10"
+decl: static
+ordinal: "0"
+details:
+    - "The application must call this function or zeInit before calling any other function."
+    - "The application can call InitDrivers or zeInit to init the drivers on the system."
+    - "Calls to zeInit or InitDrivers will not alter the drivers retrieved thru either api."
+    - "Drivers init thru zeInit or InitDrivers will not be reInitialized once init in an application.
+       The Loader will determine if the already init driver needs to be delivered to the user thru the init type flags."
+    - "Already init Drivers will not be uninitialized if the call to InitDrivers does not include that driver's type.
+       Those init drivers which don't match the init flags will not have their driver handles returned to the user in that InitDrivers call."
+    - "If this function or zeInit is not called, then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
+    - "Only one instance of each driver will be initialized per process."
+    - "A driver represents a collection of physical devices."
+    - "Multiple calls to this function will return identical driver handles, in the same order."
+    - "The drivers returned to the caller will be based on the init types which state the drivers to be included."
+    - "The application may pass nullptr for pDrivers when only querying the number of drivers."
+    - "The application may call this function multiple times with different flags or environment variables enabled."
+    - "The application must call this function after forking new processes. Each forked process must call this function."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe for scenarios where multiple libraries may initialize the driver(s) simultaneously."
+params:
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of driver instances.
+            if count is zero, then the loader shall update the value with the total number of drivers available.
+            if count is greater than the number of drivers available, then the loader shall update the value with the correct number of drivers available.
+    - type: "$x_driver_handle_t*"
+      name: phDrivers
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of driver instance handles.
+            if count is less than the number of drivers available, then the loader shall only retrieve that number of drivers.
+    - type: "$x_init_driver_type_desc_t*"
+      name: desc
+      desc: |
+            [in] descriptor containing the driver type initialization details including $x_init_driver_type_flag_t combinations.
+--- #--------------------------------------------------------------------------
+type: enum
 desc: "Supported API versions"
 class: $xDriver
 name: $x_api_version_t

@@ -809,7 +809,10 @@ def _generate_returns(obj, meta):
                             if re.match(r"stype", m['name']):
                                 _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
                             else:
-                                _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], m['name']))
+                                if "$x_init_driver_type_flags_t" == mtypename:
+                                    _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s == %s->%s`"%('0x0', item['name'], m['name']))
+                                else:
+                                    _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], m['name']))
 
                 elif type_traits.is_properties(item['type']):
                     # walk each entry in the properties

@@ -556,6 +556,10 @@ etors:
       desc: $x_image_pitched_exp_desc_t
       version: "1.9"
       value: "0x0002001F"
+    - name: INIT_DRIVER_TYPE_DESC
+      desc: $x_init_driver_type_desc_t
+      version: "1.10"
+      value: "0x00020020"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
