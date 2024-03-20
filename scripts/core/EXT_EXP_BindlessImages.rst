@@ -27,6 +27,7 @@ API
     * ${x}_device_pitched_alloc_exp_properties_t
     * ${x}_image_bindless_exp_desc_t
     * ${x}_image_pitched_exp_desc_t
+    * ${x}_sampler_ptr_exp_desc_t
 
 * Functions
 
@@ -46,7 +47,8 @@ This function only allows for the allocation of image memory in an implementatio
 In this extension, we propose the following additions:
  * Provide a new image descriptor and flags for Bindless images.
  * Support for creation of images on linearly allocated memory backed by USM.
- * Extension API to create an image handle from pitched memory
+ * Extension API to create an image handle from pitched memory.
+ * Create sampled image from the new image descriptor and a sampler.
 
 A "Bindless image" can be created by passing ${x}_image_bindless_exp_desc_t to pNext member of
 ${x}_image_desc_t and set the flags value as ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS

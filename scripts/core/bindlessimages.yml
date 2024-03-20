@@ -65,6 +65,19 @@ members:
       init: "0"
 --- #--------------------------------------------------------------------------
 type: struct
+desc: "Sampler created from $xSamplerCreate. This structure may be passed to $xImageCreate via pNext member of $x_image_desc_t, $x_image_pitched_exp_desc_t or $x_image_bindless_exp_desc_t."
+class: $xImage
+version: "1.9"
+name: $x_sampler_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: void*
+      name: sampler
+      desc: |
+            [in] handle of a sampler
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: struct
 desc: "Device specific properties for pitched allocations"
 version: "1.9"
 class: $xDevice

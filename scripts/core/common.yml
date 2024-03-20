@@ -556,6 +556,10 @@ etors:
       desc: $x_image_pitched_exp_desc_t
       version: "1.9"
       value: "0x0002001F"
+    - name: SAMPLER_EXP_DESC
+      desc: $x_sampler_exp_desc_t
+      version: "1.9"
+      value: "0x00020020"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
