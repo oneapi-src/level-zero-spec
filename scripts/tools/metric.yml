@@ -121,16 +121,16 @@ etors:
     - name: IP
       desc: "Metric type: instruction pointer"
       version: "1.7"
-    - name: EXP_EVENT_NO_VALUE
+    - name: EVENT_EXP_TIMESTAMP
       desc: "Metric type: event with only timestamp and value has no meaning"
       version: "1.10"
-    - name: EXP_EVENT_START
+    - name: EVENT_EXP_START
       desc: "Metric type: the first event of a start/end event pair"
       version: "1.10"
-    - name: EXP_EVENT_END
+    - name: EVENT_EXP_END
       desc: "Metric type: the second event of a start/end event pair"
       version: "1.10"
-    - name: EXP_EVENT_MONOTONIC_WRAPS_VALUE
+    - name: EVENT_EXP_MONOTONIC_WRAPS_VALUE
       desc: "Metric type: value of the event is a monotonically increasing value that can wrap around"
       version: "1.10"
       value: "0x7ffffffe"

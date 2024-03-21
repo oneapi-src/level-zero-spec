@@ -19,6 +19,7 @@ Metric Tracer Experimental Extension
 API
 ----
 * Enumerations
+    * ${t}_metric_tracer_exp_version_t
 
     * ${t}_metric_group_sampling_type_flags_t
 
@@ -57,8 +58,35 @@ API
 Metric Tracer
 ~~~~~~~~~~~~~~~~~~~
 
-Support collection of metrics from events produced in an asynchronous mode. Application can use ${t}MetricGroupGet to enumerate the list of metric groups 
-and ${t}MetricGroupGetProperties to get metric group sampling type and search for ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED
+Metrics collection model that allows retrieving metrics from events generated in asynchronous fashion. A Metrics Tracer is a software interface that allows 
+configuration for collection of such metrics. Collected raw data can be converted into parsable data with the use of a decoder object. 
+
+Enumeration
+-----------
+
+Application can use ${t}MetricGroupGet to enumerate the list of metric groups and ${t}MetricGroupGetProperties to get metric group sampling type 
+and search for ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED. 
+
+Configuration
+-------------
+
+Use the ${t}ContextActivateMetricGroups API call to configure the device for data collection.
+ 
+Collection
+----------
+
+Metric Tracer based collection mode allows the creation of a tracer object for multiple metric groups than can be collected concurrently. Once metric groups are 
+activated the tracer can be created using ${t}MetricTracerCreateExp. Tracers are created in disabled state, applications have the flexibility to to enable 
+(${t}MetricTracerEnableExp) and disable (${t}MetricTracerDisableExp) during workload execution to selectively decide sections on which to collect metrics. 
+ata can be retrieved from the tracer with ${t}MetricTracerReadDataExp.
+
+Decoding
+--------
+Metric Tracer collects the data in device specific, raw form that is not suitable for application processing. To convert data into a format that allows 
+application parsing a decoder object can be used. The decoder object is created with ${t}MetricDecoderCreateExp and data can be converted using 
+${t}MetricTracerDecodeExp. Each event in the data is associated with a decodable metric, which can be retrieved with ${t}MetricDecoderGetDecodableMetricsExp.
+
+
 
 Sample Code
 ------------
