@@ -198,7 +198,7 @@ desc: "Metric Programmable parameter information"
 version: "1.9"
 class: $tMetricProgrammable
 name: $t_metric_programmable_param_info_exp_t
-base: $t_base_desc_t
+base: $t_base_properties_t
 members:
     - type: $t_metric_programmable_param_type_exp_t
       name: "type"
@@ -221,7 +221,7 @@ desc: "Metric Programmable parameter value information"
 version: "1.9"
 class: $tMetricProgrammable
 name: $t_metric_programmable_param_value_info_exp_t
-base: $t_base_desc_t
+base: $t_base_properties_t
 members:
     - type: $t_value_info_exp_t
       name: "valueInfo"
@@ -339,19 +339,19 @@ decl: static
 details:
     - "Multiple parameter values could be used to prepare a metric."
     - "If parameterCount = 0, the default value of the metric programmable would be used for all parameters."
-    - "The implementation can post-fix a C string to the metric name and description, based on the parmeter values chosen."
+    - "The implementation can post-fix a C string to the metric name and description, based on the parameter values chosen."
     - "$tMetricProgrammableGetParamInfoExp() returns a list of parameters in a defined order."
     - "Therefore, the list of values passed in to the API should respect the same order such that the desired parameter is set with expected value"
 params:
     - type: $t_metric_programmable_exp_handle_t
       name: hMetricProgrammable
       desc: "[in] handle of the metric programmable"
-    - type: $t_metric_programmable_param_value_exp_t*
-      name: pParameterValues
-      desc: "[in] list of parameter values to be set."
     - type: uint32_t
       name: parameterCount
       desc: "[in] Count of parameters to set."
+    - type: $t_metric_programmable_param_value_exp_t*
+      name: pParameterValues
+      desc: "[in] list of parameter values to be set."
     - type: "const char*"
       name: "pName"
       desc: "[in] pointer to metric name to be used. Must point to a null-terminated character array no longer than $T_MAX_METRIC_NAME."
