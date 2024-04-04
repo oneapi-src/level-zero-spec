@@ -65,7 +65,13 @@ members:
       desc: "[out] timestamp at which the event happened."
     - type: uint32_t
       name: "metricIndex"
-      desc: "[out] index to the decodable metric handle in the input array (phMetric) in $tMetricTracerDecode()"
+      desc: "[out] index to the decodable metric handle in the input array (phMetric) in $tMetricTracerDecode()."
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the event occurred on a sub-device; false means the device on which the metric tracer was opened does not have sub-devices."
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create a metric tracer for a device."
@@ -212,10 +218,10 @@ version: "1.10"
 class: $tMetricDecoder
 name: GetDecodableMetricsExp
 details:
-    - "The decodable metrics handles returned by this API are defined by the metric groups in the tracer 
+    - "The decodable metrics handles returned by this API are defined by the metric groups in the tracer
       on which the decoder was created."
-    - "The decodable metrics handles returned by this API are only valid to decode metrics raw data 
-      with $tMetricTracerDecodeExp(). Decodable metric handles are not valid to compare with metrics handles included in 
+    - "The decodable metrics handles returned by this API are only valid to decode metrics raw data
+      with $tMetricTracerDecodeExp(). Decodable metric handles are not valid to compare with metrics handles included in
       metric groups."
 params:
     - type: $t_metric_decoder_exp_handle_t

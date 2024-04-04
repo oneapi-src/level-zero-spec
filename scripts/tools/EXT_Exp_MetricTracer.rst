@@ -28,7 +28,7 @@ API
     * ${t}_metric_type_t
 
     New Values
-        ${T}_METRIC_TYPE_EXP_EVENT_NO_VALUE   
+        ${T}_METRIC_TYPE_EXP_EVENT_NO_VALUE
             Metric type:  have only timestamp and value has no meaning.
         ${T}_METRIC_TYPE_EXP_EVENT_START
             Metric type: the first event of a start/stop event pair.
@@ -58,14 +58,14 @@ API
 Metric Tracer
 ~~~~~~~~~~~~~~~~~~~
 
-Metrics collection model that allows retrieving metrics from events generated in asynchronous fashion. A Metrics Tracer is a software interface that allows 
-configuration for collection of such metrics. Collected raw data can be converted into parsable data with the use of a decoder object. 
+Metrics collection model that allows retrieving metrics from events generated in asynchronous fashion. A Metrics Tracer is a software interface that allows
+configuration for collection of such metrics. Collected raw data can be converted into parsable data with the use of a decoder object.
 
 Enumeration
 -----------
 
-Application can use ${t}MetricGroupGet to enumerate the list of metric groups and ${t}MetricGroupGetProperties to get metric group sampling type 
-and search for ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED. 
+Application can use ${t}MetricGroupGet to enumerate the list of metric groups and ${t}MetricGroupGetProperties to get metric group sampling type
+and search for ${T}_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED.
 
 Configuration
 -------------
@@ -83,7 +83,7 @@ ata can be retrieved from the tracer with ${t}MetricTracerReadDataExp.
 Decoding
 --------
 Metric Tracer collects the data in device specific, raw form that is not suitable for application processing. To convert data into a format that allows 
-application parsing a decoder object can be used. The decoder object is created with ${t}MetricDecoderCreateExp and data can be converted using 
+application parsing a decoder object can be used. The decoder object is created with ${t}MetricDecoderCreateExp and data can be converted using
 ${t}MetricTracerDecodeExp. Each event in the data is associated with a decodable metric, which can be retrieved with ${t}MetricDecoderGetDecodableMetricsExp.
 
 
@@ -115,13 +115,13 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     ${x}EventPoolCreate( hContext, &eventPoolDesc, 1, &hDevice, &hEventPool );
     eventDesc.index  = 0;
     eventDesc.signal = ${X}_EVENT_SCOPE_FLAG_HOST;
-    eventDesc.wait   = ${X}_EVENT_SCOPE_FLAG_HOST; 
+    eventDesc.wait   = ${X}_EVENT_SCOPE_FLAG_HOST;
     ${x}EventCreate( hEventPool, &eventDesc, &hNotificationEvent );
     
     // Create tracer
     ${t}MetricTracerCreateExp(hContext, hDevice, 1, &hMetricGroup , &tracerDescriptor, hNotificationEvent, &hMetricTracer);
 
-    // create decoder 
+    // create decoder
     ${t}MetricDecoderCreateExp( hMetricTracer,  &hMetricDecoder);
 
     // Get decodable metrics
@@ -133,10 +133,10 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     // Enable the tracer
     ${t}MetricTracerEnableExp(hMetricTracer, true);
 
-    // Run your workload 
+    // Run your workload
     Workload(hDevice);
 
-    // Wait for data, optional in this example 
+    // Wait for data, optional in this example
     ${x}EventHostSynchronize( hNotificationEvent, 1000 /\*timeout\*/ );
     // reset the event if it fired
 
@@ -144,7 +144,7 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     size_t rawDataSize = 0;
     ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, nullptr);
     std::vector<uint8_t>rawData(rawDataSize);
-    ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, rawData.data()); 
+    ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, rawData.data());
 
     // decode
     uint32_t numEntries =0;
