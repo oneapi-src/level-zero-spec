@@ -153,7 +153,7 @@ members:
     - type: uint32_t
       name: deviceId
       desc: |
-            [out] device id from PCI configuration
+            [out] device id from PCI configuration.
             Note, the device id uses little-endian format.
     - type: $x_device_property_flags_t
       name: flags
