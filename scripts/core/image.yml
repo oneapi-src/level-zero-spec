@@ -128,6 +128,15 @@ etors:
       desc: "Media Format: RGBP. Format type and swizzle is ignored for this."
     - name: BRGP
       desc: "Media Format: BRGP. Format type and swizzle is ignored for this."
+    - name: "8_8_8"
+      desc: "3-component 8-bit layout"
+      version: "1.9"
+    - name: "16_16_16"
+      desc: "3-component 16-bit layout"
+      version: "1.9"
+    - name: "32_32_32"
+      desc: "3-component 32-bit layout"
+      version: "1.9"
 
 --- #--------------------------------------------------------------------------
 type: enum

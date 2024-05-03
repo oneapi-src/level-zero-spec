@@ -6,6 +6,9 @@
     t=tags['$t']
     T=t.upper()
 %>
+<%!
+    from parse_specs import _version_compare_less, _version_compare_gequal
+%>
 
 .. _tools-programming-guide:
 
@@ -26,7 +29,7 @@ The following environment variables are required to be enabled during ${x}Init f
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
 | Tools           | ${T}_ENABLE_API_TRACING_EXP          | {**0**, 1} | Enables driver instrumentation for API tracing                                    |
-%if ver >= 1.5:
+%if _version_compare_gequal(ver, "1.5"):
 |                 |                                     |            | **Note**: This tracing environment variable is **deprecated**. Please use the     |
 |                 |                                     |            | tracing loader layer instead.                                                     |
 %endif
@@ -854,7 +857,7 @@ Not all events have event-specific fields.
 
     The event is generated in response to an interrupt request if none of the requested threads is available to be interrupted.
 
-%if ver >= 1.1:
+%if _version_compare_gequal(ver, "1.1"):
   * ${T}_DEBUG_EVENT_TYPE_PAGE_FAULT: there was a page fault on the device
 
     The event provides the page fault reason, the faulting address aligned to the page granularity, and a mask specifying the alignment.
@@ -961,10 +964,10 @@ A tool may read and write the register state of a stopped device thread.
 
 Registers are grouped into sets of similar registers.
 The types of register sets supported by a device can be queried using
-%if ver < 1.5:
+%if _version_compare_less(ver, "1.5"):
 ${t}DebugGetRegisterSetProperties.
 %endif
-%if ver >= 1.5:
+%if _version_compare_gequal(ver, "1.5"):
 ${t}DebugGetRegisterSetProperties and ${t}DebugGetThreadRegisterSetProperties.
 The former provides general information about the register sets supported on a device.  The latter provides the concrete register set for the argument thread.  The register set may depend on dynamic properties and may change between stops.
 %endif
@@ -982,7 +985,7 @@ The following pseudo-code demonstrates obtaining register set properties for a d
     
     ${t}_debug_regset_properties_t* pRegSets = allocate(nRegSets * sizeof(${t}_debug_regset_properties_t));
     ${t}DebugGetRegisterSetProperties(hDevice, &nRegSets, pRegSets);
-%if ver >= 1.5:
+%if _version_compare_gequal(ver, "1.5"):
 
 The following pseudo-code demonstrates obtaining register set properties for a thread:
 
