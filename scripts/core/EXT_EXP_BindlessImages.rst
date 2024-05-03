@@ -47,9 +47,16 @@ In this extension, we propose the following additions:
  * Provide a new image descriptor and flags for Bindless images.
  * Support for creation of images on linearly allocated memory backed by USM.
  * Extension API to create an image handle from pitched memory
+ * Create Bindless sampled images
 
 A "Bindless image" can be created by passing ${x}_image_bindless_exp_desc_t to pNext member of
 ${x}_image_desc_t and set the flags value as ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS
+
+A "Bindless sampled image" can be created by passing ${x}_image_bindless_exp_desc_t to pNext member of
+${x}_image_desc_t and setting the flags to a combination of ${X}_IMAGE_BINDLESS_EXP_FLAG_BINDLESS and ${X}_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE
+When image view is created from bindless sampled image, sampling modes can be redefined by passing sampler descriptor in pNext field of ${x}_image_bindless_exp_desc_t struct.
+Image view created from bindless sampled image without setting ${X}_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE is an unsampled image.
+Sampled image view can be created from bindless unsampled image by setting ${X}_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE and passing sampler descriptor in pNext field of ${x}_image_bindless_exp_desc_t struct.
 
 This extension is complimentary to and may be used in conjunction with the `ZE_extension_image_view <https://spec.oneapi.io/level-zero/latest/core/EXT_ImageView.html#image-view-extension>`_ extension
 
@@ -179,3 +186,100 @@ Programming example with pitched memory usage
     // Once all operations on the image are complete we need destroy image handle and free memory
     ${x}ImageDestroy(hImage);
     ${x}MemFree(hContext, pitchedPtr);
+
+Programming example with Bindless sampled images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. parsed-literal::
+
+    // 2D image dimensions
+    size_t imageWidth = 1024;
+    size_t imageHeight = 1024;
+
+    // Single-precision float image format with one channel
+    ${x}_image_format_t imageFormat = {
+        ZE_IMAGE_FORMAT_LAYOUT_32, ZE_IMAGE_FORMAT_TYPE_FLOAT,
+        ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X,
+        ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X
+    }
+
+    // Define sampler descriptor
+    ${x}_sampler_desc_t samplerDesc = {
+        ZE_STRUCTURE_TYPE_SAMPLER_DESC,
+        nullptr,
+        ZE_SAMPLER_ADDRESS_MODE_CLAMP,
+        ZE_SAMPLER_FILTER_MODE_LINEAR,
+        true
+    };
+
+    // Create an image descriptor for bindless image
+    ${x}_image_desc_t imageDesc = {
+        ZE_STRUCTURE_TYPE_IMAGE_DESC,
+        nullptr,
+        0,
+        ZE_IMAGE_TYPE_2D,
+        imageFormat,
+        imageWidth, imageHeight, 0, 0, 0
+    };
+
+    ${x}_image_bindless_exp_desc_t bindlessImageDesc = {ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESC};
+    bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS | ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE;
+    imageDesc.pNext = &bindlessImageDesc;
+
+    bindlessImageDesc.pNext = &samplerDesc;
+
+    // Create bindless sampled image
+    // pass ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS and ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE to zeImageCreate(),
+    ${x}_image_handle_t hImage;
+    ${x}ImageCreate(hContext, hDevice, &imageDesc, &hImage);
+
+    // Create an image view from bindless sampled image
+    // define sampler descriptor for view
+    ${x}_sampler_desc_t samplerDescForView = {
+        ZE_STRUCTURE_TYPE_SAMPLER_DESC,
+        nullptr,
+        ZE_SAMPLER_ADDRESS_MODE_CLAMP,
+        ZE_SAMPLER_FILTER_MODE_NEAREST,
+        true
+    };
+
+    ${x}_image_format_t imageViewFormat = {
+        ZE_IMAGE_FORMAT_LAYOUT_32, ZE_IMAGE_FORMAT_TYPE_UINT,
+        ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X,
+        ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X
+    }
+
+    // image descriptor for bindless image view
+    ${x}_image_desc_t imageViewDesc = {
+        ZE_STRUCTURE_TYPE_IMAGE_DESC,
+        nullptr,
+        0,
+        ZE_IMAGE_TYPE_2D,
+        imageViewFormat,
+        128, 128, 0, 0, 0
+    };
+    imageViewDesc.pNext = &bindlessImageDesc;
+    bindlessImageDesc.pNext = &samplerDescForView;
+    ${x}_image_handle_t hImageView;
+
+    ${x}ImageViewCreateExt(hContext, hDevice, &imageViewDesc, hImage, &hImageView);
+
+    // If ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE is not set, unsampled image is created
+    ${x}_image_handle_t hUnsampledImageView;
+    bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS;
+    bindlessImageDesc.pNext = nullptr;
+    ${x}ImageViewCreateExt(hContext, hDevice, &imageViewDesc, hImage, &hUnsampledImageView);
+
+    // Create an image view from bindless unsampled image
+    ${x}_image_handle_t hUnsampledImage;
+    ${x}_image_handle_t hSampledImageView;
+    bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS;
+    bindlessImageDesc.pNext = nullptr;
+    imageDesc.pNext = &bindlessImageDesc;
+
+    // create unsampled image
+    ${x}ImageCreate(hContext, hDevice, &imageDesc, &hUnsampledImage);
+
+    bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS | ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE;
+    bindlessImageDesc.pNext = &samplerDescForView;
+    ${x}ImageViewCreateExt(hContext, hDevice, &imageDesc, hUnsampledImage, &hSampledImageView);

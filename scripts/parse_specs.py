@@ -14,7 +14,7 @@ import copy
 from templates.helper import param_traits, type_traits, value_traits
 
 default_version = "1.0"
-all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "2.0"]
+all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "2.0"]
 
 """
     preprocess object
@@ -99,15 +99,7 @@ def _validate_doc(f, d, tags, line_num):
             if not isinstance(d['version'], str):
                 raise Exception(prefix+"'version' must be a string: '%s'"%type(d['version']))
 
-            try:
-                version = str(float(d['version']))
-            except:
-                version = None
-
-            if version != d['version']:
-                raise Exception(prefix+"'version' invalid value: '%s'"%d['version'])
-
-        return float(d.get('version', base_version))
+        return d.get('version', base_version)
 
     def __validate_tag(d, key, tags, case):
         for x in tags:
@@ -120,14 +112,6 @@ def _validate_doc(f, d, tags, line_num):
             for k, v in desc.items():
                 if not isinstance(k, str):
                     raise Exception(prefix+"'version' must be a string: '%s'"%type(k))
-
-                try:
-                    version = str(float(k))
-                except:
-                    version = None
-
-                if version != k:
-                    raise Exception(prefix+"'version' invalid value: '%s'"%k)
 
                 for x in ['[in]', '[out]', '[in,out]']:
                     if v.startswith(x):
@@ -197,7 +181,7 @@ def _validate_doc(f, d, tags, line_num):
 
         value = -1
         d_ver = d.get('version', default_version)
-        max_ver = float(d_ver)
+        max_ver = d_ver
         for i, item in enumerate(d['etors']):
             prefix="'etors'[%s] "%i
             if not isinstance(item, dict):
@@ -220,7 +204,7 @@ def _validate_doc(f, d, tags, line_num):
             ver = __validate_version(item, prefix=prefix, base_version=d_ver)
             if item.get('value'):
                 max_ver = ver
-            if ver < max_ver:
+            if _version_compare_less(ver, max_ver):
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
 
@@ -250,7 +234,7 @@ def _validate_doc(f, d, tags, line_num):
             raise Exception("'members' must be a sequence: '%s'"%type(d['members']))
 
         d_ver = d.get('version', default_version)
-        max_ver = float(d_ver)
+        max_ver = d_ver
         for i, item in enumerate(d['members']):
             prefix="'members'[%s] "%i
             if not isinstance(item, dict):
@@ -270,7 +254,7 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
 
             ver = __validate_version(item, prefix=prefix, base_version=d_ver)
-            if ver < max_ver:
+            if _version_compare_less(ver, max_ver):
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
 
@@ -282,7 +266,7 @@ def _validate_doc(f, d, tags, line_num):
             raise Exception("'params' must be a sequence: '%s'"%type(d['params']))
 
         d_ver = d.get('version', default_version)
-        max_ver = float(d_ver)
+        max_ver = d_ver
         min = {'[in]': None, '[out]': None, '[in,out]': None}
         for i, item in enumerate(d['params']):
             prefix="'params'[%s] "%i
@@ -309,7 +293,7 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
 
             ver = __validate_version(item, prefix=prefix, base_version=d_ver)
-            if ver < max_ver:
+            if _version_compare_greater(ver, max_ver):
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
 
@@ -414,15 +398,131 @@ def _validate_doc(f, d, tags, line_num):
 """
     filters object by version
 """
+def _version_compare_greater(a, b):
+    a_major = int(a.split('.')[0])
+    a_minor = int(a.split('.')[1])
+
+    b_major = int(b.split('.')[0])
+    b_minor = int(b.split('.')[1])
+
+    if (a_major > b_major):
+        # print("DEBUG: greater(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    if (a_major < b_major):
+        # print("DEBUG: greater(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
+        return False
+
+    # a_major == b_major
+
+    if (a_minor > b_minor):
+        # print("DEBUG: greater(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_minor <= b_minor
+
+    # print("DEBUG: greater(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
+    return False
+
+def _version_compare_equal(a, b):
+    a_major = int(a.split('.')[0])
+    a_minor = int(a.split('.')[1])
+
+    b_major = int(b.split('.')[0])
+    b_minor = int(b.split('.')[1])
+
+    ret_val = ((a_major == b_major) and (a_minor == b_minor))
+    # print("DEBUG: equal(%d.%d, %d.%d) -> %s" % (a_major, a_minor, b_major, b_minor, ret_val))
+    return ret_val
+
+def _version_compare_less(a, b):
+    a_major = int(a.split('.')[0])
+    a_minor = int(a.split('.')[1])
+
+    b_major = int(b.split('.')[0])
+    b_minor = int(b.split('.')[1])
+
+    if a_major > b_major:
+        # print("DEBUG: less(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
+        return False
+
+    if a_major < b_major:
+        # print("DEBUG: less(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_major == b_major
+
+    if a_minor < b_minor:
+        # print("DEBUG: less(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_minor >= b_minor
+
+    # print("DEBUG: less(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
+    return False
+
+def _version_compare_lequal(a, b):
+    a_major = int(a.split('.')[0])
+    a_minor = int(a.split('.')[1])
+
+    b_major = int(b.split('.')[0])
+    b_minor = int(b.split('.')[1])
+
+    if a_major > b_major:
+        # print("DEBUG: lequal(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
+        return False
+
+    if a_major < b_major:
+        # print("DEBUG: lequal(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_major == b_major
+
+    if a_minor <= b_minor:
+        # print("DEBUG: lequal(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_minor > b_minor
+
+    # print("DEBUG: lequal(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
+    return False
+
+def _version_compare_gequal(a, b):
+    a_major = int(a.split('.')[0])
+    a_minor = int(a.split('.')[1])
+
+    b_major = int(b.split('.')[0])
+    b_minor = int(b.split('.')[1])
+
+    if a_major > b_major:
+        # print("DEBUG: gequal(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    if a_major < b_major:
+        # print("DEBUG: gequal(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
+        return False
+
+    # a_major == b_major
+
+    if a_minor >= b_minor:
+        # print("DEBUG: gequal(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_minor < b_minor
+
+    # print("DEBUG: gequal(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
+    return False
+
 def _filter_version(d, max_ver):
-    ver = float(d.get('version', default_version))
-    if ver > max_ver:
+    ver = d.get('version', default_version)
+
+    if _version_compare_greater(ver, max_ver):
         return None
 
     def __filter_desc(d):
         if 'desc' in d and isinstance(d['desc'], dict):
             for k, v in d['desc'].items():
-                if float(k) <= max_ver:
+                if _version_compare_lequal(k, max_ver):
                     desc = v
             d['desc'] = desc
         return d
@@ -435,7 +535,7 @@ def _filter_version(d, max_ver):
                     version = float(k)
                 except:
                     return det
-                if version <= max_ver:
+                if _version_compare_lequal(k,  max_ver):
                     detail = v
             return detail
         return det
@@ -452,8 +552,8 @@ def _filter_version(d, max_ver):
     type = d['type']
     if 'enum' == type:
         for e in d['etors']:
-            ver = float(e.get('version', default_version))
-            if ver <= max_ver:
+            ver = e.get('version', default_version)
+            if _version_compare_lequal(ver, max_ver):
                 flt.append(__filter_desc(e))
         if d['name'].endswith('version_t'):
             flt.append({
@@ -465,15 +565,15 @@ def _filter_version(d, max_ver):
 
     elif 'function' == type:
         for p in d['params']:
-            ver = float(p.get('version', default_version))
-            if ver <= max_ver:
+            ver = p.get('version', default_version)
+            if _version_compare_lequal(ver, max_ver):
                 flt.append(__filter_desc(p))
         d['params'] = flt
 
     elif 'struct' == type or 'union' == type or 'class' == type:
         for m in d.get('members',[]):
-            ver = float(m.get('version', default_version))
-            if ver <= max_ver:
+            ver = m.get('version', default_version)
+            if _version_compare_lequal(ver, max_ver):
                 flt.append(__filter_desc(m))
         d['members'] = flt
 
@@ -487,10 +587,10 @@ def _make_versions(d, max_ver):
     type = d['type']
     if 'function' == type or 'struct' == type:
         for ver in all_versions:
-            if float(ver) > max_ver:
+            if _version_compare_greater(ver, max_ver):
                 break
 
-            dv = _filter_version(copy.deepcopy(d), float(ver))
+            dv = _filter_version(copy.deepcopy(d), ver)
             if not dv:
                 continue
 
@@ -794,7 +894,7 @@ def parse(section, version, tags, meta, ref):
             if not _validate_doc(f, d, tags, line_nums[i]):
                 continue
 
-            d = _filter_version(d, float(version))
+            d = _filter_version(d, version)
             if not d:
                 continue
 

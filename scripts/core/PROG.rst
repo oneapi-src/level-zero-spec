@@ -4,6 +4,11 @@
     x=tags['$x']
     X=x.upper()
 %>
+
+<%!
+    from parse_specs import _version_compare_less, _version_compare_gequal
+%>
+
 .. _core-programming-guide:
 
 ========================
@@ -47,7 +52,7 @@ The following diagram illustrates the relationship between the driver, device an
 
 .. image:: ../images/core_device.png
 
-%if ver >= 1.7:
+%if _version_compare_gequal(ver, "1.7"):
 Level Zero device model hierarchy is composed of **Root Devices** and **Sub-Devices**: A root-device may contain two or more sub-devices and a sub-device shall belong to a single root-device.
 A root-device may not contain a single sub-device, as that would be the same root-device. A root device may also be a device with no sub-devices.
 
@@ -620,10 +625,10 @@ External memory handles may be imported from other APIs, or exported for use in 
 Importing and exporting external memory is an optional feature.
 Devices may describe the types of external memory handles they support using ${x}DeviceGetExternalMemoryProperties.
 
-%if ver >= 1.5:
+%if _version_compare_gequal(ver, "1.5"):
 Importing and exporting external memory is supported for device and host memory allocations and images.
 %endif
-%if ver < 1.5:
+%if _version_compare_less(ver, "1.5"):
 Importing and exporting external memory is supported for device memory allocations and images.
 %endif
 
@@ -1104,10 +1109,10 @@ A kernel timestamp event is a special type of event that records device timestam
 .. parsed-literal::
 
        // Get timestamp frequency
-%if ver >= 1.1:
+%if _version_compare_gequal(ver, "1.1"):
        const double timestampFreq = NS_IN_SEC / device_properties.timerResolution;
 %endif
-%if ver < 1.1:
+%if _version_compare_less(ver, "1.1"):
        const uint64_t timestampFreq = device_properties.timerResolution;
 %endif
        const uint64_t timestampMaxValue = ~(-1L << device_properties.kernelTimestampValidBits);
@@ -1712,7 +1717,7 @@ Environment Variables
 
 The following table documents the supported knobs for overriding default functional behavior.
 
-%if ver < 1.7:
+%if _version_compare_less(ver, "1.7"):
 
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
@@ -1726,7 +1731,7 @@ The following table documents the supported knobs for overriding default functio
 
 %endif
 
-%if ver >= 1.7:
+%if _version_compare_gequal(ver, "1.7"):
 
 +-----------------+-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values                            | Description                                                                       |
@@ -1766,7 +1771,7 @@ The values are specific to system configuration; e.g., the number of devices and
 The values are specific to the order in which devices are reported by the driver; i.e., the first device maps to ordinal 0, the second device to ordinal 1, and so forth.
 If the affinity mask is not set, then all devices and sub-devices are reported; as is the default behavior.
 
-%if ver >= 1.7:
+%if _version_compare_gequal(ver, "1.7"):
 The affinity mask masks the devices as defined by value set in the ${X}_FLAT_DEVICE_HIERARCHY environment variable, i.e., a Level Zero driver shall read
 first ${X}_FLAT_DEVICE_HIERARCHY to determine the device handles to be used by the application and then interpret the values passed in ${X}_AFFINITY_MASK
 based on the device model selected.
@@ -1776,7 +1781,7 @@ The order of the devices reported by the ${x}DeviceGet is implementation-specifi
 
 The order of the devices reported by the ${x}DeviceGet can be forced to be consistent by setting the ${X}_ENABLE_PCI_ID_DEVICE_ORDER environment variable.
 
-%if ver < 1.7:
+%if _version_compare_less(ver, "1.7"):
 The following examples demonstrate proper usage for a system configuration of two devices, each with four sub-devices:
 
 - `0, 1`: all devices and sub-devices are reported (same as default)
@@ -1788,7 +1793,7 @@ The following examples demonstrate proper usage for a system configuration of tw
 
 %endif
 
-%if ver >= 1.7:
+%if _version_compare_gequal(ver, "1.7"):
 The following examples demonstrate proper usage for a system configuration composed of two physical devices, each of which can be further
 sub-divided into four smaller devices. For the purpose of these examples, we will refer to the two physical devices as `parent devices`
 and to the smaller sub-devices as `tiles`.
@@ -2125,10 +2130,10 @@ such as multiple levels of indirection, there are two methods available:
 
     + If the driver is unable to make all allocations resident, then the call to ${x}CommandQueueExecuteCommandLists will return ${X}_RESULT_ERROR_OUT_OF_DEVICE_MEMORY
 
-%if ver >= 1.6:
+%if _version_compare_gequal(ver, "1.6"):
 2. Explicit ${x}ContextMakeMemoryResident APIs are included for the application to dynamically change residency as needed.
 %endif
-%if ver < 1.6:
+%if _version_compare_less(ver, "1.6"):
 2. Explicit ${x}ContextMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)
 %endif
 
@@ -2283,18 +2288,18 @@ The following code examples demonstrate how to use the memory IPC APIs:
        ${x}MemCloseIpcHandle(hContext, dptr);
        
 
-%if ver >= 1.6:
+%if _version_compare_gequal(ver, "1.6"):
 5. Finally, return the IPC handle to the driver with  ${x}MemPutIpcHandle and
    free the device pointer in the sending process. If ${x}MemPutIpcHandle is not called,
    any actions performed by that call are eventually done by ${x}MemFree.
 %endif
-%if ver < 1.6:
+%if _version_compare_less(ver, "1.6"):
 5. Finally, free the device pointer in the sending process:
 %endif
 
 .. parsed-literal::
 
-%if ver >= 1.6:
+%if _version_compare_gequal(ver, "1.6"):
        ${x}MemPutIpcHandle(hContext, hIpc);
 %endif
        ${x}MemFree(hContext, dptr);
@@ -2384,19 +2389,19 @@ Note, there is no guaranteed address equivalence for the values of ``hEvent`` in
        ${x}EventDestroy(hEvent);
        ${x}EventPoolCloseIpcHandle(&hEventPool);
 
-%if ver >= 1.6:
+%if _version_compare_gequal(ver, "1.6"):
 5. Finally, return the IPC handle to the driver with ${x}EventPoolPutIpcHandle and
    free the event pool in the sending process. If ${x}EventPoolPutIpcHandle is not called,
    any actions performed by that call are eventually done by ${x}EventPoolDestroy.
 %endif
-%if ver < 1.6:
+%if _version_compare_less(ver, "1.6"):
 5. Finally, free the event pool handle in the sending process:
 %endif
 
 .. parsed-literal::
 
        ${x}EventDestroy(hEvent);
-%if ver >= 1.6:
+%if _version_compare_gequal(ver, "1.6"):
        ${x}EventPoolPutIpcHandle(hContext, hIpcEventPool);
 %endif
        ${x}EventPoolDestroy(hEventPool);

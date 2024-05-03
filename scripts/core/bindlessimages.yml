@@ -33,6 +33,10 @@ version: "1.9"
 etors:
     - name: BINDLESS
       desc: "Bindless images are created with $xImageCreate. The image handle created with this flag is valid on both host and device."
+    - name: SAMPLED_IMAGE
+      desc: |
+            Bindless sampled images are created with $xImageCreate by combining BINDLESS and SAMPLED_IMAGE.
+            Create sampled image view from bindless unsampled image using SAMPLED_IMAGE.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Image descriptor for bindless images. This structure may be passed to $xImageCreate via pNext member of $x_image_desc_t."
@@ -49,6 +53,7 @@ members:
             default behavior is bindless images are not used when creating handles via $xImageCreate.
             When the flag is passed to $xImageCreate, then only the memory for the image is allocated.
             Additional image handles can be created with $xImageViewCreateExt.
+            When $X_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE flag is passed, $x_sampler_desc_t must be attached via pNext member of $x_image_bindless_exp_desc_t.
       init: "0"
 --- #--------------------------------------------------------------------------
 type: struct
