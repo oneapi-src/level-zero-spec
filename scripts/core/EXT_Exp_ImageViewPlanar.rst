@@ -6,6 +6,11 @@ from templates import helper as th
     x=tags['$x']
     X=x.upper()
 %>
+
+<%!
+    from parse_specs import _version_compare_gequal
+%>
+
 :orphan:
 
 .. _ZE_experimental_image_view_planar:
@@ -14,7 +19,7 @@ from templates import helper as th
  Image View Planar Extension
 =============================
 
-%if ver >= 1.5:
+%if _version_compare_gequal(ver, "1.5"):
 This experimental extension is deprecated and replaced by the :ref:`${th.subt(namespace, tags, X)}_extension_image_view_planar <${th.subt(namespace, tags, X)}_extension_image_view_planar>` standard extension.
 %endif
 

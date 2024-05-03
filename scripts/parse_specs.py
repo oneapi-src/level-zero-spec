@@ -405,7 +405,35 @@ def _version_compare_greater(a, b):
     b_major = int(b.split('.')[0])
     b_minor = int(b.split('.')[1])
 
-    return ((a_major > b_major) or (a_minor > b_minor))
+    if (a_major > b_major):
+        # print("DEBUG: greater(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    if (a_major < b_major):
+        # print("DEBUG: greater(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
+        return False
+
+    # a_major == b_major
+
+    if (a_minor > b_minor):
+        # print("DEBUG: greater(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_minor <= b_minor
+
+    # print("DEBUG: greater(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
+    return False
+
+def _version_compare_equal(a, b):
+    a_major = int(a.split('.')[0])
+    a_minor = int(a.split('.')[1])
+
+    b_major = int(b.split('.')[0])
+    b_minor = int(b.split('.')[1])
+
+    ret_val = ((a_major == b_major) and (a_minor == b_minor))
+    # print("DEBUG: equal(%d.%d, %d.%d) -> %s" % (a_major, a_minor, b_major, b_minor, ret_val))
+    return ret_val
 
 def _version_compare_less(a, b):
     a_major = int(a.split('.')[0])
@@ -415,20 +443,25 @@ def _version_compare_less(a, b):
     b_minor = int(b.split('.')[1])
 
     if a_major > b_major:
+        # print("DEBUG: less(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
         return False
 
     if a_major < b_major:
+        # print("DEBUG: less(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
         return True
 
     # a_major == b_major
+
     if a_minor < b_minor:
+        # print("DEBUG: less(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
         return True
 
+    # a_minor >= b_minor
+
+    # print("DEBUG: less(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
     return False
 
 def _version_compare_lequal(a, b):
-  #    print("lequal: %s, %s" % (a, b))
-
     a_major = int(a.split('.')[0])
     a_minor = int(a.split('.')[1])
 
@@ -436,15 +469,48 @@ def _version_compare_lequal(a, b):
     b_minor = int(b.split('.')[1])
 
     if a_major > b_major:
+        # print("DEBUG: lequal(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
         return False
 
     if a_major < b_major:
+        # print("DEBUG: lequal(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
         return True
 
     # a_major == b_major
+
     if a_minor <= b_minor:
+        # print("DEBUG: lequal(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
         return True
 
+    # a_minor > b_minor
+
+    # print("DEBUG: lequal(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
+    return False
+
+def _version_compare_gequal(a, b):
+    a_major = int(a.split('.')[0])
+    a_minor = int(a.split('.')[1])
+
+    b_major = int(b.split('.')[0])
+    b_minor = int(b.split('.')[1])
+
+    if a_major > b_major:
+        # print("DEBUG: gequal(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    if a_major < b_major:
+        # print("DEBUG: gequal(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
+        return False
+
+    # a_major == b_major
+
+    if a_minor >= b_minor:
+        # print("DEBUG: gequal(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
+        return True
+
+    # a_minor < b_minor
+
+    # print("DEBUG: gequal(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
     return False
 
 def _filter_version(d, max_ver):
