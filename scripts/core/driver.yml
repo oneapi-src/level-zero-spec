@@ -116,6 +116,11 @@ etors:
       desc: "version 1.9"
       version: "1.9"
 --- #--------------------------------------------------------------------------
+type: macro
+desc: "Current API version as a macro"
+name: "$X_API_VERSION_CURRENT_M"
+value: "$X_MAKE_VERSION( 1, 9 )"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the API version supported by the specified driver"
 class: $xDriver
