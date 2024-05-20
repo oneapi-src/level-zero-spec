@@ -62,9 +62,9 @@ name: $T_MAX_METRIC_PROGRAMMABLE_PARAMETER_NAME_EXP
 value: "128"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Maximum value information string size"
+desc: "Maximum value for programmable value description"
 version: "1.9"
-name: $T_MAX_VALUE_INFO_CSTRING_EXP
+name: $T_MAX_METRIC_PROGRAMMABLE_VALUE_DESCRIPTION_EXP
 value: "128"
 --- #--------------------------------------------------------------------------
 type: handle
@@ -139,8 +139,6 @@ etors:
       desc: "64-bit floating-point"
     - name: BOOL8
       desc: "8-bit boolean"
-    - name: CSTRING
-      desc: "C string"
     - name: UINT8
       desc: "8-bit unsigned-integer"
     - name: UINT16
@@ -186,9 +184,6 @@ members:
     - type: uint16_t
       name: "ui16"
       desc: "[out] 16-bit unsigned integer"
-    - type: char
-      name: "cString[$T_MAX_VALUE_INFO_CSTRING_EXP]"
-      desc: "[out] cString"
     - type: $t_value_uint64_range_exp_t
       name: "ui64Range"
       desc: "[out] minimum and maximum value of the range"
@@ -226,6 +221,9 @@ members:
     - type: $t_value_info_exp_t
       name: "valueInfo"
       desc: "[out] information about the parameter value"
+    - type: char
+      name: "description[$T_MAX_METRIC_PROGRAMMABLE_VALUE_DESCRIPTION_EXP]"
+      desc: "[out] description about the value"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric Programmable parameter value"
