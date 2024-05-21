@@ -1,0 +1,280 @@
+#
+# Copyright (C) 2024 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool Experimental Extension for Metrics Tracer"
+version: "1.10"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Metric Tracer Experimental Extension Name"
+version: "1.10"
+name: $T_METRICS_TRACER_EXP_NAME
+value: '"$XT_experimental_metric_tracer"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Metric Tracer Experimental Extension Version(s)"
+version: "1.10"
+name: $t_metric_tracer_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of metric tracer's object"
+version: "1.10"
+class: $tMetricTracer
+name: "$t_metric_tracer_exp_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of metric decoder's object"
+version: "1.10"
+class: $tMetricDecoder
+name: "$t_metric_decoder_exp_handle_t"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Metric tracer descriptor"
+version: "1.10"
+class: $tMetricTracer
+name: $t_metric_tracer_exp_desc_t
+base: $t_base_desc_t
+members:
+    - type: uint32_t
+      name: "notifyEveryNBytes"
+      desc: >
+            [in,out] number of collected bytes after which notification event will be signaled.
+            If the requested value is not supported exactly, then the driver may use a value that
+            is the closest supported approximation and shall update this member during
+            $tMetricTracerCreateExp.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Decoded metric entry"
+version: "1.10"
+name: $t_metric_entry_exp_t
+members:
+    - type: $t_value_t 
+      name: "value"
+      desc: "[out] value of the decodable metric entry or event. Number is meaningful based on the metric type."
+    - type: uint64_t  
+      name: "timeStamp"
+      desc: "[out] timestamp at which the event happened."
+    - type: uint32_t
+      name: "metricIndex"
+      desc: "[out] index to the decodable metric handle in the input array (phMetric) in $tMetricTracerDecode()."
+    - type: $x_bool_t
+      name: "onSubdevice"
+      desc: "[out] True if the event occurred on a sub-device; false means the device on which the metric tracer was opened does not have sub-devices."
+    - type: uint32_t
+      name: "subdeviceId"
+      desc: "[out] If onSubdevice is true, this gives the ID of the sub-device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Create a metric tracer for a device."
+version: "1.10"
+class: $tMetricTracer
+name: CreateExp
+decl: static
+details:
+    - "The notification event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_HOST_VISIBLE flag."
+    - "The duration of the signal event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
+    - "The application must **not** call this function from simultaneous threads with the same device handle."
+    - "The metric tracer is created in disabled state"
+    - "Metric groups must support sampling type ZET_METRIC_SAMPLING_TYPE_EXP_FLAG_TRACER_BASED"
+    - "All metric groups must be first activated"
+params:
+    - type: $t_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "$t_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint32_t
+      name: "metricGroupCount"
+      desc: "[in] metric group count"
+    - type: "$t_metric_group_handle_t*"
+      name: "phMetricGroups"
+      desc: "[in][range(0, metricGroupCount )] handles of the metric groups to trace"
+    - type: "$t_metric_tracer_exp_desc_t*"
+      name: desc
+      desc: "[in,out] metric tracer descriptor"
+    - type: "$x_event_handle_t"
+      name: hNotificationEvent
+      desc: "[in][optional] event used for report availability notification. Note: If buffer is not drained when the event it flagged, there is a risk of HW event buffer being overrun"
+    - type: "$t_metric_tracer_exp_handle_t*"
+      name: phMetricTracer
+      desc: "[out] handle of the metric tracer"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroy a metric tracer."
+version: "1.10"
+class: $tMetricTracer
+name: DestroyExp
+details:
+    - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
+params:
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Start events collection"
+version: "1.10"
+class: $tMetricTracer
+name: EnableExp
+details:
+    - "Driver implementations must make this API call have as minimal overhead as possible, to allow applications start/stop event collection at any point during execution"
+    - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
+params:
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+    - type: $x_bool_t
+      name: synchronous
+      desc: |
+            [in] request synchronous behavior. Confirmation of successful asynchronous operation is done by calling $tMetricTracerReadDataExp()
+            and checking the return status: $X_RESULT_NOT_READY will be returned when the tracer is inactive. $X_RESULT_SUCCESS will be returned 
+            when the tracer is active.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Stop events collection"
+version: "1.10"
+class: $tMetricTracer
+name: DisableExp
+details:
+    - "Driver implementations must make this API call have as minimal overhead as possible, to allow applications start/stop event collection at any point during execution"
+    - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
+params:
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+    - type: $x_bool_t
+      name: synchronous
+      desc: |
+            [in] request synchronous behavior. Confirmation of successful asynchronous operation is done by calling $tMetricTracerReadDataExp()
+            and checking the return status: $X_RESULT_SUCCESS will be returned when the tracer is active or when it is inactive but still has data. 
+            $X_RESULT_NOT_READY will be returned when the tracer is inactive and has no more data to be retrieved.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Read data from the metric tracer"
+version: "1.10"
+class: $tMetricTracer
+name: ReadDataExp
+details:
+    - "The application must **not** call this function from simultaneous threads with the same metric tracer handle."
+    - "Data can be retrieved after tracer is disabled. When buffers are drained $X_RESULT_NOT_READY will be returned"
+params:
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+    - type: size_t*
+      name: pRawDataSize
+      desc: |
+            [in,out] pointer to size in bytes of raw data requested to read.
+            if size is zero, then the driver will update the value with the total size in bytes needed for all data available.
+            if size is non-zero, then driver will only retrieve that amount of data. 
+            if size is larger than size needed for all data, then driver will update the value with the actual size needed.
+    - type: uint8_t*
+      name: pRawData
+      desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing tracer data in raw format"
+returns:
+    - $X_RESULT_WARNING_DROPPED_DATA:
+        - "Metric tracer data may have been dropped."
+    - $X_RESULT_NOT_READY: 
+        - "Metric tracer is disabled and no data is available to read."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Create a metric decoder for a given metric tracer."
+version: "1.10"
+class: $tMetricDecoder
+name: CreateExp
+params:
+    - type: "$t_metric_tracer_exp_handle_t"
+      name: hMetricTracer
+      desc: "[in] handle of the metric tracer"
+    - type: $t_metric_decoder_exp_handle_t*
+      name: phMetricDecoder 
+      desc: "[out] handle of the metric decoder object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroy a metric decoder."
+version: "1.10"
+class: $tMetricDecoder
+name: DestroyExp
+params:
+    - type: $t_metric_decoder_exp_handle_t
+      name: phMetricDecoder 
+      desc: "[in] handle of the metric decoder object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Return the list of the decodable metrics from the decoder."
+version: "1.10"
+class: $tMetricDecoder
+name: GetDecodableMetricsExp
+details:
+    - "The decodable metrics handles returned by this API are defined by the metric groups in the tracer
+      on which the decoder was created."
+    - "The decodable metrics handles returned by this API are only valid to decode metrics raw data
+      with $tMetricTracerDecodeExp(). Decodable metric handles are not valid to compare with metrics handles included in
+      metric groups."
+params:
+    - type: $t_metric_decoder_exp_handle_t
+      name: hMetricDecoder 
+      desc: "[in] handle of the metric decoder object"
+    - type: uint32_t* 
+      name: pCount 
+      desc: |
+            [in,out] pointer to number of decodable metric in the hMetricDecoder handle. If count is zero, then the driver shall 
+            update the value with the total number of decodable metrics available in the decoder. if count is greater than zero 
+            but less than the total number of decodable metrics available in the decoder, then only that number will be returned. 
+            if count is greater than the number of decodable metrics available in the decoder, then the driver shall update the 
+            value with the actual number of decodable metrics available. 
+    - type: $t_metric_handle_t*
+      name: phMetrics 
+      desc: "[in,out] [range(0, pCount)] array of handles of decodable metrics in the hMetricDecoder handle provided."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Decode raw events collected from a tracer."
+version: "1.10"
+class: $tMetricTracer
+name: DecodeExp
+params:
+    - type: $t_metric_decoder_exp_handle_t
+      name: phMetricDecoder 
+      desc: "[in] handle of the metric decoder object"
+    - type: size_t*
+      name: pRawDataSize
+      desc: | 
+            [in,out] size in bytes of raw data buffer. If pMetricEntriesCount is greater than zero but less than total number of 
+            decodable metrics available in the raw data buffer, then driver shall update this value with actual number of raw 
+            data bytes processed.
+    - type: uint8_t*
+      name: pRawData
+      desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing tracer data in raw format"
+    - type: uint32_t 
+      name: metricsCount 
+      desc: |
+            [in] number of decodable metrics in the tracer for which the hMetricDecoder handle was provided. See 
+            $tMetricDecoderGetDecodableMetricsExp(). If metricCount is greater than zero but less than the number decodable 
+            metrics available in the raw data buffer, then driver shall only decode those.
+    - type: $t_metric_handle_t*
+      name: phMetrics 
+      desc: |
+            [in] [range(0, metricsCount)] array of handles of decodable metrics in the decoder for which the hMetricDecoder handle was 
+            provided. Metrics handles are expected to be for decodable metrics, see $tMetricDecoderGetDecodableMetrics() 
+    - type: uint32_t*
+      name: pMetricEntriesCount
+      desc: |
+            [in,out] pointer to number of decodable metric entries to be decoded. If count is zero, then the driver shall update the value 
+            with the total number of decodable metric entries to be decoded. If count is greater than zero but less than the total number 
+            available in the raw data, then only that number of results will be decoded. if count is greater than the number available in 
+            the raw data buffer, then the driver shall update the value with the actual number of decodable metric entries to be decoded.
+    - type: $t_metric_entry_exp_t*
+      name: pMetricEntries 
+      desc: "[in,out][optional][range(0, *pMetricEntriesCount)] buffer containing decoded metric entries"
