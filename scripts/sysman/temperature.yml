@@ -33,6 +33,12 @@ etors:
     - name: GPU_BOARD_MIN
       desc: "The minimum temperature across all sensors in the GPU Board"
       version: "1.8"
+    - name: PACKAGE 
+      desc: "The maximum temperature across all sensors in the GPU package"
+      version: "1.10"
+    - name: VR 
+      desc: "The maximum temperature across all sensors in the VR"
+      version: "1.10"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
