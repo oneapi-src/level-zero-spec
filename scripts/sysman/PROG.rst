@@ -32,6 +32,7 @@ Environment Variables
 The System Resource Management library may now be initialized without using environment variables by calling ${s}Init.
 
 For compatibility, the following environment variables may also be enabled during initialization for the respective feature.
+It is recommended to initialize sysman either by calling ${s}Init or using the following environment variables but not both.
 %endif
 %if _version_compare_less(ver, "1.5"):
 The following environment variables are required to be enabled during initialization for the respective feature.
