@@ -23,7 +23,10 @@ name: $s_vf_management_exp_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+      desc: "version 1.0 (deprecated)"
+    - name: "1_1"
+      value: "$X_MAKE_VERSION( 1, 1 )"
+      desc: "version 1.1"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Virtual function memory types"
@@ -84,12 +87,11 @@ members:
     - type: uint64_t
       name: "size"
       desc: "[out] Total allocatable memory in bytes."
-    - type: uint64_t
-      name: "timestamp"
-      desc: "[out] Wall clock time from VF when value was sampled."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides engine utilization values for a virtual function"
+details:
+    - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeCounterValue - s1.activeCounterValue) / (s2.samplingCounterValue - s1.samplingCounterValue)"
 version: "1.9"
 class: $sVFManagement
 name: $s_vf_util_engine_exp_t
@@ -103,10 +105,7 @@ members:
       desc: "[out] Represents active counter."
     - type: uint64_t
       name: "samplingCounterValue"
-      desc: "[out] Represents counter value when activeCounterValue was sampled."
-    - type: uint64_t
-      name: "timestamp"
-      desc: "[out] Wall clock time when the activeCounterValue was sampled."
+      desc: "[out] Represents counter value when activeCounterValue was sampled. Refer to the formulae above for calculating the utilization percent"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get handle of virtual function modules"
@@ -166,7 +165,6 @@ params:
             [in,out] Pointer to the number of VF memory stats descriptors.
               - if count is zero, the driver shall update the value with the total number of memory stats available.
               - if count is greater than the total number of memory stats available, the driver shall update the value with the correct number of memory stats available.
-              - The count returned is the sum of number of VF instances currently available and the PF instance.
     - type: $s_vf_util_mem_exp_t*
       name: pMemUtil
       desc: |
@@ -192,7 +190,6 @@ params:
             [in,out] Pointer to the number of VF engine stats descriptors.
               - if count is zero, the driver shall update the value with the total number of engine stats available.
               - if count is greater than the total number of engine stats available, the driver shall update the value with the correct number of engine stats available.
-              - The count returned is the sum of number of VF instances currently available and the PF instance.
     - type: $s_vf_util_engine_exp_t*
       name: pEngineUtil
       desc: |
@@ -200,45 +197,6 @@ params:
               - if count is less than the total number of engine stats available, then driver shall only retrieve that number of stats.
               - the implementation shall populate the vector pCount-1 number of VF engine stats.
 --- #--------------------------------------------------------------------------
-type: function
-desc: "Configure utilization telemetry enabled or disabled associated with Virtual Function (VF)"
-version: "1.9"
-class: $sVFManagement
-name: SetVFTelemetryModeExp
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_vf_handle_t
-      name: hVFhandle
-      desc: "[in] Sysman handle for the component."
-    - type: $s_vf_info_util_exp_flags_t
-      name: "flags"
-      desc: "[in] utilization flags to enable or disable. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
-    - type: $x_bool_t
-      name: "enable"
-      desc: "[in] Enable utilization telemetry."
---- #--------------------------------------------------------------------------
-type: function
-desc: "Set sampling interval to monitor for a particular utilization telemetry associated with Virtual Function (VF)"
-version: "1.9"
-class: $sVFManagement
-name: SetVFTelemetrySamplingIntervalExp
-details:
-    - "The application may call this function from simultaneous threads."
-    - "The implementation of this function should be lock-free."
-params:
-    - type: $s_vf_handle_t
-      name: hVFhandle
-      desc: "[in] Sysman handle for the component."
-    - type: $s_vf_info_util_exp_flags_t
-      name: "flag"
-      desc: "[in] utilization flags to set sampling interval. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
-    - type: uint64_t
-      name: "samplingInterval"
-      desc: "[in] Sampling interval value."
---- #--------------------------------------------------------------------------
-
 type: class
 desc: "C++ wrapper for a Sysman virtual function management  group"
 version: "1.9"

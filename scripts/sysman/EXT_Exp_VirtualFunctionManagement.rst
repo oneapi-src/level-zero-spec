@@ -25,8 +25,6 @@ API
     * ${s}VFManagementGetVFPropertiesExp
     * ${s}VFManagementGetVFMemoryUtilizationExp
     * ${s}VFManagementGetVFEngineUtilizationExp
-    * ${s}VFManagementSetVFTelemetryModeExp
-    * ${s}VFManagementSetVFTelemetrySamplingIntervalExp
 
 * Enumerations
 
@@ -71,6 +69,7 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
     // Using VF# 0 to demonstrate how to detect engine info type and query engine util info
     ${s}_vf_handle_t activeVf = vfs[0];
     uint32_t count = 1;
+    unit32_t engineUtilPercent = 0;
     if (vfProps[0].flags & ZES_VF_INFO_ENGINE) {
         ${s}_vf_util_engine_exp_t engineUtil0 = {};
         ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil0);
@@ -78,11 +77,7 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
         ${s}_vf_util_engine_exp_t engineUtil1 = {};
         ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil1);
         // Use formula to calculate engine utilization % based on the 2 snapshots above
+        engineUtilPercent = (engineUtil1.activeCounterValue - engineUtil0.activeCounterValue) / engineUtil1.samplingCounterValue - engineUtil0.samplingCounterValue
     }
 
-    // Demonstrate using setter to switch off Engine telemetry for VF0 and then check if Getter returns INVALID
-    ${s}VFManagementSetVFTelemetryModeExp(activeVf,  ZES_VF_INFO_ENGINE, false); 
-    ${x}_result_t res = ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil0);
-    if (res != ZES_RESULT_SUCCESS) {
-        printf("Engine utilization successfully disabled for VF");
-    }
+
