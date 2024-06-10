@@ -21,9 +21,9 @@ desc: "Programmable Metrics Experimental Extension Version(s)"
 version: "1.9"
 name: $t_metric_programmable_exp_version_t
 etors:
-    - name: "1_0"
-      value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "version 1.0"
+    - name: "1_1"
+      value: "$X_MAKE_VERSION( 1, 1 )"
+      desc: "version 1.1"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum count of characters in export data element name"
@@ -66,6 +66,12 @@ desc: "Maximum value for programmable value description"
 version: "1.9"
 name: $T_MAX_METRIC_PROGRAMMABLE_VALUE_DESCRIPTION_EXP
 value: "128"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum value metric group name prefix"
+version: "1.10"
+name: $X_MAX_METRIC_GROUP_NAME_PREFIX
+value: "64"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of metric programmable's object"
@@ -388,29 +394,47 @@ params:
             if count is less than the number of metrics available, then driver shall only retrieve that number of metric handles.
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Create metric group handle."
-version: "1.9"
-class: $tMetricGroup
-name: CreateExp
+desc: "Create multiple metric group handles from metric handles."
+version: "1.10"
+class: $tDevice
+name: CreateMetricGroupsFromMetricsExp
 decl: static
 details:
-    - "Metrics from $tMetricCreateFromProgrammableExp() could be added to the created metric group."
+    - "Creates multiple metric groups from metrics which were created using $tMetricCreateFromProgrammableExp()."
+    - "Metrics whose Hardware resources do not overlap are added to same metric group."
+    - "The metric groups created using this API are managed by the application and cannot be retrieved using $tMetricGroupGet()."
+    - "The created metric groups are ready for activation and collection."
 params:
     - type: $t_device_handle_t
       name: hDevice
-      desc: "[in] handle of the device"
-    - type: "const char*"
-      name: pName
-      desc: "[in] pointer to metric group name. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_NAME."
-    - type: "const char*"
+      desc: "[in] handle of the device."
+    - type: uint32_t
+      name: metricCount
+      desc: "[in] number of metric handles."
+    - type: "zet_metric_handle_t *"
+      name: phMetrics
+      desc: "[in] metric handles to be added to the metric groups."
+    - type: "const char *"
+      name: pMetricGroupNamePrefix
+      desc: "[in] prefix to the name created for the metric groups. Must point to a null-terminated character array no longer than ZEX_MAX_METRIC_GROUP_NAME_PREFIX."
+    - type: "const char *"
       name: pDescription
-      desc: "[in] pointer to metric group description. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_DESCRIPTION."
-    - type: $t_metric_group_sampling_type_flags_t
-      name: samplingType
-      desc: "[in] Sampling type for the metric group."
+      desc: "[in] pointer to description of the metric groups. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_DESCRIPTION."
+    - type: "uint32_t *"
+      name: metricGroupCount
+      desc: |
+            [in,out] pointer to the number of metric group handles to be created.
+            if metricGroupCount is zero, then the driver shall update the value with the maximum possible number of metric group handles that could be created.
+            if metricGroupCount is greater than the number of metric group handles that could be created, then the driver shall update the value with the correct number of metric group handles generated.
+            if metricGroupCount is lesser than the number of metric group handles that could be created, then $X_RESULT_ERROR_INVALID_ARGUMENT is returned.
     - type: $t_metric_group_handle_t*
       name: phMetricGroup
-      desc: "[in,out] Created Metric group handle"
+      desc: |
+            [in,out][optional][range(0, metricGroupCount)] array of handle of metric group handles.
+            Created Metric group handles.
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "metricGroupCount is lesser than the number of metric group handles that could be created."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Add a metric handle to the metric group handle created using $tMetricGroupCreateExp."

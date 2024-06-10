@@ -40,7 +40,7 @@ API
     * ${t}MetricProgrammableGetParamInfoExp
     * ${t}MetricProgrammableGetParamValueInfoExp
     * ${t}MetricCreateFromProgrammableExp
-    * ${t}MetricGroupCreateExp
+    * ${t}DeviceCreateMetricGroupsFromMetrics
     * ${t}MetricGroupAddMetricExp
     * ${t}MetricGroupRemoveMetricExp
     * ${t}MetricGroupCloseExp
@@ -63,7 +63,6 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
 
     ${t}_metric_handle_t * metricHandles = null_ptr;
     uint32_t metricHandleCount = 0;
-    ${t}_metric_group_handle_t metricGroup;
 
     // Query and Get metric programmable handles
     uint32_t programmableCount = 0;
@@ -96,19 +95,21 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
             // Create Metric
             char metricName[ZET_MAX_METRIC_NAME] = "eu_active_minimum";
             char metricDescription[ZET_MAX_METRIC_DESCRIPTION] = "eu_active_minimum_desc";
-            ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, null_ptr);
+            ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, nullptr);
             ${t}_metric_handle_t * metricHandles = allocate(sizeof(${t}_metric_handle_t) * metricHandleCount);
             ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, metricHandles);
         }
     }
 
     //Create Metric Group from metrics
-    ${t}_metric_group_handle_t metricGroupHandle{};
-    char metricGroupName[ZET_MAX_METRIC_GROUP_NAME] = "eu_active";
+    char metricGroupNamePrefix[ZET_MAX_METRIC_GROUP_NAME_PREFIX_EXP] = "eu_active";
     char metricGroupDescription[ZET_MAX_METRIC_GROUP_DESCRIPTION] = "eu_active_desc";
-    ${t}MetricGroupCreateExp(device, metricGroupName, metricGroupDescription, ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED, &metricGroup);
-    ${t}MetricGroupAddMetricExp(metricGroup, &metricHandles[0], null_ptr, null_ptr);
-    ${t}MetricGroupCloseExp(metricGroup);
+    uint32_t metricGroupCount = 0;
+    ${t}DeviceCreateMetricGroupsFromMetricsExp(device, 1, &metricHandles[0], metricGroupNamePrefix, metricGroupDescription, &metricGroupCount, nullptr);
+    ${t}_metric_group_handle_t * metricGroupHandles = allocate(sizeof(${t}_metric_group_handle_t) * metricGroupCount);
+    ${t}DeviceCreateMetricGroupsFromMetricsExp(device, 1, &metricHandles[0], metricGroupNamePrefix, metricGroupDescription, &metricGroupCount, metricGroupHandles);
+    ${t}MetricGroupAddMetricExp(metricGroupHandles[0], &metricHandles[1], nullptr, nullptr);
+    ${t}MetricGroupCloseExp(metricGroupHandles[0]);
 
     //Activate Metric group
     //Collect Metric group using available sampling types
