@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 Intel Corporation
+# Copyright (C) 2023-2024 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -145,6 +145,9 @@ etors:
       desc: "16-bit unsigned-integer"
     - name: UINT64_RANGE
       desc: "64-bit unsigned-integer range (minimum and maximum)"
+    - name: FLOAT64_RANGE
+      desc: "64-bit floating point range (minimum and maximum)"
+      version: "1.10"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Value info of type uint64_t range"
@@ -156,7 +159,19 @@ members:
       desc: "[out] minimum value of the range"
     - type: uint64_t
       name: "ui64Max"
-      desc: "[out] max value of the range"
+      desc: "[out] maximum value of the range"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Value info of type float64 range"
+version: "1.10"
+name: $t_value_fp64_range_exp_t
+members:
+    - type: double
+      name: "fp64Min"
+      desc: "[out] minimum value of the range"
+    - type: double
+      name: "fp64Max"
+      desc: "[out] maximum value of the range"
 --- #--------------------------------------------------------------------------
 type: union
 desc: "Union of value information"
@@ -187,6 +202,10 @@ members:
     - type: $t_value_uint64_range_exp_t
       name: "ui64Range"
       desc: "[out] minimum and maximum value of the range"
+    - type: $t_value_fp64_range_exp_t
+      name: "fp64Range"
+      desc: "[out] minimum and maximum value of the range"
+      version: "1.10"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Metric Programmable parameter information"
