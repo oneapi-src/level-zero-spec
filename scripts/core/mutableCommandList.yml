@@ -8,7 +8,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Extension for supporting compute graphs with dynamic properties."
-version: "1.9"
+version: "1.10"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Mutable Command List Extension Name"
@@ -18,16 +18,19 @@ value: '"$X_experimental_mutable_command_list"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable Command List Extension Version(s)"
-version: "1.9"
+version: "1.10"
 name: $x_mutable_command_list_exp_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
+    - name: "1_1"
+      value: "$X_MAKE_VERSION( 1, 1 )"
+      desc: "version 1.1"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable command flags"
-version: "1.9"
+version: "1.10"
 class: $xCommandList
 name: $x_mutable_command_exp_flags_t
 etors:
@@ -43,10 +46,12 @@ etors:
       desc: "command signal event"
     - name: WAIT_EVENTS
       desc: "command wait events"
+    - name: KERNEL_INSTRUCTION
+      desc: "command kernel"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable command identifier descriptor"
-version: "1.9"
+version: "1.10"
 class: $xCommandList
 name: $x_mutable_command_id_exp_desc_t
 base: $x_base_desc_t
@@ -55,7 +60,22 @@ members:
       name: flags
       desc: |
             [in] mutable command flags.
-              - must be 0 (default, equivalent to setting all flags), or a valid combination of $x_mutable_command_exp_flag_t
+              - must be 0 (default, equivalent to setting all flags bar kernel instruction), or a valid combination of $x_mutable_command_exp_flag_t
+              - in order to include kernel instruction mutation, $X_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION must be explictly included
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable all kernels command identifier descriptor"
+version: "1.10"
+class: $xCommandList
+name: $x_mutable_command_id_kernel_instruction_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint32_t
+      name: numKernels
+      desc: "[in] number of kernels in array"
+    - type: "$x_kernel_handle_t*"
+      name: phKernels
+      desc: "[in] array of kernel handles"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable command list flags"
@@ -178,6 +198,20 @@ members:
       name: offsetZ
       desc: "[in] global offset for Z dimension to use for this kernel"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable kernel descriptor"
+version: "1.10"
+class: $xCommandList
+name: $x_mutable_kernel_instruction_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: $x_kernel_handle_t
+      name: hKernel
+      desc: "[in] kernel handle to use for this append operation"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a unique command identifier for the next command to be appended to a command list."
 version: "1.9"
@@ -201,7 +235,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Updates mutable commands."
-version: "1.9"
+version: "1.10"
 class: $xCommandList
 name: UpdateMutableCommandsExp
 details:
@@ -217,16 +251,20 @@ params:
     - type: "const $x_mutable_commands_exp_desc_t*"
       name: desc
       desc: "[in] pointer to mutable commands descriptor; multiple descriptors may be chained via `pNext` member"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "Invalid kernel argument or not matching update descriptor provided"
+    - $X_RESULT_ERROR_INVALID_KERNEL_HANDLE:
+        - "Invalid kernel handle provided for the mutation kernel instruction operation"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Updates the signal event for a mutable command in a mutable command list."
-version: "1.9"
+version: "1.10"
 class: $xCommandList
 name: UpdateMutableCommandSignalEventExp
 details:
     - "This function may only be called for a mutable command list."
     - "The type, scope and flags of the signal event must match those of the source command."
-    - "Passing a null pointer as the signal event will update the command to not issue a signal."
     - "The application must synchronize mutable command list execution before calling this function."
     - "The application must close a mutable command list after completing all updates."
     - "This function must not be called from simultaneous threads with the same command list handle."

@@ -292,6 +292,9 @@ etors:
       desc: "[Validation] copy operations do not support overlapping regions of memory"
     - name: WARNING_ACTION_REQUIRED
       desc: "[Sysman] an action is required to complete the desired operation"
+    - name: ERROR_INVALID_KERNEL_HANDLE
+      desc: "[Core, Validation] kernel handle is invalid for the operation"
+      version: "1.10"
     - name: ERROR_UNKNOWN
       value: "0x7ffffffe"
       desc: "[Core] unknown or internal error"
@@ -556,10 +559,21 @@ etors:
       desc: $x_image_pitched_exp_desc_t
       version: "1.9"
       value: "0x0002001F"
+ 
+    - name: MUTABLE_KERNEL_INSTRUCTION_EXP_DESC
+      desc: $x_mutable_kernel_instruction_exp_desc_t
+      version: "1.10"
+      value: "0x00020020"
+    - name: MUTABLE_COMMAND_ID_KERNEL_INSTRUCTION_EXP_DESC
+      desc: $x_mutable_command_id_kernel_instruction_exp_desc_t
+      version: "1.10"
+      value: "0x00020021"
+
     - name: INIT_DRIVER_TYPE_DESC
       desc: $x_init_driver_type_desc_t
       version: "1.10"
       value: "0x00020020"
+
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
