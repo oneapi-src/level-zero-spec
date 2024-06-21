@@ -36,6 +36,9 @@ API
     * ${x}_mutable_global_offset_exp_desc_t
     * ${x}_mutable_kernel_instruction_exp_desc_t
 
+    * ${x}_mutable_graph_argument_exp_desc_t
+    * ${x}_mutable_graph_profiling_query_exp_desc_t
+
 * Functions
 
     * ${x}CommandListGetNextCommandIdExp
@@ -134,6 +137,10 @@ API
 The application may subsequently mutate specific commands, as follows:
 
 .. parsed-literal::
+
+    // Check the implementation support for Kernel Argument and group count mutation
+    assert(mutCmdListProps.mutableCommandFlags & ${X}_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTS);
+    assert(mutCmdListProps.mutableCommandFlags & ${X}_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNT);
 
     // Prepare to modify group count
     ${x}_group_count_t groupCount = {

@@ -48,6 +48,10 @@ etors:
       desc: "command wait events"
     - name: KERNEL_INSTRUCTION
       desc: "command kernel"
+    - name: GRAPH_ARGUMENTS
+      desc: "graph arguments"
+    - name: GRAPH_PROFILING
+      desc: "graph profiling buffer"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable command identifier descriptor"
@@ -211,6 +215,37 @@ members:
     - type: $x_kernel_handle_t
       name: hKernel
       desc: "[in] kernel handle to use for this append operation"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable graph argument descriptor"
+version: "1.10"
+class: $xCommandList
+name: $x_mutable_graph_argument_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: uint32_t
+      name: argIndex
+      desc: "[in] graph argument index"
+    - type: "const void*"
+      name: pArgValue
+      desc: "[in] pointer to graph argument value"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Mutable graph profiling query descriptor"
+version: "1.10"
+class: $xCommandList
+name: $x_mutable_graph_profiling_query_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint64_t
+      name: commandId
+      desc: "[in] command identifier"
+    - type: $x_graph_profiling_query_handle_t
+      name: hProfilingQuery
+      desc: "[in] handle of profiling query"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns a unique command identifier for the next command to be appended to a command list."
