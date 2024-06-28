@@ -5,12 +5,8 @@ Python dependencies:
   * [Sphinx](https://www.sphinx-doc.org/en/master/) v2.2.2
 
 Installing Python dependencies:
-  * Ensure HTTP proxy environment variables are setup with following commands. Restart command window after
-  ~~~~
-    setx HTTP_PROXY "http://proxy-chain.intel.com:912"
-    setx HTTPS_PROXY "http://proxy-chain.intel.com:912"
-  ~~~~
-  * Install all python requirements.
+
+  * Install all python requirements
   ~~~~
     py -m pip install -r ..\third_party\requirements.txt
   ~~~~
