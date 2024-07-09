@@ -571,14 +571,10 @@ etors:
       desc: $x_mutable_graph_argument_exp_desc_t
       version: "1.10"
       value: "0x00020022"
-    - name: MUTABLE_GRAPH_PROFILING_QUERY_EXP_DESC
-      desc: $x_mutable_graph_profiling_query_exp_desc_t
-      version: "1.10"
-      value: "0x00020023"
     - name: INIT_DRIVER_TYPE_DESC
       desc: $x_init_driver_type_desc_t
       version: "1.10"
-      value: "0x00020024"
+      value: "0x00020023"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"

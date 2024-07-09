@@ -37,7 +37,6 @@ API
     * ${x}_mutable_kernel_instruction_exp_desc_t
 
     * ${x}_mutable_graph_argument_exp_desc_t
-    * ${x}_mutable_graph_profiling_query_exp_desc_t
 
 * Functions
 
