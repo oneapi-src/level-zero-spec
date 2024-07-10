@@ -40,7 +40,7 @@ API
     * ${t}MetricProgrammableGetParamInfoExp
     * ${t}MetricProgrammableGetParamValueInfoExp
     * ${t}MetricCreateFromProgrammableExp
-    * ${t}DeviceCreateMetricGroupsFromMetrics
+    * ${t}DeviceCreateMetricGroupsFromMetricsExp
     * ${t}MetricGroupAddMetricExp
     * ${t}MetricGroupRemoveMetricExp
     * ${t}MetricGroupCloseExp

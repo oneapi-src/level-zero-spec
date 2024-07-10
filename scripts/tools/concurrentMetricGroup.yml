@@ -42,13 +42,13 @@ params:
       desc: "[in] metric group count"
     - type: "$t_metric_group_handle_t *"
       name: phMetricGroups
-      desc: "[in, out] metrics groups to be re-arranged to be sets of concurrent groups"
+      desc: "[in,out] metrics groups to be re-arranged to be sets of concurrent groups"
+    - type: "uint32_t *"
+      name: pMetricGroupsCountPerConcurrentGroup
+      desc: |
+            [in,out][optional][*pConcurrentGroupCount] count of metric groups per concurrent group.
     - type: "uint32_t *"
       name: pConcurrentGroupCount
       desc: |
             [out] number of concurrent groups.
             The value of this parameter could be used to determine the number of replays necessary.
-    - type: "uint32_t *"
-      name: pMetricGroupsCountPerConcurrentGroup
-      desc: |
-            [in,out][optional][*pConcurrentGroupCount] count of metric groups per concurrent group.

@@ -28,13 +28,13 @@ API
     * ${t}_metric_type_t
 
     New Values
-        ${T}_METRIC_TYPE_EXP_EVENT_NO_VALUE
+        ${T}_METRIC_TYPE_EVENT_EXP_TIMESTAMP
             Metric type:  have only timestamp and value has no meaning.
-        ${T}_METRIC_TYPE_EXP_EVENT_START
+        ${T}_METRIC_TYPE_EVENT_EXP_START
             Metric type: the first event of a start/stop event pair.
-        ${T}_METRIC_TYPE_EXP_EVENT_END
+        ${T}_METRIC_TYPE_EVENT_EXP_END
             Metric type: the second event of a start/stop event pair.
-        ${T}_METRIC_TYPE_EXP_EVENT_MONOTONIC_WRAPS_VALUE
+        ${T}_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUE
             Metric type: value of the event is a monotonic increasing value that can wrap around.
 
 
