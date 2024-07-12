@@ -26,7 +26,6 @@ API
 * Structures
 
     * ${x}_mutable_command_id_exp_desc_t
-    * ${x}_mutable_command_id_kernel_instruction_exp_desc_t
     * ${x}_mutable_command_list_exp_properties_t
     * ${x}_mutable_command_list_exp_desc_t
     * ${x}_mutable_commands_exp_desc_t
@@ -34,16 +33,17 @@ API
     * ${x}_mutable_group_count_exp_desc_t
     * ${x}_mutable_group_size_exp_desc_t
     * ${x}_mutable_global_offset_exp_desc_t
-    * ${x}_mutable_kernel_instruction_exp_desc_t
 
     * ${x}_mutable_graph_argument_exp_desc_t
 
 * Functions
 
     * ${x}CommandListGetNextCommandIdExp
+    * ${x}CommandListGetNextCommandIdWithKernelsExp
     * ${x}CommandListUpdateMutableCommandsExp
     * ${x}CommandListUpdateMutableCommandSignalEventExp
     * ${x}CommandListUpdateMutableCommandWaitEventsExp
+    * ${x}CommandListUpdateMutableCommandKernelsExp
 
 
 ======================
@@ -58,7 +58,7 @@ API
 
     // Discover mutable command list properties
     ${x}_mutable_command_list_exp_properties_t mutCmdListProps = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIES,    // stype
+        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIES,      // stype
         nullptr,                                                    // pNext
         0,                                                          // mutableCommandListFlags
         0                                                           // mutableCommandFlags
@@ -111,7 +111,7 @@ API
 
     // Get next command identifier
     ${x}_mutable_command_id_exp_desc_t cmdIdDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC       // stype
+        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC,      // stype
         nullptr,                                            // pNext
         0                                                   // flags
     };
@@ -137,10 +137,6 @@ The application may subsequently mutate specific commands, as follows:
 
 .. parsed-literal::
 
-    // Check the implementation support for Kernel Argument and group count mutation
-    assert(mutCmdListProps.mutableCommandFlags & ${X}_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTS);
-    assert(mutCmdListProps.mutableCommandFlags & ${X}_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNT);
-
     // Prepare to modify group count
     ${x}_group_count_t groupCount = {
         256,                                                    // groupCountX
@@ -149,7 +145,7 @@ The application may subsequently mutate specific commands, as follows:
     };
 
     ${x}_mutable_group_count_exp_desc_t groupCountDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC,       // stype
+        ${X}_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC,         // stype
         nullptr,                                                // pNext
         commandId,                                              // commandId
         &groupCount                                             // pGroupCount
@@ -159,7 +155,7 @@ The application may subsequently mutate specific commands, as follows:
     int argValue = 1;
 
     ${x}_mutable_kernel_argument_exp_desc_t krnlArgDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC,   // stype
+        ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC,     // stype
         &groupCountDesc,                                        // pNext
         commandId,                                              // commandId
         0,                                                      // argIndex
@@ -169,7 +165,7 @@ The application may subsequently mutate specific commands, as follows:
 
     // Prepare to update mutable commands
     ${x}_mutable_commands_exp_desc_t desc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC,          // stype
+        ${X}_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC,            // stype
         &krnlArgDesc,                                           // pNext
         0                                                       // flags
     };
@@ -190,23 +186,18 @@ The application may subsequently mutate specific commands, as follows:
     ${x}CommandListClose(hCommandList);
 
     // ...
-Note, the command list must be explicitly closed after updating mutable commands and events. This informs the implementation that the application has finished with updates and is ready to submit the command list.
 
-In preparation for kernel mutation user must provide all possible kernel mutations.
+
+Note, the command list must be explicitly closed after updating mutable commands and events. This informs the implementation that the application has finished with updates and is ready to submit the command list.
+In preparation for kernel mutation user must provide all possible kernels for the command.
 
 .. parsed-literal::
 
     // define all possible kernels
     ${x}_kernel_handle_t addKernel;
-    ${x}_kernel_handle_t copyKernel;
+    ${x}_kernel_handle_t mulKernel;
 
-    ${x}_kernel_handle_t kernels[] = {addKernel, copyKernel};
-
-    ${x}_mutable_command_id_kernel_instruction_exp_desc_t availableKernelsDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_KERNEL_INSTRUCTION_EXP_DESC, // stype
-        2,                                                                  // numKernels
-        kernels                                                             // phKernels
-    };
+    ${x}_kernel_handle_t kernels[] = {addKernel, mulKernel};
 
     // when users want kernel mutation, they need to explicitly state this, as 0 does not include kernel instruction mutation by default
     ${x}_mutable_command_exp_flags_t mutationFlags =
@@ -217,14 +208,14 @@ In preparation for kernel mutation user must provide all possible kernel mutatio
 
     // Get next command identifier
     ${x}_mutable_command_id_exp_desc_t cmdIdDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC,    // stype
-        &availableKernelsDesc,                              // pNext
+        ${X}_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC,      // stype
+        nullptr,                                            // pNext
         mutationFlags                                       // flags
     };
 
-    // retrieve id for the append operation
+    // retrieve id for the append operation and provide all possible kernels for this command
     uint64_t mutableKernelCommandId = 0;
-    ${x}CommandListGetNextCommandIdExp(hCommandList, &cmdIdDesc, &mutableKernelCommandId);
+    ${x}CommandListGetNextCommandIdWithKernelsExp(hCommandList, &cmdIdDesc, &mutableKernelCommandId, 2, kernels);
 
     // Encode command into command list
     ${x}CommandListAppendLaunchKernel(hCommandList, addKernel, &groupSize, nullptr, 0, nullptr);
@@ -232,41 +223,44 @@ In preparation for kernel mutation user must provide all possible kernel mutatio
     // Close the command list
     ${x}CommandListClose(hCommandList);
 
-Mutation of kernel instructions must obey two rules:
-- kernel mutation descriptor must be attached as first for a given command id.
-- kernel mutation invalidates all kernel arguments and dispatch parameters, these must be provided for the new kernel.
+Mutation of kernels must obey two rules:
+- kernel handle mutation function must be called as first for a given command id
+- kernel mutation invalidates all kernel arguments and dispatch parameters, these must be provided for the new kernel
 
 .. parsed-literal::
 
+    // Update mutable kernel for the command, switch from `addKernel` to `mulKernel`
+    ${x}CommandListUpdateMutableCommandKernelsExp(hCommandList, 1, &mutableKernelCommandId, &mulKernel);
+
     // modify group count
     ${x}_group_count_t groupCount = {
-        32, // groupCountX
-        1,  // groupCountY
-        1   // groupCountZ
+        32,                                                     // groupCountX
+        1,                                                      // groupCountY
+        1                                                       // groupCountZ
     };
 
     ${x}_mutable_group_count_exp_desc_t groupCountDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC,   // stype
-        nullptr,                                            // pNext
-        mutableKernelCommandId,                             // commandId
-        &groupCount                                         // pGroupCount
+        ${X}_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC,         // stype
+        nullptr,                                                // pNext
+        mutableKernelCommandId,                                 // commandId
+        &groupCount                                             // pGroupCount
     };
 
     ${x}_mutable_group_size_exp_desc_t groupSizeDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESC,    // stype
-        &groupCountDesc,                                    // pNext
-        mutableKernelCommandId,                             // commandId
-        32,                                                 // groupSizeX
-        1,                                                  // groupSizeY
-        1,                                                  // groupSizeZ
+        ${X}_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESC,          // stype
+        &groupCountDesc,                                        // pNext
+        mutableKernelCommandId,                                 // commandId
+        32,                                                     // groupSizeX
+        1,                                                      // groupSizeY
+        1,                                                      // groupSizeZ
     };
 
     // Prepare to modify Kernel Argument
     int argValue = 1;
-    void *usmPointer = newMemory;
+    void *usmPointer;
 
     ${x}_mutable_kernel_argument_exp_desc_t krnlArgMemoryDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC,   // stype
+        ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC,     // stype
         &groupSizeDesc,                                         // pNext
         mutableKernelCommandId,                                 // commandId
         0,                                                      // argIndex
@@ -275,7 +269,7 @@ Mutation of kernel instructions must obey two rules:
     };
 
     ${x}_mutable_kernel_argument_exp_desc_t krnlArgScalarDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC,   // stype
+        ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC,     // stype
         &krnlArgMemoryDesc,                                     // pNext
         mutableKernelCommandId,                                 // commandId
         1,                                                      // argIndex
@@ -293,12 +287,12 @@ Mutation of kernel instructions must obey two rules:
 
     // Prepare to update mutable commands
     ${x}_mutable_commands_exp_desc_t desc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC,      // stype
-        &krnlDesc,                                          // pNext
-        0                                                   // flags
+        ${X}_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC,            // stype
+        &krnlArgScalarDesc,                                     // pNext
+        0                                                       // flags
     };
 
-     // Update mutable commands
+    // Update mutable kernel arguments and dispatch parameters for the command
     ${x}CommandListUpdateMutableCommandsExp(hCommandList, &desc);
 
     // Close the command list

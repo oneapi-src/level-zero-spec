@@ -559,22 +559,14 @@ etors:
       desc: $x_image_pitched_exp_desc_t
       version: "1.9"
       value: "0x0002001F"
-    - name: MUTABLE_KERNEL_INSTRUCTION_EXP_DESC
-      desc: $x_mutable_kernel_instruction_exp_desc_t
-      version: "1.10"
-      value: "0x00020020"
-    - name: MUTABLE_COMMAND_ID_KERNEL_INSTRUCTION_EXP_DESC
-      desc: $x_mutable_command_id_kernel_instruction_exp_desc_t
-      version: "1.10"
-      value: "0x00020021"
     - name: MUTABLE_GRAPH_ARGUMENT_EXP_DESC
       desc: $x_mutable_graph_argument_exp_desc_t
       version: "1.10"
-      value: "0x00020022"
+      value: "0x00020020"
     - name: INIT_DRIVER_TYPE_DESC
       desc: $x_init_driver_type_desc_t
       version: "1.10"
-      value: "0x00020023"
+      value: "0x00020021"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"
