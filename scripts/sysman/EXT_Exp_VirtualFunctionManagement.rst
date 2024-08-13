@@ -21,20 +21,18 @@ API
 
 * Functions
 
-    * ${s}DeviceEnumActiveVFExp
-    * ${s}VFManagementGetVFPropertiesExp
+    * ${s}DeviceEnumEnabledVFExp
+    * ${s}VFManagementGetVFCapabilitiesExp
     * ${s}VFManagementGetVFMemoryUtilizationExp
     * ${s}VFManagementGetVFEngineUtilizationExp
 
 * Enumerations
 
     * ${s}_vf_management_exp_version_t
-    * ${s}_vf_info_mem_type_exp_flags_t
-    * ${s}_vf_info_util_exp_flags_t
    
 * Structures
 
-    * ${s}_vf_exp_properties_t
+    * ${s}_vf_exp_capabilities_t
     * ${s}_vf_util_mem_exp_t
     * ${s}_vf_util_engine_exp_t
    
@@ -51,33 +49,29 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
 
     // Gather count of VF handles
     uint32_t numVf = 0;
-    ${s}_vf_exp_properties_t vfProps {};
-    ${s}DeviceEnumActiveVFExp(hDevice, &numVf, nullptr);
+    ${s}_vf_exp_capabilities_t vfProps {};
+    ${s}DeviceEnumEnabledVFExp(hDevice, &numVf, nullptr);
 
     // Allocate memory for vf handles and call back in to gather handles
     std::vector<${s}_vf_handle_t> vfs(numVf, nullptr);
-    ${s}DeviceEnumActiveVFExp(hDevice, &numVf, vfs.data());
+    ${s}DeviceEnumEnabledVFExp(hDevice, &numVf, vfs.data());
 
     // Gather VF properties
-    std::vector <${s}_vf_exp_properties_t> vfProps(numVf);
+    std::vector <${s}_vf_exp_capabilities_t> vfProps(numVf);
     for (uint32_t i = 0; i < numVf; i++) {
-        ${s}VFManagementGetVFPropertiesExp(vfs[i], &vfProps[i]);
+        ${s}VFManagementGetVFCapabilitiesExp(vfs[i], &vfProps[i]);
     }
 
     // Detect the info types a particular VF supports
 
     // Using VF# 0 to demonstrate how to detect engine info type and query engine util info
     ${s}_vf_handle_t activeVf = vfs[0];
-    uint32_t count = 1;
-    unit32_t engineUtilPercent = 0;
-    if (vfProps[0].flags & ZES_VF_INFO_ENGINE) {
-        ${s}_vf_util_engine_exp_t engineUtil0 = {};
-        ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil0);
-        sleep(1)
-        ${s}_vf_util_engine_exp_t engineUtil1 = {};
-        ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &count, &engineUtil1);
-        // Use formula to calculate engine utilization % based on the 2 snapshots above
-        engineUtilPercent = (engineUtil1.activeCounterValue - engineUtil0.activeCounterValue) / engineUtil1.samplingCounterValue - engineUtil0.samplingCounterValue
-    }
-
-
+    uint32_t engineStatCount = 0;
+    
+    ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineStatCount, nullptr);
+    // Allocate memory for vf engine stats
+    ${s}_vf_util_engine_exp_t* engineStats0 = (${s}_vf_util_engine_exp_t*) allocate(engineStatCount * sizeof(${s}_vf_util_engine_exp_t));
+    ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineStatCount, engineStats0);
+    sleep(1)
+    ${s}_vf_util_engine_exp_t* engineStats1 = (${s}_vf_util_engine_exp_t*) allocate(engineStatCount * sizeof(${s}_vf_util_engine_exp_t));
+    ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineStatCount, &engineStats1);

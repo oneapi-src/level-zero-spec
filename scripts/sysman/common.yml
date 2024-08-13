@@ -233,10 +233,10 @@ etors:
       value: "0x00020004"
       desc: $s_subdevice_exp_properties_t
       version: "1.9"
-    - name: VF_EXP_PROPERTIES
+    - name: VF_EXP_CAPABILITIES
       value: "0x00020005"
-      desc: $s_vf_exp_properties_t
-      version: "1.9"
+      desc: $s_vf_exp_capabilities_t
+      version: "1.10"
     - name: VF_UTIL_MEM_EXP
       value: "0x00020006"
       desc: $s_vf_util_mem_exp_t

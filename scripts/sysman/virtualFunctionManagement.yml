@@ -28,65 +28,36 @@ etors:
       value: "$X_MAKE_VERSION( 1, 1 )"
       desc: "version 1.1"
 --- #--------------------------------------------------------------------------
-type: enum
-desc: "Virtual function memory types"
-version: "1.9"
-class: $sVFManagement
-name: $s_vf_info_mem_type_exp_flags_t
-etors:
-    - name: MEM_TYPE_SYSTEM
-      desc: "System memory"
-    - name: MEM_TYPE_DEVICE
-      desc: "Device local memory"
---- #--------------------------------------------------------------------------
-type: enum
-desc: "Virtual function utilization flag bit fields"
-version: "1.9"
-class: $sVFManagement
-name: $s_vf_info_util_exp_flags_t
-etors:
-    - name: INFO_NONE
-      desc: "No info associated with virtual function"
-    - name: INFO_MEM_CPU
-      desc: "System memory utilization associated with virtual function"
-    - name: INFO_MEM_GPU
-      desc: "Device memory utilization associated with virtual function"
-    - name: INFO_ENGINE
-      desc: 'Engine utilization associated with virtual function'
---- #--------------------------------------------------------------------------
 type: struct
-desc: "Virtual function management properties"
-version: "1.9"
+desc: "Virtual function management capabilities"
+version: "1.10"
 class: $sVFManagement
-name: $s_vf_exp_properties_t
+name: $s_vf_exp_capabilities_t
 base: $s_base_properties_t
 members:
     - type: $s_pci_address_t
       name: "address"
       desc: "[out] Virtual function BDF address"
-    - type: $s_uuid_t
-      name: uuid
-      desc: "[out] universal unique identifier of the device"
-    - type: $s_vf_info_util_exp_flags_t
-      name: "flags"
-      desc: "[out] utilization flags available. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
+    - type: uint32_t
+      name: "vfDeviceMemSize"
+      desc: "[out] Virtual function memory size in bytes"
+    - type: uint32_t
+      name: "vfID"
+      desc: "[out] Virtual Function ID"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides memory utilization values for a virtual function"
-version: "1.9"
+version: "1.10"
 class: $sVFManagement
 name: $s_vf_util_mem_exp_t
 base: $s_base_state_t
 members:
-    - type: $s_vf_info_mem_type_exp_flags_t
-      name: "memTypeFlags"
-      desc: "[out] Memory type flags."
+    - type: $s_mem_loc_t
+      name: "vfMemLocation"
+      desc: "[out] Location of this memory (system, device)"
     - type: uint64_t
-      name: "free"
+      name: "vfMemUtilized"
       desc: "[out] Free memory size in bytes."
-    - type: uint64_t
-      name: "size"
-      desc: "[out] Total allocatable memory in bytes."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides engine utilization values for a virtual function"
@@ -98,7 +69,7 @@ name: $s_vf_util_engine_exp_t
 base: $s_base_state_t
 members:
     - type: $s_engine_group_t
-      name: "type"
+      name: "vfEngineType"
       desc: "[out] The engine group."
     - type: uint64_t
       name: "activeCounterValue"
@@ -111,7 +82,7 @@ type: function
 desc: "Get handle of virtual function modules"
 version: "1.9"
 class: $sDevice
-name: EnumActiveVFExp
+name: EnumEnabledVFExp
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -132,10 +103,10 @@ params:
             if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Get virtual function management properties"
-version: "1.9"
+desc: "Get virtual function management capabilities"
+version: "1.10"
 class: $sVFManagement
-name: GetVFPropertiesExp
+name: GetVFCapabilitiesExp
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -143,9 +114,9 @@ params:
     - type: $s_vf_handle_t
       name: hVFhandle
       desc: "[in] Sysman handle for the VF component."
-    - type: $s_vf_exp_properties_t*
-      name: pProperties
-      desc: "[in,out] Will contain VF properties."
+    - type: $s_vf_exp_capabilities_t*
+      name: pCapability
+      desc: "[in,out] Will contain VF capability."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory activity stats for each available memory types associated with Virtual Function (VF)"
@@ -155,6 +126,7 @@ name: GetVFMemoryUtilizationExp
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "If VF is disable/pause/not active, utilization will give zero value."
 params:
     - type: $s_vf_handle_t
       name: hVFhandle
@@ -180,6 +152,7 @@ name: GetVFEngineUtilizationExp
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "If VF is disable/pause/not active, utilization will give zero value."
 params:
     - type: $s_vf_handle_t
       name: hVFhandle
