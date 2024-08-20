@@ -147,42 +147,49 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, rawData.data());
 
     // decode
-    uint32_t numEntries =0;
-    ${t}MetricTracerDecodeExp(hMetricDecoder,  &rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &numEntries, nullptr);
-    std::vector<ze_metric_entry_exp_t> decodedEntries(numEntries)
-    ${t}MetricTracerDecodeExp(hMetricDecoder,  &rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &numEntries, decodedEntries.data());
+    uint32_t totalNumEntries = 0;
+    uint32_t setCount = 0;
+    ${t}MetricTracerDecodeExp(hMetricDecoder,  &rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &setCount, nullptr, &totalNumEntries, nullptr);
+    std::vector<ze_metric_entry_exp_t> decodedEntries(totalNumEntries)
+    std::vector<uint32_t> metricEntriesCountPerSet(setCount);
+    ${t}MetricTracerDecodeExp(hMetricDecoder,  &rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &setCount, metricEntriesCountPerSet.data(), &totalNumEntries, decodedEntries.data());
 
-    for (uint32_t index = 0; index < numEntries; index++) {
-        ${t}_metric_entry_exp_t metricEntry = decodedEntries[index];
-        ${t}_metric_properties_t metricProperties = {};
-        ${t}MetricGetProperties(decodableMetrics[metricEntry.metricIndex], &metricProperties);
-        std::cout << "Component: " << metricProperties.component ". Decodable metric name: " << metricProperties.name;
-        switch (metricProperties.resultType) {
-        case ${T}_VALUE_TYPE_UINT32:
-        case ${T}_VALUE_TYPE_UINT8:
-        case ${T}_VALUE_TYPE_UINT16:
-            std::cout << ".\t value: " << metricEntry.value.ui32 << std::endl;
-          break;
-        case ${T}_VALUE_TYPE_UINT64:
-            std::cout << ".\t value: " << metricEntry.value.ui64 << std::endl;
-          break;
-        case ${T}_VALUE_TYPE_FLOAT32:
-            std::cout << ".\t value: " << metricEntry.value.fp32 << std::endl;
-          break;
-        case ${T}_VALUE_TYPE_FLOAT64:
-            std::cout << ".\t value: " << metricEntry.value.fp64 << std::endl;
-          break;
-        case ${T}_VALUE_TYPE_BOOL8:
-	        if( metricEntry.value.b8 ){
-                std::cout << ".\t value: true" << std::endl;
-            else
-                std::cout << ".\t value: false" << std::endl;
+  uint32_t setEntryStart = 0;
+    for (uint8_t setIndex = 0; setIndex < setCount; setIndex++) {
+        for (uint32_t index = setEntryStart;  index < metricEntriesCountPerSet[setIndex]; index++) {
+            ${t}_metric_entry_exp_t metricEntry = decodedEntries[index];
+            ${t}_metric_properties_t metricProperties = {};
+            ${t}MetricGetProperties(decodableMetrics[metricEntry.metricIndex], &metricProperties);
+            std::cout << "Component: " << metricProperties.component ". Decodable metric name: " << metricProperties.name;
+            switch (metricProperties.resultType) {
+            case ${T}_VALUE_TYPE_UINT8:
+            case ${T}_VALUE_TYPE_UINT16:
+            case ${T}_VALUE_TYPE_UINT32:
+                std::cout << ".\t value: " << metricEntry.value.ui32 << std::endl;
+            break;
+            case ${T}_VALUE_TYPE_UINT64:
+                std::cout << ".\t value: " << metricEntry.value.ui64 << std::endl;
+            break;
+            case ${T}_VALUE_TYPE_FLOAT32:
+                std::cout << ".\t value: " << metricEntry.value.fp32 << std::endl;
+            break;
+            case ${T}_VALUE_TYPE_FLOAT64:
+                std::cout << ".\t value: " << metricEntry.value.fp64 << std::endl;
+            break;
+            case ${T}_VALUE_TYPE_BOOL8:
+                if( metricEntry.value.b8 ){
+                    std::cout << ".\t value: true" << std::endl;
+                else
+                    std::cout << ".\t value: false" << std::endl;
+                }
+            break;
+            default:
+            break;
             }
-          break;
-        default:
-         break;
+            
+            setEntryStart = metricEntriesCountPerSet[setIndex];
         }
-       }
+    }
 
     // Close metric tracer
     ${t}MetricTracerDisableExp(hMetricTracer, true);

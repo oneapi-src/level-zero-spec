@@ -65,7 +65,7 @@ members:
       desc: "[out] timestamp at which the event happened."
     - type: uint32_t
       name: "metricIndex"
-      desc: "[out] index to the decodable metric handle in the input array (phMetric) in $tMetricTracerDecode()."
+      desc: "[out] index to the decodable metric handle in the input array (phMetric) in $tMetricTracerDecodeExp()."
     - type: $x_bool_t
       name: "onSubdevice"
       desc: "[out] True if the event occurred on a sub-device; false means the device on which the metric tracer was opened does not have sub-devices."
@@ -269,12 +269,25 @@ params:
             [in] [range(0, metricsCount)] array of handles of decodable metrics in the decoder for which the hMetricDecoder handle was 
             provided. Metrics handles are expected to be for decodable metrics, see $tMetricDecoderGetDecodableMetrics() 
     - type: uint32_t*
+      name: pSetCount
+      desc: |
+            [in,out] pointer to number of metric sets. If count is zero, then the driver shall update the value with the total
+            number of metric sets to be decoded. If count is greater than the number available in the raw data buffer, then the
+            driver shall update the value with the actual number of metric sets to be decoded. There is a 1:1 relation between
+            the number of sets and sub-devices returned in the decoded entries.
+    - type: uint32_t*
+      name: pMetricEntriesCountPerSet
+      desc: |
+            [in,out][optional][range(0, *pSetCount)] buffer of metric entries counts per metric set, one value per set.
+    - type: uint32_t*
       name: pMetricEntriesCount
       desc: |
-            [in,out] pointer to number of decodable metric entries to be decoded. If count is zero, then the driver shall update the value 
-            with the total number of decodable metric entries to be decoded. If count is greater than zero but less than the total number 
-            available in the raw data, then only that number of results will be decoded. if count is greater than the number available in 
-            the raw data buffer, then the driver shall update the value with the actual number of decodable metric entries to be decoded.
+            [in,out]  pointer to the total number of metric entries decoded, for all metric sets. If count is zero, then the
+            driver shall update the value with the total number of metric entries to be decoded. If count is greater than zero
+            but less than the total number of metric entries available in the raw data, then user provided number will be decoded.
+            If count is greater than the number available in the raw data buffer, then the driver shall update the value with
+            the actual number of decodable metric entries decoded. If set to null, then driver will only update the value of
+            pSetCount.
     - type: $t_metric_entry_exp_t*
       name: pMetricEntries 
       desc: "[in,out][optional][range(0, *pMetricEntriesCount)] buffer containing decoded metric entries"
