@@ -129,6 +129,9 @@ etors:
       desc: "Produces normalization using raw_metric / HW instance_count."
     - name: NORMALIZATION_RATE
       desc: "Produces normalization average using raw_metric / timestamp."
+    - name: NORMALIZATION_BYTES
+      version: "1.10"
+      desc: "Produces normalization average using raw_metric * n bytes."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported value info types"
