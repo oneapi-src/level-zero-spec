@@ -277,14 +277,6 @@ Mutation of kernels must obey two rules:
         &argValue                                               // pArgValue
     };
 
-    // set new kernel
-    ${x}_mutable_kernel_instruction_exp_desc_t krnlDesc = {
-        ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_INSTRUCTION_EXP_DESC,    // stype
-        &krnlArgScalarDesc,                                         // pNext
-        mutableKernelCommandId,                                     // commandId
-        copyKernel,                                                 // hKernel
-    };
-
     // Prepare to update mutable commands
     ${x}_mutable_commands_exp_desc_t desc = {
         ${X}_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC,            // stype
