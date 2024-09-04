@@ -424,16 +424,16 @@ params:
       name: pDescription
       desc: "[in] pointer to description of the metric groups. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_DESCRIPTION."
     - type: "uint32_t *"
-      name: metricGroupCount
+      name: pMetricGroupCount
       desc: |
             [in,out] pointer to the number of metric group handles to be created.
-            if metricGroupCount is zero, then the driver shall update the value with the maximum possible number of metric group handles that could be created.
-            if metricGroupCount is greater than the number of metric group handles that could be created, then the driver shall update the value with the correct number of metric group handles generated.
-            if metricGroupCount is lesser than the number of metric group handles that could be created, then $X_RESULT_ERROR_INVALID_ARGUMENT is returned.
+            if pMetricGroupCount is zero, then the driver shall update the value with the maximum possible number of metric group handles that could be created.
+            if pMetricGroupCount is greater than the number of metric group handles that could be created, then the driver shall update the value with the correct number of metric group handles generated.
+            if pMetricGroupCount is lesser than the number of metric group handles that could be created, then $X_RESULT_ERROR_INVALID_ARGUMENT is returned.
     - type: $t_metric_group_handle_t*
       name: phMetricGroup
       desc: |
-            [in,out][optional][range(0, metricGroupCount)] array of handle of metric group handles.
+            [in,out][optional][range(0, *pMetricGroupCount)] array of handle of metric group handles.
             Created Metric group handles.
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:

@@ -237,7 +237,7 @@ params:
             value with the actual number of decodable metrics available. 
     - type: $t_metric_handle_t*
       name: phMetrics 
-      desc: "[in,out] [range(0, pCount)] array of handles of decodable metrics in the hMetricDecoder handle provided."
+      desc: "[in,out] [range(0, *pCount)] array of handles of decodable metrics in the hMetricDecoder handle provided."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Decode raw events collected from a tracer."
