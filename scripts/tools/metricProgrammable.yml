@@ -358,9 +358,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create metric handles by applying parameter values on the metric programmable handle."
-version: "1.9"
+version: "1.11"
 class: $tMetric
-name: CreateFromProgrammableExp
+name: CreateFromProgrammable1Exp
 decl: static
 details:
     - "Multiple parameter values could be used to prepare a metric."
@@ -397,13 +397,49 @@ params:
             if count is less than the number of metrics available, then driver shall only retrieve that number of metric handles.
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Create metric handles by applying parameter values on the metric programmable handle."
+version: "1.11"
+class: $tMetric
+name: CreateFromProgrammableExp
+decl: static
+details:
+    - "This API is deprecated. Please use $tMetricCreateFromProgrammable1Exp()"
+params:
+    - type: $t_metric_programmable_exp_handle_t
+      name: hMetricProgrammable
+      desc: "[in] handle of the metric programmable"
+    - type: $t_metric_programmable_param_value_exp_t*
+      name: pParameterValues
+      desc: "[in] list of parameter values to be set."
+    - type: uint32_t
+      name: parameterCount
+      desc: "[in] Count of parameters to set."
+    - type: "const char*"
+      name: "pName"
+      desc: "[in] pointer to metric name to be used. Must point to a null-terminated character array no longer than $T_MAX_METRIC_NAME."
+    - type: "const char*"
+      name: "pDescription"
+      desc: "[in] pointer to metric description to be used. Must point to a null-terminated character array no longer than $T_MAX_METRIC_DESCRIPTION."
+    - type: "uint32_t*"
+      name: pMetricHandleCount
+      desc: |
+            [in,out] Pointer to the number of metric handles.
+            if count is zero, then the driver shall update the value with the number of metric handles available for this programmable.
+            if count is greater than the number of metric handles available, then the driver shall update the value with the correct number of metric handles available.
+    - type: "$t_metric_handle_t*"
+      name: phMetricHandles
+      desc: |
+            [in,out][optional][range(0,*pMetricHandleCount)] array of handle of metrics.
+            if count is less than the number of metrics available, then driver shall only retrieve that number of metric handles.
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Create multiple metric group handles from metric handles."
 version: "1.10"
 class: $tDevice
 name: CreateMetricGroupsFromMetricsExp
 decl: static
 details:
-    - "Creates multiple metric groups from metrics which were created using $tMetricCreateFromProgrammableExp()."
+    - "Creates multiple metric groups from metrics which were created using $tMetricCreateFromProgrammable1Exp()."
     - "Metrics whose Hardware resources do not overlap are added to same metric group."
     - "The metric groups created using this API are managed by the application and cannot be retrieved using $tMetricGroupGet()."
     - "The created metric groups are ready for activation and collection."
@@ -525,8 +561,8 @@ class: $tMetricGroup
 name: DestroyExp
 decl: static
 details:
-    - "Metric handles created using $tMetricCreateFromProgrammableExp and are part of the metricGroup are not destroyed."
-    - "It is necessary to call $tMetricDestroyExp for each of the metric handles (created from $tMetricCreateFromProgrammableExp) to destroy them."
+    - "Metric handles created using $tMetricCreateFromProgrammable1Exp and are part of the metricGroup are not destroyed."
+    - "It is necessary to call $tMetricDestroyExp for each of the metric handles (created from $tMetricCreateFromProgrammable1Exp) to destroy them."
 params:
     - type: $t_metric_group_handle_t 
       name: hMetricGroup
@@ -538,7 +574,7 @@ returns:
       - "If trying to destroy an activated metric group"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroy a metric created using $tMetricCreateFromProgrammableExp."
+desc: "Destroy a metric created using $tMetricCreateFromProgrammable1Exp."
 version: "1.9"
 class: $tMetric
 name: DestroyExp

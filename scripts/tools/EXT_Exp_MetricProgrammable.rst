@@ -39,7 +39,7 @@ API
     * ${t}MetricProgrammableGetPropertiesExp
     * ${t}MetricProgrammableGetParamInfoExp
     * ${t}MetricProgrammableGetParamValueInfoExp
-    * ${t}MetricCreateFromProgrammableExp
+    * ${t}MetricCreateFromProgrammable1Exp
     * ${t}DeviceCreateMetricGroupsFromMetricsExp
     * ${t}MetricGroupAddMetricExp
     * ${t}MetricGroupRemoveMetricExp
@@ -95,9 +95,9 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
             // Create Metric
             char metricName[ZET_MAX_METRIC_NAME] = "eu_active_minimum";
             char metricDescription[ZET_MAX_METRIC_DESCRIPTION] = "eu_active_minimum_desc";
-            ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, nullptr);
+            ${t}MetricCreateFromProgrammable1Exp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, nullptr);
             ${t}_metric_handle_t * metricHandles = allocate(sizeof(${t}_metric_handle_t) * metricHandleCount);
-            ${t}MetricCreateFromProgrammableExp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, metricHandles);
+            ${t}MetricCreateFromProgrammable1Exp(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, metricHandles);
         }
     }
 
