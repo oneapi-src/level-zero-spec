@@ -476,6 +476,31 @@ returns:
        - "metricGroupCount is lesser than the number of metric group handles that could be created."
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Create metric group handle."
+version: "1.11"
+class: $tMetricGroup
+name: CreateExp
+decl: static
+details:
+    - "This API is deprecated. Please use $tCreateMetricGroupsFromMetricsExp() "
+params:
+    - type: $t_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "const char*"
+      name: pName
+      desc: "[in] pointer to metric group name. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_NAME."
+    - type: "const char*"
+      name: pDescription
+      desc: "[in] pointer to metric group description. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_DESCRIPTION."
+    - type: $t_metric_group_sampling_type_flags_t
+      name: samplingType
+      desc: "[in] Sampling type for the metric group."
+    - type: $t_metric_group_handle_t*
+      name: phMetricGroup
+      desc: "[in,out] Created Metric group handle"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Add a metric handle to the metric group handle created using $tMetricGroupCreateExp."
 version: "1.9"
 class: $tMetricGroup
