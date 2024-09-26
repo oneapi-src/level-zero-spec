@@ -360,7 +360,7 @@ type: function
 desc: "Create metric handles by applying parameter values on the metric programmable handle."
 version: "1.11"
 class: $tMetric
-name: CreateFromProgrammable1Exp
+name: CreateFromProgrammableExp2
 decl: static
 details:
     - "Multiple parameter values could be used to prepare a metric."
@@ -403,7 +403,7 @@ class: $tMetric
 name: CreateFromProgrammableExp
 decl: static
 details:
-    - "This API is deprecated. Please use $tMetricCreateFromProgrammable1Exp()"
+    - "This API is deprecated. Please use $tMetricCreateFromProgrammableExp2()"
 params:
     - type: $t_metric_programmable_exp_handle_t
       name: hMetricProgrammable
@@ -439,7 +439,7 @@ class: $tDevice
 name: CreateMetricGroupsFromMetricsExp
 decl: static
 details:
-    - "Creates multiple metric groups from metrics which were created using $tMetricCreateFromProgrammable1Exp()."
+    - "Creates multiple metric groups from metrics which were created using $tMetricCreateFromProgrammableExp2()."
     - "Metrics whose Hardware resources do not overlap are added to same metric group."
     - "The metric groups created using this API are managed by the application and cannot be retrieved using $tMetricGroupGet()."
     - "The created metric groups are ready for activation and collection."
@@ -561,8 +561,8 @@ class: $tMetricGroup
 name: DestroyExp
 decl: static
 details:
-    - "Metric handles created using $tMetricCreateFromProgrammable1Exp and are part of the metricGroup are not destroyed."
-    - "It is necessary to call $tMetricDestroyExp for each of the metric handles (created from $tMetricCreateFromProgrammable1Exp) to destroy them."
+    - "Metric handles created using $tMetricCreateFromProgrammableExp2 and are part of the metricGroup are not destroyed."
+    - "It is necessary to call $tMetricDestroyExp for each of the metric handles (created from $tMetricCreateFromProgrammableExp2) to destroy them."
 params:
     - type: $t_metric_group_handle_t 
       name: hMetricGroup
@@ -574,7 +574,7 @@ returns:
       - "If trying to destroy an activated metric group"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroy a metric created using $tMetricCreateFromProgrammable1Exp."
+desc: "Destroy a metric created using $tMetricCreateFromProgrammableExp2."
 version: "1.9"
 class: $tMetric
 name: DestroyExp
