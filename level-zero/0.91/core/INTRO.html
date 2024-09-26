@@ -1,0 +1,821 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Overview &mdash; Level Zero Specification  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/custom.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Core Programming Guide" href="PROG.html" />
+    <link rel="prev" title="oneAPI Level Zero Specification" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Level Zero Specification
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.91
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#objective">Objective</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#devices">Devices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-caches">Memory &amp; Caches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subdevice-support">Subdevice Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#peer-to-peer-communication">Peer-to-Peer Communication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inter-process-communication">Inter-Process Communication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-management">System Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api-specification">API Specification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#terminology">Terminology</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#naming-convention">Naming Convention</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#versioning">Versioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#error-handling">Error Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multithreading-and-concurrency">Multithreading and Concurrency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experimental-api-support">Experimental API Support</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#driver-architecture">Driver Architecture</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#library">Library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#loader">Loader</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device-drivers">Device Drivers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#validation-layer">Validation Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instrumentation-layer">Instrumentation Layer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#affinity-mask">Affinity Mask</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tools">Tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-management-1">System Management</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Core Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tools Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#api-tracing">API Tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#metrics">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#program-instrumentation">Program Instrumentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#program-debug">Program Debug</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Sysman Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html#high-level-overview">High-level overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html#interface-details">Interface details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html#security">Security</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SPIR-V Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#common-properties">Common Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#required-capabilities">Required Capabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#validation-rules">Validation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#extensions">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#numerical-compliance">Numerical Compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#image-addressing-and-filtering">Image Addressing and Filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/api.html">Tools API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Latest Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html#previous-releases">Previous Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Level Zero Specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+
+    
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Permalink to this headline">¶</a></h2>
+<p>The objective of the ‘One API’ Level-Zero API is to provide
+direct-to-metal interfaces to offload accelerator devices. It is a
+programming interface that can be published at a cadence that better
+matches Intel hardware releases and can be tailored to any device needs.
+It can be adapted to support broader set of languages features, such as
+function pointers, virtual functions, unified memory, and I/O
+capabilities.</p>
+<img alt="../_images/one_api_sw_stack.png" src="../_images/one_api_sw_stack.png" />
+<p>The Level-Zero API provides the lowest-level, fine-grain and most explicit control over:</p>
+<ul class="simple">
+<li><p>Device Discovery</p></li>
+<li><p>Memory Allocation</p></li>
+<li><p>Peer-to-Peer Communication</p></li>
+<li><p>Inter-Process Sharing</p></li>
+<li><p>Kernel Submission</p></li>
+<li><p>Asynchronous Execution and Scheduling</p></li>
+<li><p>Synchronization Primitives</p></li>
+<li><p>Metrics Reporting</p></li>
+<li><p>System Management Interface</p></li>
+</ul>
+<p>Most applications should not require the additional control provided by
+the Level-Zero API. The Level-Zero API is intended for providing
+explicit controls needed by higher-level runtime APIs and libraries.</p>
+<p>While initially influenced by other low-level APIs, such as OpenCL and Vulkan,
+the Level-Zero APIs are designed to evolve independently. While initially
+influenced by GPU architecture, the Level-Zero APIs are designed to be supportable
+across different compute device architectures, such as FPGAs, CSAs, etc.</p>
+<div class="section" id="devices">
+<h3>Devices<a class="headerlink" href="#devices" title="Permalink to this headline">¶</a></h3>
+<p>The API architecture exposes both physical and logical abstraction of
+the underlying devices capabilities. The device, sub device and memory
+are exposed at physical level while command queues, events and
+synchronization methods are defined as logical entities. All logical
+entities will be bound to device level physical capabilities.</p>
+<p>Device discovery APIs enumerate the accelerators functional features.
+These APIs provide interface to query information like compute unit
+count within the device or sub device, available memory and affinity to
+the compute, user managed cache size and work submission command queues.</p>
+</div>
+<div class="section" id="memory-caches">
+<h3>Memory &amp; Caches<a class="headerlink" href="#memory-caches" title="Permalink to this headline">¶</a></h3>
+<p>Memory is visible to the upper-level software stack as unified memory
+with a single virtual address space covering both the Host and a
+specific device.</p>
+<p>For GPUs, the API exposes two levels of the device memory hierarchy:</p>
+<ol class="arabic">
+<li><p>Local Device Memory: can be managed at the device and/or sub device level.</p></li>
+<li><p>Device Cache(s):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Last Level Cache (L3) can be controlled through memory allocation APIs.</p></li>
+<li><p>Low Level Cache (L1) can be controlled through program language intrinsics.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>The API allows allocation of buffers and images at device and sub device
+granularity with full cacheablity hints.</p>
+<ul class="simple">
+<li><p>Buffers are transparent memory accessed through virtual address pointers</p></li>
+<li><p>Images are opaque objects accessed through handles</p></li>
+</ul>
+<p>The memory APIs provide allocation methods to allocate either device,
+host or shared memory. The APIs enable both implicit and explicit
+management of the resources by the application or runtimes. The
+interface also provides query capabilities for all memory objects.</p>
+</div>
+<div class="section" id="subdevice-support">
+<h3>Subdevice Support<a class="headerlink" href="#subdevice-support" title="Permalink to this headline">¶</a></h3>
+<p>The API supports sub-devices and there are functions to query
+and obtain a sub-device. A sub-device can represent a physical or
+logical partition of the device. Outside of these functions there are no
+distinction between sub-devices and devices. For example, a sub-device
+can be used with memory allocation and tasks and allow placement and
+submission to a specific sub-device.</p>
+</div>
+<div class="section" id="peer-to-peer-communication">
+<h3>Peer-to-Peer Communication<a class="headerlink" href="#peer-to-peer-communication" title="Permalink to this headline">¶</a></h3>
+<p>Peer to Peer API’s provide capabilities to marshall data across Host to
+Device, Device to Host and Device to Device. The data marshalling API
+can be scheduled as asynchronous operations or can be synchronized with
+kernel execution through command queues. Data coherency is maintained by
+the driver without any explicit involvement from the application.</p>
+</div>
+<div class="section" id="inter-process-communication">
+<h3>Inter-Process Communication<a class="headerlink" href="#inter-process-communication" title="Permalink to this headline">¶</a></h3>
+<p>The API allows sharing of memory objects across different device
+processes. Since each process has its own virtual address space, there
+is no guarantee that the same virtual address will be available when the
+memory object is shared in new process. There are a set of APIs that
+makes it easier to share the memory objects with ease.</p>
+</div>
+<div class="section" id="system-management">
+<h3>System Management<a class="headerlink" href="#system-management" title="Permalink to this headline">¶</a></h3>
+<p>The API provides in-band ability to query the performance, power and
+health of accelerator resources. It also enables controlling the
+performance and power profile of these resources. Finally, it provides
+access to maintenance facilities such as performing hardware diagnostics
+or updating firmware.</p>
+</div>
+</div>
+<div class="section" id="api-specification">
+<h2>API Specification<a class="headerlink" href="#api-specification" title="Permalink to this headline">¶</a></h2>
+<p>The following section provides high-level design philosophy of the APIs.
+For more detailed information, refer to the programming guides and
+detailed specification pages.</p>
+<div class="section" id="terminology">
+<h3>Terminology<a class="headerlink" href="#terminology" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This specification uses key words based on
+<a class="reference external" href="https://www.ietf.org/rfc/rfc2119.txt">RFC2119</a> to indicate
+requirement level. In particular, the following words are used to
+describe the actions of an implementation of this specification:</p>
+<ul class="simple">
+<li><p><strong>May</strong> - the word <em>may</em>, or the adjective <em>optional</em>, mean that conforming implementations are permitted to, but need not behave as described.</p></li>
+<li><p><strong>Should</strong> - the word <em>should</em>, or the adjective <em>recommended</em>, mean that there could be reasons for an implementations to deviate from the behavior described, but that such deviation should be avoided.</p></li>
+<li><p><strong>Must</strong> - the word <em>must</em>, or the term <em>required</em> or <em>shall</em>, mean that the behavior described is an absolute requirement of the specification.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="naming-convention">
+<h3>Naming Convention<a class="headerlink" href="#naming-convention" title="Permalink to this headline">¶</a></h3>
+<p>The following naming conventions are followed in order to avoid
+conflicts within the API, or with other APIs and libraries:
+- all driver entry points are prefixed with ze
+- all types follow **ze_&lt;name&gt;_t** convention
+- all macros and enumerator values use all caps **ZE_&lt;SCOPE&gt;_&lt;NAME&gt;** convention
+- all functions use camel case <strong>ze&lt;Object&gt;&lt;Action&gt;</strong> convention - exception: since “driver” functions use implicit &lt;Object&gt;, it is omitted
+- all structure members and function parameters use camel case convention</p>
+<p>In addition, the following coding standards are followed:
+- all function input parameters precede output parameters
+- all functions return ::ze_result_t</p>
+</div>
+<div class="section" id="versioning">
+<h3>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h3>
+<p>There are multiple versions that should be used by the application to determine compatibility:</p>
+<p><strong>API Version</strong> - this is the version of the API supported by the device.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This is typically used to determine if the device supports the minimum set of APIs required by the application.</p></li>
+<li><p>There is a single API version that represents a collection of APIs.</p></li>
+<li><p>The value is determined from calling ::zeDriverGetApiVersion</p></li>
+<li><p>The value returned will be the minimum of the ::ze_api_version_t supported by the device and known by the driver.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Structure Version</strong> - these are the versions of the structures passed-by-pointer to the driver.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>These are typically used by the driver to support applications written to older versions of the API.</p></li>
+<li><p>They are provided as the first member of every structure passed to the driver.</p></li>
+</ul>
+</div></blockquote>
+<p><strong>Driver Version</strong> - this is the version of the driver installed in the system.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This is typically used to mitigate driver implementation issues for a feature.</p></li>
+<li><p>The value is determined from calling ::zeDriverGetProperties</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="error-handling">
+<h3>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h3>
+<p>The following design philosophies are adopted in order to reduce Host-side overhead:</p>
+<ul>
+<li><p>By default, the driver implementation does no parameter validation of any kind</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This can be enabled via environment variables, described below</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>By default, neither the driver nor device provide any protection against the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Invalid API programming</p></li>
+<li><p>Invalid function arguments</p></li>
+<li><p>Function infinite loops or recursions</p></li>
+<li><p>Synchronization primitive deadlocks</p></li>
+<li><p>Non-visible memory access by the Host or device</p></li>
+<li><p>Non-resident memory access by the device</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>The driver implementation is <strong>not</strong> required to perform API validation of any kind</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The driver should ensure well-behaved applications are not burdened with the overhead needed for non-behaving applications</p></li>
+<li><p>Unless otherwise specified, the driver behavior is undefined when APIs are improperly used</p></li>
+<li><p>For debug purposes, API validation can be enabled via the [Validation Layers](#v0)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>All API functions return ::ze_result_t</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This enumeration contains error codes for the core APIs and validation layers</p></li>
+<li><p>This allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="multithreading-and-concurrency">
+<h3>Multithreading and Concurrency<a class="headerlink" href="#multithreading-and-concurrency" title="Permalink to this headline">¶</a></h3>
+<p>The following design philosophies are adopted in order to maximize Host thread concurrency:</p>
+<ul>
+<li><p>APIs are free-threaded when the driver object handle is different.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the driver should avoid thread-locks for these API calls</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>APIs are not thread-safe when the driver object handle is the same, except when explicitly noted.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the application is responsible for ensuring multiple threads do not enter an API when the handle is the same</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>APIs are not thread-safe with other APIs that use the same driver object handle</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the application is responsible for ensuring multiple threads do not enter these APIs when the handle is the same</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>APIs do not support reference counting of handles.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the application is responsible for tracking ownership and explicitly freeing handles and memory</p></li>
+<li><p>the application is responsible for ensuring that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault</p></li>
+<li><p>no implicit garabage collection is supported by the driver</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>In general, the API is designed to be free-threaded rather than thread-safe.
+This provides multithreaded applications with complete
+control over both threading and locks. This also eliminates unnecessary
+driver overhead for single threaded applications and/or very low latency
+usages.</p>
+<p>The exception to this rule is that all memory allocation APIs are
+thread-safe since they allocate from a single global memory pool. If an
+application needs lock-free memory allocation, then it could allocate a
+per-thread pool and implement its own sub-allocator.</p>
+<p>An application is in direct control over all Host thread creation and
+usage. The driver should never implicitly create threads. If there is a
+need for an implementation to use a background thread, then that thread
+should be create and provided by the application.</p>
+<p>Each API function must document details on the multithreading
+requirements for that call.</p>
+<p>The primary usage-models enabled by these rules is:</p>
+<ul class="simple">
+<li><p>multiple, simultaneous threads may operate on independent driver objects with no implicit thread-locks</p></li>
+<li><p>driver object handles may be passed between and used by multiple threads with no implicit thread-locks</p></li>
+</ul>
+</div>
+<div class="section" id="experimental-api-support">
+<h3>Experimental API Support<a class="headerlink" href="#experimental-api-support" title="Permalink to this headline">¶</a></h3>
+<p>Features which are still being considered for inclusion into the “Core”
+API, but require additional experimentation by application vendors
+before ratification, are exposed as “Experimental” APIs.</p>
+<p>Applications should not rely on experimental APIs in production.
+- Experimental APIs may be added and removed from the API at any time; with or without an official API revision.
+- Experimental APIs are not guaranteed to be forward or backward compatible between API versions.
+- Experimental APIs are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.</p>
+<p>An implementation will return ::ZE_RESULT_ERROR_UNSUPPORTED_FEATURE for any experimental API not supported by that driver.</p>
+</div>
+</div>
+<div class="section" id="driver-architecture">
+<h2>Driver Architecture<a class="headerlink" href="#driver-architecture" title="Permalink to this headline">¶</a></h2>
+<p>The following section provides high-level driver architecture.</p>
+<img alt="../_images/intro_driver.png" src="../_images/intro_driver.png" />
+<div class="section" id="library">
+<h3>Library<a class="headerlink" href="#library" title="Permalink to this headline">¶</a></h3>
+<p>A static import library shall be provided to allow applications
+to make direct API calls without understanding the underlying
+driver interfaces.</p>
+<p>C/C++ applications may include “ze_api.h” and link with “ze_api.lib”.</p>
+</div>
+<div class="section" id="loader">
+<h3>Loader<a class="headerlink" href="#loader" title="Permalink to this headline">¶</a></h3>
+<p>The loader initiates the loading of the driver(s) and layer(s). The
+loader exports all API functions to the static library via per-process
+API function pointer table(s). Each driver and layer must below the
+loader will also export its API/DDI functions via per-process function
+pointer table(s). The export function and table definitions are defined
+in “ze_ddi.h”.</p>
+<p>The loader is dynamically linked with the application using the
+“ze_loader.dll” (windows) or “ze_loader.so” (linux). The loader is
+vendor agnostic, but must be aware of the names of vendor-specific
+device driver names. (Note: these are currently hard-coded but a
+registration method will be adopted when multiple vendors are
+supported.)</p>
+<p>The loader dynamically loads each vendor’s device driver(s) present in
+the system and queries each per-process function pointer table(s). If
+only one device driver needs to be loaded, then the loader layer may be
+entirely bypassed.</p>
+<p>The following diagram illustrates the expected loading sequence:</p>
+<img alt="../_images/intro_loader.png" src="../_images/intro_loader.png" />
+<p>Thus, the loader’s internal function pointer table entries may point to:</p>
+<ul class="simple">
+<li><p>validation layer intercepts (if enabled),</p></li>
+<li><p>instrumentation layer intercepts (if enabled),</p></li>
+<li><p>device driver exports, + or any combination of the above</p></li>
+</ul>
+</div>
+<div class="section" id="device-drivers">
+<h3>Device Drivers<a class="headerlink" href="#device-drivers" title="Permalink to this headline">¶</a></h3>
+<p>The device driver(s) contain the device-specific implementations of the APIs.</p>
+<p>The device driver(s) are dynamically linked using a <em>ze_vendor_type.dll</em>
+(windows) / <em>ze_vendor_type.so</em> (linux); where <em>vendor</em> and <em>type</em> are
+names chosen by the device vendor. For example, Intel GPUs use the name:
+“ze_intc_gpu”.</p>
+</div>
+<div class="section" id="validation-layer">
+<h3>Validation Layer<a class="headerlink" href="#validation-layer" title="Permalink to this headline">¶</a></h3>
+<p>The validation layer provides an optional capability for application
+developers to enable additional API validation while maintaining minimal
+driver implementation overhead.</p>
+<ul class="simple">
+<li><p>works independent of driver implementation</p></li>
+<li><p>works for production / release drivers</p></li>
+<li><p>works independent of vendor or device type</p></li>
+<li><p>checks for common application errors, such as parameter validation</p></li>
+<li><p>provides common application debug tracking, such as object and memory lifetime</p></li>
+</ul>
+<p>The validation layer must be enabled via an environment variable. Each
+capability is enabled by additional environment variables.</p>
+<p>The validation layer supports the following capabilities:</p>
+<ul>
+<li><p>Parameter Validation</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>checks function parameters, such as null pointer parameters, invalid enumerations, uninitialized structures, etc.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Handle Lifetime</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>tracks handle allocations, destruction and usage for leaks and invalid usage (e.g., destruction while still in-use by device)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Memory Tracker</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>tracks memory allocations and free for leaks and invalid usage (e.g., non-visible to device)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Threading Validation</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>checks multi-threading usage (e.g., functions are not called from simultaneous threads using the same handle)</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="instrumentation-layer">
+<h3>Instrumentation Layer<a class="headerlink" href="#instrumentation-layer" title="Permalink to this headline">¶</a></h3>
+<p>The instrumentation layer provides an optional capability for
+application developers to enable additional profiling API while
+maintaining minimal driver implementation overhead.</p>
+<ul class="simple">
+<li><p>works independent of driver implementation</p></li>
+<li><p>works for production / release drivers</p></li>
+<li><p>implements <a class="reference internal" href="#tools">Tools</a> APIs</p></li>
+</ul>
+<p>The instrumentation layer must be enabled via an environment variable. Each capability is enabled by additional environment variables.</p>
+<p>The instrumentation layer supports the following capabilities:</p>
+<ul>
+<li><p><strong>API Tracing</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Enables API tracing and profiling APIs; more details in Tools programming guide</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Program Instrumentation</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Enables instrumentation of programs for profiling; more details in Tools programming guide</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>The following table documents the supported knobs for overriding default
+driver behavior.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 25%" />
+<col style="width: 8%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Values</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Device</p></td>
+<td><p>ZE_AFFINITY_MASK</p></td>
+<td><p>Hex String</p></td>
+<td><p>Forces driver to only report devices (and sub-devices) as specified by mask value</p></td>
+</tr>
+<tr class="row-odd"><td><p>Memory</p></td>
+<td><p>ZE_SHARED_FORCE_DEVICE_ALLOC</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Forces all shared allocations into device memory</p></td>
+</tr>
+<tr class="row-even"><td rowspan="5"><p>Validation</p></td>
+<td><p>ZE_ENABLE_VALIDATION_LAYER</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables validation layer for debugging</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZE_ENABLE_PARAMETER_VALIDATION</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the validation level for parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>ZE_ENABLE_HANDLE_LIFETIME</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the validation level for tracking handle lifetime</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZE_ENABLE_MEMORY_TRACKER</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the validation level for tracking memory lifetime</p></td>
+</tr>
+<tr class="row-even"><td><p>ZE_ENABLE_THREADING_VALIDATION</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the validation level for multithreading usage</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="5"><p>Instrumentation</p></td>
+<td><p>ZE_ENABLE_INSTRUMENTATION_LAYER</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables validation layer for debugging</p></td>
+</tr>
+<tr class="row-even"><td><p>ZE_ENABLE_API_TRACING</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the instrumentation for API tracing</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZE_ENABLE_METRICS</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the instrumentation for device metrics</p></td>
+</tr>
+<tr class="row-even"><td><p>ZE_ENABLE_PROGRAM_INSTRUMENTATION</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the instrumentation for program instrumentation</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZE_ENABLE_PROGRAM_DEBUGGING</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables the instrumentation for program debugging</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="affinity-mask">
+<h4>Affinity Mask<a class="headerlink" href="#affinity-mask" title="Permalink to this headline">¶</a></h4>
+<p>The affinity mask allows an application or tool to restrict which
+devices (and sub-devices) are visible to 3rd-party libraries or
+applications in another process, respectively. The affinity mask is
+specified via an environment variable as a string of hexadecimal values.
+The value is specific to system configuration; e.g., the number of
+devices and the number of sub-devices for each device.
+The following examples demonstrate proper usage:</p>
+<ul>
+<li><p>“” (empty string) = disabled; i.e. all devices and sub-devices are reported. This is the default value.</p></li>
+<li><p>Two devices, each with four sub-devices</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“FF” = all devices and sub-devices are reported (same as default)</p></li>
+<li><p>“0F” = only device 0 (with all its sub-devices) is reported</p></li>
+<li><p>“F0” = only device 1 (with all its sub-devices) is reported as device 0’</p></li>
+<li><p>“AA” = both device 0 and 1 are reported, however each only has two sub-devices reported as sub-device 0 and 1</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Two devices, device 0 with one sub-device and device 1 with two sub-devices</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>“07” = all devices and sub-devices are reported (same as default) + “01” = only device 0 (with all its sub-devices) is reported</p></li>
+<li><p>“06” = only device 1 (with all its sub-devices) is reported as device 0</p></li>
+<li><p>“05” = both device 0 and device 1 are reported, however each only has one sub-device reported as sub-device 0</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="tools">
+<span id="id1"></span><h2>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
+<p>Level-Zero APIs specific for supporting 3rd-party tools are separated
+from “Core” into “Tools” APIs. The “Tools” APIs are designed to provided
+low-level access to device capabilities in order to support 3rd-party
+tools, but are not intended to replace or directly interface 3rd-party
+tools. The “Tools” APIs are still available for direct application use.</p>
+<p>The following diagram illustrates how 3rd-party tools may utilize the instrumentation layer:</p>
+<img alt="../_images/intro_tools.png" src="../_images/intro_tools.png" />
+<p>The “Tools” APIs provide the following capabilities for 3rd-party tools:</p>
+<ul class="simple">
+<li><p>Allow for callbacks to be registered, in order to be notified of specific application events.</p></li>
+<li><p>Allow for device metrics to be queried, in order to profile application usage.</p></li>
+<li><p>Allow for application programs to be instrumented with custom instructions, for low-level code profiling.</p></li>
+<li><p>Allow for application programs to be debugged using breakpoints and register access.</p></li>
+</ul>
+<p>See the “Tools” programming guide for more details.</p>
+</div>
+<div class="section" id="system-management-1">
+<span id="id2"></span><h2>System Management<a class="headerlink" href="#system-management-1" title="Permalink to this headline">¶</a></h2>
+<p>All global management of accelerator resources are separated from “Core” into the “Sysman” API.</p>
+<p>The “Sysman” API provides in-band access to the following features for each accelerator device:</p>
+<ul class="simple">
+<li><p>Query inventory information</p></li>
+<li><p>Query information about host processes using the device</p></li>
+<li><p>Change the accelerator workload scheduling policies</p></li>
+<li><p>Query and control frequency/voltage/power</p></li>
+<li><p>Query temperature sensors</p></li>
+<li><p>Query load on various accelerator engines (overall, media, compute, copy)</p></li>
+<li><p>Query device memory bandwidth and health</p></li>
+<li><p>Query PCI bandwidth and health</p></li>
+<li><p>Query high-speed Fabric bandwidth and health</p></li>
+<li><p>Control the standby policy of the device</p></li>
+<li><p>Query ECC/RAS status of various components on the device</p></li>
+<li><p>Query power supply status</p></li>
+<li><p>Control LEDs</p></li>
+<li><p>Control fans</p></li>
+<li><p>Perform overclocking/under-voltage changes where appropriate</p></li>
+<li><p>Listen for events (temperature excursion, frequency throttling, RAS errors)</p></li>
+<li><p>Flash firmware</p></li>
+<li><p>Run diagnostics</p></li>
+<li><p>Reset the device</p></li>
+</ul>
+<p>By default, only administrator users have permissions to perform control
+operations on resources. Most queries are available to any user with the
+exception of those that could be used for side-channel attacks. The
+systems administrator can tighten/relax the default permissions.</p>
+<p>See the “Sysman” programming guide for more details.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="PROG.html" class="btn btn-neutral float-right" title="Core Programming Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="oneAPI Level Zero Specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

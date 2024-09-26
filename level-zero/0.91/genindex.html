@@ -1,0 +1,2660 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Index &mdash; Level Zero Specification  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+        <script type="text/javascript" src="_static/custom.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Level Zero Specification
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.91
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core/INTRO.html">Overview</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Core Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core/PROG.html">Core Programming Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tools Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tools/PROG.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/PROG.html#api-tracing">API Tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/PROG.html#metrics">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/PROG.html#program-instrumentation">Program Instrumentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/PROG.html#program-debug">Program Debug</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Sysman Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tools/SYSMAN.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/SYSMAN.html#high-level-overview">High-level overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/SYSMAN.html#interface-details">Interface details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/SYSMAN.html#security">Security</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SPIR-V Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html#common-properties">Common Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html#required-capabilities">Required Capabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html#validation-rules">Validation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html#extensions">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html#numerical-compliance">Numerical Compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html#image-addressing-and-filtering">Image Addressing and Filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core/api.html">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/api.html">Tools API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Latest Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html#previous-releases">Previous Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Level Zero Specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+
+    
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#Z"><strong>Z</strong></a>
+ 
+</div>
+<h2 id="Z">Z</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="core/api.html#_CPPv418ZE_API_VERSION_1_0">ZE_API_VERSION_1_0 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_api_version_t">ze_api_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ZE_CACHE_CONFIG_DEFAULT">ZE_CACHE_CONFIG_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_CACHE_CONFIG_LARGE_DATA">ZE_CACHE_CONFIG_LARGE_DATA (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_CACHE_CONFIG_LARGE_SLM">ZE_CACHE_CONFIG_LARGE_SLM (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417ze_cache_config_t">ze_cache_config_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ze_command_list_desc_t">ze_command_list_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_command_list_desc_t5flagsE">ze_command_list_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_command_list_desc_t7versionE">ze_command_list_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_COMMAND_LIST_DESC_VERSION_CURRENT">ZE_COMMAND_LIST_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ze_command_list_desc_version_t">ze_command_list_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_COMMAND_LIST_FLAG_COPY_ONLY">ZE_COMMAND_LIST_FLAG_COPY_ONLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY">ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv440ZE_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT">ZE_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_COMMAND_LIST_FLAG_NONE">ZE_COMMAND_LIST_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ZE_COMMAND_LIST_FLAG_RELAXED_ORDERING">ZE_COMMAND_LIST_FLAG_RELAXED_ORDERING (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ze_command_list_flag_t">ze_command_list_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ze_command_queue_desc_t">ze_command_queue_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N23ze_command_queue_desc_t5flagsE">ze_command_queue_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N23ze_command_queue_desc_t4modeE">ze_command_queue_desc_t::mode (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N23ze_command_queue_desc_t7ordinalE">ze_command_queue_desc_t::ordinal (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N23ze_command_queue_desc_t8priorityE">ze_command_queue_desc_t::priority (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N23ze_command_queue_desc_t7versionE">ze_command_queue_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT">ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ze_command_queue_desc_version_t">ze_command_queue_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ZE_COMMAND_QUEUE_FLAG_COPY_ONLY">ZE_COMMAND_QUEUE_FLAG_COPY_ONLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY">ZE_COMMAND_QUEUE_FLAG_LOGICAL_ONLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_COMMAND_QUEUE_FLAG_NONE">ZE_COMMAND_QUEUE_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv439ZE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY">ZE_COMMAND_QUEUE_FLAG_SINGLE_SLICE_ONLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv450ZE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS">ZE_COMMAND_QUEUE_FLAG_SUPPORTS_COOPERATIVE_KERNELS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ze_command_queue_flag_t">ze_command_queue_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUS">ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_COMMAND_QUEUE_MODE_DEFAULT">ZE_COMMAND_QUEUE_MODE_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433ZE_COMMAND_QUEUE_MODE_SYNCHRONOUS">ZE_COMMAND_QUEUE_MODE_SYNCHRONOUS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ze_command_queue_mode_t">ze_command_queue_mode_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_COMMAND_QUEUE_PRIORITY_HIGH">ZE_COMMAND_QUEUE_PRIORITY_HIGH (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_COMMAND_QUEUE_PRIORITY_LOW">ZE_COMMAND_QUEUE_PRIORITY_LOW (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ZE_COMMAND_QUEUE_PRIORITY_NORMAL">ZE_COMMAND_QUEUE_PRIORITY_NORMAL (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ze_command_queue_priority_t">ze_command_queue_priority_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_copy_region_t">ze_copy_region_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_copy_region_t5depthE">ze_copy_region_t::depth (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_copy_region_t6heightE">ze_copy_region_t::height (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_copy_region_t7originXE">ze_copy_region_t::originX (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_copy_region_t7originYE">ze_copy_region_t::originY (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_copy_region_t7originZE">ze_copy_region_t::originZ (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_copy_region_t5widthE">ze_copy_region_t::width (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ze_device_cache_properties_t">ze_device_cache_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_cache_properties_t33intermediateCacheControlSupportedE">ze_device_cache_properties_t::intermediateCacheControlSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_cache_properties_t25intermediateCachelineSizeE">ze_device_cache_properties_t::intermediateCachelineSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_cache_properties_t21intermediateCacheSizeE">ze_device_cache_properties_t::intermediateCacheSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_cache_properties_t22lastLevelCachelineSizeE">ze_device_cache_properties_t::lastLevelCachelineSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_cache_properties_t18lastLevelCacheSizeE">ze_device_cache_properties_t::lastLevelCacheSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_cache_properties_t34lastLevelCacheSizeControlSupportedE">ze_device_cache_properties_t::lastLevelCacheSizeControlSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_cache_properties_t7versionE">ze_device_cache_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv442ZE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_CACHE_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ze_device_cache_properties_version_t">ze_device_cache_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ze_device_compute_properties_t">ze_device_compute_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t14maxGroupCountXE">ze_device_compute_properties_t::maxGroupCountX (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t14maxGroupCountYE">ze_device_compute_properties_t::maxGroupCountY (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t14maxGroupCountZE">ze_device_compute_properties_t::maxGroupCountZ (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t13maxGroupSizeXE">ze_device_compute_properties_t::maxGroupSizeX (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t13maxGroupSizeYE">ze_device_compute_properties_t::maxGroupSizeY (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t13maxGroupSizeZE">ze_device_compute_properties_t::maxGroupSizeZ (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t20maxSharedLocalMemoryE">ze_device_compute_properties_t::maxSharedLocalMemory (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t17maxTotalGroupSizeE">ze_device_compute_properties_t::maxTotalGroupSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t16numSubGroupSizesE">ze_device_compute_properties_t::numSubGroupSizes (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t13subGroupSizesE">ze_device_compute_properties_t::subGroupSizes (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t7versionE">ze_device_compute_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv444ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_COMPUTE_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv438ze_device_compute_properties_version_t">ze_device_compute_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ze_device_image_properties_t">ze_device_image_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t19maxImageArraySlicesE">ze_device_image_properties_t::maxImageArraySlices (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t18maxImageBufferSizeE">ze_device_image_properties_t::maxImageBufferSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t14maxImageDims1DE">ze_device_image_properties_t::maxImageDims1D (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t14maxImageDims2DE">ze_device_image_properties_t::maxImageDims2D (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t14maxImageDims3DE">ze_device_image_properties_t::maxImageDims3D (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t16maxReadImageArgsE">ze_device_image_properties_t::maxReadImageArgs (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t11maxSamplersE">ze_device_image_properties_t::maxSamplers (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t17maxWriteImageArgsE">ze_device_image_properties_t::maxWriteImageArgs (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t9supportedE">ze_device_image_properties_t::supported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_image_properties_t7versionE">ze_device_image_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv442ZE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_IMAGE_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ze_device_image_properties_version_t">ze_device_image_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ze_device_kernel_properties_t">ze_device_kernel_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t20doubleFpCapabilitiesE">ze_device_kernel_properties_t::doubleFpCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t13dp4aSupportedE">ze_device_kernel_properties_t::dp4aSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t13fp16SupportedE">ze_device_kernel_properties_t::fp16Supported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t13fp64SupportedE">ze_device_kernel_properties_t::fp64Supported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t18halfFpCapabilitiesE">ze_device_kernel_properties_t::halfFpCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t21int64AtomicsSupportedE">ze_device_kernel_properties_t::int64AtomicsSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t16maxArgumentsSizeE">ze_device_kernel_properties_t::maxArgumentsSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t21nativeKernelSupportedE">ze_device_kernel_properties_t::nativeKernelSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t16printfBufferSizeE">ze_device_kernel_properties_t::printfBufferSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t20singleFpCapabilitiesE">ze_device_kernel_properties_t::singleFpCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t21spirvVersionSupportedE">ze_device_kernel_properties_t::spirvVersionSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_kernel_properties_t7versionE">ze_device_kernel_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv443ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_KERNEL_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ze_device_kernel_properties_version_t">ze_device_kernel_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ze_device_mem_alloc_desc_t">ze_device_mem_alloc_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_device_mem_alloc_desc_t5flagsE">ze_device_mem_alloc_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_device_mem_alloc_desc_t7ordinalE">ze_device_mem_alloc_desc_t::ordinal (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_device_mem_alloc_desc_t7versionE">ze_device_mem_alloc_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv440ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT">ZE_DEVICE_MEM_ALLOC_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ze_device_mem_alloc_desc_version_t">ze_device_mem_alloc_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED">ZE_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv438ZE_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED">ZE_DEVICE_MEM_ALLOC_FLAG_BIAS_UNCACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ZE_DEVICE_MEM_ALLOC_FLAG_DEFAULT">ZE_DEVICE_MEM_ALLOC_FLAG_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ze_device_mem_alloc_flag_t">ze_device_mem_alloc_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ze_device_memory_access_properties_t">ze_device_memory_access_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_device_memory_access_properties_t23deviceAllocCapabilitiesE">ze_device_memory_access_properties_t::deviceAllocCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_device_memory_access_properties_t21hostAllocCapabilitiesE">ze_device_memory_access_properties_t::hostAllocCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_device_memory_access_properties_t34sharedCrossDeviceAllocCapabilitiesE">ze_device_memory_access_properties_t::sharedCrossDeviceAllocCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_device_memory_access_properties_t35sharedSingleDeviceAllocCapabilitiesE">ze_device_memory_access_properties_t::sharedSingleDeviceAllocCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_device_memory_access_properties_t29sharedSystemAllocCapabilitiesE">ze_device_memory_access_properties_t::sharedSystemAllocCapabilities (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_device_memory_access_properties_t7versionE">ze_device_memory_access_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv450ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_MEMORY_ACCESS_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv444ze_device_memory_access_properties_version_t">ze_device_memory_access_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ze_device_memory_properties_t">ze_device_memory_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_memory_properties_t11maxBusWidthE">ze_device_memory_properties_t::maxBusWidth (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_memory_properties_t12maxClockRateE">ze_device_memory_properties_t::maxClockRate (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_memory_properties_t9totalSizeE">ze_device_memory_properties_t::totalSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_device_memory_properties_t7versionE">ze_device_memory_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv443ZE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_MEMORY_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ze_device_memory_properties_version_t">ze_device_memory_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ze_device_p2p_properties_t">ze_device_p2p_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_device_p2p_properties_t15accessSupportedE">ze_device_p2p_properties_t::accessSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_device_p2p_properties_t16atomicsSupportedE">ze_device_p2p_properties_t::atomicsSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_device_p2p_properties_t7versionE">ze_device_p2p_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv440ZE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_P2P_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ze_device_p2p_properties_version_t">ze_device_p2p_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ze_device_properties_t">ze_device_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t13coreClockRateE">ze_device_properties_t::coreClockRate (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t8deviceIdE">ze_device_properties_t::deviceId (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t18eccMemorySupportedE">ze_device_properties_t::eccMemorySupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t11isSubdeviceE">ze_device_properties_t::isSubdevice (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t23maxCommandQueuePriorityE">ze_device_properties_t::maxCommandQueuePriority (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t16maxCommandQueuesE">ze_device_properties_t::maxCommandQueues (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t4nameE">ze_device_properties_t::name (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t22numAsyncComputeEnginesE">ze_device_properties_t::numAsyncComputeEngines (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t19numAsyncCopyEnginesE">ze_device_properties_t::numAsyncCopyEngines (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t17numEUsPerSubsliceE">ze_device_properties_t::numEUsPerSubslice (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t9numSlicesE">ze_device_properties_t::numSlices (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t20numSubslicesPerSliceE">ze_device_properties_t::numSubslicesPerSlice (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t15numThreadsPerEUE">ze_device_properties_t::numThreadsPerEU (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t27onDemandPageFaultsSupportedE">ze_device_properties_t::onDemandPageFaultsSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t19physicalEUSimdWidthE">ze_device_properties_t::physicalEUSimdWidth (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t11subdeviceIdE">ze_device_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t15timerResolutionE">ze_device_properties_t::timerResolution (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t4typeE">ze_device_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t22unifiedMemorySupportedE">ze_device_properties_t::unifiedMemorySupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t4uuidE">ze_device_properties_t::uuid (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t8vendorIdE">ze_device_properties_t::vendorId (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_device_properties_t7versionE">ze_device_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_DEVICE_PROPERTIES_VERSION_CURRENT">ZE_DEVICE_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ze_device_properties_version_t">ze_device_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419ZE_DEVICE_TYPE_FPGA">ZE_DEVICE_TYPE_FPGA (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418ZE_DEVICE_TYPE_GPU">ZE_DEVICE_TYPE_GPU (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_device_type_t">ze_device_type_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_device_uuid_t">ze_device_uuid_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_device_uuid_t2idE">ze_device_uuid_t::id (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ze_driver_ipc_properties_t">ze_driver_ipc_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_driver_ipc_properties_t15eventsSupportedE">ze_driver_ipc_properties_t::eventsSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_driver_ipc_properties_t13memsSupportedE">ze_driver_ipc_properties_t::memsSupported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_driver_ipc_properties_t7versionE">ze_driver_ipc_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv440ZE_DRIVER_IPC_PROPERTIES_VERSION_CURRENT">ZE_DRIVER_IPC_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ze_driver_ipc_properties_version_t">ze_driver_ipc_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ze_driver_properties_t">ze_driver_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_driver_properties_t13driverVersionE">ze_driver_properties_t::driverVersion (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_driver_properties_t4uuidE">ze_driver_properties_t::uuid (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_driver_properties_t7versionE">ze_driver_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_DRIVER_PROPERTIES_VERSION_CURRENT">ZE_DRIVER_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ze_driver_properties_version_t">ze_driver_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_driver_uuid_t">ze_driver_uuid_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_driver_uuid_t2idE">ze_driver_uuid_t::id (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415ze_event_desc_t">ze_event_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_event_desc_t5indexE">ze_event_desc_t::index (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_event_desc_t6signalE">ze_event_desc_t::signal (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_event_desc_t7versionE">ze_event_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_event_desc_t4waitE">ze_event_desc_t::wait (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_EVENT_DESC_VERSION_CURRENT">ZE_EVENT_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ze_event_desc_version_t">ze_event_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420ze_event_pool_desc_t">ze_event_pool_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N20ze_event_pool_desc_t5countE">ze_event_pool_desc_t::count (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N20ze_event_pool_desc_t5flagsE">ze_event_pool_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N20ze_event_pool_desc_t7versionE">ze_event_pool_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_EVENT_POOL_DESC_VERSION_CURRENT">ZE_EVENT_POOL_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ze_event_pool_desc_version_t">ze_event_pool_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_EVENT_POOL_FLAG_DEFAULT">ZE_EVENT_POOL_FLAG_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ZE_EVENT_POOL_FLAG_HOST_VISIBLE">ZE_EVENT_POOL_FLAG_HOST_VISIBLE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ZE_EVENT_POOL_FLAG_IPC">ZE_EVENT_POOL_FLAG_IPC (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420ze_event_pool_flag_t">ze_event_pool_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ZE_EVENT_POOL_FLAG_TIMESTAMP">ZE_EVENT_POOL_FLAG_TIMESTAMP (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_EVENT_SCOPE_FLAG_DEVICE">ZE_EVENT_SCOPE_FLAG_DEVICE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ZE_EVENT_SCOPE_FLAG_HOST">ZE_EVENT_SCOPE_FLAG_HOST (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ZE_EVENT_SCOPE_FLAG_NONE">ZE_EVENT_SCOPE_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_EVENT_SCOPE_FLAG_SUBDEVICE">ZE_EVENT_SCOPE_FLAG_SUBDEVICE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ze_event_scope_flag_t">ze_event_scope_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_EVENT_TIMESTAMP_CONTEXT_END">ZE_EVENT_TIMESTAMP_CONTEXT_END (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ZE_EVENT_TIMESTAMP_CONTEXT_START">ZE_EVENT_TIMESTAMP_CONTEXT_START (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_EVENT_TIMESTAMP_GLOBAL_END">ZE_EVENT_TIMESTAMP_GLOBAL_END (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ZE_EVENT_TIMESTAMP_GLOBAL_START">ZE_EVENT_TIMESTAMP_GLOBAL_START (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ze_event_timestamp_type_t">ze_event_timestamp_type_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415ze_fence_desc_t">ze_fence_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_fence_desc_t5flagsE">ze_fence_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_fence_desc_t7versionE">ze_fence_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_FENCE_DESC_VERSION_CURRENT">ZE_FENCE_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ze_fence_desc_version_t">ze_fence_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418ZE_FENCE_FLAG_NONE">ZE_FENCE_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415ze_fence_flag_t">ze_fence_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420ze_fp_capabilities_t">ze_fp_capabilities_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417ZE_FP_CAPS_DENORM">ZE_FP_CAPS_DENORM (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv414ZE_FP_CAPS_FMA">ZE_FP_CAPS_FMA (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418ZE_FP_CAPS_INF_NAN">ZE_FP_CAPS_INF_NAN (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415ZE_FP_CAPS_NONE">ZE_FP_CAPS_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ZE_FP_CAPS_ROUND_TO_INF">ZE_FP_CAPS_ROUND_TO_INF (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_FP_CAPS_ROUND_TO_NEAREST">ZE_FP_CAPS_ROUND_TO_NEAREST (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ZE_FP_CAPS_ROUND_TO_ZERO">ZE_FP_CAPS_ROUND_TO_ZERO (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_FP_CAPS_ROUNDED_DIVIDE_SQRT">ZE_FP_CAPS_ROUNDED_DIVIDE_SQRT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ZE_FP_CAPS_SOFT_FLOAT">ZE_FP_CAPS_SOFT_FLOAT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_group_count_t">ze_group_count_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_group_count_t11groupCountXE">ze_group_count_t::groupCountX (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_group_count_t11groupCountYE">ze_group_count_t::groupCountY (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_group_count_t11groupCountZE">ze_group_count_t::groupCountZ (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ze_host_mem_alloc_desc_t">ze_host_mem_alloc_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N24ze_host_mem_alloc_desc_t5flagsE">ze_host_mem_alloc_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N24ze_host_mem_alloc_desc_t7versionE">ze_host_mem_alloc_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv438ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT">ZE_HOST_MEM_ALLOC_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ze_host_mem_alloc_desc_version_t">ze_host_mem_alloc_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_HOST_MEM_ALLOC_FLAG_BIAS_CACHED">ZE_HOST_MEM_ALLOC_FLAG_BIAS_CACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_HOST_MEM_ALLOC_FLAG_BIAS_UNCACHED">ZE_HOST_MEM_ALLOC_FLAG_BIAS_UNCACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv442ZE_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED">ZE_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_HOST_MEM_ALLOC_FLAG_DEFAULT">ZE_HOST_MEM_ALLOC_FLAG_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ze_host_mem_alloc_flag_t">ze_host_mem_alloc_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415ze_image_desc_t">ze_image_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t11arraylevelsE">ze_image_desc_t::arraylevels (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t5depthE">ze_image_desc_t::depth (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t5flagsE">ze_image_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t6formatE">ze_image_desc_t::format (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t6heightE">ze_image_desc_t::height (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t9miplevelsE">ze_image_desc_t::miplevels (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t4typeE">ze_image_desc_t::type (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t7versionE">ze_image_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N15ze_image_desc_t5widthE">ze_image_desc_t::width (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_IMAGE_DESC_VERSION_CURRENT">ZE_IMAGE_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ze_image_desc_version_t">ze_image_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FLAG_BIAS_CACHED">ZE_IMAGE_FLAG_BIAS_CACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FLAG_BIAS_UNCACHED">ZE_IMAGE_FLAG_BIAS_UNCACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_IMAGE_FLAG_PROGRAM_READ">ZE_IMAGE_FLAG_PROGRAM_READ (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FLAG_PROGRAM_WRITE">ZE_IMAGE_FLAG_PROGRAM_WRITE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415ze_image_flag_t">ze_image_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ze_image_format_desc_t">ze_image_format_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_image_format_desc_t6layoutE">ze_image_format_desc_t::layout (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_image_format_desc_t4typeE">ze_image_format_desc_t::type (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_image_format_desc_t1wE">ze_image_format_desc_t::w (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_image_format_desc_t1xE">ze_image_format_desc_t::x (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_image_format_desc_t1yE">ze_image_format_desc_t::y (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_image_format_desc_t1zE">ze_image_format_desc_t::z (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2">ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ZE_IMAGE_FORMAT_LAYOUT_11_11_10">ZE_IMAGE_FORMAT_LAYOUT_11_11_10 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_LAYOUT_16">ZE_IMAGE_FORMAT_LAYOUT_16 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ZE_IMAGE_FORMAT_LAYOUT_16_16">ZE_IMAGE_FORMAT_LAYOUT_16_16 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16">ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_LAYOUT_32">ZE_IMAGE_FORMAT_LAYOUT_32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ZE_IMAGE_FORMAT_LAYOUT_32_32">ZE_IMAGE_FORMAT_LAYOUT_32_32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32">ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4">ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1">ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ZE_IMAGE_FORMAT_LAYOUT_5_6_5">ZE_IMAGE_FORMAT_LAYOUT_5_6_5 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ZE_IMAGE_FORMAT_LAYOUT_8">ZE_IMAGE_FORMAT_LAYOUT_8 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_IMAGE_FORMAT_LAYOUT_8_8">ZE_IMAGE_FORMAT_LAYOUT_8_8 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8">ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_AYUV">ZE_IMAGE_FORMAT_LAYOUT_AYUV (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_NV12">ZE_IMAGE_FORMAT_LAYOUT_NV12 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_P010">ZE_IMAGE_FORMAT_LAYOUT_P010 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_P012">ZE_IMAGE_FORMAT_LAYOUT_P012 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_P016">ZE_IMAGE_FORMAT_LAYOUT_P016 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_P216">ZE_IMAGE_FORMAT_LAYOUT_P216 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ze_image_format_layout_t">ze_image_format_layout_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_UYVY">ZE_IMAGE_FORMAT_LAYOUT_UYVY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_VYUY">ZE_IMAGE_FORMAT_LAYOUT_VYUY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_IMAGE_FORMAT_LAYOUT_Y16">ZE_IMAGE_FORMAT_LAYOUT_Y16 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_Y216">ZE_IMAGE_FORMAT_LAYOUT_Y216 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_Y410">ZE_IMAGE_FORMAT_LAYOUT_Y410 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_LAYOUT_Y8">ZE_IMAGE_FORMAT_LAYOUT_Y8 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_YUYV">ZE_IMAGE_FORMAT_LAYOUT_YUYV (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_IMAGE_FORMAT_LAYOUT_YVYU">ZE_IMAGE_FORMAT_LAYOUT_YVYU (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_SWIZZLE_0">ZE_IMAGE_FORMAT_SWIZZLE_0 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_SWIZZLE_1">ZE_IMAGE_FORMAT_SWIZZLE_1 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_SWIZZLE_A">ZE_IMAGE_FORMAT_SWIZZLE_A (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_SWIZZLE_B">ZE_IMAGE_FORMAT_SWIZZLE_B (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_SWIZZLE_G">ZE_IMAGE_FORMAT_SWIZZLE_G (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_SWIZZLE_R">ZE_IMAGE_FORMAT_SWIZZLE_R (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ze_image_format_swizzle_t">ze_image_format_swizzle_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_SWIZZLE_X">ZE_IMAGE_FORMAT_SWIZZLE_X (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_IMAGE_FORMAT_TYPE_FLOAT">ZE_IMAGE_FORMAT_TYPE_FLOAT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_TYPE_SINT">ZE_IMAGE_FORMAT_TYPE_SINT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_IMAGE_FORMAT_TYPE_SNORM">ZE_IMAGE_FORMAT_TYPE_SNORM (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ze_image_format_type_t">ze_image_format_type_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_IMAGE_FORMAT_TYPE_UINT">ZE_IMAGE_FORMAT_TYPE_UINT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ZE_IMAGE_FORMAT_TYPE_UNORM">ZE_IMAGE_FORMAT_TYPE_UNORM (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ze_image_properties_t">ze_image_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N21ze_image_properties_t18samplerFilterFlagsE">ze_image_properties_t::samplerFilterFlags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N21ze_image_properties_t7versionE">ze_image_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_IMAGE_PROPERTIES_VERSION_CURRENT">ZE_IMAGE_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ze_image_properties_version_t">ze_image_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417ze_image_region_t">ze_image_region_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_image_region_t5depthE">ze_image_region_t::depth (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_image_region_t6heightE">ze_image_region_t::height (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_image_region_t7originXE">ze_image_region_t::originX (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_image_region_t7originYE">ze_image_region_t::originY (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_image_region_t7originZE">ze_image_region_t::originZ (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_image_region_t5widthE">ze_image_region_t::width (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR">ZE_IMAGE_SAMPLER_FILTER_FLAGS_LINEAR (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_IMAGE_SAMPLER_FILTER_FLAGS_NONE">ZE_IMAGE_SAMPLER_FILTER_FLAGS_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_IMAGE_SAMPLER_FILTER_FLAGS_POINT">ZE_IMAGE_SAMPLER_FILTER_FLAGS_POINT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ze_image_sampler_filter_flags_t">ze_image_sampler_filter_flags_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ZE_IMAGE_TYPE_1D">ZE_IMAGE_TYPE_1D (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ZE_IMAGE_TYPE_1DARRAY">ZE_IMAGE_TYPE_1DARRAY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ZE_IMAGE_TYPE_2D">ZE_IMAGE_TYPE_2D (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ZE_IMAGE_TYPE_2DARRAY">ZE_IMAGE_TYPE_2DARRAY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ZE_IMAGE_TYPE_3D">ZE_IMAGE_TYPE_3D (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420ZE_IMAGE_TYPE_BUFFER">ZE_IMAGE_TYPE_BUFFER (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415ze_image_type_t">ze_image_type_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ZE_INIT_FLAG_GPU_ONLY">ZE_INIT_FLAG_GPU_ONLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417ZE_INIT_FLAG_NONE">ZE_INIT_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv414ze_init_flag_t">ze_init_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426ze_ipc_event_pool_handle_t">ze_ipc_event_pool_handle_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_ipc_event_pool_handle_t4dataE">ze_ipc_event_pool_handle_t::data (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419ze_ipc_mem_handle_t">ze_ipc_mem_handle_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N19ze_ipc_mem_handle_t4dataE">ze_ipc_mem_handle_t::data (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ZE_IPC_MEMORY_FLAG_NONE">ZE_IPC_MEMORY_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420ze_ipc_memory_flag_t">ze_ipc_memory_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ZE_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS">ZE_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_KERNEL_ATTR_INDIRECT_HOST_ACCESS">ZE_KERNEL_ATTR_INDIRECT_HOST_ACCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ZE_KERNEL_ATTR_INDIRECT_SHARED_ACCESS">ZE_KERNEL_ATTR_INDIRECT_SHARED_ACCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ZE_KERNEL_ATTR_SOURCE_ATTRIBUTE">ZE_KERNEL_ATTR_SOURCE_ATTRIBUTE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ze_kernel_attribute_t">ze_kernel_attribute_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_kernel_desc_t">ze_kernel_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_kernel_desc_t5flagsE">ze_kernel_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_kernel_desc_t11pKernelNameE">ze_kernel_desc_t::pKernelName (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_kernel_desc_t7versionE">ze_kernel_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_KERNEL_DESC_VERSION_CURRENT">ZE_KERNEL_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ze_kernel_desc_version_t">ze_kernel_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_KERNEL_FLAG_FORCE_RESIDENCY">ZE_KERNEL_FLAG_FORCE_RESIDENCY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419ZE_KERNEL_FLAG_NONE">ZE_KERNEL_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_kernel_flag_t">ze_kernel_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ze_kernel_properties_t">ze_kernel_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_kernel_properties_t4nameE">ze_kernel_properties_t::name (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_kernel_properties_t13numKernelArgsE">ze_kernel_properties_t::numKernelArgs (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_kernel_properties_t18requiredGroupSizeXE">ze_kernel_properties_t::requiredGroupSizeX (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_kernel_properties_t18requiredGroupSizeYE">ze_kernel_properties_t::requiredGroupSizeY (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_kernel_properties_t18requiredGroupSizeZE">ze_kernel_properties_t::requiredGroupSizeZ (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N22ze_kernel_properties_t7versionE">ze_kernel_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_KERNEL_PROPERTIES_VERSION_CURRENT">ZE_KERNEL_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ze_kernel_properties_version_t">ze_kernel_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ZE_MEMORY_ACCESS">ZE_MEMORY_ACCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ze_memory_access_capabilities_t">ze_memory_access_capabilities_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ZE_MEMORY_ACCESS_NONE">ZE_MEMORY_ACCESS_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ZE_MEMORY_ADVICE_BIAS_CACHED">ZE_MEMORY_ADVICE_BIAS_CACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_MEMORY_ADVICE_BIAS_UNCACHED">ZE_MEMORY_ADVICE_BIAS_UNCACHED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_MEMORY_ADVICE_CLEAR_ACCESSED_BY">ZE_MEMORY_ADVICE_CLEAR_ACCESSED_BY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv440ZE_MEMORY_ADVICE_CLEAR_NON_ATOMIC_MOSTLY">ZE_MEMORY_ADVICE_CLEAR_NON_ATOMIC_MOSTLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv441ZE_MEMORY_ADVICE_CLEAR_PREFERRED_LOCATION">ZE_MEMORY_ADVICE_CLEAR_PREFERRED_LOCATION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_MEMORY_ADVICE_CLEAR_READ_MOSTLY">ZE_MEMORY_ADVICE_CLEAR_READ_MOSTLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ZE_MEMORY_ADVICE_SET_ACCESSED_BY">ZE_MEMORY_ADVICE_SET_ACCESSED_BY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv438ZE_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY">ZE_MEMORY_ADVICE_SET_NON_ATOMIC_MOSTLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv439ZE_MEMORY_ADVICE_SET_PREFERRED_LOCATION">ZE_MEMORY_ADVICE_SET_PREFERRED_LOCATION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ZE_MEMORY_ADVICE_SET_READ_MOSTLY">ZE_MEMORY_ADVICE_SET_READ_MOSTLY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418ze_memory_advice_t">ze_memory_advice_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433ze_memory_allocation_properties_t">ze_memory_allocation_properties_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_memory_allocation_properties_t2idE">ze_memory_allocation_properties_t::id (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_memory_allocation_properties_t4typeE">ze_memory_allocation_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_memory_allocation_properties_t7versionE">ze_memory_allocation_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv447ZE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT">ZE_MEMORY_ALLOCATION_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv441ze_memory_allocation_properties_version_t">ze_memory_allocation_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ZE_MEMORY_ATOMIC_ACCESS">ZE_MEMORY_ATOMIC_ACCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_MEMORY_CONCURRENT_ACCESS">ZE_MEMORY_CONCURRENT_ACCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_MEMORY_CONCURRENT_ATOMIC_ACCESS">ZE_MEMORY_CONCURRENT_ATOMIC_ACCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ZE_MEMORY_TYPE_DEVICE">ZE_MEMORY_TYPE_DEVICE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419ZE_MEMORY_TYPE_HOST">ZE_MEMORY_TYPE_HOST (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ZE_MEMORY_TYPE_SHARED">ZE_MEMORY_TYPE_SHARED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_memory_type_t">ze_memory_type_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422ZE_MEMORY_TYPE_UNKNOWN">ZE_MEMORY_TYPE_UNKNOWN (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421ze_module_constants_t">ze_module_constants_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N21ze_module_constants_t12numConstantsE">ze_module_constants_t::numConstants (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N21ze_module_constants_t12pConstantIdsE">ze_module_constants_t::pConstantIds (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N21ze_module_constants_t15pConstantValuesE">ze_module_constants_t::pConstantValues (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416ze_module_desc_t">ze_module_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_module_desc_t6formatE">ze_module_desc_t::format (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_module_desc_t9inputSizeE">ze_module_desc_t::inputSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_module_desc_t11pBuildFlagsE">ze_module_desc_t::pBuildFlags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_module_desc_t10pConstantsE">ze_module_desc_t::pConstants (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_module_desc_t12pInputModuleE">ze_module_desc_t::pInputModule (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_module_desc_t7versionE">ze_module_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_MODULE_DESC_VERSION_CURRENT">ZE_MODULE_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ze_module_desc_version_t">ze_module_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ZE_MODULE_FORMAT_IL_SPIRV">ZE_MODULE_FORMAT_IL_SPIRV (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ZE_MODULE_FORMAT_NATIVE">ZE_MODULE_FORMAT_NATIVE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418ze_module_format_t">ze_module_format_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ze_native_kernel_uuid_t">ze_native_kernel_uuid_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N23ze_native_kernel_uuid_t2idE">ze_native_kernel_uuid_t::id (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427ZE_RESULT_ERROR_DEVICE_LOST">ZE_RESULT_ERROR_DEVICE_LOST (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv440ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ZE_RESULT_ERROR_INVALID_ARGUMENT">ZE_RESULT_ERROR_INVALID_ARGUMENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv441ZE_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE">ZE_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_RESULT_ERROR_INVALID_ENUMERATION">ZE_RESULT_ERROR_INVALID_ENUMERATION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ZE_RESULT_ERROR_INVALID_FUNCTION_NAME">ZE_RESULT_ERROR_INVALID_FUNCTION_NAME (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_RESULT_ERROR_INVALID_GLOBAL_NAME">ZE_RESULT_ERROR_INVALID_GLOBAL_NAME (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv446ZE_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION">ZE_RESULT_ERROR_INVALID_GLOBAL_WIDTH_DIMENSION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv444ZE_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION">ZE_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv445ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX">ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv444ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE">ZE_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv446ZE_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE">ZE_RESULT_ERROR_INVALID_KERNEL_ATTRIBUTE_VALUE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_RESULT_ERROR_INVALID_KERNEL_NAME">ZE_RESULT_ERROR_INVALID_KERNEL_NAME (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ZE_RESULT_ERROR_INVALID_NATIVE_BINARY">ZE_RESULT_ERROR_INVALID_NATIVE_BINARY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_RESULT_ERROR_INVALID_NULL_HANDLE">ZE_RESULT_ERROR_INVALID_NULL_HANDLE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_RESULT_ERROR_INVALID_NULL_POINTER">ZE_RESULT_ERROR_INVALID_NULL_POINTER (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ZE_RESULT_ERROR_INVALID_SIZE">ZE_RESULT_ERROR_INVALID_SIZE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv446ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT">ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_RESULT_ERROR_MODULE_BUILD_FAILURE">ZE_RESULT_ERROR_MODULE_BUILD_FAILURE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_RESULT_ERROR_NOT_AVAILABLE">ZE_RESULT_ERROR_NOT_AVAILABLE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_RESULT_ERROR_OVERLAPPING_REGIONS">ZE_RESULT_ERROR_OVERLAPPING_REGIONS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_RESULT_ERROR_UNINITIALIZED">ZE_RESULT_ERROR_UNINITIALIZED (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423ZE_RESULT_ERROR_UNKNOWN">ZE_RESULT_ERROR_UNKNOWN (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT">ZE_RESULT_ERROR_UNSUPPORTED_ALIGNMENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv439ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_RESULT_ERROR_UNSUPPORTED_FEATURE">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv440ZE_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT">ZE_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432ZE_RESULT_ERROR_UNSUPPORTED_SIZE">ZE_RESULT_ERROR_UNSUPPORTED_SIZE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435ZE_RESULT_ERROR_UNSUPPORTED_VERSION">ZE_RESULT_ERROR_UNSUPPORTED_VERSION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419ZE_RESULT_NOT_READY">ZE_RESULT_NOT_READY (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417ZE_RESULT_SUCCESS">ZE_RESULT_SUCCESS (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv411ze_result_t">ze_result_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_SAMPLER_ADDRESS_MODE_CLAMP">ZE_SAMPLER_ADDRESS_MODE_CLAMP (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv439ZE_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER">ZE_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_SAMPLER_ADDRESS_MODE_MIRROR">ZE_SAMPLER_ADDRESS_MODE_MIRROR (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ZE_SAMPLER_ADDRESS_MODE_NONE">ZE_SAMPLER_ADDRESS_MODE_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_SAMPLER_ADDRESS_MODE_REPEAT">ZE_SAMPLER_ADDRESS_MODE_REPEAT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ze_sampler_address_mode_t">ze_sampler_address_mode_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417ze_sampler_desc_t">ze_sampler_desc_t (C++ class)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_sampler_desc_t11addressModeE">ze_sampler_desc_t::addressMode (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_sampler_desc_t10filterModeE">ze_sampler_desc_t::filterMode (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_sampler_desc_t12isNormalizedE">ze_sampler_desc_t::isNormalized (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N17ze_sampler_desc_t7versionE">ze_sampler_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431ZE_SAMPLER_DESC_VERSION_CURRENT">ZE_SAMPLER_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ze_sampler_desc_version_t">ze_sampler_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ZE_SAMPLER_FILTER_MODE_LINEAR">ZE_SAMPLER_FILTER_MODE_LINEAR (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430ZE_SAMPLER_FILTER_MODE_NEAREST">ZE_SAMPLER_FILTER_MODE_NEAREST (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424ze_sampler_filter_mode_t">ze_sampler_filter_mode_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426zeCommandListAppendBarrier24ze_command_list_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t">zeCommandListAppendBarrier (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429zeCommandListAppendEventReset24ze_command_list_handle_t17ze_event_handle_t">zeCommandListAppendEventReset (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428zeCommandListAppendImageCopy24ze_command_list_handle_t17ze_image_handle_t17ze_image_handle_t17ze_event_handle_t">zeCommandListAppendImageCopy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv438zeCommandListAppendImageCopyFromMemory24ze_command_list_handle_t17ze_image_handle_tPKvPK17ze_image_region_t17ze_event_handle_t">zeCommandListAppendImageCopyFromMemory (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434zeCommandListAppendImageCopyRegion24ze_command_list_handle_t17ze_image_handle_t17ze_image_handle_tPK17ze_image_region_tPK17ze_image_region_t17ze_event_handle_t">zeCommandListAppendImageCopyRegion (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436zeCommandListAppendImageCopyToMemory24ze_command_list_handle_tPv17ze_image_handle_tPK17ze_image_region_t17ze_event_handle_t">zeCommandListAppendImageCopyToMemory (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv442zeCommandListAppendLaunchCooperativeKernel24ze_command_list_handle_t18ze_kernel_handle_tPK16ze_group_count_t17ze_event_handle_t8uint32_tP17ze_event_handle_t">zeCommandListAppendLaunchCooperativeKernel (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431zeCommandListAppendLaunchKernel24ze_command_list_handle_t18ze_kernel_handle_tPK16ze_group_count_t17ze_event_handle_t8uint32_tP17ze_event_handle_t">zeCommandListAppendLaunchKernel (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv439zeCommandListAppendLaunchKernelIndirect24ze_command_list_handle_t18ze_kernel_handle_tPK16ze_group_count_t17ze_event_handle_t8uint32_tP17ze_event_handle_t">zeCommandListAppendLaunchKernelIndirect (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv448zeCommandListAppendLaunchMultipleKernelsIndirect24ze_command_list_handle_t8uint32_tP18ze_kernel_handle_tPK8uint32_tPK16ze_group_count_t17ze_event_handle_t8uint32_tP17ze_event_handle_t">zeCommandListAppendLaunchMultipleKernelsIndirect (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428zeCommandListAppendMemAdvise24ze_command_list_handle_t18ze_device_handle_tPKv6size_t18ze_memory_advice_t">zeCommandListAppendMemAdvise (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429zeCommandListAppendMemoryCopy24ze_command_list_handle_tPvPKv6size_t17ze_event_handle_t">zeCommandListAppendMemoryCopy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435zeCommandListAppendMemoryCopyRegion24ze_command_list_handle_tPvPK16ze_copy_region_t8uint32_t8uint32_tPKvPK16ze_copy_region_t8uint32_t8uint32_t17ze_event_handle_t">zeCommandListAppendMemoryCopyRegion (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429zeCommandListAppendMemoryFill24ze_command_list_handle_tPvPKv6size_t6size_t17ze_event_handle_t">zeCommandListAppendMemoryFill (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433zeCommandListAppendMemoryPrefetch24ze_command_list_handle_tPKv6size_t">zeCommandListAppendMemoryPrefetch (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv438zeCommandListAppendMemoryRangesBarrier24ze_command_list_handle_t8uint32_tPK6size_tPPKv17ze_event_handle_t8uint32_tP17ze_event_handle_t">zeCommandListAppendMemoryRangesBarrier (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv430zeCommandListAppendSignalEvent24ze_command_list_handle_t17ze_event_handle_t">zeCommandListAppendSignalEvent (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431zeCommandListAppendWaitOnEvents24ze_command_list_handle_t8uint32_tP17ze_event_handle_t">zeCommandListAppendWaitOnEvents (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418zeCommandListClose24ze_command_list_handle_t">zeCommandListClose (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419zeCommandListCreate18ze_device_handle_tPK22ze_command_list_desc_tP24ze_command_list_handle_t">zeCommandListCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428zeCommandListCreateImmediate18ze_device_handle_tPK23ze_command_queue_desc_tP24ze_command_list_handle_t">zeCommandListCreateImmediate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420zeCommandListDestroy24ze_command_list_handle_t">zeCommandListDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418zeCommandListReset24ze_command_list_handle_t">zeCommandListReset (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420zeCommandQueueCreate18ze_device_handle_tPK23ze_command_queue_desc_tP25ze_command_queue_handle_t">zeCommandQueueCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeCommandQueueDestroy25ze_command_queue_handle_t">zeCommandQueueDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433zeCommandQueueExecuteCommandLists25ze_command_queue_handle_t8uint32_tP24ze_command_list_handle_t17ze_fence_handle_t">zeCommandQueueExecuteCommandLists (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425zeCommandQueueSynchronize25ze_command_queue_handle_t8uint32_t">zeCommandQueueSynchronize (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeDeviceCanAccessPeer18ze_device_handle_t18ze_device_handle_tP9ze_bool_t">zeDeviceCanAccessPeer (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418zeDeviceEvictImage18ze_device_handle_t17ze_image_handle_t">zeDeviceEvictImage (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419zeDeviceEvictMemory18ze_device_handle_tPv6size_t">zeDeviceEvictMemory (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv411zeDeviceGet18ze_driver_handle_tP8uint32_tP18ze_device_handle_t">zeDeviceGet (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426zeDeviceGetCacheProperties18ze_device_handle_tP28ze_device_cache_properties_t">zeDeviceGetCacheProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428zeDeviceGetComputeProperties18ze_device_handle_tP30ze_device_compute_properties_t">zeDeviceGetComputeProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426zeDeviceGetImageProperties18ze_device_handle_tP28ze_device_image_properties_t">zeDeviceGetImageProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427zeDeviceGetKernelProperties18ze_device_handle_tP29ze_device_kernel_properties_t">zeDeviceGetKernelProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433zeDeviceGetMemoryAccessProperties18ze_device_handle_tP36ze_device_memory_access_properties_t">zeDeviceGetMemoryAccessProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv427zeDeviceGetMemoryProperties18ze_device_handle_tP8uint32_tP29ze_device_memory_properties_t">zeDeviceGetMemoryProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424zeDeviceGetP2PProperties18ze_device_handle_t18ze_device_handle_tP26ze_device_p2p_properties_t">zeDeviceGetP2PProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeDeviceGetProperties18ze_device_handle_tP22ze_device_properties_t">zeDeviceGetProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeDeviceGetSubDevices18ze_device_handle_tP8uint32_tP18ze_device_handle_t">zeDeviceGetSubDevices (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425zeDeviceMakeImageResident18ze_device_handle_t17ze_image_handle_t">zeDeviceMakeImageResident (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426zeDeviceMakeMemoryResident18ze_device_handle_tPv6size_t">zeDeviceMakeMemoryResident (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431zeDeviceSetLastLevelCacheConfig18ze_device_handle_t17ze_cache_config_t">zeDeviceSetLastLevelCacheConfig (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeDeviceSystemBarrier18ze_device_handle_t">zeDeviceSystemBarrier (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422zeDriverAllocDeviceMem18ze_driver_handle_tPK26ze_device_mem_alloc_desc_t6size_t6size_t18ze_device_handle_tPPv">zeDriverAllocDeviceMem (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420zeDriverAllocHostMem18ze_driver_handle_tPK24ze_host_mem_alloc_desc_t6size_t6size_tPPv">zeDriverAllocHostMem (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422zeDriverAllocSharedMem18ze_driver_handle_tPK26ze_device_mem_alloc_desc_tPK24ze_host_mem_alloc_desc_t6size_t6size_t18ze_device_handle_tPPv">zeDriverAllocSharedMem (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425zeDriverCloseMemIpcHandle18ze_driver_handle_tPKv">zeDriverCloseMemIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415zeDriverFreeMem18ze_driver_handle_tPv">zeDriverFreeMem (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv411zeDriverGetP8uint32_tP18ze_driver_handle_t">zeDriverGet (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeDriverGetApiVersion18ze_driver_handle_tP16ze_api_version_t">zeDriverGetApiVersion (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435zeDriverGetExtensionFunctionAddress18ze_driver_handle_tPKcPPv">zeDriverGetExtensionFunctionAddress (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424zeDriverGetIPCProperties18ze_driver_handle_tP26ze_driver_ipc_properties_t">zeDriverGetIPCProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426zeDriverGetMemAddressRange18ze_driver_handle_tPKvPPvP6size_t">zeDriverGetMemAddressRange (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429zeDriverGetMemAllocProperties18ze_driver_handle_tPKvP33ze_memory_allocation_properties_tP18ze_device_handle_t">zeDriverGetMemAllocProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423zeDriverGetMemIpcHandle18ze_driver_handle_tPKvP19ze_ipc_mem_handle_t">zeDriverGetMemIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeDriverGetProperties18ze_driver_handle_tP22ze_driver_properties_t">zeDriverGetProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424zeDriverOpenMemIpcHandle18ze_driver_handle_t18ze_device_handle_t19ze_ipc_mem_handle_t20ze_ipc_memory_flag_tPPv">zeDriverOpenMemIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv413zeEventCreate22ze_event_pool_handle_tPK15ze_event_desc_tP17ze_event_handle_t">zeEventCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv414zeEventDestroy17ze_event_handle_t">zeEventDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv419zeEventGetTimestamp17ze_event_handle_t25ze_event_timestamp_type_tPv">zeEventGetTimestamp (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416zeEventHostReset17ze_event_handle_t">zeEventHostReset (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417zeEventHostSignal17ze_event_handle_t">zeEventHostSignal (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422zeEventHostSynchronize17ze_event_handle_t8uint32_t">zeEventHostSynchronize (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425zeEventPoolCloseIpcHandle22ze_event_pool_handle_t">zeEventPoolCloseIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv417zeEventPoolCreate18ze_driver_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t">zeEventPoolCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418zeEventPoolDestroy22ze_event_pool_handle_t">zeEventPoolDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t">zeEventPoolGetIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424zeEventPoolOpenIpcHandle18ze_driver_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t">zeEventPoolOpenIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418zeEventQueryStatus17ze_event_handle_t">zeEventQueryStatus (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv413zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t">zeFenceCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv414zeFenceDestroy17ze_fence_handle_t">zeFenceDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422zeFenceHostSynchronize17ze_fence_handle_t8uint32_t">zeFenceHostSynchronize (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv418zeFenceQueryStatus17ze_fence_handle_t">zeFenceQueryStatus (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv412zeFenceReset17ze_fence_handle_t">zeFenceReset (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv413zeImageCreate18ze_device_handle_tPK15ze_image_desc_tP17ze_image_handle_t">zeImageCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv414zeImageDestroy17ze_image_handle_t">zeImageDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420zeImageGetProperties18ze_device_handle_tPK15ze_image_desc_tP21ze_image_properties_t">zeImageGetProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv46zeInit14ze_init_flag_t">zeInit (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv414zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t">zeKernelCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415zeKernelDestroy18ze_kernel_handle_t">zeKernelDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420zeKernelGetAttribute18ze_kernel_handle_t21ze_kernel_attribute_tP8uint32_tPv">zeKernelGetAttribute (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv421zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t">zeKernelGetProperties (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv">zeKernelSetArgumentValue (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420zeKernelSetAttribute18ze_kernel_handle_t21ze_kernel_attribute_t8uint32_tPKv">zeKernelSetAttribute (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv420zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t">zeKernelSetGroupSize (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv434zeKernelSetIntermediateCacheConfig18ze_kernel_handle_t17ze_cache_config_t">zeKernelSetIntermediateCacheConfig (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t">zeKernelSuggestGroupSize (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv439zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t">zeKernelSuggestMaxCooperativeGroupCount (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423zeModuleBuildLogDestroy28ze_module_build_log_handle_t">zeModuleBuildLogDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc">zeModuleBuildLogGetString (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv414zeModuleCreate18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t">zeModuleCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415zeModuleDestroy18ze_module_handle_t">zeModuleDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv">zeModuleGetFunctionPointer (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv424zeModuleGetGlobalPointer18ze_module_handle_tPKcPPv">zeModuleGetGlobalPointer (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv422zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc">zeModuleGetKernelNames (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv423zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t">zeModuleGetNativeBinary (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv415zeSamplerCreate18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t">zeSamplerCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv416zeSamplerDestroy19ze_sampler_handle_t">zeSamplerDestroy (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_debug_config_t">zet_debug_config_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_debug_config_t7variantE">zet_debug_config_t::variant (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_debug_config_t7versionE">zet_debug_config_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zet_debug_config_v1_t">zet_debug_config_v1_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_debug_config_v1_t3pidE">zet_debug_config_v1_t::pid (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427zet_debug_config_variants_t">zet_debug_config_variants_t (C++ union)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N27zet_debug_config_variants_t2v1E">zet_debug_config_variants_t::v1 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_DEBUG_DETACH_HOST_EXIT">ZET_DEBUG_DETACH_HOST_EXIT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_DEBUG_DETACH_INVALID">ZET_DEBUG_DETACH_INVALID (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zet_debug_detach_reason_t">zet_debug_detach_reason_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_DEBUG_EVENT_DETACHED">ZET_DEBUG_EVENT_DETACHED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_DEBUG_EVENT_EXCEPTION">ZET_DEBUG_EVENT_EXCEPTION (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_DEBUG_EVENT_FLAG_NONE">ZET_DEBUG_EVENT_FLAG_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_DEBUG_EVENT_FLAG_STOPPED">ZET_DEBUG_EVENT_FLAG_STOPPED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_debug_event_flags_t">zet_debug_event_flags_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431zet_debug_event_info_detached_t">zet_debug_event_info_detached_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N31zet_debug_event_info_detached_t6reasonE">zet_debug_event_info_detached_t::reason (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zet_debug_event_info_module_t">zet_debug_event_info_module_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_debug_event_info_module_t4loadE">zet_debug_event_info_module_t::load (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_debug_event_info_module_t11moduleBeginE">zet_debug_event_info_module_t::moduleBegin (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_debug_event_info_module_t9moduleEndE">zet_debug_event_info_module_t::moduleEnd (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zet_debug_event_info_t">zet_debug_event_info_t (C++ union)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_debug_event_info_t8detachedE">zet_debug_event_info_t::detached (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_debug_event_info_t6moduleE">zet_debug_event_info_t::module (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_DEBUG_EVENT_INVALID">ZET_DEBUG_EVENT_INVALID (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427ZET_DEBUG_EVENT_MODULE_LOAD">ZET_DEBUG_EVENT_MODULE_LOAD (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_DEBUG_EVENT_MODULE_UNLOAD">ZET_DEBUG_EVENT_MODULE_UNLOAD (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_DEBUG_EVENT_PROCESS_ENTRY">ZET_DEBUG_EVENT_PROCESS_ENTRY (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_DEBUG_EVENT_PROCESS_EXIT">ZET_DEBUG_EVENT_PROCESS_EXIT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_debug_event_t">zet_debug_event_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_event_t5flagsE">zet_debug_event_t::flags (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_event_t4infoE">zet_debug_event_t::info (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_event_t6threadE">zet_debug_event_t::thread (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_event_t4typeE">zet_debug_event_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zet_debug_event_type_t">zet_debug_event_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv434ZET_DEBUG_MEMORY_SPACE_GEN_DEFAULT">ZET_DEBUG_MEMORY_SPACE_GEN_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430ZET_DEBUG_MEMORY_SPACE_GEN_SLM">ZET_DEBUG_MEMORY_SPACE_GEN_SLM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv439zet_debug_memory_space_intel_graphics_t">zet_debug_memory_space_intel_graphics_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_DEBUG_STATE_GEN_ACC">ZET_DEBUG_STATE_GEN_ACC (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_DEBUG_STATE_GEN_ADDR">ZET_DEBUG_STATE_GEN_ADDR (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_DEBUG_STATE_GEN_FLAG">ZET_DEBUG_STATE_GEN_FLAG (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_DEBUG_STATE_GEN_GRF">ZET_DEBUG_STATE_GEN_GRF (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427ZET_DEBUG_STATE_GEN_INVALID">ZET_DEBUG_STATE_GEN_INVALID (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zet_debug_state_intel_graphics_t">zet_debug_state_intel_graphics_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zet_debug_state_section_t">zet_debug_state_section_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_debug_state_section_t6offsetE">zet_debug_state_section_t::offset (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_debug_state_section_t4sizeE">zet_debug_state_section_t::size (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_debug_state_section_t4typeE">zet_debug_state_section_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_debug_state_section_t7versionE">zet_debug_state_section_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_debug_state_t">zet_debug_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_state_t10headerSizeE">zet_debug_state_t::headerSize (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_state_t6numSecE">zet_debug_state_t::numSec (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_state_t7secSizeE">zet_debug_state_t::secSize (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_debug_state_t4sizeE">zet_debug_state_t::size (C++ member)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="tools/api.html#_CPPv421zet_diag_properties_t">zet_diag_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_diag_properties_t9haveTestsE">zet_diag_properties_t::haveTests (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_diag_properties_t4nameE">zet_diag_properties_t::name (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_diag_properties_t11onSubdeviceE">zet_diag_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_diag_properties_t11subdeviceIdE">zet_diag_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_diag_properties_t4typeE">zet_diag_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_DIAG_RESULT_ABORT">ZET_DIAG_RESULT_ABORT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_DIAG_RESULT_FAIL_CANT_REPAIR">ZET_DIAG_RESULT_FAIL_CANT_REPAIR (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_DIAG_RESULT_NO_ERRORS">ZET_DIAG_RESULT_NO_ERRORS (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv433ZET_DIAG_RESULT_REBOOT_FOR_REPAIR">ZET_DIAG_RESULT_REBOOT_FOR_REPAIR (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_diag_result_t">zet_diag_result_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_diag_test_t">zet_diag_test_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_diag_test_t5indexE">zet_diag_test_t::index (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_diag_test_t4nameE">zet_diag_test_t::name (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419ZET_DIAG_TYPE_ARRAY">ZET_DIAG_TYPE_ARRAY (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418ZET_DIAG_TYPE_SCAN">ZET_DIAG_TYPE_SCAN (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_diag_type_t">zet_diag_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zet_energy_threshold_t">zet_energy_threshold_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_energy_threshold_t6enableE">zet_energy_threshold_t::enable (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_energy_threshold_t9processIdE">zet_energy_threshold_t::processId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_energy_threshold_t9thresholdE">zet_energy_threshold_t::threshold (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420ZET_ENGINE_GROUP_ALL">ZET_ENGINE_GROUP_ALL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_ENGINE_GROUP_COMPUTE_ALL">ZET_ENGINE_GROUP_COMPUTE_ALL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_ENGINE_GROUP_COPY_ALL">ZET_ENGINE_GROUP_COPY_ALL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_ENGINE_GROUP_MEDIA_ALL">ZET_ENGINE_GROUP_MEDIA_ALL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_engine_group_t">zet_engine_group_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_engine_properties_t">zet_engine_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_engine_properties_t11onSubdeviceE">zet_engine_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_engine_properties_t11subdeviceIdE">zet_engine_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_engine_properties_t4typeE">zet_engine_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_engine_stats_t">zet_engine_stats_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_engine_stats_t10activeTimeE">zet_engine_stats_t::activeTime (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_engine_stats_t9timestampE">zet_engine_stats_t::timestamp (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418ZET_ENGINE_TYPE_3D">ZET_ENGINE_TYPE_3D (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_ENGINE_TYPE_COMPUTE">ZET_ENGINE_TYPE_COMPUTE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419ZET_ENGINE_TYPE_DMA">ZET_ENGINE_TYPE_DMA (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_ENGINE_TYPE_MEDIA">ZET_ENGINE_TYPE_MEDIA (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_ENGINE_TYPE_OTHER">ZET_ENGINE_TYPE_OTHER (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_engine_type_t">zet_engine_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_event_config_t">zet_event_config_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_event_config_t10registeredE">zet_event_config_t::registered (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zet_fabric_link_type_t">zet_fabric_link_type_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_fabric_link_type_t4descE">zet_fabric_link_type_t::desc (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_fabric_port_config_t">zet_fabric_port_config_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_fabric_port_config_t9beaconingE">zet_fabric_port_config_t::beaconing (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_fabric_port_config_t7enabledE">zet_fabric_port_config_t::enabled (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zet_fabric_port_properties_t">zet_fabric_port_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_properties_t10maxRxSpeedE">zet_fabric_port_properties_t::maxRxSpeed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_properties_t10maxTxSpeedE">zet_fabric_port_properties_t::maxTxSpeed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_properties_t5modelE">zet_fabric_port_properties_t::model (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_properties_t11onSubdeviceE">zet_fabric_port_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_properties_t8portUuidE">zet_fabric_port_properties_t::portUuid (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_properties_t11subdeviceIdE">zet_fabric_port_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431ZET_FABRIC_PORT_QUAL_ISSUES_FEC">ZET_FABRIC_PORT_QUAL_ISSUES_FEC (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435ZET_FABRIC_PORT_QUAL_ISSUES_LTP_CRC">ZET_FABRIC_PORT_QUAL_ISSUES_LTP_CRC (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_FABRIC_PORT_QUAL_ISSUES_NONE">ZET_FABRIC_PORT_QUAL_ISSUES_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv433ZET_FABRIC_PORT_QUAL_ISSUES_SPEED">ZET_FABRIC_PORT_QUAL_ISSUES_SPEED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zet_fabric_port_qual_issues_t">zet_fabric_port_qual_issues_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_fabric_port_speed_t">zet_fabric_port_speed_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_speed_t7bitRateE">zet_fabric_port_speed_t::bitRate (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_speed_t12maxBandwidthE">zet_fabric_port_speed_t::maxBandwidth (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_speed_t5widthE">zet_fabric_port_speed_t::width (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv436ZET_FABRIC_PORT_STAB_ISSUES_FLAPPING">ZET_FABRIC_PORT_STAB_ISSUES_FLAPPING (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv438ZET_FABRIC_PORT_STAB_ISSUES_NO_CONNECT">ZET_FABRIC_PORT_STAB_ISSUES_NO_CONNECT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_FABRIC_PORT_STAB_ISSUES_NONE">ZET_FABRIC_PORT_STAB_ISSUES_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zet_fabric_port_stab_issues_t">zet_fabric_port_stab_issues_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv444ZET_FABRIC_PORT_STAB_ISSUES_TOO_MANY_REPLAYS">ZET_FABRIC_PORT_STAB_ISSUES_TOO_MANY_REPLAYS (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_fabric_port_state_t">zet_fabric_port_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_state_t13qualityIssuesE">zet_fabric_port_state_t::qualityIssues (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_state_t7rxSpeedE">zet_fabric_port_state_t::rxSpeed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_state_t15stabilityIssuesE">zet_fabric_port_state_t::stabilityIssues (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_state_t6statusE">zet_fabric_port_state_t::status (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_fabric_port_state_t7txSpeedE">zet_fabric_port_state_t::txSpeed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_FABRIC_PORT_STATUS_BLACK">ZET_FABRIC_PORT_STATUS_BLACK (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_FABRIC_PORT_STATUS_GREEN">ZET_FABRIC_PORT_STATUS_GREEN (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_FABRIC_PORT_STATUS_RED">ZET_FABRIC_PORT_STATUS_RED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_fabric_port_status_t">zet_fabric_port_status_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_FABRIC_PORT_STATUS_YELLOW">ZET_FABRIC_PORT_STATUS_YELLOW (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zet_fabric_port_throughput_t">zet_fabric_port_throughput_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_throughput_t9rxCounterE">zet_fabric_port_throughput_t::rxCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_throughput_t14rxMaxBandwidthE">zet_fabric_port_throughput_t::rxMaxBandwidth (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_throughput_t9timestampE">zet_fabric_port_throughput_t::timestamp (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_throughput_t9txCounterE">zet_fabric_port_throughput_t::txCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_fabric_port_throughput_t14txMaxBandwidthE">zet_fabric_port_throughput_t::txMaxBandwidth (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zet_fabric_port_uuid_t">zet_fabric_port_uuid_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_fabric_port_uuid_t2idE">zet_fabric_port_uuid_t::id (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zet_fan_config_t">zet_fan_config_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_fan_config_t4modeE">zet_fan_config_t::mode (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_fan_config_t9numPointsE">zet_fan_config_t::numPoints (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_fan_config_t5speedE">zet_fan_config_t::speed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_fan_config_t10speedUnitsE">zet_fan_config_t::speedUnits (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_fan_config_t5tableE">zet_fan_config_t::table (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_fan_properties_t">zet_fan_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_properties_t10canControlE">zet_fan_properties_t::canControl (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_properties_t9maxPointsE">zet_fan_properties_t::maxPoints (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_properties_t8maxSpeedE">zet_fan_properties_t::maxSpeed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_properties_t11onSubdeviceE">zet_fan_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_properties_t11subdeviceIdE">zet_fan_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_FAN_SPEED_MODE_DEFAULT">ZET_FAN_SPEED_MODE_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_FAN_SPEED_MODE_FIXED">ZET_FAN_SPEED_MODE_FIXED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_fan_speed_mode_t">zet_fan_speed_mode_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_FAN_SPEED_MODE_TABLE">ZET_FAN_SPEED_MODE_TABLE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427ZET_FAN_SPEED_UNITS_PERCENT">ZET_FAN_SPEED_UNITS_PERCENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_FAN_SPEED_UNITS_RPM">ZET_FAN_SPEED_UNITS_RPM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zet_fan_speed_units_t">zet_fan_speed_units_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_fan_temp_speed_t">zet_fan_temp_speed_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_temp_speed_t5speedE">zet_fan_temp_speed_t::speed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_temp_speed_t11temperatureE">zet_fan_temp_speed_t::temperature (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_fan_temp_speed_t5unitsE">zet_fan_temp_speed_t::units (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zet_firmware_properties_t">zet_firmware_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_firmware_properties_t10canControlE">zet_firmware_properties_t::canControl (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_firmware_properties_t4nameE">zet_firmware_properties_t::name (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_firmware_properties_t11onSubdeviceE">zet_firmware_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_firmware_properties_t11subdeviceIdE">zet_firmware_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N25zet_firmware_properties_t7versionE">zet_firmware_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419ZET_FREQ_DOMAIN_GPU">ZET_FREQ_DOMAIN_GPU (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422ZET_FREQ_DOMAIN_MEMORY">ZET_FREQ_DOMAIN_MEMORY (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_freq_domain_t">zet_freq_domain_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zet_freq_properties_t">zet_freq_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t10canControlE">zet_freq_properties_t::canControl (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t24isThrottleEventSupportedE">zet_freq_properties_t::isThrottleEventSupported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t3maxE">zet_freq_properties_t::max (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t3minE">zet_freq_properties_t::min (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t11onSubdeviceE">zet_freq_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t4stepE">zet_freq_properties_t::step (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t11subdeviceIdE">zet_freq_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_freq_properties_t4typeE">zet_freq_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zet_freq_range_t">zet_freq_range_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_freq_range_t3maxE">zet_freq_range_t::max (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_freq_range_t3minE">zet_freq_range_t::min (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zet_freq_state_t">zet_freq_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_freq_state_t6actualE">zet_freq_state_t::actual (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_freq_state_t9efficientE">zet_freq_state_t::efficient (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_freq_state_t7requestE">zet_freq_state_t::request (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_freq_state_t3tdpE">zet_freq_state_t::tdp (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_freq_state_t15throttleReasonsE">zet_freq_state_t::throttleReasons (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv437ZET_FREQ_THROTTLE_REASONS_AVE_PWR_CAP">ZET_FREQ_THROTTLE_REASONS_AVE_PWR_CAP (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv439ZET_FREQ_THROTTLE_REASONS_BURST_PWR_CAP">ZET_FREQ_THROTTLE_REASONS_BURST_PWR_CAP (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv439ZET_FREQ_THROTTLE_REASONS_CURRENT_LIMIT">ZET_FREQ_THROTTLE_REASONS_CURRENT_LIMIT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv434ZET_FREQ_THROTTLE_REASONS_HW_RANGE">ZET_FREQ_THROTTLE_REASONS_HW_RANGE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430ZET_FREQ_THROTTLE_REASONS_NONE">ZET_FREQ_THROTTLE_REASONS_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435ZET_FREQ_THROTTLE_REASONS_PSU_ALERT">ZET_FREQ_THROTTLE_REASONS_PSU_ALERT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv434ZET_FREQ_THROTTLE_REASONS_SW_RANGE">ZET_FREQ_THROTTLE_REASONS_SW_RANGE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427zet_freq_throttle_reasons_t">zet_freq_throttle_reasons_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv439ZET_FREQ_THROTTLE_REASONS_THERMAL_LIMIT">ZET_FREQ_THROTTLE_REASONS_THERMAL_LIMIT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_freq_throttle_time_t">zet_freq_throttle_time_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_freq_throttle_time_t12throttleTimeE">zet_freq_throttle_time_t::throttleTime (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_freq_throttle_time_t9timestampE">zet_freq_throttle_time_t::timestamp (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_led_properties_t">zet_led_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_led_properties_t10canControlE">zet_led_properties_t::canControl (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_led_properties_t7haveRGBE">zet_led_properties_t::haveRGB (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_led_properties_t11onSubdeviceE">zet_led_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_led_properties_t11subdeviceIdE">zet_led_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_led_state_t">zet_led_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_led_state_t4blueE">zet_led_state_t::blue (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_led_state_t5greenE">zet_led_state_t::green (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_led_state_t4isOnE">zet_led_state_t::isOn (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_led_state_t3redE">zet_led_state_t::red (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zet_mem_bandwidth_t">zet_mem_bandwidth_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N19zet_mem_bandwidth_t12maxBandwidthE">zet_mem_bandwidth_t::maxBandwidth (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N19zet_mem_bandwidth_t11readCounterE">zet_mem_bandwidth_t::readCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N19zet_mem_bandwidth_t9timestampE">zet_mem_bandwidth_t::timestamp (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N19zet_mem_bandwidth_t12writeCounterE">zet_mem_bandwidth_t::writeCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_MEM_HEALTH_CRITICAL">ZET_MEM_HEALTH_CRITICAL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_MEM_HEALTH_DEGRADED">ZET_MEM_HEALTH_DEGRADED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417ZET_MEM_HEALTH_OK">ZET_MEM_HEALTH_OK (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422ZET_MEM_HEALTH_REPLACE">ZET_MEM_HEALTH_REPLACE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zet_mem_health_t">zet_mem_health_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_mem_properties_t">zet_mem_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_mem_properties_t11onSubdeviceE">zet_mem_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_mem_properties_t12physicalSizeE">zet_mem_properties_t::physicalSize (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_mem_properties_t11subdeviceIdE">zet_mem_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_mem_properties_t4typeE">zet_mem_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_mem_state_t">zet_mem_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_mem_state_t13allocatedSizeE">zet_mem_state_t::allocatedSize (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_mem_state_t6healthE">zet_mem_state_t::health (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_mem_state_t7maxSizeE">zet_mem_state_t::maxSize (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416ZET_MEM_TYPE_DDR">ZET_MEM_TYPE_DDR (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416ZET_MEM_TYPE_GRF">ZET_MEM_TYPE_GRF (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416ZET_MEM_TYPE_HBM">ZET_MEM_TYPE_HBM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415ZET_MEM_TYPE_L1">ZET_MEM_TYPE_L1 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415ZET_MEM_TYPE_L3">ZET_MEM_TYPE_L3 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416ZET_MEM_TYPE_SLM">ZET_MEM_TYPE_SLM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417ZET_MEM_TYPE_SRAM">ZET_MEM_TYPE_SRAM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv414zet_mem_type_t">zet_mem_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zet_metric_group_properties_t">zet_metric_group_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_metric_group_properties_t11descriptionE">zet_metric_group_properties_t::description (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_metric_group_properties_t6domainE">zet_metric_group_properties_t::domain (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_metric_group_properties_t22maxCommandQueueOrdinalE">zet_metric_group_properties_t::maxCommandQueueOrdinal (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_metric_group_properties_t11metricCountE">zet_metric_group_properties_t::metricCount (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_metric_group_properties_t4nameE">zet_metric_group_properties_t::name (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_metric_group_properties_t12samplingTypeE">zet_metric_group_properties_t::samplingType (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N29zet_metric_group_properties_t7versionE">zet_metric_group_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv443ZET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT">ZET_METRIC_GROUP_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv437zet_metric_group_properties_version_t">zet_metric_group_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv442ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED">ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zet_metric_group_sampling_type_t">zet_metric_group_sampling_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv441ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED">ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_metric_properties_t">zet_metric_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t9componentE">zet_metric_properties_t::component (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t11descriptionE">zet_metric_properties_t::description (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t10metricTypeE">zet_metric_properties_t::metricType (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t4nameE">zet_metric_properties_t::name (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t10resultTypeE">zet_metric_properties_t::resultType (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t11resultUnitsE">zet_metric_properties_t::resultUnits (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t10tierNumberE">zet_metric_properties_t::tierNumber (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_metric_properties_t7versionE">zet_metric_properties_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv437ZET_METRIC_PROPERTIES_VERSION_CURRENT">ZET_METRIC_PROPERTIES_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431zet_metric_properties_version_t">zet_metric_properties_version_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zet_metric_query_pool_desc_t">zet_metric_query_pool_desc_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_metric_query_pool_desc_t5countE">zet_metric_query_pool_desc_t::count (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_metric_query_pool_desc_t5flagsE">zet_metric_query_pool_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N28zet_metric_query_pool_desc_t7versionE">zet_metric_query_pool_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv442ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT">ZET_METRIC_QUERY_POOL_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv436zet_metric_query_pool_desc_version_t">zet_metric_query_pool_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv438ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE">ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv441ZET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION">ZET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zet_metric_query_pool_flag_t">zet_metric_query_pool_flag_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_metric_tracer_desc_t">zet_metric_tracer_desc_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_metric_tracer_desc_t19notifyEveryNReportsE">zet_metric_tracer_desc_t::notifyEveryNReports (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_metric_tracer_desc_t14samplingPeriodE">zet_metric_tracer_desc_t::samplingPeriod (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_metric_tracer_desc_t7versionE">zet_metric_tracer_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv438ZET_METRIC_TRACER_DESC_VERSION_CURRENT">ZET_METRIC_TRACER_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zet_metric_tracer_desc_version_t">zet_metric_tracer_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_METRIC_TYPE_DURATION">ZET_METRIC_TYPE_DURATION (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_METRIC_TYPE_EVENT">ZET_METRIC_TYPE_EVENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_METRIC_TYPE_EVENT_WITH_RANGE">ZET_METRIC_TYPE_EVENT_WITH_RANGE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420ZET_METRIC_TYPE_FLAG">ZET_METRIC_TYPE_FLAG (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_METRIC_TYPE_RATIO">ZET_METRIC_TYPE_RATIO (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419ZET_METRIC_TYPE_RAW">ZET_METRIC_TYPE_RAW (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_metric_type_t">zet_metric_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_METRIC_TYPE_THROUGHPUT">ZET_METRIC_TYPE_THROUGHPUT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_METRIC_TYPE_TIMESTAMP">ZET_METRIC_TYPE_TIMESTAMP (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv438ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF">ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zet_module_debug_info_format_t">zet_module_debug_info_format_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zet_oc_capabilities_t">zet_oc_capabilities_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t21isHighVoltModeCapableE">zet_oc_capabilities_t::isHighVoltModeCapable (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t21isHighVoltModeEnabledE">zet_oc_capabilities_t::isHighVoltModeEnabled (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t17isIccMaxSupportedE">zet_oc_capabilities_t::isIccMaxSupported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t13isOcSupportedE">zet_oc_capabilities_t::isOcSupported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t16isTjMaxSupportedE">zet_oc_capabilities_t::isTjMaxSupported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t26maxFactoryDefaultFrequencyE">zet_oc_capabilities_t::maxFactoryDefaultFrequency (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t24maxFactoryDefaultVoltageE">zet_oc_capabilities_t::maxFactoryDefaultVoltage (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t14maxOcFrequencyE">zet_oc_capabilities_t::maxOcFrequency (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t12maxOcVoltageE">zet_oc_capabilities_t::maxOcVoltage (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t18maxOcVoltageOffsetE">zet_oc_capabilities_t::maxOcVoltageOffset (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_oc_capabilities_t18minOcVoltageOffsetE">zet_oc_capabilities_t::minOcVoltageOffset (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_oc_config_t">zet_oc_config_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_oc_config_t9frequencyE">zet_oc_config_t::frequency (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_oc_config_t4modeE">zet_oc_config_t::mode (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_oc_config_t13voltageOffsetE">zet_oc_config_t::voltageOffset (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_oc_config_t13voltageTargetE">zet_oc_config_t::voltageTarget (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_OC_MODE_INTERPOLATIVE">ZET_OC_MODE_INTERPOLATIVE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415ZET_OC_MODE_OFF">ZET_OC_MODE_OFF (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420ZET_OC_MODE_OVERRIDE">ZET_OC_MODE_OVERRIDE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv413zet_oc_mode_t">zet_oc_mode_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_pci_address_t">zet_pci_address_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_pci_address_t3busE">zet_pci_address_t::bus (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_pci_address_t6deviceE">zet_pci_address_t::device (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_pci_address_t6domainE">zet_pci_address_t::domain (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_pci_address_t8functionE">zet_pci_address_t::function (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_pci_bar_properties_t">zet_pci_bar_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_pci_bar_properties_t4baseE">zet_pci_bar_properties_t::base (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_pci_bar_properties_t5indexE">zet_pci_bar_properties_t::index (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_pci_bar_properties_t4sizeE">zet_pci_bar_properties_t::size (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_pci_bar_properties_t4typeE">zet_pci_bar_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_PCI_BAR_TYPE_CONFIG">ZET_PCI_BAR_TYPE_CONFIG (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_PCI_BAR_TYPE_INDIRECT_IO">ZET_PCI_BAR_TYPE_INDIRECT_IO (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_PCI_BAR_TYPE_INDIRECT_MEM">ZET_PCI_BAR_TYPE_INDIRECT_MEM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_PCI_BAR_TYPE_MMIO">ZET_PCI_BAR_TYPE_MMIO (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422ZET_PCI_BAR_TYPE_OTHER">ZET_PCI_BAR_TYPE_OTHER (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420ZET_PCI_BAR_TYPE_ROM">ZET_PCI_BAR_TYPE_ROM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_pci_bar_type_t">zet_pci_bar_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_PCI_BAR_TYPE_VGA_IO">ZET_PCI_BAR_TYPE_VGA_IO (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_PCI_BAR_TYPE_VGA_MEM">ZET_PCI_BAR_TYPE_VGA_MEM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_PCI_BAR_TYPE_VRAM">ZET_PCI_BAR_TYPE_VRAM (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_PCI_LINK_QUAL_ISSUES_NONE">ZET_PCI_LINK_QUAL_ISSUES_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_PCI_LINK_QUAL_ISSUES_REPLAYS">ZET_PCI_LINK_QUAL_ISSUES_REPLAYS (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430ZET_PCI_LINK_QUAL_ISSUES_SPEED">ZET_PCI_LINK_QUAL_ISSUES_SPEED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zet_pci_link_qual_issues_t">zet_pci_link_qual_issues_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_PCI_LINK_STAB_ISSUES_NONE">ZET_PCI_LINK_STAB_ISSUES_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435ZET_PCI_LINK_STAB_ISSUES_RETRAINING">ZET_PCI_LINK_STAB_ISSUES_RETRAINING (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zet_pci_link_stab_issues_t">zet_pci_link_stab_issues_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_PCI_LINK_STATUS_GREEN">ZET_PCI_LINK_STATUS_GREEN (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_PCI_LINK_STATUS_RED">ZET_PCI_LINK_STATUS_RED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zet_pci_link_status_t">zet_pci_link_status_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_PCI_LINK_STATUS_YELLOW">ZET_PCI_LINK_STATUS_YELLOW (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_pci_properties_t">zet_pci_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_pci_properties_t7addressE">zet_pci_properties_t::address (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_pci_properties_t8maxSpeedE">zet_pci_properties_t::maxSpeed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_pci_speed_t">zet_pci_speed_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_speed_t3genE">zet_pci_speed_t::gen (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_speed_t12maxBandwidthE">zet_pci_speed_t::maxBandwidth (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_speed_t5widthE">zet_pci_speed_t::width (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_pci_state_t">zet_pci_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_state_t13qualityIssuesE">zet_pci_state_t::qualityIssues (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_state_t5speedE">zet_pci_state_t::speed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_state_t15stabilityIssuesE">zet_pci_state_t::stabilityIssues (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_state_t6statusE">zet_pci_state_t::status (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_pci_stats_t">zet_pci_stats_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_stats_t12maxBandwidthE">zet_pci_stats_t::maxBandwidth (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_stats_t13packetCounterE">zet_pci_stats_t::packetCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_stats_t13replayCounterE">zet_pci_stats_t::replayCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_stats_t9rxCounterE">zet_pci_stats_t::rxCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_stats_t9timestampE">zet_pci_stats_t::timestamp (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_pci_stats_t9txCounterE">zet_pci_stats_t::txCounter (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_PERF_PROFILE_BALANCED">ZET_PERF_PROFILE_BALANCED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_PERF_PROFILE_COMPUTE_BOUNDED">ZET_PERF_PROFILE_COMPUTE_BOUNDED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431ZET_PERF_PROFILE_MEMORY_BOUNDED">ZET_PERF_PROFILE_MEMORY_BOUNDED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_perf_profile_t">zet_perf_profile_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_power_burst_limit_t">zet_power_burst_limit_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_power_burst_limit_t7enabledE">zet_power_burst_limit_t::enabled (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_power_burst_limit_t5powerE">zet_power_burst_limit_t::power (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zet_power_energy_counter_t">zet_power_energy_counter_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N26zet_power_energy_counter_t6energyE">zet_power_energy_counter_t::energy (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N26zet_power_energy_counter_t9timestampE">zet_power_energy_counter_t::timestamp (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zet_power_peak_limit_t">zet_power_peak_limit_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_power_peak_limit_t7powerACE">zet_power_peak_limit_t::powerAC (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_power_peak_limit_t7powerDCE">zet_power_peak_limit_t::powerDC (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zet_power_properties_t">zet_power_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_power_properties_t10canControlE">zet_power_properties_t::canControl (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_power_properties_t26isEnergyThresholdSupportedE">zet_power_properties_t::isEnergyThresholdSupported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_power_properties_t8maxLimitE">zet_power_properties_t::maxLimit (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_power_properties_t11onSubdeviceE">zet_power_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N22zet_power_properties_t11subdeviceIdE">zet_power_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427zet_power_sustained_limit_t">zet_power_sustained_limit_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N27zet_power_sustained_limit_t7enabledE">zet_power_sustained_limit_t::enabled (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N27zet_power_sustained_limit_t8intervalE">zet_power_sustained_limit_t::interval (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N27zet_power_sustained_limit_t5powerE">zet_power_sustained_limit_t::power (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zet_process_state_t">zet_process_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N19zet_process_state_t7enginesE">zet_process_state_t::engines (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N19zet_process_state_t7memSizeE">zet_process_state_t::memSize (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N19zet_process_state_t9processIdE">zet_process_state_t::processId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435ZET_PROFILE_FLAG_FREE_REGISTER_INFO">ZET_PROFILE_FLAG_FREE_REGISTER_INFO (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv438ZET_PROFILE_FLAG_REGISTER_REALLOCATION">ZET_PROFILE_FLAG_REGISTER_REALLOCATION (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_profile_flag_t">zet_profile_flag_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv433zet_profile_free_register_token_t">zet_profile_free_register_token_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N33zet_profile_free_register_token_t5countE">zet_profile_free_register_token_t::count (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N33zet_profile_free_register_token_t4sizeE">zet_profile_free_register_token_t::size (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N33zet_profile_free_register_token_t4typeE">zet_profile_free_register_token_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_profile_info_t">zet_profile_info_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_profile_info_t5flagsE">zet_profile_info_t::flags (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_profile_info_t9numTokensE">zet_profile_info_t::numTokens (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N18zet_profile_info_t7versionE">zet_profile_info_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_PROFILE_INFO_VERSION_CURRENT">ZET_PROFILE_INFO_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zet_profile_info_version_t">zet_profile_info_version_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431zet_profile_register_sequence_t">zet_profile_register_sequence_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N31zet_profile_register_sequence_t5countE">zet_profile_register_sequence_t::count (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N31zet_profile_register_sequence_t5startE">zet_profile_register_sequence_t::start (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv436ZET_PROFILE_TOKEN_TYPE_FREE_REGISTER">ZET_PROFILE_TOKEN_TYPE_FREE_REGISTER (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_profile_token_type_t">zet_profile_token_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_psu_properties_t">zet_psu_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_psu_properties_t8ampLimitE">zet_psu_properties_t::ampLimit (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_psu_properties_t7haveFanE">zet_psu_properties_t::haveFan (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_psu_properties_t11onSubdeviceE">zet_psu_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_psu_properties_t11subdeviceIdE">zet_psu_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zet_psu_state_t">zet_psu_state_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_psu_state_t7currentE">zet_psu_state_t::current (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_psu_state_t9fanFailedE">zet_psu_state_t::fanFailed (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_psu_state_t11temperatureE">zet_psu_state_t::temperature (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N15zet_psu_state_t10voltStatusE">zet_psu_state_t::voltStatus (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_PSU_VOLTAGE_STATUS_NORMAL">ZET_PSU_VOLTAGE_STATUS_NORMAL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427ZET_PSU_VOLTAGE_STATUS_OVER">ZET_PSU_VOLTAGE_STATUS_OVER (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_psu_voltage_status_t">zet_psu_voltage_status_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_PSU_VOLTAGE_STATUS_UNDER">ZET_PSU_VOLTAGE_STATUS_UNDER (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zet_ras_config_t">zet_ras_config_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_ras_config_t18detailedThresholdsE">zet_ras_config_t::detailedThresholds (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_ras_config_t9processIdE">zet_ras_config_t::processId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N16zet_ras_config_t14totalThresholdE">zet_ras_config_t::totalThreshold (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_ras_details_t">zet_ras_details_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_ras_details_t14numCacheErrorsE">zet_ras_details_t::numCacheErrors (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_ras_details_t16numComputeErrorsE">zet_ras_details_t::numComputeErrors (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_ras_details_t16numDisplayErrorsE">zet_ras_details_t::numDisplayErrors (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_ras_details_t15numDriverErrorsE">zet_ras_details_t::numDriverErrors (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_ras_details_t19numNonComputeErrorsE">zet_ras_details_t::numNonComputeErrors (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_ras_details_t20numProgrammingErrorsE">zet_ras_details_t::numProgrammingErrors (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_ras_details_t9numResetsE">zet_ras_details_t::numResets (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430ZET_RAS_ERROR_TYPE_CORRECTABLE">ZET_RAS_ERROR_TYPE_CORRECTABLE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_ras_error_type_t">zet_ras_error_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_RAS_ERROR_TYPE_UNCORRECTABLE">ZET_RAS_ERROR_TYPE_UNCORRECTABLE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_ras_properties_t">zet_ras_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_ras_properties_t11onSubdeviceE">zet_ras_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_ras_properties_t11subdeviceIdE">zet_ras_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_ras_properties_t4typeE">zet_ras_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431ZET_REPAIR_STATUS_NOT_PERFORMED">ZET_REPAIR_STATUS_NOT_PERFORMED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427ZET_REPAIR_STATUS_PERFORMED">ZET_REPAIR_STATUS_PERFORMED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zet_repair_status_t">zet_repair_status_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429ZET_REPAIR_STATUS_UNSUPPORTED">ZET_REPAIR_STATUS_UNSUPPORTED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv433ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG">ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_SCHED_MODE_EXCLUSIVE">ZET_SCHED_MODE_EXCLUSIVE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zet_sched_mode_t">zet_sched_mode_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422ZET_SCHED_MODE_TIMEOUT">ZET_SCHED_MODE_TIMEOUT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424ZET_SCHED_MODE_TIMESLICE">ZET_SCHED_MODE_TIMESLICE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zet_sched_timeout_properties_t">zet_sched_timeout_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N30zet_sched_timeout_properties_t15watchdogTimeoutE">zet_sched_timeout_properties_t::watchdogTimeout (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zet_sched_timeslice_properties_t">zet_sched_timeslice_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N32zet_sched_timeslice_properties_t8intervalE">zet_sched_timeslice_properties_t::interval (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N32zet_sched_timeslice_properties_t12yieldTimeoutE">zet_sched_timeslice_properties_t::yieldTimeout (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430ZET_STANDBY_PROMO_MODE_DEFAULT">ZET_STANDBY_PROMO_MODE_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428ZET_STANDBY_PROMO_MODE_NEVER">ZET_STANDBY_PROMO_MODE_NEVER (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_standby_promo_mode_t">zet_standby_promo_mode_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zet_standby_properties_t">zet_standby_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_standby_properties_t11onSubdeviceE">zet_standby_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_standby_properties_t11subdeviceIdE">zet_standby_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N24zet_standby_properties_t4typeE">zet_standby_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_STANDBY_TYPE_GLOBAL">ZET_STANDBY_TYPE_GLOBAL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_standby_type_t">zet_standby_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425ZET_SYSMAN_EVENT_TYPE_ALL">ZET_SYSMAN_EVENT_TYPE_ALL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv434ZET_SYSMAN_EVENT_TYPE_DEVICE_RESET">ZET_SYSMAN_EVENT_TYPE_DEVICE_RESET (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv446ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER">ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_ENTER (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv445ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT">ZET_SYSMAN_EVENT_TYPE_DEVICE_SLEEP_STATE_EXIT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv446ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED">ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv440ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH">ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv436ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED">ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH">ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_SYSMAN_EVENT_TYPE_NONE">ZET_SYSMAN_EVENT_TYPE_NONE (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv437ZET_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH">ZET_SYSMAN_EVENT_TYPE_PCI_LINK_HEALTH (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv444ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS">ZET_SYSMAN_EVENT_TYPE_RAS_CORRECTABLE_ERRORS (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv446ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS">ZET_SYSMAN_EVENT_TYPE_RAS_UNCORRECTABLE_ERRORS (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_sysman_event_type_t">zet_sysman_event_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL">ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv437ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1">ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv437ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2">ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zet_sysman_properties_t">zet_sysman_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t11boardNumberE">zet_sysman_properties_t::boardNumber (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t9brandNameE">zet_sysman_properties_t::brandName (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t4coreE">zet_sysman_properties_t::core (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t13driverVersionE">zet_sysman_properties_t::driverVersion (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t9modelNameE">zet_sysman_properties_t::modelName (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t13numSubdevicesE">zet_sysman_properties_t::numSubdevices (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t12serialNumberE">zet_sysman_properties_t::serialNumber (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N23zet_sysman_properties_t10vendorNameE">zet_sysman_properties_t::vendorName (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426ZET_SYSMAN_VERSION_CURRENT">ZET_SYSMAN_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_sysman_version_t">zet_sysman_version_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_temp_config_t">zet_temp_config_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_temp_config_t14enableCriticalE">zet_temp_config_t::enableCritical (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_temp_config_t9processIdE">zet_temp_config_t::processId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_temp_config_t10threshold1E">zet_temp_config_t::threshold1 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_temp_config_t10threshold2E">zet_temp_config_t::threshold2 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zet_temp_properties_t">zet_temp_properties_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_temp_properties_t23isCriticalTempSupportedE">zet_temp_properties_t::isCriticalTempSupported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_temp_properties_t21isThreshold1SupportedE">zet_temp_properties_t::isThreshold1Supported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_temp_properties_t21isThreshold2SupportedE">zet_temp_properties_t::isThreshold2Supported (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_temp_properties_t11onSubdeviceE">zet_temp_properties_t::onSubdevice (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_temp_properties_t11subdeviceIdE">zet_temp_properties_t::subdeviceId (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N21zet_temp_properties_t4typeE">zet_temp_properties_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_TEMP_SENSORS_GLOBAL">ZET_TEMP_SENSORS_GLOBAL (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420ZET_TEMP_SENSORS_GPU">ZET_TEMP_SENSORS_GPU (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423ZET_TEMP_SENSORS_MEMORY">ZET_TEMP_SENSORS_MEMORY (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zet_temp_sensors_t">zet_temp_sensors_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zet_temp_threshold_t">zet_temp_threshold_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_temp_threshold_t15enableHighToLowE">zet_temp_threshold_t::enableHighToLow (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_temp_threshold_t15enableLowToHighE">zet_temp_threshold_t::enableLowToHigh (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N20zet_temp_threshold_t9thresholdE">zet_temp_threshold_t::threshold (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_tracer_desc_t">zet_tracer_desc_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_tracer_desc_t9pUserDataE">zet_tracer_desc_t::pUserData (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_tracer_desc_t7versionE">zet_tracer_desc_t::version (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431ZET_TRACER_DESC_VERSION_CURRENT">ZET_TRACER_DESC_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zet_tracer_desc_version_t">zet_tracer_desc_version_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zet_typed_value_t">zet_typed_value_t (C++ class)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_typed_value_t4typeE">zet_typed_value_t::type (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N17zet_typed_value_t5valueE">zet_typed_value_t::value (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv411zet_value_t">zet_value_t (C++ union)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N11zet_value_t2b8E">zet_value_t::b8 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N11zet_value_t4fp32E">zet_value_t::fp32 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N11zet_value_t4fp64E">zet_value_t::fp64 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N11zet_value_t4ui32E">zet_value_t::ui32 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv4N11zet_value_t4ui64E">zet_value_t::ui64 (C++ member)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420ZET_VALUE_TYPE_BOOL8">ZET_VALUE_TYPE_BOOL8 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422ZET_VALUE_TYPE_FLOAT32">ZET_VALUE_TYPE_FLOAT32 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422ZET_VALUE_TYPE_FLOAT64">ZET_VALUE_TYPE_FLOAT64 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zet_value_type_t">zet_value_type_t (C++ enum)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_VALUE_TYPE_UINT32">ZET_VALUE_TYPE_UINT32 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421ZET_VALUE_TYPE_UINT64">ZET_VALUE_TYPE_UINT64 (C++ enumerator)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv439zetCommandListAppendMetricMemoryBarrier25zet_command_list_handle_t">zetCommandListAppendMetricMemoryBarrier (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv436zetCommandListAppendMetricQueryBegin25zet_command_list_handle_t25zet_metric_query_handle_t">zetCommandListAppendMetricQueryBegin (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv434zetCommandListAppendMetricQueryEnd25zet_command_list_handle_t25zet_metric_query_handle_t17ze_event_handle_t">zetCommandListAppendMetricQueryEnd (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv438zetCommandListAppendMetricTracerMarker25zet_command_list_handle_t26zet_metric_tracer_handle_t8uint32_t">zetCommandListAppendMetricTracerMarker (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv414zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t">zetDebugAttach (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv414zetDebugDetach26zet_debug_session_handle_t">zetDebugDetach (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetDebugGetNumThreads26zet_debug_session_handle_tP8uint64_t">zetDebugGetNumThreads (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zetDebugInterrupt26zet_debug_session_handle_t8uint64_t">zetDebugInterrupt (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zetDebugReadEvent26zet_debug_session_handle_t8uint64_t6size_tPv">zetDebugReadEvent (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zetDebugReadMemory26zet_debug_session_handle_t8uint64_ti8uint64_t6size_tPv">zetDebugReadMemory (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zetDebugReadState26zet_debug_session_handle_t8uint64_t8uint64_t6size_tPv">zetDebugReadState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv414zetDebugResume26zet_debug_session_handle_t8uint64_t">zetDebugResume (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zetDebugWriteMemory26zet_debug_session_handle_t8uint64_ti8uint64_t6size_tPKv">zetDebugWriteMemory (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zetDebugWriteState26zet_debug_session_handle_t8uint64_t8uint64_t6size_tPKv">zetDebugWriteState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetDeviceActivateMetricGroups19zet_device_handle_t8uint32_tP25zet_metric_group_handle_t">zetDeviceActivateMetricGroups (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv47zetInit14ze_init_flag_t">zetInit (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetKernelGetProfileInfo19zet_kernel_handle_tP18zet_profile_info_t">zetKernelGetProfileInfo (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv412zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t">zetMetricGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t">zetMetricGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t">zetMetricGroupCalculateMetricValues (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t">zetMetricGroupGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t">zetMetricGroupGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetMetricQueryCreate30zet_metric_query_pool_handle_t8uint32_tP25zet_metric_query_handle_t">zetMetricQueryCreate (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetMetricQueryDestroy25zet_metric_query_handle_t">zetMetricQueryDestroy (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetMetricQueryGetData25zet_metric_query_handle_tP6size_tP7uint8_t">zetMetricQueryGetData (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv424zetMetricQueryPoolCreate19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t">zetMetricQueryPoolCreate (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t">zetMetricQueryPoolDestroy (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zetMetricQueryReset25zet_metric_query_handle_t">zetMetricQueryReset (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetMetricTracerClose26zet_metric_tracer_handle_t">zetMetricTracerClose (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zetMetricTracerOpen19zet_device_handle_t25zet_metric_group_handle_tP24zet_metric_tracer_desc_t17ze_event_handle_tP26zet_metric_tracer_handle_t">zetMetricTracerOpen (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetMetricTracerReadData26zet_metric_tracer_handle_t8uint32_tP6size_tP7uint8_t">zetMetricTracerReadData (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetModuleGetDebugInfo19zet_module_handle_t30zet_module_debug_info_format_tP6size_tP7uint8_t">zetModuleGetDebugInfo (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanDeviceGetProperties19zet_sysman_handle_tP23zet_sysman_properties_t">zetSysmanDeviceGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zetSysmanDeviceGetRepairStatus19zet_sysman_handle_tP19zet_repair_status_t">zetSysmanDeviceGetRepairStatus (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanDeviceReset19zet_sysman_handle_t">zetSysmanDeviceReset (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanDiagnosticsGet19zet_sysman_handle_tP8uint32_tP24zet_sysman_diag_handle_t">zetSysmanDiagnosticsGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv433zetSysmanDiagnosticsGetProperties24zet_sysman_diag_handle_tP21zet_diag_properties_t">zetSysmanDiagnosticsGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanDiagnosticsGetTests24zet_sysman_diag_handle_tP8uint32_tP15zet_diag_test_t">zetSysmanDiagnosticsGetTests (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanDiagnosticsRunTests24zet_sysman_diag_handle_t8uint32_t8uint32_tP17zet_diag_result_t">zetSysmanDiagnosticsRunTests (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zetSysmanEngineGet19zet_sysman_handle_tP8uint32_tP26zet_sysman_engine_handle_t">zetSysmanEngineGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zetSysmanEngineGetActivity26zet_sysman_engine_handle_tP18zet_engine_stats_t">zetSysmanEngineGetActivity (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanEngineGetProperties26zet_sysman_engine_handle_tP23zet_engine_properties_t">zetSysmanEngineGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zetSysmanEventGet19zet_sysman_handle_tP25zet_sysman_event_handle_t">zetSysmanEventGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanEventGetConfig25zet_sysman_event_handle_tP18zet_event_config_t">zetSysmanEventGetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zetSysmanEventGetState25zet_sysman_event_handle_t9ze_bool_tP8uint32_t">zetSysmanEventGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanEventListen18ze_driver_handle_t8uint32_t8uint32_tP25zet_sysman_event_handle_tP8uint32_t">zetSysmanEventListen (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanEventSetConfig25zet_sysman_event_handle_tPK18zet_event_config_t">zetSysmanEventSetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zetSysmanFabricPortGet19zet_sysman_handle_tP8uint32_tP31zet_sysman_fabric_port_handle_t">zetSysmanFabricPortGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanFabricPortGetConfig31zet_sysman_fabric_port_handle_tP24zet_fabric_port_config_t">zetSysmanFabricPortGetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zetSysmanFabricPortGetLinkType31zet_sysman_fabric_port_handle_t9ze_bool_tP22zet_fabric_link_type_t">zetSysmanFabricPortGetLinkType (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zetSysmanFabricPortGetProperties31zet_sysman_fabric_port_handle_tP28zet_fabric_port_properties_t">zetSysmanFabricPortGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427zetSysmanFabricPortGetState31zet_sysman_fabric_port_handle_tP23zet_fabric_port_state_t">zetSysmanFabricPortGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zetSysmanFabricPortGetThroughput31zet_sysman_fabric_port_handle_tP28zet_fabric_port_throughput_t">zetSysmanFabricPortGetThroughput (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanFabricPortSetConfig31zet_sysman_fabric_port_handle_tPK24zet_fabric_port_config_t">zetSysmanFabricPortSetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zetSysmanFanGet19zet_sysman_handle_tP8uint32_tP23zet_sysman_fan_handle_t">zetSysmanFanGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetSysmanFanGetConfig23zet_sysman_fan_handle_tP16zet_fan_config_t">zetSysmanFanGetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zetSysmanFanGetProperties23zet_sysman_fan_handle_tP20zet_fan_properties_t">zetSysmanFanGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanFanGetState23zet_sysman_fan_handle_t21zet_fan_speed_units_tP8uint32_t">zetSysmanFanGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetSysmanFanSetConfig23zet_sysman_fan_handle_tPK16zet_fan_config_t">zetSysmanFanSetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv422zetSysmanFirmwareFlash28zet_sysman_firmware_handle_tPv8uint32_t">zetSysmanFirmwareFlash (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanFirmwareGet19zet_sysman_handle_tP8uint32_tP28zet_sysman_firmware_handle_t">zetSysmanFirmwareGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanFirmwareGetChecksum28zet_sysman_firmware_handle_tP8uint32_t">zetSysmanFirmwareGetChecksum (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zetSysmanFirmwareGetProperties28zet_sysman_firmware_handle_tP25zet_firmware_properties_t">zetSysmanFirmwareGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetSysmanFrequencyGet19zet_sysman_handle_tP8uint32_tP24zet_sysman_freq_handle_t">zetSysmanFrequencyGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv436zetSysmanFrequencyGetAvailableClocks24zet_sysman_freq_handle_tP8uint32_tPd">zetSysmanFrequencyGetAvailableClocks (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv431zetSysmanFrequencyGetProperties24zet_sysman_freq_handle_tP21zet_freq_properties_t">zetSysmanFrequencyGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zetSysmanFrequencyGetRange24zet_sysman_freq_handle_tP16zet_freq_range_t">zetSysmanFrequencyGetRange (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zetSysmanFrequencyGetState24zet_sysman_freq_handle_tP16zet_freq_state_t">zetSysmanFrequencyGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv433zetSysmanFrequencyGetThrottleTime24zet_sysman_freq_handle_tP24zet_freq_throttle_time_t">zetSysmanFrequencyGetThrottleTime (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435zetSysmanFrequencyOcGetCapabilities24zet_sysman_freq_handle_tP21zet_oc_capabilities_t">zetSysmanFrequencyOcGetCapabilities (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetSysmanFrequencyOcGetConfig24zet_sysman_freq_handle_tP15zet_oc_config_t">zetSysmanFrequencyOcGetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetSysmanFrequencyOcGetIccMax24zet_sysman_freq_handle_tPd">zetSysmanFrequencyOcGetIccMax (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanFrequencyOcGetTjMax24zet_sysman_freq_handle_tPd">zetSysmanFrequencyOcGetTjMax (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetSysmanFrequencyOcSetConfig24zet_sysman_freq_handle_tP15zet_oc_config_tP9ze_bool_t">zetSysmanFrequencyOcSetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetSysmanFrequencyOcSetIccMax24zet_sysman_freq_handle_td">zetSysmanFrequencyOcSetIccMax (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanFrequencyOcSetTjMax24zet_sysman_freq_handle_td">zetSysmanFrequencyOcSetTjMax (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zetSysmanFrequencySetRange24zet_sysman_freq_handle_tPK16zet_freq_range_t">zetSysmanFrequencySetRange (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv412zetSysmanGet19zet_device_handle_t20zet_sysman_version_tP19zet_sysman_handle_t">zetSysmanGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zetSysmanLedGet19zet_sysman_handle_tP8uint32_tP23zet_sysman_led_handle_t">zetSysmanLedGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zetSysmanLedGetProperties23zet_sysman_led_handle_tP20zet_led_properties_t">zetSysmanLedGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanLedGetState23zet_sysman_led_handle_tP15zet_led_state_t">zetSysmanLedGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanLedSetState23zet_sysman_led_handle_tPK15zet_led_state_t">zetSysmanLedSetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv418zetSysmanMemoryGet19zet_sysman_handle_tP8uint32_tP23zet_sysman_mem_handle_t">zetSysmanMemoryGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427zetSysmanMemoryGetBandwidth23zet_sysman_mem_handle_tP19zet_mem_bandwidth_t">zetSysmanMemoryGetBandwidth (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanMemoryGetProperties23zet_sysman_mem_handle_tP20zet_mem_properties_t">zetSysmanMemoryGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanMemoryGetState23zet_sysman_mem_handle_tP15zet_mem_state_t">zetSysmanMemoryGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zetSysmanPciGetBars19zet_sysman_handle_tP8uint32_tP24zet_pci_bar_properties_t">zetSysmanPciGetBars (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zetSysmanPciGetProperties19zet_sysman_handle_tP20zet_pci_properties_t">zetSysmanPciGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanPciGetState19zet_sysman_handle_tP15zet_pci_state_t">zetSysmanPciGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanPciGetStats19zet_sysman_handle_tP15zet_pci_stats_t">zetSysmanPciGetStats (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zetSysmanPerformanceProfileGet19zet_sysman_handle_tP18zet_perf_profile_t">zetSysmanPerformanceProfileGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv439zetSysmanPerformanceProfileGetSupported19zet_sysman_handle_tP8uint32_tP18zet_perf_profile_t">zetSysmanPerformanceProfileGetSupported (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zetSysmanPerformanceProfileSet19zet_sysman_handle_t18zet_perf_profile_t">zetSysmanPerformanceProfileSet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv417zetSysmanPowerGet19zet_sysman_handle_tP8uint32_tP23zet_sysman_pwr_handle_t">zetSysmanPowerGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv430zetSysmanPowerGetEnergyCounter23zet_sysman_pwr_handle_tP26zet_power_energy_counter_t">zetSysmanPowerGetEnergyCounter (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zetSysmanPowerGetEnergyThreshold23zet_sysman_pwr_handle_tP22zet_energy_threshold_t">zetSysmanPowerGetEnergyThreshold (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanPowerGetLimits23zet_sysman_pwr_handle_tP27zet_power_sustained_limit_tP23zet_power_burst_limit_tP22zet_power_peak_limit_t">zetSysmanPowerGetLimits (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv427zetSysmanPowerGetProperties23zet_sysman_pwr_handle_tP22zet_power_properties_t">zetSysmanPowerGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zetSysmanPowerSetEnergyThreshold23zet_sysman_pwr_handle_td">zetSysmanPowerSetEnergyThreshold (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanPowerSetLimits23zet_sysman_pwr_handle_tPK27zet_power_sustained_limit_tPK23zet_power_burst_limit_tPK22zet_power_peak_limit_t">zetSysmanPowerSetLimits (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv426zetSysmanProcessesGetState19zet_sysman_handle_tP8uint32_tP19zet_process_state_t">zetSysmanProcessesGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zetSysmanPsuGet19zet_sysman_handle_tP8uint32_tP23zet_sysman_psu_handle_t">zetSysmanPsuGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zetSysmanPsuGetProperties23zet_sysman_psu_handle_tP20zet_psu_properties_t">zetSysmanPsuGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanPsuGetState23zet_sysman_psu_handle_tP15zet_psu_state_t">zetSysmanPsuGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zetSysmanRasGet19zet_sysman_handle_tP8uint32_tP23zet_sysman_ras_handle_t">zetSysmanRasGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetSysmanRasGetConfig23zet_sysman_ras_handle_tP16zet_ras_config_t">zetSysmanRasGetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv425zetSysmanRasGetProperties23zet_sysman_ras_handle_tP20zet_ras_properties_t">zetSysmanRasGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv420zetSysmanRasGetState23zet_sysman_ras_handle_t9ze_bool_tP8uint64_tP17zet_ras_details_t">zetSysmanRasGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetSysmanRasSetConfig23zet_sysman_ras_handle_tPK16zet_ras_config_t">zetSysmanRasSetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zetSysmanSchedulerGetCurrentMode19zet_sysman_handle_tP16zet_sched_mode_t">zetSysmanSchedulerGetCurrentMode (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv435zetSysmanSchedulerGetSupportedModes19zet_sysman_handle_tP8uint32_tP16zet_sched_mode_t">zetSysmanSchedulerGetSupportedModes (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv442zetSysmanSchedulerGetTimeoutModeProperties19zet_sysman_handle_t9ze_bool_tP30zet_sched_timeout_properties_t">zetSysmanSchedulerGetTimeoutModeProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv444zetSysmanSchedulerGetTimesliceModeProperties19zet_sysman_handle_t9ze_bool_tP32zet_sched_timeslice_properties_t">zetSysmanSchedulerGetTimesliceModeProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv441zetSysmanSchedulerSetComputeUnitDebugMode19zet_sysman_handle_tP9ze_bool_t">zetSysmanSchedulerSetComputeUnitDebugMode (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv434zetSysmanSchedulerSetExclusiveMode19zet_sysman_handle_tP9ze_bool_t">zetSysmanSchedulerSetExclusiveMode (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv432zetSysmanSchedulerSetTimeoutMode19zet_sysman_handle_tP30zet_sched_timeout_properties_tP9ze_bool_t">zetSysmanSchedulerSetTimeoutMode (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv434zetSysmanSchedulerSetTimesliceMode19zet_sysman_handle_tP32zet_sched_timeslice_properties_tP9ze_bool_t">zetSysmanSchedulerSetTimesliceMode (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zetSysmanStandbyGet19zet_sysman_handle_tP8uint32_tP27zet_sysman_standby_handle_t">zetSysmanStandbyGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanStandbyGetMode27zet_sysman_standby_handle_tP24zet_standby_promo_mode_t">zetSysmanStandbyGetMode (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetSysmanStandbyGetProperties27zet_sysman_standby_handle_tP24zet_standby_properties_t">zetSysmanStandbyGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanStandbySetMode27zet_sysman_standby_handle_t24zet_standby_promo_mode_t">zetSysmanStandbySetMode (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv423zetSysmanTemperatureGet19zet_sysman_handle_tP8uint32_tP24zet_sysman_temp_handle_t">zetSysmanTemperatureGet (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetSysmanTemperatureGetConfig24zet_sysman_temp_handle_tP17zet_temp_config_t">zetSysmanTemperatureGetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv433zetSysmanTemperatureGetProperties24zet_sysman_temp_handle_tP21zet_temp_properties_t">zetSysmanTemperatureGetProperties (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv428zetSysmanTemperatureGetState24zet_sysman_temp_handle_tPd">zetSysmanTemperatureGetState (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv429zetSysmanTemperatureSetConfig24zet_sysman_temp_handle_tPK17zet_temp_config_t">zetSysmanTemperatureSetConfig (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv415zetTracerCreate19zet_driver_handle_tPK17zet_tracer_desc_tP19zet_tracer_handle_t">zetTracerCreate (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv416zetTracerDestroy19zet_tracer_handle_t">zetTracerDestroy (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv419zetTracerSetEnabled19zet_tracer_handle_t9ze_bool_t">zetTracerSetEnabled (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetTracerSetEpilogues19zet_tracer_handle_tP20zet_core_callbacks_t">zetTracerSetEpilogues (C++ function)</a>
+</li>
+      <li><a href="tools/api.html#_CPPv421zetTracerSetPrologues19zet_tracer_handle_tP20zet_core_callbacks_t">zetTracerSetPrologues (C++ function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,1072 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>oneAPI Specification Releases &#8212; oneAPI Specification Versions  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/uxlfoundation/spec.oneapi.io/issues/new?title=Issue%20on%20page%20%2Findex.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button"
+   title="Open an issue"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/index.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>oneAPI Specification Releases</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero">Level Zero</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-notes">Release Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-10">Level Zero v1.10</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-3">Level Zero v1.9.3</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-2">Level Zero v1.9.2</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-1">Level Zero v1.9.1</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-0">Level Zero v1.9.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-8-0">Level Zero v1.8.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-7-8">Level Zero v1.7.8</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-7-0">Level Zero v1.7.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-6-10">Level Zero v1.6.10</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-6-3">Level Zero v1.6.3</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-6-0">Level Zero v1.6.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-17">Level Zero v1.5.17</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-16">Level Zero v1.5.16</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-8">Level Zero v1.5.8</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-0">Level Zero v1.5.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-4-8">Level Zero v1.4.8</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-4">Level Zero v1.4</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-3">Level Zero v1.3</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-2">Level Zero v1.2</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-1">Level Zero v1.1</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-0">Level Zero v1.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v0-95">Level Zero v0.95</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v0-91">Level Zero v0.91</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="oneapi-specification-releases">
+<h1>oneAPI Specification Releases<a class="headerlink" href="#oneapi-specification-releases" title="Link to this heading">#</a></h1>
+<p>The oneapi spec has moved to <a class="reference external" href="https://oneapi-spec.uxlfoundation.org/">oneAPI Spec</a>. Level Zero continues to
+be available at this site. All other specs have been archived. For any
+questions, file an issue at <a class="reference external" href="https://github.com/uxlfoundation/spec.oneapi.io">spec.oneapi.io issues</a>.</p>
+<section id="level-zero">
+<h2>Level Zero<a class="headerlink" href="#level-zero" title="Link to this heading">#</a></h2>
+<table class="table">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 20.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Version</p></th>
+<th class="head"><p>Date</p></th>
+<th class="head"><p>View</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-10">Level Zero v1.10</a></p></td>
+<td><p>2024-09-06</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.10/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-3">Level Zero v1.9.3</a></p></td>
+<td><p>2024-05-03</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.9.3/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-2">Level Zero v1.9.2</a></p></td>
+<td><p>2024-02-20</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.9.2/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-1">Level Zero v1.9.1</a></p></td>
+<td><p>2024-02-09</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.9.1/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-0">Level Zero v1.9.0</a></p></td>
+<td><p>2024-02-02</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.9.0/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-8-0">Level Zero v1.8.0</a></p></td>
+<td><p>2023-10-13</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.8.0/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-7-8">Level Zero v1.7.8</a></p></td>
+<td><p>2023-8-28</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.7.8/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-7-0">Level Zero v1.7.0</a></p></td>
+<td><p>2023-7-9</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.7.0/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-10">Level Zero v1.6.10</a></p></td>
+<td><p>2023-5-19</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.6.10/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-6-3">Level Zero v1.6.3</a></p></td>
+<td><p>2023-4-25</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.6.3/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-0">Level Zero v1.6.0</a></p></td>
+<td><p>2023-3-31</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.6.0/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-17">Level Zero v1.5.17</a></p></td>
+<td><p>2023-3-2</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.5.17/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-16">Level Zero v1.5.16</a></p></td>
+<td><p>2023-2-28</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.5.16/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-8">Level Zero v1.5.8</a></p></td>
+<td><p>2023-1-19</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.5.8/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-0">Level Zero v1.5.0</a></p></td>
+<td><p>2023-1-11</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.5.0/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-4-8">Level Zero v1.4.8</a></p></td>
+<td><p>2022-07-22</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.4.8/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-4">Level Zero v1.4</a></p></td>
+<td><p>2022-05-05</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.4.0/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-3">Level Zero v1.3</a></p></td>
+<td><p>2021-11-27</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.3.7/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-2">Level Zero v1.2</a></p></td>
+<td><p>2021-05-11</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.2.43/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-1">Level Zero v1.1</a></p></td>
+<td><p>2021-02-04</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.1.2/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-0">Level Zero v1.0</a></p></td>
+<td><p>2020-10-02</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/1.0.4/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v0-95">Level Zero v0.95</a></p></td>
+<td><p>2020-05-28</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/0.95/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v0-91">Level Zero v0.91</a></p></td>
+<td><p>2020-03-04</p></td>
+<td><p><a class="reference external" href="https://spec.oneapi.io/level-zero/0.91/index.html">HTML</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="release-notes">
+<h3>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">#</a></h3>
+<section id="level-zero-v1-10">
+<h4>Level Zero v1.10<a class="headerlink" href="#level-zero-v1-10" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Updated Features</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Supports new single API for Level Zero Init and Driver Retrieval</p></li>
+<li><p>Support for concurrent Metric group query</p></li>
+<li><p>Supports experimental extension for metric tracer</p></li>
+<li><p>Support to specify fp64 range to metric_value_info</p></li>
+<li><p>Support zetCreateMetricGroupsFromMetricsExp programmable API</p></li>
+<li><p>Support for new temperature sensor types</p></li>
+<li><p>Support for ZE_API_VERSION_CURRENT_M macro for compile time version validation.</p></li>
+<li><p>Supports version 1.1 of mutable commands extension</p></li>
+<li><p>Support for NPU graph support for MCL extension</p></li>
+<li><p>Support for new ELF memory space for debugger</p></li>
+<li><p>Support for Metric Tracer Decode support for sub-devices</p></li>
+<li><p>Support for byte normalized programmable type</p></li>
+<li><p>Added updates to virtual management API</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Patches to v1.9.3 release</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Added description to replace C string parameter type</p></li>
+<li><p>Fixed metricprogrammable spec issues</p></li>
+<li><p>Update documentation on zesInit Usage</p></li>
+<li><p>Remove VF experimental interfaces</p></li>
+<li><p>fix metrics names in tracer</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-9-3">
+<h4>Level Zero v1.9.3<a class="headerlink" href="#level-zero-v1-9-3" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Patches to v1.9.2 release</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Misc infrastructure updates</p></li>
+<li><p>Fix typo in for device property</p></li>
+<li><p>Update support for sampled bindless images</p></li>
+<li><p>Update new image formats</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-9-2">
+<h4>Level Zero v1.9.2<a class="headerlink" href="#level-zero-v1-9-2" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Patch v1.9 to fix API version enum</p></li>
+</ul>
+</section>
+<section id="level-zero-v1-9-1">
+<h4>Level Zero v1.9.1<a class="headerlink" href="#level-zero-v1-9-1" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Misc. patches to v1.9.0 release</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Add missing enumerations to programming guides</p></li>
+<li><p>Add numWaitEvents parameter to mutable command list update wait events API (needed for loader)</p></li>
+<li><p>Add range to phCommandLists description in append command lists extension</p></li>
+<li><p>Fix spelling error in sysman subdevice properties structure type name</p></li>
+<li><p>Fix immediate command list append API parameter description to work around script limitation</p></li>
+<li><p>Convert fixed-length character array parameters to constant pointers in programmable metrics and firmware secuirty version extensions</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-9-0">
+<h4>Level Zero v1.9.0<a class="headerlink" href="#level-zero-v1-9-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core</p>
+<ul>
+<li><p>Fix device hierarchy environment variable value in docs</p></li>
+<li><p>Add experimental extension for immediate command list append command lists</p></li>
+<li><p>Add experimental extension to clone a command list</p></li>
+<li><p>Add experimental extension for mutable command lists</p></li>
+<li><p>Add experimental extension for bindless images</p></li>
+<li><p>Add introspection APIs</p></li>
+<li><p>Add invalid argument error code to zeContextMakeMemoryResident</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Fixes to Memory Bandwidth Extensions</p></li>
+<li><p>Add SURVIVABILITY_MODE_DETECTED event type</p></li>
+<li><p>Clarify engine stats details</p></li>
+<li><p>Add clarification for setting frequency defaults</p></li>
+<li><p>New firmware API for logging</p></li>
+<li><p>Add extension to support Flat device model</p></li>
+<li><p>Add experimental extension to access firmware security version</p></li>
+<li><p>Add experimental extension for VF telemetry</p></li>
+</ul>
+</li>
+<li><p>Tools</p>
+<ul>
+<li><p>Add support for programmable metrics</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-8-0">
+<h4>Level Zero v1.8.0<a class="headerlink" href="#level-zero-v1-8-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core</p>
+<ul>
+<li><p>Add API Versions 1.7, 1.8</p></li>
+<li><p>Add experimental extension for counter-based events</p></li>
+<li><p>Clarify usage of IPC event pools</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Add RasClearState to extension listing</p></li>
+<li><p>Add MEMORY power domain</p></li>
+<li><p>Add GPU power domain</p></li>
+<li><p>Clarify that the time units for engine activity counters are implementation specific</p></li>
+<li><p>Describe extension discovery</p></li>
+<li><p>Added GPU Board Temperature Metric</p></li>
+<li><p>Add power domain properties extension</p></li>
+<li><p>Deprecate unused APIs and/or APIs with enhanced replacements</p></li>
+<li><p>Deprecate compute unit debug mode</p></li>
+<li><p>Add memory timestamp valid bits experimental extension</p></li>
+<li><p>Add flash progress API</p></li>
+<li><p>Added Memory Page Offline Metrics</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-7-8">
+<h4>Level Zero v1.7.8<a class="headerlink" href="#level-zero-v1-7-8" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core</p>
+<ul>
+<li><p>Fix timestamps results parameter attributes</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Add extension mechanism for dynamically discovering RAS error states</p></li>
+<li><p>Move engine activity extension to separate extension file</p></li>
+<li><p>Add clarifications to board and serial number descriptions</p></li>
+<li><p>Clarify description for multi-port throughput</p></li>
+</ul>
+</li>
+<li><p>Tools</p>
+<ul>
+<li><p>Clarify metric streamer desc member descriptions</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-7-0">
+<h4>Level Zero v1.7.0<a class="headerlink" href="#level-zero-v1-7-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core</p>
+<ul>
+<li><p>Fix a spelling error in the core programming guide command queues section</p></li>
+<li><p>Minor fix to kernel timestamp example in programming guide</p></li>
+<li><p>Some fixes for kernel max group size extension</p></li>
+<li><p>Add clarification to immediate command lists execution</p></li>
+<li><p>Add system memory hint for memory advise</p></li>
+<li><p>Add API to set atomic properties of a shared allocation</p></li>
+<li><p>Add support for in-order lists</p></li>
+<li><p>Add support for flexible device hierarchy model</p></li>
+<li><p>Add ray tracing acceleration structure build experimental extension</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Various updates for engine, fabric, device and memory</p></li>
+<li><p>Added Fabric Error Counters and API</p></li>
+<li><p>Update engine group descriptions</p></li>
+<li><p>Fixes to GetFabricPortMultiThroughput</p></li>
+</ul>
+</li>
+<li><p>Tools</p>
+<ul>
+<li><p>Minor formatting fix for metric export data</p></li>
+<li><p>Fix sample code for MetricGroupGetExportDataExp</p></li>
+<li><p>Promote ZET_METRIC_TYPE_IP_EXP out of experimental</p></li>
+<li><p>Fix ZET typo to conform to naming convention</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-6-10">
+<h4>Level Zero v1.6.10<a class="headerlink" href="#level-zero-v1-6-10" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core</p>
+<ul>
+<li><p>Clarify documentation on build logs lifetime</p></li>
+<li><p>Set pNext pointer to NULL in programming guide</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Add support for machine independent calculation for metrics data</p></li>
+<li><p>Update metrics timer resolution to cycle/sec</p></li>
+</ul>
+</li>
+<li><p>Tools</p>
+<ul>
+<li><p>Fix html generation of metric export data example code</p></li>
+<li><p>Fix base type for zet_metric_global_timestamps_resolution_exp_t</p></li>
+</ul>
+</li>
+<li><p>Infrastructure (Scripts)</p>
+<ul>
+<li><p>Misc. formatting and infrastructure fixes</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-6-3">
+<h4>Level Zero v1.6.3<a class="headerlink" href="#level-zero-v1-6-3" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core</p>
+<ul>
+<li><p>Import SECURITY.md</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Revert RAS Category and Fabric API changes, restoring backwards compatibility.</p></li>
+</ul>
+</li>
+<li><p>Infrastructure (Scripts)</p>
+<ul>
+<li><p>Update copyright year for publication.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-6-0">
+<h4>Level Zero v1.6.0<a class="headerlink" href="#level-zero-v1-6-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Add zeMemPutIpcHandle and zeEventPoolPutIpcHandle</p></li>
+<li><p>Add helper functions for IPC handle</p></li>
+<li><p>Add zeDriverGetLastResultString</p></li>
+<li><p>Add zeCommandListHostSynchronize</p></li>
+<li><p>Module build option clarification</p></li>
+<li><p>Introduce extension to query normalized kernel event timestamps</p></li>
+<li><p>Clarify image buffers format/layout restrictions</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Extend the SYSMAN Frequency Domain list to include a MEDIA Domain</p></li>
+</ul>
+</li>
+<li><p>Infrastructure (Scripts)</p>
+<ul>
+<li><p>Fixup extension references and substitutions</p></li>
+<li><p>Fixup parser versions (add newer point releases to all_versions)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-5-17">
+<h4>Level Zero v1.5.17<a class="headerlink" href="#level-zero-v1-5-17" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Tool Changes</p>
+<ul>
+<li><p>Add missing version to global metrics timestamps extension</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-5-16">
+<h4>Level Zero v1.5.16<a class="headerlink" href="#level-zero-v1-5-16" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Clarify intended interpretation of 32-bit device id</p></li>
+<li><p>Clarify that zeContextMakeMemoryResident is a cross-platform API</p></li>
+<li><p>Clarify language for pString parameter of zeKernelGetSourceAttributes</p></li>
+<li><p>Add an extension to get the kernel max group size properties</p></li>
+<li><p>Fixup typo in PCI Properties extension example</p></li>
+</ul>
+</li>
+<li><p>Tool Changes</p>
+<ul>
+<li><p>Add extension for global metrics timestamps</p></li>
+</ul>
+</li>
+<li><p>Sysman Changes</p>
+<ul>
+<li><p>Explicitly state the timestamp unit for the memory bandwidth API</p></li>
+<li><p>Update value of ZES_MAX_RAS_ERROR_CATEGORY_COUNT macro</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-5-8">
+<h4>Level Zero v1.5.8<a class="headerlink" href="#level-zero-v1-5-8" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Infrastructure (Scripts)</p>
+<ul>
+<li><p>Remove nullptr error code from params with mbz trait</p></li>
+<li><p>Fix handling of mbz attributes</p></li>
+<li><p>Fix ze_device_properties_t in samples</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-5-0">
+<h4>Level Zero v1.5.0<a class="headerlink" href="#level-zero-v1-5-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Clarify that a context can also be used by sub-devices of devices</p></li>
+<li><p>Add an extension for bfloat16 conversions</p></li>
+<li><p>Relax restriction and allow ipc events with timestamps</p></li>
+<li><p>Add an extension to return the device IP version</p></li>
+<li><p>Move image view extension to standard</p></li>
+<li><p>Fix off-by-one error for maximum memory allocation size</p></li>
+<li><p>Add host support for IPC allocations</p></li>
+<li><p>Add sub-allocations properties extensions</p></li>
+<li><p>Clarify commands in an immediate command list may execute synchronously</p></li>
+<li><p>Add additional default errors</p></li>
+</ul>
+</li>
+<li><p>Tool Changes</p>
+<ul>
+<li><p>Add a deprecation message for ZET_ENABLE_API_TRACING_EXP</p></li>
+</ul>
+</li>
+<li><p>Sysman Changes</p>
+<ul>
+<li><p>RAS Category and Fabric API</p></li>
+<li><p>Remove out-of-date Sysman object hierarchy diagram</p></li>
+<li><p>Mark zesPowerGetLimits and zesPowerSetLimits as deprecated</p></li>
+<li><p>Separate APIs for initializing and enumerating sysman</p></li>
+<li><p>Correct documentation for zesMemoryGetBandwidth</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-4-8">
+<h4>Level Zero v1.4.8<a class="headerlink" href="#level-zero-v1-4-8" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Fix naming for some fabric extension function args.</p></li>
+</ul>
+</li>
+<li><p>Sysman Changes</p>
+<ul>
+<li><p>Remove const for _zes_power_limit_ext_desc_t ouput params.</p></li>
+<li><p>Modify zes_power_level_t desc entry.</p></li>
+<li><p>Add missing structure type enums.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-4">
+<h4>Level Zero v1.4<a class="headerlink" href="#level-zero-v1-4" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Fabric Topology Discovery API extension added.</p></li>
+<li><p>Add detail to allocation access capabilities</p></li>
+<li><p>Add an extension to the Core API for obtaining memory BW</p></li>
+<li><p>Add clarifications for printf</p></li>
+<li><p>Add extension for querying device locally unique identifier</p></li>
+<li><p>Fix reordering of stypes</p></li>
+<li><p>Standardize use of desc in SetEccState</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-3">
+<h4>Level Zero v1.3<a class="headerlink" href="#level-zero-v1-3" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Add EU count extension.</p></li>
+<li><p>Add clarification that link log may contain unresolved symbols
+after dynamic linking.</p></li>
+<li><p>Add documentation for dynamic linking.</p></li>
+<li><p>Add extension for linkage inspection.</p></li>
+<li><p>Add extension for obtaining PCI BDF address.</p></li>
+<li><p>Clarify programming guide section on command queues &amp; command lists.</p></li>
+<li><p>Correct documentation regarding maxMemoryFillPatternSize.</p></li>
+<li><p>Clarify that pNext should be nullptr as default.</p></li>
+<li><p>Clarify that unsupported structure types in pNext are ignored.</p></li>
+<li><p>Add extension for image copy to/from memory that permits pitch
+within the memory buffer.</p></li>
+<li><p>Add support for sRGB.</p></li>
+<li><p>Clarify that zeInit needs to be called after forking processes.</p></li>
+<li><p>Clarify barrier execution semantics for zeCommandListAppendBarrier.</p></li>
+<li><p>Add an extension for querying image allocation properties.</p></li>
+<li><p>Add an experimental extension to supply compression hints.</p></li>
+</ul>
+</li>
+<li><p>Tools Changes</p>
+<ul>
+<li><p>Add experimental extension for calculating multiple metrics.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-2">
+<h4>Level Zero v1.2<a class="headerlink" href="#level-zero-v1-2" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Added alloc flags for device and host initial placement.</p></li>
+<li><p>Fix spec references.</p></li>
+<li><p>Add clarification that SPIR-V import and export linkage types are
+used.</p></li>
+<li><p>Add VPU to ze_device_type_t and ze_init_flags_t.</p></li>
+<li><p>Add -ze-opt-level build option.</p></li>
+<li><p>Add kernel scheduling hints experimental extension.</p></li>
+<li><p>Add extended subgroups extension.</p></li>
+<li><p>Add image view planar extension.</p></li>
+<li><p>Add image view extension.</p></li>
+<li><p>Add additional kernel preferred group size properties.</p></li>
+<li><p>Add SPIR-V extension for linkonce-odr.</p></li>
+<li><p>Add cache biasing flags for IPC handles.</p></li>
+<li><p>Add documentation pages for extensions.</p></li>
+<li><p>Add kernel scheduling hints for thread arbitration policy.</p></li>
+<li><p>Add image memory properties experimental extension.</p></li>
+<li><p>Add Event Query Timestamps experimental extension.</p></li>
+<li><p>Fix compatibility issue device time resolution.</p></li>
+<li><p>Add RGBP and BRGP image formats.</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>New return codes for low power state.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-1">
+<h4>Level Zero v1.1<a class="headerlink" href="#level-zero-v1-1" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Add code example for interop sharing, importing Linux dma_buf as
+an external memory handle for device allocation.</p></li>
+<li><p>Clarify zeInit behavior regarding multiple calls with different
+flags or environment variables.</p></li>
+<li><p>Add experimental extension for global work offset property to be
+set on kernel.</p></li>
+<li><p>Update timeResolution units to double in device properties.</p></li>
+<li><p>Added zeDeviceGetGlobalTimestamps to return synchronized host and
+device global timestamps.</p></li>
+<li><p>Clarification on non-standard extensions via
+zeDriverGetExtensionFunctionAddress.</p></li>
+<li><p>Clarifications for execution behavior for submitting multiple
+command lists</p></li>
+<li><p>Add zeContextCreateEx to support context visibility for one or
+more device objects.</p></li>
+<li><p>Specify that kernel state is not stored in thread-local storage by
+implementation.</p></li>
+<li><p>Add float atomics extension to support additional floating point
+atomics capabilities.</p></li>
+<li><p>Add extension to relax allocation limits and allow for allocations
+&gt; 4GB.</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Fix bug in fan spec. The fan configuration zes_fan_config_t should
+point to the table structure zes_fan_table_t instead of one
+temp/speed pair.</p></li>
+</ul>
+</li>
+<li><p>Tools</p>
+<ul>
+<li><p>Add page fault debug event ZE_DEBUG_EVENT_TYPE_PAGE_FAULT.</p></li>
+<li><p>Clarification for metric group properties.</p></li>
+<li><p>Remove phWaitEvents parameters from zetCommandListAppendMetricQueryEnd.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v1-0">
+<h4>Level Zero v1.0<a class="headerlink" href="#level-zero-v1-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Core Changes</p>
+<ul>
+<li><p>Update command queue group properties to indicate numQueues is
+number of physical engines.</p></li>
+<li><p>Clarify ‘Get’ parameters such that the pCount description is more
+clear to what is return in array.</p></li>
+<li><p>Clarify metrics flag in ze_command_queue_group_property_flags_t.</p></li>
+<li><p>Fix API documentation to indicate that pIpcProperties argument is
+[in,out] for GetIpcProperties.</p></li>
+<li><p>Add experimental extension “ze_experimental_module_program” to
+support compiling and linking multiple SPIR-V modules together.</p></li>
+<li><p>Updates to Raytracing extension.</p></li>
+<li><p>Clean up Introduction documentation to remove reference to CSA and
+update ABI compatibility.</p></li>
+<li><p>Fix PG documentation error for -g build flag in Module Build
+Options section.</p></li>
+<li><p>Clarify in PG the default signal / wait event behavior.</p></li>
+<li><p>Add cooperative kernel launch code snippet in PG.</p></li>
+<li><p>Clarify that app must ensure the location in the pool is not being
+used by another event in zeEventCreate.</p></li>
+</ul>
+</li>
+<li><p>Sysman</p>
+<ul>
+<li><p>Update PG to describe that both min and max temperatures across
+sensors will be included in temp components.</p></li>
+<li><p>Clarify fan configuration comment to indicate that fan temp/speeds
+are passed back as table.</p></li>
+<li><p>Fixed comment showing how to calculate %allocated and %free memory
+in memory state structure.</p></li>
+<li><p>Clean up ambiguous comments in the function and structures for
+scheduler and memory components.</p></li>
+</ul>
+</li>
+<li><p>Tools</p>
+<ul>
+<li><p>Fix wrong type in pseudo-code for API Tracing documentation.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="level-zero-v0-95">
+<h4>Level Zero v0.95<a class="headerlink" href="#level-zero-v0-95" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Updates from implementation team.</p></li>
+</ul>
+</section>
+<section id="level-zero-v0-91">
+<h4>Level Zero v0.91<a class="headerlink" href="#level-zero-v0-91" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Initial release</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero">Level Zero</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-notes">Release Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-10">Level Zero v1.10</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-3">Level Zero v1.9.3</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-2">Level Zero v1.9.2</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-1">Level Zero v1.9.1</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-9-0">Level Zero v1.9.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-8-0">Level Zero v1.8.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-7-8">Level Zero v1.7.8</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-7-0">Level Zero v1.7.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-6-10">Level Zero v1.6.10</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-6-3">Level Zero v1.6.3</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-6-0">Level Zero v1.6.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-17">Level Zero v1.5.17</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-16">Level Zero v1.5.16</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-8">Level Zero v1.5.8</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-5-0">Level Zero v1.5.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-4-8">Level Zero v1.4.8</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-4">Level Zero v1.4</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-3">Level Zero v1.3</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-2">Level Zero v1.2</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-1">Level Zero v1.1</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-0">Level Zero v1.0</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v0-95">Level Zero v0.95</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v0-91">Level Zero v0.91</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2021, Intel Corporation.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

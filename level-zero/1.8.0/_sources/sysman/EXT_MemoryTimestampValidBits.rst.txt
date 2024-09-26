@@ -1,0 +1,19 @@
+
+:orphan:
+
+.. _ZES_extension_mem_timestamp_valid_bits:
+
+========================================
+ Memory Timestamp Valid Bits Extension
+========================================
+
+API
+----
+
+* Enumerations
+
+    * :ref:`zes-mem-timestamp-bits-exp-version-t`
+
+* Structures
+
+    * :ref:`zes-mem-timestamp-bits-exp-t`

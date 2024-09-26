@@ -1,0 +1,2791 @@
+
+
+==============================
+Tools API
+==============================
+oneAPI Level Zero Specification - Version 0.91
+
+ 
+
+ 
+
+ 
+
+
+
+
+ 
+
+ 
+
+Driver
+============================================================
+* Functions
+
+
+    * :ref:`zetInit`
+
+ 
+
+ 
+
+
+Driver Functions
+------------------------------------------------------------------------------
+
+
+.. _zetInit:
+
+zetInit
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetInit
+    :project: LevelZero
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+ 
+
+ 
+
+Debug
+============================================================
+* Functions
+
+
+    * :ref:`zetDebugAttach`
+    * :ref:`zetDebugDetach`
+    * :ref:`zetDebugGetNumThreads`
+    * :ref:`zetDebugReadEvent`
+    * :ref:`zetDebugInterrupt`
+    * :ref:`zetDebugResume`
+    * :ref:`zetDebugReadMemory`
+    * :ref:`zetDebugWriteMemory`
+    * :ref:`zetDebugReadState`
+    * :ref:`zetDebugWriteState`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-debug-event-flags-t`
+    * :ref:`zet-debug-event-type-t`
+    * :ref:`zet-debug-detach-reason-t`
+    * :ref:`zet-debug-memory-space-intel-graphics-t`
+    * :ref:`zet-debug-state-intel-graphics-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-debug-config-v1-t`
+    * :ref:`zet-debug-config-variants-t`
+    * :ref:`zet-debug-config-t`
+    * :ref:`zet-debug-event-info-detached-t`
+    * :ref:`zet-debug-event-info-module-t`
+    * :ref:`zet-debug-event-info-t`
+    * :ref:`zet-debug-event-t`
+    * :ref:`zet-debug-state-section-t`
+    * :ref:`zet-debug-state-t`
+
+
+Debug Functions
+------------------------------------------------------------------------------
+
+
+.. _zetDebugAttach:
+
+zetDebugAttach
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugAttach
+    :project: LevelZero
+
+
+.. _zetDebugDetach:
+
+zetDebugDetach
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugDetach
+    :project: LevelZero
+
+
+.. _zetDebugGetNumThreads:
+
+zetDebugGetNumThreads
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugGetNumThreads
+    :project: LevelZero
+
+
+.. _zetDebugReadEvent:
+
+zetDebugReadEvent
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugReadEvent
+    :project: LevelZero
+
+
+.. _zetDebugInterrupt:
+
+zetDebugInterrupt
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugInterrupt
+    :project: LevelZero
+
+
+.. _zetDebugResume:
+
+zetDebugResume
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugResume
+    :project: LevelZero
+
+
+.. _zetDebugReadMemory:
+
+zetDebugReadMemory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugReadMemory
+    :project: LevelZero
+
+
+.. _zetDebugWriteMemory:
+
+zetDebugWriteMemory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugWriteMemory
+    :project: LevelZero
+
+
+.. _zetDebugReadState:
+
+zetDebugReadState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugReadState
+    :project: LevelZero
+
+
+.. _zetDebugWriteState:
+
+zetDebugWriteState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDebugWriteState
+    :project: LevelZero
+
+
+
+Debug Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-debug-event-flags-t:
+
+zet_debug_event_flags_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_debug_event_flags_t
+    :project: LevelZero
+
+
+.. _zet-debug-event-type-t:
+
+zet_debug_event_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_debug_event_type_t
+    :project: LevelZero
+
+
+.. _zet-debug-detach-reason-t:
+
+zet_debug_detach_reason_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_debug_detach_reason_t
+    :project: LevelZero
+
+
+.. _zet-debug-memory-space-intel-graphics-t:
+
+zet_debug_memory_space_intel_graphics_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_debug_memory_space_intel_graphics_t
+    :project: LevelZero
+
+
+.. _zet-debug-state-intel-graphics-t:
+
+zet_debug_state_intel_graphics_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_debug_state_intel_graphics_t
+    :project: LevelZero
+
+ 
+Debug Structures
+------------------------------------------------------------------------------
+
+.. _zet-debug-config-v1-t:
+
+zet_debug_config_v1_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_debug_config_v1_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-debug-config-variants-t:
+
+zet_debug_config_variants_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenunion:: zet_debug_config_variants_t
+    :project: LevelZero
+
+.. _zet-debug-config-t:
+
+zet_debug_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_debug_config_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-debug-event-info-detached-t:
+
+zet_debug_event_info_detached_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_debug_event_info_detached_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-debug-event-info-module-t:
+
+zet_debug_event_info_module_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_debug_event_info_module_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-debug-event-info-t:
+
+zet_debug_event_info_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenunion:: zet_debug_event_info_t
+    :project: LevelZero
+
+.. _zet-debug-event-t:
+
+zet_debug_event_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_debug_event_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-debug-state-section-t:
+
+zet_debug_state_section_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_debug_state_section_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-debug-state-t:
+
+zet_debug_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_debug_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Metric
+============================================================
+* Functions
+
+
+    * :ref:`zetMetricGroupGet`
+    * :ref:`zetMetricGroupGetProperties`
+    * :ref:`zetMetricGroupCalculateMetricValues`
+    * :ref:`zetMetricGet`
+    * :ref:`zetMetricGetProperties`
+    * :ref:`zetDeviceActivateMetricGroups`
+    * :ref:`zetMetricTracerOpen`
+    * :ref:`zetCommandListAppendMetricTracerMarker`
+    * :ref:`zetMetricTracerClose`
+    * :ref:`zetMetricTracerReadData`
+    * :ref:`zetMetricQueryPoolCreate`
+    * :ref:`zetMetricQueryPoolDestroy`
+    * :ref:`zetMetricQueryCreate`
+    * :ref:`zetMetricQueryDestroy`
+    * :ref:`zetMetricQueryReset`
+    * :ref:`zetCommandListAppendMetricQueryBegin`
+    * :ref:`zetCommandListAppendMetricQueryEnd`
+    * :ref:`zetCommandListAppendMetricMemoryBarrier`
+    * :ref:`zetMetricQueryGetData`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-metric-group-sampling-type-t`
+    * :ref:`zet-metric-group-properties-version-t`
+    * :ref:`zet-metric-type-t`
+    * :ref:`zet-value-type-t`
+    * :ref:`zet-metric-properties-version-t`
+    * :ref:`zet-metric-tracer-desc-version-t`
+    * :ref:`zet-metric-query-pool-desc-version-t`
+    * :ref:`zet-metric-query-pool-flag-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-metric-group-properties-t`
+    * :ref:`zet-value-t`
+    * :ref:`zet-typed-value-t`
+    * :ref:`zet-metric-properties-t`
+    * :ref:`zet-metric-tracer-desc-t`
+    * :ref:`zet-metric-query-pool-desc-t`
+
+
+Metric Functions
+------------------------------------------------------------------------------
+
+
+.. _zetMetricGroupGet:
+
+zetMetricGroupGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGroupGet
+    :project: LevelZero
+
+
+.. _zetMetricGroupGetProperties:
+
+zetMetricGroupGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGroupGetProperties
+    :project: LevelZero
+
+
+.. _zetMetricGroupCalculateMetricValues:
+
+zetMetricGroupCalculateMetricValues
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGroupCalculateMetricValues
+    :project: LevelZero
+
+
+.. _zetMetricGet:
+
+zetMetricGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGet
+    :project: LevelZero
+
+
+.. _zetMetricGetProperties:
+
+zetMetricGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGetProperties
+    :project: LevelZero
+
+
+.. _zetDeviceActivateMetricGroups:
+
+zetDeviceActivateMetricGroups
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDeviceActivateMetricGroups
+    :project: LevelZero
+
+
+.. _zetMetricTracerOpen:
+
+zetMetricTracerOpen
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricTracerOpen
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricTracerMarker:
+
+zetCommandListAppendMetricTracerMarker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricTracerMarker
+    :project: LevelZero
+
+
+.. _zetMetricTracerClose:
+
+zetMetricTracerClose
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricTracerClose
+    :project: LevelZero
+
+
+.. _zetMetricTracerReadData:
+
+zetMetricTracerReadData
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricTracerReadData
+    :project: LevelZero
+
+
+.. _zetMetricQueryPoolCreate:
+
+zetMetricQueryPoolCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryPoolCreate
+    :project: LevelZero
+
+
+.. _zetMetricQueryPoolDestroy:
+
+zetMetricQueryPoolDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryPoolDestroy
+    :project: LevelZero
+
+
+.. _zetMetricQueryCreate:
+
+zetMetricQueryCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryCreate
+    :project: LevelZero
+
+
+.. _zetMetricQueryDestroy:
+
+zetMetricQueryDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryDestroy
+    :project: LevelZero
+
+
+.. _zetMetricQueryReset:
+
+zetMetricQueryReset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryReset
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricQueryBegin:
+
+zetCommandListAppendMetricQueryBegin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricQueryBegin
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricQueryEnd:
+
+zetCommandListAppendMetricQueryEnd
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricQueryEnd
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricMemoryBarrier:
+
+zetCommandListAppendMetricMemoryBarrier
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricMemoryBarrier
+    :project: LevelZero
+
+
+.. _zetMetricQueryGetData:
+
+zetMetricQueryGetData
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryGetData
+    :project: LevelZero
+
+
+
+Metric Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-metric-group-sampling-type-t:
+
+zet_metric_group_sampling_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_group_sampling_type_t
+    :project: LevelZero
+
+
+.. _zet-metric-group-properties-version-t:
+
+zet_metric_group_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_group_properties_version_t
+    :project: LevelZero
+
+
+.. _zet-metric-type-t:
+
+zet_metric_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_type_t
+    :project: LevelZero
+
+
+.. _zet-value-type-t:
+
+zet_value_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_value_type_t
+    :project: LevelZero
+
+
+.. _zet-metric-properties-version-t:
+
+zet_metric_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_properties_version_t
+    :project: LevelZero
+
+
+.. _zet-metric-tracer-desc-version-t:
+
+zet_metric_tracer_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_tracer_desc_version_t
+    :project: LevelZero
+
+
+.. _zet-metric-query-pool-desc-version-t:
+
+zet_metric_query_pool_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_query_pool_desc_version_t
+    :project: LevelZero
+
+
+.. _zet-metric-query-pool-flag-t:
+
+zet_metric_query_pool_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_query_pool_flag_t
+    :project: LevelZero
+
+ 
+Metric Structures
+------------------------------------------------------------------------------
+
+.. _zet-metric-group-properties-t:
+
+zet_metric_group_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_group_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-value-t:
+
+zet_value_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenunion:: zet_value_t
+    :project: LevelZero
+
+.. _zet-typed-value-t:
+
+zet_typed_value_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_typed_value_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-metric-properties-t:
+
+zet_metric_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-metric-tracer-desc-t:
+
+zet_metric_tracer_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_tracer_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-metric-query-pool-desc-t:
+
+zet_metric_query_pool_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_query_pool_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Module
+============================================================
+* Functions
+
+
+    * :ref:`zetModuleGetDebugInfo`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-module-debug-info-format-t`
+
+ 
+
+
+Module Functions
+------------------------------------------------------------------------------
+
+
+.. _zetModuleGetDebugInfo:
+
+zetModuleGetDebugInfo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetModuleGetDebugInfo
+    :project: LevelZero
+
+
+
+Module Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-module-debug-info-format-t:
+
+zet_module_debug_info_format_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_module_debug_info_format_t
+    :project: LevelZero
+
+ 
+
+ 
+
+Pin
+============================================================
+* Functions
+
+
+    * :ref:`zetKernelGetProfileInfo`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-profile-info-version-t`
+    * :ref:`zet-profile-flag-t`
+    * :ref:`zet-profile-token-type-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-profile-info-t`
+    * :ref:`zet-profile-free-register-token-t`
+    * :ref:`zet-profile-register-sequence-t`
+
+
+Pin Functions
+------------------------------------------------------------------------------
+
+
+.. _zetKernelGetProfileInfo:
+
+zetKernelGetProfileInfo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetKernelGetProfileInfo
+    :project: LevelZero
+
+
+
+Pin Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-profile-info-version-t:
+
+zet_profile_info_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_profile_info_version_t
+    :project: LevelZero
+
+
+.. _zet-profile-flag-t:
+
+zet_profile_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_profile_flag_t
+    :project: LevelZero
+
+
+.. _zet-profile-token-type-t:
+
+zet_profile_token_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_profile_token_type_t
+    :project: LevelZero
+
+ 
+Pin Structures
+------------------------------------------------------------------------------
+
+.. _zet-profile-info-t:
+
+zet_profile_info_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_profile_info_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-profile-free-register-token-t:
+
+zet_profile_free_register_token_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_profile_free_register_token_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-profile-register-sequence-t:
+
+zet_profile_register_sequence_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_profile_register_sequence_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Sysman
+============================================================
+* Functions
+
+
+    * :ref:`zetSysmanGet`
+    * :ref:`zetSysmanDeviceGetProperties`
+    * :ref:`zetSysmanSchedulerGetSupportedModes`
+    * :ref:`zetSysmanSchedulerGetCurrentMode`
+    * :ref:`zetSysmanSchedulerGetTimeoutModeProperties`
+    * :ref:`zetSysmanSchedulerGetTimesliceModeProperties`
+    * :ref:`zetSysmanSchedulerSetTimeoutMode`
+    * :ref:`zetSysmanSchedulerSetTimesliceMode`
+    * :ref:`zetSysmanSchedulerSetExclusiveMode`
+    * :ref:`zetSysmanSchedulerSetComputeUnitDebugMode`
+    * :ref:`zetSysmanPerformanceProfileGetSupported`
+    * :ref:`zetSysmanPerformanceProfileGet`
+    * :ref:`zetSysmanPerformanceProfileSet`
+    * :ref:`zetSysmanProcessesGetState`
+    * :ref:`zetSysmanDeviceReset`
+    * :ref:`zetSysmanDeviceGetRepairStatus`
+    * :ref:`zetSysmanPciGetProperties`
+    * :ref:`zetSysmanPciGetState`
+    * :ref:`zetSysmanPciGetBars`
+    * :ref:`zetSysmanPciGetStats`
+    * :ref:`zetSysmanPowerGet`
+    * :ref:`zetSysmanPowerGetProperties`
+    * :ref:`zetSysmanPowerGetEnergyCounter`
+    * :ref:`zetSysmanPowerGetLimits`
+    * :ref:`zetSysmanPowerSetLimits`
+    * :ref:`zetSysmanPowerGetEnergyThreshold`
+    * :ref:`zetSysmanPowerSetEnergyThreshold`
+    * :ref:`zetSysmanFrequencyGet`
+    * :ref:`zetSysmanFrequencyGetProperties`
+    * :ref:`zetSysmanFrequencyGetAvailableClocks`
+    * :ref:`zetSysmanFrequencyGetRange`
+    * :ref:`zetSysmanFrequencySetRange`
+    * :ref:`zetSysmanFrequencyGetState`
+    * :ref:`zetSysmanFrequencyGetThrottleTime`
+    * :ref:`zetSysmanFrequencyOcGetCapabilities`
+    * :ref:`zetSysmanFrequencyOcGetConfig`
+    * :ref:`zetSysmanFrequencyOcSetConfig`
+    * :ref:`zetSysmanFrequencyOcGetIccMax`
+    * :ref:`zetSysmanFrequencyOcSetIccMax`
+    * :ref:`zetSysmanFrequencyOcGetTjMax`
+    * :ref:`zetSysmanFrequencyOcSetTjMax`
+    * :ref:`zetSysmanEngineGet`
+    * :ref:`zetSysmanEngineGetProperties`
+    * :ref:`zetSysmanEngineGetActivity`
+    * :ref:`zetSysmanStandbyGet`
+    * :ref:`zetSysmanStandbyGetProperties`
+    * :ref:`zetSysmanStandbyGetMode`
+    * :ref:`zetSysmanStandbySetMode`
+    * :ref:`zetSysmanFirmwareGet`
+    * :ref:`zetSysmanFirmwareGetProperties`
+    * :ref:`zetSysmanFirmwareGetChecksum`
+    * :ref:`zetSysmanFirmwareFlash`
+    * :ref:`zetSysmanMemoryGet`
+    * :ref:`zetSysmanMemoryGetProperties`
+    * :ref:`zetSysmanMemoryGetState`
+    * :ref:`zetSysmanMemoryGetBandwidth`
+    * :ref:`zetSysmanFabricPortGet`
+    * :ref:`zetSysmanFabricPortGetProperties`
+    * :ref:`zetSysmanFabricPortGetLinkType`
+    * :ref:`zetSysmanFabricPortGetConfig`
+    * :ref:`zetSysmanFabricPortSetConfig`
+    * :ref:`zetSysmanFabricPortGetState`
+    * :ref:`zetSysmanFabricPortGetThroughput`
+    * :ref:`zetSysmanTemperatureGet`
+    * :ref:`zetSysmanTemperatureGetProperties`
+    * :ref:`zetSysmanTemperatureGetConfig`
+    * :ref:`zetSysmanTemperatureSetConfig`
+    * :ref:`zetSysmanTemperatureGetState`
+    * :ref:`zetSysmanPsuGet`
+    * :ref:`zetSysmanPsuGetProperties`
+    * :ref:`zetSysmanPsuGetState`
+    * :ref:`zetSysmanFanGet`
+    * :ref:`zetSysmanFanGetProperties`
+    * :ref:`zetSysmanFanGetConfig`
+    * :ref:`zetSysmanFanSetConfig`
+    * :ref:`zetSysmanFanGetState`
+    * :ref:`zetSysmanLedGet`
+    * :ref:`zetSysmanLedGetProperties`
+    * :ref:`zetSysmanLedGetState`
+    * :ref:`zetSysmanLedSetState`
+    * :ref:`zetSysmanRasGet`
+    * :ref:`zetSysmanRasGetProperties`
+    * :ref:`zetSysmanRasGetConfig`
+    * :ref:`zetSysmanRasSetConfig`
+    * :ref:`zetSysmanRasGetState`
+    * :ref:`zetSysmanEventGet`
+    * :ref:`zetSysmanEventGetConfig`
+    * :ref:`zetSysmanEventSetConfig`
+    * :ref:`zetSysmanEventGetState`
+    * :ref:`zetSysmanEventListen`
+    * :ref:`zetSysmanDiagnosticsGet`
+    * :ref:`zetSysmanDiagnosticsGetProperties`
+    * :ref:`zetSysmanDiagnosticsGetTests`
+    * :ref:`zetSysmanDiagnosticsRunTests`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-sysman-version-t`
+    * :ref:`zet-engine-type-t`
+    * :ref:`zet-sched-mode-t`
+    * :ref:`zet-perf-profile-t`
+    * :ref:`zet-repair-status-t`
+    * :ref:`zet-pci-link-status-t`
+    * :ref:`zet-pci-link-qual-issues-t`
+    * :ref:`zet-pci-link-stab-issues-t`
+    * :ref:`zet-pci-bar-type-t`
+    * :ref:`zet-freq-domain-t`
+    * :ref:`zet-freq-throttle-reasons-t`
+    * :ref:`zet-oc-mode-t`
+    * :ref:`zet-engine-group-t`
+    * :ref:`zet-standby-type-t`
+    * :ref:`zet-standby-promo-mode-t`
+    * :ref:`zet-mem-type-t`
+    * :ref:`zet-mem-health-t`
+    * :ref:`zet-fabric-port-status-t`
+    * :ref:`zet-fabric-port-qual-issues-t`
+    * :ref:`zet-fabric-port-stab-issues-t`
+    * :ref:`zet-temp-sensors-t`
+    * :ref:`zet-psu-voltage-status-t`
+    * :ref:`zet-fan-speed-mode-t`
+    * :ref:`zet-fan-speed-units-t`
+    * :ref:`zet-ras-error-type-t`
+    * :ref:`zet-sysman-event-type-t`
+    * :ref:`zet-diag-type-t`
+    * :ref:`zet-diag-result-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-sysman-properties-t`
+    * :ref:`zet-sched-timeout-properties-t`
+    * :ref:`zet-sched-timeslice-properties-t`
+    * :ref:`zet-process-state-t`
+    * :ref:`zet-pci-address-t`
+    * :ref:`zet-pci-speed-t`
+    * :ref:`zet-pci-properties-t`
+    * :ref:`zet-pci-state-t`
+    * :ref:`zet-pci-bar-properties-t`
+    * :ref:`zet-pci-stats-t`
+    * :ref:`zet-power-properties-t`
+    * :ref:`zet-power-energy-counter-t`
+    * :ref:`zet-power-sustained-limit-t`
+    * :ref:`zet-power-burst-limit-t`
+    * :ref:`zet-power-peak-limit-t`
+    * :ref:`zet-energy-threshold-t`
+    * :ref:`zet-freq-properties-t`
+    * :ref:`zet-freq-range-t`
+    * :ref:`zet-freq-state-t`
+    * :ref:`zet-freq-throttle-time-t`
+    * :ref:`zet-oc-capabilities-t`
+    * :ref:`zet-oc-config-t`
+    * :ref:`zet-engine-properties-t`
+    * :ref:`zet-engine-stats-t`
+    * :ref:`zet-standby-properties-t`
+    * :ref:`zet-firmware-properties-t`
+    * :ref:`zet-mem-properties-t`
+    * :ref:`zet-mem-state-t`
+    * :ref:`zet-mem-bandwidth-t`
+    * :ref:`zet-fabric-port-uuid-t`
+    * :ref:`zet-fabric-port-speed-t`
+    * :ref:`zet-fabric-port-properties-t`
+    * :ref:`zet-fabric-link-type-t`
+    * :ref:`zet-fabric-port-config-t`
+    * :ref:`zet-fabric-port-state-t`
+    * :ref:`zet-fabric-port-throughput-t`
+    * :ref:`zet-temp-properties-t`
+    * :ref:`zet-temp-threshold-t`
+    * :ref:`zet-temp-config-t`
+    * :ref:`zet-psu-properties-t`
+    * :ref:`zet-psu-state-t`
+    * :ref:`zet-fan-temp-speed-t`
+    * :ref:`zet-fan-properties-t`
+    * :ref:`zet-fan-config-t`
+    * :ref:`zet-led-properties-t`
+    * :ref:`zet-led-state-t`
+    * :ref:`zet-ras-properties-t`
+    * :ref:`zet-ras-details-t`
+    * :ref:`zet-ras-config-t`
+    * :ref:`zet-event-config-t`
+    * :ref:`zet-diag-test-t`
+    * :ref:`zet-diag-properties-t`
+
+
+Sysman Functions
+------------------------------------------------------------------------------
+
+
+.. _zetSysmanGet:
+
+zetSysmanGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanGet
+    :project: LevelZero
+
+
+.. _zetSysmanDeviceGetProperties:
+
+zetSysmanDeviceGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanDeviceGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerGetSupportedModes:
+
+zetSysmanSchedulerGetSupportedModes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerGetSupportedModes
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerGetCurrentMode:
+
+zetSysmanSchedulerGetCurrentMode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerGetCurrentMode
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerGetTimeoutModeProperties:
+
+zetSysmanSchedulerGetTimeoutModeProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerGetTimeoutModeProperties
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerGetTimesliceModeProperties:
+
+zetSysmanSchedulerGetTimesliceModeProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerGetTimesliceModeProperties
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerSetTimeoutMode:
+
+zetSysmanSchedulerSetTimeoutMode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerSetTimeoutMode
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerSetTimesliceMode:
+
+zetSysmanSchedulerSetTimesliceMode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerSetTimesliceMode
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerSetExclusiveMode:
+
+zetSysmanSchedulerSetExclusiveMode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerSetExclusiveMode
+    :project: LevelZero
+
+
+.. _zetSysmanSchedulerSetComputeUnitDebugMode:
+
+zetSysmanSchedulerSetComputeUnitDebugMode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanSchedulerSetComputeUnitDebugMode
+    :project: LevelZero
+
+
+.. _zetSysmanPerformanceProfileGetSupported:
+
+zetSysmanPerformanceProfileGetSupported
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPerformanceProfileGetSupported
+    :project: LevelZero
+
+
+.. _zetSysmanPerformanceProfileGet:
+
+zetSysmanPerformanceProfileGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPerformanceProfileGet
+    :project: LevelZero
+
+
+.. _zetSysmanPerformanceProfileSet:
+
+zetSysmanPerformanceProfileSet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPerformanceProfileSet
+    :project: LevelZero
+
+
+.. _zetSysmanProcessesGetState:
+
+zetSysmanProcessesGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanProcessesGetState
+    :project: LevelZero
+
+
+.. _zetSysmanDeviceReset:
+
+zetSysmanDeviceReset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanDeviceReset
+    :project: LevelZero
+
+
+.. _zetSysmanDeviceGetRepairStatus:
+
+zetSysmanDeviceGetRepairStatus
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanDeviceGetRepairStatus
+    :project: LevelZero
+
+
+.. _zetSysmanPciGetProperties:
+
+zetSysmanPciGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPciGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanPciGetState:
+
+zetSysmanPciGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPciGetState
+    :project: LevelZero
+
+
+.. _zetSysmanPciGetBars:
+
+zetSysmanPciGetBars
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPciGetBars
+    :project: LevelZero
+
+
+.. _zetSysmanPciGetStats:
+
+zetSysmanPciGetStats
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPciGetStats
+    :project: LevelZero
+
+
+.. _zetSysmanPowerGet:
+
+zetSysmanPowerGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPowerGet
+    :project: LevelZero
+
+
+.. _zetSysmanPowerGetProperties:
+
+zetSysmanPowerGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPowerGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanPowerGetEnergyCounter:
+
+zetSysmanPowerGetEnergyCounter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPowerGetEnergyCounter
+    :project: LevelZero
+
+
+.. _zetSysmanPowerGetLimits:
+
+zetSysmanPowerGetLimits
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPowerGetLimits
+    :project: LevelZero
+
+
+.. _zetSysmanPowerSetLimits:
+
+zetSysmanPowerSetLimits
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPowerSetLimits
+    :project: LevelZero
+
+
+.. _zetSysmanPowerGetEnergyThreshold:
+
+zetSysmanPowerGetEnergyThreshold
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPowerGetEnergyThreshold
+    :project: LevelZero
+
+
+.. _zetSysmanPowerSetEnergyThreshold:
+
+zetSysmanPowerSetEnergyThreshold
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPowerSetEnergyThreshold
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyGet:
+
+zetSysmanFrequencyGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyGet
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyGetProperties:
+
+zetSysmanFrequencyGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyGetAvailableClocks:
+
+zetSysmanFrequencyGetAvailableClocks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyGetAvailableClocks
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyGetRange:
+
+zetSysmanFrequencyGetRange
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyGetRange
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencySetRange:
+
+zetSysmanFrequencySetRange
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencySetRange
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyGetState:
+
+zetSysmanFrequencyGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyGetState
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyGetThrottleTime:
+
+zetSysmanFrequencyGetThrottleTime
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyGetThrottleTime
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyOcGetCapabilities:
+
+zetSysmanFrequencyOcGetCapabilities
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyOcGetCapabilities
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyOcGetConfig:
+
+zetSysmanFrequencyOcGetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyOcGetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyOcSetConfig:
+
+zetSysmanFrequencyOcSetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyOcSetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyOcGetIccMax:
+
+zetSysmanFrequencyOcGetIccMax
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyOcGetIccMax
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyOcSetIccMax:
+
+zetSysmanFrequencyOcSetIccMax
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyOcSetIccMax
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyOcGetTjMax:
+
+zetSysmanFrequencyOcGetTjMax
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyOcGetTjMax
+    :project: LevelZero
+
+
+.. _zetSysmanFrequencyOcSetTjMax:
+
+zetSysmanFrequencyOcSetTjMax
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFrequencyOcSetTjMax
+    :project: LevelZero
+
+
+.. _zetSysmanEngineGet:
+
+zetSysmanEngineGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEngineGet
+    :project: LevelZero
+
+
+.. _zetSysmanEngineGetProperties:
+
+zetSysmanEngineGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEngineGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanEngineGetActivity:
+
+zetSysmanEngineGetActivity
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEngineGetActivity
+    :project: LevelZero
+
+
+.. _zetSysmanStandbyGet:
+
+zetSysmanStandbyGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanStandbyGet
+    :project: LevelZero
+
+
+.. _zetSysmanStandbyGetProperties:
+
+zetSysmanStandbyGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanStandbyGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanStandbyGetMode:
+
+zetSysmanStandbyGetMode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanStandbyGetMode
+    :project: LevelZero
+
+
+.. _zetSysmanStandbySetMode:
+
+zetSysmanStandbySetMode
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanStandbySetMode
+    :project: LevelZero
+
+
+.. _zetSysmanFirmwareGet:
+
+zetSysmanFirmwareGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFirmwareGet
+    :project: LevelZero
+
+
+.. _zetSysmanFirmwareGetProperties:
+
+zetSysmanFirmwareGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFirmwareGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanFirmwareGetChecksum:
+
+zetSysmanFirmwareGetChecksum
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFirmwareGetChecksum
+    :project: LevelZero
+
+
+.. _zetSysmanFirmwareFlash:
+
+zetSysmanFirmwareFlash
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFirmwareFlash
+    :project: LevelZero
+
+
+.. _zetSysmanMemoryGet:
+
+zetSysmanMemoryGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanMemoryGet
+    :project: LevelZero
+
+
+.. _zetSysmanMemoryGetProperties:
+
+zetSysmanMemoryGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanMemoryGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanMemoryGetState:
+
+zetSysmanMemoryGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanMemoryGetState
+    :project: LevelZero
+
+
+.. _zetSysmanMemoryGetBandwidth:
+
+zetSysmanMemoryGetBandwidth
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanMemoryGetBandwidth
+    :project: LevelZero
+
+
+.. _zetSysmanFabricPortGet:
+
+zetSysmanFabricPortGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFabricPortGet
+    :project: LevelZero
+
+
+.. _zetSysmanFabricPortGetProperties:
+
+zetSysmanFabricPortGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFabricPortGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanFabricPortGetLinkType:
+
+zetSysmanFabricPortGetLinkType
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFabricPortGetLinkType
+    :project: LevelZero
+
+
+.. _zetSysmanFabricPortGetConfig:
+
+zetSysmanFabricPortGetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFabricPortGetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanFabricPortSetConfig:
+
+zetSysmanFabricPortSetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFabricPortSetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanFabricPortGetState:
+
+zetSysmanFabricPortGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFabricPortGetState
+    :project: LevelZero
+
+
+.. _zetSysmanFabricPortGetThroughput:
+
+zetSysmanFabricPortGetThroughput
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFabricPortGetThroughput
+    :project: LevelZero
+
+
+.. _zetSysmanTemperatureGet:
+
+zetSysmanTemperatureGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanTemperatureGet
+    :project: LevelZero
+
+
+.. _zetSysmanTemperatureGetProperties:
+
+zetSysmanTemperatureGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanTemperatureGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanTemperatureGetConfig:
+
+zetSysmanTemperatureGetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanTemperatureGetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanTemperatureSetConfig:
+
+zetSysmanTemperatureSetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanTemperatureSetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanTemperatureGetState:
+
+zetSysmanTemperatureGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanTemperatureGetState
+    :project: LevelZero
+
+
+.. _zetSysmanPsuGet:
+
+zetSysmanPsuGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPsuGet
+    :project: LevelZero
+
+
+.. _zetSysmanPsuGetProperties:
+
+zetSysmanPsuGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPsuGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanPsuGetState:
+
+zetSysmanPsuGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanPsuGetState
+    :project: LevelZero
+
+
+.. _zetSysmanFanGet:
+
+zetSysmanFanGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFanGet
+    :project: LevelZero
+
+
+.. _zetSysmanFanGetProperties:
+
+zetSysmanFanGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFanGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanFanGetConfig:
+
+zetSysmanFanGetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFanGetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanFanSetConfig:
+
+zetSysmanFanSetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFanSetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanFanGetState:
+
+zetSysmanFanGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanFanGetState
+    :project: LevelZero
+
+
+.. _zetSysmanLedGet:
+
+zetSysmanLedGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanLedGet
+    :project: LevelZero
+
+
+.. _zetSysmanLedGetProperties:
+
+zetSysmanLedGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanLedGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanLedGetState:
+
+zetSysmanLedGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanLedGetState
+    :project: LevelZero
+
+
+.. _zetSysmanLedSetState:
+
+zetSysmanLedSetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanLedSetState
+    :project: LevelZero
+
+
+.. _zetSysmanRasGet:
+
+zetSysmanRasGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanRasGet
+    :project: LevelZero
+
+
+.. _zetSysmanRasGetProperties:
+
+zetSysmanRasGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanRasGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanRasGetConfig:
+
+zetSysmanRasGetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanRasGetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanRasSetConfig:
+
+zetSysmanRasSetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanRasSetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanRasGetState:
+
+zetSysmanRasGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanRasGetState
+    :project: LevelZero
+
+
+.. _zetSysmanEventGet:
+
+zetSysmanEventGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEventGet
+    :project: LevelZero
+
+
+.. _zetSysmanEventGetConfig:
+
+zetSysmanEventGetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEventGetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanEventSetConfig:
+
+zetSysmanEventSetConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEventSetConfig
+    :project: LevelZero
+
+
+.. _zetSysmanEventGetState:
+
+zetSysmanEventGetState
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEventGetState
+    :project: LevelZero
+
+
+.. _zetSysmanEventListen:
+
+zetSysmanEventListen
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanEventListen
+    :project: LevelZero
+
+
+.. _zetSysmanDiagnosticsGet:
+
+zetSysmanDiagnosticsGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanDiagnosticsGet
+    :project: LevelZero
+
+
+.. _zetSysmanDiagnosticsGetProperties:
+
+zetSysmanDiagnosticsGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanDiagnosticsGetProperties
+    :project: LevelZero
+
+
+.. _zetSysmanDiagnosticsGetTests:
+
+zetSysmanDiagnosticsGetTests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanDiagnosticsGetTests
+    :project: LevelZero
+
+
+.. _zetSysmanDiagnosticsRunTests:
+
+zetSysmanDiagnosticsRunTests
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetSysmanDiagnosticsRunTests
+    :project: LevelZero
+
+
+
+Sysman Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-sysman-version-t:
+
+zet_sysman_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_sysman_version_t
+    :project: LevelZero
+
+
+.. _zet-engine-type-t:
+
+zet_engine_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_engine_type_t
+    :project: LevelZero
+
+
+.. _zet-sched-mode-t:
+
+zet_sched_mode_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_sched_mode_t
+    :project: LevelZero
+
+
+.. _zet-perf-profile-t:
+
+zet_perf_profile_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_perf_profile_t
+    :project: LevelZero
+
+
+.. _zet-repair-status-t:
+
+zet_repair_status_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_repair_status_t
+    :project: LevelZero
+
+
+.. _zet-pci-link-status-t:
+
+zet_pci_link_status_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_pci_link_status_t
+    :project: LevelZero
+
+
+.. _zet-pci-link-qual-issues-t:
+
+zet_pci_link_qual_issues_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_pci_link_qual_issues_t
+    :project: LevelZero
+
+
+.. _zet-pci-link-stab-issues-t:
+
+zet_pci_link_stab_issues_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_pci_link_stab_issues_t
+    :project: LevelZero
+
+
+.. _zet-pci-bar-type-t:
+
+zet_pci_bar_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_pci_bar_type_t
+    :project: LevelZero
+
+
+.. _zet-freq-domain-t:
+
+zet_freq_domain_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_freq_domain_t
+    :project: LevelZero
+
+
+.. _zet-freq-throttle-reasons-t:
+
+zet_freq_throttle_reasons_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_freq_throttle_reasons_t
+    :project: LevelZero
+
+
+.. _zet-oc-mode-t:
+
+zet_oc_mode_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_oc_mode_t
+    :project: LevelZero
+
+
+.. _zet-engine-group-t:
+
+zet_engine_group_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_engine_group_t
+    :project: LevelZero
+
+
+.. _zet-standby-type-t:
+
+zet_standby_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_standby_type_t
+    :project: LevelZero
+
+
+.. _zet-standby-promo-mode-t:
+
+zet_standby_promo_mode_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_standby_promo_mode_t
+    :project: LevelZero
+
+
+.. _zet-mem-type-t:
+
+zet_mem_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_mem_type_t
+    :project: LevelZero
+
+
+.. _zet-mem-health-t:
+
+zet_mem_health_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_mem_health_t
+    :project: LevelZero
+
+
+.. _zet-fabric-port-status-t:
+
+zet_fabric_port_status_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_fabric_port_status_t
+    :project: LevelZero
+
+
+.. _zet-fabric-port-qual-issues-t:
+
+zet_fabric_port_qual_issues_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_fabric_port_qual_issues_t
+    :project: LevelZero
+
+
+.. _zet-fabric-port-stab-issues-t:
+
+zet_fabric_port_stab_issues_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_fabric_port_stab_issues_t
+    :project: LevelZero
+
+
+.. _zet-temp-sensors-t:
+
+zet_temp_sensors_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_temp_sensors_t
+    :project: LevelZero
+
+
+.. _zet-psu-voltage-status-t:
+
+zet_psu_voltage_status_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_psu_voltage_status_t
+    :project: LevelZero
+
+
+.. _zet-fan-speed-mode-t:
+
+zet_fan_speed_mode_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_fan_speed_mode_t
+    :project: LevelZero
+
+
+.. _zet-fan-speed-units-t:
+
+zet_fan_speed_units_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_fan_speed_units_t
+    :project: LevelZero
+
+
+.. _zet-ras-error-type-t:
+
+zet_ras_error_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_ras_error_type_t
+    :project: LevelZero
+
+
+.. _zet-sysman-event-type-t:
+
+zet_sysman_event_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_sysman_event_type_t
+    :project: LevelZero
+
+
+.. _zet-diag-type-t:
+
+zet_diag_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_diag_type_t
+    :project: LevelZero
+
+
+.. _zet-diag-result-t:
+
+zet_diag_result_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_diag_result_t
+    :project: LevelZero
+
+ 
+Sysman Structures
+------------------------------------------------------------------------------
+
+.. _zet-sysman-properties-t:
+
+zet_sysman_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_sysman_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-sched-timeout-properties-t:
+
+zet_sched_timeout_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_sched_timeout_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-sched-timeslice-properties-t:
+
+zet_sched_timeslice_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_sched_timeslice_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-process-state-t:
+
+zet_process_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_process_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-pci-address-t:
+
+zet_pci_address_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_pci_address_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-pci-speed-t:
+
+zet_pci_speed_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_pci_speed_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-pci-properties-t:
+
+zet_pci_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_pci_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-pci-state-t:
+
+zet_pci_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_pci_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-pci-bar-properties-t:
+
+zet_pci_bar_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_pci_bar_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-pci-stats-t:
+
+zet_pci_stats_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_pci_stats_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-power-properties-t:
+
+zet_power_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_power_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-power-energy-counter-t:
+
+zet_power_energy_counter_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_power_energy_counter_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-power-sustained-limit-t:
+
+zet_power_sustained_limit_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_power_sustained_limit_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-power-burst-limit-t:
+
+zet_power_burst_limit_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_power_burst_limit_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-power-peak-limit-t:
+
+zet_power_peak_limit_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_power_peak_limit_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-energy-threshold-t:
+
+zet_energy_threshold_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_energy_threshold_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-freq-properties-t:
+
+zet_freq_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_freq_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-freq-range-t:
+
+zet_freq_range_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_freq_range_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-freq-state-t:
+
+zet_freq_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_freq_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-freq-throttle-time-t:
+
+zet_freq_throttle_time_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_freq_throttle_time_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-oc-capabilities-t:
+
+zet_oc_capabilities_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_oc_capabilities_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-oc-config-t:
+
+zet_oc_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_oc_config_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-engine-properties-t:
+
+zet_engine_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_engine_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-engine-stats-t:
+
+zet_engine_stats_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_engine_stats_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-standby-properties-t:
+
+zet_standby_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_standby_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-firmware-properties-t:
+
+zet_firmware_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_firmware_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-mem-properties-t:
+
+zet_mem_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_mem_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-mem-state-t:
+
+zet_mem_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_mem_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-mem-bandwidth-t:
+
+zet_mem_bandwidth_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_mem_bandwidth_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fabric-port-uuid-t:
+
+zet_fabric_port_uuid_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fabric_port_uuid_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fabric-port-speed-t:
+
+zet_fabric_port_speed_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fabric_port_speed_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fabric-port-properties-t:
+
+zet_fabric_port_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fabric_port_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fabric-link-type-t:
+
+zet_fabric_link_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fabric_link_type_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fabric-port-config-t:
+
+zet_fabric_port_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fabric_port_config_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fabric-port-state-t:
+
+zet_fabric_port_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fabric_port_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fabric-port-throughput-t:
+
+zet_fabric_port_throughput_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fabric_port_throughput_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-temp-properties-t:
+
+zet_temp_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_temp_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-temp-threshold-t:
+
+zet_temp_threshold_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_temp_threshold_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-temp-config-t:
+
+zet_temp_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_temp_config_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-psu-properties-t:
+
+zet_psu_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_psu_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-psu-state-t:
+
+zet_psu_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_psu_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fan-temp-speed-t:
+
+zet_fan_temp_speed_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fan_temp_speed_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fan-properties-t:
+
+zet_fan_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fan_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-fan-config-t:
+
+zet_fan_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_fan_config_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-led-properties-t:
+
+zet_led_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_led_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-led-state-t:
+
+zet_led_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_led_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-ras-properties-t:
+
+zet_ras_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_ras_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-ras-details-t:
+
+zet_ras_details_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_ras_details_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-ras-config-t:
+
+zet_ras_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_ras_config_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-event-config-t:
+
+zet_event_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_event_config_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-diag-test-t:
+
+zet_diag_test_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_diag_test_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-diag-properties-t:
+
+zet_diag_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_diag_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Tracing
+============================================================
+* Functions
+
+
+    * :ref:`zetTracerCreate`
+    * :ref:`zetTracerDestroy`
+    * :ref:`zetTracerSetPrologues`
+    * :ref:`zetTracerSetEpilogues`
+    * :ref:`zetTracerSetEnabled`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-tracer-desc-version-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-tracer-desc-t`
+
+
+Tracing Functions
+------------------------------------------------------------------------------
+
+
+.. _zetTracerCreate:
+
+zetTracerCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerCreate
+    :project: LevelZero
+
+
+.. _zetTracerDestroy:
+
+zetTracerDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerDestroy
+    :project: LevelZero
+
+
+.. _zetTracerSetPrologues:
+
+zetTracerSetPrologues
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerSetPrologues
+    :project: LevelZero
+
+
+.. _zetTracerSetEpilogues:
+
+zetTracerSetEpilogues
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerSetEpilogues
+    :project: LevelZero
+
+
+.. _zetTracerSetEnabled:
+
+zetTracerSetEnabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerSetEnabled
+    :project: LevelZero
+
+
+
+Tracing Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-tracer-desc-version-t:
+
+zet_tracer_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_tracer_desc_version_t
+    :project: LevelZero
+
+ 
+Tracing Structures
+------------------------------------------------------------------------------
+
+.. _zet-tracer-desc-t:
+
+zet_tracer_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_tracer_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+

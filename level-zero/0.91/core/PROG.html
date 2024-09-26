@@ -1,0 +1,1817 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Core Programming Guide &mdash; Level Zero Specification  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/custom.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Initialization" href="../tools/PROG.html" />
+    <link rel="prev" title="Overview" href="INTRO.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Level Zero Specification
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.91
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Overview</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Core Programming Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Core Programming Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#drivers-and-devices">Drivers and Devices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#drivers">Drivers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device">Device</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialization-and-discovery">Initialization and Discovery</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#memory-and-images">Memory and Images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#memory">Memory</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#types">Types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cache-hints-prefetch-and-memory-advice">Cache Hints, Prefetch, and Memory Advice</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#images">Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device-cache-settings">Device Cache Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#command-queues-and-command-lists">Command Queues and Command Lists</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command-queues">Command Queues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creation">Creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#execution">Execution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#destruction">Destruction</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#command-lists">Command Lists</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#creation-1">Creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#appending">Appending</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submission">Submission</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#recycling">Recycling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#low-latency-immediate-command-lists">Low-Latency Immediate Command Lists</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#synchronization-primitives">Synchronization Primitives</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fences">Fences</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#events">Events</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#barriers">Barriers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#execution-barriers">Execution Barriers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-barriers">Memory Barriers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#range-based-memory-barriers">Range-based Memory Barriers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modules-and-kernels">Modules and Kernels</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modules">Modules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-build-options">Module Build Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-specialization-constants">Module Specialization Constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-build-log">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-caching-with-native-binaries">Module Caching with Native Binaries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#built-in-kernels">Built-in Kernels</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#kernels">Kernels</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kernel-attributes-and-properties">Kernel Attributes and Properties</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#execution-1">Execution</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#kernel-group-size">Kernel Group Size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kernel-arguments">Kernel Arguments</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#kernel-launch">Kernel Launch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cooperative-kernels">Cooperative Kernels</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sampler">Sampler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced">Advanced</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sub-device-support">Sub-Device Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device-residency">Device Residency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#opencl-interoperability">OpenCL Interoperability</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cl-mem">cl_mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cl-program">cl_program</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cl-command-queue">cl_command_queue</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#inter-process-communication">Inter-Process Communication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#memory-1">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#events-1">Events</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#peer-to-peer-access-and-queries">Peer-to-Peer Access and Queries</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Tools Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#api-tracing">API Tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#metrics">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#program-instrumentation">Program Instrumentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html#program-debug">Program Debug</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Sysman Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html#high-level-overview">High-level overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html#interface-details">Interface details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/SYSMAN.html#security">Security</a></li>
+</ul>
+<p class="caption"><span class="caption-text">SPIR-V Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#common-properties">Common Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#required-capabilities">Required Capabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#validation-rules">Validation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#extensions">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#numerical-compliance">Numerical Compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html#image-addressing-and-filtering">Image Addressing and Filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/api.html">Tools API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Latest Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html#previous-releases">Previous Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Level Zero Specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+
+    
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="core-programming-guide">
+<h1>Core Programming Guide<a class="headerlink" href="#core-programming-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="drivers-and-devices">
+<h2>Drivers and Devices<a class="headerlink" href="#drivers-and-devices" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="drivers">
+<h3>Drivers<a class="headerlink" href="#drivers" title="Permalink to this headline">¶</a></h3>
+<p>A driver represents a collection of physical devices in the system using the same Level-Zero driver.</p>
+<ul class="simple">
+<li><p>The application may query the number of Level-Zero drivers installed on the system and the properties of each driver.</p></li>
+<li><p>More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver supports a GPU from a different vendor, and finally a different driver may support an FPGA.</p></li>
+<li><p>A driver is primarily used to allocate and manage resources that are used by multiple devices.</p></li>
+<li><p>Memory is <strong>not</strong> implicitly shared across all devices supported by a driver. However, it is available to be explicitly shared.</p></li>
+</ul>
+</div>
+<div class="section" id="device">
+<h3>Device<a class="headerlink" href="#device" title="Permalink to this headline">¶</a></h3>
+<p>A device represents a physical device in the system that support Level-Zero.</p>
+<ul class="simple">
+<li><p>The application may query the number devices supported by a driver.</p></li>
+<li><p>The application is responsible for sharing memory and explicit submission and synchronization across multiple devices.</p></li>
+<li><p>Device may expose sub-devices that allow finer-grained control of physical or logical partitions of a device.</p></li>
+</ul>
+<p>The following diagram illustrates the relationship between the driver, device and other objects described in this document.</p>
+<img alt="../_images/core_device.png" src="../_images/core_device.png" />
+</div>
+<div class="section" id="initialization-and-discovery">
+<h3>Initialization and Discovery<a class="headerlink" href="#initialization-and-discovery" title="Permalink to this headline">¶</a></h3>
+<p>The driver must be initialized by calling Init before any other
+function. This function will load and initialize all Level-Zero
+driver(s) in the system for all threads in the current process.
+Simultaneous calls to ::zeInit are thread-safe and only one instance of
+driver(s) will be loaded per-process. This function will allow queries
+of the available driver instances in the system.</p>
+<p>The following pseudo-code demonstrates a basic initialization and device discovery sequence:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Initialize the driver</span>
+<span class="n">zeInit</span><span class="p">(</span><span class="n">ZE_INIT_FLAG_NONE</span><span class="p">);</span>
+
+<span class="c1">// Discover all the driver instances</span>
+<span class="kt">uint32_t</span> <span class="n">driverCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">zeDriverGet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">driverCount</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="n">ze_driver_handle_t</span><span class="o">*</span> <span class="n">allDrivers</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">driverCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_driver_handle_t</span><span class="p">));</span>
+<span class="n">zeDriverGet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">driverCount</span><span class="p">,</span> <span class="n">allDrivers</span><span class="p">);</span>
+
+<span class="c1">// Find a driver instance with a GPU device</span>
+<span class="n">ze_driver_handle_t</span> <span class="n">hDriver</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+<span class="n">ze_device_handle_t</span> <span class="n">hDevice</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">driverCount</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">deviceCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">zeDeviceGet</span><span class="p">(</span><span class="n">allDrivers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+    <span class="n">ze_device_handle_t</span><span class="o">*</span> <span class="n">allDevices</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">deviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_device_handle_t</span><span class="p">));</span>
+    <span class="n">zeDeviceGet</span><span class="p">(</span><span class="n">allDrivers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">allDevices</span><span class="p">);</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">d</span> <span class="o">&lt;</span> <span class="n">deviceCount</span><span class="p">;</span> <span class="o">++</span><span class="n">d</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ze_device_properties_t</span> <span class="n">device_properties</span><span class="p">;</span>
+        <span class="n">zeDeviceGetProperties</span><span class="p">(</span><span class="n">allDevices</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">device_properties</span><span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">ZE_DEVICE_TYPE_GPU</span> <span class="o">==</span> <span class="n">device_properties</span><span class="p">.</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">hDriver</span> <span class="o">=</span> <span class="n">allDrivers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">hDevice</span> <span class="o">=</span> <span class="n">allDevices</span><span class="p">[</span><span class="n">d</span><span class="p">];</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">allDevices</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">nullptr</span> <span class="o">!=</span> <span class="n">hDriver</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">free</span><span class="p">(</span><span class="n">allDrivers</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="n">nullptr</span> <span class="o">==</span> <span class="n">hDevice</span><span class="p">)</span>
+    <span class="k">return</span><span class="p">;</span> <span class="c1">// no GPU devices found</span>
+
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="memory-and-images">
+<h2>Memory and Images<a class="headerlink" href="#memory-and-images" title="Permalink to this headline">¶</a></h2>
+<p>There are two types of allocations:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#linearmemory"><span class="std std-ref">Memory</span></a> - linear, unformatted allocations for direct access from both the host and device.</p></li>
+<li><p><a class="reference internal" href="#images"><span class="std std-ref">Images</span></a> - non-linear, formatted allocations for direct access from the device.</p></li>
+</ol>
+<div class="section" id="memory">
+<span id="linearmemory"></span><h3>Memory<a class="headerlink" href="#memory" title="Permalink to this headline">¶</a></h3>
+<p>Linear, unformatted memory allocations are represented as pointers in
+the host application. A pointer on the host has the same size as a
+pointer on the device.</p>
+<div class="section" id="types">
+<h4>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h4>
+<p>Three types of allocations are supported. The type of allocation
+describes the <em>ownership</em> of the allocation:</p>
+<p>1. <strong>Host</strong> allocations are
+owned by the host and are intended to be allocated out of system memory.
+Host allocations are accessible by the host and one or more devices. The
+same pointer to a host allocation may be used on the host and all
+supported devices; they have <em>address equivalence</em>. Host allocations are
+not expected to migrate between system memory and device local memory.
+Host allocations trade off wide accessibility and transfer benefits for
+potentially higher per-access costs, such as over PCI express.</p>
+<p>2. <strong>Device</strong> allocations are owned by a specific device and are intended
+to be allocated out of device local memory, if present. Device
+allocations generally trade off access limitations for higher
+performance. With very few exceptions, device allocations may only be
+accessed by the specific device that they are allocated on, or copied to
+a host or another device allocation. The same pointer to a device
+allocation may be used on any supported device.</p>
+<p>3. <strong>Shared</strong>
+allocations share ownership and are intended to migrate between the host
+and one or more devices. Shared allocations are accessible by at least
+the host and an associated device. Shared allocations may be accessed by
+other devices in some cases. Shared allocations trade off transfer costs
+for per-access benefits. The same pointer to a shared allocation may be
+used on the host and all supported devices.</p>
+<p>A <strong>Shared System</strong> allocation is a sub-class of a <strong>Shared</strong>
+allocation, where the memory is allocated by a <em>system allocator</em> - such
+as <code class="docutils literal notranslate"><span class="pre">malloc</span></code> or <code class="docutils literal notranslate"><span class="pre">new</span></code> - rather than by an allocation API. Shared
+system allocations have no associated device - they are inherently
+cross-device. Like other shared allocations, shared system allocations
+are intended to migrate between the host and supported devices, and the
+same pointer to a shared system allocation may be used on the host and
+all supported devices.</p>
+<p>In summary:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 30%" />
+<col style="width: 13%" />
+<col style="width: 22%" />
+<col style="width: 12%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Initial Location</p></th>
+<th class="head"><p>Accessible By</p></th>
+<th class="head"></th>
+<th class="head"><p>Migratable To</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p><strong>Host</strong></p></td>
+<td rowspan="2"><p>Host</p></td>
+<td><p>Host</p></td>
+<td><p>Yes</p></td>
+<td><p>Host</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-odd"><td><p>Any Device</p></td>
+<td><p>Yes (perhaps over PCIe)</p></td>
+<td><p>Device</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td rowspan="3"><p><strong>Device</strong></p></td>
+<td rowspan="3"><p>Specific Device</p></td>
+<td><p>Host</p></td>
+<td><p>No</p></td>
+<td><p>Host</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Specific Device</p></td>
+<td><p>Yes</p></td>
+<td><p>Device</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>Another Device</p></td>
+<td><p>Optional (may require p2p)</p></td>
+<td><p>Another Device</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="3"><p><strong>Shared</strong></p></td>
+<td rowspan="3"><p>Host, Specific Device, or Unspecified</p></td>
+<td><p>Host</p></td>
+<td><p>Yes</p></td>
+<td><p>Host</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td><p>Specific Device</p></td>
+<td><p>Yes</p></td>
+<td><p>Device</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Another Device</p></td>
+<td><p>Optional (may require p2p)</p></td>
+<td><p>Another Device</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><strong>Shared System</strong></p></td>
+<td rowspan="2"><p>Host</p></td>
+<td><p>Host</p></td>
+<td><p>Yes</p></td>
+<td><p>Host</p></td>
+<td><p>Yes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Device</p></td>
+<td><p>Yes</p></td>
+<td><p>Device</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
+<p>Devices may support different capabilities for each type of allocation. Supported capabilities are:</p>
+<ul class="simple">
+<li><p>::ZE_MEMORY_ACCESS - if a device supports access (read or write) to allocations of the specified type.</p></li>
+<li><p>::ZE_MEMORY_ATOMIC_ACCESS - if a device support atomic operations on allocations of the specified type. Atomic operations may include relaxed consistency read-modify-write atomics and atomic operations that enforce memory consistency for non-atomic operations.</p></li>
+<li><p>::ZE_MEMORY_CONCURRENT_ACCESS - if a device supports concurrent access to allocations of the specified type. Concurrent access may be from another device that supports concurrent access, or from the host. Devices that support concurrent access but do not support concurrent atomic access must write to unique non-overlapping memory locations to avoid data races and hence undefined behavior.</p></li>
+<li><p>::ZE_MEMORY_CONCURRENT_ATOMIC_ACCESS - if a device supports concurrent atomic operations on allocations of the specified type. Concurrent atomic operations may be from another device that supports concurrent atomic access, or from the host. Devices that support concurrent atomic access may use atomic operations to enforce memory consistency with other devices that support concurrent atomic access, or with the host.</p></li>
+</ul>
+<p>Some devices may <em>oversubscribe</em> some <strong>shared</strong> allocations. When and how such oversubscription occurs, including which allocations are evicted when the working set changes, are considered implementation details.</p>
+<p>The required matrix of capabilities are:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 10%" />
+<col style="width: 14%" />
+<col style="width: 18%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Allocation Type</p></th>
+<th class="head"><p>Access</p></th>
+<th class="head"><p>Atomic Access</p></th>
+<th class="head"><p>Concurrent Access</p></th>
+<th class="head"><p>Concurrent Atomic Access</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Host</strong></p></td>
+<td><p>Required</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Device</strong></p></td>
+<td><p>Required</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Shared</strong></p></td>
+<td><p>Required</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Shared</strong> (Cross-Device)</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Shared System</strong> (Cross-Device)</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+<td><p>Optional</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="cache-hints-prefetch-and-memory-advice">
+<h4>Cache Hints, Prefetch, and Memory Advice<a class="headerlink" href="#cache-hints-prefetch-and-memory-advice" title="Permalink to this headline">¶</a></h4>
+<p>Cacheability hints may be provided via separate host and device
+allocation flags when memory is allocated.</p>
+<p><strong>Shared</strong> allocations may be prefetched to a supporting device via the
+::zeCommandListAppendMemoryPrefetch API. Prefetching may allow memory
+transfers to be scheduled concurrently with other computations and may
+improve performance.</p>
+<p>Additionally, an application may provide memory advice for a <strong>shared</strong>
+allocation via the ::zeCommandListAppendMemAdvise API, to override
+driver heuristics or migration policies. Memory advice may avoid
+unnecessary or unprofitable memory transfers and may improve
+performance.</p>
+<p>Both prefetch and memory advice are asynchronous operations that are
+appended into command lists.</p>
+</div>
+</div>
+<div class="section" id="images">
+<span id="id1"></span><h3>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
+<p>An image is used to store multi-dimensional and format-defined memory
+for optimal device access. An image’s contents can be copied to and from
+other images, as well as host-accessible memory allocations. This is the
+only method for host access to the contents of an image. This
+methodology allows for device-specific encoding of image contents (e.g.,
+tile swizzle patterns, lossless compression, etc.) and avoids exposing
+these details in the API in a backwards compatible fashion.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Specify single component FLOAT32 format</span>
+<span class="n">ze_image_format_desc_t</span> <span class="n">formatDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_IMAGE_FORMAT_LAYOUT_32</span><span class="p">,</span> <span class="n">ZE_IMAGE_FORMAT_TYPE_FLOAT</span><span class="p">,</span>
+    <span class="n">ZE_IMAGE_FORMAT_SWIZZLE_R</span><span class="p">,</span> <span class="n">ZE_IMAGE_FORMAT_SWIZZLE_0</span><span class="p">,</span> <span class="n">ZE_IMAGE_FORMAT_SWIZZLE_0</span><span class="p">,</span> <span class="n">ZE_IMAGE_FORMAT_SWIZZLE_1</span>
+<span class="p">};</span>
+
+<span class="n">ze_image_desc_t</span> <span class="n">imageDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_IMAGE_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_IMAGE_FLAG_PROGRAM_READ</span><span class="p">,</span>
+    <span class="n">ZE_IMAGE_TYPE_2D</span><span class="p">,</span>
+    <span class="n">formatDesc</span><span class="p">,</span>
+    <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+<span class="p">};</span>
+<span class="n">ze_image_handle_t</span> <span class="n">hImage</span><span class="p">;</span>
+<span class="n">zeImageCreate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">imageDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hImage</span><span class="p">);</span>
+
+<span class="c1">// upload contents from host pointer</span>
+<span class="n">zeCommandListAppendImageCopyFromMemory</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hImage</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="n">pImageData</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="device-cache-settings">
+<h3>Device Cache Settings<a class="headerlink" href="#device-cache-settings" title="Permalink to this headline">¶</a></h3>
+<p>There are two methods for device and kernel cache control:</p>
+<ol class="arabic">
+<li><p>Cache Size Configuration: Ability to configure larger size for SLM vs Data globally for Device or per Kernel instance.</p></li>
+<li><p>Runtime Hint/preference for application to allow access to be Cached or not in Device Caches. For GPU device this is provided via two ways:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>During Image creation via Flag</p></li>
+<li><p>Kernel instruction</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>The following pseudo-code demonstrates a basic sequence for Cache size
+configuration:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Large SLM for Intermediate and Last Level cache.</span>
+<span class="c1">// Note: The intermediate cache setting is applied to each kernel. Last level is applied for the device.</span>
+<span class="n">zeKernelSetIntermediateCacheConfig</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">ZE_CACHE_CONFIG_LARGE_SLM</span><span class="p">);</span>
+<span class="n">zeDeviceSetLastLevelCacheConfig</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="n">ZE_CACHE_CONFIG_LARGE_SLM</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="command-queues-and-command-lists">
+<h2>Command Queues and Command Lists<a class="headerlink" href="#command-queues-and-command-lists" title="Permalink to this headline">¶</a></h2>
+<p>The following are the motivations for separating a command queue from a command list:</p>
+<ul class="simple">
+<li><p>Command queues are mostly associated with physical device properties, such as the number of input streams.</p></li>
+<li><p>Command queues provide (near) zero-latency access to the device.</p></li>
+<li><p>Command lists are mostly associated with Host threads for simultaneous construction.</p></li>
+<li><p>Command list appending can occur independently of command queue submission.</p></li>
+<li><p>Command list submission can occur to more than one command queue.</p></li>
+</ul>
+<p>The following diagram illustrates the hierarchy of command lists and command queues to the device:</p>
+<img alt="../_images/core_queue.png" src="../_images/core_queue.png" />
+<div class="section" id="command-queues">
+<h3>Command Queues<a class="headerlink" href="#command-queues" title="Permalink to this headline">¶</a></h3>
+<p>A command queue represents a logical input stream to the device, tied to a physical input
+stream via an ordinal at creation time.</p>
+<div class="section" id="creation">
+<h4>Creation<a class="headerlink" href="#creation" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>The application may explicitly bind the command queue to a physical input stream, or
+allow the driver to choose dynamically, based on usage.</p></li>
+<li><p>Multiple command queues may be created that use the same physical input stream. For example,
+an application may create a command queue per Host thread with different scheduling priorities.</p></li>
+<li><p>However, because each command queue allocates a logical hardware context, an application
+should avoid creating multiple command queues for the same physical input stream with the
+same priority due to possible performance penalties with hardware context switching.</p></li>
+<li><p>The maximum number of command queues an application can create is limited by device-specific
+resources; e.g., the maximum number of logical hardware contexts supported by the device.
+This can be queried from ::ze_device_properties_t.maxCommandQueues.</p></li>
+<li><p>The maximum number of simultaneous compute command queues per device is queried from
+::ze_device_properties_t.numAsyncComputeEngines.</p></li>
+<li><p>The maximum number of simultaneous copy command queues per device is queried from
+::ze_device_properties_t.numAsyncCopyEngines.</p></li>
+<li><p>All command lists executed on a command queue are guaranteed to only execute on its
+single, physical input stream; e.g., copy commands in a compute command list / queue will
+execute via the compute engine, not the copy engine.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a basic sequence for creation of command queues:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create a command queue</span>
+<span class="n">ze_command_queue_desc_t</span> <span class="n">commandQueueDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_COMMAND_QUEUE_FLAG_NONE</span><span class="p">,</span>
+    <span class="n">ZE_COMMAND_QUEUE_MODE_DEFAULT</span><span class="p">,</span>
+    <span class="n">ZE_COMMAND_QUEUE_PRIORITY_NORMAL</span><span class="p">,</span>
+    <span class="mi">0</span>
+<span class="p">};</span>
+<span class="n">ze_command_queue_handle_t</span> <span class="n">hCommandQueue</span><span class="p">;</span>
+<span class="n">zeCommandQueueCreate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">commandQueueDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandQueue</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="execution">
+<h4>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Command lists submitted to a command queue are <strong>immediately</strong> executed in a fifo manner.</p></li>
+<li><p>Command queue submission is free-treaded, allowing multiple Host threads to
+share the same command queue.</p></li>
+<li><p>If multiple Host threads enter the same command queue simultaneously, then execution order
+is undefined.</p></li>
+<li><p>Command lists created with ::ZE_COMMAND_LIST_FLAG_COPY_ONLY may only be submitted to
+command queues created with ::ZE_COMMAND_QUEUE_FLAG_COPY_ONLY.</p></li>
+</ul>
+</div>
+<div class="section" id="destruction">
+<h4>Destruction<a class="headerlink" href="#destruction" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>The application is responsible for making sure the device is not currently
+executing from a command queue before it is deleted. This is
+typically done by tracking command queue fences, but may also be
+handled by calling ::zeCommandQueueSynchronize.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="command-lists">
+<h3>Command Lists<a class="headerlink" href="#command-lists" title="Permalink to this headline">¶</a></h3>
+<p>A command list represents a sequence of commands for execution on a command queue.</p>
+<div class="section" id="creation-1">
+<span id="id2"></span><h4>Creation<a class="headerlink" href="#creation-1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>A command list is created for a device to allow device-specific appending of commands.</p></li>
+<li><p>A command list can be copied to create another command list. The application may use this
+to copy a command list for use on a different device.</p></li>
+</ul>
+</div>
+<div class="section" id="appending">
+<h4>Appending<a class="headerlink" href="#appending" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>There is no implicit binding of command lists to Host threads. Therefore, an
+application may share a command list handle across multiple Host threads. However,
+the application is responsible for ensuring that multiple Host threads do not access
+the same command list simultaneously.</p></li>
+<li><p>By default, commands are executed in the same order in which they are appended.
+However, an application may allow the driver to optimize the ordering by using
+::ZE_COMMAND_LIST_FLAG_RELAXED_ORDERING. Reordering is guaranteed to be only occur
+between barriers and synchronization primitives.</p></li>
+<li><p>By default, commands submitted to a command list are optimized for execution by
+balancing both device throughput and Host latency. For very low-level latency
+usage-models, applications should use immediate command lists. For usage-models where
+maximum throughput is desired, applications should use ::ZE_COMMAND_LIST_FLAG_MAXIMIZE_THROUGHPUT.</p></li>
+<li><p>By default, commands submitted to a command list may be optimized by the driver
+to fully exploit the concurrency of the device by distributing commands across
+multiple engines and/or sub-devices. If the application prefers to opt-out of
+these optimizations, such as when the application plans to perform this distribution
+itself, then it should use ::ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a basic sequence for creation of command lists:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create a command list</span>
+<span class="n">ze_command_list_desc_t</span> <span class="n">commandListDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_COMMAND_LIST_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_COMMAND_LIST_FLAG_NONE</span>
+<span class="p">};</span>
+<span class="n">ze_command_list_handle_t</span> <span class="n">hCommandList</span><span class="p">;</span>
+<span class="n">zeCommandListCreate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">commandListDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="submission">
+<h4>Submission<a class="headerlink" href="#submission" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>There is no implicit association between a command list and a command queue.
+Therefore, a command list may be submitted to any, or multiple command queues.
+However, if a command list is meant to be submitted to a copy-only command queue
+then the ::ZE_COMMAND_LIST_FLAG_COPY_ONLY must be set at creation.</p></li>
+<li><p>The application is responsible for calling close before submission to a command queue.</p></li>
+<li><p>Command lists do not inherit state from other command lists executed on the same
+command queue.  i.e. each command list begins execution in its own default state.</p></li>
+<li><p>A command list may be submitted multiple times.  It is up to the application to ensure
+that the command list can be executed multiple times.  Events, for example, must be
+explicitly reset prior to re-execution.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates submission of commands to a command queue, via a command list:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="p">...</span>
+<span class="c1">// finished appending commands (typically done on another thread)</span>
+<span class="n">zeCommandListClose</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">);</span>
+
+<span class="c1">// Execute command list in command queue</span>
+<span class="n">zeCommandQueueExecuteCommandLists</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="c1">// synchronize host and device</span>
+<span class="n">zeCommandQueueSynchronize</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="n">UINT32_MAX</span><span class="p">);</span>
+
+<span class="c1">// Reset (recycle) command list for new commands</span>
+<span class="n">zeCommandListReset</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="recycling">
+<h4>Recycling<a class="headerlink" href="#recycling" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>A command list may be recycled to avoid the overhead of frequent creation and destruction.</p></li>
+<li><p>The application is responsible for making sure the device is not currently
+executing from a command list before it is reset. This should be
+handled by tracking a completion event associated with the command list.</p></li>
+<li><p>The application is responsible for making sure the device is not currently
+executing from a command list before it is deleted. This should be
+handled by tracking a completion event associated with the command list.</p></li>
+</ul>
+</div>
+<div class="section" id="low-latency-immediate-command-lists">
+<h4>Low-Latency Immediate Command Lists<a class="headerlink" href="#low-latency-immediate-command-lists" title="Permalink to this headline">¶</a></h4>
+<p>A special type of command list can be used for very low-latency submission usage-models.</p>
+<ul class="simple">
+<li><p>An immediate command list is both a command list and an implicit command queue.</p></li>
+<li><p>An immediate command list is created using a command queue descriptor.</p></li>
+<li><p>Commands submitted to an immediate command list are immediately executed on the device.</p></li>
+<li><p>An immediate command list is not required to be closed or reset. However, usage will be honored, and expected behaviors will be followed.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a basic sequence for creation and usage of immediate command lists:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create an immediate command list</span>
+<span class="n">ze_command_queue_desc_t</span> <span class="n">commandQueueDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_COMMAND_QUEUE_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_COMMAND_QUEUE_FLAG_NONE</span><span class="p">,</span>
+    <span class="n">ZE_COMMAND_QUEUE_MODE_DEFAULT</span><span class="p">,</span>
+    <span class="n">ZE_COMMAND_QUEUE_PRIORITY_NORMAL</span><span class="p">,</span>
+    <span class="mi">0</span>
+<span class="p">};</span>
+<span class="n">ze_command_list_handle_t</span> <span class="n">hCommandList</span><span class="p">;</span>
+<span class="n">zeCommandListCreateImmediate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">commandQueueDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">);</span>
+
+<span class="c1">// Immediately submit a kernel to the device</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="synchronization-primitives">
+<h2>Synchronization Primitives<a class="headerlink" href="#synchronization-primitives" title="Permalink to this headline">¶</a></h2>
+<p>There are two types of synchronization primitives:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#fences">Fences</a> - used to communicate to the host that command queue execution has completed.</p></li>
+<li><p><a class="reference internal" href="#events">Events</a> - used as fine-grain host-to-device, device-to-host or device-to-device execution and memory dependencies.</p></li>
+</ol>
+<p>The following diagram illustrates the relationship of capabilities of these types of synchronization primitives:</p>
+<img alt="../_images/core_sync.png" src="../_images/core_sync.png" />
+<p>The following are the motivations for separating the different types of synchronization primitives:</p>
+<ul>
+<li><p>Allows device-specific optimizations for certain types of primitives:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>fences may share device memory with all other fences within the same command queue.</p></li>
+<li><p>events may be implemented using pipelined operations as part of the program execution.</p></li>
+<li><p>fences are implicit, coarse-grain execution and memory barriers.</p></li>
+<li><p>events optionally cause fine-grain execution and memory barriers.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Allows distinction on which type of primitive may be shared across devices.</p></li>
+</ul>
+<p>Generally. Events are generic synchronization primitives that can be used across many different usage-models, including those of fences.
+However, this generality comes with some cost in memory overhead and efficiency.</p>
+<div class="section" id="fences">
+<span id="id3"></span><h3>Fences<a class="headerlink" href="#fences" title="Permalink to this headline">¶</a></h3>
+<p>A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution within a command queue has completed.</p>
+<ul class="simple">
+<li><p>A fence is associated with a single command queue.</p></li>
+<li><p>A fence can only be signaled from a device’s command queue (e.g. between execution of command lists) and can only be waited upon from the host.</p></li>
+<li><p>A fence guarantees both execution completion and memory coherency, across the device and host, prior to being signaled.</p></li>
+<li><p>A fence only has two states: not signaled and signaled.</p></li>
+<li><p>A fence can only be reset from the Host.</p></li>
+<li><p>A fence cannot be shared across processes.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a sequence for creation, submission and querying of a fence:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create fence</span>
+<span class="n">ze_fence_desc_t</span> <span class="n">fenceDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_FENCE_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_FENCE_FLAG_NONE</span>
+<span class="p">};</span>
+<span class="n">ze_fence_handle_t</span> <span class="n">hFence</span><span class="p">;</span>
+<span class="n">zeFenceCreate</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">fenceDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hFence</span><span class="p">);</span>
+
+<span class="c1">// Execute a command list with a signal of the fence</span>
+<span class="n">zeCommandQueueExecuteCommandLists</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hFence</span><span class="p">);</span>
+
+<span class="c1">// Wait for fence to be signaled</span>
+<span class="n">zeFenceHostSynchronize</span><span class="p">(</span><span class="n">hFence</span><span class="p">,</span> <span class="n">UINT32_MAX</span><span class="p">);</span>
+<span class="n">zeFenceReset</span><span class="p">(</span><span class="n">hFence</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>The primary usage model(s) for fences are to notify the Host when a command list has finished execution to allow:</p>
+<ul class="simple">
+<li><p>Recycling of memory and images</p></li>
+<li><p>Recycling of command lists</p></li>
+<li><p>Recycling of other synchronization primitives</p></li>
+<li><p>Explicit memory residency.</p></li>
+</ul>
+<p>The following diagram illustrates fences signaled after command lists on execution:</p>
+<img alt="../_images/core_fence.png" src="../_images/core_fence.png" />
+</div>
+<div class="section" id="events">
+<span id="id4"></span><h3>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h3>
+<p>An event is used to communicate fine-grain host-to-device, device-to-host or device-to-device dependencies from within a command list.</p>
+<ul>
+<li><p>An event can be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>signaled from within a device’s command list and waited upon within the same command list</p></li>
+<li><p>signaled from within a device’s command list and waited upon from the host, another command queue or another device</p></li>
+<li><p>signaled from the host, and waited upon from within a device’s command list.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>An event only has two states: not signaled and signaled.</p></li>
+<li><p>An event doesn’t implicitly reset. Signaling a signaled event (or resetting an unsignaled event) is valid and has no effect on the state of the event.</p></li>
+<li><p>An event can be explicitly reset from the Host or device.</p></li>
+<li><p>An event can be appended into multiple command lists simultaneously.</p></li>
+<li><p>An event can be shared across devices and processes.</p></li>
+<li><p>An event can invoke an execution and/or memory barrier; which should be used sparingly to avoid device underutilization.</p></li>
+<li><p>There are no protections against events causing deadlocks, such as circular waits scenarios.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>These problems are left to the application to avoid.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>An event intended to be signaled by the host, another command queue or another device after command list submission to a command queue may prevent subsequent forward progress within the command queue itself.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>This can create bubbles in the pipeline or deadlock situations if not correctly scheduled.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>An event pool is used for creation of individual events:</p>
+<ul class="simple">
+<li><p>An event pool reduces the cost of creating multiple events by allowing underlying device allocations to be shared by events with the same properties</p></li>
+<li><p>An event pool can be shared via IPC; allowing sharing blocks of events rather than sharing each individual event</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a sequence for creation and submission of an event:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create event pool</span>
+<span class="n">ze_event_pool_desc_t</span> <span class="n">eventPoolDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_EVENT_POOL_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_POOL_FLAG_HOST_VISIBLE</span><span class="p">,</span> <span class="c1">// all events in pool are visible to Host</span>
+    <span class="mi">1</span>
+<span class="p">};</span>
+<span class="n">ze_event_pool_handle_t</span> <span class="n">hEventPool</span><span class="p">;</span>
+<span class="n">zeEventPoolCreate</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventPoolDesc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEventPool</span><span class="p">);</span>
+
+<span class="n">ze_event_desc_t</span> <span class="n">eventDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_EVENT_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_NONE</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_HOST</span>  <span class="c1">// ensure memory coherency across device and Host after event completes</span>
+<span class="p">};</span>
+<span class="n">ze_event_handle_t</span> <span class="n">hEvent</span><span class="p">;</span>
+<span class="n">zeEventCreate</span><span class="p">(</span><span class="n">hEventPool</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEvent</span><span class="p">);</span>
+
+<span class="c1">// Append a signal of an event into the command list after the kernel executes</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">hEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="c1">// Execute the command list with the signal</span>
+<span class="n">zeCommandQueueExecuteCommandLists</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>The following diagram illustrates an event being signaled between kernels within a command list:</p>
+<img alt="../_images/core_event.png" src="../_images/core_event.png" />
+</div>
+</div>
+<div class="section" id="barriers">
+<h2>Barriers<a class="headerlink" href="#barriers" title="Permalink to this headline">¶</a></h2>
+<p>There are two types of barriers:</p>
+<ol class="arabic simple">
+<li><p><strong>Execution Barriers</strong> - used to communicate execution dependencies between commands within a command list or across command queues, devices and/or Host.</p></li>
+<li><p><strong>Memory Barriers</strong> - used to communicate memory coherency dependencies between commands within a command list or across command queues, devices and/or Host.</p></li>
+</ol>
+<p>The following pseudo-code demonstrates a sequence for submission of a brute-force execution and global memory barrier:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="c1">// Append a barrier into a command list to ensure hKernel1 completes before hKernel2 begins</span>
+<span class="n">zeCommandListAppendBarrier</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<div class="section" id="execution-barriers">
+<h3>Execution Barriers<a class="headerlink" href="#execution-barriers" title="Permalink to this headline">¶</a></h3>
+<p>Commands executed on a command list are only guaranteed to start in the same order in which they are submitted; i.e.?there is no implicit definition of the order of completion.</p>
+<ul class="simple">
+<li><p>Fences provide implicit, coarse-grain control to indicate that all previous commands must complete prior to the fence being signaled.</p></li>
+<li><p>Events provide explicit, fine-grain control over execution dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a sequence for submission of a fine-grain execution-only dependency using events:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ze_event_desc_t</span> <span class="n">event1Desc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_EVENT_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_NONE</span><span class="p">,</span> <span class="c1">// no memory/cache coherency required on signal</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_NONE</span>  <span class="c1">// no memory/cache coherency required on wait</span>
+<span class="p">};</span>
+<span class="n">ze_event_handle_t</span> <span class="n">hEvent1</span><span class="p">;</span>
+<span class="n">zeEventCreate</span><span class="p">(</span><span class="n">hEventPool</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">event1Desc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEvent1</span><span class="p">);</span>
+
+<span class="c1">// Ensure hKernel1 completes before signaling hEvent1</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">hEvent1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="c1">// Ensure hEvent1 is signaled before starting hKernel2</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEvent1</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="memory-barriers">
+<h3>Memory Barriers<a class="headerlink" href="#memory-barriers" title="Permalink to this headline">¶</a></h3>
+<p>Commands executed on a command list are <em>not</em> guaranteed to maintain memory coherency with other commands;
+i.e. there is no implicit memory or cache coherency.</p>
+<ul class="simple">
+<li><p>Fences provide implicit, coarse-grain control to indicate that all caches and memory are coherent across the device and Host prior to the fence being signaled.</p></li>
+<li><p>Events provide explicit, fine-grain control over cache and memory coherency dependencies between commands; allowing more opportunities for concurrent execution and higher device utilization.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a sequence for submission of a fine-grain memory dependency using events:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ze_event_desc_t</span> <span class="n">event1Desc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_EVENT_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_DEVICE</span><span class="p">,</span> <span class="c1">// ensure memory coherency across device before event signaled</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_NONE</span>
+<span class="p">};</span>
+<span class="n">ze_event_handle_t</span> <span class="n">hEvent1</span><span class="p">;</span>
+<span class="n">zeEventCreate</span><span class="p">(</span><span class="n">hEventPool</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">event1Desc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEvent1</span><span class="p">);</span>
+
+<span class="c1">// Ensure hKernel1 memory writes are fully coherent across the device before signaling hEvent1</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">hEvent1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="c1">// Ensure hEvent1 is signaled before starting hKernel2</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEvent1</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="range-based-memory-barriers">
+<h3>Range-based Memory Barriers<a class="headerlink" href="#range-based-memory-barriers" title="Permalink to this headline">¶</a></h3>
+<p>Range-based memory barriers provide explicit control of which cachelines
+require coherency.</p>
+<p>The following pseudo-code demonstrates a sequence for submission of a range-based memory barrier:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="c1">// Ensure memory range is fully coherent across the device after hKernel1 and before hKernel2</span>
+<span class="n">zeCommandListAppendMemoryRangesBarrier</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ptr</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="modules-and-kernels">
+<h2>Modules and Kernels<a class="headerlink" href="#modules-and-kernels" title="Permalink to this headline">¶</a></h2>
+<p>There are multiple levels of constructs needed for executing kernels on the device:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#modules">Modules</a> represent a single translation unit that consists of kernels that have been compiled together.</p></li>
+<li><p><a class="reference internal" href="#kernels">Kernels</a> represent the kernel within the module that will be launched directly from a command list.</p></li>
+</ol>
+<p>The following diagram provides a high-level overview of the major parts
+of the system.</p>
+<img alt="../_images/core_module.png" src="../_images/core_module.png" />
+<div class="section" id="modules">
+<span id="id5"></span><h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+<p>Modules can be created from an IL or directly from native format using ::zeModuleCreate.</p>
+<ul class="simple">
+<li><p>::zeModuleCreate takes a format argument that specifies the input format.</p></li>
+<li><p>::zeModuleCreate performs a compilation step when format is IL.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a sequence for creating a module from an OpenCL kernel:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">__kernel</span> <span class="kt">void</span> <span class="nf">image_scaling</span><span class="p">(</span> <span class="n">__read_only</span>  <span class="n">image2d_t</span> <span class="n">src_img</span><span class="p">,</span>
+                             <span class="n">__write_only</span> <span class="n">image2d_t</span> <span class="n">dest_img</span><span class="p">,</span>
+                                          <span class="n">uint</span> <span class="n">WIDTH</span><span class="p">,</span>     <span class="c1">// resized width</span>
+                                          <span class="n">uint</span> <span class="n">HEIGHT</span> <span class="p">)</span>   <span class="c1">// resized height</span>
+<span class="p">{</span>
+    <span class="n">int2</span>       <span class="n">coor</span> <span class="o">=</span> <span class="p">(</span><span class="n">int2</span><span class="p">)(</span> <span class="n">get_global_id</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">get_global_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">);</span>
+    <span class="n">float2</span> <span class="n">normCoor</span> <span class="o">=</span> <span class="n">convert_float2</span><span class="p">(</span><span class="n">coor</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">float2</span><span class="p">)(</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span> <span class="p">);</span>
+
+    <span class="n">float4</span>    <span class="n">color</span> <span class="o">=</span> <span class="n">read_imagef</span><span class="p">(</span> <span class="n">src_img</span><span class="p">,</span> <span class="n">SMPL_PREF</span><span class="p">,</span> <span class="n">normCoor</span> <span class="p">);</span>
+
+    <span class="n">write_imagef</span><span class="p">(</span> <span class="n">dest_img</span><span class="p">,</span> <span class="n">coor</span><span class="p">,</span> <span class="n">color</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)</span>
+<span class="n">ze_module_desc_t</span> <span class="n">moduleDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_MODULE_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_MODULE_FORMAT_IL_SPIRV</span><span class="p">,</span>
+    <span class="n">ilSize</span><span class="p">,</span>
+    <span class="n">pImageScalingIL</span><span class="p">,</span>
+    <span class="n">nullptr</span><span class="p">,</span>
+    <span class="n">nullptr</span>
+<span class="p">};</span>
+<span class="n">ze_module_handle_t</span> <span class="n">hModule</span><span class="p">;</span>
+<span class="n">zeModuleCreate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">moduleDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hModule</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<div class="section" id="module-build-options">
+<h4>Module Build Options<a class="headerlink" href="#module-build-options" title="Permalink to this headline">¶</a></h4>
+<p>Module build options can be passed with ::ze_module_desc_t as a string.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 43%" />
+<col style="width: 8%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Build Option</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Device Support</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>-ze-opt-disable</p></td>
+<td><p>Disable optimizations.</p></td>
+<td><p>Disabled</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>-ze-opt-greater-than-4GB-buffer-required</p></td>
+<td><p>Use 64-bit offset calculations for buffers.</p></td>
+<td><p>Disabled</p></td>
+<td><p>GPU</p></td>
+</tr>
+<tr class="row-even"><td><p>-ze-opt-large-register-file</p></td>
+<td><p>Increase number of registers available to threads.</p></td>
+<td><p>Disabled</p></td>
+<td><p>GPU</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-specialization-constants">
+<h4>Module Specialization Constants<a class="headerlink" href="#module-specialization-constants" title="Permalink to this headline">¶</a></h4>
+<p>SPIR-V supports specialization constants that allow certain constants to be updated to new
+values during runtime execution. Each specialization constant in SPIR-V has an identifier
+and default value. The ::zeModuleCreate function allows for an array of constants and their
+corresponding identifiers to be passed in to override the constants in the SPIR-V module.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Spec constant overrides for group size.</span>
+<span class="n">ze_module_constants_t</span> <span class="n">specConstants</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">3</span><span class="p">,</span>
+    <span class="n">pGroupSizeIds</span><span class="p">,</span>
+    <span class="n">pGroupSizeValues</span>
+<span class="p">};</span>
+<span class="c1">// OpenCL C kernel has been compiled to SPIRV IL (pImageScalingIL)</span>
+<span class="n">ze_module_desc_t</span> <span class="n">moduleDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_MODULE_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_MODULE_FORMAT_IL_SPIRV</span><span class="p">,</span>
+    <span class="n">ilSize</span><span class="p">,</span>
+    <span class="n">pImageScalingIL</span><span class="p">,</span>
+    <span class="n">nullptr</span><span class="p">,</span>
+    <span class="o">&amp;</span><span class="n">specConstants</span>
+<span class="p">};</span>
+<span class="n">ze_module_handle_t</span> <span class="n">hModule</span><span class="p">;</span>
+<span class="n">zeModuleCreate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">moduleDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hModule</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>Note: Specialization constants are only handled at module create time and therefore if
+you need to change them then you’ll need to compile a new module.</p>
+</div>
+<div class="section" id="module-build-log">
+<h4>Module Build Log<a class="headerlink" href="#module-build-log" title="Permalink to this headline">¶</a></h4>
+<p>The ::zeModuleCreate function can optionally generate a build log object ::ze_module_build_log_handle_t.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="p">...</span>
+<span class="n">ze_module_build_log_handle_t</span> <span class="n">buildlog</span><span class="p">;</span>
+<span class="n">ze_result_t</span> <span class="n">result</span> <span class="o">=</span> <span class="n">zeModuleCreate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">module</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">buildlog</span><span class="p">);</span>
+
+<span class="c1">// Only save build logs for module creation errors.</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">result</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">szLog</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">zeModuleBuildLogGetString</span><span class="p">(</span><span class="n">buildlog</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">szLog</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+    <span class="n">char_t</span><span class="o">*</span> <span class="n">strLog</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">szLog</span><span class="p">);</span>
+    <span class="n">zeModuleBuildLogGetString</span><span class="p">(</span><span class="n">buildlog</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">szLog</span><span class="p">,</span> <span class="n">strLog</span><span class="p">);</span>
+
+    <span class="c1">// Save log to disk.</span>
+    <span class="p">...</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">strLog</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">zeModuleBuildLogDestroy</span><span class="p">(</span><span class="n">buildlog</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-caching-with-native-binaries">
+<h4>Module Caching with Native Binaries<a class="headerlink" href="#module-caching-with-native-binaries" title="Permalink to this headline">¶</a></h4>
+<p>Disk caching of modules is not supported by the driver. If a disk cache for modules is desired, then it is the
+responsibility of the application to implement this using ::zeModuleGetNativeBinary.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="p">...</span>
+<span class="c1">// compute hash for pIL and check cache.</span>
+<span class="p">...</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">cacheUpdateNeeded</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">szBinary</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">zeModuleGetNativeBinary</span><span class="p">(</span><span class="n">hModule</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">szBinary</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+    <span class="kt">uint8_t</span><span class="o">*</span> <span class="n">pBinary</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">szBinary</span><span class="p">);</span>
+    <span class="n">zeModuleGetNativeBinary</span><span class="p">(</span><span class="n">hModule</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">szBinary</span><span class="p">,</span> <span class="n">pBinary</span><span class="p">);</span>
+
+    <span class="c1">// cache pBinary for corresponding IL</span>
+    <span class="p">...</span>
+
+    <span class="n">free</span><span class="p">(</span><span class="n">pBinary</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Also, note that the native binary will retain all debug information that is associated with the module. This allows debug
+capabilities for modules that are created from native binaries.</p>
+</div>
+<div class="section" id="built-in-kernels">
+<h4>Built-in Kernels<a class="headerlink" href="#built-in-kernels" title="Permalink to this headline">¶</a></h4>
+<p>Built-in kernels are not supported but can be implemented by an upper level runtime or library using the native binary
+interface.</p>
+</div>
+</div>
+<div class="section" id="kernels">
+<span id="id6"></span><h3>Kernels<a class="headerlink" href="#kernels" title="Permalink to this headline">¶</a></h3>
+<p>A Kernel is a reference to a kernel within a module. The Kernel object supports both explicit and implicit kernel
+arguments along with data needed for launch.</p>
+<p>The following pseudo-code demonstrates a sequence for creating a kernel from a module:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ze_kernel_desc_t</span> <span class="n">kernelDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_KERNEL_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_KERNEL_FLAG_NONE</span><span class="p">,</span>
+    <span class="s">&quot;image_scaling&quot;</span>
+<span class="p">};</span>
+<span class="n">ze_kernel_handle_t</span> <span class="n">hKernel</span><span class="p">;</span>
+<span class="n">zeKernelCreate</span><span class="p">(</span><span class="n">hModule</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">kernelDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hKernel</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<div class="section" id="kernel-attributes-and-properties">
+<h4>Kernel Attributes and Properties<a class="headerlink" href="#kernel-attributes-and-properties" title="Permalink to this headline">¶</a></h4>
+<p>Use ::zeKernelSetAttribute to set attributes for a kernel object.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Kernel performs indirect device access.</span>
+<span class="n">bool_t</span> <span class="n">isIndirect</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="n">zeKernelSetAttribute</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">ZE_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">bool_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">isIndirect</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>Use ::zeKernelSetAttribute to get attributes for a kernel object.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Does kernel perform indirect device access.</span>
+<span class="n">zeKernelGetAttribute</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">ZE_KERNEL_ATTR_INDIRECT_DEVICE_ACCESS</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">bool_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">isIndirect</span><span class="p">);</span>
+<span class="p">...</span>
+
+<span class="kt">uint32_t</span> <span class="n">strSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// Size of string + null terminator</span>
+<span class="n">zeKernelGetAttribute</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">ZE_KERNEL_ATTR_SOURCE_ATTRIBUTE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">strSize</span><span class="p">,</span> <span class="n">nullptr</span> <span class="p">);</span>
+<span class="kt">char</span><span class="o">*</span> <span class="n">pAttributes</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">strSize</span><span class="p">);</span>
+<span class="n">zeKernelGetAttribute</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">ZE_KERNEL_ATTR_SOURCE_ATTRIBUTE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">strSize</span><span class="p">,</span> <span class="n">pAttributes</span> <span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>See ::ze_kernel_attribute_t for more information on the “set” and “get” attributes.</p>
+<p>Use ::zeKernelGetProperties to query invariant properties from a kernel object.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="p">...</span>
+<span class="n">ze_kernel_properties_t</span> <span class="n">kernelProperties</span><span class="p">;</span>
+
+<span class="c1">//</span>
+<span class="n">zeKernelGetProperties</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">kernelProperties</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>See ::ze_kernel_properties_t for more information for kernel properties.</p>
+</div>
+</div>
+<div class="section" id="execution-1">
+<span id="id7"></span><h3>Execution<a class="headerlink" href="#execution-1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="kernel-group-size">
+<h4>Kernel Group Size<a class="headerlink" href="#kernel-group-size" title="Permalink to this headline">¶</a></h4>
+<p>The group size for a kernel can be set using ::zeKernelSetGroupSize. If a group size is not
+set prior to appending a kernel into a command list then a default will be chosen.
+The group size can be updated over a series of append operations. The driver will copy the
+group size information when appending the kernel into the command list.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">zeKernelSetGroupSize</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">groupSizeX</span><span class="p">,</span> <span class="n">groupSizeY</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>The API supports a query for suggested group size when providing the global size. This function ignores the
+group size that was set on the kernel using ::zeKernelSetGroupSize.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Find suggested group size for processing image.</span>
+<span class="kt">uint32_t</span> <span class="n">groupSizeX</span><span class="p">;</span>
+<span class="kt">uint32_t</span> <span class="n">groupSizeY</span><span class="p">;</span>
+<span class="n">zeKernelSuggestGroupSize</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">imageWidth</span><span class="p">,</span> <span class="n">imageHeight</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">groupSizeX</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">groupSizeY</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="n">zeKernelSetGroupSize</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="n">groupSizeX</span><span class="p">,</span> <span class="n">groupSizeY</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="kernel-arguments">
+<h4>Kernel Arguments<a class="headerlink" href="#kernel-arguments" title="Permalink to this headline">¶</a></h4>
+<p>Kernel arguments represent only the explicit kernel arguments that are within ?brackets? e.g.?func(arg1, arg2, ?).</p>
+<ul class="simple">
+<li><p>Use ::zeKernelSetArgumentValue to setup arguments for a kernel launch.</p></li>
+<li><p>The AppendLaunchKernel command will make a copy the kernel arguments to send to the device.</p></li>
+<li><p>Kernel arguments can be updated at any time and used across multiple append calls.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates a sequence for setting kernel args and launching the kernel:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Bind arguments</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_image_handle_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">src_image</span><span class="p">);</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_image_handle_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">dest_image</span><span class="p">);</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">width</span><span class="p">);</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">height</span><span class="p">);</span>
+
+<span class="n">ze_group_count_t</span> <span class="n">launchArgs</span> <span class="o">=</span> <span class="p">{</span> <span class="n">numGroupsX</span><span class="p">,</span> <span class="n">numGroupsY</span><span class="p">,</span> <span class="mi">1</span> <span class="p">};</span>
+
+<span class="c1">// Append launch kernel</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="c1">// Update image pointers to copy and scale next image.</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_image_handle_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">src2_image</span><span class="p">);</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_image_handle_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">dest2_image</span><span class="p">);</span>
+
+<span class="c1">// Append launch kernel</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="kernel-launch">
+<h4>Kernel Launch<a class="headerlink" href="#kernel-launch" title="Permalink to this headline">¶</a></h4>
+<p>In order to launch a kernel on the device an application must call one of the CommandListAppendLaunch* functions for
+a command list. The most basic version of these is ::zeCommandListAppendLaunchKernel which takes a
+command list, kernel handle, launch arguments, and an optional synchronization event used to signal completion.
+The launch arguments contain thread group dimensions.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// compute number of groups to launch based on image size and group size.</span>
+<span class="kt">uint32_t</span> <span class="n">numGroupsX</span> <span class="o">=</span> <span class="n">imageWidth</span> <span class="o">/</span> <span class="n">groupSizeX</span><span class="p">;</span>
+<span class="kt">uint32_t</span> <span class="n">numGroupsY</span> <span class="o">=</span> <span class="n">imageHeight</span> <span class="o">/</span> <span class="n">groupSizeY</span><span class="p">;</span>
+
+<span class="n">ze_group_count_t</span> <span class="n">launchArgs</span> <span class="o">=</span> <span class="p">{</span> <span class="n">numGroupsX</span><span class="p">,</span> <span class="n">numGroupsY</span><span class="p">,</span> <span class="mi">1</span> <span class="p">};</span>
+
+<span class="c1">// Append launch kernel</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The function ::zeCommandListAppendLaunchKernelIndirect allows the launch parameters to be supplied indirectly in a
+buffer that the device reads instead of the command itself. This allows for the previous operations on the
+device to generate the parameters.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ze_group_count_t</span><span class="o">*</span> <span class="n">pIndirectArgs</span><span class="p">;</span>
+
+<span class="p">...</span>
+<span class="n">zeDriverAllocDeviceMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_group_count_t</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">),</span> <span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pIndirectArgs</span><span class="p">);</span>
+
+<span class="c1">// Append launch kernel - indirect</span>
+<span class="n">zeCommandListAppendLaunchKernelIndirect</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pIndirectArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cooperative-kernels">
+<h4>Cooperative Kernels<a class="headerlink" href="#cooperative-kernels" title="Permalink to this headline">¶</a></h4>
+<p>Cooperative kernels allow sharing of data and synchronization across all launched groups in a safe manner. To support this
+there is a ::zeCommandListAppendLaunchCooperativeKernel that allows launching groups that can cooperate with each other.
+Finally, there is a ::zeKernelSuggestMaxCooperativeGroupCount function that suggests a maximum group count size that
+the device supports.</p>
+</div>
+</div>
+<div class="section" id="sampler">
+<h3>Sampler<a class="headerlink" href="#sampler" title="Permalink to this headline">¶</a></h3>
+<p>The API supports Sampler objects that represent state needed for sampling images from within
+kernels. The ::zeSamplerCreate function takes a sampler descriptor (::ze_sampler_desc_t):</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Sampler Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Address Mode</p></td>
+<td><p>Determines how out-of-bounds
+accessse are handled. See
+::ze_sampler_address_mode_t.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Filter Mode</p></td>
+<td><p>Specifies which filtering mode to
+use. See
+::ze_sampler_filter_mode_t</p></td>
+</tr>
+<tr class="row-even"><td><p>Normalized</p></td>
+<td><p>Specifies whether coordinates for
+addressing image are normalized
+[0,1] or not.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following is sample for code creating a sampler object and passing it as a kernel argument:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Setup sampler for linear filtering and clamp out of bounds accesses to edge.</span>
+<span class="n">ze_sampler_desc_t</span> <span class="n">desc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_SAMPLER_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_SAMPLER_ADDRESS_MODE_CLAMP</span><span class="p">,</span>
+    <span class="n">ZE_SAMPLER_FILTER_MODE_LINEAR</span><span class="p">,</span>
+    <span class="nb">false</span>
+    <span class="p">};</span>
+<span class="n">ze_sampler_handle_t</span> <span class="n">sampler</span><span class="p">;</span>
+<span class="n">zeSamplerCreate</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sampler</span><span class="p">);</span>
+<span class="p">...</span>
+
+<span class="c1">// The sampler can be passed as a kernel argument.</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_sampler_handle_t</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">sampler</span><span class="p">);</span>
+
+<span class="c1">// Append launch kernel</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="advanced">
+<h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sub-device-support">
+<h3>Sub-Device Support<a class="headerlink" href="#sub-device-support" title="Permalink to this headline">¶</a></h3>
+<p>The API allows support for sub-devices which can enable finer grained
+control of scheduling and memory allocation to a sub-partition of the device.
+There are functions to query and obtain a sub-device but outside of these
+functions there are no distinction between sub-devices and devices.</p>
+<p>Use ::zeDeviceGetSubDevices to confirm sub-devices are supported and to
+obtain a sub-device handle. There are additional device properties in
+::ze_device_properties_t for sub-devices to confirm a device is a
+sub-device and to query the sub-device id. This is useful when needing
+to pass a sub-device handle to another library.</p>
+<p>To allocate memory and dispatch tasks to a specific sub-device then
+obtain the sub-device handle and use this with memory and command
+queue/lists APIs. Local memory allocation will be placed in the local
+memory that is attached to the sub-device. An out-of-memory error
+indicates that there is not enough local sub-device memory for the
+allocation. The driver will not try and spill sub-device allocations
+over to another sub-device’s local memory. However, the application can
+retry using the parent device and the driver will decide where to place
+the allocation.</p>
+<p>One thing to note is that the ordinal that is used when creating a
+command queue is relative to the sub-device. This ordinal specifies
+which physical compute queue on the device or sub-device to map the
+logical queue to. The application needs to query
+::ze_device_properties_t.numAsyncComputeEngines from the sub-device to
+determine how to set this ordinal. See ::ze_command_queue_desc_t for
+more details.</p>
+<p>A 16-byte unique device identifier (uuid) can be obtained for a device
+or sub-device using ::zeDeviceGetProperties.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Query for all sub-devices of the device</span>
+<span class="kt">uint32_t</span> <span class="n">subdeviceCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">zeDeviceGetSubDevices</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">subdeviceCount</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="n">ze_device_handle_t</span><span class="o">*</span> <span class="n">allSubDevices</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">subdeviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_device_handle_t</span><span class="p">));</span>
+<span class="n">zeDeviceGetSubDevices</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">subdeviceCount</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">allSubDevices</span><span class="p">);</span>
+
+<span class="c1">// Desire is to allocate and dispatch work to sub-device 2.</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">subdeviceCount</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">);</span>
+<span class="n">ze_device_handle_t</span> <span class="n">hSubdevice</span> <span class="o">=</span> <span class="n">allSubDevices</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+
+<span class="c1">// Query sub-device properties.</span>
+<span class="n">ze_device_properties_t</span> <span class="n">subdeviceProps</span><span class="p">;</span>
+<span class="n">zeDeviceGetProperties</span><span class="p">(</span><span class="n">hSubdevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">subdeviceProps</span><span class="p">);</span>
+
+<span class="n">assert</span><span class="p">(</span><span class="n">subdeviceProps</span><span class="p">.</span><span class="n">isSubdevice</span> <span class="o">==</span> <span class="nb">true</span><span class="p">);</span> <span class="c1">// Ensure that we have a handle to a sub-device.</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">subdeviceProps</span><span class="p">.</span><span class="n">subdeviceId</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>    <span class="c1">// Ensure that we have a handle to the sub-device we asked for.</span>
+
+<span class="kt">void</span><span class="o">*</span> <span class="n">pMemForSubDevice2</span><span class="p">;</span>
+<span class="n">zeDriverAllocDeviceMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="n">memSize</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">),</span> <span class="n">hSubdevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pMemForSubDevice2</span><span class="p">);</span>
+<span class="p">...</span>
+
+<span class="p">...</span>
+<span class="c1">// Check that cmd queue ordinal that was chosen is valid.</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">desc</span><span class="p">.</span><span class="n">ordinal</span> <span class="o">&lt;</span> <span class="n">subdeviceProps</span><span class="p">.</span><span class="n">numAsyncComputeEngines</span><span class="p">);</span>
+
+<span class="n">ze_command_queue_handle_t</span> <span class="n">commandQueueForSubDevice2</span><span class="p">;</span>
+<span class="n">zeCommandQueueCreate</span><span class="p">(</span><span class="n">hSubdevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">commandQueueForSubDevice2</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="device-residency">
+<h3>Device Residency<a class="headerlink" href="#device-residency" title="Permalink to this headline">¶</a></h3>
+<p>For devices that do not support page-faults, the driver must ensure that
+all pages that will be accessed by the kernel are resident before
+program execution. This can be determined by checking
+::ze_device_properties_t.onDemandPageFaultsSupported.</p>
+<p>In most cases, the driver implicitly handles residency of allocations
+for device access. This can be done by inspecting API parameters,
+including kernel arguments. However, in cases where the devices does
+<strong>not</strong> support page-faulting <em>and</em> the driver is incapable of
+determining whether an allocation will be accessed by the device, such
+as multiple levels of indirection, there are two methods available:</p>
+<ol class="arabic">
+<li><p>The application may set the ::ZE_KERNEL_FLAG_FORCE_RESIDENCY flag during program creation to force all device allocations to be resident during execution.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>in addition, the application should indicate the type of allocations that will be indirectly accessed using ::ze_kernel_attribute_t (ZE_KERNEL_ATTR_INDIRECT_HOST_ACCESS, DEVICE_ACCESS, or SHARED_ACCESS).</p></li>
+<li><p>if the driver is unable to make all allocations resident, then the call to ::zeCommandQueueExecuteCommandLists will return ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Explcit ::zeDeviceMakeMemoryResident APIs are included for the application to dynamically change residency as needed. (Windows-only)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>if the application over-commits device memory, then a call to ::zeDeviceMakeMemoryResident will return ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ol>
+<p>If the application does not properly manage residency for these cases then the device may experience unrecoverable page-faults.</p>
+<p>The following pseudo-code demonstrate a sequence for using coarse-grain residency control for indirect arguments:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">node</span> <span class="p">{</span>
+    <span class="n">node</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">node</span><span class="o">*</span> <span class="n">begin</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+<span class="n">zeDriverAllocHostMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">begin</span><span class="p">);</span>
+<span class="n">zeDriverAllocHostMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+<span class="n">zeDriverAllocHostMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+
+<span class="c1">// &#39;begin&#39; is passed as kernel argument and appended into command list</span>
+<span class="kt">bool</span> <span class="n">hasIndirectHostAccess</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="n">zeKernelSetAttribute</span><span class="p">(</span><span class="n">hFuncArgs</span><span class="p">,</span> <span class="n">ZE_KERNEL_ATTR_INDIRECT_HOST_ACCESS</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">bool</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">hasIndirectHostAccess</span><span class="p">);</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="o">*</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">begin</span><span class="p">);</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+
+<span class="p">...</span>
+
+<span class="n">zeCommandQueueExecuteCommandLists</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>The following pseudo-code demonstrate a sequence for using fine-grain residency control for indirect arguments:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="n">node</span> <span class="p">{</span>
+    <span class="n">node</span><span class="o">*</span> <span class="n">next</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">node</span><span class="o">*</span> <span class="n">begin</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+<span class="n">zeDriverAllocHostMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">begin</span><span class="p">);</span>
+<span class="n">zeDriverAllocHostMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+<span class="n">zeDriverAllocHostMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">);</span>
+
+<span class="c1">// &#39;begin&#39; is passed as kernel argument and appended into command list</span>
+<span class="n">zeKernelSetArgumentValue</span><span class="p">(</span><span class="n">hKernel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="o">*</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">begin</span><span class="p">);</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">launchArgs</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="p">...</span>
+
+<span class="c1">// Make indirect allocations resident before enqueuing</span>
+<span class="n">zeDeviceMakeMemoryResident</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+<span class="n">zeDeviceMakeMemoryResident</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+
+<span class="n">zeCommandQueueExecuteCommandLists</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hFence</span><span class="p">);</span>
+
+<span class="c1">// wait until complete</span>
+<span class="n">zeFenceHostSynchronize</span><span class="p">(</span><span class="n">hFence</span><span class="p">,</span> <span class="n">UINT32_MAX</span><span class="p">);</span>
+
+<span class="c1">// Finally, evict to free device resources</span>
+<span class="n">zeDeviceEvictMemory</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+<span class="n">zeDeviceEvictMemory</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="n">begin</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">node</span><span class="p">));</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="opencl-interoperability">
+<h3>OpenCL Interoperability<a class="headerlink" href="#opencl-interoperability" title="Permalink to this headline">¶</a></h3>
+<p>Interoperability with OpenCL is currently only supported <em>from</em> OpenCL
+<em>to</em> Level-Zero for a subset of types. The APIs are designed to be OS
+agnostics and allow implementations to optimize for unified device
+drivers; while allowing less optimal interoperability across different
+device types and/or vendors.</p>
+<p>There are three OpenCL types that can be shared for interoperability:</p>
+<ol class="arabic simple">
+<li><p><strong>cl_mem</strong> - an OpenCL buffer object</p></li>
+<li><p><strong>cl_program</strong> - an OpenCL program object</p></li>
+<li><p><strong>cl_command_queue</strong> - an OpenCL command queue object</p></li>
+</ol>
+<div class="section" id="cl-mem">
+<h4>cl_mem<a class="headerlink" href="#cl-mem" title="Permalink to this headline">¶</a></h4>
+<p>OpenCL buffer objects may be registered for use as a Level-Zero device
+memory allocation. Registering an OpenCL buffer object with Level-Zero
+merely obtains a pointer to the underlying device memory allocation and
+does not alter the lifetime of the device memory underlying the OpenCL
+buffer object. Freeing the Level-Zero device memory allocation
+effectively “un-registers” the allocation from Level-Zero, and should be
+performed before the OpenCL buffer object is destroyed. Using the
+Level-Zero device memory allocation after destroying its associated
+OpenCL buffer object will result in undefined behavior.</p>
+<p>Applications are responsible for enforcing memory consistency for shared
+buffer objects using existing OpenCL and/or Level-Zero APIs.</p>
+</div>
+<div class="section" id="cl-program">
+<h4>cl_program<a class="headerlink" href="#cl-program" title="Permalink to this headline">¶</a></h4>
+<p>Level-Zero modules are always in a compiled state and therefore prior to
+retrieving an ::ze_module_handle_t from a cl_program the caller must
+ensure the cl_program is compiled and linked.</p>
+</div>
+<div class="section" id="cl-command-queue">
+<h4>cl_command_queue<a class="headerlink" href="#cl-command-queue" title="Permalink to this headline">¶</a></h4>
+<p>Sharing OpenCL command queues provide opportunities to minimize
+transition costs when submitting work from an OpenCL queue followed by
+submitting work to Level-Zero command queue and vice-versa. Enqueuing
+Level-Zero command lists to Level-Zero command queues are immediately
+submitted to the device. OpenCL implementations, however, may not
+necessarily submit tasks to the device unless forced by explicit OpenCL
+API such as clFlush or clFinish. To minimize overhead between sharing
+command queues, applications must explicitly submit OpenCL command
+queues using clFlush, clFinish or similar operations prior to enqueuing
+a Level-Zero command list. Failing to explicitly submit device work may
+result in undefined behavior.</p>
+<p>Sharing an OpenCL command queue doesn’t alter the lifetime of the API
+object. It provides knowledge for the driver to potentially reuse some
+internal resources which may have noticeable overhead when switching the
+resources.</p>
+<p>Memory contents as reflected by any caching schemes will be consistent
+such that, for example, a memory write in an OpenCL command queue can be
+read by a subsequent Level-Zero command list without any special
+application action. The cost to ensure memory consistency may be
+implementation dependent. The performance of sharing command queues will
+be no worse than an application submitting work to OpenCL, calling
+clFinish followed by submitting a Level-Zero command list. In most
+cases, command queue sharing may be much more efficient.</p>
+</div>
+</div>
+<div class="section" id="inter-process-communication">
+<h3>Inter-Process Communication<a class="headerlink" href="#inter-process-communication" title="Permalink to this headline">¶</a></h3>
+<p>There are two types of Inter-Process Communication (IPC) APIs for using
+Level-Zero allocations across processes:</p>
+<ol class="arabic simple">
+<li><p>Memory</p></li>
+<li><p>Events</p></li>
+</ol>
+<div class="section" id="memory-1">
+<span id="id8"></span><h4>Memory<a class="headerlink" href="#memory-1" title="Permalink to this headline">¶</a></h4>
+<p>The following code examples demonstrate how to use the memory IPC APIs:</p>
+<ol class="arabic simple">
+<li><p>First, the allocation is made, packaged, and sent on the sending
+process:</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="o">*</span> <span class="n">dptr</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+<span class="n">zeDriverAllocDeviceMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">desc</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">alignment</span><span class="p">,</span> <span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dptr</span><span class="p">);</span>
+
+<span class="n">ze_ipc_mem_handle_t</span> <span class="n">hIPC</span><span class="p">;</span>
+<span class="n">zeDriverGetMemIpcHandle</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="n">dptr</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hIPC</span><span class="p">);</span>
+
+<span class="c1">// Method of sending to receiving process is not defined by Level-Zero:</span>
+<span class="n">send_to_receiving_process</span><span class="p">(</span><span class="n">hIPC</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Next, the allocation is received and un-packaged on the receiving
+process:</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Method of receiving from sending process is not defined by Level-Zero:</span>
+<span class="n">ze_ipc_mem_handle_t</span> <span class="n">hIPC</span><span class="p">;</span>
+<span class="n">hIPC</span> <span class="o">=</span> <span class="n">receive_from_sending_process</span><span class="p">();</span>
+
+<span class="kt">void</span><span class="o">*</span> <span class="n">dptr</span> <span class="o">=</span> <span class="n">nullptr</span><span class="p">;</span>
+<span class="n">zeDriverOpenMemIpcHandle</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="n">hDevice</span><span class="p">,</span> <span class="n">hIPC</span><span class="p">,</span> <span class="n">ZE_IPC_MEMORY_FLAG_NONE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dptr</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Each process may now refer to the same device memory allocation via its <code class="docutils literal notranslate"><span class="pre">dptr</span></code>.
+Note, there is no guaranteed address equivalence for the values of <code class="docutils literal notranslate"><span class="pre">dptr</span></code> in each process.</p></li>
+<li><p>To cleanup, first close the handle in the receiving process:</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">zeDriverCloseMemIpcHandle</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="n">dptr</span><span class="p">);</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Finally, free the device pointer in the sending process:</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">zeDriverFreeMem</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="n">dptr</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="events-1">
+<span id="id9"></span><h4>Events<a class="headerlink" href="#events-1" title="Permalink to this headline">¶</a></h4>
+<p>The following code examples demonstrate how to use the event IPC APIs:</p>
+<ol class="arabic">
+<li><p>First, the event pool is created, packaged, and sent on the sending process:</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// create event pool</span>
+<span class="n">ze_event_pool_desc_t</span> <span class="n">eventPoolDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_EVENT_POOL_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_POOL_FLAG_IPC</span> <span class="o">|</span> <span class="n">ZE_EVENT_POOL_FLAG_HOST_VISIBLE</span><span class="p">,</span>
+    <span class="mi">10</span>
+<span class="p">};</span>
+<span class="n">ze_event_pool_handle_t</span> <span class="n">hEventPool</span><span class="p">;</span>
+<span class="n">zeEventPoolCreate</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventPoolDesc</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEventPool</span><span class="p">);</span>
+
+<span class="c1">// get IPC handle and send to another process</span>
+<span class="n">ze_ipc_event_pool_handle_t</span> <span class="n">hIpcEvent</span><span class="p">;</span>
+<span class="n">zeEventPoolGetIpcHandle</span><span class="p">(</span><span class="n">hEventPool</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hIpcEventPool</span><span class="p">);</span>
+<span class="n">send_to_receiving_process</span><span class="p">(</span><span class="n">hIpcEventPool</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Next, the event pool is received and un-packaged on the receiving process:</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// get IPC handle from other process</span>
+<span class="n">ze_ipc_event_pool_handle_t</span> <span class="n">hIpcEventPool</span><span class="p">;</span>
+<span class="n">receive_from_sending_process</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hIpcEventPool</span><span class="p">);</span>
+
+<span class="c1">// open event pool</span>
+<span class="n">ze_event_pool_handle_t</span> <span class="n">hEventPool</span><span class="p">;</span>
+<span class="n">zeEventPoolOpenIpcHandle</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="n">hIpcEventPool</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEventPool</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Each process may now refer to the same device event allocation via its handle.</p>
+<ol class="loweralpha simple">
+<li><p>receiving process creates event at location</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ze_event_handle_t</span> <span class="n">hEvent</span><span class="p">;</span>
+<span class="n">ze_event_desc_t</span> <span class="n">eventDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_EVENT_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_NONE</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_HOST</span><span class="p">,</span> <span class="c1">// ensure memory coherency across device and Host after event signaled</span>
+<span class="p">};</span>
+<span class="n">zeEventCreate</span><span class="p">(</span><span class="n">hEventPool</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEvent</span><span class="p">);</span>
+
+<span class="c1">// submit kernel and signal event when complete</span>
+<span class="n">zeCommandListAppendLaunchKernel</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">hKernel</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">args</span><span class="p">,</span> <span class="n">hEvent</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+<span class="n">zeCommandListClose</span><span class="p">(</span><span class="n">hCommandList</span><span class="p">);</span>
+<span class="n">zeCommandQueueExecuteCommandLists</span><span class="p">(</span><span class="n">hCommandQueue</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hCommandList</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="loweralpha simple" start="2">
+<li><p>sending process creates event at same location</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">ze_event_handle_t</span> <span class="n">hEvent</span><span class="p">;</span>
+<span class="n">ze_event_desc_t</span> <span class="n">eventDesc</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ZE_EVENT_DESC_VERSION_CURRENT</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_NONE</span><span class="p">,</span>
+    <span class="n">ZE_EVENT_SCOPE_FLAG_HOST</span><span class="p">,</span> <span class="c1">// ensure memory coherency across device and Host after event signaled</span>
+<span class="p">};</span>
+<span class="n">zeEventCreate</span><span class="p">(</span><span class="n">hEventPool</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventDesc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hEvent</span><span class="p">);</span>
+
+<span class="n">zeEventHostSynchronize</span><span class="p">(</span><span class="n">hEvent</span><span class="p">,</span> <span class="n">UINT32_MAX</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note, there is no guaranteed address equivalence for the values of <code class="docutils literal notranslate"><span class="pre">hEvent</span></code> in each process.</p>
+</li>
+<li><p>To cleanup, first close the pool handle in the receiving process:</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">zeEventDestroy</span><span class="p">(</span><span class="n">hEvent</span><span class="p">);</span>
+<span class="n">zeEventPoolCloseIpcHandle</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hEventPool</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Finally, free the event pool handle in the sending process:</p>
+<blockquote>
+<div><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">zeEventDestroy</span><span class="p">(</span><span class="n">hEvent</span><span class="p">);</span>
+<span class="n">zeEventPoolDestroy</span><span class="p">(</span><span class="n">hEventPool</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="peer-to-peer-access-and-queries">
+<h3>Peer-to-Peer Access and Queries<a class="headerlink" href="#peer-to-peer-access-and-queries" title="Permalink to this headline">¶</a></h3>
+<p>Devices may be linked together within a node by a scale-up fabric and depending on the configuration,
+the fabric can support atomics, compute kernel remote access, and data copies.</p>
+<p>The following Peer-to-Peer functionalities are provided through the API:</p>
+<ul>
+<li><p>Check for existence of peer-to-peer fabric between two devices.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>::zeDeviceCanAccessPeer</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Query remote memory access and atomic capabilities for peer-to-peer</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>::zeDeviceGetP2PProperties</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Copy data between devices over peer-to-peer fabric.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>::zeCommandListAppendMemoryCopy</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../tools/PROG.html" class="btn btn-neutral float-right" title="Initialization" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="INTRO.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

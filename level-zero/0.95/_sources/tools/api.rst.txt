@@ -1,0 +1,641 @@
+
+
+==============================
+Tools API
+==============================
+oneAPI Level Zero Specification - Version 0.95.0
+
+ 
+
+ 
+
+Common
+============================================================
+* Enumerations
+
+
+    * :ref:`zet-structure-type-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-base-properties-t`
+    * :ref:`zet-base-desc-t`
+
+
+
+
+Common Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-structure-type-t:
+
+zet_structure_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_structure_type_t
+    :project: LevelZero
+
+ 
+Common Structures
+------------------------------------------------------------------------------
+
+.. _zet-base-properties-t:
+
+zet_base_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_base_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-base-desc-t:
+
+zet_base_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_base_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+ 
+
+ 
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+ 
+
+ 
+
+Metric
+============================================================
+* Functions
+
+
+    * :ref:`zetMetricGroupGet`
+    * :ref:`zetMetricGroupGetProperties`
+    * :ref:`zetMetricGroupCalculateMetricValues`
+    * :ref:`zetMetricGet`
+    * :ref:`zetMetricGetProperties`
+    * :ref:`zetDeviceActivateMetricGroups`
+    * :ref:`zetMetricStreamerOpen`
+    * :ref:`zetCommandListAppendMetricStreamerMarker`
+    * :ref:`zetMetricStreamerClose`
+    * :ref:`zetMetricStreamerReadData`
+    * :ref:`zetMetricQueryPoolCreate`
+    * :ref:`zetMetricQueryPoolDestroy`
+    * :ref:`zetMetricQueryCreate`
+    * :ref:`zetMetricQueryDestroy`
+    * :ref:`zetMetricQueryReset`
+    * :ref:`zetCommandListAppendMetricQueryBegin`
+    * :ref:`zetCommandListAppendMetricQueryEnd`
+    * :ref:`zetCommandListAppendMetricMemoryBarrier`
+    * :ref:`zetMetricQueryGetData`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-metric-group-sampling-type-t`
+    * :ref:`zet-metric-type-t`
+    * :ref:`zet-value-type-t`
+    * :ref:`zet-metric-query-pool-flag-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-metric-group-properties-t`
+    * :ref:`zet-value-t`
+    * :ref:`zet-typed-value-t`
+    * :ref:`zet-metric-properties-t`
+    * :ref:`zet-metric-streamer-desc-t`
+    * :ref:`zet-metric-query-pool-desc-t`
+
+
+Metric Functions
+------------------------------------------------------------------------------
+
+
+.. _zetMetricGroupGet:
+
+zetMetricGroupGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGroupGet
+    :project: LevelZero
+
+
+.. _zetMetricGroupGetProperties:
+
+zetMetricGroupGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGroupGetProperties
+    :project: LevelZero
+
+
+.. _zetMetricGroupCalculateMetricValues:
+
+zetMetricGroupCalculateMetricValues
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGroupCalculateMetricValues
+    :project: LevelZero
+
+
+.. _zetMetricGet:
+
+zetMetricGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGet
+    :project: LevelZero
+
+
+.. _zetMetricGetProperties:
+
+zetMetricGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricGetProperties
+    :project: LevelZero
+
+
+.. _zetDeviceActivateMetricGroups:
+
+zetDeviceActivateMetricGroups
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetDeviceActivateMetricGroups
+    :project: LevelZero
+
+
+.. _zetMetricStreamerOpen:
+
+zetMetricStreamerOpen
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricStreamerOpen
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricStreamerMarker:
+
+zetCommandListAppendMetricStreamerMarker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricStreamerMarker
+    :project: LevelZero
+
+
+.. _zetMetricStreamerClose:
+
+zetMetricStreamerClose
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricStreamerClose
+    :project: LevelZero
+
+
+.. _zetMetricStreamerReadData:
+
+zetMetricStreamerReadData
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricStreamerReadData
+    :project: LevelZero
+
+
+.. _zetMetricQueryPoolCreate:
+
+zetMetricQueryPoolCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryPoolCreate
+    :project: LevelZero
+
+
+.. _zetMetricQueryPoolDestroy:
+
+zetMetricQueryPoolDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryPoolDestroy
+    :project: LevelZero
+
+
+.. _zetMetricQueryCreate:
+
+zetMetricQueryCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryCreate
+    :project: LevelZero
+
+
+.. _zetMetricQueryDestroy:
+
+zetMetricQueryDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryDestroy
+    :project: LevelZero
+
+
+.. _zetMetricQueryReset:
+
+zetMetricQueryReset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryReset
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricQueryBegin:
+
+zetCommandListAppendMetricQueryBegin
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricQueryBegin
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricQueryEnd:
+
+zetCommandListAppendMetricQueryEnd
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricQueryEnd
+    :project: LevelZero
+
+
+.. _zetCommandListAppendMetricMemoryBarrier:
+
+zetCommandListAppendMetricMemoryBarrier
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetCommandListAppendMetricMemoryBarrier
+    :project: LevelZero
+
+
+.. _zetMetricQueryGetData:
+
+zetMetricQueryGetData
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetMetricQueryGetData
+    :project: LevelZero
+
+
+
+Metric Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-metric-group-sampling-type-t:
+
+zet_metric_group_sampling_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_group_sampling_type_t
+    :project: LevelZero
+
+
+.. _zet-metric-type-t:
+
+zet_metric_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_type_t
+    :project: LevelZero
+
+
+.. _zet-value-type-t:
+
+zet_value_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_value_type_t
+    :project: LevelZero
+
+
+.. _zet-metric-query-pool-flag-t:
+
+zet_metric_query_pool_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_metric_query_pool_flag_t
+    :project: LevelZero
+
+ 
+Metric Structures
+------------------------------------------------------------------------------
+
+.. _zet-metric-group-properties-t:
+
+zet_metric_group_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_group_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-value-t:
+
+zet_value_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenunion:: zet_value_t
+    :project: LevelZero
+
+.. _zet-typed-value-t:
+
+zet_typed_value_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_typed_value_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-metric-properties-t:
+
+zet_metric_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-metric-streamer-desc-t:
+
+zet_metric_streamer_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_streamer_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-metric-query-pool-desc-t:
+
+zet_metric_query_pool_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_metric_query_pool_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Module
+============================================================
+* Functions
+
+
+    * :ref:`zetModuleGetDebugInfo`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-module-debug-info-format-t`
+
+ 
+
+
+Module Functions
+------------------------------------------------------------------------------
+
+
+.. _zetModuleGetDebugInfo:
+
+zetModuleGetDebugInfo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetModuleGetDebugInfo
+    :project: LevelZero
+
+
+
+Module Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-module-debug-info-format-t:
+
+zet_module_debug_info_format_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_module_debug_info_format_t
+    :project: LevelZero
+
+ 
+
+ 
+
+Pin
+============================================================
+* Functions
+
+
+    * :ref:`zetKernelGetProfileInfo`
+
+ 
+* Enumerations
+
+
+    * :ref:`zet-profile-flag-t`
+    * :ref:`zet-profile-token-type-t`
+
+ 
+* Structures
+
+
+    * :ref:`zet-profile-properties-t`
+    * :ref:`zet-profile-free-register-token-t`
+    * :ref:`zet-profile-register-sequence-t`
+
+
+Pin Functions
+------------------------------------------------------------------------------
+
+
+.. _zetKernelGetProfileInfo:
+
+zetKernelGetProfileInfo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetKernelGetProfileInfo
+    :project: LevelZero
+
+
+
+Pin Enums
+------------------------------------------------------------------------------
+
+
+.. _zet-profile-flag-t:
+
+zet_profile_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_profile_flag_t
+    :project: LevelZero
+
+
+.. _zet-profile-token-type-t:
+
+zet_profile_token_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zet_profile_token_type_t
+    :project: LevelZero
+
+ 
+Pin Structures
+------------------------------------------------------------------------------
+
+.. _zet-profile-properties-t:
+
+zet_profile_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_profile_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-profile-free-register-token-t:
+
+zet_profile_free_register_token_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_profile_free_register_token_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zet-profile-register-sequence-t:
+
+zet_profile_register_sequence_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_profile_register_sequence_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Tracing
+============================================================
+* Functions
+
+
+    * :ref:`zetTracerCreate`
+    * :ref:`zetTracerDestroy`
+    * :ref:`zetTracerSetPrologues`
+    * :ref:`zetTracerSetEpilogues`
+    * :ref:`zetTracerSetEnabled`
+
+ 
+
+ 
+* Structures
+
+
+    * :ref:`zet-tracer-desc-t`
+
+
+Tracing Functions
+------------------------------------------------------------------------------
+
+
+.. _zetTracerCreate:
+
+zetTracerCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerCreate
+    :project: LevelZero
+
+
+.. _zetTracerDestroy:
+
+zetTracerDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerDestroy
+    :project: LevelZero
+
+
+.. _zetTracerSetPrologues:
+
+zetTracerSetPrologues
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerSetPrologues
+    :project: LevelZero
+
+
+.. _zetTracerSetEpilogues:
+
+zetTracerSetEpilogues
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerSetEpilogues
+    :project: LevelZero
+
+
+.. _zetTracerSetEnabled:
+
+zetTracerSetEnabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zetTracerSetEnabled
+    :project: LevelZero
+
+
+
+ 
+Tracing Structures
+------------------------------------------------------------------------------
+
+.. _zet-tracer-desc-t:
+
+zet_tracer_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zet_tracer_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+

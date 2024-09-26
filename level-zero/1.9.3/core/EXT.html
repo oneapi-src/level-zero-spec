@@ -1,0 +1,634 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Extensions &#8212; Level Zero Specification  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/EXT';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Documentation" href="../api.html" />
+    <link rel="prev" title="SPIR-V Programming Guide" href="SPIRV.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Extensions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html">Core API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/api.html">Tools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/api.html">Sysman API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/core/EXT.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Extensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective">Objective</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naming-convention">Naming Convention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-enumerations">Extending Enumerations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-structures">Extending Structures</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-core-extensions">List of Standard Core Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-experimental-extensions">List of Experimental Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-sysman-extensions">List of Standard Sysman Extensions</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="extensions">
+<h1>Extensions<a class="headerlink" href="#extensions" title="Link to this heading">#</a></h1>
+<section id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Link to this heading">#</a></h2>
+<p>Features which are device- or vendor-specific can be exposed as extensions.</p>
+<p>There are two types of extensions defined by this specification:</p>
+<ol class="arabic simple">
+<li><p><strong>Standard</strong> - extensions ratified for inclusion into the current and all future versions of the specification.</p></li>
+<li><p><strong>Experimental</strong> - extensions require additional experimentation and feedback from application vendors
+before ratification, therefore applications should not rely on experimental extensions in production.</p></li>
+</ol>
+<p>In addition to above, an implementation may choose to provide non-standard extensions which are
+not defined in this specification.</p>
+<p>It is the responsibility of the implementation to define and document such non-standard extensions
+and also to ensure these extensions do not conflict or interfere with any features or extensions of the standard
+core or sysman APIs.</p>
+<p>The following table summarizes the APIs to be used for discovery of different types of extensions. Aside
+from <a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a> which has been available since inception of this specification,
+the other APIs have been added subsequently. The versions of spec in which the APIs were added is also
+noted in following table.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>API Category</p></th>
+<th class="head"><p>Version API added</p></th>
+<th class="head"><p>Extension Type</p></th>
+<th class="head"><p>Extension Discovery API</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Core</p></td>
+<td><p>NA</p></td>
+<td><p>Standard</p></td>
+<td><p><a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Core</p></td>
+<td><p>NA</p></td>
+<td><p>Experimental</p></td>
+<td><p><a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Core</p></td>
+<td><p>1.1</p></td>
+<td><p>Implementation non-standard</p></td>
+<td><p><a class="reference internal" href="api.html#zedrivergetextensionfunctionaddress"><span class="std std-ref">zeDriverGetExtensionFunctionAddress</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Sysman</p></td>
+<td><p>1.8</p></td>
+<td><p>Standard</p></td>
+<td><p><a class="reference internal" href="../sysman/api.html#zesdrivergetextensionproperties"><span class="std std-ref">zesDriverGetExtensionProperties</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Sysman</p></td>
+<td><p>1.8</p></td>
+<td><p>Experimental</p></td>
+<td><p><a class="reference internal" href="../sysman/api.html#zesdrivergetextensionproperties"><span class="std std-ref">zesDriverGetExtensionProperties</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Sysman</p></td>
+<td><p>1.8</p></td>
+<td><p>Implementation non-standard</p></td>
+<td><p><a class="reference internal" href="../sysman/api.html#zesdrivergetextensionfunctionaddress"><span class="std std-ref">zesDriverGetExtensionFunctionAddress</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Extensions must use globally unique names for macros, enums, structures and functions</p></li>
+<li><p>Extensions must have globally unique extension names reported from <a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a>, <a class="reference internal" href="../sysman/api.html#zesdrivergetextensionproperties"><span class="std std-ref">zesDriverGetExtensionProperties</span></a></p></li>
+<li><p>All extensions must be defined in this specification</p></li>
+<li><p>Extensions must not break backwards compatibility of the standard APIs defined in this specification</p></li>
+<li><p>Standard extension versions must be backwards compatible with prior versions</p></li>
+</ul>
+<section id="naming-convention">
+<h3>Naming Convention<a class="headerlink" href="#naming-convention" title="Link to this heading">#</a></h3>
+<p>The following naming conventions must be followed for <strong>standard</strong> extensions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>All extension functions must be postfixed with <cite>Ext</cite></p></li>
+<li><p>All macros must use all caps with the appropriate prefix. Core macros shall use <cite>ZE_NAME_EXT</cite>, Sysman macros shall use <cite>ZES_NAME_EXT</cite></p></li>
+<li><p>All structures, enumerations and other types must follow snake case convention with appropriate prefix. Core structures and enumerations shall use <cite>ze_name_ext_t</cite> and Sysman shall use <cite>zes_name_ext_t</cite></p></li>
+<li><p>All enumerator values must use all caps with appropriate prefix. Core enumerator values shall use <cite>ZE_ENUM_EXT_ETOR_NAME</cite> and Sysman shall use <cite>ZES_ENUM_EXT_ETOR_NAME</cite></p></li>
+<li><p>All handle types must end with <cite>ext_handle_t</cite></p></li>
+<li><p>All descriptor structures must end with <cite>ext_desc_t</cite></p></li>
+<li><p>All property structures must end with <cite>ext_properties_t</cite></p></li>
+<li><p>All flag enumerations must end with <cite>ext_flags_t</cite></p></li>
+</ul>
+</div></blockquote>
+<p>The following naming conventions must be followed for <strong>experimental</strong> extensions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Experimental extensions may be added and removed from the driver at any time.</p></li>
+<li><p>Experimental extensions are not guaranteed to be forward- or backward-compatible between versions.</p></li>
+<li><p>Experimental extensions are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.</p></li>
+<li><p>All extension functions must be postfixed with <cite>Exp</cite>. The vendor name must follow the <cite>ze</cite> or <cite>zes</cite> prefix and follow CamelCase convention.</p></li>
+<li><p>All macros must use all caps with the appropriate prefix. Core macros shall use <cite>ZE_NAME_EXP</cite>, Sysman macros shall use <cite>ZES_NAME_EXP</cite>. The vendor name must follow <cite>ZE</cite> or <cite>ZES</cite> prefix.</p></li>
+<li><p>All structures, enumerations and other types must follow snake case convention with appropriate prefix. Core structures and enumerations shall use <cite>ze_name_exp_t</cite> and Sysman shall use <cite>zes_name_exp_t</cite>. The vendor name must follow <cite>ze</cite> or <cite>ZES</cite> prefix.</p></li>
+<li><p>All enumerator values must use all caps with appropriate prefix. Core enumerator values shall use <cite>ZE_ENUM_EXP_ETOR_NAME</cite> and Sysman shall use <cite>ZES_ENUM_EXP_ETOR_NAME</cite>. The vendor name must follow <cite>ZE</cite> or <cite>ZES</cite> prefix.</p></li>
+<li><p>All handle types must end with <cite>exp_handle_t</cite></p></li>
+<li><p>All descriptor structures must end with <cite>exp_desc_t</cite></p></li>
+<li><p>All property structures must end with <cite>exp_properties_t</cite></p></li>
+<li><p>All flag enumerations must end with <cite>exp_flags_t</cite></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="extending-enumerations">
+<h3>Extending Enumerations<a class="headerlink" href="#extending-enumerations" title="Link to this heading">#</a></h3>
+<p>Any existing enumeration may be extended by adding new etors.
+Etors must still use extension naming convention and values should be assigned to avoid future compatibility issues.</p>
+</section>
+<section id="extending-structures">
+<h3>Extending Structures<a class="headerlink" href="#extending-structures" title="Link to this heading">#</a></h3>
+<p>Any structure derived from base descriptor or base property structure types may be extended using structure chains.
+While it is possible to use other methods, this is the required method for extending existing structures.</p>
+<p>A structure chain can contain more than one extension structure, in any order. Therefore, extensions should not be
+dependent on their order relative to other extensions and the implementation must be order agnostic. In addition,
+the implementation will ignore extended structures that it does not support.</p>
+<p>The extension must document the specific structures and functions that may be extended using the structure chain.</p>
+</section>
+</section>
+<section id="list-of-standard-core-extensions">
+<h2>List of Standard Core Extensions<a class="headerlink" href="#list-of-standard-core-extensions" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="EXT_EUCount.html#ze-extension-eu-count"><span class="std std-ref">“ZE_extension_eu_count”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_PCIProperties.html#ze-extension-pci-properties"><span class="std std-ref">“ZE_extension_pci_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_SRGB.html#ze-extension-srgb"><span class="std std-ref">“ZE_extension_srgb”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Bfloat16Conversions.html#ze-extension-bfloat16-conversions"><span class="std std-ref">“ZE_extension_bfloat16_conversions”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_CacheReservation.html#ze-extension-cache-reservation"><span class="std std-ref">“ZE_extension_cache_reservation”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_DeviceLUID.html#ze-extension-device-luid"><span class="std std-ref">“ZE_extension_device_luid”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_DeviceIpVersion.html#ze-extension-device-ip-version"><span class="std std-ref">“ZE_extension_device_ip_version”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_EventQueryKernelTimestamps.html#ze-extension-event-query-kernel-timestamps"><span class="std std-ref">“ZE_extension_event_query_kernel_timestamps”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_FloatAtomics.html#ze-extension-float-atomics"><span class="std std-ref">“ZE_extension_float_atomics”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_ImageCopy.html#ze-extension-image-copy"><span class="std std-ref">“ZE_extension_image_copy”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_ImageQueryAllocProperties.html#ze-extension-image-query-alloc-properties"><span class="std std-ref">“ZE_extension_image_query_alloc_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_ImageView.html#ze-extension-image-view"><span class="std std-ref">“ZE_extension_image_view”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_ImageViewPlanar.html#ze-extension-image-view-planar"><span class="std std-ref">“ZE_extension_image_view_planar”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_KernelMaxGroupSizeProperties.html#ze-extension-kernel-max-group-size-properties"><span class="std std-ref">“ZE_extension_kernel_max_group_size_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_LinkageInspection.html#ze-extension-linkage-inspection"><span class="std std-ref">“ZE_extension_linkage_inspection”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_LinkOnceODR.html#ze-extension-linkonce-odr"><span class="std std-ref">“ZE_extension_linkonce_odr”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_MemoryCompressionHints.html#ze-extension-memory-compression-hints"><span class="std std-ref">“ZE_extension_memory_compression_hints”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_MemoryFreePolicies.html#ze-extension-memory-free-policies"><span class="std std-ref">“ZE_extension_memory_free_policies”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_MemoryProperties.html#ze-extension-device-memory-properties"><span class="std std-ref">“ZE_extension_device_memory_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Raytracing.html#ze-extension-raytracing"><span class="std std-ref">“ZE_extension_raytracing”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Subgroups.html#ze-extension-subgroups"><span class="std std-ref">“ZE_extension_subgroups”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_EngineActivity.html#zes-extension-engine-activity"><span class="std std-ref">“ZES_extension_engine_activity”</span></a></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="list-of-experimental-extensions">
+<h2>List of Experimental Extensions<a class="headerlink" href="#list-of-experimental-extensions" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="EXT_Exp_RTASBuilder.html#ze-experimental-rtas-builder"><span class="std std-ref">“ZE_experimental_rtas_builder”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_BandwidthProperties.html#ze-experimental-bandwidth-properties"><span class="std std-ref">“ZE_experimental_bandwidth_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_EXP_BindlessImages.html#ze-experimental-bindless-image"><span class="std std-ref">“ZE_experimental_bindless_image”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_CommandListClone.html#ze-experimental-command-list-clone"><span class="std std-ref">“ZE_experimental_command_list_clone”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_CounterBasedEventPools.html#ze-experimental-event-pool-counter-based"><span class="std std-ref">“ZE_experimental_event_pool_counter_based”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_EventQueryTimestamps.html#ze-experimental-event-query-timestamps"><span class="std std-ref">“ZE_experimental_event_query_timestamps”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_Fabric.html#ze-experimental-fabric"><span class="std std-ref">“ZE_experimental_fabric”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_GlobalOffset.html#ze-experimental-global-offset"><span class="std std-ref">“ZE_experimental_global_offset”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_ImageMemoryProperties.html#ze-experimental-image-memory-properties"><span class="std std-ref">“ZE_experimental_image_memory_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_ImageView.html#ze-experimental-image-view"><span class="std std-ref">“ZE_experimental_image_view”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_ImageViewPlanar.html#ze-experimental-image-view-planar"><span class="std std-ref">“ZE_experimental_image_view_planar”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_ImmediateCommandListAppend.html#ze-experimental-immediate-command-list-append"><span class="std std-ref">“ZE_experimental_immediate_command_list_append”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_SchedulingHints.html#ze-experimental-scheduling-hints"><span class="std std-ref">“ZE_experimental_scheduling_hints”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_MutableCommandList.html#ze-experimental-mutable-command-list"><span class="std std-ref">“ZE_experimental_mutable_command_list”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_PowerSavingHint.html#ze-experimental-power-saving-hint"><span class="std std-ref">“ZE_experimental_power_saving_hint”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_ModuleProgram.html#ze-experimental-module-program"><span class="std std-ref">“ZE_experimental_module_program”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_RelaxedAllocLimits.html#ze-experimental-relaxed-allocation-limits"><span class="std std-ref">“ZE_experimental_relaxed_allocation_limits”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Exp_SubAllocationProperties.html#ze-experimental-sub-allocations"><span class="std std-ref">“ZE_experimental_sub_allocations”</span></a></p></li>
+<li><p><a class="reference internal" href="../tools/EXT_Exp_GlobalTimestamps.html#zet-experimental-global-metric-timestamps"><span class="std std-ref">“ZET_experimental_global_metric_timestamps”</span></a></p></li>
+<li><p><a class="reference internal" href="../tools/EXT_Exp_MetricExportData.html#zet-experimental-metric-export-data"><span class="std std-ref">“ZET_experimental_metric_export_data”</span></a></p></li>
+<li><p><a class="reference internal" href="../tools/EXT_Exp_MetricProgrammable.html#zet-experimental-programmable-metrics"><span class="std std-ref">“ZET_experimental_programmable_metrics”</span></a></p></li>
+<li><p><a class="reference internal" href="../tools/EXT_Exp_MultiMetricValues.html#zet-experimental-calculate-multiple-metrics"><span class="std std-ref">“ZET_experimental_calculate_multiple_metrics”</span></a></p></li>
+<li><p><a class="reference internal" href="../tools/EXT_Exp_APITracing.html#zet-experimental-api-tracing"><span class="std std-ref">“ZET_experimental_api_tracing”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_Exp_FirmwareSecurityVersion.html#zes-experimental-firmware-security-version"><span class="std std-ref">“ZES_experimental_firmware_security_version”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_Exp_MemPageOfflineState.html#zes-extension-mem-state"><span class="std std-ref">“ZES_extension_mem_state”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_Exp_power_domain.html#zes-extension-power-domain-properties"><span class="std std-ref">“ZES_extension_power_domain_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_Exp_RasState.html#zes-extension-ras-state"><span class="std std-ref">“ZES_extension_ras_state”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_SysmanDeviceMapping.html#zes-experimental-sysman-device-mapping"><span class="std std-ref">“ZES_experimental_sysman_device_mapping”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_Exp_VirtualFunctionManagement.html#zes-experimental-virtual-function-management"><span class="std std-ref">“ZES_experimental_virtual_function_management”</span></a></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="list-of-standard-sysman-extensions">
+<h2>List of Standard Sysman Extensions<a class="headerlink" href="#list-of-standard-sysman-extensions" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../sysman/EXT_PowerLimits.html#zes-extension-power-limits"><span class="std std-ref">“ZES_extension_power_limits”</span></a></p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="SPIRV.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SPIR-V Programming Guide</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Documentation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objective">Objective</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#naming-convention">Naming Convention</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-enumerations">Extending Enumerations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-structures">Extending Structures</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-core-extensions">List of Standard Core Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-experimental-extensions">List of Experimental Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-sysman-extensions">List of Standard Sysman Extensions</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Copy Extension &mdash; Level Zero Specification  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Level Zero Specification
+          </a>
+              <div class="version">
+                1.4.3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EXT.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://spec.oneapi.io/releases/index.html#level-zero">Versions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Level Zero Specification</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="image-copy-extension">
+<span id="ze-extension-image-copy"></span><h1>Image Copy Extension<a class="headerlink" href="#image-copy-extension" title="Permalink to this headline"></a></h1>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zecommandlistappendimagecopytomemoryext"><span class="std std-ref">zeCommandListAppendImageCopyToMemoryExt</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zecommandlistappendimagecopyfrommemoryext"><span class="std std-ref">zeCommandListAppendImageCopyFromMemoryExt</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-image-copy-ext-version-t"><span class="std std-ref">ze_image_copy_ext_version_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="image-copy">
+<h3>Image Copy<a class="headerlink" href="#image-copy" title="Permalink to this headline"></a></h3>
+<p>Sometimes it is desired to copy the contents of an image object to a buffer object, i.e., linear un-formatted memory, e.g., for use in a different library. The <a class="reference internal" href="api.html#zecommandlistappendimagecopytomemory"><span class="std std-ref">zeCommandListAppendImageCopyToMemory</span></a> API call can be used to for this purpose if no padding is desired in the buffer being written into. The <a class="reference internal" href="api.html#zecommandlistappendimagecopytomemoryext"><span class="std std-ref">zeCommandListAppendImageCopyToMemoryExt</span></a> call can be used to copy pixel values from an image object into a destination buffer with padding. Padding can be specified in both row pitch as well as slice pitch for 3D images/2D image arrays. The slice pitch must be set to 0 when performing this operation with 2D images.</p>
+<p>The following psuedo-code demonstrates a sequence for copying a 32x32 region out of an image object to a buffer with row pitch set to 64:</p>
+<pre class="literal-block">...
+// Create image region descriptor
+<a class="reference internal" href="api.html#ze-image-region-t"><span class="std std-ref">ze_image_region_t</span></a> srcReg = {
+  0,  // originX
+  0,  // originY
+  0,  // originZ
+  32, // width
+  32, // height
+  0   // depth
+};
+
+
+<a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> result = <a class="reference internal" href="api.html#zecommandlistappendimagecopytomemoryext"><span class="std std-ref">zeCommandListAppendImageCopyToMemoryExt</span></a>(hCmdList, pDstBuffer, hSrcImage, &amp;srcRegion, 64, 0, nullptr, 0, nullptr);</pre>
+<p>Similarly, sometimes it is desired to copy the contents of a buffer object, i.e., linear un-formatted memory, to an image object, e.g., if the contents of the image are being imported from a different library. The <a class="reference internal" href="api.html#zecommandlistappendimagecopyfrommemory"><span class="std std-ref">zeCommandListAppendImageCopyFromMemory</span></a> API call can be used to for this purpose if no padding is present in the buffer being read from. The <a class="reference internal" href="api.html#zecommandlistappendimagecopyfrommemoryext"><span class="std std-ref">zeCommandListAppendImageCopyFromMemoryExt</span></a> call can be used to copy pixel values from the source buffer with padding into an image object. Padding can be specified in both row pitch as well as slice pitch for 3D images/2D image arrays. The slice pitch must be set to 0 when performing this operation with 2D images.</p>
+<p>The following psuedo-code demonstrates a sequence for copying a 32x32 region from a buffer with row pitch equal to 64 into an image object with row pitch:</p>
+<pre class="literal-block">...
+// Create image region descriptor
+<a class="reference internal" href="api.html#ze-image-region-t"><span class="std std-ref">ze_image_region_t</span></a> srcReg = {
+  0,  // originX
+  0,  // originY
+  0,  // originZ
+  32, // width
+  32, // height
+  0   // depth
+};
+
+
+<a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> result = <a class="reference internal" href="api.html#zecommandlistappendimagecopyfrommemoryext"><span class="std std-ref">zeCommandListAppendImageCopyFromMemoryExt</span></a>(hCmdList, hDstImage, pSrcBuffer, &amp;srcRegion, 64, 0, nullptr, 0, nullptr);</pre>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

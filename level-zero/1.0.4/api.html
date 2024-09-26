@@ -1,0 +1,1164 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API Documentation &mdash; Level Zero Specification  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Core API" href="core/api.html" />
+    <link rel="prev" title="Extensions" href="core/EXT.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Level Zero Specification
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.4.46
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html">Core API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools/api.html">Tools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html">Sysman API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="versions.html">Versions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Level Zero Specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+
+    
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-documentation">
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core/api.html">Core API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#common">Common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#common-enums">Common Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-result-t">ze_result_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-structure-type-t">ze_structure_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-external-memory-type-flags-t">ze_external_memory_type_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#common-structures">Common Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-ipc-mem-handle-t">ze_ipc_mem_handle_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-ipc-event-pool-handle-t">ze_ipc_event_pool_handle_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-base-properties-t">ze_base_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-base-desc-t">ze_base_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#driver">Driver</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#driver-functions">Driver Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeinit">zeInit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedriverget">zeDriverGet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedrivergetapiversion">zeDriverGetApiVersion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedrivergetproperties">zeDriverGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedrivergetipcproperties">zeDriverGetIpcProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedrivergetextensionproperties">zeDriverGetExtensionProperties</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#driver-enums">Driver Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-init-flags-t">ze_init_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-api-version-t">ze_api_version_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-ipc-property-flags-t">ze_ipc_property_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#driver-structures">Driver Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-driver-uuid-t">ze_driver_uuid_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-driver-properties-t">ze_driver_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-driver-ipc-properties-t">ze_driver_ipc_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-driver-extension-properties-t">ze_driver_extension_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#device">Device</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#device-functions">Device Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedeviceget">zeDeviceGet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetsubdevices">zeDeviceGetSubDevices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetproperties">zeDeviceGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetcomputeproperties">zeDeviceGetComputeProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetmoduleproperties">zeDeviceGetModuleProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetcommandqueuegroupproperties">zeDeviceGetCommandQueueGroupProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetmemoryproperties">zeDeviceGetMemoryProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetmemoryaccessproperties">zeDeviceGetMemoryAccessProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetcacheproperties">zeDeviceGetCacheProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetimageproperties">zeDeviceGetImageProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetexternalmemoryproperties">zeDeviceGetExternalMemoryProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetp2pproperties">zeDeviceGetP2PProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicecanaccesspeer">zeDeviceCanAccessPeer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zedevicegetstatus">zeDeviceGetStatus</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#device-enums">Device Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-type-t">ze_device_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-property-flags-t">ze_device_property_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-module-flags-t">ze_device_module_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-fp-flags-t">ze_device_fp_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-queue-group-property-flags-t">ze_command_queue_group_property_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-memory-property-flags-t">ze_device_memory_property_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-memory-access-cap-flags-t">ze_memory_access_cap_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-cache-property-flags-t">ze_device_cache_property_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-p2p-property-flags-t">ze_device_p2p_property_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#device-structures">Device Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-uuid-t">ze_device_uuid_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-properties-t">ze_device_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-thread-t">ze_device_thread_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-compute-properties-t">ze_device_compute_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-native-kernel-uuid-t">ze_native_kernel_uuid_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-module-properties-t">ze_device_module_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-queue-group-properties-t">ze_command_queue_group_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-memory-properties-t">ze_device_memory_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-memory-access-properties-t">ze_device_memory_access_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-cache-properties-t">ze_device_cache_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-image-properties-t">ze_device_image_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-external-memory-properties-t">ze_device_external_memory_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-p2p-properties-t">ze_device_p2p_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#context">Context</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#context-functions">Context Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextcreate">zeContextCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextdestroy">zeContextDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextgetstatus">zeContextGetStatus</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#context-enums">Context Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-context-flags-t">ze_context_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#context-structures">Context Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-context-desc-t">ze_context_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#cmdqueue">Cmdqueue</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#cmdqueue-functions">Cmdqueue Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandqueuecreate">zeCommandQueueCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandqueuedestroy">zeCommandQueueDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandqueueexecutecommandlists">zeCommandQueueExecuteCommandLists</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandqueuesynchronize">zeCommandQueueSynchronize</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#cmdqueue-enums">Cmdqueue Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-queue-flags-t">ze_command_queue_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-queue-mode-t">ze_command_queue_mode_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-queue-priority-t">ze_command_queue_priority_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#cmdqueue-structures">Cmdqueue Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-queue-desc-t">ze_command_queue_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#cmdlist">Cmdlist</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#cmdlist-functions">Cmdlist Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistcreate">zeCommandListCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistcreateimmediate">zeCommandListCreateImmediate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistdestroy">zeCommandListDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistclose">zeCommandListClose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistreset">zeCommandListReset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendwriteglobaltimestamp">zeCommandListAppendWriteGlobalTimestamp</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#cmdlist-enums">Cmdlist Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-list-flags-t">ze_command_list_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#cmdlist-structures">Cmdlist Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-command-list-desc-t">ze_command_list_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#barrier">Barrier</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#barrier-functions">Barrier Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendbarrier">zeCommandListAppendBarrier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendmemoryrangesbarrier">zeCommandListAppendMemoryRangesBarrier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextsystembarrier">zeContextSystemBarrier</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#copy">Copy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#copy-functions">Copy Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendmemorycopy">zeCommandListAppendMemoryCopy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendmemoryfill">zeCommandListAppendMemoryFill</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendmemorycopyregion">zeCommandListAppendMemoryCopyRegion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendmemorycopyfromcontext">zeCommandListAppendMemoryCopyFromContext</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendimagecopy">zeCommandListAppendImageCopy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendimagecopyregion">zeCommandListAppendImageCopyRegion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendimagecopytomemory">zeCommandListAppendImageCopyToMemory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendimagecopyfrommemory">zeCommandListAppendImageCopyFromMemory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendmemoryprefetch">zeCommandListAppendMemoryPrefetch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendmemadvise">zeCommandListAppendMemAdvise</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#copy-enums">Copy Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-memory-advice-t">ze_memory_advice_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#copy-structures">Copy Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-copy-region-t">ze_copy_region_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-region-t">ze_image_region_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#event">Event</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#event-functions">Event Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventpoolcreate">zeEventPoolCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventpooldestroy">zeEventPoolDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventcreate">zeEventCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventdestroy">zeEventDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventpoolgetipchandle">zeEventPoolGetIpcHandle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventpoolopenipchandle">zeEventPoolOpenIpcHandle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventpoolcloseipchandle">zeEventPoolCloseIpcHandle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendsignalevent">zeCommandListAppendSignalEvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendwaitonevents">zeCommandListAppendWaitOnEvents</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventhostsignal">zeEventHostSignal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventhostsynchronize">zeEventHostSynchronize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventquerystatus">zeEventQueryStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendeventreset">zeCommandListAppendEventReset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventhostreset">zeEventHostReset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeeventquerykerneltimestamp">zeEventQueryKernelTimestamp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendquerykerneltimestamps">zeCommandListAppendQueryKernelTimestamps</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#event-enums">Event Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-event-pool-flags-t">ze_event_pool_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-event-scope-flags-t">ze_event_scope_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#event-structures">Event Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-event-pool-desc-t">ze_event_pool_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-event-desc-t">ze_event_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-kernel-timestamp-data-t">ze_kernel_timestamp_data_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-kernel-timestamp-result-t">ze_kernel_timestamp_result_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#fence">Fence</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#fence-functions">Fence Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zefencecreate">zeFenceCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zefencedestroy">zeFenceDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zefencehostsynchronize">zeFenceHostSynchronize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zefencequerystatus">zeFenceQueryStatus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zefencereset">zeFenceReset</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#fence-enums">Fence Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-fence-flags-t">ze_fence_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#fence-structures">Fence Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-fence-desc-t">ze_fence_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#image">Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#image-functions">Image Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeimagegetproperties">zeImageGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeimagecreate">zeImageCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zeimagedestroy">zeImageDestroy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#image-enums">Image Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-flags-t">ze_image_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-type-t">ze_image_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-format-layout-t">ze_image_format_layout_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-format-type-t">ze_image_format_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-format-swizzle-t">ze_image_format_swizzle_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-sampler-filter-flags-t">ze_image_sampler_filter_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#image-structures">Image Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-format-t">ze_image_format_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-desc-t">ze_image_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-image-properties-t">ze_image_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#memory">Memory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#memory-functions">Memory Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememallocshared">zeMemAllocShared</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememallocdevice">zeMemAllocDevice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememallochost">zeMemAllocHost</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememfree">zeMemFree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememgetallocproperties">zeMemGetAllocProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememgetaddressrange">zeMemGetAddressRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememgetipchandle">zeMemGetIpcHandle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememopenipchandle">zeMemOpenIpcHandle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zememcloseipchandle">zeMemCloseIpcHandle</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#memory-enums">Memory Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-mem-alloc-flags-t">ze_device_mem_alloc_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-host-mem-alloc-flags-t">ze_host_mem_alloc_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-memory-type-t">ze_memory_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-ipc-memory-flags-t">ze_ipc_memory_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#memory-structures">Memory Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-mem-alloc-desc-t">ze_device_mem_alloc_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-host-mem-alloc-desc-t">ze_host_mem_alloc_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-memory-allocation-properties-t">ze_memory_allocation_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-external-memory-export-desc-t">ze_external_memory_export_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-external-memory-import-fd-t">ze_external_memory_import_fd_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-external-memory-export-fd-t">ze_external_memory_export_fd_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#module">Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#module-functions">Module Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulecreate">zeModuleCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemoduledestroy">zeModuleDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemoduledynamiclink">zeModuleDynamicLink</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulebuildlogdestroy">zeModuleBuildLogDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulebuildloggetstring">zeModuleBuildLogGetString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulegetnativebinary">zeModuleGetNativeBinary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulegetglobalpointer">zeModuleGetGlobalPointer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulegetkernelnames">zeModuleGetKernelNames</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulegetproperties">zeModuleGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelcreate">zeKernelCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekerneldestroy">zeKernelDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zemodulegetfunctionpointer">zeModuleGetFunctionPointer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelsetgroupsize">zeKernelSetGroupSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelsuggestgroupsize">zeKernelSuggestGroupSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelsuggestmaxcooperativegroupcount">zeKernelSuggestMaxCooperativeGroupCount</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelsetargumentvalue">zeKernelSetArgumentValue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelsetindirectaccess">zeKernelSetIndirectAccess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelgetindirectaccess">zeKernelGetIndirectAccess</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelgetsourceattributes">zeKernelGetSourceAttributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelsetcacheconfig">zeKernelSetCacheConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelgetproperties">zeKernelGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zekernelgetname">zeKernelGetName</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendlaunchkernel">zeCommandListAppendLaunchKernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendlaunchcooperativekernel">zeCommandListAppendLaunchCooperativeKernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendlaunchkernelindirect">zeCommandListAppendLaunchKernelIndirect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecommandlistappendlaunchmultiplekernelsindirect">zeCommandListAppendLaunchMultipleKernelsIndirect</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#module-enums">Module Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-module-format-t">ze_module_format_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-module-property-flags-t">ze_module_property_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-kernel-flags-t">ze_kernel_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-kernel-indirect-access-flags-t">ze_kernel_indirect_access_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-cache-config-flags-t">ze_cache_config_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#module-structures">Module Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-module-constants-t">ze_module_constants_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-module-desc-t">ze_module_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-module-properties-t">ze_module_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-kernel-desc-t">ze_kernel_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-kernel-uuid-t">ze_kernel_uuid_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-kernel-properties-t">ze_kernel_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-group-count-t">ze_group_count_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#program">Program</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#program-enums">Program Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-module-program-exp-version-t">ze_module_program_exp_version_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#program-structures">Program Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-module-program-exp-desc-t">ze_module_program_exp_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#raytracing">Raytracing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#raytracing-enums">Raytracing Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-raytracing-ext-version-t">ze_raytracing_ext_version_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-raytracing-ext-flags-t">ze_device_raytracing_ext_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-raytracing-mem-alloc-ext-flags-t">ze_raytracing_mem_alloc_ext_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#raytracing-structures">Raytracing Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-device-raytracing-ext-properties-t">ze_device_raytracing_ext_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-raytracing-mem-alloc-ext-desc-t">ze_raytracing_mem_alloc_ext_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#residency">Residency</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#residency-functions">Residency Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextmakememoryresident">zeContextMakeMemoryResident</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextevictmemory">zeContextEvictMemory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextmakeimageresident">zeContextMakeImageResident</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zecontextevictimage">zeContextEvictImage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#sampler">Sampler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#sampler-functions">Sampler Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zesamplercreate">zeSamplerCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zesamplerdestroy">zeSamplerDestroy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#sampler-enums">Sampler Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-sampler-address-mode-t">ze_sampler_address_mode_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-sampler-filter-mode-t">ze_sampler_filter_mode_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#sampler-structures">Sampler Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-sampler-desc-t">ze_sampler_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core/api.html#virtual">Virtual</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#virtual-functions">Virtual Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zevirtualmemreserve">zeVirtualMemReserve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zevirtualmemfree">zeVirtualMemFree</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zevirtualmemquerypagesize">zeVirtualMemQueryPageSize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zephysicalmemcreate">zePhysicalMemCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zephysicalmemdestroy">zePhysicalMemDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zevirtualmemmap">zeVirtualMemMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zevirtualmemunmap">zeVirtualMemUnmap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zevirtualmemsetaccessattribute">zeVirtualMemSetAccessAttribute</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#zevirtualmemgetaccessattribute">zeVirtualMemGetAccessAttribute</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#virtual-enums">Virtual Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-memory-access-attribute-t">ze_memory_access_attribute_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-physical-mem-flags-t">ze_physical_mem_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core/api.html#virtual-structures">Virtual Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core/api.html#ze-physical-mem-desc-t">ze_physical_mem_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools/api.html">Tools API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools/api.html#common">Common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#common-enums">Common Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-structure-type-t">zet_structure_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-value-type-t">zet_value_type_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#common-structures">Common Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-base-properties-t">zet_base_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-base-desc-t">zet_base_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-value-t">zet_value_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-typed-value-t">zet_typed_value_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools/api.html#module">Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#module-functions">Module Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmodulegetdebuginfo">zetModuleGetDebugInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#module-enums">Module Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-module-debug-info-format-t">zet_module_debug_info_format_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools/api.html#debug">Debug</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#debug-functions">Debug Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdevicegetdebugproperties">zetDeviceGetDebugProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugattach">zetDebugAttach</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugdetach">zetDebugDetach</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugreadevent">zetDebugReadEvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugacknowledgeevent">zetDebugAcknowledgeEvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebuginterrupt">zetDebugInterrupt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugresume">zetDebugResume</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugreadmemory">zetDebugReadMemory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugwritememory">zetDebugWriteMemory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebuggetregistersetproperties">zetDebugGetRegisterSetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugreadregisters">zetDebugReadRegisters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetdebugwriteregisters">zetDebugWriteRegisters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#debug-enums">Debug Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-device-debug-property-flags-t">zet_device_debug_property_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-event-flags-t">zet_debug_event_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-event-type-t">zet_debug_event_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-detach-reason-t">zet_debug_detach_reason_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-memory-space-type-t">zet_debug_memory_space_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-regset-type-t">zet_debug_regset_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-regset-flags-t">zet_debug_regset_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#debug-structures">Debug Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-device-debug-properties-t">zet_device_debug_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-config-t">zet_debug_config_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-event-info-detached-t">zet_debug_event_info_detached_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-event-info-module-t">zet_debug_event_info_module_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-event-info-thread-stopped-t">zet_debug_event_info_thread_stopped_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-event-info-t">zet_debug_event_info_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-event-t">zet_debug_event_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-memory-space-desc-t">zet_debug_memory_space_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-debug-regset-properties-t">zet_debug_regset_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools/api.html#metric">Metric</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#metric-functions">Metric Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricgroupget">zetMetricGroupGet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricgroupgetproperties">zetMetricGroupGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricgroupcalculatemetricvalues">zetMetricGroupCalculateMetricValues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricget">zetMetricGet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricgetproperties">zetMetricGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetcontextactivatemetricgroups">zetContextActivateMetricGroups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricstreameropen">zetMetricStreamerOpen</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetcommandlistappendmetricstreamermarker">zetCommandListAppendMetricStreamerMarker</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricstreamerclose">zetMetricStreamerClose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricstreamerreaddata">zetMetricStreamerReadData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricquerypoolcreate">zetMetricQueryPoolCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricquerypooldestroy">zetMetricQueryPoolDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricquerycreate">zetMetricQueryCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricquerydestroy">zetMetricQueryDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricqueryreset">zetMetricQueryReset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetcommandlistappendmetricquerybegin">zetCommandListAppendMetricQueryBegin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetcommandlistappendmetricqueryend">zetCommandListAppendMetricQueryEnd</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetcommandlistappendmetricmemorybarrier">zetCommandListAppendMetricMemoryBarrier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetmetricquerygetdata">zetMetricQueryGetData</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#metric-enums">Metric Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-group-sampling-type-flags-t">zet_metric_group_sampling_type_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-type-t">zet_metric_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-group-calculation-type-t">zet_metric_group_calculation_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-query-pool-type-t">zet_metric_query_pool_type_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#metric-structures">Metric Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-group-properties-t">zet_metric_group_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-properties-t">zet_metric_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-streamer-desc-t">zet_metric_streamer_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-metric-query-pool-desc-t">zet_metric_query_pool_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools/api.html#pin">Pin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#pin-functions">Pin Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zetkernelgetprofileinfo">zetKernelGetProfileInfo</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#pin-enums">Pin Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-profile-flags-t">zet_profile_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-profile-token-type-t">zet_profile_token_type_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#pin-structures">Pin Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-profile-properties-t">zet_profile_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-profile-free-register-token-t">zet_profile_free_register_token_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-profile-register-sequence-t">zet_profile_register_sequence_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools/api.html#tracing">Tracing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#tracing-functions">Tracing Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zettracerexpcreate">zetTracerExpCreate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zettracerexpdestroy">zetTracerExpDestroy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zettracerexpsetprologues">zetTracerExpSetPrologues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zettracerexpsetepilogues">zetTracerExpSetEpilogues</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zettracerexpsetenabled">zetTracerExpSetEnabled</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#tracing-enums">Tracing Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-api-tracing-exp-version-t">zet_api_tracing_exp_version_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tools/api.html#tracing-structures">Tracing Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api.html#zet-tracer-exp-desc-t">zet_tracer_exp_desc_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sysman/api.html">Sysman API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#common">Common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#common-enums">Common Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-structure-type-t">zes_structure_type_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#common-structures">Common Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-base-properties-t">zes_base_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-base-desc-t">zes_base_desc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-base-state-t">zes_base_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-base-config-t">zes_base_config_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-base-capability-t">zes_base_capability_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#device">Device</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#device-functions">Device Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdevicegetproperties">zesDeviceGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdevicegetstate">zesDeviceGetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdevicereset">zesDeviceReset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceprocessesgetstate">zesDeviceProcessesGetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdevicepcigetproperties">zesDevicePciGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdevicepcigetstate">zesDevicePciGetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdevicepcigetbars">zesDevicePciGetBars</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdevicepcigetstats">zesDevicePciGetStats</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#device-enums">Device Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-engine-type-flags-t">zes_engine_type_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-repair-status-t">zes_repair_status_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-reset-reason-flags-t">zes_reset_reason_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-link-status-t">zes_pci_link_status_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-link-qual-issue-flags-t">zes_pci_link_qual_issue_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-link-stab-issue-flags-t">zes_pci_link_stab_issue_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-bar-type-t">zes_pci_bar_type_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#device-structures">Device Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-device-state-t">zes_device_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-device-properties-t">zes_device_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-process-state-t">zes_process_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-address-t">zes_pci_address_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-speed-t">zes_pci_speed_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-properties-t">zes_pci_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-state-t">zes_pci_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-bar-properties-t">zes_pci_bar_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-pci-stats-t">zes_pci_stats_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#diagnostics">Diagnostics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#diagnostics-functions">Diagnostics Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumdiagnostictestsuites">zesDeviceEnumDiagnosticTestSuites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdiagnosticsgetproperties">zesDiagnosticsGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdiagnosticsgettests">zesDiagnosticsGetTests</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdiagnosticsruntests">zesDiagnosticsRunTests</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#diagnostics-enums">Diagnostics Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-diag-result-t">zes_diag_result_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#diagnostics-structures">Diagnostics Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-diag-test-t">zes_diag_test_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-diag-properties-t">zes_diag_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#engine">Engine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#engine-functions">Engine Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumenginegroups">zesDeviceEnumEngineGroups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesenginegetproperties">zesEngineGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesenginegetactivity">zesEngineGetActivity</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#engine-enums">Engine Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-engine-group-t">zes_engine_group_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#engine-structures">Engine Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-engine-properties-t">zes_engine_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-engine-stats-t">zes_engine_stats_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#events">Events</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#events-functions">Events Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceeventregister">zesDeviceEventRegister</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdrivereventlisten">zesDriverEventListen</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#events-enums">Events Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-event-type-flags-t">zes_event_type_flags_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#fabric">Fabric</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#fabric-functions">Fabric Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumfabricports">zesDeviceEnumFabricPorts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfabricportgetproperties">zesFabricPortGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfabricportgetlinktype">zesFabricPortGetLinkType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfabricportgetconfig">zesFabricPortGetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfabricportsetconfig">zesFabricPortSetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfabricportgetstate">zesFabricPortGetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfabricportgetthroughput">zesFabricPortGetThroughput</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#fabric-enums">Fabric Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-status-t">zes_fabric_port_status_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-qual-issue-flags-t">zes_fabric_port_qual_issue_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-failure-flags-t">zes_fabric_port_failure_flags_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#fabric-structures">Fabric Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-id-t">zes_fabric_port_id_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-speed-t">zes_fabric_port_speed_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-properties-t">zes_fabric_port_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-link-type-t">zes_fabric_link_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-config-t">zes_fabric_port_config_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-state-t">zes_fabric_port_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fabric-port-throughput-t">zes_fabric_port_throughput_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#fan">Fan</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#fan-functions">Fan Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumfans">zesDeviceEnumFans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfangetproperties">zesFanGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfangetconfig">zesFanGetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfansetdefaultmode">zesFanSetDefaultMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfansetfixedspeedmode">zesFanSetFixedSpeedMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfansetspeedtablemode">zesFanSetSpeedTableMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfangetstate">zesFanGetState</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#fan-enums">Fan Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fan-speed-mode-t">zes_fan_speed_mode_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fan-speed-units-t">zes_fan_speed_units_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#fan-structures">Fan Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fan-speed-t">zes_fan_speed_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fan-temp-speed-t">zes_fan_temp_speed_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fan-speed-table-t">zes_fan_speed_table_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fan-properties-t">zes_fan_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-fan-config-t">zes_fan_config_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#firmware">Firmware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#firmware-functions">Firmware Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumfirmwares">zesDeviceEnumFirmwares</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfirmwaregetproperties">zesFirmwareGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfirmwareflash">zesFirmwareFlash</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#firmware-structures">Firmware Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-firmware-properties-t">zes_firmware_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#frequency">Frequency</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#frequency-functions">Frequency Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumfrequencydomains">zesDeviceEnumFrequencyDomains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencygetproperties">zesFrequencyGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencygetavailableclocks">zesFrequencyGetAvailableClocks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencygetrange">zesFrequencyGetRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencysetrange">zesFrequencySetRange</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencygetstate">zesFrequencyGetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencygetthrottletime">zesFrequencyGetThrottleTime</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocgetcapabilities">zesFrequencyOcGetCapabilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocgetfrequencytarget">zesFrequencyOcGetFrequencyTarget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocsetfrequencytarget">zesFrequencyOcSetFrequencyTarget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocgetvoltagetarget">zesFrequencyOcGetVoltageTarget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocsetvoltagetarget">zesFrequencyOcSetVoltageTarget</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocsetmode">zesFrequencyOcSetMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocgetmode">zesFrequencyOcGetMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocgeticcmax">zesFrequencyOcGetIccMax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocseticcmax">zesFrequencyOcSetIccMax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocgettjmax">zesFrequencyOcGetTjMax</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesfrequencyocsettjmax">zesFrequencyOcSetTjMax</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#frequency-enums">Frequency Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-freq-domain-t">zes_freq_domain_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-freq-throttle-reason-flags-t">zes_freq_throttle_reason_flags_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-oc-mode-t">zes_oc_mode_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#frequency-structures">Frequency Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-freq-properties-t">zes_freq_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-freq-range-t">zes_freq_range_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-freq-state-t">zes_freq_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-freq-throttle-time-t">zes_freq_throttle_time_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-oc-capabilities-t">zes_oc_capabilities_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#led">Led</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#led-functions">Led Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumleds">zesDeviceEnumLeds</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesledgetproperties">zesLedGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesledgetstate">zesLedGetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesledsetstate">zesLedSetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesledsetcolor">zesLedSetColor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#led-structures">Led Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-led-properties-t">zes_led_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-led-color-t">zes_led_color_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-led-state-t">zes_led_state_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#memory">Memory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#memory-functions">Memory Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenummemorymodules">zesDeviceEnumMemoryModules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesmemorygetproperties">zesMemoryGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesmemorygetstate">zesMemoryGetState</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesmemorygetbandwidth">zesMemoryGetBandwidth</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#memory-enums">Memory Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-mem-type-t">zes_mem_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-mem-loc-t">zes_mem_loc_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-mem-health-t">zes_mem_health_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#memory-structures">Memory Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-mem-properties-t">zes_mem_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-mem-state-t">zes_mem_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-mem-bandwidth-t">zes_mem_bandwidth_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#performance">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#performance-functions">Performance Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumperformancefactordomains">zesDeviceEnumPerformanceFactorDomains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesperformancefactorgetproperties">zesPerformanceFactorGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesperformancefactorgetconfig">zesPerformanceFactorGetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesperformancefactorsetconfig">zesPerformanceFactorSetConfig</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#performance-structures">Performance Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-perf-properties-t">zes_perf_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#power">Power</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#power-functions">Power Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumpowerdomains">zesDeviceEnumPowerDomains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespowergetproperties">zesPowerGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespowergetenergycounter">zesPowerGetEnergyCounter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespowergetlimits">zesPowerGetLimits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespowersetlimits">zesPowerSetLimits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespowergetenergythreshold">zesPowerGetEnergyThreshold</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespowersetenergythreshold">zesPowerSetEnergyThreshold</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#power-structures">Power Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-power-properties-t">zes_power_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-power-energy-counter-t">zes_power_energy_counter_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-power-sustained-limit-t">zes_power_sustained_limit_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-power-burst-limit-t">zes_power_burst_limit_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-power-peak-limit-t">zes_power_peak_limit_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-energy-threshold-t">zes_energy_threshold_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#psu">Psu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#psu-functions">Psu Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumpsus">zesDeviceEnumPsus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespsugetproperties">zesPsuGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zespsugetstate">zesPsuGetState</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#psu-enums">Psu Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-psu-voltage-status-t">zes_psu_voltage_status_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#psu-structures">Psu Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-psu-properties-t">zes_psu_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-psu-state-t">zes_psu_state_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#ras">Ras</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#ras-functions">Ras Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumraserrorsets">zesDeviceEnumRasErrorSets</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesrasgetproperties">zesRasGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesrasgetconfig">zesRasGetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesrassetconfig">zesRasSetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesrasgetstate">zesRasGetState</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#ras-enums">Ras Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-ras-error-type-t">zes_ras_error_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-ras-error-cat-t">zes_ras_error_cat_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#ras-structures">Ras Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-ras-properties-t">zes_ras_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-ras-state-t">zes_ras_state_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-ras-config-t">zes_ras_config_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#scheduler">Scheduler</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#scheduler-functions">Scheduler Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumschedulers">zesDeviceEnumSchedulers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulergetproperties">zesSchedulerGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulergetcurrentmode">zesSchedulerGetCurrentMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulergettimeoutmodeproperties">zesSchedulerGetTimeoutModeProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulergettimeslicemodeproperties">zesSchedulerGetTimesliceModeProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulersettimeoutmode">zesSchedulerSetTimeoutMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulersettimeslicemode">zesSchedulerSetTimesliceMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulersetexclusivemode">zesSchedulerSetExclusiveMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesschedulersetcomputeunitdebugmode">zesSchedulerSetComputeUnitDebugMode</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#scheduler-enums">Scheduler Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-sched-mode-t">zes_sched_mode_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#scheduler-structures">Scheduler Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-sched-properties-t">zes_sched_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-sched-timeout-properties-t">zes_sched_timeout_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-sched-timeslice-properties-t">zes_sched_timeslice_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#standby">Standby</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#standby-functions">Standby Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumstandbydomains">zesDeviceEnumStandbyDomains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesstandbygetproperties">zesStandbyGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesstandbygetmode">zesStandbyGetMode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesstandbysetmode">zesStandbySetMode</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#standby-enums">Standby Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-standby-type-t">zes_standby_type_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-standby-promo-mode-t">zes_standby_promo_mode_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#standby-structures">Standby Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-standby-properties-t">zes_standby_properties_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sysman/api.html#temperature">Temperature</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#temperature-functions">Temperature Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zesdeviceenumtemperaturesensors">zesDeviceEnumTemperatureSensors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zestemperaturegetproperties">zesTemperatureGetProperties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zestemperaturegetconfig">zesTemperatureGetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zestemperaturesetconfig">zesTemperatureSetConfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zestemperaturegetstate">zesTemperatureGetState</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#temperature-enums">Temperature Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-temp-sensors-t">zes_temp_sensors_t</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sysman/api.html#temperature-structures">Temperature Structures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-temp-properties-t">zes_temp_properties_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-temp-threshold-t">zes_temp_threshold_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api.html#zes-temp-config-t">zes_temp_config_t</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="core/api.html" class="btn btn-neutral float-right" title="Core API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="core/EXT.html" class="btn btn-neutral float-left" title="Extensions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

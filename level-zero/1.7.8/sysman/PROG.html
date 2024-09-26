@@ -1,0 +1,3488 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sysman Programming Guide &#8212; Level Zero Specification  documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SPIR-V Programming Guide" href="../core/SPIRV.html" />
+    <link rel="prev" title="Tools Programming Guide" href="../tools/PROG.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Level Zero Specification  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/INTRO.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/PROG.html">
+   Core Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tools/PROG.html">
+   Tools Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Sysman Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/SPIRV.html">
+   SPIR-V Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/EXT.html">
+   Extensions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../core/api.html">
+     Core API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tools/api.html">
+     Tools API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api.html">
+     Sysman API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../versions.html">
+   Versions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/sysman/PROG.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#high-level-overview">
+   High-level overview
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#environment-variables">
+     Environment Variables
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#initialization">
+     Initialization
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#global-device-management">
+     Global device management
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-component-management">
+     Device component management
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-component-enumeration">
+     Device component enumeration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sub-device-management">
+     Sub-device management
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#events">
+     Events
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#telemetry-and-timestamps">
+     Telemetry and timestamps
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interface-details">
+   Interface details
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#global-operations">
+     Global operations
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#device-properties">
+       Device Properties
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#host-processes">
+       Host Processes
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#device-reset">
+       Device reset
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pci-link-operations">
+       PCI link operations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-power-domains">
+     Operations on power domains
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-frequency-domains">
+     Operations on frequency domains
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#frequency-voltage-overclocking">
+       Frequency/Voltage overclocking
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scheduler-operations">
+       Scheduler operations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-disabling-ecc-config-dynamically">
+     Enabling/disabling ECC Config Dynamically
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tuning-workload-performance">
+     Tuning workload performance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-engine-groups">
+     Operations on engine groups
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-standby-domains">
+     Operations on standby domains
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-firmwares">
+     Operations on firmwares
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#querying-memory-modules">
+     Querying Memory Modules
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-fabric-ports">
+     Operations on Fabric ports
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#querying-temperature">
+     Querying temperature
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-power-supplies">
+     Operations on power supplies
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-fans">
+     Operations on fans
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-leds">
+     Operations on LEDs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#querying-ras-errors">
+     Querying RAS errors
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-diagnostics">
+     Performing Diagnostics
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#events-2">
+     Events
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#security">
+   Security
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#linux">
+     Linux
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#windows">
+     Windows
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#virtualization">
+     Virtualization
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Sysman Programming Guide</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#high-level-overview">
+   High-level overview
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#environment-variables">
+     Environment Variables
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#initialization">
+     Initialization
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#global-device-management">
+     Global device management
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-component-management">
+     Device component management
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-component-enumeration">
+     Device component enumeration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sub-device-management">
+     Sub-device management
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#events">
+     Events
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#telemetry-and-timestamps">
+     Telemetry and timestamps
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#interface-details">
+   Interface details
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#global-operations">
+     Global operations
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#device-properties">
+       Device Properties
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#host-processes">
+       Host Processes
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#device-reset">
+       Device reset
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#pci-link-operations">
+       PCI link operations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-power-domains">
+     Operations on power domains
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-frequency-domains">
+     Operations on frequency domains
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#frequency-voltage-overclocking">
+       Frequency/Voltage overclocking
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scheduler-operations">
+       Scheduler operations
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-disabling-ecc-config-dynamically">
+     Enabling/disabling ECC Config Dynamically
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#tuning-workload-performance">
+     Tuning workload performance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-engine-groups">
+     Operations on engine groups
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-standby-domains">
+     Operations on standby domains
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-firmwares">
+     Operations on firmwares
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#querying-memory-modules">
+     Querying Memory Modules
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-fabric-ports">
+     Operations on Fabric ports
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#querying-temperature">
+     Querying temperature
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-power-supplies">
+     Operations on power supplies
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-fans">
+     Operations on fans
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#operations-on-leds">
+     Operations on LEDs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#querying-ras-errors">
+     Querying RAS errors
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performing-diagnostics">
+     Performing Diagnostics
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#events-2">
+     Events
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#security">
+   Security
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#linux">
+     Linux
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#windows">
+     Windows
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#virtualization">
+     Virtualization
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="sysman-programming-guide">
+<span id="id1"></span><h1>Sysman Programming Guide<a class="headerlink" href="#sysman-programming-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Sysman is the System Resource Management library used to monitor and
+control the power and performance of accelerator devices.</p>
+</div>
+<div class="section" id="high-level-overview">
+<h2>High-level overview<a class="headerlink" href="#high-level-overview" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>The System Resource Management library may now be initialized without using environment variables by calling <a class="reference internal" href="api.html#zesinit"><span class="std std-ref">zesInit</span></a>.</p>
+<p>For compatibility, the following environment variables may also be enabled during initialization for the respective feature.</p>
+<table class="table">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 25%" />
+<col style="width: 8%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Values</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Sysman</p></td>
+<td><p>ZES_ENABLE_SYSMAN</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables driver initialization and dependencies for system management</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sysman</p></td>
+<td><p>ZES_ENABLE_SYSMAN_LOW_POWER</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Driver initialize the device in low power mode</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="initialization">
+<h3>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h3>
+<p>An application wishing to manage power and performance for devices may
+use the System Resource Management library to enumerate system management
+driver and device handles.</p>
+<p>The following pseudo-code demonstrates a basic initialization and device discovery sequence:</p>
+<pre class="literal-block">function main( ... )
+    if (<a class="reference internal" href="api.html#zesinit"><span class="std std-ref">zesInit</span></a>(0) != <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        output(&quot;Can't initialize the API&quot;)
+    else
+        # Discover all the drivers
+        uint32_t driversCount = 0
+        <a class="reference internal" href="api.html#zesdriverget"><span class="std std-ref">zesDriverGet</span></a>(&amp;driversCount, nullptr)
+        zes_driver_handle_t* allDrivers = allocate(driversCount * sizeof(zes_driver_handle_t))
+        <a class="reference internal" href="api.html#zesdriverget"><span class="std std-ref">zesDriverGet</span></a>(&amp;driversCount, allDrivers)
+
+        zes_driver_handle_t hDriver = nullptr
+        for(i = 0 .. driversCount-1)
+            # Discover devices in a driver
+            uint32_t deviceCount = 0
+            <a class="reference internal" href="api.html#zesdeviceget"><span class="std std-ref">zesDeviceGet</span></a>(allDrivers[i], &amp;deviceCount, nullptr)
+
+            zes_device_handle_t* hSysmanHandles =
+                allocate_memory(deviceCount * sizeof(zes_device_handle_t))
+            <a class="reference internal" href="api.html#zesdeviceget"><span class="std std-ref">zesDeviceGet</span></a>(allDrivers[i], &amp;deviceCount, hSysmanHandles)
+
+            # Use the hSymanHandles to manage the devices
+
+    free_memory(...)</pre>
+<p>For compatibility, an application may also use the Level0 Core API to
+enumerate through available accelerator devices in the system. For
+each device handle, an application can cast it to a sysman device handle
+to manage the system resources of the device.</p>
+<p>There is a unique handle for each device. Multiple threads can use the
+handle. If concurrent accesses are made to the same device property
+through the handle, the last request wins.</p>
+<p>The pseudo code below shows how to enumerate the GPU devices in the
+system and create Sysman handles for them:</p>
+<pre class="literal-block">function main( ... )
+    if (<a class="reference internal" href="../core/api.html#zeinit"><span class="std std-ref">zeInit</span></a>(0) != <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        output(&quot;Can't initialize the API&quot;)
+    else
+        # Discover all the drivers
+        uint32_t driversCount = 0
+        <a class="reference internal" href="../core/api.html#zedriverget"><span class="std std-ref">zeDriverGet</span></a>(&amp;driversCount, nullptr)
+        ze_driver_handle_t* allDrivers = allocate(driversCount * sizeof(ze_driver_handle_t))
+        <a class="reference internal" href="../core/api.html#zedriverget"><span class="std std-ref">zeDriverGet</span></a>(&amp;driversCount, allDrivers)
+
+        ze_driver_handle_t hDriver = nullptr
+        for(i = 0 .. driversCount-1)
+            # Discover devices in a driver
+            uint32_t deviceCount = 0
+            <a class="reference internal" href="../core/api.html#zedeviceget"><span class="std std-ref">zeDeviceGet</span></a>(allDrivers[i], &amp;deviceCount, nullptr)
+
+            ze_device_handle_t* allDevices =
+                allocate_memory(deviceCount * sizeof(ze_device_handle_t))
+            <a class="reference internal" href="../core/api.html#zedeviceget"><span class="std std-ref">zeDeviceGet</span></a>(allDrivers[i], &amp;deviceCount, allDevices)
+
+            for(devIndex = 0 .. deviceCount-1)
+                <a class="reference internal" href="../core/api.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> device_properties {}
+                device_properties.stype = <a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></a>
+                <a class="reference internal" href="../core/api.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>(allDevices[devIndex], &amp;device_properties)
+                if(<a class="reference internal" href="../core/api.html#ze-device-type-t"><span class="std std-ref">ZE_DEVICE_TYPE_GPU</span></a> != device_properties.type)
+                    next
+                # Get the Sysman device handle
+                zes_device_handle_t hSysmanDevice = (zes_device_handle_t)allDevices[devIndex]
+                # Start using hSysmanDevice to manage the device
+
+    free_memory(...)</pre>
+</div>
+<div class="section" id="global-device-management">
+<h3>Global device management<a class="headerlink" href="#global-device-management" title="Permalink to this headline">¶</a></h3>
+<p>The following operations are provided to access overall device
+information and control aspects of the entire device:</p>
+<ul class="simple">
+<li><p>Get device UUID, deviceID, number of sub-devices</p></li>
+<li><p>Get Brand/model/vendor name</p></li>
+<li><p>Query the information about processes using this device</p></li>
+<li><p>Reset device</p></li>
+<li><p>Query if the device has been repaired</p></li>
+<li><p>Query if the device needs to be reset and for what reasons (wedged, initiate repair)</p></li>
+<li><p>PCI information:</p>
+<ul>
+<li><p>Get configured bars</p></li>
+<li><p>Get maximum supported bandwidth</p></li>
+<li><p>Query current speed (GEN/no. of lanes)</p></li>
+<li><p>Query current throughput</p></li>
+<li><p>Query packet retry counters</p></li>
+</ul>
+</li>
+</ul>
+<p>The full list of available functions is described below.</p>
+</div>
+<div class="section" id="device-component-management">
+<h3>Device component management<a class="headerlink" href="#device-component-management" title="Permalink to this headline">¶</a></h3>
+<p>Aside from management of the global properties of a device, there are
+many device components that can be managed to change the performance
+and/or power configuration of the device. Similar components are broken
+into <strong>classes</strong> and each class has a set of operations that can be
+performed on them.</p>
+<p>For example, devices typically have one or more frequency domains. The
+Sysman API exposes a class for frequency and an enumeration of all
+frequency domains that can be managed.</p>
+<p>The table below summarizes the classes that provide device queries and
+an example list of components that would be enumerated for a device with
+two sub-devices. The table shows the operations (queries) that will be
+provided for all components in each class.</p>
+<table class="table">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 33%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Components</p></th>
+<th class="head"><p>Operations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#power">Power</a></p></td>
+<td><p>Card:
+power</p>
+<p>Package:
+power</p>
+<p>Sub-device 0: total
+power</p>
+<p>Sub-device 1: total
+power</p>
+</td>
+<td><p>Get energy consumption</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#frequency">Frequency</a></p></td>
+<td><p>Sub-device 0: GPU frequency</p>
+<p>Sub-device 0: Memory frequency</p>
+<p>Sub-device 1: GPU frequency</p>
+<p>Sub-device 1: Memory frequency</p>
+</td>
+<td><p>List available frequencies</p>
+<p>Set frequency range</p>
+<p>Get frequencies</p>
+<p>Get throttle reasons</p>
+<p>Get throttle time</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#engines">Engines</a></p></td>
+<td><p>Sub-device 0: All engines</p>
+<p>Sub-device 0: Compute engines</p>
+<p>Sub-device 0: Media engines</p>
+<p>Sub-device 0: Copy engines</p>
+<p>Sub-device 1: All engines</p>
+<p>Sub-device 1: Compute engines</p>
+<p>Sub-device 1: Media engines</p>
+<p>Sub-device 1: Copy engines</p>
+</td>
+<td><p>Get busy time</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#scheduler">Scheduler</a></p></td>
+<td><p>Sub-device 0: All engines</p>
+<p>Sub-device 1: All engines</p>
+</td>
+<td><p>Get scheduler mode and properties</p>
+<p>Get scheduler mode and properties</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#firmware">Firmware</a></p></td>
+<td><p>Sub-device 0: Enumerates each
+firmware</p>
+<p>Sub-device 1: Enumerates each
+firmware</p>
+</td>
+<td><p>Get firmware name and version</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#memory">Memory</a></p></td>
+<td><p>Sub-device 0: Memory module</p>
+<p>Sub-device 1: Memory module</p>
+</td>
+<td><p>Get maximum supported bandwidth</p>
+<p>Get free memory</p>
+<p>Get current bandwidth</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fabric-port">Fabric-Port</a></p></td>
+<td><p>Sub-device 0: Enumerates each
+port</p>
+<p>Sub-device 1: Enumerates each
+port</p>
+</td>
+<td><p>Get port configuration (UP/DOWN)</p>
+<p>Get physical link details</p>
+<p>Get port health
+(healthy/degraded/failed/disabled)</p>
+<p>Get remote port</p>
+<p>Get port rx/tx speed</p>
+<p>Get port rx/tx bandwidth</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#temperature">Temperature</a></p></td>
+<td><p>Package: temperature (min, max)</p>
+<p>Sub-device 0: GPU temperature
+(min, max)</p>
+<p>Sub-device 0: Memory
+temperature (min, max)</p>
+<p>Sub-device 1: GPU temperature
+(min, max)</p>
+<p>Sub-device 1: Memory
+temperature (min, max)</p>
+</td>
+<td><p>Get current temperature sensor reading</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#psu">PSU</a></p></td>
+<td><p>Package: Power supplies</p></td>
+<td><p>Get details about the power supply</p>
+<p>Query current state (temperature,
+current, fan)</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fan">Fan</a></p></td>
+<td><p>Package: Fans</p></td>
+<td><p>Get details (max fan speed)</p>
+<p>Get config (fixed fan speed,
+temperature-speed table)</p>
+<p>Query current fan speed</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#led">LED</a></p></td>
+<td><p>Package: LEDs</p></td>
+<td><p>Get details (RGB capable)</p>
+<p>Query current state (on, color)</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ras">RAS</a></p></td>
+<td><p>Sub-device 0: One set of RAS
+error counters</p>
+<p>Sub-device 1: One set of RAS
+error counters</p>
+</td>
+<td><p>Read RAS total correctable and
+uncorrectable error counters</p>
+<p>Read breakdown of errors by category
+(no. resets, no. programming errors,
+no. programming errors, no. driver
+errors, no. compute errors, no. cache
+errors, no. memory errors, no. PCI
+errors, no. display errors, no.
+non-compute errors)</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#diagnostics">Diagnostics</a></p></td>
+<td><p>Package: SCAN test suite</p>
+<p>Package: ARRAY test suite</p>
+</td>
+<td><p>Get list of all diagnostics tests</p></td>
+</tr>
+</tbody>
+</table>
+<p>The table below summarizes the classes that provide device controls and
+an example list of components that would be enumerated for a device with
+two sub-devices. The table shows the operations (controls) that will be
+provided for all components in each class.</p>
+<table class="table">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 33%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Components</p></th>
+<th class="head"><p>Operations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#power">Power</a></p></td>
+<td><p>Card: power</p>
+<p>Package: power</p>
+</td>
+<td><p>Set sustained power limit</p>
+<p>Set burst power limit</p>
+<p>Set peak power limit</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#frequency">Frequency</a></p></td>
+<td><p>Sub-device 0: GPU frequency</p>
+<p>Sub-device 0: Memory frequency</p>
+<p>Sub-device 1: GPU frequency</p>
+<p>Sub-device 1: Memory frequency</p>
+</td>
+<td><p>Set frequency range</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#scheduler">Scheduler</a></p></td>
+<td><p>Sub-device 0: All engines</p>
+<p>Sub-device 1: All engines</p>
+</td>
+<td><p>Set scheduler mode</p>
+<p>Set scheduler mode</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#performance-factor">Performance-Factor</a></p></td>
+<td><p>Sub-device 0: Compute</p>
+<p>Sub-device 0: Media</p>
+<p>Sub-device 1: Compute</p>
+<p>Sub-device 1: Media</p>
+</td>
+<td><p>Tune workload performance</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#standby">Standby</a></p></td>
+<td><p>Sub-device 0: Control
+entire sub-device</p>
+<p>Sub-device 1: Control entire
+sub-device</p>
+</td>
+<td><p>Disable opportunistic standby
+standby</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#firmware">Firmware</a></p></td>
+<td><p>Sub-device 0: Enumerates each
+firmware</p>
+<p>Sub-device 1: Enumerates each
+firmware</p>
+</td>
+<td><p>Flash new firmware</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fabric-port">Fabric-Port</a></p></td>
+<td><p>Sub-device 0: Control each port</p>
+<p>Sub-device 1: Control each port</p>
+</td>
+<td><p>Configure port UP/DOWN</p>
+<p>Turn beaconing ON/OFF</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fan">Fan</a></p></td>
+<td><p>Package: Fans</p></td>
+<td><p>Set config (fixed speed, temperature-
+speed table)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#led">LED</a></p></td>
+<td><p>Package: LEDs</p></td>
+<td><p>Turn LED on/off and set color</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#diagnostics">Diagnostics</a></p></td>
+<td><p>SCAN test suite</p>
+<p>ARRAY test suite</p>
+</td>
+<td><p>Run all or a subset
+of diagnostic tests
+in the test suite</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="device-component-enumeration">
+<h3>Device component enumeration<a class="headerlink" href="#device-component-enumeration" title="Permalink to this headline">¶</a></h3>
+<p>The Sysman API provides functions to enumerate all components in a class
+that can be managed.</p>
+<p>For example, there is a frequency class which is used to control the
+frequency of different parts of the device. On most devices, the
+enumerator will provide two handles, one to control the GPU frequency
+and one to enumerate the device memory frequency. This is illustrated in
+the figure below:</p>
+<img alt="../_images/tools_sysman_freq_flow.png" src="../_images/tools_sysman_freq_flow.png" />
+<p>In the C API, each class is associated with a unique handle type
+(e.g. zes_freq_handle_t refers to a frequency component). In
+the C++ API, each class is a C++ class (e.g. An instance of the class zes::SysmanFrequency
+refers to a frequency component).</p>
+<p>The pseudo code below shows how to use the Sysman API to enumerate all
+GPU frequency components and fix each to a specific frequency if this is
+supported:</p>
+<pre class="literal-block">function FixGpuFrequency(zes_device_handle_t hSysmanDevice, double FreqMHz)
+    uint32_t numFreqDomains
+    if ((<a class="reference internal" href="api.html#zesdeviceenumfrequencydomains"><span class="std std-ref">zesDeviceEnumFrequencyDomains</span></a>(hSysmanDevice, &amp;numFreqDomains, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>))
+        zes_freq_handle_t* pFreqHandles =
+            allocate_memory(numFreqDomains * sizeof(zes_freq_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumfrequencydomains"><span class="std std-ref">zesDeviceEnumFrequencyDomains</span></a>(hSysmanDevice, &amp;numFreqDomains, pFreqHandles) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (index = 0 .. numFreqDomains-1)
+                <a class="reference internal" href="api.html#zes-freq-properties-t"><span class="std std-ref">zes_freq_properties_t</span></a> props {};
+                props.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_FREQ_PROPERTIES</span></a>;
+                if (<a class="reference internal" href="api.html#zesfrequencygetproperties"><span class="std std-ref">zesFrequencyGetProperties</span></a>(pFreqHandles[index], &amp;props) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    # Only change the frequency of the domain if:
+                    # 1. The domain controls a GPU accelerator
+                    # 2. The domain frequency can be changed
+                    if (props.type == <a class="reference internal" href="api.html#zes-freq-domain-t"><span class="std std-ref">ZES_FREQ_DOMAIN_GPU</span></a>
+                        and props.canControl)
+                            # Fix the frequency
+                            <a class="reference internal" href="api.html#zes-freq-range-t"><span class="std std-ref">zes_freq_range_t</span></a> range
+                            range.min = FreqMHz
+                            range.max = FreqMHz
+                            <a class="reference internal" href="api.html#zesfrequencysetrange"><span class="std std-ref">zesFrequencySetRange</span></a>(pFreqHandles[index], &amp;range)
+    free_memory(...)</pre>
+</div>
+<div class="section" id="sub-device-management">
+<h3>Sub-device management<a class="headerlink" href="#sub-device-management" title="Permalink to this headline">¶</a></h3>
+<p>A Sysman device handle operates at the device level. If a sub-device device handle is passed to
+any of the Sysman functions, the result will be as if the device handle was used.</p>
+<p>The enumerator for device components will return a list of components that are located in each
+sub-device. Properties for each component will indicate in which sub-device it is located. If software
+wishing to manage components in only one sub-device should filter the enumerated components using the
+sub-device ID (see <a class="reference internal" href="../core/api.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a>.subdeviceId).</p>
+<p>The figure below shows the frequency components that will be enumerated on a device with two sub-devices where each sub-device has a GPU and
+device memory frequency control:</p>
+<img alt="../_images/tools_sysman_freq_subdevices.png" src="../_images/tools_sysman_freq_subdevices.png" />
+<p>The pseudo code below shows how to fix the GPU frequency on a specific
+sub-device (notice the additional sub-device check):</p>
+<pre class="literal-block">function FixSubdeviceGpuFrequency(zes_device_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
+    uint32_t numFreqDomains
+    if ((<a class="reference internal" href="api.html#zesdeviceenumfrequencydomains"><span class="std std-ref">zesDeviceEnumFrequencyDomains</span></a>(hSysmanDevice, &amp;numFreqDomains, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>))
+        zes_freq_handle_t* pFreqHandles =
+            allocate_memory(numFreqDomains * sizeof(zes_freq_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumfrequencydomains"><span class="std std-ref">zesDeviceEnumFrequencyDomains</span></a>(hSysmanDevice, &amp;numFreqDomains, pFreqHandles) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (index = 0 .. numFreqDomains-1)
+                <a class="reference internal" href="api.html#zes-freq-properties-t"><span class="std std-ref">zes_freq_properties_t</span></a> props {};
+                props.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_FREQ_PROPERTIES</span></a>;
+                if (<a class="reference internal" href="api.html#zesfrequencygetproperties"><span class="std std-ref">zesFrequencyGetProperties</span></a>(pFreqHandles[index], &amp;props) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    # Only change the frequency of the domain if:
+                    # 1. The domain controls a GPU accelerator
+                    # 2. The domain frequency can be changed
+                    # 3. The domain is located in the specified sub-device
+                    if (props.type == <a class="reference internal" href="api.html#zes-freq-domain-t"><span class="std std-ref">ZES_FREQ_DOMAIN_GPU</span></a>
+                        and props.canControl
+                        and props.subdeviceId == subdeviceId)
+                            # Fix the frequency
+                            <a class="reference internal" href="api.html#zes-freq-range-t"><span class="std std-ref">zes_freq_range_t</span></a> range
+                            range.min = FreqMHz
+                            range.max = FreqMHz
+                            <a class="reference internal" href="api.html#zesfrequencysetrange"><span class="std std-ref">zesFrequencySetRange</span></a>(pFreqHandles[index], &amp;range)
+    free_memory(...)</pre>
+</div>
+<div class="section" id="events">
+<h3>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h3>
+<p>Events are a way to determine if changes have occurred on a device
+e.g. new RAS errors without polling the Sysman API. An application
+registers the events that it wishes to receive notification about and
+then it listens for notifications. The application can choose to block
+when listening - this will put the calling application thread to sleep
+until new notifications are received.</p>
+<p>The API enables registering for events from multiple devices and
+listening for any events coming from any devices by using one function
+call.</p>
+<p>Once notifications have occurred, the application can use the query
+Sysman interface functions to get more details.</p>
+<p>The following events are provided:</p>
+<ul class="simple">
+<li><p>Any RAS errors have occurred</p></li>
+</ul>
+<p>The full list of available functions for handling events is described below.</p>
+</div>
+<div class="section" id="telemetry-and-timestamps">
+<h3>Telemetry and timestamps<a class="headerlink" href="#telemetry-and-timestamps" title="Permalink to this headline">¶</a></h3>
+<p>Many of the API calls return underlying hardware telemetry (counters).
+These counters are typically monotonic and wrap around at the their
+bit width boundaires. An application will typically want to take the
+delta between two samples. Many times, the rate of change of a counter
+is required. For example, sampling a counter for bytes transmitted through
+a link and dividing by the delta time between the samples will yield
+average bandwidth.</p>
+<p>When returning telemetry, the API will include a timestamp when the
+underlying hardware counter was sampled. Each timestamp is only relevant
+to the telemetry that it accompanies. Each timestamp associated with
+a piece of telemetry can have it’s own absolute base that can be
+different from timestamps return with other telemetry. As a result,
+no calculation should be made based on timestamps returned from
+different telemetry.</p>
+<p>The timestamps are not guaranteed to have the same base between
+applications. They should only be used within the execution of a single
+application.</p>
+</div>
+</div>
+<div class="section" id="interface-details">
+<h2>Interface details<a class="headerlink" href="#interface-details" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="global-operations">
+<h3>Global operations<a class="headerlink" href="#global-operations" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="device-properties">
+<h4>Device Properties<a class="headerlink" href="#device-properties" title="Permalink to this headline">¶</a></h4>
+<p>The following operations permit getting properties about the entire
+device:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdevicegetproperties"><span class="std std-ref">zesDeviceGetProperties</span></a>()</p></td>
+<td><p>Get static device properties -
+device UUID, sub-device ID,
+device brand/model/vendor strings</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesdevicegetstate"><span class="std std-ref">zesDeviceGetState</span></a>()</p></td>
+<td><p>Determine device state: was the
+device repaired, does the device
+need to be reset and for what
+reasons (wedged, initiate repair)</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to display general information about a
+device:</p>
+<pre class="literal-block">function ShowDeviceInfo(zes_device_handle_t hSysmanDevice)
+    <a class="reference internal" href="api.html#zes-device-properties-t"><span class="std std-ref">zes_device_properties_t</span></a> devProps {}
+    devProps.stype = <a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></a>
+    <a class="reference internal" href="api.html#zes-device-state-t"><span class="std std-ref">zes_device_state_t</span></a> devState
+    if (<a class="reference internal" href="api.html#zesdevicegetproperties"><span class="std std-ref">zesDeviceGetProperties</span></a>(hSysmanDevice, &amp;devProps) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        output(&quot;    UUID:           %s&quot;, devProps.core.uuid.id)
+        output(&quot;    #subdevices:    %u&quot;, devProps.numSubdevices)
+        output(&quot;    brand:          %s&quot;, devProps.brandName)
+        output(&quot;    model:          %s&quot;, devProps.modelName)
+    if (<a class="reference internal" href="api.html#zesdevicegetstate"><span class="std std-ref">zesDeviceGetState</span></a>(hSysmanDevice, &amp;devState) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        output(&quot;    Was repaired:   %s&quot;, (devState.repaired == <a class="reference internal" href="api.html#zes-repair-status-t"><span class="std std-ref">ZES_REPAIR_STATUS_PERFORMED</span></a>) ? &quot;yes&quot; : &quot;no&quot;)
+        if (devState.reset != 0)
+      {
+          output(&quot;DEVICE RESET REQUIRED:&quot;)
+          if (devState.reset &amp; <a class="reference internal" href="api.html#zes-reset-reason-flags-t"><span class="std std-ref">ZES_RESET_REASON_FLAG_WEDGED</span></a>)
+              output(&quot;- Hardware is wedged&quot;)
+          if (devState.reset &amp; <a class="reference internal" href="api.html#zes-reset-reason-flags-t"><span class="std std-ref">ZES_RESET_REASON_FLAG_REPAIR</span></a>)
+              output(&quot;- Hardware needs to complete repairs&quot;)
+      }
+  }</pre>
+</div>
+<div class="section" id="host-processes">
+<h4>Host Processes<a class="headerlink" href="#host-processes" title="Permalink to this headline">¶</a></h4>
+<p>The following functions provide information about host processes that
+are using the device:</p>
+<table class="table">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceprocessesgetstate"><span class="std std-ref">zesDeviceProcessesGetState</span></a>()</p></td>
+<td><p>Get information about all
+processes that are using this
+device - process ID, device
+memory allocation size,
+accelerators being used.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Using the process ID, an application can determine the owner and the
+path to the executable - this information is not returned by the API.</p>
+</div>
+<div class="section" id="device-reset">
+<h4>Device reset<a class="headerlink" href="#device-reset" title="Permalink to this headline">¶</a></h4>
+<p>The device can be reset using the following function:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdevicereset"><span class="std std-ref">zesDeviceReset</span></a>()</p></td>
+<td><p>Requests that the driver
+perform a PCI bus reset of the
+device.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pci-link-operations">
+<h4>PCI link operations<a class="headerlink" href="#pci-link-operations" title="Permalink to this headline">¶</a></h4>
+<p>The following functions permit getting data about the PCI endpoint for the device:</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdevicepcigetproperties"><span class="std std-ref">zesDevicePciGetProperties</span></a>()</p></td>
+<td><p>Get static properties for the PCI
+port - BDF address, number of
+bars, maximum supported speed</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesdevicepcigetstate"><span class="std std-ref">zesDevicePciGetState</span></a>()</p></td>
+<td><p>Get current PCI port speed
+(number of lanes, generation)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdevicepcigetbars"><span class="std std-ref">zesDevicePciGetBars</span></a>()</p></td>
+<td><p>Get information about each
+configured PCI bar</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesdevicepcigetstats"><span class="std std-ref">zesDevicePciGetStats</span></a>()</p></td>
+<td><p>Get PCI statistics - throughput,
+total packets, number of packet
+replays</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to output the PCI BDF address:</p>
+<pre class="literal-block">function ShowPciInfo(zes_device_handle_t hSysmanDevice)
+    <a class="reference internal" href="api.html#zes-pci-properties-t"><span class="std std-ref">zes_pci_properties_t</span></a> pciProps {};
+    pciProps.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_PCI_PROPERTIES</span></a>;
+    if (<a class="reference internal" href="api.html#zesdevicepcigetproperties"><span class="std std-ref">zesDevicePciGetProperties</span></a>(hSysmanDevice, &amp;pciProps) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        output(&quot;    PCI address:        %04u:%02u:%02u.%u&quot;,
+            pciProps.address.domain,
+            pciProps.address.bus,
+            pciProps.address.device,
+            pciProps.address.function);</pre>
+</div>
+</div>
+<div class="section" id="operations-on-power-domains">
+<span id="power"></span><h3>Operations on power domains<a class="headerlink" href="#operations-on-power-domains" title="Permalink to this headline">¶</a></h3>
+<p>The PSU (Power Supply Unit) provides power to a device. The amount of power
+drawn by a device is a function of the voltage and frequency, both of which are
+controlled by the Punit, a micro-controller on the device. If the voltage and
+frequency are too high, two conditions can occur:</p>
+<ol class="arabic simple">
+<li><p>Over-current - This is where the current drawn by the device exceeds
+the maximum current that the PSU can supply. The PSU asserts a signal
+when this occurs, and it is processed by the Punit.</p></li>
+<li><p>Over-temperature - The device is generating too much heat that cannot
+be dissipated fast enough. The Punit monitors temperatures and reacts
+when the sensors show the maximum temperature exceeds the threshold
+TjMax (typically 100 degrees Celsius).</p></li>
+</ol>
+<p>When either of these conditions occurs, the Punit throttles the
+frequencies/voltages of the device down to their minimum values,
+severely impacting performance. The Punit avoids such severe throttling
+by imposing power limits. There are two types of power limits:</p>
+<ol class="arabic simple">
+<li><p>Reactive - In this case, the Punit will measure the moving average over
+some interval of the actual power (hardware measurement). If the average
+power exceeds the limit, Punit will start slowly decreasing the
+maximum frequency limits that can be requested for each frequency domain.
+Conversely, if the average power is below the limit, Punit will slowly
+increase the maximum frequency limits that can be requested up to the
+hardware frequency limit for each domain. When user/driver frequency
+requests are above the maximum frequency limits, throttling occurs and
+this should normally reduce the power.</p></li>
+<li><p>Proactive - In this case, the Punit can perform a calculation based on
+the current configuration of the chip and frequency requests to predict
+the worst case power that could be generated. If this calculation exceeds
+the proactive limit, a search is done to find the maximum frequency that will
+fit within the limit.</p></li>
+</ol>
+<p>Limits need not be applied at the hardware scope level of a device. Devices are
+subdivided into one or more power domains. A power domain is a hardware scope
+over which power consumption can be monitored and controlled. Power domains can
+exist at different hardware scopes such as:</p>
+<ol class="arabic simple">
+<li><p>Card-level - Power domains defined at this level monitor &amp; control power
+consumption over a whole card.</p></li>
+<li><p>Package-level - Power domains defined at this level monitor &amp; control power
+consumption over a single physical package on a card.</p></li>
+<li><p>Stack-level - Power domains defined at this level monitor &amp; control power
+consumption over a single stack within a package.</p></li>
+</ol>
+<p>At any given point in time, a platform can be running on either mains power or,
+in the case of platforms such as laptops, can be running on battery power. This
+is referred to as the power source. Limits can be configured to take effect only
+when a device is drawing power from a specified source, i.e., separate limits
+can be imposed when a device is running off battery power as opposed to mains
+power.</p>
+<p>Depending on the platform and power domain, power limits can be expressed in
+terms of either amperage or wattage. The API can be queried to determine in which
+units a given power limit should be specified.</p>
+<p>A power limit can correspond one of the following power levels.</p>
+<table class="table">
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 28%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Limit</p></th>
+<th class="head"><p>Window</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Instantaneous</p></td>
+<td><p>NA</p></td>
+<td><p>Punit predicts the
+worst case power for
+the current frequency
+requests and if it
+exceeds the limit,
+the actual
+frequencies
+will be lowered.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Peak</p></td>
+<td><p>e.g. 100usec</p></td>
+<td><p>Punit tracks a moving
+average of power over
+a short window. When
+this exceeds a
+programmable
+threshold, the Punit
+starts throttling
+frequencies/voltages.</p></td>
+</tr>
+<tr class="row-even"><td><p>Burst</p></td>
+<td><p>e.g. 2ms</p></td>
+<td><p>Punit tracks a moving
+average of power over
+a medium window. When
+this exceeds a
+programmable
+threshold, the Punit
+starts throttling
+frequencies/voltages.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sustained</p></td>
+<td><p>e.g. 28s</p></td>
+<td><p>Punit tracks a moving
+average of power over
+a long window. When
+this exceeds a
+programmable
+threshold, the Punit
+throttles
+frequencies/voltages.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that the sustained, burst, and peak power limits are only reactive, whereas
+the instantaneous power limit is only proactive.</p>
+<p>The default factory values are tuned assuming the device is operating at
+normal temperatures running significant workloads:</p>
+<ul class="simple">
+<li><p>The peak power limit is tuned to avoid tripping the PSU over-current
+signal for all but the most intensive compute workloads. Most
+workloads should be able to run at maximum frequencies without
+hitting this condition.</p></li>
+<li><p>The burst power limit permits most workloads to run at maximum
+frequencies for short periods.</p></li>
+<li><p>The sustained power limit will be triggered if high frequencies are
+requested for lengthy periods (configurable, default is 28sec) and
+the frequencies will be throttled if the high requests and
+utilization of the device continues.</p></li>
+</ul>
+<p>Some power domains support requesting the event
+<a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED</span></a> be generated when the
+energy consumption exceeds some value. This can be a useful technique to
+suspend an application until the GPU becomes busy. The technique
+involves calling <a class="reference internal" href="api.html#zespowersetenergythreshold"><span class="std std-ref">zesPowerSetEnergyThreshold</span></a>() with some delta
+energy threshold, registering to receive the event using the function
+<a class="reference internal" href="api.html#zesdeviceeventregister"><span class="std std-ref">zesDeviceEventRegister</span></a>() and then calling <a class="reference internal" href="api.html#zesdrivereventlisten"><span class="std std-ref">zesDriverEventListen</span></a>() to
+block until the event is triggered. When the energy consumed by the
+power domain from the time the call is made exceeds the specified delta,
+the event is triggered, and the application is woken up.</p>
+<p>A device can have multiple power domains:</p>
+<ul class="simple">
+<li><p>One card level power domain that handles the power consumed by the entire
+PCIe card.</p></li>
+<li><p>One package level power domain that handles the power consumed by the
+entire accelerator chip. This includes the power of all sub-devices on
+the chip.</p></li>
+<li><p>One or more power domains for each sub-device if the product has
+sub-devices.</p></li>
+</ul>
+<p>The following functions are provided to manage the power of the device:</p>
+<table class="table">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 69%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumpowerdomains"><span class="std std-ref">zesDeviceEnumPowerDomains</span></a>()</p></td>
+<td><p>Enumerate the power domains.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zespowergetproperties"><span class="std std-ref">zesPowerGetProperties</span></a>()</p></td>
+<td><p>Get the minimum/maximum power limit that can be
+specified when changing the power limits of a
+specific power domain. Also read the factory
+default sustained power limit of the part.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zespowergetenergycounter"><span class="std std-ref">zesPowerGetEnergyCounter</span></a>()</p></td>
+<td><p>Read the energy consumption of
+the specific domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zespowergetlimitsext"><span class="std std-ref">zesPowerGetLimitsExt</span></a>()</p></td>
+<td><p>Get all the
+power limits for the specific
+power domain.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zespowersetlimitsext"><span class="std std-ref">zesPowerSetLimitsExt</span></a>()</p></td>
+<td><p>Set all the
+power limits for the specific
+power domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zespowergetenergythreshold"><span class="std std-ref">zesPowerGetEnergyThreshold</span></a>()</p></td>
+<td><p>Get the current energy threshold.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zespowersetenergythreshold"><span class="std std-ref">zesPowerSetEnergyThreshold</span></a>()</p></td>
+<td><p>Set the energy threshold. Event
+<a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED</span></a></p>
+<p>will be generated when the energy
+consumed since calling this
+function exceeds the specified
+threshold.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to output information about each power
+domain on a device:</p>
+<pre class="literal-block">function ShowPowerDomains(zes_device_handle_t hSysmanDevice)
+    uint32_t numPowerDomains
+    if (<a class="reference internal" href="api.html#zesdeviceenumpowerdomains"><span class="std std-ref">zesDeviceEnumPowerDomains</span></a>(hSysmanDevice, &amp;numPowerDomains, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        zes_pwr_handle_t* phPower =
+            allocate_memory(numPowerDomains * sizeof(zes_pwr_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumpowerdomains"><span class="std std-ref">zesDeviceEnumPowerDomains</span></a>(hSysmanDevice, &amp;numPowerDomains, phPower) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (pwrIndex = 0 .. numPowerDomains-1)
+                <a class="reference internal" href="api.html#zes-power-properties-t"><span class="std std-ref">zes_power_properties_t</span></a> props {};
+                props.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_POWER_PROPERTIES</span></a>;
+                if (<a class="reference internal" href="api.html#zespowergetproperties"><span class="std std-ref">zesPowerGetProperties</span></a>(phPower[pwrIndex], &amp;props) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    if (props.onSubdevice)
+                        output(&quot;Sub-device %u power:n&quot;, props.subdeviceId)
+                        output(&quot;    Can control: %s&quot;, props.canControl ? &quot;yes&quot; : &quot;no&quot;)
+                        call_function ShowPowerLimits(phPower[pwrIndex])
+                    else
+                        output(&quot;Total package power:n&quot;)
+                        output(&quot;    Can control: %s&quot;, props.canControl ? &quot;yes&quot; : &quot;no&quot;)
+                        call_function ShowPowerLimits(phPower[pwrIndex])
+    free_memory(...)
+}
+
+function ShowPowerLimits(zes_pwr_handle_t hPower)
+    uint32_t limitCount = 0
+    if (<a class="reference internal" href="api.html#zespowergetlimitsext"><span class="std std-ref">zesPowerGetLimitsExt</span></a>(hPower, &amp;limitCount, nullptr) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        <a class="reference internal" href="api.html#zes-power-limit-ext-desc-t"><span class="std std-ref">zes_power_limit_ext_desc_t</span></a> * allLimits = allocate(limitCount * sizeof(<a class="reference internal" href="api.html#zes-power-limit-ext-desc-t"><span class="std std-ref">zes_power_limit_ext_desc_t</span></a>));
+        if (<a class="reference internal" href="api.html#zespowergetlimitsext"><span class="std std-ref">zesPowerGetLimitsExt</span></a>(hPower, &amp;numLimits, allLimits) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+
+            for (i = 0; i &lt; limitCount; ++i)
+                output(&quot;Limit is enabled: %s&quot;, enabled)
+                output(&quot;Power averaging window: %d&quot;, interval)</pre>
+<p>The pseudo code below shows how to modify the sustained power limit for the first power
+domain found on a device:</p>
+<pre class="literal-block">function SetPowerDomainLimit(zes_device_handle_t hSysmanDevice)
+    uint32_t numPowerDomains
+    if (<a class="reference internal" href="api.html#zesdeviceenumpowerdomains"><span class="std std-ref">zesDeviceEnumPowerDomains</span></a>(hSysmanDevice, &amp;numPowerDomains, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        zes_pwr_handle_t* phPower =
+            allocate_memory(numPowerDomains * sizeof(zes_pwr_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumpowerdomains"><span class="std std-ref">zesDeviceEnumPowerDomains</span></a>(hSysmanDevice, &amp;numPowerDomains, phPower) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (pwrIndex = 0 .. numPowerDomains-1)
+                <a class="reference internal" href="api.html#zes-power-properties-t"><span class="std std-ref">zes_power_properties_t</span></a> props {};
+                props.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_POWER_PROPERTIES</span></a>;
+                if (<a class="reference internal" href="api.html#zespowergetproperties"><span class="std std-ref">zesPowerGetProperties</span></a>(phPower[pwrIndex], &amp;props) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    uint32_t limitCount = 0
+                    if (<a class="reference internal" href="api.html#zespowergetlimitsext"><span class="std std-ref">zesPowerGetLimitsExt</span></a>(hPower, &amp;limitCount, nullptr) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                        <a class="reference internal" href="api.html#zes-power-limit-ext-desc-t"><span class="std std-ref">zes_power_limit_ext_desc_t</span></a> * allLimits = allocate(limitCount * sizeof(<a class="reference internal" href="api.html#zes-power-limit-ext-desc-t"><span class="std std-ref">zes_power_limit_ext_desc_t</span></a>));
+                        if (<a class="reference internal" href="api.html#zespowergetlimitsext"><span class="std std-ref">zesPowerGetLimitsExt</span></a>(hPower, &amp;numLimits, allLimits) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                            for (i = 0; i &lt; limitCount; ++i)
+                                if (allLimits[i].level == <a class="reference internal" href="api.html#zes-power-level-t"><span class="std std-ref">ZES_POWER_LEVEL_SUSTAINED</span></a>)
+                                    if (allLimits[i].limitValueLocked == False)
+                                        allLimits[i].limit = newLimit
+                        <a class="reference internal" href="api.html#zespowersetlimitsext"><span class="std std-ref">zesPowerSetLimitsExt</span></a>(hPower, &amp;numLimits, allLimits)</pre>
+<p>The pseudo code shows how to output the average power. It assumes that
+the function is called regularly (say every 100ms).</p>
+<pre class="literal-block">function ShowAveragePower(zes_pwr_handle_t hPower, <a class="reference internal" href="api.html#zes-power-energy-counter-t"><span class="std std-ref">zes_power_energy_counter_t</span></a>* pPrevEnergyCounter)
+    <a class="reference internal" href="api.html#zes-power-energy-counter-t"><span class="std std-ref">zes_power_energy_counter_t</span></a> newEnergyCounter;
+    if (<a class="reference internal" href="api.html#zespowergetenergycounter"><span class="std std-ref">zesPowerGetEnergyCounter</span></a>(hPower, &amp;newEnergyCounter) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter-&gt;timestamp;
+        if (deltaTime)
+            output(&quot;    Average power: %.3f W&quot;, (newEnergyCounter.energy - pPrevEnergyCounter-&gt;energy) / deltaTime);
+            *pPrevEnergyCounter = newEnergyCounter;</pre>
+</div>
+<div class="section" id="operations-on-frequency-domains">
+<span id="frequency"></span><h3>Operations on frequency domains<a class="headerlink" href="#operations-on-frequency-domains" title="Permalink to this headline">¶</a></h3>
+<p>The hardware manages frequencies to achieve a balance between best
+performance and power consumption. Most devices have one or more
+frequency domains.</p>
+<p>The following functions are provided to manage the frequency domains on
+the device:</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumfrequencydomains"><span class="std std-ref">zesDeviceEnumFrequencyDomains</span></a>()</p></td>
+<td><p>Enumerate all the frequency
+domains on the device and
+sub-devices.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencygetproperties"><span class="std std-ref">zesFrequencyGetProperties</span></a>()</p></td>
+<td><p>Find out which domain
+<a class="reference internal" href="api.html#zes-freq-domain-t"><span class="std std-ref">zes_freq_domain_t</span></a> is controlled
+by this frequency and min/max
+hardware frequencies.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencygetavailableclocks"><span class="std std-ref">zesFrequencyGetAvailableClocks</span></a>()</p></td>
+<td><p>Get an array of all available
+frequencies that can be requested
+on this domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencygetrange"><span class="std std-ref">zesFrequencyGetRange</span></a>()</p></td>
+<td><p>Get the current min/max frequency
+between which the hardware can
+operate for a frequency domain.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencysetrange"><span class="std std-ref">zesFrequencySetRange</span></a>()</p></td>
+<td><p>Set the min/max frequency between
+which the hardware can operate
+for a frequency domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencygetstate"><span class="std std-ref">zesFrequencyGetState</span></a>()</p></td>
+<td><p>Get the current frequency
+request, actual frequency, TDP
+frequency and throttle reasons
+for a frequency domain.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencygetthrottletime"><span class="std std-ref">zesFrequencyGetThrottleTime</span></a>()</p></td>
+<td><p>Gets the amount of time a
+frequency domain has been
+throttled.</p></td>
+</tr>
+</tbody>
+</table>
+<p>It is only permitted to set the frequency range if the device property
+<a class="reference internal" href="api.html#zes-freq-properties-t"><span class="std std-ref">zes_freq_properties_t</span></a>.canControl is true for the specific frequency
+domain.</p>
+<p>By setting the min/max frequency range to the same value, software is
+effectively disabling the hardware-controlled frequency and getting a
+fixed stable frequency providing the Punit does not need to throttle due
+to excess power/heat.</p>
+<p>Based on the power/thermal conditions, the frequency requested by
+software or the hardware may not be respected. This situation can be
+determined using the function <a class="reference internal" href="api.html#zesfrequencygetstate"><span class="std std-ref">zesFrequencyGetState</span></a>() which will
+indicate the current frequency request, the actual (resolved) frequency
+and other frequency information that depends on the current conditions.
+If the actual frequency is below the requested frequency,
+<a class="reference internal" href="api.html#zes-freq-state-t"><span class="std std-ref">zes_freq_state_t</span></a>.throttleReasons will provide the reasons why the
+frequency is being limited by the Punit.</p>
+<p>When a frequency domain starts being throttled, the event
+<a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_FREQ_THROTTLED</span></a> is triggered if this is supported
+(check <a class="reference internal" href="api.html#zes-freq-properties-t"><span class="std std-ref">zes_freq_properties_t</span></a>.isThrottleEventSupported).</p>
+<div class="section" id="frequency-voltage-overclocking">
+<h4>Frequency/Voltage overclocking<a class="headerlink" href="#frequency-voltage-overclocking" title="Permalink to this headline">¶</a></h4>
+<p>Overclocking involves modifying the voltage-frequency (V-F) curve to
+either achieve better performance by permitting the hardware to reach
+higher frequencies or better efficiency by lowering the voltage for the
+same frequency.</p>
+<p>By default, the hardware imposes a factory-fused maximum frequency and a
+voltage-frequency curve. The voltage-frequency curve specifies how much
+voltage is needed to safely reach a given frequency without hitting
+overcurrent conditions. If the hardware detects overcurrent (IccMax), it
+will severely throttle frequencies in order to protect itself. Also, if
+the hardware detects that any part of the chip exceeds a maximum
+temperature limit (TjMax) it will also severely throttle frequencies.</p>
+<p>To improve maximum performance, the following modifications can be made:</p>
+<ul class="simple">
+<li><p>Increase the maximum frequency.</p></li>
+<li><p>Increase the voltage to ensure stability at the higher frequency.</p></li>
+<li><p>Increase the maximum current (IccMax).</p></li>
+<li><p>Increase the maximum temperature (TjMax).</p></li>
+</ul>
+<p>All these changes come with the risk of damage the device.</p>
+<p>To improve efficiency for a given workload that is not excercising the
+full circuitry of the device, the following modifications can be made:</p>
+<ul class="simple">
+<li><p>Decrease the voltage</p></li>
+</ul>
+<p>Frequency overclocking is accomplished by calling <a class="reference internal" href="api.html#zesfrequencyocsetfrequencytarget"><span class="std std-ref">zesFrequencyOcSetFrequencyTarget</span></a>() with the desired Frequency
+Target and the Voltage setting by calling <a class="reference internal" href="api.html#zesfrequencyocsetvoltagetarget"><span class="std std-ref">zesFrequencyOcSetVoltageTarget</span></a>() with the new voltage and the voltrage offset.
+There are three modes that control the way voltage and frequency are handled when overclocking:</p>
+<table class="table">
+<colgroup>
+<col style="width: 54%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Overclock mode</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-oc-mode-t"><span class="std std-ref">ZES_OC_MODE_OVERRIDE</span></a></p></td>
+<td><p>In this mode, a fixed
+user-supplied voltage
+VoltageTarget plus
+VoltageOffset
+is applied at all times,
+independent of the frequency
+request. This is not efficient but
+can improve stability by avoiding
+power-supply voltage changes as the
+frequency changes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-oc-mode-t"><span class="std std-ref">ZES_OC_MODE_INTERPOLATIVE</span></a></p></td>
+<td><p>In this mode, In this mode, the
+voltage/frequency curve can be extended
+with a new voltage/frequency point that will
+be interpolated. The existing
+voltage/frequency points can also be offset
+(up or down) by a fixed voltage. This mode
+disables FIXED and OVERRIDE modes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-oc-mode-t"><span class="std std-ref">ZES_OC_MODE_FIXED</span></a></p></td>
+<td><p>In this mode, In this mode, hardware will
+disable most frequency throttling and lock
+the frequency and voltage at the specified
+overclock values. This mode disables
+OVERRIDE and INTERPOLATIVE modes. This mode
+can damage the part, most of the protections
+are disabled on this mode.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following functions are provided to handle overclocking:</p>
+<table class="table">
+<colgroup>
+<col style="width: 58%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencyocgetcapabilities"><span class="std std-ref">zesFrequencyOcGetCapabilities</span></a>()</p></td>
+<td><p>Determine the overclock
+capabilities of the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencyocgetfrequencytarget"><span class="std std-ref">zesFrequencyOcGetFrequencyTarget</span></a>()</p></td>
+<td><p>Get current overclock target
+frequency set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencyocsetfrequencytarget"><span class="std std-ref">zesFrequencyOcSetFrequencyTarget</span></a>()</p></td>
+<td><p>Set the new overclock target
+frequency</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencyocgetvoltagetarget"><span class="std std-ref">zesFrequencyOcGetVoltageTarget</span></a>()</p></td>
+<td><p>Get current overclock target
+voltage set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencyocsetvoltagetarget"><span class="std std-ref">zesFrequencyOcSetVoltageTarget</span></a>()</p></td>
+<td><p>Set the new overclock target
+voltage and offset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencyocsetmode"><span class="std std-ref">zesFrequencyOcSetMode</span></a>()</p></td>
+<td><p>Sets the desired overclock mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencyocgetmode"><span class="std std-ref">zesFrequencyOcGetMode</span></a>()</p></td>
+<td><p>Gets the current overclock mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencyocgeticcmax"><span class="std std-ref">zesFrequencyOcGetIccMax</span></a>()</p></td>
+<td><p>Get the maximum current limit in
+effect.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencyocseticcmax"><span class="std std-ref">zesFrequencyOcSetIccMax</span></a>()</p></td>
+<td><p>Set a new maximum current limit.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfrequencyocgettjmax"><span class="std std-ref">zesFrequencyOcGetTjMax</span></a>()</p></td>
+<td><p>Get the maximum temperature limit
+in effect.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfrequencyocsettjmax"><span class="std std-ref">zesFrequencyOcSetTjMax</span></a>()</p></td>
+<td><p>Set a new maximum temperature
+limit.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Overclocking can be turned off by calling
+<a class="reference internal" href="api.html#zesfrequencyocsetmode"><span class="std std-ref">zesFrequencyOcSetMode</span></a>() with mode <a class="reference internal" href="api.html#zes-oc-mode-t"><span class="std std-ref">ZES_OC_MODE_OFF</span></a> and by
+calling <a class="reference internal" href="api.html#zesfrequencyocgeticcmax"><span class="std std-ref">zesFrequencyOcGetIccMax</span></a>() and <a class="reference internal" href="api.html#zesfrequencyocsettjmax"><span class="std std-ref">zesFrequencyOcSetTjMax</span></a>() with values of 0.0.</p>
+</div>
+<div class="section" id="scheduler-operations">
+<span id="scheduler"></span><h4>Scheduler operations<a class="headerlink" href="#scheduler-operations" title="Permalink to this headline">¶</a></h4>
+<p>Scheduler components control how workloads are executed on accelerator
+engines and how to share the hardware resources when multiple workloads are
+submitted concurrently. This policy is referred to as a scheduler mode.</p>
+<p>The available scheduler operating modes are given by the enum
+<a class="reference internal" href="api.html#zes-sched-mode-t"><span class="std std-ref">zes_sched_mode_t</span></a> and summarized in the table below:</p>
+<table class="table">
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Scheduler mode</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-sched-mode-t"><span class="std std-ref">ZES_SCHED_MODE_TIMEOUT</span></a></p></td>
+<td><p>This mode is optimized for
+multiple applications or contexts
+submitting work to the hardware.
+When higher priority work
+arrives, the scheduler attempts
+to pause the current executing
+work within some timeout
+interval, then submits the other
+work. It is possible to configure
+(<a class="reference internal" href="api.html#zes-sched-timeout-properties-t"><span class="std std-ref">zes_sched_timeout_properties_t</span></a>)
+the watchdog timeout which
+controls the maximum time the
+scheduler will wait for a
+workload to complete a batch of
+work or yield to other
+applications before it is
+terminated. If the watchdog
+timeout is set to
+ZES_SCHED_WATCHDOG_DISABLE, the
+scheduler enforces no fairness.
+This means that if there is other
+work to execute, the scheduler
+will try to submit it but will
+not terminate an executing
+process that does not complete
+quickly.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-sched-mode-t"><span class="std std-ref">ZES_SCHED_MODE_TIMESLICE</span></a></p></td>
+<td><p>This mode is optimized to provide
+fair sharing of hardware
+execution time between multiple
+contexts submitting work to the
+hardware concurrently. It is
+possible to configure
+(<a class="reference internal" href="api.html#zes-sched-timeslice-properties-t"><span class="std std-ref">zes_sched_timeslice_properties_t</span></a>)</p>
+<p>the timeslice interval and the
+amount of time the scheduler will
+wait for work to yield to another
+application before it is
+terminated.</p>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-sched-mode-t"><span class="std std-ref">ZES_SCHED_MODE_EXCLUSIVE</span></a></p></td>
+<td><p>This mode is optimized for single
+application/context use-cases. It
+permits a context to run
+indefinitely on the hardware
+without being preempted or
+terminated. All pending work for
+other contexts must wait until
+the running context completes
+with no further submitted work.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-sched-mode-t"><span class="std std-ref">ZES_SCHED_MODE_COMPUTE_UNIT_DEBUG</span></a></p></td>
+<td><p>This mode is optimized for
+application debug. It ensures
+that only one command queue can
+execute work on the hardware at a
+given time. Work is permitted to
+run as long as needed without
+enforcing any scheduler fairness
+policies.</p></td>
+</tr>
+</tbody>
+</table>
+<p>A device can have multiple scheduler components. Each scheduler component controls
+the workload execution behavior on one or more accelerator engines
+(<a class="reference internal" href="api.html#zes-engine-type-flags-t"><span class="std std-ref">zes_engine_type_flags_t</span></a>). The following functions are available for changing
+the scheduler mode for each scheduler component:</p>
+<table class="table">
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumschedulers"><span class="std std-ref">zesDeviceEnumSchedulers</span></a>()</p></td>
+<td><p>Get handles to each scheduler
+component.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesschedulergetproperties"><span class="std std-ref">zesSchedulerGetProperties</span></a>()</p></td>
+<td><p>Get properties of a scheduler
+component (sub-device, engines
+linked to this scheduler,
+supported scheduler modes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesschedulergetcurrentmode"><span class="std std-ref">zesSchedulerGetCurrentMode</span></a>()</p></td>
+<td><p>Get the current scheduler mode
+(timeout, timeslice, exclusive,
+single command queue)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesschedulergettimeoutmodeproperties"><span class="std std-ref">zesSchedulerGetTimeoutModeProperties</span></a>()</p></td>
+<td><p>Get the settings for the timeout
+scheduler mode</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesschedulergettimeslicemodeproperties"><span class="std std-ref">zesSchedulerGetTimesliceModeProperties</span></a>()</p></td>
+<td><p>Get the settings for the
+timeslice scheduler mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesschedulersettimeoutmode"><span class="std std-ref">zesSchedulerSetTimeoutMode</span></a>()</p></td>
+<td><p>Change to timeout scheduler mode
+and/or change properties</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesschedulersettimeslicemode"><span class="std std-ref">zesSchedulerSetTimesliceMode</span></a>()</p></td>
+<td><p>Change to timeslice scheduler
+mode and/or change properties</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesschedulersetexclusivemode"><span class="std std-ref">zesSchedulerSetExclusiveMode</span></a>()</p></td>
+<td><p>Change to exclusive scheduler
+mode and/or change properties</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesschedulersetcomputeunitdebugmode"><span class="std std-ref">zesSchedulerSetComputeUnitDebugMode</span></a>()</p></td>
+<td><p>Change to compute unit debug
+scheduler mode and/or change
+properties</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to stop the scheduler enforcing fairness
+while permitting other work to attempt to run:</p>
+<pre class="literal-block">function DisableSchedulerWatchdog(zes_device_handle_t hSysmanDevice)
+    uint32_t numSched
+    if ((<a class="reference internal" href="api.html#zesdeviceenumschedulers"><span class="std std-ref">zesDeviceEnumSchedulers</span></a>(hSysmanDevice, &amp;numSched, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>))
+        zes_sched_handle_t* pSchedHandles =
+            allocate_memory(numSched * sizeof(zes_sched_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumschedulers"><span class="std std-ref">zesDeviceEnumSchedulers</span></a>(hSysmanDevice, &amp;numSched, pSchedHandles) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (index = 0 .. numSched-1)
+                <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> res
+                <a class="reference internal" href="api.html#zes-sched-mode-t"><span class="std std-ref">zes_sched_mode_t</span></a> currentMode
+                res = <a class="reference internal" href="api.html#zesschedulergetcurrentmode"><span class="std std-ref">zesSchedulerGetCurrentMode</span></a>(pSchedHandles[index], &amp;currentMode)
+                if (res == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    ze_bool_t requireReload
+                    <a class="reference internal" href="api.html#zes-sched-timeout-properties-t"><span class="std std-ref">zes_sched_timeout_properties_t</span></a> props
+                    props.watchdogTimeout = ZES_SCHED_WATCHDOG_DISABLE
+                    res = <a class="reference internal" href="api.html#zesschedulersettimeoutmode"><span class="std std-ref">zesSchedulerSetTimeoutMode</span></a>(pSchedHandles[index], &amp;props, &amp;requireReload)
+                    if (res == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                        if (requireReload)
+                            output(&quot;WARNING: Reload the driver to complete desired configuration.&quot;)
+                        else
+                            output(&quot;Schedule mode changed successfully.&quot;)
+                    else if(res == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a>)
+                        output(&quot;ERROR: The timeout scheduler mode is not supported on this device.&quot;)
+                    else if(res == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a>)
+                        output(&quot;ERROR: Don't have permissions to change the scheduler mode.&quot;)
+                    else
+                        output(&quot;ERROR: Problem calling the API to change the scheduler mode.&quot;)
+                else if(res == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a>)
+                    output(&quot;ERROR: Scheduler modes are not supported on this device.&quot;)
+                else
+                    output(&quot;ERROR: Problem calling the API.&quot;)</pre>
+</div>
+</div>
+<div class="section" id="enabling-disabling-ecc-config-dynamically">
+<span id="ecc"></span><h3>Enabling/disabling ECC Config Dynamically<a class="headerlink" href="#enabling-disabling-ecc-config-dynamically" title="Permalink to this headline">¶</a></h3>
+<p>Memory corruption occurs when random bits in data flip due to natural processes
+such as background radiation, cosmic rays, etc… A single bit flip in one of the
+high-bits of a single data-value may drastically change the behavior of some
+applications. Workloads from the financial, industrial control, critical
+infrastructure, and critical database sectors are typically not tolerant to memory
+corruption—memory corruption can cause highly undesirable behavior. Error correction
+codes (ECC) are a memory controller technology that reduce memory corruption at
+the cost of reduced memory performance and capacity.</p>
+<p>The loss of memory performance and capacity makes ECC undesirable for some workloads.
+Application domains may be insensitive to low-level memory corruption. Algorithms
+may be designed for numerical stability or may be inherently stochastic, making them
+insensitive to memory corruption.</p>
+<p>Products may support ECC capabilities and may additionally make ECC dynamically
+configurable, i.e. if ECC is supported, then it may be turned on or off on demand.
+A device reset, either in the form of a warm reset or a cold reboot, may be
+required to switch between ECC enabled and disabled states.</p>
+<p>Support for ECC can be checked using the function <a class="reference internal" href="api.html#zesdeviceeccavailable"><span class="std std-ref">zesDeviceEccAvailable</span></a>(). If ECC
+is supported, then support for dynamic ECC control can be checked using the
+function <a class="reference internal" href="api.html#zesdeviceeccconfigurable"><span class="std std-ref">zesDeviceEccConfigurable</span></a>(). The current ECC state, pending ECC state,
+and action required to affect the pending ECC state can be determined using the
+struct <a class="reference internal" href="api.html#zes-device-ecc-properties-t"><span class="std std-ref">zes_device_ecc_properties_t</span></a> returned by the function <a class="reference internal" href="api.html#zesdevicegeteccstate"><span class="std std-ref">zesDeviceGetEccState</span></a>().
+The ECC state can be changed by calling the <a class="reference internal" href="api.html#zesdeviceseteccstate"><span class="std std-ref">zesDeviceSetEccState</span></a>() which takes the
+desired ECC state as input and returns the struct <a class="reference internal" href="api.html#zes-device-ecc-properties-t"><span class="std std-ref">zes_device_ecc_properties_t</span></a> which
+lists the current ECC state, pending ECC state, and action required to affect the
+pending ECC state</p>
+<p>The following pseudo code demonstrates how the ECC state can be queried and changed
+from disabled to enabled:</p>
+<pre class="literal-block">function EnableECC(zes_device_handle_t hSysmanDevice)
+    ze_bool_t EccAvailable = False;
+    <a class="reference internal" href="api.html#zesdeviceeccavailable"><span class="std std-ref">zesDeviceEccAvailable</span></a>(hSysmanDevice, &amp;EccAvailable)
+    if (EccAvailable == True) {
+        ze_bool_t EccConfigurable = False;
+        <a class="reference internal" href="api.html#zesdeviceeccconfigurable"><span class="std std-ref">zesDeviceEccConfigurable</span></a>(hSysmanDevice, &amp;EccConfigurable)
+        if (EccConfigurable == True) {
+            <a class="reference internal" href="api.html#zes-device-ecc-properties-t"><span class="std std-ref">zes_device_ecc_properties_t</span></a> props = {<a class="reference internal" href="api.html#zes-device-ecc-state-t"><span class="std std-ref">ZES_DEVICE_ECC_STATE_UNAVAILABLE</span></a>, <a class="reference internal" href="api.html#zes-device-ecc-state-t"><span class="std std-ref">ZES_DEVICE_ECC_STATE_UNAVAILABLE</span></a>, <a class="reference internal" href="api.html#zes-device-action-t"><span class="std std-ref">ZES_DEVICE_ACTION_NONE</span></a>}
+            <a class="reference internal" href="api.html#zesdevicegeteccstate"><span class="std std-ref">zesDeviceGetEccState</span></a>(hSysmanDevice, &amp;props)
+            if (props.currentState == <a class="reference internal" href="api.html#zes-device-ecc-state-t"><span class="std std-ref">ZES_DEVICE_ECC_STATE_DISABLED</span></a>) {
+                <a class="reference internal" href="api.html#zes-device-ecc-desc-t"><span class="std std-ref">zes_device_ecc_desc_t</span></a> newState = <a class="reference internal" href="api.html#zes-device-ecc-state-t"><span class="std std-ref">ZES_DEVICE_ECC_STATE_ENABLED</span></a>
+                <a class="reference internal" href="api.html#zesdeviceseteccstate"><span class="std std-ref">zesDeviceSetEccState</span></a>(hSysmanDevice, newState, &amp;props)
+            }
+        }
+    }</pre>
+</div>
+<div class="section" id="tuning-workload-performance">
+<span id="performance-factor"></span><h3>Tuning workload performance<a class="headerlink" href="#tuning-workload-performance" title="Permalink to this headline">¶</a></h3>
+<p>While hardware attempts to balance system resources effectively, there are
+workloads that can benefit from external performance hints. For hardware
+where this is possible, the API exposes <em>Performance Factors</em> domains that
+can be used to provide these hints.</p>
+<p>A Performance Factor is defined as a number between 0 and 100 that expresses
+a trade-off between the energy provided to the accelerator units and the
+energy provided to the supporting units. As an example, a compute heavy
+workload benefits from a higher distribution of energy at the computational
+units rather than for the memory controller. Alternatively, a memory bounded
+workload can benefit by trading off performance of the computational units
+for higher throughput in the memory controller. Generally the hardware
+will get this balance right, but the Performance Factor can be used to
+make the balance more aggressive. In the examples given, a Performance
+Factor of 100 would indicate that the workload is completely compute
+bounded and requires very little support from the memory controller.
+Alternatively, a Performance Factor of 0 would indicate that the workload
+is completely memory bounded and the performance of the memory
+controller needs to be increased.</p>
+<p>Tuning for a workload can involve running the application repeatedly with
+different values of the Performance Factor from 0 to 100 and choosing
+the value that gives the best performance. The default value is 50.
+Alternatively, a more dynamic approach would involve monitoring the
+various utilization metrics of the accelerator to determine memory
+and compute bounded and moving the Performance Factor up and down
+in order to remove the bottleneck.</p>
+<p>The API provides a way to enumerate the domains that can be controlled
+by a Performance Factor. A domain contains one or more accelerators
+whose performance will be affected by this setting. The API provides
+functions to change the Performance Factor for a domain.</p>
+<p>Here is a summary of the available functions:</p>
+<table class="table">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumperformancefactordomains"><span class="std std-ref">zesDeviceEnumPerformanceFactorDomains</span></a>()</p></td>
+<td><p>Enumerate the Performance Factor domains available on the
+hardware.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesperformancefactorgetproperties"><span class="std std-ref">zesPerformanceFactorGetProperties</span></a>()</p></td>
+<td><p>Find out if the Performance Factor domain is located on a
+sub-device and which accelerators are affected by it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesperformancefactorgetconfig"><span class="std std-ref">zesPerformanceFactorGetConfig</span></a>()</p></td>
+<td><p>Read the current performance factor being used by the hardware
+for a domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesperformancefactorsetconfig"><span class="std std-ref">zesPerformanceFactorSetConfig</span></a>()</p></td>
+<td><p>Change the Performance Factor of the hardware for a domain.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-engine-groups">
+<span id="engines"></span><h3>Operations on engine groups<a class="headerlink" href="#operations-on-engine-groups" title="Permalink to this headline">¶</a></h3>
+<p>Accelerator resources (e.g. arrays of compute units or media decoders) are
+fed work by what are called engines. The API provides the ability to measuring
+the execution time (activity) of these engines. The type of engines is
+defined in the enum <a class="reference internal" href="api.html#zes-engine-group-t"><span class="std std-ref">zes_engine_group_t</span></a>.</p>
+<p>Generally there is a one to one relationship between an engine and an underlying
+accelerator resource. For example, a single media decode engine submits work to a
+single media decoder hardware and no other engine can do so. Measuring the execution
+time (activity) of a single engine is equivalent to measuring the execution time
+of the underlying accelerator hardware.</p>
+<p>There are also products where multiple engines submit work to the same underlying
+accelerator hardware. The hardware will execute the work from each engine
+concurrently. In these cases, the execution time of each individual engine
+will add up to more than the execution time of the underlying accelerator
+hardware since each engine is only receiving a portion of the accelerator
+hardware. In this case, the API also provides engine groups which will
+measure the total execution time at the level of the hardware accelerator
+rather than at the level of the individual engines. For example, the API
+may enumerate multiple engine groups of type <a class="reference internal" href="api.html#zes-engine-group-t"><span class="std std-ref">ZES_ENGINE_GROUP_COMPUTE_SINGLE</span></a>
+which will permit measuring the activity of each individual engine. However,
+to measure the overall activity of the shared compute resources, the API
+will enumerate an engine group of type <a class="reference internal" href="api.html#zes-engine-group-t"><span class="std std-ref">ZES_ENGINE_GROUP_COMPUTE_ALL</span></a>. In this case,
+the activity report is for when any of the compute engines are active between two snapshots.</p>
+<p>By taking two snapshots of the activity counters, it is possible to
+calculate the average utilization of different parts of the device.</p>
+<p>The following functions are provided:</p>
+<table class="table">
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumenginegroups"><span class="std std-ref">zesDeviceEnumEngineGroups</span></a>()</p></td>
+<td><p>Enumerate the engine groups that
+can be queried.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesenginegetproperties"><span class="std std-ref">zesEngineGetProperties</span></a>()</p></td>
+<td><p>Get the properties of an engine
+group. This will return the type
+of engine group (one of
+<a class="reference internal" href="api.html#zes-engine-group-t"><span class="std std-ref">zes_engine_group_t</span></a>) and on
+which sub-device the group is
+making measurements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesenginegetactivity"><span class="std std-ref">zesEngineGetActivity</span></a>()</p></td>
+<td><p>Returns the activity counters for
+an engine group.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-standby-domains">
+<span id="standby"></span><h3>Operations on standby domains<a class="headerlink" href="#operations-on-standby-domains" title="Permalink to this headline">¶</a></h3>
+<p>When a device is idle, it will enter a low-power state. Since exit from
+low-power states have associated latency, it can hurt performance. The
+hardware attempts to stike a balance between saving power when there are
+large idle times between workload submissions to the device and keeping
+the device awake when it determines that the idle time between submissions
+is short.</p>
+<p>A device consists of one or more blocks that can autonomously power-gate into a
+standby state. The list of domains is given by <a class="reference internal" href="api.html#zes-standby-type-t"><span class="std std-ref">zes_standby_type_t</span></a>.</p>
+<p>The following functions can be used to control how the hardware promotes
+to standby states:</p>
+<table class="table">
+<colgroup>
+<col style="width: 49%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumstandbydomains"><span class="std std-ref">zesDeviceEnumStandbyDomains</span></a>()</p></td>
+<td><p>Enumerate the standby domains.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesstandbygetproperties"><span class="std std-ref">zesStandbyGetProperties</span></a>()</p></td>
+<td><p>Get the properties of a standby
+domain. This will return the
+parts of the device that are
+affected by this domain (one of
+<a class="reference internal" href="api.html#zes-engine-group-t"><span class="std std-ref">zes_engine_group_t</span></a>) and on
+which sub-device the domain is
+located.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesstandbygetmode"><span class="std std-ref">zesStandbyGetMode</span></a>()</p></td>
+<td><p>Get the current promotion mode
+(one of
+<a class="reference internal" href="api.html#zes-standby-promo-mode-t"><span class="std std-ref">zes_standby_promo_mode_t</span></a>) for a
+standby domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesstandbysetmode"><span class="std std-ref">zesStandbySetMode</span></a>()</p></td>
+<td><p>Set the promotion mode (one of
+<a class="reference internal" href="api.html#zes-standby-promo-mode-t"><span class="std std-ref">zes_standby_promo_mode_t</span></a>) for a
+standby domain.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-firmwares">
+<span id="firmware"></span><h3>Operations on firmwares<a class="headerlink" href="#operations-on-firmwares" title="Permalink to this headline">¶</a></h3>
+<p>The following functions are provided to manage firmwares on the device:</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumfirmwares"><span class="std std-ref">zesDeviceEnumFirmwares</span></a>()</p></td>
+<td><p>Enumerate all firmwares that can
+be managed on the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfirmwaregetproperties"><span class="std std-ref">zesFirmwareGetProperties</span></a>()</p></td>
+<td><p>Find out the name and version of
+a firmware.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfirmwareflash"><span class="std std-ref">zesFirmwareFlash</span></a>()</p></td>
+<td><p>Flash a new firmware image.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="querying-memory-modules">
+<span id="memory"></span><h3>Querying Memory Modules<a class="headerlink" href="#querying-memory-modules" title="Permalink to this headline">¶</a></h3>
+<p>The API provides an enumeration of all device memory modules. For each
+memory module, the current and maximum bandwidth can be queried. The API
+also provides a health metric which can take one of the following values
+(<a class="reference internal" href="api.html#zes-mem-health-t"><span class="std std-ref">zes_mem_health_t</span></a>):</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Memory health</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-mem-health-t"><span class="std std-ref">ZES_MEM_HEALTH_OK</span></a></p></td>
+<td><p>All memory channels are healthy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-mem-health-t"><span class="std std-ref">ZES_MEM_HEALTH_DEGRADED</span></a></p></td>
+<td><p>Excessive correctable errors have
+been detected on one or more
+channels. Device should be reset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-mem-health-t"><span class="std std-ref">ZES_MEM_HEALTH_CRITICAL</span></a></p></td>
+<td><p>Operating with reduced memory to
+cover banks with too many
+uncorrectable errors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-mem-health-t"><span class="std std-ref">ZES_MEM_HEALTH_REPLACE</span></a></p></td>
+<td><p>Device should be replaced due to
+excessive uncorrectable errors.</p></td>
+</tr>
+</tbody>
+</table>
+<p>When the health state of a memory module changes, the event
+<a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_MEM_HEALTH</span></a> is triggered.</p>
+<p>The following functions provide access to information about the device
+memory modules:</p>
+<table class="table">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenummemorymodules"><span class="std std-ref">zesDeviceEnumMemoryModules</span></a>()</p></td>
+<td><p>Enumerate the memory modules.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesmemorygetproperties"><span class="std std-ref">zesMemoryGetProperties</span></a>()</p></td>
+<td><p>Find out the type of memory and
+maximum physical memory of a
+module.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesmemorygetbandwidth"><span class="std std-ref">zesMemoryGetBandwidth</span></a>()</p></td>
+<td><p>Returns memory bandwidth counters
+for a module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesmemorygetstate"><span class="std std-ref">zesMemoryGetState</span></a>()</p></td>
+<td><p>Returns the currently health free
+memory and total physical memory
+for a memory module.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-fabric-ports">
+<span id="fabric-port"></span><h3>Operations on Fabric ports<a class="headerlink" href="#operations-on-fabric-ports" title="Permalink to this headline">¶</a></h3>
+<p><strong>Fabric</strong> is the term given to describe high-speed interconnections
+between accelerator devices, primarily used to provide low latency fast
+access to remote device memory. Devices have one or more <strong>fabric
+ports</strong> that transmit and receive data over physical links. Links
+connect fabric ports, thus permitting data to travel between devices.
+Routing rules determine the flow of traffic through the fabric.</p>
+<p>The figure below shows four devices, each with two fabric ports. Each
+port has a link that connects it to a port on another device. In this
+example, the devices are connected in a ring. Device A and D can access
+each other’s memory through either device B or device C depending on how
+the fabric routing rules are configured. If the connection between
+device B and D goes down, the routing rules can be modified such that
+device B and D can still access each other’s memory by going through two
+hops in the fabric (device A and C).</p>
+<img alt="../_images/tools_sysman_fabric.png" src="../_images/tools_sysman_fabric.png" />
+<p>The API permits enumerating all the ports available on a device. Each
+port is uniquely identified within a system by the following information:</p>
+<ul class="simple">
+<li><p>Fabric ID: Unique identifier for the fabric end-point</p></li>
+<li><p>Attach ID: Unique identifier for the device attachment point</p></li>
+<li><p>Port Number: The logical port number (this is typically marked somewhere on the physical device)</p></li>
+</ul>
+<p>The API provides this information in the struct {t}_fabric_port_id_t.
+The identifiers are not universal - uniqueness is only guaranteed
+within a given system and provided the system configuration does not change.</p>
+<p>When a fabric port is connected, the API provides the unique identifier
+for the remote fabric port. By enumerating all ports in a system and
+matching up the remote port identifies, an application can build up
+a topology map of connectivity.</p>
+<p>For each port, the API permits querying its configuration (UP/DOWN) and
+its health which can take one of the following values:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Fabric port health</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_HEALTHY</span></a></p></td>
+<td><p>The port is up and operating as
+expected.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_DEGRADED</span></a></p></td>
+<td><p>The port is up but has quality
+and/or bandwidth degradation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_FAILED</span></a></p></td>
+<td><p>Port connection instabilities are
+preventing workloads making
+forward progress.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_DISABLED</span></a></p></td>
+<td><p>The port is configured down.</p></td>
+</tr>
+</tbody>
+</table>
+<p>If the port is in a degraded state, the API provides additional
+information about the types of quality degradation that are being
+observed. If the port is in a red state, the API provides additional
+information about the causes of the instability.</p>
+<p>When a port’s health state changes, the event
+<a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_FABRIC_PORT_HEALTH</span></a> is triggered.</p>
+<p>The API provides the current transmit and receive bitrate of each port.
+It also permits measuring the receive and transmit bandwidth flowing
+through each port - these metrics include the protocol overhead in addition
+to traffic generated by the devices.</p>
+<p>Since ports can pass data directly through to another port, the measured
+bandwidth at a port can be higher than the actual bandwidth generated by
+the accelerators directly connected by two ports. As such, bandwidth
+metrics at each port are more relevant for determining points of
+congestion in the fabric and less relevant for measuring the total
+bandwidth passing between two accelerators.</p>
+<p>The following functions can be used to manage Fabric ports:</p>
+<table class="table">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumfabricports"><span class="std std-ref">zesDeviceEnumFabricPorts</span></a>()</p></td>
+<td><p>Enumerate all fabric ports on the
+device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfabricportgetproperties"><span class="std std-ref">zesFabricPortGetProperties</span></a>()</p></td>
+<td><p>Get static properties about the
+port (model, pord Id, max
+receive/transmit speed).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfabricportgetlinktype"><span class="std std-ref">zesFabricPortGetLinkType</span></a>()</p></td>
+<td><p>Get details about the physical
+link connected to the port.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfabricportgetconfig"><span class="std std-ref">zesFabricPortGetConfig</span></a>()</p></td>
+<td><p>Determine if the port is
+configured UP and if beaconing is
+on or off.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfabricportsetconfig"><span class="std std-ref">zesFabricPortSetConfig</span></a>()</p></td>
+<td><p>Configure the port UP or DOWN and
+turn beaconing on or off.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfabricportgetstate"><span class="std std-ref">zesFabricPortGetState</span></a>()</p></td>
+<td><p>Determine the health of the port
+connection, reasons for link
+degradation or connection issues,
+current receive/transmit and port
+Id of the remote end-point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfabricportgetthroughput"><span class="std std-ref">zesFabricPortGetThroughput</span></a>()</p></td>
+<td><p>Get port receive/transmit
+counters along with current
+receive/transmit port speed.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For devices with sub-devices, the fabric ports are usually located in
+the sub-device. Given a device handle, <a class="reference internal" href="api.html#zesdeviceenumfabricports"><span class="std std-ref">zesDeviceEnumFabricPorts</span></a>() will
+include the ports on each sub-device. In this case,
+<a class="reference internal" href="api.html#zes-fabric-port-properties-t"><span class="std std-ref">zes_fabric_port_properties_t</span></a>.onSubdevice will be set to true and
+<a class="reference internal" href="api.html#zes-fabric-port-properties-t"><span class="std std-ref">zes_fabric_port_properties_t</span></a>.subdeviceId will give the subdevice ID
+where that port is located.</p>
+<p>The pseudo-code below shows how to get the state of all fabric ports in
+the device and sub-devices:</p>
+<pre class="literal-block">void ShowFabricPorts(zes_device_handle_t hSysmanDevice)
+    uint32_t numPorts
+    if ((<a class="reference internal" href="api.html#zesdeviceenumfabricports"><span class="std std-ref">zesDeviceEnumFabricPorts</span></a>(hSysmanDevice, &amp;numPorts, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>))
+        zes_fabric_port_handle_t* phPorts =
+            allocate_memory(numPorts * sizeof(zes_fabric_port_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumfabricports"><span class="std std-ref">zesDeviceEnumFabricPorts</span></a>(hSysmanDevice, &amp;numPorts, phPorts) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (index = 0 .. numPorts-1)
+                # Show information about a particular port
+                output(&quot;    Port %u:n&quot;, index)
+                call_function ShowFabricPortInfo(phPorts[index])
+    free_memory(...)
+
+function ShowFabricPortInfo(zes_fabric_port_handle_t hPort)
+    <a class="reference internal" href="api.html#zes-fabric-port-properties-t"><span class="std std-ref">zes_fabric_port_properties_t</span></a> props {};
+    props.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIES</span></a>;
+    if (<a class="reference internal" href="api.html#zesfabricportgetproperties"><span class="std std-ref">zesFabricPortGetProperties</span></a>(hPort, &amp;props) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        <a class="reference internal" href="api.html#zes-fabric-port-state-t"><span class="std std-ref">zes_fabric_port_state_t</span></a> state
+        if (<a class="reference internal" href="api.html#zesfabricportgetstate"><span class="std std-ref">zesFabricPortGetState</span></a>(hPort, &amp;state) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            <a class="reference internal" href="api.html#zes-fabric-link-type-t"><span class="std std-ref">zes_fabric_link_type_t</span></a> link
+            if (<a class="reference internal" href="api.html#zesfabricportgetlinktype"><span class="std std-ref">zesFabricPortGetLinkType</span></a>(hPort, &amp;link) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                <a class="reference internal" href="api.html#zes-fabric-port-config-t"><span class="std std-ref">zes_fabric_port_config_t</span></a> config
+                if (<a class="reference internal" href="api.html#zesfabricportgetconfig"><span class="std std-ref">zesFabricPortGetConfig</span></a>(hPort, &amp;config) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    output(&quot;        Model:                 %s&quot;, props.model)
+                    if (props.onSubdevice)
+                        output(&quot;        On sub-device:         %u&quot;, props.subdeviceId)
+                    if (config.enabled)
+                    {
+                        var status
+                        output(&quot;        Config:                UP&quot;)
+                        switch (state.status)
+                            case <a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_HEALTHY</span></a>:
+                                status = &quot;HEALTHY - The port is up and operating as expected&quot;
+                            case <a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_DEGRADED</span></a>:
+                                status = &quot;DEGRADED - The port is up but has quality and/or bandwidth degradation&quot;
+                            case <a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_FAILED</span></a>:
+                                status = &quot;FAILED - Port connection instabilities&quot;
+                            case <a class="reference internal" href="api.html#zes-fabric-port-status-t"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_DISABLED</span></a>:
+                                status = &quot;DISABLED - The port is configured down&quot;
+                            default:
+                                status = &quot;UNKNOWN&quot;
+                        output(&quot;        Status:                %s&quot;, status)
+                        output(&quot;        Link type:             %s&quot;, link.desc)
+                        output(
+                            &quot;        Max speed (rx/tx):     %llu/%llu bytes/sec&quot;,
+                            props.maxRxSpeed.bitRate * props.maxRxSpeed.width / 8,
+                            props.maxTxSpeed.bitRate * props.maxTxSpeed.width / 8)
+                        output(
+                            &quot;        Current speed (rx/tx): %llu/%llu bytes/sec&quot;,
+                            state.rxSpeed.bitRate * state.rxSpeed.width / 8,
+                            state.txSpeed.bitRate * state.txSpeed.width / 8)
+                    else
+                        output(&quot;        Config:                DOWN&quot;)</pre>
+<p>The function <a class="reference internal" href="api.html#zesfabricportgetmultiportthroughput"><span class="std std-ref">zesFabricPortGetMultiPortThroughput</span></a> provides a mechanism for the user to gather throughput values for multiple ports together in a single call.</p>
+<p>The following pseudo-code describes how API is used to gather throughput:</p>
+<pre class="literal-block">// Enumerate fabric ports
+uint32_t numPorts = 0;
+<a class="reference internal" href="api.html#zesdeviceenumfabricports"><span class="std std-ref">zesDeviceEnumFabricPorts</span></a>(hSysmanDevice, &amp;numPorts, NULL);
+zes_fabric_port_handle_t* phPorts =
+    allocate_memory(numPorts * sizeof(zes_fabric_port_handle_t));
+<a class="reference internal" href="api.html#zesdeviceenumfabricports"><span class="std std-ref">zesDeviceEnumFabricPorts</span></a>(hSysmanDevice, &amp;numPorts, phPorts);
+
+// Gather throughput for all fabric ports together
+<a class="reference internal" href="api.html#zes-fabric-port-throughput-t"><span class="std std-ref">zes_fabric_port_throughput_t</span></a>* pThroughput =
+    allocate_memory(numPorts * sizeof(<a class="reference internal" href="api.html#zes-fabric-port-throughput-t"><span class="std std-ref">zes_fabric_port_throughput_t</span></a>));
+<a class="reference internal" href="api.html#zesfabricportgetmultiportthroughput"><span class="std std-ref">zesFabricPortGetMultiPortThroughput</span></a>(hSysmanDevice, numPorts, phPorts, &amp;pThroughput);</pre>
+</div>
+<div class="section" id="querying-temperature">
+<span id="temperature"></span><h3>Querying temperature<a class="headerlink" href="#querying-temperature" title="Permalink to this headline">¶</a></h3>
+<p>A device has multiple temperature sensors embedded at different
+locations. The following locations are supported:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Temperature sensor location</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">ZES_TEMP_SENSORS_GLOBAL</span></a></p></td>
+<td><p>Returns the maximum measured temperature
+across all sensors in the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">ZES_TEMP_SENSORS_GPU</span></a></p></td>
+<td><p>Returns the maximum measured temperature
+across all sensors in the GPU
+accelerator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">ZES_TEMP_SENSORS_MEMORY</span></a></p></td>
+<td><p>Returns the maximum measured temperature
+across all sensors in the device
+memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">ZES_TEMP_SENSORS_GLOBAL_MIN</span></a></p></td>
+<td><p>Returns the minimum measured temperature
+across all sensors in the device.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">ZES_TEMP_SENSORS_GPU_MIN</span></a></p></td>
+<td><p>Returns the minimum measured temperature
+across all sensors in the GPU
+accelerator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">ZES_TEMP_SENSORS_MEMORY_MIN</span></a></p></td>
+<td><p>Returns the minimum measured temperature
+across all sensors in the device
+memory.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For some sensors, it is possible to request that events be triggered
+when temperatures cross thresholds. This is accomplished using the
+function <a class="reference internal" href="api.html#zestemperaturegetconfig"><span class="std std-ref">zesTemperatureGetConfig</span></a>() and
+<a class="reference internal" href="api.html#zestemperaturesetconfig"><span class="std std-ref">zesTemperatureSetConfig</span></a>(). Support for specific events is
+accomplished by calling <a class="reference internal" href="api.html#zestemperaturegetproperties"><span class="std std-ref">zesTemperatureGetProperties</span></a>(). In
+general, temperature events are only supported on the temperature sensor
+of type <a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">ZES_TEMP_SENSORS_GLOBAL</span></a>. The list below describes the list of
+temperature events:</p>
+<table class="table">
+<colgroup>
+<col style="width: 57%" />
+<col style="width: 26%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Check support</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL</span></a></p></td>
+<td><p><a class="reference internal" href="api.html#zes-temp-properties-t"><span class="std std-ref">zes_temp_properties_t</span></a>
+.isCriticalTempSupported</p></td>
+<td><p>The event is
+triggered when the
+temperature crosses
+into the critical
+zone where severe
+frequency throttling
+will be taking place.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1</span></a></p></td>
+<td><p><a class="reference internal" href="api.html#zes-temp-properties-t"><span class="std std-ref">zes_temp_properties_t</span></a>
+.isThreshold1Supported</p></td>
+<td><p>The event is
+triggered when the
+temperature crosses
+the custom threshold
+1. Flags can be set
+to limit the trigger
+to when crossing from
+high to low or low to
+high.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD2</span></a></p></td>
+<td><p><a class="reference internal" href="api.html#zes-temp-properties-t"><span class="std std-ref">zes_temp_properties_t</span></a>
+.isThreshold2Supported</p></td>
+<td><p>The event is
+triggered when the
+temperature crosses
+the custom threshold
+2. Flags can be set
+to limit the trigger
+to when crossing from
+high to low or low to
+high.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following function can be used to manage temperature sensors:</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumtemperaturesensors"><span class="std std-ref">zesDeviceEnumTemperatureSensors</span></a>()</p></td>
+<td><p>Enumerate the temperature sensors
+on the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zestemperaturegetproperties"><span class="std std-ref">zesTemperatureGetProperties</span></a>()</p></td>
+<td><p>Get static properties for a
+temperature sensor. In
+particular, this will indicate
+which parts of the device the
+sensor measures (one of
+<a class="reference internal" href="api.html#zes-temp-sensors-t"><span class="std std-ref">zes_temp_sensors_t</span></a>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zestemperaturegetconfig"><span class="std std-ref">zesTemperatureGetConfig</span></a>()</p></td>
+<td><p>Get information about the current
+temperature thresholds -
+enabled/threshold/processID.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zestemperaturesetconfig"><span class="std std-ref">zesTemperatureSetConfig</span></a>()</p></td>
+<td><p>Set new temperature thresholds.
+Events will be triggered when the
+temperature crosses these
+thresholds.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zestemperaturegetstate"><span class="std std-ref">zesTemperatureGetState</span></a>()</p></td>
+<td><p>Read the temperature of a sensor.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-power-supplies">
+<span id="psu"></span><h3>Operations on power supplies<a class="headerlink" href="#operations-on-power-supplies" title="Permalink to this headline">¶</a></h3>
+<p>The following functions can be used to access information about each
+power-supply on a device:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumpsus"><span class="std std-ref">zesDeviceEnumPsus</span></a>()</p></td>
+<td><p>Enumerate the power supplies on
+the device that can be managed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zespsugetproperties"><span class="std std-ref">zesPsuGetProperties</span></a>()</p></td>
+<td><p>Get static details about the
+power supply.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zespsugetstate"><span class="std std-ref">zesPsuGetState</span></a>()</p></td>
+<td><p>Get information about the health
+(temperature, current, fan) of
+the power supply.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-fans">
+<span id="fan"></span><h3>Operations on fans<a class="headerlink" href="#operations-on-fans" title="Permalink to this headline">¶</a></h3>
+<p>If <a class="reference internal" href="api.html#zesdeviceenumfans"><span class="std std-ref">zesDeviceEnumFans</span></a>() returns one or more fan handles, it is possible to
+manage their speed. The hardware can be instructed to run the fan at a fixed
+speed (or 0 for silent operations) or to provide a table of temperature-speed
+points in which case the hardware will dynamically change the fan speed based
+on the current temperature of the chip. This configuration information is
+described in the structure <a class="reference internal" href="api.html#zes-fan-config-t"><span class="std std-ref">zes_fan_config_t</span></a>. When specifying speed, one
+can provide the value in revolutions per minute (<a class="reference internal" href="api.html#zes-fan-speed-units-t"><span class="std std-ref">ZES_FAN_SPEED_UNITS_RPM</span></a>)
+or as a percentage of the maximum RPM (<a class="reference internal" href="api.html#zes-fan-speed-units-t"><span class="std std-ref">ZES_FAN_SPEED_UNITS_PERCENT</span></a>).</p>
+<p>The following functions are available:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumfans"><span class="std std-ref">zesDeviceEnumFans</span></a>()</p></td>
+<td><p>Enumerate the fans on the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfangetproperties"><span class="std std-ref">zesFanGetProperties</span></a>()</p></td>
+<td><p>Get the maximum RPM of the fan
+and the maximum number of points
+that can be specified in the
+temperature-speed table for a
+fan.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfangetconfig"><span class="std std-ref">zesFanGetConfig</span></a>()</p></td>
+<td><p>Get the current configuration
+(speed) of a fan.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfansetdefaultmode"><span class="std std-ref">zesFanSetDefaultMode</span></a>()</p></td>
+<td><p>Return fan control to factory
+default.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfansetfixedspeedmode"><span class="std std-ref">zesFanSetFixedSpeedMode</span></a>()</p></td>
+<td><p>Configure the fan to rotate
+at a fixed speed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesfansetspeedtablemode"><span class="std std-ref">zesFanSetSpeedTableMode</span></a>()</p></td>
+<td><p>Configure fan speed to depend
+on temperature.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesfangetstate"><span class="std std-ref">zesFanGetState</span></a>()</p></td>
+<td><p>Get the current speed of a fan.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to output the fan speed of all fans:</p>
+<pre class="literal-block">function ShowFans(zes_device_handle_t hSysmanDevice)
+    uint32_t numFans
+    if (<a class="reference internal" href="api.html#zesdeviceenumfans"><span class="std std-ref">zesDeviceEnumFans</span></a>(hSysmanDevice, &amp;numFans, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        zes_fan_handle_t* phFans =
+            allocate_memory(numFans * sizeof(zes_fan_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumfans"><span class="std std-ref">zesDeviceEnumFans</span></a>(hSysmanDevice, &amp;numFans, phFans) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            output(&quot;    Fans&quot;)
+            for (fanIndex = 0 .. numFans-1)
+                int32_t speed
+                if (<a class="reference internal" href="api.html#zesfangetstate"><span class="std std-ref">zesFanGetState</span></a>(phFans[fanIndex], <a class="reference internal" href="api.html#zes-fan-speed-units-t"><span class="std std-ref">ZES_FAN_SPEED_UNITS_RPM</span></a>, &amp;speed)
+                    == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                        output(&quot;        Fan %u: %d RPM&quot;, fanIndex, speed)
+    free_memory(...)
+}</pre>
+<p>The next example shows how to set the fan speed for all fans to a fixed
+value in RPM, but only if control is permitted:</p>
+<pre class="literal-block">function SetFanSpeed(zes_device_handle_t hSysmanDevice, uint32_t SpeedRpm)
+{
+    uint32_t numFans
+    if (<a class="reference internal" href="api.html#zesdeviceenumfans"><span class="std std-ref">zesDeviceEnumFans</span></a>(hSysmanDevice, &amp;numFans, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+        zes_fan_handle_t* phFans =
+            allocate_memory(numFans * sizeof(zes_fan_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumfans"><span class="std std-ref">zesDeviceEnumFans</span></a>(hSysmanDevice, &amp;numFans, phFans) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            <a class="reference internal" href="api.html#zes-fan-speed-t"><span class="std std-ref">zes_fan_speed_t</span></a> speedRequest
+            speedRequest.speed = SpeedRpm
+            speedRequest.speedUnits = <a class="reference internal" href="api.html#zes-fan-speed-units-t"><span class="std std-ref">ZES_FAN_SPEED_UNITS_RPM</span></a>
+            for (fanIndex = 0 .. numFans-1)
+                <a class="reference internal" href="api.html#zes-fan-properties-t"><span class="std std-ref">zes_fan_properties_t</span></a> fanprops {};
+                fanprops.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_FAN_PROPERTIES</span></a>;
+                if (<a class="reference internal" href="api.html#zesfangetproperties"><span class="std std-ref">zesFanGetProperties</span></a>(phFans[fanIndex], &amp;fanprops) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    if (fanprops.canControl)
+                        <a class="reference internal" href="api.html#zesfansetfixedspeedmode"><span class="std std-ref">zesFanSetFixedSpeedMode</span></a>(phFans[fanIndex], &amp;speedRequest)
+                    else
+                        output(&quot;ERROR: Can't control fan %u.n&quot;, fanIndex)
+    free_memory(...)
+}</pre>
+</div>
+<div class="section" id="operations-on-leds">
+<span id="led"></span><h3>Operations on LEDs<a class="headerlink" href="#operations-on-leds" title="Permalink to this headline">¶</a></h3>
+<p>If <a class="reference internal" href="api.html#zesdeviceenumleds"><span class="std std-ref">zesDeviceEnumLeds</span></a>() returns one or more LED handles, it is possible
+to manage LEDs on the device. This includes turning them off/on and
+where the capability exists, changing their color in real-time.</p>
+<p>The following functions are available:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumleds"><span class="std std-ref">zesDeviceEnumLeds</span></a>()</p></td>
+<td><p>Enumerate the LEDs on the device
+that can be managed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesledgetproperties"><span class="std std-ref">zesLedGetProperties</span></a>()</p></td>
+<td><p>Find out if a LED supports color
+changes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesledgetstate"><span class="std std-ref">zesLedGetState</span></a>()</p></td>
+<td><p>Find out if a LED is currently
+off/on and the color where the
+capability is available.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesledsetstate"><span class="std std-ref">zesLedSetState</span></a>()</p></td>
+<td><p>Turn a LED off/on and set the
+color where the capability is
+available.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="querying-ras-errors">
+<span id="ras"></span><h3>Querying RAS errors<a class="headerlink" href="#querying-ras-errors" title="Permalink to this headline">¶</a></h3>
+<p>RAS stands for Reliability, Availability, and Serviceability. It is a
+feature of certain devices that attempts to correct random bit errors
+and provide redundancy where permanent damage has occurred.</p>
+<p>If a device supports RAS, it maintains counters for hardware and software
+errors. There are two types of errors and they are defined in <a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">zes_ras_error_type_t</span></a>:</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_UNCORRECTABLE</span></a></p></td>
+<td><p>Hardware errors occurred which
+most likely resulted in loss of
+data or even a device hang. If an
+error results in device lockup, a
+warm boot is required before
+those errors will be reported.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_CORRECTABLE</span></a></p></td>
+<td><p>These are errors that were
+corrected by the hardware and did
+not cause data corruption.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Software can use the function <a class="reference internal" href="api.html#zesrasgetproperties"><span class="std std-ref">zesRasGetProperties</span></a>() to find out
+if the device supports RAS and if it is enabled. This information is
+returned in the structure <a class="reference internal" href="api.html#zes-ras-properties-t"><span class="std std-ref">zes_ras_properties_t</span></a>.</p>
+<p>The function <a class="reference internal" href="api.html#zesdeviceenumraserrorsets"><span class="std std-ref">zesDeviceEnumRasErrorSets</span></a>() enumerates the available sets of RAS
+errors. If no handles are returned, the device does not support RAS. A
+device without sub-devices will return one handle if RAS is supported. A
+device with sub-devices will return a handle for each sub-device.</p>
+<p>To determine if errors have occurred, software uses the function
+<a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>(). This will return the total number of errors of
+a given type (correctable/uncorrectable) that have occurred.</p>
+<p>When calling <a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>(), software can request that the
+error counters be cleared. When this is done, all counters of the
+specified type (correctable/uncorrectable) will be set to zero and any
+subsequent calls to this function will only show new errors that have
+occurred. If software intends to clear errors, it should be the only
+application doing so and it should store the counters in an appropriate
+database for historical analysis.</p>
+<p><a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>() returns a breakdown of errors by category
+in the structure <a class="reference internal" href="api.html#zes-ras-state-t"><span class="std std-ref">zes_ras_state_t</span></a>. The table below describes the categories:</p>
+<table class="table">
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 32%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error category</p></th>
+<th class="head"><p><a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_CORRECTABLE</span></a></p></th>
+<th class="head"><p><a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_UNCORRECTABLE</span></a></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-ras-error-cat-t"><span class="std std-ref">ZES_RAS_ERROR_CAT_RESET</span></a></p></td>
+<td><p>Always zero.</p></td>
+<td><p>Number of accelerator engine resets
+attempted by the driver.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-ras-error-cat-t"><span class="std std-ref">ZES_RAS_ERROR_CAT_PROGRAMMING_ERRORS</span></a></p></td>
+<td><p>Always zero.</p></td>
+<td><p>Number of hardware
+exceptions generated
+by the way workloads
+have programmed the
+hardware.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-ras-error-cat-t"><span class="std std-ref">ZES_RAS_ERROR_CAT_DRIVER_ERRORS</span></a></p></td>
+<td><p>Always zero.</p></td>
+<td><p>Number of low level
+driver communication
+errors have occurred.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-ras-error-cat-t"><span class="std std-ref">ZES_RAS_ERROR_CAT_COMPUTE_ERRORS</span></a></p></td>
+<td><p>Number of errors that
+have occurred in the
+accelerator hardware
+that were corrected.</p></td>
+<td><p>Number of errors that
+have occurred in the
+accelerator hardware
+that were not
+corrected. These
+would have caused the
+hardware to hang and
+the driver to reset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-ras-error-cat-t"><span class="std std-ref">ZES_RAS_ERROR_CAT_NON_COMPUTE_ERRORS</span></a></p></td>
+<td><p>Number of errors
+occurring in
+fixed-function
+accelerator hardware
+that were corrected.</p></td>
+<td><p>Number of errors
+occurring in the
+fixed-function
+accelerator hardware
+there could not be
+corrected. Typically
+these will result in
+a PCI bus reset and
+driver reset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-ras-error-cat-t"><span class="std std-ref">ZES_RAS_ERROR_CAT_CACHE_ERRORS</span></a></p></td>
+<td><p>Number of ECC
+correctable errors
+that have occurred in
+the on-chip caches
+(caches/register
+file/shared local
+memory).</p></td>
+<td><p>Number of ECC
+uncorrectable errors
+that have occurred in
+the on-chip caches
+(caches/register
+file/shared local
+memory). These would
+have caused the
+hardware to hang and
+the driver to reset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-ras-error-cat-t"><span class="std std-ref">ZES_RAS_ERROR_CAT_DISPLAY_ERRORS</span></a></p></td>
+<td><p>Number of ECC
+correctable errors
+that have occurred in
+the display.</p></td>
+<td><p>Number of ECC
+uncorrectable errors
+that have occurred in
+the display.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Each RAS error type can trigger events when the error counters exceed
+thresholds. The events are listed in the table below. Software can use
+the functions <a class="reference internal" href="api.html#zesrasgetconfig"><span class="std std-ref">zesRasGetConfig</span></a>() and <a class="reference internal" href="api.html#zesrassetconfig"><span class="std std-ref">zesRasSetConfig</span></a>() to
+get and set the thresholds for each error type. The default is for all
+thresholds to be 0 which means that no events are generated. Thresholds
+can be set on the total RAS error counter or on each of the detailed
+error counters.</p>
+<table class="table">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>RAS error Type</p></th>
+<th class="head"><p>Event</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_UNCORRECTABLE</span></a></p></td>
+<td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_CORRECTABLE</span></a></p></td>
+<td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<p>The table below summaries all the RAS management functions:</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumraserrorsets"><span class="std std-ref">zesDeviceEnumRasErrorSets</span></a>()</p></td>
+<td><p>Get handles to the available RAS
+error groups.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesrasgetproperties"><span class="std std-ref">zesRasGetProperties</span></a>()</p></td>
+<td><p>Get properties about a RAS error
+group - type of RAS errors and if
+they are enabled.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesrasgetconfig"><span class="std std-ref">zesRasGetConfig</span></a>()</p></td>
+<td><p>Get the current list of
+thresholds for each counter in
+the RAS group. RAS error events
+will be generated when the
+thresholds are exceeded.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesrassetconfig"><span class="std std-ref">zesRasSetConfig</span></a>()</p></td>
+<td><p>Set current list of thresholds
+for each counter in the RAS
+group. RAS error events will be
+generated when the thresholds are
+exceeded.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>()</p></td>
+<td><p>Get the current state of the RAS
+error counters. The counters can
+also be cleared.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to determine if RAS is supported and the
+current state of RAS errors:</p>
+<pre class="literal-block">void ShowRasErrors(zes_device_handle_t hSysmanDevice)
+    uint32_t numRasErrorSets
+    if ((<a class="reference internal" href="api.html#zesdeviceenumraserrorsets"><span class="std std-ref">zesDeviceEnumRasErrorSets</span></a>(hSysmanDevice, &amp;numRasErrorSets, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>))
+        zes_ras_handle_t* phRasErrorSets =
+            allocate_memory(numRasErrorSets * sizeof(zes_ras_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumraserrorsets"><span class="std std-ref">zesDeviceEnumRasErrorSets</span></a>(hSysmanDevice, &amp;numRasErrorSets, phRasErrorSets) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (rasIndex = 0 .. numRasErrorSets)
+                <a class="reference internal" href="api.html#zes-ras-properties-t"><span class="std std-ref">zes_ras_properties_t</span></a> props {};
+                props.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_RAS_PROPERTIES</span></a>;
+                if (<a class="reference internal" href="api.html#zesrasgetproperties"><span class="std std-ref">zesRasGetProperties</span></a>(phRasErrorSets[rasIndex], &amp;props) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    var pErrorType
+                    switch (props.type)
+                        case <a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_CORRECTABLE</span></a>:
+                            pErrorType = &quot;Correctable&quot;
+                        case <a class="reference internal" href="api.html#zes-ras-error-type-t"><span class="std std-ref">ZES_RAS_ERROR_TYPE_UNCORRECTABLE</span></a>:
+                            pErrorType = &quot;Uncorrectable&quot;
+                        default:
+                            pErrorType = &quot;Unknown&quot;
+                    output(&quot;RAS %s errors&quot;, pErrorType)
+                    if (props.onSubdevice)
+                        output(&quot;    On sub-device: %u&quot;, props.subdeviceId)
+                    output(&quot;    RAS supported: %s&quot;, props.supported ? &quot;yes&quot; : &quot;no&quot;)
+                    output(&quot;    RAS enabled: %s&quot;, props.enabled ? &quot;yes&quot; : &quot;no&quot;)
+                    if (props.supported and props.enabled)
+                        <a class="reference internal" href="api.html#zes-ras-state-t"><span class="std std-ref">zes_ras_state_t</span></a> errorDetails
+                        if (<a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>(phRasErrorSets[rasIndex], 1, &amp;errorDetails)
+                            == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                                 uint64_t numErrors = 0
+                                 for (int i = 0; i &lt; ZES_RAS_ERROR_CAT_MAX; i++)
+                                     numErrors += errorDetails.category[i];
+                                 output(&quot;    Number new errors: %llun&quot;, (long long unsigned int)numErrors);
+                                 if (numErrors)
+                                     call_function OutputRasDetails(&amp;errorDetails)
+    free_memory(...)
+
+function OutputRasDetails(<a class="reference internal" href="api.html#zes-ras-state-t"><span class="std std-ref">zes_ras_state_t</span></a>* pDetails)
+    output(&quot;        Number new resets:                %llu&quot;, pDetails-&gt;category[ZES_RAS_ERROR_CAT_RESET])
+    output(&quot;        Number new programming errors:    %llu&quot;, pDetails-&gt;category[ZES_RAS_ERROR_CAT_PROGRAMMING_ERRORS])
+    output(&quot;        Number new driver errors:         %llu&quot;, pDetails-&gt;category[ZES_RAS_ERROR_CAT_DRIVER_ERRORS])
+    output(&quot;        Number new compute errors:        %llu&quot;, pDetails-&gt;category[ZES_RAS_ERROR_CAT_COMPUTE_ERRORS])
+    output(&quot;        Number new non-compute errors:    %llu&quot;, pDetails-&gt;category[ZES_RAS_ERROR_CAT_NON_COMPUTE_ERRORS])
+    output(&quot;        Number new cache errors:          %llu&quot;, pDetails-&gt;category[ZES_RAS_ERROR_CAT_CACHE_ERRORS])
+    output(&quot;        Number new display errors:        %llu&quot;, pDetails-&gt;category[ZES_RAS_ERROR_CAT_DISPLAY_ERRORS])</pre>
+</div>
+<div class="section" id="performing-diagnostics">
+<span id="diagnostics"></span><h3>Performing Diagnostics<a class="headerlink" href="#performing-diagnostics" title="Permalink to this headline">¶</a></h3>
+<p>Diagnostics is the process of requesting that the hardware run self-checks
+and repairs.</p>
+<p><strong>WARNING:</strong> Performing diagnostics can destroy current device state.
+It is important that all workloads are stopped before initiating.</p>
+<p>This is achieved using
+the function <a class="reference internal" href="api.html#zesdiagnosticsruntests"><span class="std std-ref">zesDiagnosticsRunTests</span></a>(). On return from the
+function, software can use the diagnostics return code
+(<a class="reference internal" href="api.html#zes-diag-result-t"><span class="std std-ref">zes_diag_result_t</span></a>) to determine the new course of action:</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="api.html#zes-diag-result-t"><span class="std std-ref">ZES_DIAG_RESULT_NO_ERRORS</span></a> - No errors found and workloads can
+resume submission to the hardware.</p></li>
+<li><p><a class="reference internal" href="api.html#zes-diag-result-t"><span class="std std-ref">ZES_DIAG_RESULT_ABORT</span></a> - Hardware had problems running diagnostic
+tests.</p></li>
+<li><p><a class="reference internal" href="api.html#zes-diag-result-t"><span class="std std-ref">ZES_DIAG_RESULT_FAIL_CANT_REPAIR</span></a> - Hardware had problems setting up
+repair. Card should be removed from the system.</p></li>
+<li><p><a class="reference internal" href="api.html#zes-diag-result-t"><span class="std std-ref">ZES_DIAG_RESULT_REBOOT_FOR_REPAIR</span></a> - Hardware has prepared for
+repair and requires a reboot after which time workloads can resume
+submission.</p></li>
+</ol>
+<p>The function <a class="reference internal" href="api.html#zesdevicegetstate"><span class="std std-ref">zesDeviceGetState</span></a>() can be used to determine if
+the device has been repaired.</p>
+<p>There are multiple diagnostic test suites that can be run.
+The function
+<a class="reference internal" href="api.html#zesdeviceenumdiagnostictestsuites"><span class="std std-ref">zesDeviceEnumDiagnosticTestSuites</span></a>() will enumerate each available test suite and
+the function <a class="reference internal" href="api.html#zesdiagnosticsgetproperties"><span class="std std-ref">zesDiagnosticsGetProperties</span></a>() can be used to
+determine the name of each test suite
+(<a class="reference internal" href="api.html#zes-diag-properties-t"><span class="std std-ref">zes_diag_properties_t</span></a>.name).</p>
+<p>Each test suite contains one or more diagnostic tests. On some systems,
+it is possible to run only a subset of the tests. Use the function
+<a class="reference internal" href="api.html#zesdiagnosticsgetproperties"><span class="std std-ref">zesDiagnosticsGetProperties</span></a>() and check that
+<a class="reference internal" href="api.html#zes-diag-properties-t"><span class="std std-ref">zes_diag_properties_t</span></a>.haveTests is true to determine if this feature
+is available. If it is, the function <a class="reference internal" href="api.html#zesdiagnosticsgettests"><span class="std std-ref">zesDiagnosticsGetTests</span></a>()
+can be called to get the list of individual tests that can be run.</p>
+<p>When running diagnostics for a test suite using
+<a class="reference internal" href="api.html#zesdiagnosticsruntests"><span class="std std-ref">zesDiagnosticsRunTests</span></a>(), it is possible to specify the start
+and index of tests in the suite. Setting to ZES_DIAG_FIRST_TEST_INDEX
+and ZES_DIAG_LAST_TEST_INDEX will run all tests in the suite. If it is
+possible to run a subset of tests, specify the index of the start test
+and the end test - all tests that have an index in this range will be
+run.</p>
+<p>The table below summaries all the diagnostic management functions:</p>
+<table class="table">
+<colgroup>
+<col style="width: 56%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceenumdiagnostictestsuites"><span class="std std-ref">zesDeviceEnumDiagnosticTestSuites</span></a>()</p></td>
+<td><p>Get handles to the available
+diagnostic test suites that can
+be run.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesdiagnosticsgetproperties"><span class="std std-ref">zesDiagnosticsGetProperties</span></a>()</p></td>
+<td><p>Get information about a test
+suite - type, name, location and
+if individual tests can be run.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdiagnosticsgettests"><span class="std std-ref">zesDiagnosticsGetTests</span></a>()</p></td>
+<td><p>Get list of individual diagnostic
+tests that can be run.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesdiagnosticsruntests"><span class="std std-ref">zesDiagnosticsRunTests</span></a>()</p></td>
+<td><p>Run either all or individual
+diagnostic tests.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to discover all test suites and the
+tests in each:</p>
+<pre class="literal-block">function ListDiagnosticTests(zes_device_handle_t hSysmanDevice)
+{
+    uint32_t numTestSuites
+    if ((<a class="reference internal" href="api.html#zesdeviceenumdiagnostictestsuites"><span class="std std-ref">zesDeviceEnumDiagnosticTestSuites</span></a>(hSysmanDevice, &amp;numTestSuites, NULL) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>))
+        zes_diag_handle_t* phTestSuites =
+            allocate_memory(numTestSuites * sizeof(zes_diag_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumdiagnostictestsuites"><span class="std std-ref">zesDeviceEnumDiagnosticTestSuites</span></a>(hSysmanDevice, &amp;numTestSuites, phTestSuites) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            for (suiteIndex = 0 .. numTestSuites-1)
+                uint32_t numTests = 0
+                <a class="reference internal" href="api.html#zes-diag-test-t"><span class="std std-ref">zes_diag_test_t</span></a>* pTests
+                <a class="reference internal" href="api.html#zes-diag-properties-t"><span class="std std-ref">zes_diag_properties_t</span></a> suiteProps {};
+                suiteProps.stype = <a class="reference internal" href="api.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_DIAG_PROPERTIES</span></a>;
+                if (<a class="reference internal" href="api.html#zesdiagnosticsgetproperties"><span class="std std-ref">zesDiagnosticsGetProperties</span></a>(phTestSuites[suiteIndex], &amp;suiteProps) != <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    next_loop(suiteIndex)
+                output(&quot;Diagnostic test suite %s:&quot;, suiteProps.name)
+                if (!suiteProps.haveTests)
+                    output(&quot;    There are no individual tests that can be selected.&quot;)
+                    next_loop(suiteIndex)
+                if (<a class="reference internal" href="api.html#zesdiagnosticsgettests"><span class="std std-ref">zesDiagnosticsGetTests</span></a>(phTestSuites[suiteIndex], &amp;numTests, NULL) != <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    output(&quot;    Problem getting list of individual tests.&quot;)
+                    next_loop(suiteIndex)
+                pTests = allocate_memory(numTests * sizeof(<a class="reference internal" href="api.html#zes-diag-test-t"><span class="std std-ref">zes_diag_test_t</span></a>*))
+                if (<a class="reference internal" href="api.html#zesdiagnosticsgettests"><span class="std std-ref">zesDiagnosticsGetTests</span></a>(phTestSuites[suiteIndex], &amp;numTests, pTests) != <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    output(&quot;    Problem getting list of individual tests.&quot;)
+                    next_loop(suiteIndex)
+                for (i = 0 .. numTests-1)
+                    output(&quot;    Test %u: %s&quot;, pTests[i].index, pTests[i].name)
+    free_memory(...)</pre>
+</div>
+<div class="section" id="events-2">
+<span id="id2"></span><h3>Events<a class="headerlink" href="#events-2" title="Permalink to this headline">¶</a></h3>
+<p>Events are a way to determine if changes have occurred on a device
+e.g. new RAS errors. An application registers the events that it wishes
+to receive notification about and then it queries to receive
+notifications. The query can request a blocking wait - this will put the
+calling application thread to sleep until new notifications are
+received.</p>
+<p>For every device on which the application wants to receive events, it
+should perform the following actions:</p>
+<ol class="arabic simple">
+<li><p>Use <a class="reference internal" href="api.html#zesdeviceeventregister"><span class="std std-ref">zesDeviceEventRegister</span></a>() to indicate which events it wants to
+listen to.</p></li>
+<li><p>For each event, where appropriate, call the device component functions
+to set conditions that will trigger the event.</p></li>
+</ol>
+<p>Finally, the application calls <a class="reference internal" href="api.html#zesdrivereventlisten"><span class="std std-ref">zesDriverEventListen</span></a>() with a list of
+device handles that it wishes to listen for events on. A wait timeout is
+used to request non-blocking operations (timeout = 0)
+or blocking operations (timeout = UINT32_MAX)
+or to return after a specified amount of time
+even if no events have been received.</p>
+<p>Note that calling zesDeviceEventRegister with no events (set argument events to “0”)
+will unregister all events that are being listened too. If the application
+has a thread blocked in the function zesDriverEventListen() and there are
+no more events to listen to, the function will unblock and return control
+to the application thread with an event count of 0.</p>
+<p>When events are received, they are returned when the call to function
+<a class="reference internal" href="api.html#zesdrivereventlisten"><span class="std std-ref">zesDriverEventListen</span></a>() completes. This will indicate which devices has
+generated events and the list of event types for each device. It is then
+up to the application to use the relevant device component functions to
+determine the state that has changed. For example, if the RAS error
+event has triggered for a device, then use the function <a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>()
+to get the list of RAS error counters.</p>
+<p>The list of events is given in the table below. For each event, the
+corresponding configuration and state functions are shown. Where a
+configuration function is not shown, the event is generated
+automatically; where a configuration function is shown, it must be
+called to enable the event and/or provide threshold conditions.</p>
+<table class="table">
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 15%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Trigger</p></th>
+<th class="head"><p>Configuration function</p></th>
+<th class="head"><p>State function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_DEVICE_DETACH</span></a></p></td>
+<td><p>Device is about to be reset
+by the driver</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_DEVICE_ATTACH</span></a></p></td>
+<td><p>Device completed the reset
+by the driver</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_ENTER</span></a></p></td>
+<td><p>Device is about to enter a
+deep sleep state</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_DEVICE_SLEEP_STATE_EXIT</span></a></p></td>
+<td><p>Device is exiting a deep
+sleep state</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><blockquote>
+<div><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_FREQ_THROTTLED</span></a></p>
+</div></blockquote>
+<dl class="simple">
+<dt>——————————————————————————- —</dt><dd><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED</span></a></p>
+</dd>
+</dl>
+</td>
+<td><p>Frequency starts being
+throttled</p></td>
+<td></td>
+<td><p><a class="reference internal" href="api.html#zesfrequencygetstate"><span class="std std-ref">zesFrequencyGetState</span></a>()</p></td>
+</tr>
+<tr class="row-odd"><td><p>Energy consumption
+threshold is reached</p></td>
+<td><p><a class="reference internal" href="api.html#zespowersetenergythreshold"><span class="std std-ref">zesPowerSetEnergyThreshold</span></a>()</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL</span></a></p></td>
+<td><p>Critical temperature is
+reached</p></td>
+<td><p><a class="reference internal" href="api.html#zestemperaturesetconfig"><span class="std std-ref">zesTemperatureSetConfig</span></a>()</p></td>
+<td><p><a class="reference internal" href="api.html#zestemperaturegetstate"><span class="std std-ref">zesTemperatureGetState</span></a>()</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1</span></a></p></td>
+<td><p>Temperature crosses
+threshold 1</p></td>
+<td><p><a class="reference internal" href="api.html#zestemperaturesetconfig"><span class="std std-ref">zesTemperatureSetConfig</span></a>()</p></td>
+<td><p><a class="reference internal" href="api.html#zestemperaturegetstate"><span class="std std-ref">zesTemperatureGetState</span></a>()</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD2</span></a></p></td>
+<td><p>Temperature crosses
+threshold 2</p></td>
+<td><p><a class="reference internal" href="api.html#zestemperaturesetconfig"><span class="std std-ref">zesTemperatureSetConfig</span></a>()</p></td>
+<td><p><a class="reference internal" href="api.html#zestemperaturegetstate"><span class="std std-ref">zesTemperatureGetState</span></a>()</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_MEM_HEALTH</span></a></p></td>
+<td><p>Health of device memory
+changes</p></td>
+<td></td>
+<td><p><a class="reference internal" href="api.html#zesmemorygetstate"><span class="std std-ref">zesMemoryGetState</span></a>()</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_FABRIC_PORT_HEALTH</span></a></p></td>
+<td><p>Health of fabric ports
+change</p></td>
+<td></td>
+<td><p><a class="reference internal" href="api.html#zesfabricportgetstate"><span class="std std-ref">zesFabricPortGetState</span></a>()</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS</span></a></p></td>
+<td><p>RAS correctable errors
+cross thresholds</p></td>
+<td><p><a class="reference internal" href="api.html#zesrassetconfig"><span class="std std-ref">zesRasSetConfig</span></a>()</p></td>
+<td><p><a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>()</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS</span></a></p></td>
+<td><p>RAS uncorrectable errors
+cross thresholds</p></td>
+<td><p><a class="reference internal" href="api.html#zesrassetconfig"><span class="std std-ref">zesRasSetConfig</span></a>()</p></td>
+<td><p><a class="reference internal" href="api.html#zesrasgetstate"><span class="std std-ref">zesRasGetState</span></a>()</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_DEVICE_RESET_REQUIRED</span></a></p></td>
+<td><p>Driver has determined that
+an immediate reset is
+required</p></td>
+<td></td>
+<td><p><a class="reference internal" href="api.html#zesdevicegetstate"><span class="std std-ref">zesDeviceGetState</span></a>()</p></td>
+</tr>
+</tbody>
+</table>
+<p>The call to <a class="reference internal" href="api.html#zesdrivereventlisten"><span class="std std-ref">zesDriverEventListen</span></a>() requires the driver handle and a list
+of device handles. THe device handles must have been enumerated from that
+driver, otherwise an error will be returned. If the
+application is managing devices from multiple drivers, it will need to
+call this function separately for each driver.</p>
+<p>The table below summarizes all the event management functions:</p>
+<table class="table">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api.html#zesdeviceeventregister"><span class="std std-ref">zesDeviceEventRegister</span></a>()</p></td>
+<td><p>Set the events that should be
+registered on a given event
+handle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api.html#zesdrivereventlisten"><span class="std std-ref">zesDriverEventListen</span></a>()</p></td>
+<td><p>Wait for events to arrive for a
+given list of devices.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to configure all temperature sensors to
+trigger an event when the temperature exceeds a specified threshold or
+when the critical temperature is reached.</p>
+<pre class="literal-block">function WaitForExcessTemperatureEvent(zes_driver_handle_t hDriver, double tempLimit)
+{
+    # This will contain the number of devices that we will listen for events from
+    var numListenDevices = 0
+
+    # Get list of all devices under this driver
+    uint32_t deviceCount = 0
+    <a class="reference internal" href="../core/api.html#zedeviceget"><span class="std std-ref">zeDeviceGet</span></a>(hDriver, &amp;deviceCount, nullptr)
+    # Allocate memory for all device handles
+    ze_device_handle_t* phDevices =
+        allocate_memory(deviceCount * sizeof(ze_device_handle_t))
+
+    # Allocate memory for the devices from which we will listen to temperature events
+    zes_device_handle_t* phListenDevices =
+        allocate_memory(deviceCount * sizeof(zes_device_handle_t))
+    # Allocate memory for the events that have been received from each device in phListenDevices
+    <a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">zes_event_type_flags_t</span></a>* pDeviceEvents =
+        allocate_memory(deviceCount * sizeof(<a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">zes_event_type_flags_t</span></a>))
+    # Allocate memory so that we can map device handle in phListenDevices to the device index
+    uint32_t* pListenDeviceIndex = allocate_memory(deviceCount * sizeof(uint32_t))
+
+    # Get all device handles
+    <a class="reference internal" href="../core/api.html#zedeviceget"><span class="std std-ref">zeDeviceGet</span></a>(hDriver, &amp;deviceCount, phDevices)
+    for(devIndex = 0 .. deviceCount-1)
+        # Get Sysman handle for the device
+        zes_device_handle_t hSysmanDevice = (zes_device_handle_t)phDevices[devIndex]
+
+        # Get handles to all temperature sensors
+        uint32_t numTempSensors = 0
+        if (<a class="reference internal" href="api.html#zesdeviceenumtemperaturesensors"><span class="std std-ref">zesDeviceEnumTemperatureSensors</span></a>(hSysmanDevice, &amp;numTempSensors, NULL) != <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            next_loop(devIndex)
+        zes_temp_handle_t* allTempSensors
+            allocate_memory(deviceCount * sizeof(zes_temp_handle_t))
+        if (<a class="reference internal" href="api.html#zesdeviceenumtemperaturesensors"><span class="std std-ref">zesDeviceEnumTemperatureSensors</span></a>(hSysmanDevice, &amp;numTempSensors, allTempSensors) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            # Configure each temperature sensor to trigger a critical event and a threshold1 event
+            var numConfiguredTempSensors = 0
+            for (tempIndex = 0 .. numTempSensors-1)
+                if (<a class="reference internal" href="api.html#zestemperaturegetconfig"><span class="std std-ref">zesTemperatureGetConfig</span></a>(allTempSensors[tempIndex], &amp;config) != <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    next_loop(tempIndex)
+                <a class="reference internal" href="api.html#zes-temp-config-t"><span class="std std-ref">zes_temp_config_t</span></a> config
+                config.enableCritical = true
+                config.threshold1.enableHighToLow = false
+                config.threshold1.enableLowToHigh = true
+                config.threshold1.threshold = tempLimit
+                config.threshold2.enableHighToLow = false
+                config.threshold2.enableLowToHigh = false
+                if (<a class="reference internal" href="api.html#zestemperaturesetconfig"><span class="std std-ref">zesTemperatureSetConfig</span></a>(allTempSensors[tempIndex], &amp;config) == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                    numConfiguredTempSensors++
+
+        # If we configured any sensors to generate events, we can now register to receive on this device
+        if (numConfiguredTempSensors)
+            if (<a class="reference internal" href="api.html#zesdeviceeventregister"><span class="std std-ref">zesDeviceEventRegister</span></a>(phDevices[devIndex],
+                    <a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL</span></a> | <a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1</span></a>)
+                    == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+                phListenDevices[numListenDevices] = hSysmanDevice
+                pListenDeviceIndex[numListenDevices] = devIndex
+                numListenDevices++
+
+    # If we registered to receive events on any devices, start listening now
+    if (numListenDevices)
+        # Block until we receive events
+        uint32_t numEvents
+        if (<a class="reference internal" href="api.html#zesdrivereventlisten"><span class="std std-ref">zesDriverEventListen</span></a>(hDriver, UINT32_MAX, numListenDevices, phListenDevices, &amp;numEvents, pDeviceEvents)
+            == <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+            if (numEvents)
+                for (evtIndex .. numListenDevices)
+                    if (pDeviceEvents[evtIndex] &amp; <a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL</span></a>)
+                        output(&quot;Device %u: Went above the critical temperature.&quot;,
+                            pListenDeviceIndex[evtIndex])
+                    else if (pDeviceEvents[evtIndex] &amp; <a class="reference internal" href="api.html#zes-event-type-flags-t"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1</span></a>)
+                        output(&quot;Device %u: Went above the temperature threshold %f.&quot;,
+                            pListenDeviceIndex[evtIndex], tempLimit)
+
+    free_memory(...)</pre>
+</div>
+</div>
+<div class="section" id="security">
+<h2>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="linux">
+<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h3>
+<p>The default security provided by the accelerator driver is to permit
+querying and controlling of system resources to the UNIX user <strong>root</strong>,
+querying only for users that are members of the UNIX group <strong>root</strong> and
+no access to any other user. Some queries are permitted from any user
+(e.g. requesting current frequency, checking standby state).</p>
+<p>It is the responsibility of the Linux distribution or the systems
+administrator to relax or tighten these permissions. This is typically
+done by adding udev daemon rules. For example, many distributions of
+Linux have the following rule:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">root</span>    <span class="n">video</span>   <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">dri</span><span class="o">/</span><span class="n">card0</span>
+</pre></div>
+</div>
+<p>This will permit all users in the UNIX group <strong>video</strong> to query
+information about system resources. In order to open up control access
+to users of the video group, udev rules need to be added for each
+relevant control. For example, to permit someone in the video group to
+disable standby, the following udev daemon rule would be needed:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">chmod</span> <span class="n">g</span><span class="o">+</span><span class="n">w</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">drm</span><span class="o">/</span><span class="n">card0</span><span class="o">/</span><span class="n">rc6_enable</span>
+</pre></div>
+</div>
+<p>The full list of sysfs files used by the API are described in the table
+below. For each file, the list of affected API functions is given.</p>
+<table class="table">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 26%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>sysfs file</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Functions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/sys/class/drm/card0/
+rc6_enable</p></td>
+<td><p>Used to
+enable/disable
+standby.</p></td>
+<td><p><a class="reference internal" href="api.html#zesdeviceenumstandbydomains"><span class="std std-ref">zesDeviceEnumStandbyDomains</span></a>()
+<a class="reference internal" href="api.html#zesstandbygetproperties"><span class="std std-ref">zesStandbyGetProperties</span></a>()
+<a class="reference internal" href="api.html#zesstandbygetmode"><span class="std std-ref">zesStandbyGetMode</span></a>()
+<a class="reference internal" href="api.html#zesstandbysetmode"><span class="std std-ref">zesStandbySetMode</span></a>()</p></td>
+</tr>
+<tr class="row-odd"><td><p>TBD</p></td>
+<td><p>In development</p></td>
+<td><p>TBD</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>The Windows driver will only permit telemetry requests coming from users with administrator
+permissions. It will only permit controls for system services with LocalServiceSid permissions.</p>
+</div>
+<div class="section" id="virtualization">
+<h3>Virtualization<a class="headerlink" href="#virtualization" title="Permalink to this headline">¶</a></h3>
+<p>In virtualization environments, only the host is permitted to access any
+features of the API. Attempts to use the API in virtual machines will
+fail.</p>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../tools/PROG.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Tools Programming Guide</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../core/SPIRV.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SPIR-V Programming Guide</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Intel<br/>
+    
+        &copy; Copyright 2023, Intel.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

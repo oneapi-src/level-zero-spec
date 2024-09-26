@@ -1,0 +1,2350 @@
+
+
+==============================
+Core API
+==============================
+oneAPI Level Zero Specification - Version 0.91
+
+ 
+
+ 
+
+Common
+============================================================
+* Enumerations
+
+
+    * :ref:`ze-result-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-ipc-mem-handle-t`
+    * :ref:`ze-ipc-event-pool-handle-t`
+
+
+
+
+Common Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-result-t:
+
+ze_result_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_result_t
+    :project: LevelZero
+
+ 
+Common Structures
+------------------------------------------------------------------------------
+
+.. _ze-ipc-mem-handle-t:
+
+ze_ipc_mem_handle_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_ipc_mem_handle_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-ipc-event-pool-handle-t:
+
+ze_ipc_event_pool_handle_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_ipc_event_pool_handle_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Driver
+============================================================
+* Functions
+
+
+    * :ref:`zeInit`
+    * :ref:`zeDriverGet`
+    * :ref:`zeDriverGetApiVersion`
+    * :ref:`zeDriverGetProperties`
+    * :ref:`zeDriverGetIPCProperties`
+    * :ref:`zeDriverGetExtensionFunctionAddress`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-init-flag-t`
+    * :ref:`ze-api-version-t`
+    * :ref:`ze-driver-properties-version-t`
+    * :ref:`ze-driver-ipc-properties-version-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-driver-uuid-t`
+    * :ref:`ze-driver-properties-t`
+    * :ref:`ze-driver-ipc-properties-t`
+
+
+Driver Functions
+------------------------------------------------------------------------------
+
+
+.. _zeInit:
+
+zeInit
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeInit
+    :project: LevelZero
+
+
+.. _zeDriverGet:
+
+zeDriverGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGet
+    :project: LevelZero
+
+
+.. _zeDriverGetApiVersion:
+
+zeDriverGetApiVersion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGetApiVersion
+    :project: LevelZero
+
+
+.. _zeDriverGetProperties:
+
+zeDriverGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGetProperties
+    :project: LevelZero
+
+
+.. _zeDriverGetIPCProperties:
+
+zeDriverGetIPCProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGetIPCProperties
+    :project: LevelZero
+
+
+.. _zeDriverGetExtensionFunctionAddress:
+
+zeDriverGetExtensionFunctionAddress
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGetExtensionFunctionAddress
+    :project: LevelZero
+
+
+
+Driver Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-init-flag-t:
+
+ze_init_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_init_flag_t
+    :project: LevelZero
+
+
+.. _ze-api-version-t:
+
+ze_api_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_api_version_t
+    :project: LevelZero
+
+
+.. _ze-driver-properties-version-t:
+
+ze_driver_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_driver_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-driver-ipc-properties-version-t:
+
+ze_driver_ipc_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_driver_ipc_properties_version_t
+    :project: LevelZero
+
+ 
+Driver Structures
+------------------------------------------------------------------------------
+
+.. _ze-driver-uuid-t:
+
+ze_driver_uuid_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_driver_uuid_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-driver-properties-t:
+
+ze_driver_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_driver_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-driver-ipc-properties-t:
+
+ze_driver_ipc_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_driver_ipc_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Device
+============================================================
+* Functions
+
+
+    * :ref:`zeDeviceGet`
+    * :ref:`zeDeviceGetSubDevices`
+    * :ref:`zeDeviceGetProperties`
+    * :ref:`zeDeviceGetComputeProperties`
+    * :ref:`zeDeviceGetKernelProperties`
+    * :ref:`zeDeviceGetMemoryProperties`
+    * :ref:`zeDeviceGetMemoryAccessProperties`
+    * :ref:`zeDeviceGetCacheProperties`
+    * :ref:`zeDeviceGetImageProperties`
+    * :ref:`zeDeviceGetP2PProperties`
+    * :ref:`zeDeviceCanAccessPeer`
+    * :ref:`zeDeviceSetLastLevelCacheConfig`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-device-properties-version-t`
+    * :ref:`ze-device-type-t`
+    * :ref:`ze-device-compute-properties-version-t`
+    * :ref:`ze-device-kernel-properties-version-t`
+    * :ref:`ze-fp-capabilities-t`
+    * :ref:`ze-device-memory-properties-version-t`
+    * :ref:`ze-device-memory-access-properties-version-t`
+    * :ref:`ze-memory-access-capabilities-t`
+    * :ref:`ze-device-cache-properties-version-t`
+    * :ref:`ze-device-image-properties-version-t`
+    * :ref:`ze-device-p2p-properties-version-t`
+    * :ref:`ze-cache-config-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-device-uuid-t`
+    * :ref:`ze-device-properties-t`
+    * :ref:`ze-device-compute-properties-t`
+    * :ref:`ze-native-kernel-uuid-t`
+    * :ref:`ze-device-kernel-properties-t`
+    * :ref:`ze-device-memory-properties-t`
+    * :ref:`ze-device-memory-access-properties-t`
+    * :ref:`ze-device-cache-properties-t`
+    * :ref:`ze-device-image-properties-t`
+    * :ref:`ze-device-p2p-properties-t`
+
+
+Device Functions
+------------------------------------------------------------------------------
+
+
+.. _zeDeviceGet:
+
+zeDeviceGet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGet
+    :project: LevelZero
+
+
+.. _zeDeviceGetSubDevices:
+
+zeDeviceGetSubDevices
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetSubDevices
+    :project: LevelZero
+
+
+.. _zeDeviceGetProperties:
+
+zeDeviceGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetProperties
+    :project: LevelZero
+
+
+.. _zeDeviceGetComputeProperties:
+
+zeDeviceGetComputeProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetComputeProperties
+    :project: LevelZero
+
+
+.. _zeDeviceGetKernelProperties:
+
+zeDeviceGetKernelProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetKernelProperties
+    :project: LevelZero
+
+
+.. _zeDeviceGetMemoryProperties:
+
+zeDeviceGetMemoryProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetMemoryProperties
+    :project: LevelZero
+
+
+.. _zeDeviceGetMemoryAccessProperties:
+
+zeDeviceGetMemoryAccessProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetMemoryAccessProperties
+    :project: LevelZero
+
+
+.. _zeDeviceGetCacheProperties:
+
+zeDeviceGetCacheProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetCacheProperties
+    :project: LevelZero
+
+
+.. _zeDeviceGetImageProperties:
+
+zeDeviceGetImageProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetImageProperties
+    :project: LevelZero
+
+
+.. _zeDeviceGetP2PProperties:
+
+zeDeviceGetP2PProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetP2PProperties
+    :project: LevelZero
+
+
+.. _zeDeviceCanAccessPeer:
+
+zeDeviceCanAccessPeer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceCanAccessPeer
+    :project: LevelZero
+
+
+.. _zeDeviceSetLastLevelCacheConfig:
+
+zeDeviceSetLastLevelCacheConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceSetLastLevelCacheConfig
+    :project: LevelZero
+
+
+
+Device Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-device-properties-version-t:
+
+ze_device_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-device-type-t:
+
+ze_device_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_type_t
+    :project: LevelZero
+
+
+.. _ze-device-compute-properties-version-t:
+
+ze_device_compute_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_compute_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-device-kernel-properties-version-t:
+
+ze_device_kernel_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_kernel_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-fp-capabilities-t:
+
+ze_fp_capabilities_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_fp_capabilities_t
+    :project: LevelZero
+
+
+.. _ze-device-memory-properties-version-t:
+
+ze_device_memory_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_memory_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-device-memory-access-properties-version-t:
+
+ze_device_memory_access_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_memory_access_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-memory-access-capabilities-t:
+
+ze_memory_access_capabilities_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_memory_access_capabilities_t
+    :project: LevelZero
+
+
+.. _ze-device-cache-properties-version-t:
+
+ze_device_cache_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_cache_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-device-image-properties-version-t:
+
+ze_device_image_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_image_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-device-p2p-properties-version-t:
+
+ze_device_p2p_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_p2p_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-cache-config-t:
+
+ze_cache_config_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_cache_config_t
+    :project: LevelZero
+
+ 
+Device Structures
+------------------------------------------------------------------------------
+
+.. _ze-device-uuid-t:
+
+ze_device_uuid_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_uuid_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-properties-t:
+
+ze_device_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-compute-properties-t:
+
+ze_device_compute_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_compute_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-native-kernel-uuid-t:
+
+ze_native_kernel_uuid_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_native_kernel_uuid_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-kernel-properties-t:
+
+ze_device_kernel_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_kernel_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-memory-properties-t:
+
+ze_device_memory_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_memory_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-memory-access-properties-t:
+
+ze_device_memory_access_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_memory_access_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-cache-properties-t:
+
+ze_device_cache_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_cache_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-image-properties-t:
+
+ze_device_image_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_image_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-p2p-properties-t:
+
+ze_device_p2p_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_p2p_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Cmdqueue
+============================================================
+* Functions
+
+
+    * :ref:`zeCommandQueueCreate`
+    * :ref:`zeCommandQueueDestroy`
+    * :ref:`zeCommandQueueExecuteCommandLists`
+    * :ref:`zeCommandQueueSynchronize`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-command-queue-desc-version-t`
+    * :ref:`ze-command-queue-flag-t`
+    * :ref:`ze-command-queue-mode-t`
+    * :ref:`ze-command-queue-priority-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-command-queue-desc-t`
+
+
+Cmdqueue Functions
+------------------------------------------------------------------------------
+
+
+.. _zeCommandQueueCreate:
+
+zeCommandQueueCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandQueueCreate
+    :project: LevelZero
+
+
+.. _zeCommandQueueDestroy:
+
+zeCommandQueueDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandQueueDestroy
+    :project: LevelZero
+
+
+.. _zeCommandQueueExecuteCommandLists:
+
+zeCommandQueueExecuteCommandLists
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandQueueExecuteCommandLists
+    :project: LevelZero
+
+
+.. _zeCommandQueueSynchronize:
+
+zeCommandQueueSynchronize
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandQueueSynchronize
+    :project: LevelZero
+
+
+
+Cmdqueue Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-command-queue-desc-version-t:
+
+ze_command_queue_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_command_queue_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-command-queue-flag-t:
+
+ze_command_queue_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_command_queue_flag_t
+    :project: LevelZero
+
+
+.. _ze-command-queue-mode-t:
+
+ze_command_queue_mode_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_command_queue_mode_t
+    :project: LevelZero
+
+
+.. _ze-command-queue-priority-t:
+
+ze_command_queue_priority_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_command_queue_priority_t
+    :project: LevelZero
+
+ 
+Cmdqueue Structures
+------------------------------------------------------------------------------
+
+.. _ze-command-queue-desc-t:
+
+ze_command_queue_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_command_queue_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Cmdlist
+============================================================
+* Functions
+
+
+    * :ref:`zeCommandListCreate`
+    * :ref:`zeCommandListCreateImmediate`
+    * :ref:`zeCommandListDestroy`
+    * :ref:`zeCommandListClose`
+    * :ref:`zeCommandListReset`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-command-list-desc-version-t`
+    * :ref:`ze-command-list-flag-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-command-list-desc-t`
+
+
+Cmdlist Functions
+------------------------------------------------------------------------------
+
+
+.. _zeCommandListCreate:
+
+zeCommandListCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListCreate
+    :project: LevelZero
+
+
+.. _zeCommandListCreateImmediate:
+
+zeCommandListCreateImmediate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListCreateImmediate
+    :project: LevelZero
+
+
+.. _zeCommandListDestroy:
+
+zeCommandListDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListDestroy
+    :project: LevelZero
+
+
+.. _zeCommandListClose:
+
+zeCommandListClose
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListClose
+    :project: LevelZero
+
+
+.. _zeCommandListReset:
+
+zeCommandListReset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListReset
+    :project: LevelZero
+
+
+
+Cmdlist Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-command-list-desc-version-t:
+
+ze_command_list_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_command_list_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-command-list-flag-t:
+
+ze_command_list_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_command_list_flag_t
+    :project: LevelZero
+
+ 
+Cmdlist Structures
+------------------------------------------------------------------------------
+
+.. _ze-command-list-desc-t:
+
+ze_command_list_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_command_list_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Barrier
+============================================================
+* Functions
+
+
+    * :ref:`zeCommandListAppendBarrier`
+    * :ref:`zeCommandListAppendMemoryRangesBarrier`
+    * :ref:`zeDeviceSystemBarrier`
+
+ 
+
+ 
+
+
+Barrier Functions
+------------------------------------------------------------------------------
+
+
+.. _zeCommandListAppendBarrier:
+
+zeCommandListAppendBarrier
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendBarrier
+    :project: LevelZero
+
+
+.. _zeCommandListAppendMemoryRangesBarrier:
+
+zeCommandListAppendMemoryRangesBarrier
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendMemoryRangesBarrier
+    :project: LevelZero
+
+
+.. _zeDeviceSystemBarrier:
+
+zeDeviceSystemBarrier
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceSystemBarrier
+    :project: LevelZero
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+ 
+
+ 
+
+Copy
+============================================================
+* Functions
+
+
+    * :ref:`zeCommandListAppendMemoryCopy`
+    * :ref:`zeCommandListAppendMemoryFill`
+    * :ref:`zeCommandListAppendMemoryCopyRegion`
+    * :ref:`zeCommandListAppendImageCopy`
+    * :ref:`zeCommandListAppendImageCopyRegion`
+    * :ref:`zeCommandListAppendImageCopyToMemory`
+    * :ref:`zeCommandListAppendImageCopyFromMemory`
+    * :ref:`zeCommandListAppendMemoryPrefetch`
+    * :ref:`zeCommandListAppendMemAdvise`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-memory-advice-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-copy-region-t`
+    * :ref:`ze-image-region-t`
+
+
+Copy Functions
+------------------------------------------------------------------------------
+
+
+.. _zeCommandListAppendMemoryCopy:
+
+zeCommandListAppendMemoryCopy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendMemoryCopy
+    :project: LevelZero
+
+
+.. _zeCommandListAppendMemoryFill:
+
+zeCommandListAppendMemoryFill
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendMemoryFill
+    :project: LevelZero
+
+
+.. _zeCommandListAppendMemoryCopyRegion:
+
+zeCommandListAppendMemoryCopyRegion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendMemoryCopyRegion
+    :project: LevelZero
+
+
+.. _zeCommandListAppendImageCopy:
+
+zeCommandListAppendImageCopy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendImageCopy
+    :project: LevelZero
+
+
+.. _zeCommandListAppendImageCopyRegion:
+
+zeCommandListAppendImageCopyRegion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendImageCopyRegion
+    :project: LevelZero
+
+
+.. _zeCommandListAppendImageCopyToMemory:
+
+zeCommandListAppendImageCopyToMemory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendImageCopyToMemory
+    :project: LevelZero
+
+
+.. _zeCommandListAppendImageCopyFromMemory:
+
+zeCommandListAppendImageCopyFromMemory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendImageCopyFromMemory
+    :project: LevelZero
+
+
+.. _zeCommandListAppendMemoryPrefetch:
+
+zeCommandListAppendMemoryPrefetch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendMemoryPrefetch
+    :project: LevelZero
+
+
+.. _zeCommandListAppendMemAdvise:
+
+zeCommandListAppendMemAdvise
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendMemAdvise
+    :project: LevelZero
+
+
+
+Copy Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-memory-advice-t:
+
+ze_memory_advice_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_memory_advice_t
+    :project: LevelZero
+
+ 
+Copy Structures
+------------------------------------------------------------------------------
+
+.. _ze-copy-region-t:
+
+ze_copy_region_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_copy_region_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-image-region-t:
+
+ze_image_region_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_image_region_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Event
+============================================================
+* Functions
+
+
+    * :ref:`zeEventPoolCreate`
+    * :ref:`zeEventPoolDestroy`
+    * :ref:`zeEventCreate`
+    * :ref:`zeEventDestroy`
+    * :ref:`zeEventPoolGetIpcHandle`
+    * :ref:`zeEventPoolOpenIpcHandle`
+    * :ref:`zeEventPoolCloseIpcHandle`
+    * :ref:`zeCommandListAppendSignalEvent`
+    * :ref:`zeCommandListAppendWaitOnEvents`
+    * :ref:`zeEventHostSignal`
+    * :ref:`zeEventHostSynchronize`
+    * :ref:`zeEventQueryStatus`
+    * :ref:`zeCommandListAppendEventReset`
+    * :ref:`zeEventHostReset`
+    * :ref:`zeEventGetTimestamp`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-event-pool-desc-version-t`
+    * :ref:`ze-event-pool-flag-t`
+    * :ref:`ze-event-desc-version-t`
+    * :ref:`ze-event-scope-flag-t`
+    * :ref:`ze-event-timestamp-type-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-event-pool-desc-t`
+    * :ref:`ze-event-desc-t`
+
+
+Event Functions
+------------------------------------------------------------------------------
+
+
+.. _zeEventPoolCreate:
+
+zeEventPoolCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventPoolCreate
+    :project: LevelZero
+
+
+.. _zeEventPoolDestroy:
+
+zeEventPoolDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventPoolDestroy
+    :project: LevelZero
+
+
+.. _zeEventCreate:
+
+zeEventCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventCreate
+    :project: LevelZero
+
+
+.. _zeEventDestroy:
+
+zeEventDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventDestroy
+    :project: LevelZero
+
+
+.. _zeEventPoolGetIpcHandle:
+
+zeEventPoolGetIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventPoolGetIpcHandle
+    :project: LevelZero
+
+
+.. _zeEventPoolOpenIpcHandle:
+
+zeEventPoolOpenIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventPoolOpenIpcHandle
+    :project: LevelZero
+
+
+.. _zeEventPoolCloseIpcHandle:
+
+zeEventPoolCloseIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventPoolCloseIpcHandle
+    :project: LevelZero
+
+
+.. _zeCommandListAppendSignalEvent:
+
+zeCommandListAppendSignalEvent
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendSignalEvent
+    :project: LevelZero
+
+
+.. _zeCommandListAppendWaitOnEvents:
+
+zeCommandListAppendWaitOnEvents
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendWaitOnEvents
+    :project: LevelZero
+
+
+.. _zeEventHostSignal:
+
+zeEventHostSignal
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventHostSignal
+    :project: LevelZero
+
+
+.. _zeEventHostSynchronize:
+
+zeEventHostSynchronize
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventHostSynchronize
+    :project: LevelZero
+
+
+.. _zeEventQueryStatus:
+
+zeEventQueryStatus
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventQueryStatus
+    :project: LevelZero
+
+
+.. _zeCommandListAppendEventReset:
+
+zeCommandListAppendEventReset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendEventReset
+    :project: LevelZero
+
+
+.. _zeEventHostReset:
+
+zeEventHostReset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventHostReset
+    :project: LevelZero
+
+
+.. _zeEventGetTimestamp:
+
+zeEventGetTimestamp
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventGetTimestamp
+    :project: LevelZero
+
+
+
+Event Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-event-pool-desc-version-t:
+
+ze_event_pool_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_event_pool_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-event-pool-flag-t:
+
+ze_event_pool_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_event_pool_flag_t
+    :project: LevelZero
+
+
+.. _ze-event-desc-version-t:
+
+ze_event_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_event_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-event-scope-flag-t:
+
+ze_event_scope_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_event_scope_flag_t
+    :project: LevelZero
+
+
+.. _ze-event-timestamp-type-t:
+
+ze_event_timestamp_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_event_timestamp_type_t
+    :project: LevelZero
+
+ 
+Event Structures
+------------------------------------------------------------------------------
+
+.. _ze-event-pool-desc-t:
+
+ze_event_pool_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_event_pool_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-event-desc-t:
+
+ze_event_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_event_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Fence
+============================================================
+* Functions
+
+
+    * :ref:`zeFenceCreate`
+    * :ref:`zeFenceDestroy`
+    * :ref:`zeFenceHostSynchronize`
+    * :ref:`zeFenceQueryStatus`
+    * :ref:`zeFenceReset`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-fence-desc-version-t`
+    * :ref:`ze-fence-flag-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-fence-desc-t`
+
+
+Fence Functions
+------------------------------------------------------------------------------
+
+
+.. _zeFenceCreate:
+
+zeFenceCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeFenceCreate
+    :project: LevelZero
+
+
+.. _zeFenceDestroy:
+
+zeFenceDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeFenceDestroy
+    :project: LevelZero
+
+
+.. _zeFenceHostSynchronize:
+
+zeFenceHostSynchronize
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeFenceHostSynchronize
+    :project: LevelZero
+
+
+.. _zeFenceQueryStatus:
+
+zeFenceQueryStatus
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeFenceQueryStatus
+    :project: LevelZero
+
+
+.. _zeFenceReset:
+
+zeFenceReset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeFenceReset
+    :project: LevelZero
+
+
+
+Fence Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-fence-desc-version-t:
+
+ze_fence_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_fence_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-fence-flag-t:
+
+ze_fence_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_fence_flag_t
+    :project: LevelZero
+
+ 
+Fence Structures
+------------------------------------------------------------------------------
+
+.. _ze-fence-desc-t:
+
+ze_fence_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_fence_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Image
+============================================================
+* Functions
+
+
+    * :ref:`zeImageGetProperties`
+    * :ref:`zeImageCreate`
+    * :ref:`zeImageDestroy`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-image-desc-version-t`
+    * :ref:`ze-image-flag-t`
+    * :ref:`ze-image-type-t`
+    * :ref:`ze-image-format-layout-t`
+    * :ref:`ze-image-format-type-t`
+    * :ref:`ze-image-format-swizzle-t`
+    * :ref:`ze-image-properties-version-t`
+    * :ref:`ze-image-sampler-filter-flags-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-image-format-desc-t`
+    * :ref:`ze-image-desc-t`
+    * :ref:`ze-image-properties-t`
+
+
+Image Functions
+------------------------------------------------------------------------------
+
+
+.. _zeImageGetProperties:
+
+zeImageGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeImageGetProperties
+    :project: LevelZero
+
+
+.. _zeImageCreate:
+
+zeImageCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeImageCreate
+    :project: LevelZero
+
+
+.. _zeImageDestroy:
+
+zeImageDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeImageDestroy
+    :project: LevelZero
+
+
+
+Image Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-image-desc-version-t:
+
+ze_image_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-image-flag-t:
+
+ze_image_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_flag_t
+    :project: LevelZero
+
+
+.. _ze-image-type-t:
+
+ze_image_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_type_t
+    :project: LevelZero
+
+
+.. _ze-image-format-layout-t:
+
+ze_image_format_layout_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_format_layout_t
+    :project: LevelZero
+
+
+.. _ze-image-format-type-t:
+
+ze_image_format_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_format_type_t
+    :project: LevelZero
+
+
+.. _ze-image-format-swizzle-t:
+
+ze_image_format_swizzle_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_format_swizzle_t
+    :project: LevelZero
+
+
+.. _ze-image-properties-version-t:
+
+ze_image_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-image-sampler-filter-flags-t:
+
+ze_image_sampler_filter_flags_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_sampler_filter_flags_t
+    :project: LevelZero
+
+ 
+Image Structures
+------------------------------------------------------------------------------
+
+.. _ze-image-format-desc-t:
+
+ze_image_format_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_image_format_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-image-desc-t:
+
+ze_image_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_image_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-image-properties-t:
+
+ze_image_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_image_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Memory
+============================================================
+* Functions
+
+
+    * :ref:`zeDriverAllocSharedMem`
+    * :ref:`zeDriverAllocDeviceMem`
+    * :ref:`zeDriverAllocHostMem`
+    * :ref:`zeDriverFreeMem`
+    * :ref:`zeDriverGetMemAllocProperties`
+    * :ref:`zeDriverGetMemAddressRange`
+    * :ref:`zeDriverGetMemIpcHandle`
+    * :ref:`zeDriverOpenMemIpcHandle`
+    * :ref:`zeDriverCloseMemIpcHandle`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-device-mem-alloc-desc-version-t`
+    * :ref:`ze-device-mem-alloc-flag-t`
+    * :ref:`ze-host-mem-alloc-desc-version-t`
+    * :ref:`ze-host-mem-alloc-flag-t`
+    * :ref:`ze-memory-allocation-properties-version-t`
+    * :ref:`ze-memory-type-t`
+    * :ref:`ze-ipc-memory-flag-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-device-mem-alloc-desc-t`
+    * :ref:`ze-host-mem-alloc-desc-t`
+    * :ref:`ze-memory-allocation-properties-t`
+
+
+Memory Functions
+------------------------------------------------------------------------------
+
+
+.. _zeDriverAllocSharedMem:
+
+zeDriverAllocSharedMem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverAllocSharedMem
+    :project: LevelZero
+
+
+.. _zeDriverAllocDeviceMem:
+
+zeDriverAllocDeviceMem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverAllocDeviceMem
+    :project: LevelZero
+
+
+.. _zeDriverAllocHostMem:
+
+zeDriverAllocHostMem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverAllocHostMem
+    :project: LevelZero
+
+
+.. _zeDriverFreeMem:
+
+zeDriverFreeMem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverFreeMem
+    :project: LevelZero
+
+
+.. _zeDriverGetMemAllocProperties:
+
+zeDriverGetMemAllocProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGetMemAllocProperties
+    :project: LevelZero
+
+
+.. _zeDriverGetMemAddressRange:
+
+zeDriverGetMemAddressRange
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGetMemAddressRange
+    :project: LevelZero
+
+
+.. _zeDriverGetMemIpcHandle:
+
+zeDriverGetMemIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverGetMemIpcHandle
+    :project: LevelZero
+
+
+.. _zeDriverOpenMemIpcHandle:
+
+zeDriverOpenMemIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverOpenMemIpcHandle
+    :project: LevelZero
+
+
+.. _zeDriverCloseMemIpcHandle:
+
+zeDriverCloseMemIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDriverCloseMemIpcHandle
+    :project: LevelZero
+
+
+
+Memory Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-device-mem-alloc-desc-version-t:
+
+ze_device_mem_alloc_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_mem_alloc_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-device-mem-alloc-flag-t:
+
+ze_device_mem_alloc_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_mem_alloc_flag_t
+    :project: LevelZero
+
+
+.. _ze-host-mem-alloc-desc-version-t:
+
+ze_host_mem_alloc_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_host_mem_alloc_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-host-mem-alloc-flag-t:
+
+ze_host_mem_alloc_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_host_mem_alloc_flag_t
+    :project: LevelZero
+
+
+.. _ze-memory-allocation-properties-version-t:
+
+ze_memory_allocation_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_memory_allocation_properties_version_t
+    :project: LevelZero
+
+
+.. _ze-memory-type-t:
+
+ze_memory_type_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_memory_type_t
+    :project: LevelZero
+
+
+.. _ze-ipc-memory-flag-t:
+
+ze_ipc_memory_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_ipc_memory_flag_t
+    :project: LevelZero
+
+ 
+Memory Structures
+------------------------------------------------------------------------------
+
+.. _ze-device-mem-alloc-desc-t:
+
+ze_device_mem_alloc_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_mem_alloc_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-host-mem-alloc-desc-t:
+
+ze_host_mem_alloc_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_host_mem_alloc_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-memory-allocation-properties-t:
+
+ze_memory_allocation_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_memory_allocation_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Module
+============================================================
+* Functions
+
+
+    * :ref:`zeModuleCreate`
+    * :ref:`zeModuleDestroy`
+    * :ref:`zeModuleBuildLogDestroy`
+    * :ref:`zeModuleBuildLogGetString`
+    * :ref:`zeModuleGetNativeBinary`
+    * :ref:`zeModuleGetGlobalPointer`
+    * :ref:`zeModuleGetKernelNames`
+    * :ref:`zeKernelCreate`
+    * :ref:`zeKernelDestroy`
+    * :ref:`zeModuleGetFunctionPointer`
+    * :ref:`zeKernelSetGroupSize`
+    * :ref:`zeKernelSuggestGroupSize`
+    * :ref:`zeKernelSuggestMaxCooperativeGroupCount`
+    * :ref:`zeKernelSetArgumentValue`
+    * :ref:`zeKernelSetAttribute`
+    * :ref:`zeKernelGetAttribute`
+    * :ref:`zeKernelSetIntermediateCacheConfig`
+    * :ref:`zeKernelGetProperties`
+    * :ref:`zeCommandListAppendLaunchKernel`
+    * :ref:`zeCommandListAppendLaunchCooperativeKernel`
+    * :ref:`zeCommandListAppendLaunchKernelIndirect`
+    * :ref:`zeCommandListAppendLaunchMultipleKernelsIndirect`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-module-desc-version-t`
+    * :ref:`ze-module-format-t`
+    * :ref:`ze-kernel-desc-version-t`
+    * :ref:`ze-kernel-flag-t`
+    * :ref:`ze-kernel-attribute-t`
+    * :ref:`ze-kernel-properties-version-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-module-constants-t`
+    * :ref:`ze-module-desc-t`
+    * :ref:`ze-kernel-desc-t`
+    * :ref:`ze-kernel-properties-t`
+    * :ref:`ze-group-count-t`
+
+
+Module Functions
+------------------------------------------------------------------------------
+
+
+.. _zeModuleCreate:
+
+zeModuleCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleCreate
+    :project: LevelZero
+
+
+.. _zeModuleDestroy:
+
+zeModuleDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleDestroy
+    :project: LevelZero
+
+
+.. _zeModuleBuildLogDestroy:
+
+zeModuleBuildLogDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleBuildLogDestroy
+    :project: LevelZero
+
+
+.. _zeModuleBuildLogGetString:
+
+zeModuleBuildLogGetString
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleBuildLogGetString
+    :project: LevelZero
+
+
+.. _zeModuleGetNativeBinary:
+
+zeModuleGetNativeBinary
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleGetNativeBinary
+    :project: LevelZero
+
+
+.. _zeModuleGetGlobalPointer:
+
+zeModuleGetGlobalPointer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleGetGlobalPointer
+    :project: LevelZero
+
+
+.. _zeModuleGetKernelNames:
+
+zeModuleGetKernelNames
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleGetKernelNames
+    :project: LevelZero
+
+
+.. _zeKernelCreate:
+
+zeKernelCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelCreate
+    :project: LevelZero
+
+
+.. _zeKernelDestroy:
+
+zeKernelDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelDestroy
+    :project: LevelZero
+
+
+.. _zeModuleGetFunctionPointer:
+
+zeModuleGetFunctionPointer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeModuleGetFunctionPointer
+    :project: LevelZero
+
+
+.. _zeKernelSetGroupSize:
+
+zeKernelSetGroupSize
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelSetGroupSize
+    :project: LevelZero
+
+
+.. _zeKernelSuggestGroupSize:
+
+zeKernelSuggestGroupSize
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelSuggestGroupSize
+    :project: LevelZero
+
+
+.. _zeKernelSuggestMaxCooperativeGroupCount:
+
+zeKernelSuggestMaxCooperativeGroupCount
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelSuggestMaxCooperativeGroupCount
+    :project: LevelZero
+
+
+.. _zeKernelSetArgumentValue:
+
+zeKernelSetArgumentValue
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelSetArgumentValue
+    :project: LevelZero
+
+
+.. _zeKernelSetAttribute:
+
+zeKernelSetAttribute
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelSetAttribute
+    :project: LevelZero
+
+
+.. _zeKernelGetAttribute:
+
+zeKernelGetAttribute
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelGetAttribute
+    :project: LevelZero
+
+
+.. _zeKernelSetIntermediateCacheConfig:
+
+zeKernelSetIntermediateCacheConfig
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelSetIntermediateCacheConfig
+    :project: LevelZero
+
+
+.. _zeKernelGetProperties:
+
+zeKernelGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeKernelGetProperties
+    :project: LevelZero
+
+
+.. _zeCommandListAppendLaunchKernel:
+
+zeCommandListAppendLaunchKernel
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendLaunchKernel
+    :project: LevelZero
+
+
+.. _zeCommandListAppendLaunchCooperativeKernel:
+
+zeCommandListAppendLaunchCooperativeKernel
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendLaunchCooperativeKernel
+    :project: LevelZero
+
+
+.. _zeCommandListAppendLaunchKernelIndirect:
+
+zeCommandListAppendLaunchKernelIndirect
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendLaunchKernelIndirect
+    :project: LevelZero
+
+
+.. _zeCommandListAppendLaunchMultipleKernelsIndirect:
+
+zeCommandListAppendLaunchMultipleKernelsIndirect
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeCommandListAppendLaunchMultipleKernelsIndirect
+    :project: LevelZero
+
+
+
+Module Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-module-desc-version-t:
+
+ze_module_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_module_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-module-format-t:
+
+ze_module_format_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_module_format_t
+    :project: LevelZero
+
+
+.. _ze-kernel-desc-version-t:
+
+ze_kernel_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_kernel_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-kernel-flag-t:
+
+ze_kernel_flag_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_kernel_flag_t
+    :project: LevelZero
+
+
+.. _ze-kernel-attribute-t:
+
+ze_kernel_attribute_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_kernel_attribute_t
+    :project: LevelZero
+
+
+.. _ze-kernel-properties-version-t:
+
+ze_kernel_properties_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_kernel_properties_version_t
+    :project: LevelZero
+
+ 
+Module Structures
+------------------------------------------------------------------------------
+
+.. _ze-module-constants-t:
+
+ze_module_constants_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_module_constants_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-module-desc-t:
+
+ze_module_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_module_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-kernel-desc-t:
+
+ze_kernel_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_kernel_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-kernel-properties-t:
+
+ze_kernel_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_kernel_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-group-count-t:
+
+ze_group_count_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_group_count_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Residency
+============================================================
+* Functions
+
+
+    * :ref:`zeDeviceMakeMemoryResident`
+    * :ref:`zeDeviceEvictMemory`
+    * :ref:`zeDeviceMakeImageResident`
+    * :ref:`zeDeviceEvictImage`
+
+ 
+
+ 
+
+
+Residency Functions
+------------------------------------------------------------------------------
+
+
+.. _zeDeviceMakeMemoryResident:
+
+zeDeviceMakeMemoryResident
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceMakeMemoryResident
+    :project: LevelZero
+
+
+.. _zeDeviceEvictMemory:
+
+zeDeviceEvictMemory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceEvictMemory
+    :project: LevelZero
+
+
+.. _zeDeviceMakeImageResident:
+
+zeDeviceMakeImageResident
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceMakeImageResident
+    :project: LevelZero
+
+
+.. _zeDeviceEvictImage:
+
+zeDeviceEvictImage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceEvictImage
+    :project: LevelZero
+
+
+
+ 
+
+ 
+
+Sampler
+============================================================
+* Functions
+
+
+    * :ref:`zeSamplerCreate`
+    * :ref:`zeSamplerDestroy`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-sampler-desc-version-t`
+    * :ref:`ze-sampler-address-mode-t`
+    * :ref:`ze-sampler-filter-mode-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-sampler-desc-t`
+
+
+Sampler Functions
+------------------------------------------------------------------------------
+
+
+.. _zeSamplerCreate:
+
+zeSamplerCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeSamplerCreate
+    :project: LevelZero
+
+
+.. _zeSamplerDestroy:
+
+zeSamplerDestroy
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeSamplerDestroy
+    :project: LevelZero
+
+
+
+Sampler Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-sampler-desc-version-t:
+
+ze_sampler_desc_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_sampler_desc_version_t
+    :project: LevelZero
+
+
+.. _ze-sampler-address-mode-t:
+
+ze_sampler_address_mode_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_sampler_address_mode_t
+    :project: LevelZero
+
+
+.. _ze-sampler-filter-mode-t:
+
+ze_sampler_filter_mode_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_sampler_filter_mode_t
+    :project: LevelZero
+
+ 
+Sampler Structures
+------------------------------------------------------------------------------
+
+.. _ze-sampler-desc-t:
+
+ze_sampler_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_sampler_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+

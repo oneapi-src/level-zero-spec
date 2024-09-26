@@ -1,0 +1,20 @@
+..
+  Copyright 2020 Intel Corporation
+
+.. oneAPI Level Zero Specification v0.95.0
+
+.. _l0-section:
+
+===================================
+ |l0_full_name|: |l0_spec_version|
+===================================
+
+.. toctree::
+
+   core/INTRO.rst
+   core/PROG.rst
+   tools/PROG.rst
+   sysman/PROG.rst
+   core/SPIRV.rst
+   api.rst
+   versions.rst

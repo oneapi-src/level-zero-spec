@@ -1,0 +1,1556 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tools Programming Guide &#8212; Level Zero Specification  documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sysman Programming Guide" href="../sysman/PROG.html" />
+    <link rel="prev" title="Core Programming Guide" href="../core/PROG.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Level Zero Specification  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/INTRO.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/PROG.html">
+   Core Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Tools Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../sysman/PROG.html">
+   Sysman Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/SPIRV.html">
+   SPIR-V Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../core/EXT.html">
+   Extensions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../core/api.html">
+     Core API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api.html">
+     Tools API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../sysman/api.html">
+     Sysman API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../versions.html">
+   Versions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/tools/PROG.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initialization">
+   Initialization
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#environment-variables">
+     Environment Variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#api-tracing">
+   API Tracing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#registration">
+     Registration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-disabling-and-destruction">
+     Enabling/Disabling and Destruction
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#metrics">
+   Metrics
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-1">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#metric-groups">
+     Metric Groups
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sampling-types">
+       Sampling Types
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#domains">
+       Domains
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enumeration">
+     Enumeration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#configuration">
+     Configuration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#collection">
+     Collection
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#metric-streamer">
+       Metric Streamer
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#metric-query">
+       Metric Query
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calculation">
+     Calculation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#program-instrumentation">
+   Program Instrumentation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-2">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inter-function-instrumentation">
+     Inter-Function Instrumentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#intra-function-instrumentation">
+     Intra-Function Instrumentation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#compilation">
+       Compilation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#instrumentation">
+       Instrumentation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#execution">
+       Execution
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#program-debug">
+   Program Debug
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-3">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-debug-properties">
+     Device Debug Properties
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#attach-and-detach">
+     Attach and Detach
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#devices-and-sub-devices">
+       Devices and Sub-Devices
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#device-thread-identification">
+       Device Thread Identification
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#thread-availability">
+       Thread Availability
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#debug-events">
+     Debug Events
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-control">
+     Run Control
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#memory-access">
+     Memory Access
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#register-state-access">
+     Register State Access
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Tools Programming Guide</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initialization">
+   Initialization
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#environment-variables">
+     Environment Variables
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#api-tracing">
+   API Tracing
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#registration">
+     Registration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-disabling-and-destruction">
+     Enabling/Disabling and Destruction
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#metrics">
+   Metrics
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-1">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#metric-groups">
+     Metric Groups
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#sampling-types">
+       Sampling Types
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#domains">
+       Domains
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enumeration">
+     Enumeration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#configuration">
+     Configuration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#collection">
+     Collection
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#metric-streamer">
+       Metric Streamer
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#metric-query">
+       Metric Query
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#calculation">
+     Calculation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#program-instrumentation">
+   Program Instrumentation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-2">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inter-function-instrumentation">
+     Inter-Function Instrumentation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#intra-function-instrumentation">
+     Intra-Function Instrumentation
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#compilation">
+       Compilation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#instrumentation">
+       Instrumentation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#execution">
+       Execution
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#program-debug">
+   Program Debug
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#introduction-3">
+     Introduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-debug-properties">
+     Device Debug Properties
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#attach-and-detach">
+     Attach and Detach
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#devices-and-sub-devices">
+       Devices and Sub-Devices
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#device-thread-identification">
+       Device Thread Identification
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#thread-availability">
+       Thread Availability
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#debug-events">
+     Debug Events
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-control">
+     Run Control
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#memory-access">
+     Memory Access
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#register-state-access">
+     Register State Access
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="tools-programming-guide">
+<span id="id1"></span><h1>Tools Programming Guide<a class="headerlink" href="#tools-programming-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="environment-variables">
+<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>The following environment variables are required to be enabled during <a class="reference internal" href="../core/api.html#zeinit"><span class="std std-ref">zeInit</span></a> for the respective feature.</p>
+<table class="table">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 25%" />
+<col style="width: 8%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Values</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="4"><p>Tools</p></td>
+<td><p>ZET_ENABLE_API_TRACING_EXP</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables driver instrumentation for API tracing
+<strong>Note</strong>: This tracing environment variable is <strong>deprecated</strong>. Please use the
+tracing loader layer instead.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZET_ENABLE_METRICS</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables driver instrumentation and dependencies for device metrics</p></td>
+</tr>
+<tr class="row-even"><td><p>ZET_ENABLE_PROGRAM_INSTRUMENTATION</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables driver instrumentation and dependencies for program instrumentation</p></td>
+</tr>
+<tr class="row-odd"><td><p>ZET_ENABLE_PROGRAM_DEBUGGING</p></td>
+<td><p>{<strong>0</strong>, 1}</p></td>
+<td><p>Enables driver instrumentation and dependencies for program debugging</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="api-tracing">
+<span id="id2"></span><h2>API Tracing<a class="headerlink" href="#api-tracing" title="Permalink to this headline">¶</a></h2>
+<p><strong>Experimental Extension</strong> - this feature will be removed post-1.0 and replaced with custom loader layers.</p>
+<div class="section" id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>API tracing provides a way for tools to receive notifications of API
+calls made by an application. The callbacks provide direct access to the
+input and output parameters for viewing and modification. Tools may also
+use these notifications as triggers to block and inject new API calls
+into the command stream, such as metrics.</p>
+</div>
+<div class="section" id="registration">
+<h3>Registration<a class="headerlink" href="#registration" title="Permalink to this headline">¶</a></h3>
+<p>Tools may independently register for enter and exit callbacks for individual API calls, per driver instance.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#zettracerexpsetprologues"><span class="std std-ref">zetTracerExpSetPrologues</span></a> is used to specify all the enter callbacks</p></li>
+<li><p><a class="reference internal" href="api.html#zettracerexpsetepilogues"><span class="std std-ref">zetTracerExpSetEpilogues</span></a> is used to specify all the exit callbacks</p></li>
+<li><p>If the value of a callback is nullptr, then it will be ignored.</p></li>
+</ul>
+<p>The callbacks are defined as a collection of per-API function pointers, with the following parameters:</p>
+<ul class="simple">
+<li><p>params : a structure capturing pointers to the input and output parameters of the current instance</p></li>
+<li><p>result : the current value of the return value</p></li>
+<li><p>pTracerUserData : the user’s pointer for the tracer’s data</p></li>
+<li><p>ppTracerInstanceUserData : a per-tracer, per-instance thread-local storage location; typically used for passing data from the prologue to the epilogue</p></li>
+</ul>
+<p>Note: since the creation of a tracer requires a device, on first glance
+it appears that <a class="reference internal" href="../core/api.html#zeinit"><span class="std std-ref">zeInit</span></a>, <a class="reference internal" href="../core/api.html#zedriverget"><span class="std std-ref">zeDriverGet</span></a> and <a class="reference internal" href="../core/api.html#zedeviceget"><span class="std std-ref">zeDeviceGet</span></a> are not
+traceable. However, these APIs <strong>are</strong> traceable for all calls
+subsequent from the creation and enabling of the tracer itself.</p>
+</div>
+<div class="section" id="enabling-disabling-and-destruction">
+<h3>Enabling/Disabling and Destruction<a class="headerlink" href="#enabling-disabling-and-destruction" title="Permalink to this headline">¶</a></h3>
+<p>The tracer is created in a disabled state and must be explicitly enabled
+by calling <a class="reference internal" href="api.html#zettracerexpsetenabled"><span class="std std-ref">zetTracerExpSetEnabled</span></a>. The implementation guarantees that
+prologues and epilogues will always be executed in pairs; i.e.</p>
+<ul class="simple">
+<li><p>if the prologue was called then the epilogue is guaranteed to be called, even if another thread disabled the tracer between execution</p></li>
+<li><p>if the prologue was not called then the epilogue is guaranteed not to be called, even if another thread enabled the tracer between execution</p></li>
+</ul>
+<p>The tracer should be disabled by the application before the tracer is
+destroyed. If multiple threads are in-flight, then it is still possible
+that callbacks will continue to execute even after the tracer is
+disabled; specifically, due to the pairing rules above. Due to the
+complexity involved in ensuring no threads are still or will be
+executing a callback even after its been disabled, the implementation
+will stall and wait for any outstanding threads during <a class="reference internal" href="api.html#zettracerexpdestroy"><span class="std std-ref">zetTracerExpDestroy</span></a>.</p>
+<p>The following pseudo-code demonstrates a basic usage of API tracing:</p>
+<pre class="literal-block">typedef struct _my_tracer_data_t
+{
+    uint32_t instance;
+} my_tracer_data_t;
+
+typedef struct _my_instance_data_t
+{
+    clock_t start;
+} my_instance_data_t;
+
+void OnEnterCommandListAppendLaunchKernel(
+    ze_command_list_append_launch_kernel_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData )
+{
+    my_instance_data_t* instance_data = malloc( sizeof(my_instance_data_t) );
+    *ppTracerInstanceUserData = instance_data;
+
+    instance_data-&gt;start = clock();
+}
+
+void OnExitCommandListAppendLaunchKernel(
+    ze_command_list_append_launch_kernel_params_t* params,
+    ze_result_t result,
+    void* pTracerUserData,
+    void** ppTracerInstanceUserData )
+{
+    clock_t end = clock();
+
+    my_tracer_data_t* tracer_data = (my_tracer_data_t*)pTracerUserData;
+    my_instance_data_t* instance_data = <em>(my_instance_data_t*</em>)ppTracerInstanceUserData;
+
+    float time = 1000.f * ( end - instance_data-&gt;start ) / CLOCKS_PER_SEC;
+    printf(&quot;zeCommandListAppendLaunchKernel #%d takes %.4f msn&quot;, tracer_data-&gt;instance++, time);
+
+    free(instance_data);
+}
+
+void TracingExample( ... )
+{
+    my_tracer_data_t tracer_data = {};
+    <a class="reference internal" href="api.html#zet-tracer-exp-desc-t"><span class="std std-ref">zet_tracer_exp_desc_t</span></a> tracer_desc {};
+    tracer_desc.stype = <a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_TRACER_EXP_DESC</span></a>;
+    tracer_desc.pUserData = &amp;tracer_data;
+    zet_tracer_exp_handle_t hTracer;
+    <a class="reference internal" href="api.html#zettracerexpcreate"><span class="std std-ref">zetTracerExpCreate</span></a>(hDevice, &amp;tracer_desc, &amp;hTracer);
+
+    // Set all callbacks
+    zet_core_callbacks_t prologCbs = {};
+    zet_core_callbacks_t epilogCbs = {};
+    prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
+    epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
+
+    <a class="reference internal" href="api.html#zettracerexpsetprologues"><span class="std std-ref">zetTracerExpSetPrologues</span></a>(hTracer, &amp;prologCbs);
+    <a class="reference internal" href="api.html#zettracerexpsetepilogues"><span class="std std-ref">zetTracerExpSetEpilogues</span></a>(hTracer, &amp;epilogCbs);
+
+    <a class="reference internal" href="api.html#zettracerexpsetenabled"><span class="std std-ref">zetTracerExpSetEnabled</span></a>(hTracer, true);
+
+    <a class="reference internal" href="../core/api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(hCommandList, hFunction, &amp;launchArgs, nullptr, 0, nullptr);
+    <a class="reference internal" href="../core/api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(hCommandList, hFunction, &amp;launchArgs, nullptr, 0, nullptr);
+    <a class="reference internal" href="../core/api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(hCommandList, hFunction, &amp;launchArgs, nullptr, 0, nullptr);
+
+    <a class="reference internal" href="api.html#zettracerexpsetenabled"><span class="std std-ref">zetTracerExpSetEnabled</span></a>(hTracer, false);
+    <a class="reference internal" href="api.html#zettracerexpdestroy"><span class="std std-ref">zetTracerExpDestroy</span></a>(hTracer);
+}</pre>
+</div>
+</div>
+<div class="section" id="metrics">
+<h2>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction-1">
+<span id="id3"></span><h3>Introduction<a class="headerlink" href="#introduction-1" title="Permalink to this headline">¶</a></h3>
+<p>Devices provide programmable infrastructure designed to support
+performance debugging. The API described in this document provides
+access to these device metrics. The intention of this API is to support
+performance debug and it is not advised to use it in regular execution
+as overall performance can be negatively impacted.</p>
+<div class="line-block">
+<div class="line">The following diagram illustrates the relationship between the metric
+objects described in this document.</div>
+</div>
+<img alt="../_images/tools_metric_hierarchy.png" src="../_images/tools_metric_hierarchy.png" />
+<p>Most of the detailed metrics require the device to be properly
+programmed before use. It is important to understand that the device
+programming is in most cases global. This generally means that if a
+software tool or an application is using the metrics then no other
+application can reliably use the same device resources.</p>
+</div>
+<div class="section" id="metric-groups">
+<h3>Metric Groups<a class="headerlink" href="#metric-groups" title="Permalink to this headline">¶</a></h3>
+<p>The device infrastructure consists of a pre-defined set of non-programmable
+counters, and a programmable network of connections that work with a
+separate set of counters as well as other types of counters. For sake of
+simplicity, the smallest unit of configuration is a Metric Group. Metric
+Groups are sets of metrics that provide certain perspective on
+workload’s performance. The groups aggregate metrics, define device
+programming and available collection methods. An application may choose
+to collect data from several Metric Groups provided that they all
+belong to different domains. <a class="reference internal" href="#domains"><span class="std std-ref">Domains</span></a> are used as a software
+representation of independent device resources that can safely be used
+concurrently.</p>
+<div class="section" id="sampling-types">
+<h4>Sampling Types<a class="headerlink" href="#sampling-types" title="Permalink to this headline">¶</a></h4>
+<p>Sampling types are a software representation of device capabilities in
+terms of reading metric values. Each Metric Group provides information
+on which sampling types it supports. There are separate sets of APIs
+supporting each of the sampling types <a class="reference internal" href="#time-based">Time-based</a> and <a class="reference internal" href="#event-based">Event-based</a>.</p>
+<p>All available sampling types are defined in <a class="reference internal" href="api.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">zet_metric_group_sampling_type_flags_t</span></a>.</p>
+<ul class="simple">
+<li><p>Information about supported sampling types for a given Metric Group is provided in <a class="reference internal" href="api.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.samplingType.</p></li>
+<li><p>It’s possible that a device provides multiple Metric Groups with the same names but different sampling types.</p></li>
+<li><p>When enumerating, it’s important to choose a Metric Group which supports the desired sampling type.</p></li>
+</ul>
+</div>
+<div class="section" id="domains">
+<span id="id4"></span><h4>Domains<a class="headerlink" href="#domains" title="Permalink to this headline">¶</a></h4>
+<p>Every Metric Group belongs to a given domain (<a class="reference internal" href="api.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.domain).</p>
+<ul class="simple">
+<li><p>The Metric Group typically define a uniform device counter configuration used for measurements.</p></li>
+<li><p>Each domain represents an exclusive resource used by the Metric Group.</p></li>
+<li><p>It’s possible to simultaneously gather data for two different Metric Groups, only if they belong to a different domain i.e. Metric Groups that can be collected concurrently will have different domain values.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="enumeration">
+<h3>Enumeration<a class="headerlink" href="#enumeration" title="Permalink to this headline">¶</a></h3>
+<p>All available metrics are organized into Metric Groups.</p>
+<ul class="simple">
+<li><p>During data collection, data for the whole Metric Group is gathered.</p></li>
+<li><p>The list of available Metric Groups and their Metrics is device-specific.</p></li>
+</ul>
+<p>The following APIs provide all the information needed for identification and usage.</p>
+<ul class="simple">
+<li><p>Metric Group properties are accessed through the function <a class="reference internal" href="api.html#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a> which returns <a class="reference internal" href="api.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.</p></li>
+<li><p>Metric properties are accessed through the function <a class="reference internal" href="api.html#zetmetricgetproperties"><span class="std std-ref">zetMetricGetProperties</span></a> which returns <a class="reference internal" href="api.html#zet-metric-properties-t"><span class="std std-ref">zet_metric_properties_t</span></a>.</p></li>
+</ul>
+<p>A common tool flow is to enumerate metrics looking for a specific Metric
+Group. Depending on the metrics required for a specific scenario a tool
+may choose to run the workload multiple times, recording different set
+of Metric Groups each time. Usually care must be taken to ensure
+run-to-run stability and result repeatability if metrics from different
+runs are meant to be used together. When enumerating metrics to find
+a desired Metric Group, it’s important to know in advance which sampling
+type will be used.</p>
+<p>To enumerate through the Metric tree:</p>
+<ol class="arabic">
+<li><p>Call <a class="reference internal" href="api.html#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a> to obtain Metric Group count.</p></li>
+<li><p>Call <a class="reference internal" href="api.html#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a> to obtain all Metric Groups.</p></li>
+<li><p>Iterate over all available Metric Groups.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>At this point it’s possible to check Metric Group name, domain or sampling type.</p></li>
+<li><p>Metric Group names may not be unique.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Obtain the metric count for each Metric Group by calling <a class="reference internal" href="api.html#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a> with Metric Group handle (zet_metric_group_handle_t) and checking <a class="reference internal" href="api.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.metricCount.</p></li>
+<li><p>Iterate over available Metrics using <a class="reference internal" href="api.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a> with parent Metric Group (zet_metric_group_handle_t).</p></li>
+<li><p>Check Metric properties (e.g. name, description) calling <a class="reference internal" href="api.html#zetmetricgetproperties"><span class="std std-ref">zetMetricGetProperties</span></a> with parent Metric (zet_metric_handle_t).</p></li>
+</ol>
+<p>The following pseudo-code demonstrates a basic enumeration over all
+available metric groups and their metrics. Additionally, it returns a
+metric group with a chosen name and sampling type. Similar code could be
+used for selecting a preferred metric group for a specific type of
+measurements.</p>
+<pre class="literal-block"><a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> FindMetricGroup( ze_device_handle_t hDevice,
+                               char* pMetricGroupName,
+                               uint32_t desiredSamplingType,
+                               zet_metric_group_handle_t* phMetricGroup )
+{
+    // Obtain available metric groups for the specific device
+    uint32_t metricGroupCount = 0;
+    <a class="reference internal" href="api.html#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a>( hDevice, &amp;metricGroupCount, nullptr );
+
+    zet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(zet_metric_group_handle_t));
+    <a class="reference internal" href="api.html#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a>( hDevice, &amp;metricGroupCount, phMetricGroups );
+
+    // Iterate over all metric groups available
+    for( i = 0; i &lt; metricGroupCount; i++ )
+    {
+        // Get metric group under index 'i' and its properties
+        <a class="reference internal" href="api.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a> metricGroupProperties {};
+        metricGroupProperties.stype = <a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES</span></a>;
+        <a class="reference internal" href="api.html#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a>( phMetricGroups[i], &amp;metricGroupProperties );
+
+        printf(&quot;Metric Group: %sn&quot;, metricGroupProperties.name);
+
+        // Check whether the obtained metric group supports the desired sampling type
+        if((metricGroupProperties.samplingType &amp; desiredSamplingType) == desiredSamplingType)
+        {
+            // Check whether the obtained metric group has the desired name
+            if( strcmp( pMetricGroupName, metricGroupProperties.name ) == 0 )
+            {
+                *phMetricGroup = phMetricGroups[i];
+                break;
+            }
+        }
+    }
+
+    free(phMetricGroups);
+}</pre>
+</div>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>Use the <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a> API call to configure the device
+for data collection.</p>
+<ul class="simple">
+<li><p>Subsequent calls to the function will disable device programming for the metric groups not selected for activation.</p></li>
+<li><p>To avoid undefined results only call the <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a> between experiments i.e. while not collecting data.</p></li>
+</ul>
+<p>Programming restrictions:</p>
+<ul class="simple">
+<li><p>Any combination of metric groups can be configured simultaneously provided that all of them have a different <a class="reference internal" href="api.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.domain.</p></li>
+<li><p>MetricGroup must be active until <a class="reference internal" href="api.html#zetmetricstreamerclose"><span class="std std-ref">zetMetricStreamerClose</span></a> and the last <a class="reference internal" href="api.html#zetcommandlistappendmetricqueryend"><span class="std std-ref">zetCommandListAppendMetricQueryEnd</span></a> completes.</p></li>
+</ul>
+</div>
+<div class="section" id="collection">
+<h3>Collection<a class="headerlink" href="#collection" title="Permalink to this headline">¶</a></h3>
+<p>There are two modes of metrics collection supported: <a class="reference internal" href="#time-based"><span class="std std-ref">time-based</span></a> and <a class="reference internal" href="#event-based"><span class="std std-ref">event-based</span></a>.</p>
+<ul class="simple">
+<li><p>Time-based collection is using a timer as well as other events to store data samples. A metric streamer interface is the software interface for configuration and collection.</p></li>
+<li><p>Event-based collection is based on a pair of Begin/End events appended to command lists. A metric query interface is the software interface for configuration and collection.</p></li>
+</ul>
+<div class="section" id="metric-streamer">
+<span id="time-based"></span><h4>Metric Streamer<a class="headerlink" href="#metric-streamer" title="Permalink to this headline">¶</a></h4>
+<p>Time-based collection uses a simple Open, Read, Close scheme:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#zetmetricstreameropen"><span class="std std-ref">zetMetricStreamerOpen</span></a> opens the streamer.</p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricstreamerreaddata"><span class="std std-ref">zetMetricStreamerReadData</span></a> reads the raw data to be later processed by <a class="reference internal" href="api.html#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>.</p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricstreamerclose"><span class="std std-ref">zetMetricStreamerClose</span></a> closes the streamer.</p></li>
+</ul>
+<img alt="../_images/tools_metric_streamer.png" src="../_images/tools_metric_streamer.png" />
+<p>The following pseudo-code demonstrates a basic sequence for time-based collection:</p>
+<pre class="literal-block"><a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> TimeBasedUsageExample( ze_context_handle_t hContext,
+                                     ze_device_handle_t hDevice )
+{
+    zet_metric_group_handle_t     hMetricGroup           = nullptr;
+    ze_event_handle_t            hNotificationEvent     = nullptr;
+    ze_event_pool_handle_t       hEventPool             = nullptr;
+    <a class="reference internal" href="../core/api.html#ze-event-pool-desc-t"><span class="std std-ref">ze_event_pool_desc_t</span></a>         eventPoolDesc          = {<a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_POOL_DESC</span></a>, nullptr, 0, 1};
+    <a class="reference internal" href="../core/api.html#ze-event-desc-t"><span class="std std-ref">ze_event_desc_t</span></a>              eventDesc              = {<a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_DESC</span></a>};
+    zet_metric_streamer_handle_t  hMetricStreamer        = nullptr;
+    <a class="reference internal" href="api.html#zet-metric-streamer-desc-t"><span class="std std-ref">zet_metric_streamer_desc_t</span></a>    metricStreamerDesc     = {<a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC</span></a>};
+
+    // Find a &quot;ComputeBasic&quot; metric group suitable for Time Based collection
+    FindMetricGroup( hDevice, &quot;ComputeBasic&quot;, <a class="reference internal" href="api.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED</span></a>, &amp;hMetricGroup );
+
+    // Configure the HW
+    <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a>( hContext, hDevice, /* count= */ 1, &amp;hMetricGroup );
+
+    // Create notification event
+    <a class="reference internal" href="../core/api.html#zeeventpoolcreate"><span class="std std-ref">zeEventPoolCreate</span></a>( hContext, &amp;eventPoolDesc, 1, &amp;hDevice, &amp;hEventPool );
+    eventDesc.index  = 0;
+    eventDesc.signal = <a class="reference internal" href="../core/api.html#ze-event-scope-flags-t"><span class="std std-ref">ZE_EVENT_SCOPE_FLAG_HOST</span></a>;
+    eventDesc.wait   = <a class="reference internal" href="../core/api.html#ze-event-scope-flags-t"><span class="std std-ref">ZE_EVENT_SCOPE_FLAG_HOST</span></a>;
+    <a class="reference internal" href="../core/api.html#zeeventcreate"><span class="std std-ref">zeEventCreate</span></a>( hEventPool, &amp;eventDesc, &amp;hNotificationEvent );
+
+    // Open metric streamer
+    metricStreamerDesc.samplingPeriod       = 1000;
+    metricStreamerDesc.notifyEveryNReports  = 32768;
+    <a class="reference internal" href="api.html#zetmetricstreameropen"><span class="std std-ref">zetMetricStreamerOpen</span></a>( hContext, hDevice, hMetricGroup, &amp;metricStreamerDesc, hNotificationEvent, &amp;hMetricStreamer );
+
+    // Run your workload, in this example we assume the data for the whole experiment fits in the device buffer
+    Workload(hDevice);
+    // Optionally insert markers during workload execution
+    //<a class="reference internal" href="api.html#zetcommandlistappendmetricstreamermarker"><span class="std std-ref">zetCommandListAppendMetricStreamerMarker</span></a>( hCommandList, hMetricStreamer, tool_marker_value );
+
+    // Wait for data, optional in this example since the whole workload has already been executed by now
+    //<a class="reference internal" href="../core/api.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>( hNotificationEvent, 1000 /*timeout*/ );
+    // reset the event if it fired
+
+    // Read raw data
+    size_t rawSize = 0;
+    <a class="reference internal" href="api.html#zetmetricstreamerreaddata"><span class="std std-ref">zetMetricStreamerReadData</span></a>( hMetricStreamer, UINT32_MAX, &amp;rawSize, nullptr );
+    uint8_t* rawData = malloc(rawSize);
+    <a class="reference internal" href="api.html#zetmetricstreamerreaddata"><span class="std std-ref">zetMetricStreamerReadData</span></a>( hMetricStreamer, UINT32_MAX, &amp;rawSize, rawData );
+
+    // Close metric streamer
+    <a class="reference internal" href="api.html#zetmetricstreamerclose"><span class="std std-ref">zetMetricStreamerClose</span></a>( hMetricStreamer );
+    <a class="reference internal" href="../core/api.html#zeeventdestroy"><span class="std std-ref">zeEventDestroy</span></a>( hNotificationEvent );
+    <a class="reference internal" href="../core/api.html#zeeventpooldestroy"><span class="std std-ref">zeEventPoolDestroy</span></a>( hEventPool );
+
+    // Deconfigure the device
+    <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a>( hContext, hDevice, 0, nullptr );
+
+    // Calculate metric data
+    CalculateMetricsExample( hMetricGroup, rawSize, rawData );
+    free(rawData);
+}</pre>
+</div>
+<div class="section" id="metric-query">
+<span id="event-based"></span><h4>Metric Query<a class="headerlink" href="#metric-query" title="Permalink to this headline">¶</a></h4>
+<p>Event-based collection uses a simple Begin, End, GetData scheme:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#zetcommandlistappendmetricquerybegin"><span class="std std-ref">zetCommandListAppendMetricQueryBegin</span></a> defines the start counting event</p></li>
+<li><p><a class="reference internal" href="api.html#zetcommandlistappendmetricqueryend"><span class="std std-ref">zetCommandListAppendMetricQueryEnd</span></a> defines the finish counting event</p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricquerygetdata"><span class="std std-ref">zetMetricQueryGetData</span></a> reads the raw data to be later processed by <a class="reference internal" href="api.html#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>.</p></li>
+</ul>
+<p>Typically, multiple queries are used and recycled to characterize a workload. A Query Pool is used to efficiently use and reuse device memory for multiple queries.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#zetmetricquerypoolcreate"><span class="std std-ref">zetMetricQueryPoolCreate</span></a> creates a pool of homogeneous queries.</p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricquerypooldestroy"><span class="std std-ref">zetMetricQueryPoolDestroy</span></a> frees the pool. The application must ensure no queries within the pool are in-use before freeing the pool.</p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricquerycreate"><span class="std std-ref">zetMetricQueryCreate</span></a> obtains a handle to a unique location in the pool.</p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricqueryreset"><span class="std std-ref">zetMetricQueryReset</span></a> allows for low-cost recycling of a location in the pool.</p></li>
+</ul>
+<img alt="../_images/tools_metric_query.png" src="../_images/tools_metric_query.png" />
+<p>The following pseudo-code demonstrates a basic sequence for query-based collection:</p>
+<pre class="literal-block"><a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> MetricQueryUsageExample( ze_context_handle_t hContext,
+                                       ze_device_handle_t hDevice )
+{
+    zet_metric_group_handle_t      hMetricGroup          = nullptr;
+    ze_event_handle_t             hCompletionEvent      = nullptr;
+    <a class="reference internal" href="../core/api.html#ze-event-pool-desc-t"><span class="std std-ref">ze_event_pool_desc_t</span></a>          eventPoolDesc         = {<a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_POOL_DESC</span></a>, nullptr};
+    <a class="reference internal" href="../core/api.html#ze-event-desc-t"><span class="std std-ref">ze_event_desc_t</span></a>               eventDesc             = {<a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_DESC</span></a>, nullptr};
+    ze_event_pool_handle_t        hEventPool            = nullptr;
+    zet_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
+    zet_metric_query_handle_t      hMetricQuery          = nullptr;
+    <a class="reference internal" href="api.html#zet-metric-query-pool-desc-t"><span class="std std-ref">zet_metric_query_pool_desc_t</span></a>   queryPoolDesc         = {<a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC</span></a>, nullptr};
+
+    // Find a &quot;ComputeBasic&quot; metric group suitable for Event Based collection
+    FindMetricGroup( hDevice, &quot;ComputeBasic&quot;, <a class="reference internal" href="api.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASED</span></a>, &amp;hMetricGroup );
+
+    // Configure HW
+    <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a>( hContext, hDevice, 1 /* count */, &amp;hMetricGroup );
+
+    // Create metric query pool &amp; completion event
+    queryPoolDesc.type         = <a class="reference internal" href="api.html#zet-metric-query-pool-type-t"><span class="std std-ref">ZET_METRIC_QUERY_POOL_TYPE_PERFORMANCE</span></a>;
+    queryPoolDesc.count        = 1000;
+    <a class="reference internal" href="api.html#zetmetricquerypoolcreate"><span class="std std-ref">zetMetricQueryPoolCreate</span></a>( hContext, hDevice, hMetricGroup, &amp;queryPoolDesc, &amp;hMetricQueryPool );
+    eventPoolDesc.flags = 0;
+    eventPoolDesc.count = 1000;
+    <a class="reference internal" href="../core/api.html#zeeventpoolcreate"><span class="std std-ref">zeEventPoolCreate</span></a>( hContext, &amp;eventPoolDesc, 1, &amp;hDevice, &amp;hEventPool );
+
+    // Write BEGIN metric query to command list
+    <a class="reference internal" href="api.html#zetmetricquerycreate"><span class="std std-ref">zetMetricQueryCreate</span></a>( hMetricQueryPool, 0 /*slot*/, &amp;hMetricQuery );
+    <a class="reference internal" href="api.html#zetcommandlistappendmetricquerybegin"><span class="std std-ref">zetCommandListAppendMetricQueryBegin</span></a>( hCommandList, hMetricQuery );
+
+    // build your command list
+    ...
+
+    // Write END metric query to command list, use an event to determine if the data is available
+    eventDesc.index  = 0;
+    eventDesc.signal = <a class="reference internal" href="../core/api.html#ze-event-scope-flags-t"><span class="std std-ref">ZE_EVENT_SCOPE_FLAG_HOST</span></a>;
+    eventDesc.wait   = <a class="reference internal" href="../core/api.html#ze-event-scope-flags-t"><span class="std std-ref">ZE_EVENT_SCOPE_FLAG_HOST</span></a>;
+    <a class="reference internal" href="../core/api.html#zeeventcreate"><span class="std std-ref">zeEventCreate</span></a>( hEventPool, &amp;eventDesc, &amp;hCompletionEvent);
+    <a class="reference internal" href="api.html#zetcommandlistappendmetricqueryend"><span class="std std-ref">zetCommandListAppendMetricQueryEnd</span></a>( hCommandList, hMetricQuery, hCompletionEvent, 0, nullptr );
+
+    // use <a class="reference internal" href="../core/api.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>( , , , ) to submit your workload to the device
+
+    // Wait for data
+    <a class="reference internal" href="../core/api.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>( hCompletionEvent, 1000 /*timeout*/ );
+
+    // Read raw data
+    size_t rawSize = 0;
+    <a class="reference internal" href="api.html#zetmetricquerygetdata"><span class="std std-ref">zetMetricQueryGetData</span></a>( hMetricQuery, &amp;rawSize, nullptr );
+    uint8_t* rawData = malloc(rawSize);
+    <a class="reference internal" href="api.html#zetmetricquerygetdata"><span class="std std-ref">zetMetricQueryGetData</span></a>( hMetricQuery, &amp;rawSize, rawData );
+
+    // Free the resources
+    <a class="reference internal" href="../core/api.html#zeeventdestroy"><span class="std std-ref">zeEventDestroy</span></a>( hCompletionEvent );
+    <a class="reference internal" href="../core/api.html#zeeventpooldestroy"><span class="std std-ref">zeEventPoolDestroy</span></a>( hEventPool );
+    <a class="reference internal" href="api.html#zetmetricquerypooldestroy"><span class="std std-ref">zetMetricQueryPoolDestroy</span></a>( hMetricQueryPool );
+
+    // Deconfigure HW
+    <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a>( hContext, hDevice, 0, nullptr );
+
+    // Calculate metric data
+    CalculateMetricsExample( hMetricGroup, rawSize, rawData );
+    free(rawData);
+}</pre>
+</div>
+</div>
+<div class="section" id="calculation">
+<h3>Calculation<a class="headerlink" href="#calculation" title="Permalink to this headline">¶</a></h3>
+<p>Both MetricStreamer and MetricQuery collect the data in device specific, raw form that is not suitable for application processing.
+To calculate metric values use <a class="reference internal" href="api.html#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>.</p>
+<p>The following pseudo-code demonstrates a basic sequence for metric calculation and interpretation:</p>
+<pre class="literal-block"><a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> CalculateMetricsExample( zet_metric_group_handle_t hMetricGroup,
+                                       size_t rawSize, uint8_t* rawData )
+{
+    // Calculate metric data
+    uint32_t numMetricValues = 0;
+    <a class="reference internal" href="api.html#zet-metric-group-calculation-type-t"><span class="std std-ref">zet_metric_group_calculation_type_t</span></a> calculationType = <a class="reference internal" href="api.html#zet-metric-group-calculation-type-t"><span class="std std-ref">ZET_METRIC_GROUP_CALCULATION_TYPE_METRIC_VALUES</span></a>;
+    <a class="reference internal" href="api.html#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>( hMetricGroup, calculationType, rawSize, rawData, &amp;numMetricValues, nullptr );
+    <a class="reference internal" href="api.html#zet-typed-value-t"><span class="std std-ref">zet_typed_value_t</span></a>* metricValues = malloc( numMetricValues * sizeof(<a class="reference internal" href="api.html#zet-typed-value-t"><span class="std std-ref">zet_typed_value_t</span></a>) );
+    <a class="reference internal" href="api.html#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>( hMetricGroup, calculationType, rawSize, rawData, &amp;numMetricValues, metricValues );
+
+    // Obtain available metrics for the specific metric group
+    uint32_t metricCount = 0;
+    <a class="reference internal" href="api.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a>( hMetricGroup, &amp;metricCount, nullptr );
+
+    zet_metric_handle_t* phMetrics = malloc(metricCount * sizeof(zet_metric_handle_t));
+    <a class="reference internal" href="api.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a>( hMetricGroup, &amp;metricCount, phMetrics );
+
+    // Print metric results
+    uint32_t numReports = numMetricValues / metricCount;
+    for( uint32_t report = 0; report &lt; numReports; ++report )
+    {
+        printf(&quot;Report: %dn&quot;, report);
+
+        for( uint32_t metric = 0; metric &lt; metricCount; ++metric )
+        {
+            <a class="reference internal" href="api.html#zet-typed-value-t"><span class="std std-ref">zet_typed_value_t</span></a> data = metricValues[report * metricCount + metric];
+
+            <a class="reference internal" href="api.html#zet-metric-properties-t"><span class="std std-ref">zet_metric_properties_t</span></a> metricProperties {};
+            metricProperties.stype = <a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_METRIC_PROPERTIES</span></a>;
+            <a class="reference internal" href="api.html#zetmetricgetproperties"><span class="std std-ref">zetMetricGetProperties</span></a>( phMetrics[ metric ], &amp;metricProperties );
+
+            printf(&quot;Metric: %sn&quot;, metricProperties.name );
+
+            switch( data.type )
+            {
+            case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_UINT32</span></a>:
+                printf(&quot; Value: %lun&quot;, data.value.ui32 );
+                break;
+            case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_UINT64</span></a>:
+                printf(&quot; Value: %llun&quot;, data.value.ui64 );
+                break;
+            case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_FLOAT32</span></a>:
+                printf(&quot; Value: %fn&quot;, data.value.fp32 );
+                break;
+            case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_FLOAT64</span></a>:
+                printf(&quot; Value: %fn&quot;, data.value.fp64 );
+                break;
+            case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_BOOL8</span></a>:
+                if( data.value.ui32 )
+                    printf(&quot; Value: truen&quot; );
+                else
+                    printf(&quot; Value: falsen&quot; );
+                break;
+            default:
+                break;
+            };
+        }
+    }
+
+    free(metricValues);
+    free(phMetrics);
+}</pre>
+</div>
+</div>
+<div class="section" id="program-instrumentation">
+<h2>Program Instrumentation<a class="headerlink" href="#program-instrumentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction-2">
+<span id="id5"></span><h3>Introduction<a class="headerlink" href="#introduction-2" title="Permalink to this headline">¶</a></h3>
+<p>The program instrumentation APIs provide tools a basic framework for low-level profiling of device kernels,
+by allowing direct instrumentation of those programs.
+These capabilities, in combination with those already provided, and in combination with a custom loader layer,
+are sufficient for more advanced frameworks to be developed.</p>
+<p>There are two types of instrumentation available:</p>
+<ol class="arabic simple">
+<li><p>Inter-Function Instrumentation - intercepting and redirecting function calls</p></li>
+<li><p>Intra-Function Instrumentation - injecting new instructions within a function</p></li>
+</ol>
+</div>
+<div class="section" id="inter-function-instrumentation">
+<h3>Inter-Function Instrumentation<a class="headerlink" href="#inter-function-instrumentation" title="Permalink to this headline">¶</a></h3>
+<p>The following capabilities allow for a tool to intercept and redirect function calls:</p>
+<ul class="simple">
+<li><p>Inter-module function calls - the ability to call functions between different modules; e.g., the application’s module and a tool’s module</p></li>
+<li><p>Custom loader layer - the ability to intercept and inject API calls</p></li>
+</ul>
+<p>For example, a tool may use a custom loader layer in any of the following ways:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a> - replace a module handle with instrumented module handle for all functions</p></li>
+<li><p><a class="reference internal" href="../core/api.html#zekernelcreate"><span class="std std-ref">zeKernelCreate</span></a> - replace a kernel handle with instrumented kernel handle for all call sites</p></li>
+<li><p><a class="reference internal" href="../core/api.html#zemodulegetfunctionpointer"><span class="std std-ref">zeModuleGetFunctionPointer</span></a> - replace a function pointer with instrumented function pointer for all call sites</p></li>
+<li><p><a class="reference internal" href="../core/api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a> - replace a kernel handle with instrumented kernel handle at call site</p></li>
+</ul>
+</div>
+<div class="section" id="intra-function-instrumentation">
+<h3>Intra-Function Instrumentation<a class="headerlink" href="#intra-function-instrumentation" title="Permalink to this headline">¶</a></h3>
+<p>The following capabilities allow for a tool to inject instructions within a kernel:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#zetmodulegetdebuginfo"><span class="std std-ref">zetModuleGetDebugInfo</span></a> - allows a tool to query standard debug info for an application’s module</p></li>
+<li><p><a class="reference internal" href="api.html#zetkernelgetprofileinfo"><span class="std std-ref">zetKernelGetProfileInfo</span></a> - allows a tool to query detailed information on aspects of a kernel</p></li>
+<li><p><a class="reference internal" href="../core/api.html#zemodulegetnativebinary"><span class="std std-ref">zeModuleGetNativeBinary</span></a> - allows for a tool to retrieve the native binary of the application’s module, instrument it, then create a new module using the instrumented version</p></li>
+<li><p>Custom loader layer - same usage as Inter-Function Instrumentation above</p></li>
+</ul>
+<div class="section" id="compilation">
+<h4>Compilation<a class="headerlink" href="#compilation" title="Permalink to this headline">¶</a></h4>
+<p>A module must be compiled with foreknowledge that instrumentation will be performed for the compiler to generate the proper profiling meta-data.
+Therefore, when the instrumentation layer is enabled, a new
+build flag is supported: “-zet-profile-flags &lt;value&gt;”, where &lt;value&gt; must be a
+combination of <a class="reference internal" href="api.html#zet-profile-flags-t"><span class="std std-ref">zet_profile_flags_t</span></a>, in hexidecimal.</p>
+<p>As an example, a tool could use a custom loader layer to inject this build flag on each <a class="reference internal" href="../core/api.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a> call that the tool wishes to instrument.
+In another example, a tool could recompile a Module using the build flag and use a custom loader layer to replace the application’s Module handle with it’s own.</p>
+</div>
+<div class="section" id="instrumentation">
+<h4>Instrumentation<a class="headerlink" href="#instrumentation" title="Permalink to this headline">¶</a></h4>
+<p>Once the module has been compiled with instrumentation enabled, a tool may use <a class="reference internal" href="api.html#zetmodulegetdebuginfo"><span class="std std-ref">zetModuleGetDebugInfo</span></a> and <a class="reference internal" href="api.html#zetkernelgetprofileinfo"><span class="std std-ref">zetKernelGetProfileInfo</span></a>
+in order to decode the application’s instructions and register usage for each function in the module.</p>
+<p>If a tool requires additional functions to be used, it may create other module(s) and use <a class="reference internal" href="../core/api.html#zemodulegetfunctionpointer"><span class="std std-ref">zeModuleGetFunctionPointer</span></a>
+to call functions between the application and tool modules.
+A tool may use <a class="reference internal" href="../core/api.html#zemodulegetfunctionpointer"><span class="std std-ref">zeModuleGetFunctionPointer</span></a> to retrieve the Host and device address of each function in the module.</p>
+<p>There are no APIs provided for the actual instrumentation.
+Instead this is left up to the tool itself to decode the application module’s native binary and inject native instructions.
+This model prevents the instrumentation from being manipulated by the compiler.</p>
+</div>
+<div class="section" id="execution">
+<h4>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h4>
+<p>If a tool requires changing the address of an application’s function,
+then it should use a custom loader layer to intercept API calls dealing with function pointers.
+For example, <a class="reference internal" href="../core/api.html#zemodulegetfunctionpointer"><span class="std std-ref">zeModuleGetFunctionPointer</span></a> and all flavors of <a class="reference internal" href="../core/api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="program-debug">
+<h2>Program Debug<a class="headerlink" href="#program-debug" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction-3">
+<span id="id6"></span><h3>Introduction<a class="headerlink" href="#introduction-3" title="Permalink to this headline">¶</a></h3>
+<p>The program debug APIs provide tools a basic framework for debugging device code.</p>
+<p>The debug APIs only operate on a single device.
+When debugging a multi-device system, the tool must debug each device independently.</p>
+<p>The debug APIs only operate in the context of a single host process.
+When debugging multiple host processes at the same time, the tool must debug device code
+submitted by each host process independently.</p>
+</div>
+<div class="section" id="device-debug-properties">
+<h3>Device Debug Properties<a class="headerlink" href="#device-debug-properties" title="Permalink to this headline">¶</a></h3>
+<p>A tool may query the debug properties of a device by calling <a class="reference internal" href="api.html#zetdevicegetdebugproperties"><span class="std std-ref">zetDeviceGetDebugProperties</span></a>.</p>
+<p>To start a debug session, a tool should first query the debug properties of the device it wants to attach to.
+Support for attaching debuggers is indicated by the <a class="reference internal" href="api.html#zet-device-debug-property-flags-t"><span class="std std-ref">ZET_DEVICE_DEBUG_PROPERTY_FLAG_ATTACH</span></a> flag in <a class="reference internal" href="api.html#zet-device-debug-properties-t"><span class="std std-ref">zet_device_debug_properties_t</span></a>.</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#zet-device-debug-properties-t"><span class="std std-ref">zet_device_debug_properties_t</span></a> props {};
+props.stype = <a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_DEVICE_DEBUG_PROPERTIES</span></a>;
+<a class="reference internal" href="api.html#zetdevicegetdebugproperties"><span class="std std-ref">zetDeviceGetDebugProperties</span></a>(hDevice, &amp;props);
+
+if (<a class="reference internal" href="api.html#zet-device-debug-property-flags-t"><span class="std std-ref">ZET_DEVICE_DEBUG_PROPERTY_FLAG_ATTACH</span></a> &amp; props.flags == 0)
+    return; // debugging not supporting</pre>
+</div>
+<div class="section" id="attach-and-detach">
+<h3>Attach and Detach<a class="headerlink" href="#attach-and-detach" title="Permalink to this headline">¶</a></h3>
+<p>A tool must attach to a device by calling <a class="reference internal" href="api.html#zetdebugattach"><span class="std std-ref">zetDebugAttach</span></a>.
+The library will check the following properties:</p>
+<blockquote>
+<div><ul>
+<li><p>the device must support attaching debuggers.</p></li>
+<li><p>the requested host process must exist.</p></li>
+<li><p>the tool process must be allowed to debug the requested host process.</p>
+<p>Note that this does not require the tool to be attached to the host process.</p>
+</li>
+<li><p>there must be no other tool attached at the same time.</p></li>
+<li><p>device debug must be enabled on this system.</p></li>
+</ul>
+</div></blockquote>
+<p>If permission is granted, a zet_debug_session_handle_t is provided.
+The debug session handle can be used in other program debug APIs until the tool detaches again.</p>
+<p>To end a debug session, a tool calls <a class="reference internal" href="api.html#zetdebugdetach"><span class="std std-ref">zetDebugDetach</span></a> passing the
+zet_debug_session_handle_t that had been provided on the corresponding
+<a class="reference internal" href="api.html#zetdebugattach"><span class="std std-ref">zetDebugAttach</span></a> call.</p>
+<p>The following sample code demonstrates attaching and detaching:</p>
+<pre class="literal-block">zet_debug_session_handle_t hDebug;
+
+<a class="reference internal" href="api.html#zet-debug-config-t"><span class="std std-ref">zet_debug_config_t</span></a> config;
+memset(&amp;config, 0, sizeof(config));
+config.pid = ...;
+
+errcode = <a class="reference internal" href="api.html#zetdebugattach"><span class="std std-ref">zetDebugAttach</span></a>(hDevice, &amp;config, &amp;hDebug);
+if (errcode)
+    return errcode;
+
+...
+
+errcode = <a class="reference internal" href="api.html#zetdebugdetach"><span class="std std-ref">zetDebugDetach</span></a>(hDebug);
+if (errcode)
+    return errcode;</pre>
+<div class="section" id="devices-and-sub-devices">
+<h4>Devices and Sub-Devices<a class="headerlink" href="#devices-and-sub-devices" title="Permalink to this headline">¶</a></h4>
+<p>A tool may attach to any device and will implicitly be attached to all sub-devices of that device.</p>
+<p>Implementations that use separate code segments per sub-device may further allow attaching to sub-devices individually.
+Support for this can be determined by calling <a class="reference internal" href="api.html#zetdevicegetdebugproperties"><span class="std std-ref">zetDeviceGetDebugProperties</span></a> using a sub-device handle and
+checking for the <a class="reference internal" href="api.html#zet-device-debug-property-flags-t"><span class="std std-ref">ZET_DEVICE_DEBUG_PROPERTY_FLAG_ATTACH</span></a> flag in <a class="reference internal" href="api.html#zet-device-debug-properties-t"><span class="std std-ref">zet_device_debug_properties_t</span></a>.
+In that case, a tool may choose to either attach to the device or to one or more sub-devices.</p>
+<p>When attached to a sub-device, writes to the code segment will not be broadcast to other sub-devices,
+even though they may share the same address space range.
+This allows breakpoints to be contained within one sub-device.</p>
+<p>If a tool is attached to a sub-device, any attempt to attach to an parent device results in <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a>.</p>
+<p>Implementations that share code segments across sub-devices will only allow attaching to devices.
+Any attempt to attach to a sub-device results in <a class="reference internal" href="../core/api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a>.</p>
+</div>
+<div class="section" id="device-thread-identification">
+<h4>Device Thread Identification<a class="headerlink" href="#device-thread-identification" title="Permalink to this headline">¶</a></h4>
+<p>Device threads are identified by their slice, sub-slice, EU, and thread numbers,
+which lie between zero and the respective number reported by <a class="reference internal" href="../core/api.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> minus one.</p>
+<p>If a tool is attached to a device, device threads are enumerated for all sub-devices within that device.</p>
+<p>The total number of threads on a device can be computed using device properties as shown in this sample code:</p>
+<pre class="literal-block"><a class="reference internal" href="../core/api.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> properties {};
+properties.stype = <a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></a>;
+uint64_t num_threads;
+
+<a class="reference internal" href="../core/api.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>(hDevice, &amp;properties);
+
+num_threads = properties.numSlices * properties.numSubslicesPerSlice *
+    properties.numEUsPerSubslice * properties.numThreadsPerEU;</pre>
+<p>Tools may enumerate all possible thread identifiers based on device properties
+by iterating over the number of slices, sub-slices, EUs, and threads.</p>
+</div>
+<div class="section" id="thread-availability">
+<h4>Thread Availability<a class="headerlink" href="#thread-availability" title="Permalink to this headline">¶</a></h4>
+<p>Not all threads may be available at all times and some threads may not be available at any time.
+This may have various reasons, including:</p>
+<ul class="simple">
+<li><p>the thread may be idle</p></li>
+<li><p>the thread may be assigned to a different process</p></li>
+</ul>
+<p>For the purpose of this debug tool API, threads may be in one of three states:</p>
+<ul class="simple">
+<li><p>running</p></li>
+<li><p>stopped</p></li>
+<li><p>unavailable</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="debug-events">
+<h3>Debug Events<a class="headerlink" href="#debug-events" title="Permalink to this headline">¶</a></h3>
+<p>As soon as the debug session has been started, it will receive debug events from the device.
+To read the topmost event in the FIFO, the tool must call <a class="reference internal" href="api.html#zetdebugreadevent"><span class="std std-ref">zetDebugReadEvent</span></a>.</p>
+<p>The following sample code demonstrates reading an event:</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#zet-debug-event-t"><span class="std std-ref">zet_debug_event_t</span></a> event;
+errcode = <a class="reference internal" href="api.html#zetdebugreadevent"><span class="std std-ref">zetDebugReadEvent</span></a>(hDebug, UINT64_MAX, &amp;event);
+if (errcode)
+    return errcode;
+
+...
+
+if (event.flags &amp; <a class="reference internal" href="api.html#zet-debug-event-flags-t"><span class="std std-ref">ZET_DEBUG_EVENT_FLAG_NEED_ACK</span></a>) {
+    errcode = <a class="reference internal" href="api.html#zetdebugacknowledgeevent"><span class="std std-ref">zetDebugAcknowledgeEvent</span></a>(hDebug, &amp;event);
+    if (errcode)
+        return errcode;
+}</pre>
+<p>A debug event is described by the <a class="reference internal" href="api.html#zet-debug-event-t"><span class="std std-ref">zet_debug_event_t</span></a> structure, which contains:</p>
+<blockquote>
+<div><ul>
+<li><p>The event type as <a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">zet_debug_event_type_t</span></a>.</p></li>
+<li><p>A bit-vector of <a class="reference internal" href="api.html#zet-debug-event-flags-t"><span class="std std-ref">zet_debug_event_flags_t</span></a>, which can be:</p>
+<ul>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-flags-t"><span class="std std-ref">ZET_DEBUG_EVENT_FLAG_NEED_ACK</span></a> indicates that the event needs to be acknowledged by calling <a class="reference internal" href="api.html#zetdebugacknowledgeevent"><span class="std std-ref">zetDebugAcknowledgeEvent</span></a>.
+This allows tools to perform any action in response to an event and indicate their completion by acknowledging the event.</p>
+<p>Implementations are allowed to block reading of new events until the previous event has been acknowledged.
+If an implementation allows reading further events, it must allow acknowledging events out of order.</p>
+</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>Following the common fields, the event object contains event-specific fields depending on the event type.
+Not all events have event-specific fields.</p>
+<blockquote>
+<div><ul>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_DETACHED</span></a>: the tool was detached.</p>
+<ul>
+<li><p>The detach reason as <a class="reference internal" href="api.html#zet-debug-detach-reason-t"><span class="std std-ref">zet_debug_detach_reason_t</span></a>. This can be:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zet-debug-detach-reason-t"><span class="std std-ref">ZET_DEBUG_DETACH_REASON_HOST_EXIT</span></a> indicates that the host process exited.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_PROCESS_ENTRY</span></a>: the host process created one or more command queues on the device.</p></li>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_PROCESS_EXIT</span></a>: the host process destroyed all command queues on the device.</p></li>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_MODULE_LOAD</span></a>: an in-memory module was loaded onto the device.</p></li>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_MODULE_UNLOAD</span></a>: an in-memory module is about to get unloaded from the device.</p></li>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_THREAD_STOPPED</span></a>: threads stopped due to a device exception.</p>
+<p>The reported threads remain stopped until they are resumed by a call to <a class="reference internal" href="api.html#zetdebugresume"><span class="std std-ref">zetDebugResume</span></a>.</p>
+</li>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE</span></a>: threads cannot be interrupted because they are unavailable.</p>
+<p>The event is generated in response to an interrupt request if none of the requested threads is available to be interrupted.</p>
+</li>
+<li><p><a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_PAGE_FAULT</span></a>: there was a page fault on the device</p>
+<p>The event provides the page fault reason, the faulting address aligned to the page granularity, and a mask specifying the alignment.</p>
+<p>To mask can be bit-wise ANDed with an address to obtain an address that is similarly aligned to the same page granularity as the provided faulting address.</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="run-control">
+<h3>Run Control<a class="headerlink" href="#run-control" title="Permalink to this headline">¶</a></h3>
+<p>The tool may interrupt and resume device threads by calling <a class="reference internal" href="api.html#zetdebuginterrupt"><span class="std std-ref">zetDebugInterrupt</span></a> and <a class="reference internal" href="api.html#zetdebugresume"><span class="std std-ref">zetDebugResume</span></a>, respectively.</p>
+<p>The thread argument may specify a single thread, a group of threads, or all threads on the device.
+To specify all threads, the tool must set all fields in <a class="reference internal" href="../core/api.html#ze-device-thread-t"><span class="std std-ref">ze_device_thread_t</span></a> to their maximum value.
+By setting some but not all fields to their maximum value, a tool may specify a group of threads.</p>
+<p>The <a class="reference internal" href="api.html#zetdebuginterrupt"><span class="std std-ref">zetDebugInterrupt</span></a> call is not blocking.
+When all specified threads either stopped or are determined to be currently unavailable,
+the tool receives a <a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_THREAD_STOPPED</span></a> event if at least one thread could be stopped
+or a <a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_THREAD_UNAVAILABLE</span></a> event if none of the threads is currently available.</p>
+<p>If the thread argument specified a group of threads or all threads on the device,
+the event may be preceded by <a class="reference internal" href="api.html#zet-debug-event-type-t"><span class="std std-ref">ZET_DEBUG_EVENT_TYPE_THREAD_STOPPED</span></a> events of individual threads.</p>
+<p>The tool does not know whether a thread stopped or is unavailable until it tries to access its state or access memory through it.
+Unavailable threads may become available at any time.</p>
+<p>The following sample code demonstrates how to interrupt and resume all threads in a debug session:</p>
+<pre class="literal-block"><a class="reference internal" href="../core/api.html#ze-device-thread-t"><span class="std std-ref">ze_device_thread_t</span></a> allthreads;
+allthreads.slice = UINT32_MAX;
+allthreads.subslice = UINT32_MAX;
+allthreads.eu = UINT32_MAX;
+allthreads.thread = UINT32_MAX;
+
+errcode = <a class="reference internal" href="api.html#zetdebuginterrupt"><span class="std std-ref">zetDebugInterrupt</span></a>(hDebug, allthreads);
+if (errcode)
+    return errcode;
+
+...
+
+errcode = <a class="reference internal" href="api.html#zetdebugresume"><span class="std std-ref">zetDebugResume</span></a>(hDebug, allthreads);
+if (errcode)
+    return errcode;</pre>
+</div>
+<div class="section" id="memory-access">
+<h3>Memory Access<a class="headerlink" href="#memory-access" title="Permalink to this headline">¶</a></h3>
+<p>A tool may read and write memory in the context of a stopped device thread as if that thread had read or written the memory.</p>
+<p>Memory may be partitioned into device-specific memory spaces.
+For example, GPU devices support the following memory spaces, defined by <a class="reference internal" href="api.html#zet-debug-memory-space-type-t"><span class="std std-ref">zet_debug_memory_space_type_t</span></a>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zet-debug-memory-space-type-t"><span class="std std-ref">ZET_DEBUG_MEMORY_SPACE_TYPE_DEFAULT</span></a> - default memory space</p></li>
+<li><p><a class="reference internal" href="api.html#zet-debug-memory-space-type-t"><span class="std std-ref">ZET_DEBUG_MEMORY_SPACE_TYPE_SLM</span></a> - shared local memory space</p></li>
+</ul>
+</div></blockquote>
+<p>The default memory space may also be accessed in the context of the special thread with all fields set to their maximum value.</p>
+<p>To read and write memory, call the <a class="reference internal" href="api.html#zetdebugreadmemory"><span class="std std-ref">zetDebugReadMemory</span></a> and <a class="reference internal" href="api.html#zetdebugwritememory"><span class="std std-ref">zetDebugWriteMemory</span></a> function, respectively.
+The functions specify the thread(s), memory space and input or output buffer, respectively.</p>
+<p>The following example copies 16 bytes of memory from one location in the context of one device thread to another location in the default memory space:</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#zet-debug-memory-space-desc-t"><span class="std std-ref">zet_debug_memory_space_desc_t</span></a> srcSpace = {
+    <a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_DEBUG_MEMORY_SPACE_DESC</span></a>,
+    nullptr,
+    <a class="reference internal" href="api.html#zet-debug-memory-space-type-t"><span class="std std-ref">ZET_DEBUG_MEMORY_SPACE_TYPE_DEFAULT</span></a>,
+    srcAddress
+};
+<a class="reference internal" href="api.html#zet-debug-memory-space-desc-t"><span class="std std-ref">zet_debug_memory_space_desc_t</span></a> dstSpace = {
+    <a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_DEBUG_MEMORY_SPACE_DESC</span></a>,
+    nullptr,
+    <a class="reference internal" href="api.html#zet-debug-memory-space-type-t"><span class="std std-ref">ZET_DEBUG_MEMORY_SPACE_TYPE_DEFAULT</span></a>,
+    dstAddress
+};
+
+<a class="reference internal" href="../core/api.html#ze-device-thread-t"><span class="std std-ref">ze_device_thread_t</span></a> thread0 = {
+    0, 0, 0, 0
+};
+
+uint8_t buffer[16];
+errcode = <a class="reference internal" href="api.html#zetdebugreadmemory"><span class="std std-ref">zetDebugReadMemory</span></a>(hDebug, thread0, &amp;srcSpace, sizeof(buffer), buffer);
+if (errcode)
+    return errcode;
+
+...
+
+errcode = <a class="reference internal" href="api.html#zetdebugwritememory"><span class="std std-ref">zetDebugWriteMemory</span></a>(hDebug, allthreads, &amp;dstSpace, sizeof(buffer), buffer);
+if (errcode)
+    return errcode;</pre>
+</div>
+<div class="section" id="register-state-access">
+<h3>Register State Access<a class="headerlink" href="#register-state-access" title="Permalink to this headline">¶</a></h3>
+<p>A tool may read and write the register state of a stopped device thread.</p>
+<p>Registers are grouped into sets of similar registers.
+The types of register sets supported by a device can be queried using
+<a class="reference internal" href="api.html#zetdebuggetregistersetproperties"><span class="std std-ref">zetDebugGetRegisterSetProperties</span></a> and <a class="reference internal" href="api.html#zetdebuggetthreadregistersetproperties"><span class="std std-ref">zetDebugGetThreadRegisterSetProperties</span></a>.
+The former provides general information about the register sets supported on a device.  The latter provides the concrete register set for the argument thread.  The register set may depend on dynamic properties and may change between stops.
+The register set properties specify details about each register set,
+such as the maximum number of registers in each set, and whether the register set is read-only.</p>
+<p>The actual type of registers is device-specific and will be defined by the device vendor.</p>
+<p>The following pseudo-code demonstrates obtaining register set properties for a device:</p>
+<pre class="literal-block">uint32_t nRegSets = 0;
+<a class="reference internal" href="api.html#zetdebuggetregistersetproperties"><span class="std std-ref">zetDebugGetRegisterSetProperties</span></a>(hDevice, &amp;nRegSets, nullptr);
+
+<a class="reference internal" href="api.html#zet-debug-regset-properties-t"><span class="std std-ref">zet_debug_regset_properties_t</span></a>* pRegSets = allocate(nRegSets * sizeof(<a class="reference internal" href="api.html#zet-debug-regset-properties-t"><span class="std std-ref">zet_debug_regset_properties_t</span></a>));
+<a class="reference internal" href="api.html#zetdebuggetregistersetproperties"><span class="std std-ref">zetDebugGetRegisterSetProperties</span></a>(hDevice, &amp;nRegSets, pRegSets);</pre>
+<p>The following pseudo-code demonstrates obtaining register set properties for a thread:</p>
+<pre class="literal-block"><a class="reference internal" href="../core/api.html#ze-device-thread-t"><span class="std std-ref">ze_device_thread_t</span></a> thread0 = {
+    0, 0, 0, 0
+};
+uint32_t nRegSets = 0;
+<a class="reference internal" href="api.html#zetdebuggetthreadregistersetproperties"><span class="std std-ref">zetDebugGetThreadRegisterSetProperties</span></a>(hDebug, thread0, &amp;nRegSets, nullptr);
+
+<a class="reference internal" href="api.html#zet-debug-regset-properties-t"><span class="std std-ref">zet_debug_regset_properties_t</span></a>* pRegSets = allocate(nRegSets * sizeof(<a class="reference internal" href="api.html#zet-debug-regset-properties-t"><span class="std std-ref">zet_debug_regset_properties_t</span></a>));
+<a class="reference internal" href="api.html#zetdebuggetthreadregistersetproperties"><span class="std std-ref">zetDebugGetThreadRegisterSetProperties</span></a>(hDebug, thread0, &amp;nRegSets, pRegSets);</pre>
+<p>To read and write the register state, use the <a class="reference internal" href="api.html#zetdebugreadregisters"><span class="std std-ref">zetDebugReadRegisters</span></a> and <a class="reference internal" href="api.html#zetdebugwriteregisters"><span class="std std-ref">zetDebugWriteRegisters</span></a> function, respectively.</p>
+<p>The following pseudo-code demonstrates iterating over register sets:</p>
+<pre class="literal-block">for (i = 0; i &lt; nRegSets; ++i) {
+    void* values = allocate(pRegSets[i].count * pRegSets[i].valueSize);
+
+    errcode = <a class="reference internal" href="api.html#zetdebugreadregisters"><span class="std std-ref">zetDebugReadRegisters</span></a>(hDebug, thread0, pRegSets[i].type, 0, pRegSets[i].count, values);
+    if (errcode)
+        return errcode;
+
+    ...
+
+    errcode = <a class="reference internal" href="api.html#zetdebugwriteregisters"><span class="std std-ref">zetDebugWriteRegisters</span></a>(hDebug, thread0, pRegSets[i].type, 0, pRegSets[i].count, values);
+    if (errcode)
+        return errcode;
+
+    free(values);
+}</pre>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../core/PROG.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Core Programming Guide</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../sysman/PROG.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sysman Programming Guide</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Intel<br/>
+    
+        &copy; Copyright 2023, Intel.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

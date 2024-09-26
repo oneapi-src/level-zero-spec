@@ -1,0 +1,2142 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tools API &mdash; Level Zero Specification  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Sysman API" href="../sysman/api.html" />
+    <link rel="prev" title="Core API" href="../core/api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Level Zero Specification
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.95.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../core/api.html">Core API</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tools API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common">Common</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#common-enums">Common Enums</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#common-structures">Common Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#metric">Metric</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#metric-functions">Metric Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metric-enums">Metric Enums</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#metric-structures">Metric Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module">Module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-functions">Module Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-enums">Module Enums</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pin">Pin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pin-functions">Pin Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pin-enums">Pin Enums</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pin-structures">Pin Structures</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#tracing">Tracing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tracing-functions">Tracing Functions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tracing-structures">Tracing Structures</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/api.html">Sysman API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Versions</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Level Zero Specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+
+    
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tools-api">
+<h1>Tools API<a class="headerlink" href="#tools-api" title="Permalink to this headline">¶</a></h1>
+<p>oneAPI Level Zero Specification - Version 0.95.0</p>
+<div class="section" id="common">
+<h2>Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-structure-type-t"><span class="std std-ref">zet_structure_type_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-base-properties-t"><span class="std std-ref">zet_base_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-base-desc-t"><span class="std std-ref">zet_base_desc_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="common-enums">
+<h3>Common Enums<a class="headerlink" href="#common-enums" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-structure-type-t">
+<span id="id1"></span><h4>zet_structure_type_t<a class="headerlink" href="#zet-structure-type-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv420zet_structure_type_t">
+<span id="_CPPv320zet_structure_type_t"></span><span id="_CPPv220zet_structure_type_t"></span><span class="target" id="zet__api_8h_1ae4ed66d3319e2885154f6db8f972bb05"></span><em class="property">enum </em><code class="sig-name descname">zet_structure_type_t</code><a class="headerlink" href="#_CPPv420zet_structure_type_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Defines structure types. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv442ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES">
+<span id="_CPPv342ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES"></span><span id="_CPPv242ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES"></span><span class="target" id="zet__api_8h_1ae4ed66d3319e2885154f6db8f972bb05a6658b9643fb4cfd699c0d125d96fcede"></span><code class="sig-name descname">ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES</code> = 0x1<a class="headerlink" href="#_CPPv442ZET_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#structzet__metric__group__properties__t"><span class="std std-ref">zet_metric_group_properties_t</span></a> </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv436ZET_STRUCTURE_TYPE_METRIC_PROPERTIES">
+<span id="_CPPv336ZET_STRUCTURE_TYPE_METRIC_PROPERTIES"></span><span id="_CPPv236ZET_STRUCTURE_TYPE_METRIC_PROPERTIES"></span><span class="target" id="zet__api_8h_1ae4ed66d3319e2885154f6db8f972bb05a9fc087a0fa90d28d8902fd435ca210eb"></span><code class="sig-name descname">ZET_STRUCTURE_TYPE_METRIC_PROPERTIES</code><a class="headerlink" href="#_CPPv436ZET_STRUCTURE_TYPE_METRIC_PROPERTIES" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#structzet__metric__properties__t"><span class="std std-ref">zet_metric_properties_t</span></a> </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv439ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC">
+<span id="_CPPv339ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC"></span><span id="_CPPv239ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC"></span><span class="target" id="zet__api_8h_1ae4ed66d3319e2885154f6db8f972bb05a7fccf126b5e532bbaf17fd91fdca607b"></span><code class="sig-name descname">ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC</code><a class="headerlink" href="#_CPPv439ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#structzet__metric__streamer__desc__t"><span class="std std-ref">zet_metric_streamer_desc_t</span></a> </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv441ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC">
+<span id="_CPPv341ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC"></span><span id="_CPPv241ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC"></span><span class="target" id="zet__api_8h_1ae4ed66d3319e2885154f6db8f972bb05acf6a40d18162b9008378d461dc7fd793"></span><code class="sig-name descname">ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC</code><a class="headerlink" href="#_CPPv441ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#structzet__metric__query__pool__desc__t"><span class="std std-ref">zet_metric_query_pool_desc_t</span></a> </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv437ZET_STRUCTURE_TYPE_PROFILE_PROPERTIES">
+<span id="_CPPv337ZET_STRUCTURE_TYPE_PROFILE_PROPERTIES"></span><span id="_CPPv237ZET_STRUCTURE_TYPE_PROFILE_PROPERTIES"></span><span class="target" id="zet__api_8h_1ae4ed66d3319e2885154f6db8f972bb05afc6a3ae1b94d11ba80511095251bd6bb"></span><code class="sig-name descname">ZET_STRUCTURE_TYPE_PROFILE_PROPERTIES</code><a class="headerlink" href="#_CPPv437ZET_STRUCTURE_TYPE_PROFILE_PROPERTIES" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#structzet__profile__properties__t"><span class="std std-ref">zet_profile_properties_t</span></a> </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv430ZET_STRUCTURE_TYPE_TRACER_DESC">
+<span id="_CPPv330ZET_STRUCTURE_TYPE_TRACER_DESC"></span><span id="_CPPv230ZET_STRUCTURE_TYPE_TRACER_DESC"></span><span class="target" id="zet__api_8h_1ae4ed66d3319e2885154f6db8f972bb05ae736a9736f540f5577ab4f9acfb541cd"></span><code class="sig-name descname">ZET_STRUCTURE_TYPE_TRACER_DESC</code><a class="headerlink" href="#_CPPv430ZET_STRUCTURE_TYPE_TRACER_DESC" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#structzet__tracer__desc__t"><span class="std std-ref">zet_tracer_desc_t</span></a> </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="common-structures">
+<h3>Common Structures<a class="headerlink" href="#common-structures" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-base-properties-t">
+<span id="id2"></span><h4>zet_base_properties_t<a class="headerlink" href="#zet-base-properties-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv421zet_base_properties_t">
+<span id="_CPPv321zet_base_properties_t"></span><span id="_CPPv221zet_base_properties_t"></span><span id="zet_base_properties_t"></span><span class="target" id="structzet__base__properties__t"></span><em class="property">struct </em><code class="sig-name descname">zet_base_properties_t</code><a class="headerlink" href="#_CPPv421zet_base_properties_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Base for all properties types. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N21zet_base_properties_t5stypeE">
+<span id="_CPPv3N21zet_base_properties_t5stypeE"></span><span id="_CPPv2N21zet_base_properties_t5stypeE"></span><span id="zet_base_properties_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__base__properties__t_1a9ff3cbe9e50322075ee835914e081816"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N21zet_base_properties_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N21zet_base_properties_t5pNextE">
+<span id="_CPPv3N21zet_base_properties_t5pNextE"></span><span id="_CPPv2N21zet_base_properties_t5pNextE"></span><span id="zet_base_properties_t::pNext__voidP"></span><span class="target" id="structzet__base__properties__t_1a027d58ce31fcfd33a9e41f65c1611396"></span>void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N21zet_base_properties_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in,out][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-base-desc-t">
+<span id="id3"></span><h4>zet_base_desc_t<a class="headerlink" href="#zet-base-desc-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv415zet_base_desc_t">
+<span id="_CPPv315zet_base_desc_t"></span><span id="_CPPv215zet_base_desc_t"></span><span id="zet_base_desc_t"></span><span class="target" id="structzet__base__desc__t"></span><em class="property">struct </em><code class="sig-name descname">zet_base_desc_t</code><a class="headerlink" href="#_CPPv415zet_base_desc_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Base for all descriptor types. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N15zet_base_desc_t5stypeE">
+<span id="_CPPv3N15zet_base_desc_t5stypeE"></span><span id="_CPPv2N15zet_base_desc_t5stypeE"></span><span id="zet_base_desc_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__base__desc__t_1a60ef9f9ad6292974219dbd0e0e4d6e19"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N15zet_base_desc_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N15zet_base_desc_t5pNextE">
+<span id="_CPPv3N15zet_base_desc_t5pNextE"></span><span id="_CPPv2N15zet_base_desc_t5pNextE"></span><span id="zet_base_desc_t::pNext__voidCP"></span><span class="target" id="structzet__base__desc__t_1acc9370e4002c1f7340c0971a2dad8fa4"></span><em class="property">const</em> void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N15zet_base_desc_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="metric">
+<h2>Metric<a class="headerlink" href="#metric" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricget"><span class="std std-ref">zetMetricGet</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricgetproperties"><span class="std std-ref">zetMetricGetProperties</span></a></p></li>
+<li><p><a class="reference internal" href="#zetdeviceactivatemetricgroups"><span class="std std-ref">zetDeviceActivateMetricGroups</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricstreameropen"><span class="std std-ref">zetMetricStreamerOpen</span></a></p></li>
+<li><p><a class="reference internal" href="#zetcommandlistappendmetricstreamermarker"><span class="std std-ref">zetCommandListAppendMetricStreamerMarker</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricstreamerclose"><span class="std std-ref">zetMetricStreamerClose</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricstreamerreaddata"><span class="std std-ref">zetMetricStreamerReadData</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricquerypoolcreate"><span class="std std-ref">zetMetricQueryPoolCreate</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricquerypooldestroy"><span class="std std-ref">zetMetricQueryPoolDestroy</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricquerycreate"><span class="std std-ref">zetMetricQueryCreate</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricquerydestroy"><span class="std std-ref">zetMetricQueryDestroy</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricqueryreset"><span class="std std-ref">zetMetricQueryReset</span></a></p></li>
+<li><p><a class="reference internal" href="#zetcommandlistappendmetricquerybegin"><span class="std std-ref">zetCommandListAppendMetricQueryBegin</span></a></p></li>
+<li><p><a class="reference internal" href="#zetcommandlistappendmetricqueryend"><span class="std std-ref">zetCommandListAppendMetricQueryEnd</span></a></p></li>
+<li><p><a class="reference internal" href="#zetcommandlistappendmetricmemorybarrier"><span class="std std-ref">zetCommandListAppendMetricMemoryBarrier</span></a></p></li>
+<li><p><a class="reference internal" href="#zetmetricquerygetdata"><span class="std std-ref">zetMetricQueryGetData</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-metric-group-sampling-type-t"><span class="std std-ref">zet_metric_group_sampling_type_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-metric-type-t"><span class="std std-ref">zet_metric_type_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-value-type-t"><span class="std std-ref">zet_value_type_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-metric-query-pool-flag-t"><span class="std std-ref">zet_metric_query_pool_flag_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-value-t"><span class="std std-ref">zet_value_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-typed-value-t"><span class="std std-ref">zet_typed_value_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-metric-properties-t"><span class="std std-ref">zet_metric_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-metric-streamer-desc-t"><span class="std std-ref">zet_metric_streamer_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-metric-query-pool-desc-t"><span class="std std-ref">zet_metric_query_pool_desc_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="metric-functions">
+<h3>Metric Functions<a class="headerlink" href="#metric-functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zetmetricgroupget">
+<span id="id4"></span><h4>zetMetricGroupGet<a class="headerlink" href="#zetmetricgroupget" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv417zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t">
+<span id="_CPPv317zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t"></span><span id="_CPPv217zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t"></span><span id="zetMetricGroupGet__zet_device_handle_t.uint32_tP.zet_metric_group_handle_tP"></span><span class="target" id="zet__api_8h_1ab81c4184e7dd6b0cab59807d5c5d25c2"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricGroupGet</code><span class="sig-paren">(</span>zet_device_handle_t <em>hDevice</em>, uint32_t *<em>pCount</em>, zet_metric_group_handle_t *<em>phMetricGroups</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieves metric group for a device. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hDevice</span></code>: handle of the device </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pCount</span></code>: pointer to the number of metric groups. if count is zero, then the driver will update the value with the total number of metric groups available. if count is non-zero, then driver will only retrieve that number of metric groups. if count is larger than the number of metric groups available, then the driver will update the value with the correct number of metric groups available. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phMetricGroups</span></code>: [optional][range(0, *pCount)] array of handle of metric groups </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricgroupgetproperties">
+<span id="id5"></span><h4>zetMetricGroupGetProperties<a class="headerlink" href="#zetmetricgroupgetproperties" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv427zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t">
+<span id="_CPPv327zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t"></span><span id="_CPPv227zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t"></span><span id="zetMetricGroupGetProperties__zet_metric_group_handle_t.zet_metric_group_properties_tP"></span><span class="target" id="zet__api_8h_1a33f410d437e39b1624f3d625a9f2bf22"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricGroupGetProperties</code><span class="sig-paren">(</span>zet_metric_group_handle_t <em>hMetricGroup</em>, <a class="reference internal" href="#_CPPv429zet_metric_group_properties_t" title="zet_metric_group_properties_t">zet_metric_group_properties_t</a> *<em>pProperties</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieves attributes of a metric group. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricGroup</span></code>: handle of the metric group </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pProperties</span></code>: metric group properties </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricGroup</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricgroupcalculatemetricvalues">
+<span id="id6"></span><h4>zetMetricGroupCalculateMetricValues<a class="headerlink" href="#zetmetricgroupcalculatemetricvalues" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv435zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t">
+<span id="_CPPv335zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t"></span><span id="_CPPv235zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t"></span><span id="zetMetricGroupCalculateMetricValues__zet_metric_group_handle_t.s.uint8_tCP.uint32_tP.zet_typed_value_tP"></span><span class="target" id="zet__api_8h_1a9cde635ec9f38e27ac2b19496959583f"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricGroupCalculateMetricValues</code><span class="sig-paren">(</span>zet_metric_group_handle_t <em>hMetricGroup</em>, size_t <em>rawDataSize</em>, <em class="property">const</em> uint8_t *<em>pRawData</em>, uint32_t *<em>pMetricValueCount</em>, <a class="reference internal" href="#_CPPv417zet_typed_value_t" title="zet_typed_value_t">zet_typed_value_t</a> *<em>pMetricValues</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Calculates metric values from raw data. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricGroup</span></code>: handle of the metric group </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rawDataSize</span></code>: size in bytes of raw data buffer </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pRawData</span></code>: [range(0, rawDataSize)] buffer of raw data to calculate </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pMetricValueCount</span></code>: pointer to number of metric values calculated. if count is zero, then the driver will update the value with the total number of metric values to be calculated. if count is non-zero, then driver will only calculate that number of metric values. if count is larger than the number available in the raw data buffer, then the driver will update the value with the actual number of metric values to be calculated. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pMetricValues</span></code>: [optional][range(0, *pMetricValueCount)] buffer of calculated metrics </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricGroup</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pRawData</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pMetricValueCount</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricget">
+<span id="id7"></span><h4>zetMetricGet<a class="headerlink" href="#zetmetricget" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv412zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t">
+<span id="_CPPv312zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t"></span><span id="_CPPv212zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t"></span><span id="zetMetricGet__zet_metric_group_handle_t.uint32_tP.zet_metric_handle_tP"></span><span class="target" id="zet__api_8h_1a0969e40568ceb40f43097947fe16af6a"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricGet</code><span class="sig-paren">(</span>zet_metric_group_handle_t <em>hMetricGroup</em>, uint32_t *<em>pCount</em>, zet_metric_handle_t *<em>phMetrics</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieves metric from a metric group. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricGroup</span></code>: handle of the metric group </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pCount</span></code>: pointer to the number of metrics. if count is zero, then the driver will update the value with the total number of metrics available. if count is non-zero, then driver will only retrieve that number of metrics. if count is larger than the number of metrics available, then the driver will update the value with the correct number of metrics available. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phMetrics</span></code>: [optional][range(0, *pCount)] array of handle of metrics </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricGroup</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricgetproperties">
+<span id="id8"></span><h4>zetMetricGetProperties<a class="headerlink" href="#zetmetricgetproperties" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv422zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t">
+<span id="_CPPv322zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t"></span><span id="_CPPv222zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t"></span><span id="zetMetricGetProperties__zet_metric_handle_t.zet_metric_properties_tP"></span><span class="target" id="zet__api_8h_1add7e968bb0f85203370d89138e2b921b"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricGetProperties</code><span class="sig-paren">(</span>zet_metric_handle_t <em>hMetric</em>, <a class="reference internal" href="#_CPPv423zet_metric_properties_t" title="zet_metric_properties_t">zet_metric_properties_t</a> *<em>pProperties</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieves attributes of a metric. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetric</span></code>: handle of the metric </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pProperties</span></code>: metric properties </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetric</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetdeviceactivatemetricgroups">
+<span id="id9"></span><h4>zetDeviceActivateMetricGroups<a class="headerlink" href="#zetdeviceactivatemetricgroups" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv429zetDeviceActivateMetricGroups19zet_device_handle_t8uint32_tP25zet_metric_group_handle_t">
+<span id="_CPPv329zetDeviceActivateMetricGroups19zet_device_handle_t8uint32_tP25zet_metric_group_handle_t"></span><span id="_CPPv229zetDeviceActivateMetricGroups19zet_device_handle_t8uint32_tP25zet_metric_group_handle_t"></span><span id="zetDeviceActivateMetricGroups__zet_device_handle_t.uint32_t.zet_metric_group_handle_tP"></span><span class="target" id="zet__api_8h_1a70f8142405a2dbd6dafc15468eda4b3b"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetDeviceActivateMetricGroups</code><span class="sig-paren">(</span>zet_device_handle_t <em>hDevice</em>, uint32_t <em>count</em>, zet_metric_group_handle_t *<em>phMetricGroups</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429zetDeviceActivateMetricGroups19zet_device_handle_t8uint32_tP25zet_metric_group_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Activates metric groups. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hDevice</span></code>: handle of the device </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">count</span></code>: metric group count to activate; must be 0 if <code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phMetricGroups</span></code> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phMetricGroups</span></code>: [optional][range(0, count)] handles of the metric groups to activate. nullptr to deactivate all. </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>Immediately reconfigures the device to activate only those metric groups provided.</p></li>
+<li><p>Any metric groups previously activated but not provided will be deactivated.</p></li>
+<li><p>Deactivating metric groups that are still in-use will result in undefined behavior.</p></li>
+<li><p>All metric groups must have different domains, see <a class="reference internal" href="#structzet__metric__group__properties__t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same device handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a743b17f38be52772c5f67c4101638193"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SIZE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">(nullptr</span> <span class="pre">==</span> <span class="pre">phMetricGroups)</span> <span class="pre">&amp;&amp;</span> <span class="pre">(0</span> <span class="pre">&lt;</span> <span class="pre">count)</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a><ul>
+<li><p>Multiple metric groups share the same domain </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricstreameropen">
+<span id="id10"></span><h4>zetMetricStreamerOpen<a class="headerlink" href="#zetmetricstreameropen" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv421zetMetricStreamerOpen19zet_device_handle_t25zet_metric_group_handle_tP26zet_metric_streamer_desc_t17ze_event_handle_tP28zet_metric_streamer_handle_t">
+<span id="_CPPv321zetMetricStreamerOpen19zet_device_handle_t25zet_metric_group_handle_tP26zet_metric_streamer_desc_t17ze_event_handle_tP28zet_metric_streamer_handle_t"></span><span id="_CPPv221zetMetricStreamerOpen19zet_device_handle_t25zet_metric_group_handle_tP26zet_metric_streamer_desc_t17ze_event_handle_tP28zet_metric_streamer_handle_t"></span><span id="zetMetricStreamerOpen__zet_device_handle_t.zet_metric_group_handle_t.zet_metric_streamer_desc_tP.ze_event_handle_t.zet_metric_streamer_handle_tP"></span><span class="target" id="zet__api_8h_1a5e69dc1f7c4bb8773829c9a29ef90257"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricStreamerOpen</code><span class="sig-paren">(</span>zet_device_handle_t <em>hDevice</em>, zet_metric_group_handle_t <em>hMetricGroup</em>, <a class="reference internal" href="#_CPPv426zet_metric_streamer_desc_t" title="zet_metric_streamer_desc_t">zet_metric_streamer_desc_t</a> *<em>desc</em>, ze_event_handle_t <em>hNotificationEvent</em>, zet_metric_streamer_handle_t *<em>phMetricStreamer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetMetricStreamerOpen19zet_device_handle_t25zet_metric_group_handle_tP26zet_metric_streamer_desc_t17ze_event_handle_tP28zet_metric_streamer_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Opens metric streamer for a device. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hDevice</span></code>: handle of the device </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricGroup</span></code>: handle of the metric group </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">desc</span></code>: metric streamer descriptor </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hNotificationEvent</span></code>: [optional] event used for report availability notification </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phMetricStreamer</span></code>: handle of metric streamer </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The notification event must have been created from an event pool that was created using <a class="reference internal" href="../core/api.html#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11af12236d0b143f0327b6be83fa42556ea"><span class="std std-ref">ZE_EVENT_POOL_FLAG_HOST_VISIBLE</span></a> flag.</p></li>
+<li><p>The notification event must <strong>not</strong> have been created from an event pool that was created using <a class="reference internal" href="../core/api.html#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11af1bab0559057f7ec51e2c77a1746894f"><span class="std std-ref">ZE_EVENT_POOL_FLAG_KERNEL_TIMESTAMP</span></a> flag.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same device handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricGroup</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phMetricStreamer</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767acba6edd6c7fa7caca26f6f74d0221152"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT</span></a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetcommandlistappendmetricstreamermarker">
+<span id="id11"></span><h4>zetCommandListAppendMetricStreamerMarker<a class="headerlink" href="#zetcommandlistappendmetricstreamermarker" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv440zetCommandListAppendMetricStreamerMarker25zet_command_list_handle_t28zet_metric_streamer_handle_t8uint32_t">
+<span id="_CPPv340zetCommandListAppendMetricStreamerMarker25zet_command_list_handle_t28zet_metric_streamer_handle_t8uint32_t"></span><span id="_CPPv240zetCommandListAppendMetricStreamerMarker25zet_command_list_handle_t28zet_metric_streamer_handle_t8uint32_t"></span><span id="zetCommandListAppendMetricStreamerMarker__zet_command_list_handle_t.zet_metric_streamer_handle_t.uint32_t"></span><span class="target" id="zet__api_8h_1a14a7ee1e32f97322782e42ddf9d6f708"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetCommandListAppendMetricStreamerMarker</code><span class="sig-paren">(</span>zet_command_list_handle_t <em>hCommandList</em>, zet_metric_streamer_handle_t <em>hMetricStreamer</em>, uint32_t <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv440zetCommandListAppendMetricStreamerMarker25zet_command_list_handle_t28zet_metric_streamer_handle_t8uint32_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Append metric streamer marker into a command list. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hCommandList</span></code>: handle of the command list </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricStreamer</span></code>: handle of the metric streamer </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: streamer marker value </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same command list handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricStreamer</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricstreamerclose">
+<span id="id12"></span><h4>zetMetricStreamerClose<a class="headerlink" href="#zetmetricstreamerclose" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv422zetMetricStreamerClose28zet_metric_streamer_handle_t">
+<span id="_CPPv322zetMetricStreamerClose28zet_metric_streamer_handle_t"></span><span id="_CPPv222zetMetricStreamerClose28zet_metric_streamer_handle_t"></span><span id="zetMetricStreamerClose__zet_metric_streamer_handle_t"></span><span class="target" id="zet__api_8h_1af40e1d16a641337772e7f7cd526f3fba"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricStreamerClose</code><span class="sig-paren">(</span>zet_metric_streamer_handle_t <em>hMetricStreamer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zetMetricStreamerClose28zet_metric_streamer_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Closes metric streamer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricStreamer</span></code>: [release] handle of the metric streamer </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same metric streamer handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricStreamer</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricstreamerreaddata">
+<span id="id13"></span><h4>zetMetricStreamerReadData<a class="headerlink" href="#zetmetricstreamerreaddata" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv425zetMetricStreamerReadData28zet_metric_streamer_handle_t8uint32_tP6size_tP7uint8_t">
+<span id="_CPPv325zetMetricStreamerReadData28zet_metric_streamer_handle_t8uint32_tP6size_tP7uint8_t"></span><span id="_CPPv225zetMetricStreamerReadData28zet_metric_streamer_handle_t8uint32_tP6size_tP7uint8_t"></span><span id="zetMetricStreamerReadData__zet_metric_streamer_handle_t.uint32_t.sP.uint8_tP"></span><span class="target" id="zet__api_8h_1a33250183de260f40ea54d8486cab3218"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricStreamerReadData</code><span class="sig-paren">(</span>zet_metric_streamer_handle_t <em>hMetricStreamer</em>, uint32_t <em>maxReportCount</em>, size_t *<em>pRawDataSize</em>, uint8_t *<em>pRawData</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricStreamerReadData28zet_metric_streamer_handle_t8uint32_tP6size_tP7uint8_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Reads data from metric streamer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricStreamer</span></code>: handle of the metric streamer </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxReportCount</span></code>: the maximum number of reports the application wants to receive. if UINT32_MAX, then function will retrieve all reports available </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pRawDataSize</span></code>: pointer to size in bytes of raw data requested to read. if size is zero, then the driver will update the value with the total size in bytes needed for all reports available. if size is non-zero, then driver will only retrieve the number of reports that fit into the buffer. if size is larger than size needed for all reports, then driver will update the value with the actual size needed. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pRawData</span></code>: [optional][range(0, *pRawDataSize)] buffer containing streamer reports in raw format </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricStreamer</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pRawDataSize</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricquerypoolcreate">
+<span id="id14"></span><h4>zetMetricQueryPoolCreate<a class="headerlink" href="#zetmetricquerypoolcreate" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv424zetMetricQueryPoolCreate19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t">
+<span id="_CPPv324zetMetricQueryPoolCreate19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t"></span><span id="_CPPv224zetMetricQueryPoolCreate19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t"></span><span id="zetMetricQueryPoolCreate__zet_device_handle_t.zet_metric_group_handle_t.zet_metric_query_pool_desc_tCP.zet_metric_query_pool_handle_tP"></span><span class="target" id="zet__api_8h_1a8aa05e3022f6e7ef5e939cd5585f82f9"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricQueryPoolCreate</code><span class="sig-paren">(</span>zet_device_handle_t <em>hDevice</em>, zet_metric_group_handle_t <em>hMetricGroup</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv428zet_metric_query_pool_desc_t" title="zet_metric_query_pool_desc_t">zet_metric_query_pool_desc_t</a> *<em>desc</em>, zet_metric_query_pool_handle_t *<em>phMetricQueryPool</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricQueryPoolCreate19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a pool of metric queries. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hDevice</span></code>: handle of the device </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricGroup</span></code>: metric group associated with the query object. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">desc</span></code>: metric query pool descriptor </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phMetricQueryPool</span></code>: handle of metric query pool </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricGroup</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phMetricQueryPool</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x1</span> <span class="pre">&lt;</span> <span class="pre">desc-&gt;flags</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricquerypooldestroy">
+<span id="id15"></span><h4>zetMetricQueryPoolDestroy<a class="headerlink" href="#zetmetricquerypooldestroy" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv425zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t">
+<span id="_CPPv325zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t"></span><span id="_CPPv225zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t"></span><span id="zetMetricQueryPoolDestroy__zet_metric_query_pool_handle_t"></span><span class="target" id="zet__api_8h_1a949a15c4f7926942111701514593a141"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricQueryPoolDestroy</code><span class="sig-paren">(</span>zet_metric_query_pool_handle_t <em>hMetricQueryPool</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Deletes a query pool object. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricQueryPool</span></code>: [release] handle of the metric query pool </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must destroy all query handles created from the pool before destroying the pool itself</p></li>
+<li><p>The application must ensure the device is not currently referencing the any query within the pool before it is deleted</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same query pool handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricQueryPool</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af964b27d146102948a48f0ebabe3aee3"><span class="std std-ref">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE</span></a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricquerycreate">
+<span id="id16"></span><h4>zetMetricQueryCreate<a class="headerlink" href="#zetmetricquerycreate" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv420zetMetricQueryCreate30zet_metric_query_pool_handle_t8uint32_tP25zet_metric_query_handle_t">
+<span id="_CPPv320zetMetricQueryCreate30zet_metric_query_pool_handle_t8uint32_tP25zet_metric_query_handle_t"></span><span id="_CPPv220zetMetricQueryCreate30zet_metric_query_pool_handle_t8uint32_tP25zet_metric_query_handle_t"></span><span id="zetMetricQueryCreate__zet_metric_query_pool_handle_t.uint32_t.zet_metric_query_handle_tP"></span><span class="target" id="zet__api_8h_1a1b4e045338eb829197c1c47e7700a269"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricQueryCreate</code><span class="sig-paren">(</span>zet_metric_query_pool_handle_t <em>hMetricQueryPool</em>, uint32_t <em>index</em>, zet_metric_query_handle_t *<em>phMetricQuery</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zetMetricQueryCreate30zet_metric_query_pool_handle_t8uint32_tP25zet_metric_query_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates metric query object. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricQueryPool</span></code>: handle of the metric query pool </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: index of the query within the pool </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phMetricQuery</span></code>: handle of metric query </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricQueryPool</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phMetricQuery</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricquerydestroy">
+<span id="id17"></span><h4>zetMetricQueryDestroy<a class="headerlink" href="#zetmetricquerydestroy" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv421zetMetricQueryDestroy25zet_metric_query_handle_t">
+<span id="_CPPv321zetMetricQueryDestroy25zet_metric_query_handle_t"></span><span id="_CPPv221zetMetricQueryDestroy25zet_metric_query_handle_t"></span><span id="zetMetricQueryDestroy__zet_metric_query_handle_t"></span><span class="target" id="zet__api_8h_1a01923f7c04f37b567acec87a4573d780"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricQueryDestroy</code><span class="sig-paren">(</span>zet_metric_query_handle_t <em>hMetricQuery</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetMetricQueryDestroy25zet_metric_query_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Deletes a metric query object. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricQuery</span></code>: [release] handle of metric query </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must ensure the device is not currently referencing the query before it is deleted</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same query handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricQuery</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af964b27d146102948a48f0ebabe3aee3"><span class="std std-ref">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE</span></a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricqueryreset">
+<span id="id18"></span><h4>zetMetricQueryReset<a class="headerlink" href="#zetmetricqueryreset" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv419zetMetricQueryReset25zet_metric_query_handle_t">
+<span id="_CPPv319zetMetricQueryReset25zet_metric_query_handle_t"></span><span id="_CPPv219zetMetricQueryReset25zet_metric_query_handle_t"></span><span id="zetMetricQueryReset__zet_metric_query_handle_t"></span><span class="target" id="zet__api_8h_1a7ed668f1e9d0289053c5ff996df9092d"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricQueryReset</code><span class="sig-paren">(</span>zet_metric_query_handle_t <em>hMetricQuery</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zetMetricQueryReset25zet_metric_query_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Resets a metric query object back to inital state. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricQuery</span></code>: handle of metric query </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must ensure the device is not currently referencing the query before it is reset</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same query handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricQuery</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetcommandlistappendmetricquerybegin">
+<span id="id19"></span><h4>zetCommandListAppendMetricQueryBegin<a class="headerlink" href="#zetcommandlistappendmetricquerybegin" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv436zetCommandListAppendMetricQueryBegin25zet_command_list_handle_t25zet_metric_query_handle_t">
+<span id="_CPPv336zetCommandListAppendMetricQueryBegin25zet_command_list_handle_t25zet_metric_query_handle_t"></span><span id="_CPPv236zetCommandListAppendMetricQueryBegin25zet_command_list_handle_t25zet_metric_query_handle_t"></span><span id="zetCommandListAppendMetricQueryBegin__zet_command_list_handle_t.zet_metric_query_handle_t"></span><span class="target" id="zet__api_8h_1aa65a2ee8b79e9406283add06d1201863"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetCommandListAppendMetricQueryBegin</code><span class="sig-paren">(</span>zet_command_list_handle_t <em>hCommandList</em>, zet_metric_query_handle_t <em>hMetricQuery</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zetCommandListAppendMetricQueryBegin25zet_command_list_handle_t25zet_metric_query_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Appends metric query begin into a command list. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hCommandList</span></code>: handle of the command list </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricQuery</span></code>: handle of the metric query </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same command list handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricQuery</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetcommandlistappendmetricqueryend">
+<span id="id20"></span><h4>zetCommandListAppendMetricQueryEnd<a class="headerlink" href="#zetcommandlistappendmetricqueryend" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv434zetCommandListAppendMetricQueryEnd25zet_command_list_handle_t25zet_metric_query_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t">
+<span id="_CPPv334zetCommandListAppendMetricQueryEnd25zet_command_list_handle_t25zet_metric_query_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t"></span><span id="_CPPv234zetCommandListAppendMetricQueryEnd25zet_command_list_handle_t25zet_metric_query_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t"></span><span id="zetCommandListAppendMetricQueryEnd__zet_command_list_handle_t.zet_metric_query_handle_t.ze_event_handle_t.uint32_t.ze_event_handle_tP"></span><span class="target" id="zet__api_8h_1a3f4a363448ca10af6d0edde692a68f48"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetCommandListAppendMetricQueryEnd</code><span class="sig-paren">(</span>zet_command_list_handle_t <em>hCommandList</em>, zet_metric_query_handle_t <em>hMetricQuery</em>, ze_event_handle_t <em>hSignalEvent</em>, uint32_t <em>numWaitEvents</em>, ze_event_handle_t *<em>phWaitEvents</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zetCommandListAppendMetricQueryEnd25zet_command_list_handle_t25zet_metric_query_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Appends metric query end into a command list. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hCommandList</span></code>: handle of the command list </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricQuery</span></code>: handle of the metric query </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hSignalEvent</span></code>: [optional] handle of the event to signal on completion </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numWaitEvents</span></code>: [optional] number of events to wait on before launching; must be 0 if <code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phWaitEvents</span></code> </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phWaitEvents</span></code>: [optional][range(0, numWaitEvents)] handle of the events to wait on before launching </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The signal event must <strong>not</strong> have been created from an event pool that was created using <a class="reference internal" href="../core/api.html#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11af1bab0559057f7ec51e2c77a1746894f"><span class="std std-ref">ZE_EVENT_POOL_FLAG_KERNEL_TIMESTAMP</span></a> flag.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same command list handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricQuery</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767acba6edd6c7fa7caca26f6f74d0221152"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a743b17f38be52772c5f67c4101638193"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SIZE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">(nullptr</span> <span class="pre">==</span> <span class="pre">phWaitEvents)</span> <span class="pre">&amp;&amp;</span> <span class="pre">(0</span> <span class="pre">&lt;</span> <span class="pre">numWaitEvents)</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetcommandlistappendmetricmemorybarrier">
+<span id="id21"></span><h4>zetCommandListAppendMetricMemoryBarrier<a class="headerlink" href="#zetcommandlistappendmetricmemorybarrier" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv439zetCommandListAppendMetricMemoryBarrier25zet_command_list_handle_t">
+<span id="_CPPv339zetCommandListAppendMetricMemoryBarrier25zet_command_list_handle_t"></span><span id="_CPPv239zetCommandListAppendMetricMemoryBarrier25zet_command_list_handle_t"></span><span id="zetCommandListAppendMetricMemoryBarrier__zet_command_list_handle_t"></span><span class="target" id="zet__api_8h_1adf52ad9d39b16fcfe979a02c973a33c3"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetCommandListAppendMetricMemoryBarrier</code><span class="sig-paren">(</span>zet_command_list_handle_t <em>hCommandList</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv439zetCommandListAppendMetricMemoryBarrier25zet_command_list_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Appends metric query commands to flush all caches. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hCommandList</span></code>: handle of the command list </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same command list handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zetmetricquerygetdata">
+<span id="id22"></span><h4>zetMetricQueryGetData<a class="headerlink" href="#zetmetricquerygetdata" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv421zetMetricQueryGetData25zet_metric_query_handle_tP6size_tP7uint8_t">
+<span id="_CPPv321zetMetricQueryGetData25zet_metric_query_handle_tP6size_tP7uint8_t"></span><span id="_CPPv221zetMetricQueryGetData25zet_metric_query_handle_tP6size_tP7uint8_t"></span><span id="zetMetricQueryGetData__zet_metric_query_handle_t.sP.uint8_tP"></span><span class="target" id="zet__api_8h_1abc99852f151b976597b3d4e8ed00945f"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetMetricQueryGetData</code><span class="sig-paren">(</span>zet_metric_query_handle_t <em>hMetricQuery</em>, size_t *<em>pRawDataSize</em>, uint8_t *<em>pRawData</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetMetricQueryGetData25zet_metric_query_handle_tP6size_tP7uint8_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieves raw data for a given metric query. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hMetricQuery</span></code>: handle of the metric query </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pRawDataSize</span></code>: pointer to size in bytes of raw data requested to read. if size is zero, then the driver will update the value with the total size in bytes needed for all reports available. if size is non-zero, then driver will only retrieve the number of reports that fit into the buffer. if size is larger than size needed for all reports, then driver will update the value with the actual size needed. </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pRawData</span></code>: [optional][range(0, *pRawDataSize)] buffer containing query reports in raw format </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricQuery</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pRawDataSize</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="metric-enums">
+<h3>Metric Enums<a class="headerlink" href="#metric-enums" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-metric-group-sampling-type-t">
+<span id="id23"></span><h4>zet_metric_group_sampling_type_t<a class="headerlink" href="#zet-metric-group-sampling-type-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv432zet_metric_group_sampling_type_t">
+<span id="_CPPv332zet_metric_group_sampling_type_t"></span><span id="_CPPv232zet_metric_group_sampling_type_t"></span><span class="target" id="zet__api_8h_1a82be3763c2f1c07f17af07f6e2269431"></span><em class="property">enum </em><code class="sig-name descname">zet_metric_group_sampling_type_t</code><a class="headerlink" href="#_CPPv432zet_metric_group_sampling_type_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric group sampling type. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv442ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED">
+<span id="_CPPv342ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED"></span><span id="_CPPv242ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED"></span><span class="target" id="zet__api_8h_1a82be3763c2f1c07f17af07f6e2269431ab6e626a1d27e51327cb6bf5b65698b0b"></span><code class="sig-name descname">ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED</code> = ZE_BIT(0)<a class="headerlink" href="#_CPPv442ZET_METRIC_GROUP_SAMPLING_TYPE_EVENT_BASED" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Event based sampling. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv441ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED">
+<span id="_CPPv341ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED"></span><span id="_CPPv241ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED"></span><span class="target" id="zet__api_8h_1a82be3763c2f1c07f17af07f6e2269431ac75d428ec21c9e3583ae3f525b13d1bb"></span><code class="sig-name descname">ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED</code> = ZE_BIT(1)<a class="headerlink" href="#_CPPv441ZET_METRIC_GROUP_SAMPLING_TYPE_TIME_BASED" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Time based sampling. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="zet-metric-type-t">
+<span id="id24"></span><h4>zet_metric_type_t<a class="headerlink" href="#zet-metric-type-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv417zet_metric_type_t">
+<span id="_CPPv317zet_metric_type_t"></span><span id="_CPPv217zet_metric_type_t"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8"></span><em class="property">enum </em><code class="sig-name descname">zet_metric_type_t</code><a class="headerlink" href="#_CPPv417zet_metric_type_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric types. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv424ZET_METRIC_TYPE_DURATION">
+<span id="_CPPv324ZET_METRIC_TYPE_DURATION"></span><span id="_CPPv224ZET_METRIC_TYPE_DURATION"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a48e0d08182af72dab5d2b59842e9351e"></span><code class="sig-name descname">ZET_METRIC_TYPE_DURATION</code><a class="headerlink" href="#_CPPv424ZET_METRIC_TYPE_DURATION" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: duration. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ZET_METRIC_TYPE_EVENT">
+<span id="_CPPv321ZET_METRIC_TYPE_EVENT"></span><span id="_CPPv221ZET_METRIC_TYPE_EVENT"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a797a25adff21afbff01a56448afc0748"></span><code class="sig-name descname">ZET_METRIC_TYPE_EVENT</code><a class="headerlink" href="#_CPPv421ZET_METRIC_TYPE_EVENT" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: event. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv432ZET_METRIC_TYPE_EVENT_WITH_RANGE">
+<span id="_CPPv332ZET_METRIC_TYPE_EVENT_WITH_RANGE"></span><span id="_CPPv232ZET_METRIC_TYPE_EVENT_WITH_RANGE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a355a55955a3bd7060dcc7db67d123b6f"></span><code class="sig-name descname">ZET_METRIC_TYPE_EVENT_WITH_RANGE</code><a class="headerlink" href="#_CPPv432ZET_METRIC_TYPE_EVENT_WITH_RANGE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: event with range. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv426ZET_METRIC_TYPE_THROUGHPUT">
+<span id="_CPPv326ZET_METRIC_TYPE_THROUGHPUT"></span><span id="_CPPv226ZET_METRIC_TYPE_THROUGHPUT"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8aec193fcd04b40aed458c92c07bd287ce"></span><code class="sig-name descname">ZET_METRIC_TYPE_THROUGHPUT</code><a class="headerlink" href="#_CPPv426ZET_METRIC_TYPE_THROUGHPUT" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: throughput. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv425ZET_METRIC_TYPE_TIMESTAMP">
+<span id="_CPPv325ZET_METRIC_TYPE_TIMESTAMP"></span><span id="_CPPv225ZET_METRIC_TYPE_TIMESTAMP"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8abb9105f08a67c1e1f8423127eb9b65e1"></span><code class="sig-name descname">ZET_METRIC_TYPE_TIMESTAMP</code><a class="headerlink" href="#_CPPv425ZET_METRIC_TYPE_TIMESTAMP" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: timestamp. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ZET_METRIC_TYPE_FLAG">
+<span id="_CPPv320ZET_METRIC_TYPE_FLAG"></span><span id="_CPPv220ZET_METRIC_TYPE_FLAG"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a2b3ece2d73f47565d504fb49b76b34bd"></span><code class="sig-name descname">ZET_METRIC_TYPE_FLAG</code><a class="headerlink" href="#_CPPv420ZET_METRIC_TYPE_FLAG" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: flag. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ZET_METRIC_TYPE_RATIO">
+<span id="_CPPv321ZET_METRIC_TYPE_RATIO"></span><span id="_CPPv221ZET_METRIC_TYPE_RATIO"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8af42caf0e984708fcc54de35fb71077eb"></span><code class="sig-name descname">ZET_METRIC_TYPE_RATIO</code><a class="headerlink" href="#_CPPv421ZET_METRIC_TYPE_RATIO" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: ratio. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv419ZET_METRIC_TYPE_RAW">
+<span id="_CPPv319ZET_METRIC_TYPE_RAW"></span><span id="_CPPv219ZET_METRIC_TYPE_RAW"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a40b2d339c85486e8d9a9f6b6f96f8db4"></span><code class="sig-name descname">ZET_METRIC_TYPE_RAW</code><a class="headerlink" href="#_CPPv419ZET_METRIC_TYPE_RAW" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric type: raw. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="zet-value-type-t">
+<span id="id25"></span><h4>zet_value_type_t<a class="headerlink" href="#zet-value-type-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv416zet_value_type_t">
+<span id="_CPPv316zet_value_type_t"></span><span id="_CPPv216zet_value_type_t"></span><span class="target" id="zet__api_8h_1a66f6c7e9dd405c144de2496e40cb9ef1"></span><em class="property">enum </em><code class="sig-name descname">zet_value_type_t</code><a class="headerlink" href="#_CPPv416zet_value_type_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Supported value types. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv421ZET_VALUE_TYPE_UINT32">
+<span id="_CPPv321ZET_VALUE_TYPE_UINT32"></span><span id="_CPPv221ZET_VALUE_TYPE_UINT32"></span><span class="target" id="zet__api_8h_1a66f6c7e9dd405c144de2496e40cb9ef1a7ad28c1387b37da094c022cfc20b8138"></span><code class="sig-name descname">ZET_VALUE_TYPE_UINT32</code><a class="headerlink" href="#_CPPv421ZET_VALUE_TYPE_UINT32" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>32-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv421ZET_VALUE_TYPE_UINT64">
+<span id="_CPPv321ZET_VALUE_TYPE_UINT64"></span><span id="_CPPv221ZET_VALUE_TYPE_UINT64"></span><span class="target" id="zet__api_8h_1a66f6c7e9dd405c144de2496e40cb9ef1acb888f557e6fb683c3fbdec1b7d3301d"></span><code class="sig-name descname">ZET_VALUE_TYPE_UINT64</code><a class="headerlink" href="#_CPPv421ZET_VALUE_TYPE_UINT64" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>64-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ZET_VALUE_TYPE_FLOAT32">
+<span id="_CPPv322ZET_VALUE_TYPE_FLOAT32"></span><span id="_CPPv222ZET_VALUE_TYPE_FLOAT32"></span><span class="target" id="zet__api_8h_1a66f6c7e9dd405c144de2496e40cb9ef1a895cf07e306d5f22467963955a08a24a"></span><code class="sig-name descname">ZET_VALUE_TYPE_FLOAT32</code><a class="headerlink" href="#_CPPv422ZET_VALUE_TYPE_FLOAT32" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>32-bit floating-point </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv422ZET_VALUE_TYPE_FLOAT64">
+<span id="_CPPv322ZET_VALUE_TYPE_FLOAT64"></span><span id="_CPPv222ZET_VALUE_TYPE_FLOAT64"></span><span class="target" id="zet__api_8h_1a66f6c7e9dd405c144de2496e40cb9ef1a41cc3ad3906d8f539742b8fcedf3e53e"></span><code class="sig-name descname">ZET_VALUE_TYPE_FLOAT64</code><a class="headerlink" href="#_CPPv422ZET_VALUE_TYPE_FLOAT64" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>64-bit floating-point </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv420ZET_VALUE_TYPE_BOOL8">
+<span id="_CPPv320ZET_VALUE_TYPE_BOOL8"></span><span id="_CPPv220ZET_VALUE_TYPE_BOOL8"></span><span class="target" id="zet__api_8h_1a66f6c7e9dd405c144de2496e40cb9ef1a1cc35cd9bb0a9f43a1bde49ac7190e36"></span><code class="sig-name descname">ZET_VALUE_TYPE_BOOL8</code><a class="headerlink" href="#_CPPv420ZET_VALUE_TYPE_BOOL8" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>8-bit boolean </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="zet-metric-query-pool-flag-t">
+<span id="id26"></span><h4>zet_metric_query_pool_flag_t<a class="headerlink" href="#zet-metric-query-pool-flag-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv428zet_metric_query_pool_flag_t">
+<span id="_CPPv328zet_metric_query_pool_flag_t"></span><span id="_CPPv228zet_metric_query_pool_flag_t"></span><span class="target" id="zet__api_8h_1a88e898029d03c3ac9c30f119897eb581"></span><em class="property">enum </em><code class="sig-name descname">zet_metric_query_pool_flag_t</code><a class="headerlink" href="#_CPPv428zet_metric_query_pool_flag_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric query pool types. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv438ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE">
+<span id="_CPPv338ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE"></span><span id="_CPPv238ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE"></span><span class="target" id="zet__api_8h_1a88e898029d03c3ac9c30f119897eb581a3926d6f82755d002b935d14ab846a0f1"></span><code class="sig-name descname">ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE</code><a class="headerlink" href="#_CPPv438ZET_METRIC_QUERY_POOL_FLAG_PERFORMANCE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Performance metric query pool. </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv441ZET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION">
+<span id="_CPPv341ZET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION"></span><span id="_CPPv241ZET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION"></span><span class="target" id="zet__api_8h_1a88e898029d03c3ac9c30f119897eb581a260e2fc19f817546389c1c884be4f5c9"></span><code class="sig-name descname">ZET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION</code><a class="headerlink" href="#_CPPv441ZET_METRIC_QUERY_POOL_FLAG_SKIP_EXECUTION" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Skips workload execution between begin/end calls. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="metric-structures">
+<h3>Metric Structures<a class="headerlink" href="#metric-structures" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-metric-group-properties-t">
+<span id="id27"></span><h4>zet_metric_group_properties_t<a class="headerlink" href="#zet-metric-group-properties-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv429zet_metric_group_properties_t">
+<span id="_CPPv329zet_metric_group_properties_t"></span><span id="_CPPv229zet_metric_group_properties_t"></span><span id="zet_metric_group_properties_t"></span><span class="target" id="structzet__metric__group__properties__t"></span><em class="property">struct </em><code class="sig-name descname">zet_metric_group_properties_t</code><a class="headerlink" href="#_CPPv429zet_metric_group_properties_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric group properties queried using <a class="reference internal" href="#zet__api_8h_1a33f410d437e39b1624f3d625a9f2bf22"><span class="std std-ref">zetMetricGroupGetProperties</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t5stypeE">
+<span id="_CPPv3N29zet_metric_group_properties_t5stypeE"></span><span id="_CPPv2N29zet_metric_group_properties_t5stypeE"></span><span id="zet_metric_group_properties_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__group__properties__t_1a044ddc13e754369b1bb504308645b20a"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t5pNextE">
+<span id="_CPPv3N29zet_metric_group_properties_t5pNextE"></span><span id="_CPPv2N29zet_metric_group_properties_t5pNextE"></span><span id="zet_metric_group_properties_t::pNext__voidP"></span><span class="target" id="structzet__metric__group__properties__t_1a9d060f6dcf5c174a44ee93546318239a"></span>void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in,out][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t4nameE">
+<span id="_CPPv3N29zet_metric_group_properties_t4nameE"></span><span id="_CPPv2N29zet_metric_group_properties_t4nameE"></span><span id="zet_metric_group_properties_t::name__cA"></span><span class="target" id="structzet__metric__group__properties__t_1a7f0e5ef615a4110c090082222f681bc1"></span>char <code class="sig-name descname">name</code>[<code class="sig-name descname">ZET_MAX_METRIC_GROUP_NAME</code>]<a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t4nameE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric group name </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t11descriptionE">
+<span id="_CPPv3N29zet_metric_group_properties_t11descriptionE"></span><span id="_CPPv2N29zet_metric_group_properties_t11descriptionE"></span><span id="zet_metric_group_properties_t::description__cA"></span><span class="target" id="structzet__metric__group__properties__t_1a89872b3697d249afb25e1b00f486524f"></span>char <code class="sig-name descname">description</code>[<code class="sig-name descname">ZET_MAX_METRIC_GROUP_DESCRIPTION</code>]<a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t11descriptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric group description </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t12samplingTypeE">
+<span id="_CPPv3N29zet_metric_group_properties_t12samplingTypeE"></span><span id="_CPPv2N29zet_metric_group_properties_t12samplingTypeE"></span><span id="zet_metric_group_properties_t::samplingType__zet_metric_group_sampling_type_t"></span><span class="target" id="structzet__metric__group__properties__t_1a0d45eaff5d6a11eb75b685e81e9738a7"></span><a class="reference internal" href="#_CPPv432zet_metric_group_sampling_type_t" title="zet_metric_group_sampling_type_t">zet_metric_group_sampling_type_t</a> <code class="sig-name descname">samplingType</code><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t12samplingTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric group sampling type </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t6domainE">
+<span id="_CPPv3N29zet_metric_group_properties_t6domainE"></span><span id="_CPPv2N29zet_metric_group_properties_t6domainE"></span><span id="zet_metric_group_properties_t::domain__uint32_t"></span><span class="target" id="structzet__metric__group__properties__t_1a6190b331030f48a55f7287eeb5952a5e"></span>uint32_t <code class="sig-name descname">domain</code><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t6domainE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric group domain number. Cannot use simultaneous metric groups from different domains. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t27maxCommandQueueGroupOrdinalE">
+<span id="_CPPv3N29zet_metric_group_properties_t27maxCommandQueueGroupOrdinalE"></span><span id="_CPPv2N29zet_metric_group_properties_t27maxCommandQueueGroupOrdinalE"></span><span id="zet_metric_group_properties_t::maxCommandQueueGroupOrdinal__uint32_t"></span><span class="target" id="structzet__metric__group__properties__t_1a1b3618c52887ef00b4a46adfa76c21b2"></span>uint32_t <code class="sig-name descname">maxCommandQueueGroupOrdinal</code><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t27maxCommandQueueGroupOrdinalE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] streamers and queries of this metric group cannot be submitted to a command queue group with a larger ordinal value. See <a class="reference internal" href="../core/api.html#structze__command__queue__desc__t"><span class="std std-ref">ze_command_queue_desc_t</span></a> for more information on how to specify the command queue’s group ordinal. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N29zet_metric_group_properties_t11metricCountE">
+<span id="_CPPv3N29zet_metric_group_properties_t11metricCountE"></span><span id="_CPPv2N29zet_metric_group_properties_t11metricCountE"></span><span id="zet_metric_group_properties_t::metricCount__uint32_t"></span><span class="target" id="structzet__metric__group__properties__t_1a03039c5f8693ac9e1e67701612c9e3f6"></span>uint32_t <code class="sig-name descname">metricCount</code><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t11metricCountE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric count belonging to this group </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-value-t">
+<span id="id28"></span><h4>zet_value_t<a class="headerlink" href="#zet-value-t" title="Permalink to this headline">¶</a></h4>
+<dl class="union">
+<dt id="_CPPv411zet_value_t">
+<span id="_CPPv311zet_value_t"></span><span id="_CPPv211zet_value_t"></span><span class="target" id="unionzet__value__t"></span><em class="property">union </em><code class="sig-name descname">zet_value_t</code><a class="headerlink" href="#_CPPv411zet_value_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><em>#include &lt;zet_api.h&gt;</em><p>Union of values. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N11zet_value_t4ui32E">
+<span id="_CPPv3N11zet_value_t4ui32E"></span><span id="_CPPv2N11zet_value_t4ui32E"></span><span id="zet_value_t::ui32__uint32_t"></span><span class="target" id="unionzet__value__t_1a594387096f85239c3049dd53a0350fbe"></span>uint32_t <code class="sig-name descname">ui32</code><a class="headerlink" href="#_CPPv4N11zet_value_t4ui32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] 32-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N11zet_value_t4ui64E">
+<span id="_CPPv3N11zet_value_t4ui64E"></span><span id="_CPPv2N11zet_value_t4ui64E"></span><span id="zet_value_t::ui64__uint64_t"></span><span class="target" id="unionzet__value__t_1a2fe5a4403f6db85b36a04f92d9e68178"></span>uint64_t <code class="sig-name descname">ui64</code><a class="headerlink" href="#_CPPv4N11zet_value_t4ui64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] 32-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N11zet_value_t4fp32E">
+<span id="_CPPv3N11zet_value_t4fp32E"></span><span id="_CPPv2N11zet_value_t4fp32E"></span><span id="zet_value_t::fp32__float"></span><span class="target" id="unionzet__value__t_1a861cfed38a09c426981f507e006cb619"></span>float <code class="sig-name descname">fp32</code><a class="headerlink" href="#_CPPv4N11zet_value_t4fp32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] 32-bit floating-point </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N11zet_value_t4fp64E">
+<span id="_CPPv3N11zet_value_t4fp64E"></span><span id="_CPPv2N11zet_value_t4fp64E"></span><span id="zet_value_t::fp64__double"></span><span class="target" id="unionzet__value__t_1a1f45cb64271cf92a723017aacfcd60b4"></span>double <code class="sig-name descname">fp64</code><a class="headerlink" href="#_CPPv4N11zet_value_t4fp64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] 64-bit floating-point </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N11zet_value_t2b8E">
+<span id="_CPPv3N11zet_value_t2b8E"></span><span id="_CPPv2N11zet_value_t2b8E"></span><span id="zet_value_t::b8__ze_bool_t"></span><span class="target" id="unionzet__value__t_1a35c9d24b855166d9a2c153fc68dbd87d"></span>ze_bool_t <code class="sig-name descname">b8</code><a class="headerlink" href="#_CPPv4N11zet_value_t2b8E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] 8-bit boolean </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-typed-value-t">
+<span id="id29"></span><h4>zet_typed_value_t<a class="headerlink" href="#zet-typed-value-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv417zet_typed_value_t">
+<span id="_CPPv317zet_typed_value_t"></span><span id="_CPPv217zet_typed_value_t"></span><span id="zet_typed_value_t"></span><span class="target" id="structzet__typed__value__t"></span><em class="property">struct </em><code class="sig-name descname">zet_typed_value_t</code><a class="headerlink" href="#_CPPv417zet_typed_value_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Typed value. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N17zet_typed_value_t4typeE">
+<span id="_CPPv3N17zet_typed_value_t4typeE"></span><span id="_CPPv2N17zet_typed_value_t4typeE"></span><span id="zet_typed_value_t::type__zet_value_type_t"></span><span class="target" id="structzet__typed__value__t_1a0ee27013806de20940fe55164e8fcda9"></span><a class="reference internal" href="#_CPPv416zet_value_type_t" title="zet_value_type_t">zet_value_type_t</a> <code class="sig-name descname">type</code><a class="headerlink" href="#_CPPv4N17zet_typed_value_t4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] type of value </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17zet_typed_value_t5valueE">
+<span id="_CPPv3N17zet_typed_value_t5valueE"></span><span id="_CPPv2N17zet_typed_value_t5valueE"></span><span id="zet_typed_value_t::value__zet_value_t"></span><span class="target" id="structzet__typed__value__t_1a422f14aee69461faddf293f7d469d3dd"></span><a class="reference internal" href="#_CPPv411zet_value_t" title="zet_value_t">zet_value_t</a> <code class="sig-name descname">value</code><a class="headerlink" href="#_CPPv4N17zet_typed_value_t5valueE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] value </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-metric-properties-t">
+<span id="id30"></span><h4>zet_metric_properties_t<a class="headerlink" href="#zet-metric-properties-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv423zet_metric_properties_t">
+<span id="_CPPv323zet_metric_properties_t"></span><span id="_CPPv223zet_metric_properties_t"></span><span id="zet_metric_properties_t"></span><span class="target" id="structzet__metric__properties__t"></span><em class="property">struct </em><code class="sig-name descname">zet_metric_properties_t</code><a class="headerlink" href="#_CPPv423zet_metric_properties_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric properties queried using <a class="reference internal" href="#zet__api_8h_1add7e968bb0f85203370d89138e2b921b"><span class="std std-ref">zetMetricGetProperties</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t5stypeE">
+<span id="_CPPv3N23zet_metric_properties_t5stypeE"></span><span id="_CPPv2N23zet_metric_properties_t5stypeE"></span><span id="zet_metric_properties_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__properties__t_1a810df4133cb75d5b4a085f5e5f6334ed"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t5pNextE">
+<span id="_CPPv3N23zet_metric_properties_t5pNextE"></span><span id="_CPPv2N23zet_metric_properties_t5pNextE"></span><span id="zet_metric_properties_t::pNext__voidP"></span><span class="target" id="structzet__metric__properties__t_1a448b24913ba2464c52494cbc8ac6a52d"></span>void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in,out][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t4nameE">
+<span id="_CPPv3N23zet_metric_properties_t4nameE"></span><span id="_CPPv2N23zet_metric_properties_t4nameE"></span><span id="zet_metric_properties_t::name__cA"></span><span class="target" id="structzet__metric__properties__t_1adda8a532663f1be1bd145c8a10b0afc0"></span>char <code class="sig-name descname">name</code>[<code class="sig-name descname">ZET_MAX_METRIC_NAME</code>]<a class="headerlink" href="#_CPPv4N23zet_metric_properties_t4nameE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric name </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t11descriptionE">
+<span id="_CPPv3N23zet_metric_properties_t11descriptionE"></span><span id="_CPPv2N23zet_metric_properties_t11descriptionE"></span><span id="zet_metric_properties_t::description__cA"></span><span class="target" id="structzet__metric__properties__t_1ae5414730a585e86b0d3ebe9700319e19"></span>char <code class="sig-name descname">description</code>[<code class="sig-name descname">ZET_MAX_METRIC_DESCRIPTION</code>]<a class="headerlink" href="#_CPPv4N23zet_metric_properties_t11descriptionE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric description </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t9componentE">
+<span id="_CPPv3N23zet_metric_properties_t9componentE"></span><span id="_CPPv2N23zet_metric_properties_t9componentE"></span><span id="zet_metric_properties_t::component__cA"></span><span class="target" id="structzet__metric__properties__t_1aad7a48865bc75a32470e4ac174ecd38e"></span>char <code class="sig-name descname">component</code>[<code class="sig-name descname">ZET_MAX_METRIC_COMPONENT</code>]<a class="headerlink" href="#_CPPv4N23zet_metric_properties_t9componentE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric component </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t10tierNumberE">
+<span id="_CPPv3N23zet_metric_properties_t10tierNumberE"></span><span id="_CPPv2N23zet_metric_properties_t10tierNumberE"></span><span id="zet_metric_properties_t::tierNumber__uint32_t"></span><span class="target" id="structzet__metric__properties__t_1ab6e59dc07cc897db1dab6345fd5f5d63"></span>uint32_t <code class="sig-name descname">tierNumber</code><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t10tierNumberE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] number of tier </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t10metricTypeE">
+<span id="_CPPv3N23zet_metric_properties_t10metricTypeE"></span><span id="_CPPv2N23zet_metric_properties_t10metricTypeE"></span><span id="zet_metric_properties_t::metricType__zet_metric_type_t"></span><span class="target" id="structzet__metric__properties__t_1a690b81ed46285136a06f03d4aa3a6918"></span><a class="reference internal" href="#_CPPv417zet_metric_type_t" title="zet_metric_type_t">zet_metric_type_t</a> <code class="sig-name descname">metricType</code><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t10metricTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric type </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t10resultTypeE">
+<span id="_CPPv3N23zet_metric_properties_t10resultTypeE"></span><span id="_CPPv2N23zet_metric_properties_t10resultTypeE"></span><span id="zet_metric_properties_t::resultType__zet_value_type_t"></span><span class="target" id="structzet__metric__properties__t_1ab8620a01a145e079eae1c1d0f0f92690"></span><a class="reference internal" href="#_CPPv416zet_value_type_t" title="zet_value_type_t">zet_value_type_t</a> <code class="sig-name descname">resultType</code><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t10resultTypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric result type </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N23zet_metric_properties_t11resultUnitsE">
+<span id="_CPPv3N23zet_metric_properties_t11resultUnitsE"></span><span id="_CPPv2N23zet_metric_properties_t11resultUnitsE"></span><span id="zet_metric_properties_t::resultUnits__cA"></span><span class="target" id="structzet__metric__properties__t_1af31b07b3059f0998c3bd72a0cb393f93"></span>char <code class="sig-name descname">resultUnits</code>[<code class="sig-name descname">ZET_MAX_METRIC_RESULT_UNITS</code>]<a class="headerlink" href="#_CPPv4N23zet_metric_properties_t11resultUnitsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] metric result units </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-metric-streamer-desc-t">
+<span id="id31"></span><h4>zet_metric_streamer_desc_t<a class="headerlink" href="#zet-metric-streamer-desc-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv426zet_metric_streamer_desc_t">
+<span id="_CPPv326zet_metric_streamer_desc_t"></span><span id="_CPPv226zet_metric_streamer_desc_t"></span><span id="zet_metric_streamer_desc_t"></span><span class="target" id="structzet__metric__streamer__desc__t"></span><em class="property">struct </em><code class="sig-name descname">zet_metric_streamer_desc_t</code><a class="headerlink" href="#_CPPv426zet_metric_streamer_desc_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric streamer descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N26zet_metric_streamer_desc_t5stypeE">
+<span id="_CPPv3N26zet_metric_streamer_desc_t5stypeE"></span><span id="_CPPv2N26zet_metric_streamer_desc_t5stypeE"></span><span id="zet_metric_streamer_desc_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__streamer__desc__t_1a549daf4800ecd0792e40f384dd7fc153"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N26zet_metric_streamer_desc_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N26zet_metric_streamer_desc_t5pNextE">
+<span id="_CPPv3N26zet_metric_streamer_desc_t5pNextE"></span><span id="_CPPv2N26zet_metric_streamer_desc_t5pNextE"></span><span id="zet_metric_streamer_desc_t::pNext__voidCP"></span><span class="target" id="structzet__metric__streamer__desc__t_1a8fcd9ea813ebf14ebaa4325e9860d096"></span><em class="property">const</em> void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N26zet_metric_streamer_desc_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N26zet_metric_streamer_desc_t19notifyEveryNReportsE">
+<span id="_CPPv3N26zet_metric_streamer_desc_t19notifyEveryNReportsE"></span><span id="_CPPv2N26zet_metric_streamer_desc_t19notifyEveryNReportsE"></span><span id="zet_metric_streamer_desc_t::notifyEveryNReports__uint32_t"></span><span class="target" id="structzet__metric__streamer__desc__t_1a4436778b4de1edf0abc65e6816c0af73"></span>uint32_t <code class="sig-name descname">notifyEveryNReports</code><a class="headerlink" href="#_CPPv4N26zet_metric_streamer_desc_t19notifyEveryNReportsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in,out] number of collected reports after which notification event will be signalled </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N26zet_metric_streamer_desc_t14samplingPeriodE">
+<span id="_CPPv3N26zet_metric_streamer_desc_t14samplingPeriodE"></span><span id="_CPPv2N26zet_metric_streamer_desc_t14samplingPeriodE"></span><span id="zet_metric_streamer_desc_t::samplingPeriod__uint32_t"></span><span class="target" id="structzet__metric__streamer__desc__t_1acba3918dc38ebd75f7f7ff326bf1d87d"></span>uint32_t <code class="sig-name descname">samplingPeriod</code><a class="headerlink" href="#_CPPv4N26zet_metric_streamer_desc_t14samplingPeriodE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in,out] streamer sampling period in nanoseconds </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-metric-query-pool-desc-t">
+<span id="id32"></span><h4>zet_metric_query_pool_desc_t<a class="headerlink" href="#zet-metric-query-pool-desc-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv428zet_metric_query_pool_desc_t">
+<span id="_CPPv328zet_metric_query_pool_desc_t"></span><span id="_CPPv228zet_metric_query_pool_desc_t"></span><span id="zet_metric_query_pool_desc_t"></span><span class="target" id="structzet__metric__query__pool__desc__t"></span><em class="property">struct </em><code class="sig-name descname">zet_metric_query_pool_desc_t</code><a class="headerlink" href="#_CPPv428zet_metric_query_pool_desc_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Metric query pool description. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N28zet_metric_query_pool_desc_t5stypeE">
+<span id="_CPPv3N28zet_metric_query_pool_desc_t5stypeE"></span><span id="_CPPv2N28zet_metric_query_pool_desc_t5stypeE"></span><span id="zet_metric_query_pool_desc_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__query__pool__desc__t_1a03ed8c615bce9468a6560ee5d042566a"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N28zet_metric_query_pool_desc_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N28zet_metric_query_pool_desc_t5pNextE">
+<span id="_CPPv3N28zet_metric_query_pool_desc_t5pNextE"></span><span id="_CPPv2N28zet_metric_query_pool_desc_t5pNextE"></span><span id="zet_metric_query_pool_desc_t::pNext__voidCP"></span><span class="target" id="structzet__metric__query__pool__desc__t_1a8a6bff2593a1282726ac3920817c8ee8"></span><em class="property">const</em> void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N28zet_metric_query_pool_desc_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N28zet_metric_query_pool_desc_t5flagsE">
+<span id="_CPPv3N28zet_metric_query_pool_desc_t5flagsE"></span><span id="_CPPv2N28zet_metric_query_pool_desc_t5flagsE"></span><span id="zet_metric_query_pool_desc_t::flags__zet_metric_query_pool_flag_t"></span><span class="target" id="structzet__metric__query__pool__desc__t_1a8729e5e40be63823da13da7bfc9f4dbb"></span><a class="reference internal" href="#_CPPv428zet_metric_query_pool_flag_t" title="zet_metric_query_pool_flag_t">zet_metric_query_pool_flag_t</a> <code class="sig-name descname">flags</code><a class="headerlink" href="#_CPPv4N28zet_metric_query_pool_desc_t5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] Query pool type. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N28zet_metric_query_pool_desc_t5countE">
+<span id="_CPPv3N28zet_metric_query_pool_desc_t5countE"></span><span id="_CPPv2N28zet_metric_query_pool_desc_t5countE"></span><span id="zet_metric_query_pool_desc_t::count__uint32_t"></span><span class="target" id="structzet__metric__query__pool__desc__t_1a67b66bf5a8e41aa3e699c2830305c1e4"></span>uint32_t <code class="sig-name descname">count</code><a class="headerlink" href="#_CPPv4N28zet_metric_query_pool_desc_t5countE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] Internal slots count within query pool object. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="module">
+<h2>Module<a class="headerlink" href="#module" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zetmodulegetdebuginfo"><span class="std std-ref">zetModuleGetDebugInfo</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-module-debug-info-format-t"><span class="std std-ref">zet_module_debug_info_format_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="module-functions">
+<h3>Module Functions<a class="headerlink" href="#module-functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zetmodulegetdebuginfo">
+<span id="id33"></span><h4>zetModuleGetDebugInfo<a class="headerlink" href="#zetmodulegetdebuginfo" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv421zetModuleGetDebugInfo19zet_module_handle_t30zet_module_debug_info_format_tP6size_tP7uint8_t">
+<span id="_CPPv321zetModuleGetDebugInfo19zet_module_handle_t30zet_module_debug_info_format_tP6size_tP7uint8_t"></span><span id="_CPPv221zetModuleGetDebugInfo19zet_module_handle_t30zet_module_debug_info_format_tP6size_tP7uint8_t"></span><span id="zetModuleGetDebugInfo__zet_module_handle_t.zet_module_debug_info_format_t.sP.uint8_tP"></span><span class="target" id="zet__api_8h_1a4a58fb1e41051a4009385a05bd7fa5af"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetModuleGetDebugInfo</code><span class="sig-paren">(</span>zet_module_handle_t <em>hModule</em>, <a class="reference internal" href="#_CPPv430zet_module_debug_info_format_t" title="zet_module_debug_info_format_t">zet_module_debug_info_format_t</a> <em>format</em>, size_t *<em>pSize</em>, uint8_t *<em>pDebugInfo</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetModuleGetDebugInfo19zet_module_handle_t30zet_module_debug_info_format_tP6size_tP7uint8_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieve debug info from module. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hModule</span></code>: handle of the module </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">format</span></code>: debug info format requested </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pSize</span></code>: size of debug info in bytes </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pDebugInfo</span></code>: [optional] byte pointer to debug info </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The caller can pass nullptr for pDebugInfo when querying only for size.</p></li>
+<li><p>The implementation will copy the native binary into a buffer supplied by the caller.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#zet__api_8h_1a15c31ed9f375b4db64220762e060b257abaeceaa22ed464341f7586382591825b"><span class="std std-ref"><span class="pre">ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF</span></span></a> <span class="pre">&lt;</span> <span class="pre">format</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pSize</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-enums">
+<h3>Module Enums<a class="headerlink" href="#module-enums" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-module-debug-info-format-t">
+<span id="id34"></span><h4>zet_module_debug_info_format_t<a class="headerlink" href="#zet-module-debug-info-format-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv430zet_module_debug_info_format_t">
+<span id="_CPPv330zet_module_debug_info_format_t"></span><span id="_CPPv230zet_module_debug_info_format_t"></span><span class="target" id="zet__api_8h_1a15c31ed9f375b4db64220762e060b257"></span><em class="property">enum </em><code class="sig-name descname">zet_module_debug_info_format_t</code><a class="headerlink" href="#_CPPv430zet_module_debug_info_format_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Supported module debug info formats. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv438ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF">
+<span id="_CPPv338ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF"></span><span id="_CPPv238ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF"></span><span class="target" id="zet__api_8h_1a15c31ed9f375b4db64220762e060b257abaeceaa22ed464341f7586382591825b"></span><code class="sig-name descname">ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF</code><a class="headerlink" href="#_CPPv438ZET_MODULE_DEBUG_INFO_FORMAT_ELF_DWARF" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Format is ELF/DWARF. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="pin">
+<h2>Pin<a class="headerlink" href="#pin" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zetkernelgetprofileinfo"><span class="std std-ref">zetKernelGetProfileInfo</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-profile-flag-t"><span class="std std-ref">zet_profile_flag_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-profile-token-type-t"><span class="std std-ref">zet_profile_token_type_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-profile-properties-t"><span class="std std-ref">zet_profile_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-profile-free-register-token-t"><span class="std std-ref">zet_profile_free_register_token_t</span></a></p></li>
+<li><p><a class="reference internal" href="#zet-profile-register-sequence-t"><span class="std std-ref">zet_profile_register_sequence_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="pin-functions">
+<h3>Pin Functions<a class="headerlink" href="#pin-functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zetkernelgetprofileinfo">
+<span id="id35"></span><h4>zetKernelGetProfileInfo<a class="headerlink" href="#zetkernelgetprofileinfo" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv423zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t">
+<span id="_CPPv323zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t"></span><span id="_CPPv223zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t"></span><span id="zetKernelGetProfileInfo__zet_kernel_handle_t.zet_profile_properties_tP"></span><span class="target" id="zet__api_8h_1a74ec6332c39714b20296c3809adb71b3"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetKernelGetProfileInfo</code><span class="sig-paren">(</span>zet_kernel_handle_t <em>hKernel</em>, <a class="reference internal" href="#_CPPv424zet_profile_properties_t" title="zet_profile_properties_t">zet_profile_properties_t</a> *<em>pProfileProperties</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Retrieve profiling information generated for the kernel. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hKernel</span></code>: handle to kernel </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pProfileProperties</span></code>: pointer to profile properties </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>Module must be created using the following build option:<ul>
+<li><p>”-zet-profile-flags &lt;n&gt;” - enable generation of profile information</p></li>
+<li><p>”&lt;n&gt;” must be a combination of <a class="reference internal" href="#zet__api_8h_1ad843252507862f8ef02fd0dad5d82949"><span class="std std-ref">zet_profile_flag_t</span></a>, in hex</p></li>
+</ul>
+</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hKernel</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProfileProperties</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="pin-enums">
+<h3>Pin Enums<a class="headerlink" href="#pin-enums" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-profile-flag-t">
+<span id="id36"></span><h4>zet_profile_flag_t<a class="headerlink" href="#zet-profile-flag-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv418zet_profile_flag_t">
+<span id="_CPPv318zet_profile_flag_t"></span><span id="_CPPv218zet_profile_flag_t"></span><span class="target" id="zet__api_8h_1ad843252507862f8ef02fd0dad5d82949"></span><em class="property">enum </em><code class="sig-name descname">zet_profile_flag_t</code><a class="headerlink" href="#_CPPv418zet_profile_flag_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Supportted profile features. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv438ZET_PROFILE_FLAG_REGISTER_REALLOCATION">
+<span id="_CPPv338ZET_PROFILE_FLAG_REGISTER_REALLOCATION"></span><span id="_CPPv238ZET_PROFILE_FLAG_REGISTER_REALLOCATION"></span><span class="target" id="zet__api_8h_1ad843252507862f8ef02fd0dad5d82949abfa46b3a69dc959450cf5a046169b247"></span><code class="sig-name descname">ZET_PROFILE_FLAG_REGISTER_REALLOCATION</code> = ZE_BIT(0)<a class="headerlink" href="#_CPPv438ZET_PROFILE_FLAG_REGISTER_REALLOCATION" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>possible to allow for instrumentation </p>
+<p>request the compiler attempt to minimize register usage as much as </p>
+</dd></dl>
+
+<dl class="enumerator">
+<dt id="_CPPv435ZET_PROFILE_FLAG_FREE_REGISTER_INFO">
+<span id="_CPPv335ZET_PROFILE_FLAG_FREE_REGISTER_INFO"></span><span id="_CPPv235ZET_PROFILE_FLAG_FREE_REGISTER_INFO"></span><span class="target" id="zet__api_8h_1ad843252507862f8ef02fd0dad5d82949a8dc74863921fff05fce5ff61d0a4f78b"></span><code class="sig-name descname">ZET_PROFILE_FLAG_FREE_REGISTER_INFO</code> = ZE_BIT(1)<a class="headerlink" href="#_CPPv435ZET_PROFILE_FLAG_FREE_REGISTER_INFO" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>request the compiler generate free register info </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="zet-profile-token-type-t">
+<span id="id37"></span><h4>zet_profile_token_type_t<a class="headerlink" href="#zet-profile-token-type-t" title="Permalink to this headline">¶</a></h4>
+<dl class="enum">
+<dt id="_CPPv424zet_profile_token_type_t">
+<span id="_CPPv324zet_profile_token_type_t"></span><span id="_CPPv224zet_profile_token_type_t"></span><span class="target" id="zet__api_8h_1a0badc391a7cb6b5f8075392fd7093d27"></span><em class="property">enum </em><code class="sig-name descname">zet_profile_token_type_t</code><a class="headerlink" href="#_CPPv424zet_profile_token_type_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Supported profile token types. </p>
+<p><em>Values:</em></p>
+<dl class="enumerator">
+<dt id="_CPPv436ZET_PROFILE_TOKEN_TYPE_FREE_REGISTER">
+<span id="_CPPv336ZET_PROFILE_TOKEN_TYPE_FREE_REGISTER"></span><span id="_CPPv236ZET_PROFILE_TOKEN_TYPE_FREE_REGISTER"></span><span class="target" id="zet__api_8h_1a0badc391a7cb6b5f8075392fd7093d27a745f3925a0295d3cbc34c0d3a98a8766"></span><code class="sig-name descname">ZET_PROFILE_TOKEN_TYPE_FREE_REGISTER</code><a class="headerlink" href="#_CPPv436ZET_PROFILE_TOKEN_TYPE_FREE_REGISTER" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>GRF info. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="pin-structures">
+<h3>Pin Structures<a class="headerlink" href="#pin-structures" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-profile-properties-t">
+<span id="id38"></span><h4>zet_profile_properties_t<a class="headerlink" href="#zet-profile-properties-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv424zet_profile_properties_t">
+<span id="_CPPv324zet_profile_properties_t"></span><span id="_CPPv224zet_profile_properties_t"></span><span id="zet_profile_properties_t"></span><span class="target" id="structzet__profile__properties__t"></span><em class="property">struct </em><code class="sig-name descname">zet_profile_properties_t</code><a class="headerlink" href="#_CPPv424zet_profile_properties_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Profiling meta-data for instrumentation. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N24zet_profile_properties_t5stypeE">
+<span id="_CPPv3N24zet_profile_properties_t5stypeE"></span><span id="_CPPv2N24zet_profile_properties_t5stypeE"></span><span id="zet_profile_properties_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__profile__properties__t_1adc4540c2f86caa80ede4d650bb9b5765"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N24zet_profile_properties_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N24zet_profile_properties_t5pNextE">
+<span id="_CPPv3N24zet_profile_properties_t5pNextE"></span><span id="_CPPv2N24zet_profile_properties_t5pNextE"></span><span id="zet_profile_properties_t::pNext__voidP"></span><span class="target" id="structzet__profile__properties__t_1a6907775361634be42e86c9eba714b233"></span>void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N24zet_profile_properties_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in,out][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N24zet_profile_properties_t5flagsE">
+<span id="_CPPv3N24zet_profile_properties_t5flagsE"></span><span id="_CPPv2N24zet_profile_properties_t5flagsE"></span><span id="zet_profile_properties_t::flags__zet_profile_flag_t"></span><span class="target" id="structzet__profile__properties__t_1a44a315403c4ce5f1587b9b46e08be2ec"></span><a class="reference internal" href="#_CPPv418zet_profile_flag_t" title="zet_profile_flag_t">zet_profile_flag_t</a> <code class="sig-name descname">flags</code><a class="headerlink" href="#_CPPv4N24zet_profile_properties_t5flagsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] indicates which flags were enabled during compilation </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N24zet_profile_properties_t9numTokensE">
+<span id="_CPPv3N24zet_profile_properties_t9numTokensE"></span><span id="_CPPv2N24zet_profile_properties_t9numTokensE"></span><span id="zet_profile_properties_t::numTokens__uint32_t"></span><span class="target" id="structzet__profile__properties__t_1a2ed77d9891026ed6aa9cb14d3c2b51b0"></span>uint32_t <code class="sig-name descname">numTokens</code><a class="headerlink" href="#_CPPv4N24zet_profile_properties_t9numTokensE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] number of tokens immediately following this structure </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-profile-free-register-token-t">
+<span id="id39"></span><h4>zet_profile_free_register_token_t<a class="headerlink" href="#zet-profile-free-register-token-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv433zet_profile_free_register_token_t">
+<span id="_CPPv333zet_profile_free_register_token_t"></span><span id="_CPPv233zet_profile_free_register_token_t"></span><span id="zet_profile_free_register_token_t"></span><span class="target" id="structzet__profile__free__register__token__t"></span><em class="property">struct </em><code class="sig-name descname">zet_profile_free_register_token_t</code><a class="headerlink" href="#_CPPv433zet_profile_free_register_token_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Profile free register token detailing unused registers in the current function. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N33zet_profile_free_register_token_t4typeE">
+<span id="_CPPv3N33zet_profile_free_register_token_t4typeE"></span><span id="_CPPv2N33zet_profile_free_register_token_t4typeE"></span><span id="zet_profile_free_register_token_t::type__zet_profile_token_type_t"></span><span class="target" id="structzet__profile__free__register__token__t_1ae37ced9b7a8bc9f665960f7a119698d6"></span><a class="reference internal" href="#_CPPv424zet_profile_token_type_t" title="zet_profile_token_type_t">zet_profile_token_type_t</a> <code class="sig-name descname">type</code><a class="headerlink" href="#_CPPv4N33zet_profile_free_register_token_t4typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] type of token </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N33zet_profile_free_register_token_t4sizeE">
+<span id="_CPPv3N33zet_profile_free_register_token_t4sizeE"></span><span id="_CPPv2N33zet_profile_free_register_token_t4sizeE"></span><span id="zet_profile_free_register_token_t::size__uint32_t"></span><span class="target" id="structzet__profile__free__register__token__t_1a591961bc5e90ee15c0f48a4c977556c5"></span>uint32_t <code class="sig-name descname">size</code><a class="headerlink" href="#_CPPv4N33zet_profile_free_register_token_t4sizeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] total size of the token, in bytes </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N33zet_profile_free_register_token_t5countE">
+<span id="_CPPv3N33zet_profile_free_register_token_t5countE"></span><span id="_CPPv2N33zet_profile_free_register_token_t5countE"></span><span id="zet_profile_free_register_token_t::count__uint32_t"></span><span class="target" id="structzet__profile__free__register__token__t_1a6bbd8194ec2ec0b3fcee528a02763e77"></span>uint32_t <code class="sig-name descname">count</code><a class="headerlink" href="#_CPPv4N33zet_profile_free_register_token_t5countE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] number of register sequences immediately following this structure </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="zet-profile-register-sequence-t">
+<span id="id40"></span><h4>zet_profile_register_sequence_t<a class="headerlink" href="#zet-profile-register-sequence-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv431zet_profile_register_sequence_t">
+<span id="_CPPv331zet_profile_register_sequence_t"></span><span id="_CPPv231zet_profile_register_sequence_t"></span><span id="zet_profile_register_sequence_t"></span><span class="target" id="structzet__profile__register__sequence__t"></span><em class="property">struct </em><code class="sig-name descname">zet_profile_register_sequence_t</code><a class="headerlink" href="#_CPPv431zet_profile_register_sequence_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Profile register sequence detailing consecutive bytes, all of which are unused. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N31zet_profile_register_sequence_t5startE">
+<span id="_CPPv3N31zet_profile_register_sequence_t5startE"></span><span id="_CPPv2N31zet_profile_register_sequence_t5startE"></span><span id="zet_profile_register_sequence_t::start__uint32_t"></span><span class="target" id="structzet__profile__register__sequence__t_1aa02f40e34ab007178849963567cea9af"></span>uint32_t <code class="sig-name descname">start</code><a class="headerlink" href="#_CPPv4N31zet_profile_register_sequence_t5startE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] starting byte in the register table, representing the start of unused bytes in the current function </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N31zet_profile_register_sequence_t5countE">
+<span id="_CPPv3N31zet_profile_register_sequence_t5countE"></span><span id="_CPPv2N31zet_profile_register_sequence_t5countE"></span><span id="zet_profile_register_sequence_t::count__uint32_t"></span><span class="target" id="structzet__profile__register__sequence__t_1a94877d83df086321ddfe6e6bb6419b2e"></span>uint32_t <code class="sig-name descname">count</code><a class="headerlink" href="#_CPPv4N31zet_profile_register_sequence_t5countE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[out] number of consecutive bytes in the sequence, starting from start </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="tracing">
+<h2>Tracing<a class="headerlink" href="#tracing" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zettracercreate"><span class="std std-ref">zetTracerCreate</span></a></p></li>
+<li><p><a class="reference internal" href="#zettracerdestroy"><span class="std std-ref">zetTracerDestroy</span></a></p></li>
+<li><p><a class="reference internal" href="#zettracersetprologues"><span class="std std-ref">zetTracerSetPrologues</span></a></p></li>
+<li><p><a class="reference internal" href="#zettracersetepilogues"><span class="std std-ref">zetTracerSetEpilogues</span></a></p></li>
+<li><p><a class="reference internal" href="#zettracersetenabled"><span class="std std-ref">zetTracerSetEnabled</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#zet-tracer-desc-t"><span class="std std-ref">zet_tracer_desc_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="tracing-functions">
+<h3>Tracing Functions<a class="headerlink" href="#tracing-functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zettracercreate">
+<span id="id41"></span><h4>zetTracerCreate<a class="headerlink" href="#zettracercreate" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv415zetTracerCreate19zet_driver_handle_tPK17zet_tracer_desc_tP19zet_tracer_handle_t">
+<span id="_CPPv315zetTracerCreate19zet_driver_handle_tPK17zet_tracer_desc_tP19zet_tracer_handle_t"></span><span id="_CPPv215zetTracerCreate19zet_driver_handle_tPK17zet_tracer_desc_tP19zet_tracer_handle_t"></span><span id="zetTracerCreate__zet_driver_handle_t.zet_tracer_desc_tCP.zet_tracer_handle_tP"></span><span class="target" id="zet__api_8h_1a4b75a55ddffbe4bf405bc2f4ebdc2deb"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetTracerCreate</code><span class="sig-paren">(</span>zet_driver_handle_t <em>hDriver</em>, <em class="property">const</em> <a class="reference internal" href="#_CPPv417zet_tracer_desc_t" title="zet_tracer_desc_t">zet_tracer_desc_t</a> *<em>desc</em>, zet_tracer_handle_t *<em>phTracer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zetTracerCreate19zet_driver_handle_tPK17zet_tracer_desc_tP19zet_tracer_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Creates a tracer for the specified driver. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hDriver</span></code>: handle of the driver </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">desc</span></code>: pointer to tracer descriptor </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phTracer</span></code>: pointer to handle of tracer object created </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The tracer can only be used on the driver on which it was created.</p></li>
+<li><p>The tracer is created in the disabled state.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDriver</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc-&gt;pUserData</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phTracer</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zettracerdestroy">
+<span id="id42"></span><h4>zetTracerDestroy<a class="headerlink" href="#zettracerdestroy" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv416zetTracerDestroy19zet_tracer_handle_t">
+<span id="_CPPv316zetTracerDestroy19zet_tracer_handle_t"></span><span id="_CPPv216zetTracerDestroy19zet_tracer_handle_t"></span><span id="zetTracerDestroy__zet_tracer_handle_t"></span><span class="target" id="zet__api_8h_1a3d7409edb5fd62961d36650d5f9acdb7"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetTracerDestroy</code><span class="sig-paren">(</span>zet_tracer_handle_t <em>hTracer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zetTracerDestroy19zet_tracer_handle_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Destroys a tracer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hTracer</span></code>: [release] handle of tracer object to destroy </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same tracer handle.</p></li>
+<li><p>The implementation of this function will stall and wait on any outstanding threads executing callbacks before freeing any Host allocations associated with this tracer.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTracer</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af964b27d146102948a48f0ebabe3aee3"><span class="std std-ref">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE</span></a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zettracersetprologues">
+<span id="id43"></span><h4>zetTracerSetPrologues<a class="headerlink" href="#zettracersetprologues" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv421zetTracerSetPrologues19zet_tracer_handle_tP20zet_core_callbacks_t">
+<span id="_CPPv321zetTracerSetPrologues19zet_tracer_handle_tP20zet_core_callbacks_t"></span><span id="_CPPv221zetTracerSetPrologues19zet_tracer_handle_tP20zet_core_callbacks_t"></span><span id="zetTracerSetPrologues__zet_tracer_handle_t.zet_core_callbacks_tP"></span><span class="target" id="zet__api_8h_1a74559d5c75ad6e88eefaee419c9180c6"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetTracerSetPrologues</code><span class="sig-paren">(</span>zet_tracer_handle_t <em>hTracer</em>, zet_core_callbacks_t *<em>pCoreCbs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetTracerSetPrologues19zet_tracer_handle_tP20zet_core_callbacks_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the collection of callbacks to be executed <strong>before</strong> driver execution. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hTracer</span></code>: handle of the tracer </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pCoreCbs</span></code>: pointer to table of ‘core’ callback function pointers </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application only needs to set the function pointers it is interested in receiving; all others should be ‘nullptr’</p></li>
+<li><p>The application must ensure that no other threads are executing functions for which the tracing functions are changing.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same tracer handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTracer</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCoreCbs</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zettracersetepilogues">
+<span id="id44"></span><h4>zetTracerSetEpilogues<a class="headerlink" href="#zettracersetepilogues" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv421zetTracerSetEpilogues19zet_tracer_handle_tP20zet_core_callbacks_t">
+<span id="_CPPv321zetTracerSetEpilogues19zet_tracer_handle_tP20zet_core_callbacks_t"></span><span id="_CPPv221zetTracerSetEpilogues19zet_tracer_handle_tP20zet_core_callbacks_t"></span><span id="zetTracerSetEpilogues__zet_tracer_handle_t.zet_core_callbacks_tP"></span><span class="target" id="zet__api_8h_1a2040325c0573b461206f91f370df1b7d"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetTracerSetEpilogues</code><span class="sig-paren">(</span>zet_tracer_handle_t <em>hTracer</em>, zet_core_callbacks_t *<em>pCoreCbs</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetTracerSetEpilogues19zet_tracer_handle_tP20zet_core_callbacks_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Sets the collection of callbacks to be executed <strong>after</strong> driver execution. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hTracer</span></code>: handle of the tracer </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pCoreCbs</span></code>: pointer to table of ‘core’ callback function pointers </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application only needs to set the function pointers it is interested in receiving; all others should be ‘nullptr’</p></li>
+<li><p>The application must ensure that no other threads are executing functions for which the tracing functions are changing.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same tracer handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTracer</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCoreCbs</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="section" id="zettracersetenabled">
+<span id="id45"></span><h4>zetTracerSetEnabled<a class="headerlink" href="#zettracersetenabled" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="_CPPv419zetTracerSetEnabled19zet_tracer_handle_t9ze_bool_t">
+<span id="_CPPv319zetTracerSetEnabled19zet_tracer_handle_t9ze_bool_t"></span><span id="_CPPv219zetTracerSetEnabled19zet_tracer_handle_t9ze_bool_t"></span><span id="zetTracerSetEnabled__zet_tracer_handle_t.ze_bool_t"></span><span class="target" id="zet__api_8h_1a8cd7297bf83037dd2438b466124e1802"></span>ZE_APIEXPORT <a class="reference internal" href="../core/api.html#_CPPv411ze_result_t" title="ze_result_t">ze_result_t</a> ZE_APICALL <code class="sig-name descname">zetTracerSetEnabled</code><span class="sig-paren">(</span>zet_tracer_handle_t <em>hTracer</em>, ze_bool_t <em>enable</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zetTracerSetEnabled19zet_tracer_handle_t9ze_bool_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enables (or disables) the tracer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hTracer</span></code>: handle of the tracer </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable</span></code>: enable the tracer if true; disable if false </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+<p><ul class="simple">
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same tracer handle.</p></li>
+</ul>
+</p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p><ul class="simple">
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../core/api.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTracer</span></code> </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="tracing-structures">
+<h3>Tracing Structures<a class="headerlink" href="#tracing-structures" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="zet-tracer-desc-t">
+<span id="id46"></span><h4>zet_tracer_desc_t<a class="headerlink" href="#zet-tracer-desc-t" title="Permalink to this headline">¶</a></h4>
+<dl class="class">
+<dt id="_CPPv417zet_tracer_desc_t">
+<span id="_CPPv317zet_tracer_desc_t"></span><span id="_CPPv217zet_tracer_desc_t"></span><span id="zet_tracer_desc_t"></span><span class="target" id="structzet__tracer__desc__t"></span><em class="property">struct </em><code class="sig-name descname">zet_tracer_desc_t</code><a class="headerlink" href="#_CPPv417zet_tracer_desc_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Tracer descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N17zet_tracer_desc_t5stypeE">
+<span id="_CPPv3N17zet_tracer_desc_t5stypeE"></span><span id="_CPPv2N17zet_tracer_desc_t5stypeE"></span><span id="zet_tracer_desc_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__tracer__desc__t_1aaaef8aa2564a00a58ed1c205c7d89688"></span><a class="reference internal" href="#_CPPv420zet_structure_type_t" title="zet_structure_type_t">zet_structure_type_t</a> <code class="sig-name descname">stype</code><a class="headerlink" href="#_CPPv4N17zet_tracer_desc_t5stypeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17zet_tracer_desc_t5pNextE">
+<span id="_CPPv3N17zet_tracer_desc_t5pNextE"></span><span id="_CPPv2N17zet_tracer_desc_t5pNextE"></span><span id="zet_tracer_desc_t::pNext__voidCP"></span><span class="target" id="structzet__tracer__desc__t_1a18ee226de6af61462969a919de1fea0e"></span><em class="property">const</em> void *<code class="sig-name descname">pNext</code><a class="headerlink" href="#_CPPv4N17zet_tracer_desc_t5pNextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in][optional] pointer to extension-specific structure </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N17zet_tracer_desc_t9pUserDataE">
+<span id="_CPPv3N17zet_tracer_desc_t9pUserDataE"></span><span id="_CPPv2N17zet_tracer_desc_t9pUserDataE"></span><span id="zet_tracer_desc_t::pUserData__voidP"></span><span class="target" id="structzet__tracer__desc__t_1a078e194a506066f38de90ee7d90ee20f"></span>void *<code class="sig-name descname">pUserData</code><a class="headerlink" href="#_CPPv4N17zet_tracer_desc_t9pUserDataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>[in] pointer passed to every tracer’s callbacks </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../sysman/api.html" class="btn btn-neutral float-right" title="Sysman API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../core/api.html" class="btn btn-neutral float-left" title="Core API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

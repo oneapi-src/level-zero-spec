@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ray Tracing Acceleration Structure Builder Extension &#8212; Level Zero Specification  documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Level Zero Specification  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="INTRO.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="PROG.html">
+   Core Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tools/PROG.html">
+   Tools Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../sysman/PROG.html">
+   Sysman Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="SPIRV.html">
+   SPIR-V Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EXT.html">
+   Extensions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api.html">
+     Core API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tools/api.html">
+     Tools API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../sysman/api.html">
+     Sysman API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../versions.html">
+   Versions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/core/EXT_Exp_RTASBuilder.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Ray Tracing Acceleration Structure Builder Extension
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#api">
+     API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ray-tracing-acceleration-structure-builder">
+   Ray Tracing Acceleration Structure Builder
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scene-data">
+     Scene Data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-properties">
+     Device Properties
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#acceleration-structure-builder">
+     Acceleration Structure Builder
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#buffers">
+     Buffers
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scratch-buffer">
+       Scratch Buffer
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#acceleration-structure-buffer">
+       Acceleration Structure Buffer
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#executing-an-acceleration-structure-build">
+     Executing an Acceleration Structure Build
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#single-threaded-build">
+       Single-Threaded Build
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#parallel-build">
+       Parallel Build
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conservative-acceleration-structure-buffer-size">
+     Conservative Acceleration Structure Buffer Size
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cleaning-up">
+     Cleaning Up
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Ray Tracing Acceleration Structure Builder Extension</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Ray Tracing Acceleration Structure Builder Extension
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#api">
+     API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#ray-tracing-acceleration-structure-builder">
+   Ray Tracing Acceleration Structure Builder
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scene-data">
+     Scene Data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#device-properties">
+     Device Properties
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#acceleration-structure-builder">
+     Acceleration Structure Builder
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#buffers">
+     Buffers
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#scratch-buffer">
+       Scratch Buffer
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#acceleration-structure-buffer">
+       Acceleration Structure Buffer
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#executing-an-acceleration-structure-build">
+     Executing an Acceleration Structure Build
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#single-threaded-build">
+       Single-Threaded Build
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#parallel-build">
+       Parallel Build
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conservative-acceleration-structure-buffer-size">
+     Conservative Acceleration Structure Buffer Size
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#cleaning-up">
+     Cleaning Up
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="ray-tracing-acceleration-structure-builder-extension">
+<span id="ze-experimental-rtas-builder"></span><h1>Ray Tracing Acceleration Structure Builder Extension<a class="headerlink" href="#ray-tracing-acceleration-structure-builder-extension" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-exp-version-t"><span class="std std-ref">ze_rtas_builder_exp_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-device-exp-flags-t"><span class="std std-ref">ze_rtas_device_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-format-exp-t"><span class="std std-ref">ze_rtas_format_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-exp-flags-t"><span class="std std-ref">ze_rtas_builder_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-parallel-operation-exp-flags-t"><span class="std std-ref">ze_rtas_parallel_operation_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-instance-exp-flags-t"><span class="std std-ref">ze_rtas_builder_instance_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-build-op-exp-flags-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-build-quality-hint-exp-t"><span class="std std-ref">ze_rtas_builder_build_quality_hint_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-geometry-type-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_type_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ze_rtas_builder_input_data_format_exp_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-exp-desc-t"><span class="std std-ref">ze_rtas_builder_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-exp-properties-t"><span class="std std-ref">ze_rtas_builder_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-parallel-operation-exp-properties-t"><span class="std std-ref">ze_rtas_parallel_operation_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-device-exp-properties-t"><span class="std std-ref">ze_rtas_device_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-float3-exp-t"><span class="std std-ref">ze_rtas_float3_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-transform-float3x4-column-major-exp-t"><span class="std std-ref">ze_rtas_transform_float3x4_column_major_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-transform-float3x4-aligned-column-major-exp-t"><span class="std std-ref">ze_rtas_transform_float3x4_aligned_column_major_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-transform-float3x4-row-major-exp-t"><span class="std std-ref">ze_rtas_transform_float3x4_row_major_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-aabb-exp-t"><span class="std std-ref">ze_rtas_aabb_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-triangle-indices-uint32-exp-t"><span class="std std-ref">ze_rtas_triangle_indices_uint32_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-quad-indices-uint32-exp-t"><span class="std std-ref">ze_rtas_quad_indices_uint32_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-procedural-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_procedural_geometry_info_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-build-op-exp-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zertasbuildercreateexp"><span class="std std-ref">zeRTASBuilderCreateExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zertasbuildergetbuildpropertiesexp"><span class="std std-ref">zeRTASBuilderGetBuildPropertiesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zertasbuilderdestroyexp"><span class="std std-ref">zeRTASBuilderDestroyExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zedriverrtasformatcompatibilitycheckexp"><span class="std std-ref">zeDriverRTASFormatCompatibilityCheckExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zertasparalleloperationcreateexp"><span class="std std-ref">zeRTASParallelOperationCreateExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zertasparalleloperationgetpropertiesexp"><span class="std std-ref">zeRTASParallelOperationGetPropertiesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zertasparalleloperationjoinexp"><span class="std std-ref">zeRTASParallelOperationJoinExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zertasparalleloperationdestroyexp"><span class="std std-ref">zeRTASParallelOperationDestroyExp</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="ray-tracing-acceleration-structure-builder">
+<h1>Ray Tracing Acceleration Structure Builder<a class="headerlink" href="#ray-tracing-acceleration-structure-builder" title="Permalink to this headline">¶</a></h1>
+<p>The Ray Tracing Acceleration Structure Builder extension provides the functionality to build ray tracing acceleration structures (RTAS) for 3D scenes on the host for use with GPU devices.</p>
+<p>It is the user’s responsibility to manage the acceleration structure buffer and scratch buffer resources. The required sizes may be queried via <a class="reference internal" href="api.html#zertasbuildergetbuildpropertiesexp"><span class="std std-ref">zeRTASBuilderGetBuildPropertiesExp</span></a>. Once built, an acceleration structure is a self-contained entity; any input resources may be released after the successful construction. Note that acceleration structures are non-copyable resources.</p>
+<div class="section" id="scene-data">
+<h2>Scene Data<a class="headerlink" href="#scene-data" title="Permalink to this headline">¶</a></h2>
+<p>To build an acceleration structure, first setup a scene that consists of one or more geometry infos.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a> for triangle meshes,</p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a> for quad meshes,</p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-procedural-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_procedural_geometry_info_exp_t</span></a> for procedural primitives with attached axis-aligned bounding-box, and</p></li>
+<li><p><a class="reference internal" href="api.html#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a> for instances of other acceleration structures.</p></li>
+</ul>
+</div></blockquote>
+<p>The following example creates a <a class="reference internal" href="api.html#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a> to specify a triangle mesh:</p>
+<pre class="literal-block">std::vector&lt;<a class="reference internal" href="api.html#ze-rtas-triangle-indices-uint32-exp-t"><span class="std std-ref">ze_rtas_triangle_indices_uint32_exp_t</span></a>&gt; triangleIndexBuffer;
+std::vector&lt;<a class="reference internal" href="api.html#ze-rtas-float3-exp-t"><span class="std std-ref">ze_rtas_float3_exp_t</span></a>&gt; triangleVertexBuffer;
+
+// Populate vertex and index buffers
+{
+    // ...
+}
+
+<a class="reference internal" href="api.html#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a> mesh;
+memset(&amp;mesh, 0, sizeof(mesh));
+
+mesh.geometryType = <a class="reference internal" href="api.html#ze-rtas-builder-geometry-type-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_GEOMETRY_TYPE_EXP_TRIANGLES</span></a>;
+mesh.geometryFlags = 0;
+mesh.geometryMask = 0xFF;
+
+mesh.triangleFormat = <a class="reference internal" href="api.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_TRIANGLE_INDICES_UINT32</span></a>;
+mesh.triangleCount = triangleIndexBuffer.size();
+mesh.triangleStride = sizeof(<a class="reference internal" href="api.html#ze-rtas-triangle-indices-uint32-exp-t"><span class="std std-ref">ze_rtas_triangle_indices_uint32_exp_t</span></a>);
+mesh.pTriangleBuffer = triangleIndexBuffer.data();
+
+mesh.vertexFormat = <a class="reference internal" href="api.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3</span></a>;
+mesh.vertexCount = triangleVertexBuffer.size();
+mesh.vertexStride = sizeof(<a class="reference internal" href="api.html#ze-rtas-float3-exp-t"><span class="std std-ref">ze_rtas_float3_exp_t</span></a>);
+mesh.pVertexBuffer = triangleVertexBuffer.data();</pre>
+<p>Geometry is considered to be opaque by default, enabling a fast mode where traversal does not return to the caller of ray tracing for each triangle or quad hit. To process each triangle or quad hit by some any-hit shader, the <cite>geometryFlags</cite> member of the geometry infos must include the <a class="reference internal" href="api.html#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ZE_RTAS_BUILDER_GEOMETRY_EXP_FLAG_NON_OPAQUE</span></a> flag. The proper data formats of the triangle index- and vertex- buffers are specified, including the strides, and a pointer to the first element for each buffer.</p>
+<p>To refer to multiple geometries that make a scene, pointers to geometry info structures can be put into an array as follows:</p>
+<pre class="literal-block">std::vector&lt;<a class="reference internal" href="api.html#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a>*&gt; geometries;
+geometries.push_back((<a class="reference internal" href="api.html#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a>*)&amp;mesh0);
+geometries.push_back((<a class="reference internal" href="api.html#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a>*)&amp;mesh1);
+...</pre>
+<p>This completes the definition of the geometry for the scene for which to construct the acceleration structure.</p>
+</div>
+<div class="section" id="device-properties">
+<h2>Device Properties<a class="headerlink" href="#device-properties" title="Permalink to this headline">¶</a></h2>
+<p>The next step is to query the target device for acceleration structure properties.</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#ze-rtas-device-exp-properties-t"><span class="std std-ref">ze_rtas_device_exp_properties_t</span></a> rtasDeviceProps;
+rtasDeviceProps.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXP_PROPERTIES</span></a>;
+rtasDeviceProps.pNext = nullptr;
+
+<a class="reference internal" href="api.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> deviceProps;
+deviceProps.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></a>;
+deviceProps.pNext = &amp;rtasDeviceProps;
+
+<a class="reference internal" href="api.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>(hDevice, &amp;deviceProps);</pre>
+<p>The device properties contain information (a device-specific ray tracing acceleration structure format) that is required to complete an RTAS build operation.</p>
+</div>
+<div class="section" id="acceleration-structure-builder">
+<h2>Acceleration Structure Builder<a class="headerlink" href="#acceleration-structure-builder" title="Permalink to this headline">¶</a></h2>
+<p>With the scene data prepared and relevant device properties known, create a ray tracing acceleration structure builder object and query for the necessary build properties.</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#ze-rtas-builder-exp-desc-t"><span class="std std-ref">ze_rtas_builder_exp_desc_t</span></a> desc;
+desc.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_DESC</span></a>;
+desc.pNext = nullptr;
+desc.builderVersion = <a class="reference internal" href="api.html#ze-rtas-builder-exp-version-t"><span class="std std-ref">ZE_RTAS_BUILDER_EXP_VERSION_CURRENT</span></a>;
+
+ze_rtas_builder_exp_handle_t hBuilder = nullptr;
+<a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> result = <a class="reference internal" href="api.html#zertasbuildercreateexp"><span class="std std-ref">zeRTASBuilderCreateExp</span></a>(hDriver, &amp;desc, &amp;hBuilder);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);
+
+<a class="reference internal" href="api.html#ze-rtas-builder-exp-properties-t"><span class="std std-ref">ze_rtas_builder_exp_properties_t</span></a> builderProps;
+builderProps.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_PROPERTIES</span></a>;
+builderProps.pNext = nullptr;
+
+<a class="reference internal" href="api.html#ze-rtas-builder-build-op-exp-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a> buildOpDesc;
+buildOpDesc.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXP_DESC</span></a>;
+buildOpDesc.pNext = nullptr;
+buildOpDesc.rtasFormat = rtasDeviceProps.rtasFormat;
+buildOpDesc.buildQuality = <a class="reference internal" href="api.html#ze-rtas-builder-build-quality-hint-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_BUILD_QUALITY_HINT_EXP_MEDIUM</span></a>;
+buildOpDesc.buildFlags = 0;
+buildOpDesc.ppGeometries = geometries.data();
+buildOpDesc.numGeometries = geometries.size();
+
+result = <a class="reference internal" href="api.html#zertasbuildergetbuildpropertiesexp"><span class="std std-ref">zeRTASBuilderGetBuildPropertiesExp</span></a>(hBuilder, &amp;buildOpDesc, &amp;builderProps);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);</pre>
+<p>Note, the parameters of the build operation descriptor, such as acceleration structure build quality, affect the buffer requirements, etc.</p>
+<p>An application may create and use a single RTAS builder object, as multiple concurrent build operations may be performed with a single such object.</p>
+</div>
+<div class="section" id="buffers">
+<h2>Buffers<a class="headerlink" href="#buffers" title="Permalink to this headline">¶</a></h2>
+<p>With the builder properties along with everything else known at this point, the resources for the acceleration structure may be allocated.</p>
+<div class="section" id="scratch-buffer">
+<h3>Scratch Buffer<a class="headerlink" href="#scratch-buffer" title="Permalink to this headline">¶</a></h3>
+<p>A system memory scratch buffer is required to perform the build operation. It is used by the implementation for intermediate storage.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="o">*</span> <span class="n">pScratchBuffer</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">builderProps</span><span class="p">.</span><span class="n">scratchBufferSizeBytes</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="acceleration-structure-buffer">
+<h3>Acceleration Structure Buffer<a class="headerlink" href="#acceleration-structure-buffer" title="Permalink to this headline">¶</a></h3>
+<p>The acceleration structure buffer is where the ray tracing acceleration structure is written to. It must be accessible on the host as well as the device; consequently, it must be allocated as a USM resource. This example uses the worst-case sizing.</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#ze-raytracing-mem-alloc-ext-desc-t"><span class="std std-ref">ze_raytracing_mem_alloc_ext_desc_t</span></a> rtasMemAllocDesc;
+rtasMemAllocDesc.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIES</span></a>;
+rtasMemAllocDesc.pNext = nullptr;
+rtasMemAllocDesc.flags = 0;
+
+<a class="reference internal" href="api.html#ze-device-mem-alloc-desc-t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a> deviceMemAllocDesc;
+deviceMemAllocDesc.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC</span></a>;
+deviceMemAllocDesc.pNext = &amp;rtasMemAllocDesc;
+deviceMemAllocDesc.flags = <a class="reference internal" href="api.html#ze-device-mem-alloc-flags-t"><span class="std std-ref">ZE_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED</span></a>;
+deviceMemAllocDesc.ordinal = 0;
+
+<a class="reference internal" href="api.html#ze-host-mem-alloc-desc-t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a> hostMemAllocDesc;
+hostMemAllocDesc.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESC</span></a>;
+hostMemAllocDesc.pNext = nullptr;
+hostMemAllocDesc.flags = <a class="reference internal" href="api.html#ze-host-mem-alloc-flags-t"><span class="std std-ref">ZE_HOST_MEM_ALLOC_FLAG_BIAS_CACHED</span></a>;
+
+void* pRtasBuffer = nullptr;
+result = <a class="reference internal" href="api.html#zememallocshared"><span class="std std-ref">zeMemAllocShared</span></a>(hContext, &amp;deviceMemAllocDesc, &amp;hostMemAllocDesc, builderProps.rtasBufferSizeBytesMaxRequired, rtasDeviceProps.rtasBufferAlignment, hDevice, &amp;pRtasBuffer);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);</pre>
+</div>
+</div>
+<div class="section" id="executing-an-acceleration-structure-build">
+<h2>Executing an Acceleration Structure Build<a class="headerlink" href="#executing-an-acceleration-structure-build" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-threaded-build">
+<h3>Single-Threaded Build<a class="headerlink" href="#single-threaded-build" title="Permalink to this headline">¶</a></h3>
+<p>A single-threaded acceleration structure build on the host is initiated using <a class="reference internal" href="api.html#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a>.</p>
+<pre class="literal-block">result = <a class="reference internal" href="api.html#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a>(hBuilder, &amp;buildOpDesc, pScratchBuffer, builderProps.scratchBufferSizeBytes, pRtasBuffer, builderProps.rtasBufferSizeBytesMaxRequired, nullptr, nullptr, nullptr, nullptr);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);</pre>
+<p>When the build completes successfully the acceleration structure buffer is ready for use by the ray tracing API.</p>
+</div>
+<div class="section" id="parallel-build">
+<h3>Parallel Build<a class="headerlink" href="#parallel-build" title="Permalink to this headline">¶</a></h3>
+<p>In order to speed up the build operation using multiple worker threads, a parallel operation object can be associated with the build operation and joined with the application-provided worker threads as in the following example:</p>
+<blockquote>
+<div><p><strong>Note</strong>
+The following example uses <a class="reference external" href="https://spec.oneapi.io/versions/latest/elements/oneTBB/source/nested-index.html">oneTBB</a> to dispatch worker threads, but this is not a requirement.</p>
+</div></blockquote>
+<pre class="literal-block">ze_rtas_parallel_operation_exp_handle_t hParallelOperation = nullptr;
+result = <a class="reference internal" href="api.html#zertasparalleloperationcreateexp"><span class="std std-ref">zeRTASParallelOperationCreateExp</span></a>(hDriver, &amp;hParallelOperation);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);
+
+// Initiate the acceleration structure build operation with a handle
+// of a parallel operation object. This causes the parallel operation to be
+// bound to the build operation and the function returns immediately without
+// building any acceleration structure yet.
+result = <a class="reference internal" href="api.html#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a>(hBuilder, &amp;buildOpDesc, pScratchBuffer, builderProps.scratchBufferSizeBytes, pRtasBuffer, builderProps.rtasBufferSizeBytesMaxRequired, hParallelOperation, nullptr, nullptr, nullptr);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_EXP_RTAS_BUILD_DEFERRED</span></a>);
+
+// Once the parallel operation is bound to the build operation the number
+// of worker threads to join the parallel operation can be queried.
+<a class="reference internal" href="api.html#ze-rtas-parallel-operation-exp-properties-t"><span class="std std-ref">ze_rtas_parallel_operation_exp_properties_t</span></a> parallelOpProps;
+parallelOpProps.stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXP_PROPERTIES</span></a>;
+parallelOpProps.pNext = nullptr;
+
+result = <a class="reference internal" href="api.html#zertasparalleloperationgetpropertiesexp"><span class="std std-ref">zeRTASParallelOperationGetPropertiesExp</span></a>(hParallelOperation, &amp;parallelOpProps);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);
+
+// Now worker threads can join the build operation to perform the actual build
+// of the acceleration structure.
+tbb::parallel_for(0, parallelOpProps.maxConcurrency, 1, [&amp;](uint32_t i) {
+    <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> buildResult = <a class="reference internal" href="api.html#zertasparalleloperationjoinexp"><span class="std std-ref">zeRTASParallelOperationJoinExp</span></a>(hParallelOperation);
+    assert(buildResult == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);
+});
+
+// With the parallel operation complete, the parallel operation object can be released.
+result = <a class="reference internal" href="api.html#zertasparalleloperationdestroyexp"><span class="std std-ref">zeRTASParallelOperationDestroyExp</span></a>(hParallelOperation);
+assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>);</pre>
+<p>Note that the number of worker threads to be used can only be queried from the parallel operation object after it is bound to the build operation by the call to <a class="reference internal" href="api.html#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a>.</p>
+</div>
+</div>
+<div class="section" id="conservative-acceleration-structure-buffer-size">
+<h2>Conservative Acceleration Structure Buffer Size<a class="headerlink" href="#conservative-acceleration-structure-buffer-size" title="Permalink to this headline">¶</a></h2>
+<p>Sizing the acceleration structure buffer using the <cite>rtasBufferSizeBytesMaxRequired</cite> member of <a class="reference internal" href="api.html#ze-rtas-builder-exp-properties-t"><span class="std std-ref">ze_rtas_builder_exp_properties_t</span></a> guarantees that the build operation will not fail due to an out-of-memory condition. However, this size represents the memory requirement for the worst-case scenario and is larger than is typically needed. To reduce memory usage, the application may attempt to execute a build using an acceleration structure buffer sized to the <cite>rtasBufferSizeBytesExpected</cite> member of <a class="reference internal" href="api.html#ze-rtas-builder-exp-properties-t"><span class="std std-ref">ze_rtas_builder_exp_properties_t</span></a>. When using the expected size, however, it is possible for the build operation to fail with <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_EXP_RTAS_BUILD_RETRY</span></a>. If this occurs, the application may resize the acceleration structure buffer with an updated size estimate provided by the builder build API.</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> result;
+
+void* pRtasBuffer = nullptr;
+size_t rtasBufferSizeBytes = builderProps.rtasBufferSizeBytesExpected;
+
+while (true)
+{
+    pRtasBuffer = allocate_accel_buffer(rtasBufferSizeBytes);
+
+    result = <a class="reference internal" href="api.html#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a>(hBuilder, &amp;buildOpDesc, pScratchBuffer, builderProps.scratchBufferSizeBytes, pRtasBuffer, rtasBufferSizeBytes, nullptr, nullptr, nullptr, &amp;rtasBufferSizeBytes);
+
+    if (result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>)
+    {
+        break;
+    }
+
+    assert(result == <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_EXP_RTAS_BUILD_RETRY</span></a>);
+
+    free_accel_buffer(pRtasBuffer);
+}</pre>
+<p>The loop starts with the minimum acceleration buffer size for which the build will mostly likely succeed. If the build runs out of memory, <a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ZE_RESULT_EXP_RTAS_BUILD_RETRY</span></a> is returned and the build is retried with a larger acceleration structure buffer.</p>
+<p>The example above passes a pointer to the <cite>rtasBufferSizeBytes</cite> variable as a parameter to the build API, which it will update with a larger acceleration structure buffer size estimate to be used in the next attempt should the build operation fail. Alternatively, the application could increase the acceleration buffer size for the next attempt by some percentage, which could fail again, or just use the maximum size from the builder properties for the second attempt.</p>
+</div>
+<div class="section" id="cleaning-up">
+<h2>Cleaning Up<a class="headerlink" href="#cleaning-up" title="Permalink to this headline">¶</a></h2>
+<p>Once the acceleration structure has been built, any resources associated with the build may be released. Additionally, any parallel operation objects should be destroyed as well as any builder objects.</p>
+<pre class="literal-block">// Free the scratch buffer
+free(pScratchBuffer);
+
+// Destroy the builder object
+<a class="reference internal" href="api.html#zertasbuilderdestroyexp"><span class="std std-ref">zeRTASBuilderDestroyExp</span></a>(hBuilder);
+
+// Use the acceleration structure buffer with the ray tracing API
+{
+    // ...
+}
+
+// Release the acceleration structure buffer once it is no longer needed
+<a class="reference internal" href="api.html#zememfree"><span class="std std-ref">zeMemFree</span></a>(hContext, pRtasBuffer);
+pRtasBuffer = nullptr;</pre>
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Intel<br/>
+    
+        &copy; Copyright 2024, Intel.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

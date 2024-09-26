@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fabric Topology Discovery Extension &#8212; Level Zero Specification  documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Level Zero Specification  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="INTRO.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="PROG.html">
+   Core Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tools/PROG.html">
+   Tools Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../sysman/PROG.html">
+   Sysman Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="SPIRV.html">
+   SPIR-V Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EXT.html">
+   Extensions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api.html">
+     Core API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tools/api.html">
+     Tools API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../sysman/api.html">
+     Sysman API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../versions.html">
+   Versions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/core/EXT_Exp_Fabric.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#api">
+   API
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fabric-topology-discovery">
+     Fabric Topology Discovery
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fabric-vertices">
+   Fabric Vertices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fabric-edges">
+   Fabric Edges
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#discovery">
+   Discovery
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Fabric Topology Discovery Extension</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#api">
+   API
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fabric-topology-discovery">
+     Fabric Topology Discovery
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fabric-vertices">
+   Fabric Vertices
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fabric-edges">
+   Fabric Edges
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#discovery">
+   Discovery
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="fabric-topology-discovery-extension">
+<span id="ze-experimental-fabric"></span><h1>Fabric Topology Discovery Extension<a class="headerlink" href="#fabric-topology-discovery-extension" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Macros</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ZE_MAX_FABRIC_EDGE_MODEL_EXP_SIZE</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-fabric-vertex-exp-type-t"><span class="std std-ref">ze_fabric_vertex_exp_type_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-fabric-edge-exp-duplexity-t"><span class="std std-ref">ze_fabric_edge_exp_duplexity_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-fabric-vertex-pci-exp-address-t"><span class="std std-ref">ze_fabric_vertex_pci_exp_address_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-fabric-vertex-exp-properties-t"><span class="std std-ref">ze_fabric_vertex_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-fabric-edge-exp-properties-t"><span class="std std-ref">ze_fabric_edge_exp_properties_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetsubverticesexp"><span class="std std-ref">zeFabricVertexGetSubVerticesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetpropertiesexp"><span class="std std-ref">zeFabricVertexGetPropertiesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetdeviceexp"><span class="std std-ref">zeFabricVertexGetDeviceExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zedevicegetfabricvertexexp"><span class="std std-ref">zeDeviceGetFabricVertexExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricedgegetverticesexp"><span class="std std-ref">zeFabricEdgeGetVerticesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricedgegetpropertiesexp"><span class="std std-ref">zeFabricEdgeGetPropertiesExp</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="fabric-topology-discovery">
+<h3>Fabric Topology Discovery<a class="headerlink" href="#fabric-topology-discovery" title="Permalink to this headline">¶</a></h3>
+<p>The API supports two forms of topology discovery - logical &amp; physical.</p>
+<p>The API architecture exposes both the logical topology as well as the physical topology of the fabrics interconnecting accelerators. Accelerators are logically connected if they are able to access peer memory, even if the access passes through other accelerators. Accelerators are physically connected if there is a direct fabric connection between the two accelerators that allows the accelerators access to peer memory without passing through other accelerators in the fabrics.</p>
+<p>Two accelerators can be checked for logical connectivity using <a class="reference internal" href="api.html#zedevicecanaccesspeer"><span class="std std-ref">zeDeviceCanAccessPeer</span></a>. Support for remote memory access &amp; atomic capabilities can be checked using the <a class="reference internal" href="api.html#zedevicegetp2pproperties"><span class="std std-ref">zeDeviceGetP2PProperties</span></a> function. The <a class="reference internal" href="api.html#ze-device-p2p-bandwidth-exp-properties-t"><span class="std std-ref">ze_device_p2p_bandwidth_exp_properties_t</span></a> extension struct passed to <a class="reference internal" href="api.html#zedevicegetp2pproperties"><span class="std std-ref">zeDeviceGetP2PProperties</span></a> as the pNext member of  <a class="reference internal" href="api.html#ze-device-p2p-properties-t"><span class="std std-ref">ze_device_p2p_properties_t</span></a> provides the bandwidth &amp; latency of the connection between the two accelerators both logical as well as physical topology. This bandwidth &amp; latency information can be used to create the logical &amp; physical adjacency matrix representations of the fabric topology.</p>
+<p>The API architecture also exposes the physical topology of scale-up fabrics interconnecting accelerators (exposed as devices and subdevices) and switches in the form of the adjacency graph representation of the fabric topology. Both accelerators and switches are represented as fabric vertices. The physical links that interconnect accelerators and switches are represented as fabric edges. The API supports a hierarchy of fabric vertices and fabric subvertices in keeping with the hierarchy of devices and subdevices. Devices always correspond to fabric vertices while subdevices always correspond to fabric subvertices. Both fabric vertices and fabric subvertices are represented by the same opaque handle. Fabric vertices may be remote, i.e. be associated with accelerator devices on remote nodes.</p>
+</div>
+</div>
+<div class="section" id="fabric-vertices">
+<h2>Fabric Vertices<a class="headerlink" href="#fabric-vertices" title="Permalink to this headline">¶</a></h2>
+<p>A fabric vertex object represents either a physical accelerator or switch in a system that supports Level-Zero.</p>
+<ul class="simple">
+<li><p>The application may query the number of fabric vertices supported by a driver, and their respective handles, using <a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a>.</p></li>
+<li><p>The application may also obtain fabric vertex handles directly from the underlying device handles using <a class="reference internal" href="api.html#zedevicegetfabricvertexexp"><span class="std std-ref">zeDeviceGetFabricVertexExp</span></a>.</p></li>
+<li><p>Fabric vertices objects are read-only, global constructs. i.e. multiple calls to <a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a> or <a class="reference internal" href="api.html#zedevicegetfabricvertexexp"><span class="std std-ref">zeDeviceGetFabricVertexExp</span></a> will return identical fabric vertex handles.</p></li>
+<li><p>Fabric vertices may expose sub-vertices that allow finer-grained querying of the  topological properties of the system.</p></li>
+<li><p>The device represented by a fabric vertex may be obtainable from the fabric vertex handle using <a class="reference internal" href="api.html#zefabricvertexgetdeviceexp"><span class="std std-ref">zeFabricVertexGetDeviceExp</span></a>.</p></li>
+<li><p>Fabric vertices may represent remote accelerators or switches, i.e. accelerators or switches on a remote node, that are connected to the accelerators and switches in the local node via scale-out links. Such accelerators cannot be programmed from the local node &amp; the corresponding device handles cannot be obtained from the fabric vertex handles representing the remote accelerator.</p></li>
+<li><p>A fabric vertex handle is primarily used for identifying topological properties of the L0 system that can be used for optimization of the algorithm used for compute/communication.</p></li>
+</ul>
+</div>
+<div class="section" id="fabric-edges">
+<h2>Fabric Edges<a class="headerlink" href="#fabric-edges" title="Permalink to this headline">¶</a></h2>
+<p>A fabric edge object represents one or more physical links between fabric vertices in a system that supports Level-Zero.</p>
+<ul class="simple">
+<li><p>The application may query the number of fabric edges connected to a fabric vertex, and their respective handles, using <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a>.</p></li>
+<li><p>Fabric edge objects are read-only, global constructs. Multiple calls to <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a> made with the same fabric vertices will return identical fabric edge handles.</p></li>
+<li><p>A single fabric edge may represent multiple physical links between two fabric vertices as long as traffic is automatically spread over all links when a single engine is used to drive the transfer.</p></li>
+<li><p>A fabric edge handle is primarily used for identifying topological properties of the L0 system that can be used for optimization of the algorithm used for compute/communication.</p></li>
+</ul>
+</div>
+<div class="section" id="discovery">
+<h2>Discovery<a class="headerlink" href="#discovery" title="Permalink to this headline">¶</a></h2>
+<p>Assuming that the application is using a graph API to construct a graph, the following pseudo-code demonstrates a basic topology discovery sequence:</p>
+<pre class="literal-block">// Create graph object
+
+// Find all fabric vertices &amp; the edges connecting them
+ze_fabric_vertex_handle_t* vertices = nullptr;
+
+uint32_t vertexCount = 0;
+<a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a>(drivers[0], &amp;vertexCount, nullptr);
+
+vertices = allocate(vertexCount * sizeof(ze_fabric_vertex_handle_t));
+
+<a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a>(drivers[0], &amp;vertexCount, vertices);
+
+// Copy all vertices into graph
+
+for (u = 0; u &lt; vertexCount; ++u) {
+     for (v = u + 1; u &lt; vertexCount; ++v) {
+
+          uint32_t edgeCount = 0;
+
+          <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a>(vertices[u], vertices[v], &amp;edgeCount, nullptr);
+
+          ze_fabric_edge_handle_t* edges = nullptr;
+
+          edges = allocate(edgeCount * sizeof(ze_fabric_edge_handle_t));
+
+          <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a>(vertices[u], vertices[v], &amp;edgeCount, edges);
+
+          // Copy edges into graph
+
+          free(edges);
+
+     }
+}
+
+free(vertices);
+
+...</pre>
+<p>The following diagrams illustrates examples of topologies exposed via the fabric vertex &amp; fabric edge API.</p>
+<p>A six device system with all-to-all connectivity between the devices.</p>
+<img alt="../_images/A21_Vertex.png" src="../_images/A21_Vertex.png" />
+<p>Subvertex discovery reveals that each device in the system is actually composed of two subdevices with two planes of all-to-all connectivity (light-green &amp; dark-green) and one plane of 2-d mesh connectivity (blue) between the subdevices.</p>
+<img alt="../_images/A21_Subvertex.png" src="../_images/A21_Subvertex.png" />
+<p>Same as above, but with remote subdevices that manifest as subvertices but do not expose a subdevice handle.</p>
+<img alt="../_images/A21_Subvertex+Remote.png" src="../_images/A21_Subvertex+Remote.png" />
+<p>The API also supports mixing &amp; matching vertices &amp; subvertices, both local as well as remote in the same set of queries.</p>
+<img alt="../_images/A21_Vertex+Subvertex+Remote.png" src="../_images/A21_Vertex+Subvertex+Remote.png" />
+<p>An eight device system with six switches establishing all-to-all connectivity between the devices.</p>
+<img alt="../_images/DGXA100_Vertex.png" src="../_images/DGXA100_Vertex.png" />
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Intel<br/>
+    
+        &copy; Copyright 2022, Intel.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

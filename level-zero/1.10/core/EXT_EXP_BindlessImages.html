@@ -1,0 +1,691 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bindless Image Experimental Extension &#8212; Level Zero Specification  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/EXT_EXP_BindlessImages';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EXT.html">Extensions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html">Core API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/api.html">Tools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/api.html">Sysman API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/core/EXT_EXP_BindlessImages.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Bindless Image Experimental Extension</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bindless-images">Bindless Images</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-example-with-bindless-images">Programming example with Bindless images</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-example-with-pitched-memory-usage">Programming example with pitched memory usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-example-with-bindless-sampled-images">Programming example with Bindless sampled images</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="bindless-image-experimental-extension">
+<span id="ze-experimental-bindless-image"></span><h1>Bindless Image Experimental Extension<a class="headerlink" href="#bindless-image-experimental-extension" title="Link to this heading">#</a></h1>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-bindless-image-exp-version-t"><span class="std std-ref">ze_bindless_image_exp_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ze_image_bindless_exp_flags_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-device-pitched-alloc-exp-properties-t"><span class="std std-ref">ze_device_pitched_alloc_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-image-pitched-exp-desc-t"><span class="std std-ref">ze_image_pitched_exp_desc_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zememgetpitchfor2dimage"><span class="std std-ref">zeMemGetPitchFor2dImage</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zeimagegetdeviceoffsetexp"><span class="std std-ref">zeImageGetDeviceOffsetExp</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<section id="bindless-images">
+<h3>Bindless Images<a class="headerlink" href="#bindless-images" title="Link to this heading">#</a></h3>
+<p>A bindless image is defined as one which provides access to the underlying data via image reference handles.
+At the application level, this allows the user to implement programs where the number of images is not known at
+compile-time, and store all handles to images irrespective of varying formats and layouts in some container such as a dynamic array.</p>
+<p>Currently, in Level Zero, <cite>zeImageCreate</cite> performs the image memory allocation and image handle generation.
+This function only allows for the allocation of image memory in an implementation-specific layout.</p>
+<dl class="simple">
+<dt>In this extension, we propose the following additions:</dt><dd><ul class="simple">
+<li><p>Provide a new image descriptor and flags for Bindless images.</p></li>
+<li><p>Support for creation of images on linearly allocated memory backed by USM.</p></li>
+<li><p>Extension API to create an image handle from pitched memory</p></li>
+<li><p>Create Bindless sampled images</p></li>
+</ul>
+</dd>
+</dl>
+<p>A “Bindless image” can be created by passing <a class="reference internal" href="api.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a> to pNext member of
+<a class="reference internal" href="api.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a> and set the flags value as <a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS</span></a></p>
+<p>A “Bindless sampled image” can be created by passing <a class="reference internal" href="api.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a> to pNext member of
+<a class="reference internal" href="api.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a> and setting the flags to a combination of <a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS</span></a> and <a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE</span></a>
+When image view is created from bindless sampled image, sampling modes can be redefined by passing sampler descriptor in pNext field of <a class="reference internal" href="api.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a> struct.
+Image view created from bindless sampled image without setting <a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE</span></a> is an unsampled image.
+Sampled image view can be created from bindless unsampled image by setting <a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE</span></a> and passing sampler descriptor in pNext field of <a class="reference internal" href="api.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a> struct.</p>
+<p>This extension is complimentary to and may be used in conjunction with the <a class="reference external" href="https://spec.oneapi.io/level-zero/latest/core/EXT_ImageView.html#image-view-extension">ZE_extension_image_view</a> extension</p>
+</section>
+<section id="programming-example-with-bindless-images">
+<h3>Programming example with Bindless images<a class="headerlink" href="#programming-example-with-bindless-images" title="Link to this heading">#</a></h3>
+<pre class="literal-block">// Assumed image data on host
+std::vector&lt;float&gt; imageDataHost;
+
+// 2D image dimensions
+size_t imageWidth = 1024;
+size_t imageHeight = 1024;
+
+// Single-precision float image format with one channel
+<a class="reference internal" href="api.html#ze-image-format-t"><span class="std std-ref">ze_image_format_t</span></a> imageFormat = {
+    ZE_IMAGE_FORMAT_LAYOUT_32, ZE_IMAGE_FORMAT_TYPE_FLOAT,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X
+}
+
+// Create an image descriptor for bindless image
+<a class="reference internal" href="api.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a> imageDesc = {
+    ZE_STRUCTURE_TYPE_IMAGE_DESC,
+    nullptr,
+    0,
+    ZE_IMAGE_TYPE_2D,
+    imageFormat,
+    128, 128, 0, 0, 0
+};
+
+<a class="reference internal" href="api.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a> bindlessImageDesc = {<a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESC</span></a>};
+bindlessImageDesc.flags = <a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS</span></a>;
+imageDesc.pNext = &amp;bindlessImageDesc;
+
+// A bindless image is valid on both host and device and can be passed into kernels
+// When passing <a class="reference internal" href="api.html#ze-image-bindless-exp-flags-t"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS</span></a> to zeImageCreate, only the backing memory is allocated for Image
+ze_image_handle_t hImage;
+<a class="reference internal" href="api.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>(hContext, hDevice, &amp;imageDesc, &amp;hImage);
+
+//Copy To new bindless image memory
+<a class="reference internal" href="api.html#zecommandlistappendimagecopyfrommemory"><span class="std std-ref">zeCommandListAppendImageCopyFromMemory</span></a>(hCommandlist, hImage, imageDataHost.data(), nullptr, nullptr, 0, nullptr);
+
+// Launch kernel and perform appropriate synchronizations
+
+// Copy back
+<a class="reference internal" href="api.html#zecommandlistappendimagecopytomemory"><span class="std std-ref">zeCommandListAppendImageCopyToMemory</span></a>(hCommandlist, imageDataHost.data(), hImage, nullptr, nullptr, 0, nullptr);
+
+// Further image views can be created from the existing memory allocated using bindless flags
+ze_image_handle_t hImageView;
+<a class="reference internal" href="api.html#zeimageviewcreateext"><span class="std std-ref">zeImageViewCreateExt</span></a>(hContext, hDevice, &amp;imageDesc, hImage, &amp;hImageView);
+
+// New image view can be separately used by users and destroyed
+// ...
+
+// Once all operations are complete we need destroy bindless image handle(s)
+<a class="reference internal" href="api.html#zeimagedestroy"><span class="std std-ref">zeImageDestroy</span></a>(hImageView);
+<a class="reference internal" href="api.html#zeimagedestroy"><span class="std std-ref">zeImageDestroy</span></a>(hImage);</pre>
+</section>
+<section id="programming-example-with-pitched-memory-usage">
+<h3>Programming example with pitched memory usage<a class="headerlink" href="#programming-example-with-pitched-memory-usage" title="Link to this heading">#</a></h3>
+<pre class="literal-block">// Retrieve pitched alloc properties specific to device
+<a class="reference internal" href="api.html#ze-device-image-properties-t"><span class="std std-ref">ze_device_image_properties_t</span></a> deviceImageProperties = {};
+<a class="reference internal" href="api.html#ze-device-pitched-alloc-exp-properties-t"><span class="std std-ref">ze_device_pitched_alloc_exp_properties_t</span></a> pitchedAllocProperties = {};
+pitchedAllocProperties.stype  = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_PITCHED_ALLOC_DEVICE_EXP_PROPERTIES</span></a>
+
+deviceImageProperties.pNext = &amp;pitchedAllocProperties;
+<a class="reference internal" href="api.html#zedevicegetimageproperties"><span class="std std-ref">zeDeviceGetImageProperties</span></a>(hDevice, &amp;deviceImageProperties);
+
+// Assumed image data on host
+std::vector&lt;float&gt; imageDataHost;
+
+// 2D image dimensions
+size_t imageWidth = 1024;
+size_t imageHeight = 1024;
+
+//Pitched memory in linear layout
+size_t rowPitch;
+unsigned int elementSize = 128;
+<a class="reference internal" href="api.html#zememgetpitchfor2dimage"><span class="std std-ref">zeMemGetPitchFor2dImage</span></a>(hContext, hDevice, imageWidth, imageHeight, elementSize, &amp;rowPitch);
+size_t allocSize = rowPitch * imageHeight;
+<a class="reference internal" href="api.html#ze-device-mem-alloc-desc-t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a> allocDesc = {<a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC</span></a>};
+<a class="reference internal" href="api.html#zememallocdevice"><span class="std std-ref">zeMemAllocDevice</span></a>(hContext, &amp;allocDesc, allocSize, allocSize, hDevice, &amp;pitchedPtr);
+
+// Declare the copy region for copying
+<a class="reference internal" href="api.html#ze-copy-region-t"><span class="std std-ref">ze_copy_region_t</span></a> copyRegion = {0, 0, 0, imageWidth * sizeof(float), imageHeight, 0};
+
+// Copy from host to device
+<a class="reference internal" href="api.html#zecommandlistappendmemorycopyregion"><span class="std std-ref">zeCommandListAppendMemoryCopyRegion</span></a>(hCommandList, pitchedPtr, &amp;copyRegion, rowPitch, 0, imageDataHost.data(), &amp;copyRegion, imageWidth * sizeof(float), 0, nullptr, 0, nullptr);
+
+// Single-precision float image format with one channel
+<a class="reference internal" href="api.html#ze-image-format-t"><span class="std std-ref">ze_image_format_t</span></a> imageFormat = {
+    ZE_IMAGE_FORMAT_LAYOUT_32, ZE_IMAGE_FORMAT_TYPE_FLOAT,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X
+}
+
+// Create an image descriptor for bindless image
+<a class="reference internal" href="api.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a> imageDesc = {
+    ZE_STRUCTURE_TYPE_IMAGE_DESC,
+    nullptr,
+    0,
+    ZE_IMAGE_TYPE_2D,
+    imageFormat,
+    128, 128, 0, 0, 0
+};
+
+<a class="reference internal" href="api.html#ze-image-pitched-exp-desc-t"><span class="std std-ref">ze_image_pitched_exp_desc_t</span></a> pitchedImageDesc = {<a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_PITCHED_IMAGE_EXP_DESC</span></a>};
+pitchedImageDesc.ptr = pitchedPtr;
+imageDesc.pNext = &amp;pitchedImageDesc;
+
+// A image created out of pitched memory is valid on both host and device and can be passed into kernels
+ze_image_handle_t hImage;
+<a class="reference internal" href="api.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>(hContext, hDevice, &amp;imageDesc, &amp;hImage);
+
+// Launch kernel and perform appropriate synchronizations
+
+// ...
+
+// Copy from device to host
+<a class="reference internal" href="api.html#zecommandlistappendmemorycopyregion"><span class="std std-ref">zeCommandListAppendMemoryCopyRegion</span></a>(hCommandList, imageDataHost.data(), &amp;copyRegion, imageWidth * sizeof(float), 0, pitchedPtr, &amp;copyRegion, rowPitch, 0, nullptr, 0, nullptr);
+
+// Once all operations on the image are complete we need destroy image handle and free memory
+<a class="reference internal" href="api.html#zeimagedestroy"><span class="std std-ref">zeImageDestroy</span></a>(hImage);
+<a class="reference internal" href="api.html#zememfree"><span class="std std-ref">zeMemFree</span></a>(hContext, pitchedPtr);</pre>
+</section>
+<section id="programming-example-with-bindless-sampled-images">
+<h3>Programming example with Bindless sampled images<a class="headerlink" href="#programming-example-with-bindless-sampled-images" title="Link to this heading">#</a></h3>
+<pre class="literal-block">// 2D image dimensions
+size_t imageWidth = 1024;
+size_t imageHeight = 1024;
+
+// Single-precision float image format with one channel
+<a class="reference internal" href="api.html#ze-image-format-t"><span class="std std-ref">ze_image_format_t</span></a> imageFormat = {
+    ZE_IMAGE_FORMAT_LAYOUT_32, ZE_IMAGE_FORMAT_TYPE_FLOAT,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X
+}
+
+// Define sampler descriptor
+<a class="reference internal" href="api.html#ze-sampler-desc-t"><span class="std std-ref">ze_sampler_desc_t</span></a> samplerDesc = {
+    ZE_STRUCTURE_TYPE_SAMPLER_DESC,
+    nullptr,
+    ZE_SAMPLER_ADDRESS_MODE_CLAMP,
+    ZE_SAMPLER_FILTER_MODE_LINEAR,
+    true
+};
+
+// Create an image descriptor for bindless image
+<a class="reference internal" href="api.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a> imageDesc = {
+    ZE_STRUCTURE_TYPE_IMAGE_DESC,
+    nullptr,
+    0,
+    ZE_IMAGE_TYPE_2D,
+    imageFormat,
+    imageWidth, imageHeight, 0, 0, 0
+};
+
+<a class="reference internal" href="api.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a> bindlessImageDesc = {ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESC};
+bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS | ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE;
+imageDesc.pNext = &amp;bindlessImageDesc;
+
+bindlessImageDesc.pNext = &amp;samplerDesc;
+
+// Create bindless sampled image
+// pass ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS and ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE to zeImageCreate(),
+ze_image_handle_t hImage;
+<a class="reference internal" href="api.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>(hContext, hDevice, &amp;imageDesc, &amp;hImage);
+
+// Create an image view from bindless sampled image
+// define sampler descriptor for view
+<a class="reference internal" href="api.html#ze-sampler-desc-t"><span class="std std-ref">ze_sampler_desc_t</span></a> samplerDescForView = {
+    ZE_STRUCTURE_TYPE_SAMPLER_DESC,
+    nullptr,
+    ZE_SAMPLER_ADDRESS_MODE_CLAMP,
+    ZE_SAMPLER_FILTER_MODE_NEAREST,
+    true
+};
+
+<a class="reference internal" href="api.html#ze-image-format-t"><span class="std std-ref">ze_image_format_t</span></a> imageViewFormat = {
+    ZE_IMAGE_FORMAT_LAYOUT_32, ZE_IMAGE_FORMAT_TYPE_UINT,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X,
+    ZE_IMAGE_FORMAT_SWIZZLE_R, ZE_IMAGE_FORMAT_SWIZZLE_X
+}
+
+// image descriptor for bindless image view
+<a class="reference internal" href="api.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a> imageViewDesc = {
+    ZE_STRUCTURE_TYPE_IMAGE_DESC,
+    nullptr,
+    0,
+    ZE_IMAGE_TYPE_2D,
+    imageViewFormat,
+    128, 128, 0, 0, 0
+};
+imageViewDesc.pNext = &amp;bindlessImageDesc;
+bindlessImageDesc.pNext = &amp;samplerDescForView;
+ze_image_handle_t hImageView;
+
+<a class="reference internal" href="api.html#zeimageviewcreateext"><span class="std std-ref">zeImageViewCreateExt</span></a>(hContext, hDevice, &amp;imageViewDesc, hImage, &amp;hImageView);
+
+// If ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE is not set, unsampled image is created
+ze_image_handle_t hUnsampledImageView;
+bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS;
+bindlessImageDesc.pNext = nullptr;
+<a class="reference internal" href="api.html#zeimageviewcreateext"><span class="std std-ref">zeImageViewCreateExt</span></a>(hContext, hDevice, &amp;imageViewDesc, hImage, &amp;hUnsampledImageView);
+
+// Create an image view from bindless unsampled image
+ze_image_handle_t hUnsampledImage;
+ze_image_handle_t hSampledImageView;
+bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS;
+bindlessImageDesc.pNext = nullptr;
+imageDesc.pNext = &amp;bindlessImageDesc;
+
+// create unsampled image
+<a class="reference internal" href="api.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>(hContext, hDevice, &amp;imageDesc, &amp;hUnsampledImage);
+
+bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS | ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE;
+bindlessImageDesc.pNext = &amp;samplerDescForView;
+<a class="reference internal" href="api.html#zeimageviewcreateext"><span class="std std-ref">zeImageViewCreateExt</span></a>(hContext, hDevice, &amp;imageDesc, hUnsampledImage, &amp;hSampledImageView);</pre>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bindless-images">Bindless Images</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-example-with-bindless-images">Programming example with Bindless images</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-example-with-pitched-memory-usage">Programming example with pitched memory usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#programming-example-with-bindless-sampled-images">Programming example with Bindless sampled images</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

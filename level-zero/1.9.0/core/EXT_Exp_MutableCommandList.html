@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mutable Command List Extension &#8212; Level Zero Specification  documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Level Zero Specification  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="INTRO.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="PROG.html">
+   Core Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tools/PROG.html">
+   Tools Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../sysman/PROG.html">
+   Sysman Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="SPIRV.html">
+   SPIR-V Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EXT.html">
+   Extensions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api.html">
+     Core API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tools/api.html">
+     Tools API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../sysman/api.html">
+     Sysman API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../versions.html">
+   Versions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/core/EXT_Exp_MutableCommandList.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Mutable Command List Extension
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#api">
+     API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mutable-command-list">
+   Mutable Command List
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Mutable Command List Extension</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Mutable Command List Extension
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#api">
+     API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mutable-command-list">
+   Mutable Command List
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="mutable-command-list-extension">
+<span id="ze-experimental-mutable-command-list"></span><h1>Mutable Command List Extension<a class="headerlink" href="#mutable-command-list-extension" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-mutable-command-list-exp-version-t"><span class="std std-ref">ze_mutable_command_list_exp_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ze_mutable_command_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-command-list-exp-flags-t"><span class="std std-ref">ze_mutable_command_list_exp_flags_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-group-size-exp-desc-t"><span class="std std-ref">ze_mutable_group_size_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-mutable-global-offset-exp-desc-t"><span class="std std-ref">ze_mutable_global_offset_exp_desc_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zecommandlistgetnextcommandidexp"><span class="std std-ref">zeCommandListGetNextCommandIdExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zecommandlistupdatemutablecommandsignaleventexp"><span class="std std-ref">zeCommandListUpdateMutableCommandSignalEventExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zecommandlistupdatemutablecommandwaiteventsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandWaitEventsExp</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="mutable-command-list">
+<h1>Mutable Command List<a class="headerlink" href="#mutable-command-list" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>A mutable command list is created by supplying a <a class="reference internal" href="api.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a> object via the <cite>pNext</cite> member of <a class="reference internal" href="api.html#ze-command-list-desc-t"><span class="std std-ref">ze_command_list_desc_t</span></a>.</p></li>
+<li><p>Mutable command lists support mutation to <strong>identified</strong> commands <em>after</em> being closed with <a class="reference internal" href="api.html#zecommandlistclose"><span class="std std-ref">zeCommandListClose</span></a>.</p></li>
+<li><p>Implementation support for mutable commands may be discovered by providing a <a class="reference internal" href="api.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a> object in the <cite>pNext</cite> member of <a class="reference internal" href="api.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> in a call to <a class="reference internal" href="api.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>.</p></li>
+</ul>
+<pre class="literal-block">// Discover mutable command list properties
+<a class="reference internal" href="api.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a> mutCmdListProps = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIES</span></a>,      // stype
+    nullptr,                                                    // pNext
+    0,                                                          // mutableCommandListFlags
+    0                                                           // mutableCommandFlags
+};
+
+<a class="reference internal" href="api.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> deviceProps = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></a>
+};
+deviceProps.pNext = &amp;mutCmdListProps;
+
+<a class="reference internal" href="api.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>(hDevice, &amp;deviceProps);
+
+// ...
+
+// Create a mutable command list
+<a class="reference internal" href="api.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a> mutCmdListDesc = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_DESC</span></a>,
+    nullptr,
+    0 // flags
+};
+
+<a class="reference internal" href="api.html#ze-command-list-desc-t"><span class="std std-ref">ze_command_list_desc_t</span></a> commandListDesc = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_COMMAND_LIST_DESC</span></a>,
+    &amp;mutCmdListDesc,
+    0,
+    0 // flags
+};
+
+ze_command_list_handle_t hCommandList = nullptr;
+<a class="reference internal" href="api.html#zecommandlistcreate"><span class="std std-ref">zeCommandListCreate</span></a>(hContext, hDevice, &amp;commandListDesc, &amp;hCommandList);
+
+// [ ...create fence, signal event and wait event objects... ]
+// This example assumes hFence, hSignalEvent and hWaitEvent have been created.
+
+// Create kernel from module
+<a class="reference internal" href="api.html#ze-kernel-desc-t"><span class="std std-ref">ze_kernel_desc_t</span></a> kernelDesc = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_KERNEL_DESC</span></a>,
+    0,
+    &quot;example&quot;
+};
+ze_kernel_handle_t hKernel = nullptr;
+<a class="reference internal" href="api.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> result = <a class="reference internal" href="api.html#zekernelcreate"><span class="std std-ref">zeKernelCreate</span></a>(hModule, &amp;kernelDesc, &amp;hKernel);
+
+// Set the kernel arguments
+<a class="reference internal" href="api.html#ze-group-count-t"><span class="std std-ref">ze_group_count_t</span></a> groupSize = {};
+<a class="reference internal" href="api.html#zekernelsuggestgroupsize"><span class="std std-ref">zeKernelSuggestGroupSize</span></a>(hKernel, 1024, 1024, 1, &amp;groupSize.groupCountX, &amp;groupSize.groupCountY, &amp;groupSize.groupCountZ);
+
+int defaultValue = 0;
+<a class="reference internal" href="api.html#zekernelsetargumentvalue"><span class="std std-ref">zeKernelSetArgumentValue</span></a>(hKernel, 0, sizeof(int), &amp;defaultValue);
+
+// Get next command identifier
+<a class="reference internal" href="api.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a> cmdIdDesc = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC</span></a>       // stype
+    nullptr,                                            // pNext
+    0                                                   // flags
+};
+
+uint64_t commandId = 0;
+<a class="reference internal" href="api.html#zecommandlistgetnextcommandidexp"><span class="std std-ref">zeCommandListGetNextCommandIdExp</span></a>(hCommandList, &amp;cmdIdDesc, &amp;commandId);
+
+// Encode command into command list
+<a class="reference internal" href="api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(hCommandList, hKernel, &amp;groupSize, hSignalEvent, 1, &amp;hWaitEvent);
+
+// Close the command list
+<a class="reference internal" href="api.html#zecommandlistclose"><span class="std std-ref">zeCommandListClose</span></a>(hCommandList);
+
+// ...
+
+// Execute the command list
+zeCommandQueueExecuteCommandLists(hCommandQueue, 1, &amp;hCommandList, hFence);
+
+// ...</pre>
+<p>The application may subsequently mutate specific commands, as follows:</p>
+<pre class="literal-block">// Prepare to modify group count
+<a class="reference internal" href="api.html#ze-group-count-t"><span class="std std-ref">ze_group_count_t</span></a> groupCount = {
+    256,                                                    // groupCountX
+    256,                                                    // groupCountY
+    1                                                       // groupCountZ
+};
+
+<a class="reference internal" href="api.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a> groupCountDesc = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC</span></a>,         // stype
+    nullptr,                                                // pNext
+    commandId,                                              // commandId
+    &amp;groupCount                                             // pGroupCount
+};
+
+// Prepare to modify Kernel Argument
+int argValue = 1;
+
+<a class="reference internal" href="api.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a> krnlArgDesc = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC</span></a>,     // stype
+    &amp;groupCountDesc,                                        // pNext
+    commandId,                                              // commandId
+    0,                                                      // argIndex
+    sizeof(int),                                            // argSize
+    &amp;argValue                                               // pArgValue
+};
+
+// Prepare to update mutable commands
+<a class="reference internal" href="api.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a> desc = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC</span></a>,            // stype
+    &amp;krnlArgDesc,                                           // pNext
+    0                                                       // flags
+};
+
+// Synchronize command list execution
+<a class="reference internal" href="api.html#zefencehostsynchronize"><span class="std std-ref">zeFenceHostSynchronize</span></a>(hFence, UINT64_MAX);
+
+// Update mutable commands
+<a class="reference internal" href="api.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a>(hCommandList, &amp;desc);
+
+// Update signal event for the launch kernel command
+<a class="reference internal" href="api.html#zecommandlistupdatemutablecommandsignaleventexp"><span class="std std-ref">zeCommandListUpdateMutableCommandSignalEventExp</span></a>(hCommandList, commandId, hNewLaunchKernelSignalEvent);
+
+// Update the wait events for the launch kernel command
+<a class="reference internal" href="api.html#zecommandlistupdatemutablecommandwaiteventsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandWaitEventsExp</span></a>(hCommandList, commandId, &amp;hNewLaunchKernelWaitEvent);
+
+// Close the command list
+<a class="reference internal" href="api.html#zecommandlistclose"><span class="std std-ref">zeCommandListClose</span></a>(hCommandList);
+
+// ...</pre>
+<p>Note, the command list must be explicitly closed after updating mutable commands and events. This informs the implementation that the application has finished with updates and is ready to submit the command list.</p>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Intel<br/>
+    
+        &copy; Copyright 2024, Intel.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

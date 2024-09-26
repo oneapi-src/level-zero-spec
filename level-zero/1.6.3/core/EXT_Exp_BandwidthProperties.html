@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bandwidth Extension Properties &#8212; Level Zero Specification  documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Level Zero Specification  documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="INTRO.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="PROG.html">
+   Core Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../tools/PROG.html">
+   Tools Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../sysman/PROG.html">
+   Sysman Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="SPIRV.html">
+   SPIR-V Programming Guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="EXT.html">
+   Extensions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API Documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api.html">
+     Core API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../tools/api.html">
+     Tools API
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../sysman/api.html">
+     Sysman API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../versions.html">
+   Versions
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/core/EXT_Exp_BandwidthProperties.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#api">
+   API
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bandwidth-properties">
+     Bandwidth Properties
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Bandwidth Extension Properties</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#api">
+   API
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#bandwidth-properties">
+     Bandwidth Properties
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="bandwidth-extension-properties">
+<span id="ze-experimental-bandwidth-properties"></span><h1>Bandwidth Extension Properties<a class="headerlink" href="#bandwidth-extension-properties" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-device-p2p-bandwidth-exp-properties-t"><span class="std std-ref">ze_device_p2p_bandwidth_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-copy-bandwidth-exp-properties-t"><span class="std std-ref">ze_copy_bandwidth_exp_properties_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="bandwidth-properties">
+<h3>Bandwidth Properties<a class="headerlink" href="#bandwidth-properties" title="Permalink to this headline">¶</a></h3>
+<p>Properties of interest during data movement and remote access across various accelerators
+interconnected via a set of fabrics include the bandwidths and latencies provided by the fabrics,
+logical as well as physical, but also the bandwidths that can be driven by the various engines
+present in the accelerators, i.e. the copy bandwidth. In order to saturate the interconnecting
+fabrics, the copy bandwidth used to drive a transfer must be matched to the bandwidth provided by
+the fabric. This may be achieved by utilizing one or more engines to drive the transfer. The
+extensions provided here allow users to query both the fabric bandwidth &amp; latencies as well the
+copy bandwidth provided by the various engines present on each accelerator.</p>
+<p>Accelerators within a system may be connected using different link technologies as well as differing
+numbers of links. Two accelerators may be logically but not physically connected to each other, meaning
+that memory accesses and copies between the accelerators have to go over intervening accelerators.
+This limits the maximum bandwidth to the lowest bandwidth link along the connection while increasing
+the latency to the sum total of the latencies of the links along the connection. The net bandwidth and
+latency for two logically connected accelerators accounts for link technology, number of links, number
+of hops between the accelerators, etc… The net physical bandwidth &amp; physical latency between two
+accelerators are zero unless the accelerators are directly connected to each other by a fabric, and
+account for link technology, number of links, etc…</p>
+<p>The following pseudo-code demonstrates a sequence for obtaining the p2p bandwidth &amp; latency between two devices:</p>
+<pre class="literal-block">// devCount is the count of the number of devices in the system
+uint32_t** bwTable
+uint32_t** latTable
+
+bwTable = (uint32_t**)allocate(devCount*sizeof(uint32_t*));
+latTable = (uint32_t**)allocate(devCount*sizeof(uint32_t*));
+
+<a class="reference internal" href="api.html#ze-device-p2p-properties-t"><span class="std std-ref">ze_device_p2p_properties_t</span></a> P2PProps;
+<a class="reference internal" href="api.html#ze-device-p2p-bandwidth-exp-properties-t"><span class="std std-ref">ze_device_p2p_bandwidth_exp_properties_t</span></a> P2PBandwidthProps;
+P2PProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
+P2Props.pNext = &amp;P2PbandwidthProps;
+P2PBandwidthProps = ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXT_PROPERTIES;
+P2PBandwidthProps = nullptr;
+
+// Assume devices are stored in array called devices of size devCount
+for (uint32_t dev = 0; dev &lt; devCount; ++dev) {
+    bwTable[dev] = (uint32_t*)allocate(devCount*sizeof(uint32_t));
+    latTable[dev] = (uint32_t*)allocate(devCount*sizeof(uint32_t));
+    for (uint32_t peer_dev = 0; peer_dev &lt; devCount; ++peer_dev) {
+        zeDeviceGetP2PProperties(devices[dev], devices[peer_dev], &amp;P2PProps);
+        bwTable[dev][peer_dev] = P2PProps.pNext-&gt;logicalBandwidth;
+        latTable[dev][peer_dev] = P2PProps.pNext-&gt;logicalLatency;
+    }
+}</pre>
+<p>Engines from different command queue groups may drive differing amounts of bandwidth over the same link between two accelerators. The copy bandwidth of the engines within each command queue group is provided to help users determine which command queue group to pick the right types and numbers of engines from the accelerator for driving each copy operation given constraints such as the maximum bandwidth that a link supports, current usage of engines, etc… For example, some command queue groups that support copy may afford engines that support a higher copy bandwidth as compared to those from a different command queue group. For driving copies from local memory to local memory, it may be advisable to use an engine from a higher copy bandwidth group. For performing copies between devices interconnected with a lower bandwidth link, it may suffice to use an engine from a lower copy bandwidth group.</p>
+<p>The following pseudo-code demonstrates a sequence for obtaining the copy bandwidth of the engines in each command queue group:</p>
+<pre class="literal-block">// Discover all command queue groups
+uint32_t cmdqueueGroupCount = 0;
+<a class="reference internal" href="api.html#zedevicegetcommandqueuegroupproperties"><span class="std std-ref">zeDeviceGetCommandQueueGroupProperties</span></a>(hDevice, &amp;cmdqueueGroupCount, nullptr);
+
+<a class="reference internal" href="api.html#ze-command-queue-group-properties-t"><span class="std std-ref">ze_command_queue_group_properties_t</span></a>* cmdqueueGroupProperties = (<a class="reference internal" href="api.html#ze-command-queue-group-properties-t"><span class="std std-ref">ze_command_queue_group_properties_t</span></a>*)
+    allocate(cmdqueueGroupCount * sizeof(<a class="reference internal" href="api.html#ze-command-queue-group-properties-t"><span class="std std-ref">ze_command_queue_group_properties_t</span></a>));
+<a class="reference internal" href="api.html#ze-copy-bandwidth-exp-properties-t"><span class="std std-ref">ze_copy_bandwidth_exp_properties_t</span></a>* cmdqueueGroupBandwidth = (<a class="reference internal" href="api.html#ze-copy-bandwidth-exp-properties-t"><span class="std std-ref">ze_copy_bandwidth_exp_properties_t</span></a>*)
+        allocate(cmdqueueGroupCount * sizeof(<a class="reference internal" href="api.html#ze-copy-bandwidth-exp-properties-t"><span class="std std-ref">ze_copy_bandwidth_exp_properties_t</span></a>));
+for( uint32_t i = 0; i &lt; cmdqueueGroupCount; ++i ) {
+    cmdqueueGroupProperties[i].stype = ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES;
+    cmdqueueGroupProperties[i].pNext = &amp;cmdqueueGroupBandwidth[i];
+    cmdqueueGroupBandwidth[i].stype = ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXT_PROPERTIES;
+    cmdqueueGroupBandwidth[i].pNext = nullptr;
+}
+<a class="reference internal" href="api.html#zedevicegetcommandqueuegroupproperties"><span class="std std-ref">zeDeviceGetCommandQueueGroupProperties</span></a>(hDevice, &amp;cmdqueueGroupCount, cmdqueueGroupProperties);
+
+
+// Find a command queue type that supports copy &amp; print the copy bandwidth
+uint32_t computeQueueGroupOrdinal = cmdqueueGroupCount;
+for( uint32_t i = 0; i &lt; cmdqueueGroupCount; ++i ) {
+    if( cmdqueueGroupProperties[ i ].flags &amp; <a class="reference internal" href="api.html#ze-command-queue-group-property-flags-t"><span class="std std-ref">ZE_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY</span></a> ) {
+        computeQueueGroupOrdinal = i;
+        printf(&quot;copyBandwidth: %uln&quot;, cmdqueueGroupBandwidth[i].copyBandwidth)
+        break;
+    }
+}
+
+if(computeQueueGroupOrdinal == cmdqueueGroupCount)
+    return; // no compute queues found</pre>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Intel<br/>
+    
+        &copy; Copyright 2023, Intel.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

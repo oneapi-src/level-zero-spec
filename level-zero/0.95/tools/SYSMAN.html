@@ -1,0 +1,3532 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; Level Zero Specification  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script type="text/javascript" src="../_static/custom.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="../core/SPIRV.html" />
+    <link rel="prev" title="Initialization" href="PROG.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Level Zero Specification
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.91
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/INTRO.html">Overview</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Core Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/PROG.html">Core Programming Guide</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tools Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Initialization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html#api-tracing">API Tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html#metrics">Metrics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html#program-instrumentation">Program Instrumentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html#program-debug">Program Debug</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Sysman Programming Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#high-level-overview">High-level overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#global-device-management">Global device management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#device-component-management">Device component management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#device-component-enumeration">Device component enumeration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sub-device-management">Sub-device management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#events">Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#interface-details">Interface details</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#global-operations">Global operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#device-properties">Device properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#host-processes">Host processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scheduler-operations">Scheduler operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#device-reset">Device reset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pci-link-operations">PCI link operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-power-domains">Operations on power domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-frequency-domains">Operations on frequency domains</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#frequency-voltage-overclocking">Frequency/Voltage overclocking</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-engine-groups">Operations on engine groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-standby-domains">Operations on standby domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-firmwares">Operations on firmwares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-memory-modules">Querying memory modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-fabric-ports">Operations on Fabric ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-temperature">Querying temperature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-power-supplies">Operations on power supplies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-fans">Operations on fans</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations-on-leds">Operations on LEDs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-ras-errors">Querying RAS errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#performing-diagnostics">Performing diagnostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#events-2">Events</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#security">Security</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#privileged-telemetry">Privileged telemetry</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#privileged-controls">Privileged controls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#virtualization">Virtualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-summary">Function summary</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">SPIR-V Programming Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html#common-properties">Common Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html#required-capabilities">Required Capabilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html#validation-rules">Validation Rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html#extensions">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html#numerical-compliance">Numerical Compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html#image-addressing-and-filtering">Image Addressing and Filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../core/api.html">Core API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Tools API</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Versions</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Latest Release</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html#previous-releases">Previous Releases</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Level Zero Specification</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+
+    
+
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>Sysman is the System Resource Management library used to monitor and
+control the power and performance of accelerator devices.</p>
+</div>
+<div class="section" id="high-level-overview">
+<h1>High-level overview<a class="headerlink" href="#high-level-overview" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Permalink to this headline">¶</a></h2>
+<p>An application wishing to manage power and performance for devices first
+needs to use the Level0 Core API to enumerate through available
+accelerator devices in the system and select those of interest.</p>
+<p>For each selected device handle, applications use the function ::zetSysmanGet()
+to get an <strong>Sysman handle</strong> to manage system resources of the device.</p>
+<img alt="../_images/tools_sysman_object_hierarchy.png" src="../_images/tools_sysman_object_hierarchy.png" />
+<p>There is a unique handle for each device. Multiple threads can use the
+handle. If concurrent accesses are made to the same device property
+through the handle, the last request wins.</p>
+<p>The pseudo code below shows how to enumerate the GPU devices in the
+system and create Sysman handles for them:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">main</span><span class="p">(</span> <span class="p">...</span> <span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">zeInit</span><span class="p">(</span><span class="n">ZE_INIT_FLAG_NONE</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span> <span class="n">or</span>
+         <span class="p">(</span><span class="n">zetInit</span><span class="p">(</span><span class="n">ZE_INIT_FLAG_NONE</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;Can&#39;t initialize the API&quot;</span><span class="p">)</span>
+    <span class="k">else</span>
+        <span class="cp"># Discover all the drivers</span>
+        <span class="kt">uint32_t</span> <span class="n">driversCount</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">zeDriverGet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">driversCount</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">)</span>
+        <span class="n">ze_driver_handle_t</span><span class="o">*</span> <span class="n">allDrivers</span> <span class="o">=</span> <span class="n">allocate</span><span class="p">(</span><span class="n">driversCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_driver_handle_t</span><span class="p">))</span>
+        <span class="n">zeDriverGet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">driversCount</span><span class="p">,</span> <span class="n">allDrivers</span><span class="p">)</span>
+
+        <span class="n">ze_driver_handle_t</span> <span class="n">hDriver</span> <span class="o">=</span> <span class="n">nullptr</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">driversCount</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="cp"># Discover devices in a driver</span>
+            <span class="kt">uint32_t</span> <span class="n">deviceCount</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">zeDeviceGet</span><span class="p">(</span><span class="n">allDrivers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">)</span>
+
+            <span class="n">ze_device_handle_t</span><span class="o">*</span> <span class="n">allDevices</span> <span class="o">=</span>
+                <span class="n">allocate_memory</span><span class="p">(</span><span class="n">deviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_device_handle_t</span><span class="p">))</span>
+            <span class="n">zeDeviceGet</span><span class="p">(</span><span class="n">allDrivers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">allDevices</span><span class="p">)</span>
+
+            <span class="k">for</span><span class="p">(</span><span class="n">devIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">deviceCount</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">ze_device_properties_t</span> <span class="n">device_properties</span>
+                <span class="n">zeDeviceGetProperties</span><span class="p">(</span><span class="n">allDevices</span><span class="p">[</span><span class="n">devIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">device_properties</span><span class="p">)</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">ZE_DEVICE_TYPE_GPU</span> <span class="o">!=</span> <span class="n">device_properties</span><span class="p">.</span><span class="n">type</span><span class="p">)</span>
+                    <span class="n">next</span>
+                <span class="cp"># Create Sysman handle</span>
+                <span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span>
+                <span class="n">ze_result_t</span> <span class="n">res</span> <span class="o">=</span> <span class="n">zetSysmanGet</span><span class="p">(</span><span class="n">hDevice</span><span class="p">,</span> <span class="n">ZET_SYSMAN_VERSION_CURRENT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hSysmanDevice</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="cp"># Start using hSysmanDevice to manage the device</span>
+                <span class="k">else</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;ERROR: Can&#39;t initialize system resource management for this device&quot;</span><span class="p">)</span>
+
+    <span class="n">free_memory</span><span class="p">(...)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="global-device-management">
+<h2>Global device management<a class="headerlink" href="#global-device-management" title="Permalink to this headline">¶</a></h2>
+<p>The following operations are provided to access overall device
+information and control aspects of the entire device:</p>
+<ul class="simple">
+<li><p>Get device UUID, deviceID, number of sub-devices</p></li>
+<li><p>Get Brand/model/vendor name</p></li>
+<li><p>Query the information about processes using this device</p></li>
+<li><p>Get/set scheduler mode and properties</p></li>
+<li><p>Reset device</p></li>
+<li><p>Query if the device has been repaired</p></li>
+<li><p>PCI information:</p>
+<ul>
+<li><p>Get configured bars</p></li>
+<li><p>Get maximum supported bandwidth</p></li>
+<li><p>Query current speed (GEN/no. lanes)</p></li>
+<li><p>Query current throughput</p></li>
+<li><p>Query packet retry counters</p></li>
+</ul>
+</li>
+</ul>
+<p>The full list of available functions is described <a class="reference external" href="#glo">below</a>.</p>
+</div>
+<div class="section" id="device-component-management">
+<h2>Device component management<a class="headerlink" href="#device-component-management" title="Permalink to this headline">¶</a></h2>
+<p>Aside from management of the global properties of a device, there are
+many device components that can be managed to change the performance
+and/or power configuration of the device. Similar components are broken
+into <strong>classes</strong> and each class has a set of operations that can be
+performed on them.</p>
+<p>For example, devices typically have one or more frequency domains. The
+Sysman API exposes a class for frequency and an enumeration of all
+frequency domains that can be managed.</p>
+<p>The table below summarizes the classes that provide device queries and
+an example list of components that would be enumerated for a device with
+two sub-devices. The table shows the operations (queries) that will be
+provided for all components in each class.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Components</p></th>
+<th class="head"><p>Operations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="#power">Power</a></p></td>
+<td><p>Package:
+powerSub-device 0:
+Total powerSub-device
+1: Total power</p></td>
+<td><p>Get energy
+consumption</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#frequency">Frequency</a></p></td>
+<td><p>Sub-device 0: GPU
+frequencySub-device
+0: Memory
+frequencySub-device
+1: GPU
+frequencySub-device
+1: Memory frequency</p></td>
+<td><p>List available
+frequenciesSet
+frequency rangeGet
+frequenciesGet
+throttle reasonsGet
+throttle time</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#engines">Engines</a></p></td>
+<td><p>Sub-device 0: All
+enginesSub-device 0:
+Compute
+enginesSub-device 0:
+Media
+enginesSub-device 1:
+All enginesSub-device
+1: Compute
+enginesSub-device 1:
+Media engines</p></td>
+<td><p>Get busy time</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#firmware">Firmware</a></p></td>
+<td><p>Sub-device 0:
+Enumerates each
+firmwareSub-device 1:
+Enumerates each
+firmware</p></td>
+<td><p>Get firmware name and
+versionVerify
+firmware checksum</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#memory">Memory</a></p></td>
+<td><p>Sub-device 0: Memory
+module Sub-device 1:
+Memory module</p></td>
+<td><p>Get maximum supported
+bandwidthGet current
+allocation sizeGet
+current bandwidth</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#fabric-port">Fabric-Port</a></p></td>
+<td><p>Enumerates each
+portSub-device 1:
+Enumerates each port</p></td>
+<td><p>configuration
+(UP/DOWN)Get physical
+link detailsGet port
+health
+(green/yellow/red/bla
+ck)Get
+remote port UUIDGet
+port max rx/tx
+speedGet port current
+rx/tx bandwidth</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#temperature">Temperature</a></p></td>
+<td><p>Package:
+temperatureSub-device
+0: GPU
+temperatureSub-device
+0: Memory
+temperatureSub-device
+1: GPU
+temperatureSub-device
+1: Memory temperature</p></td>
+<td><p>Get current
+temperature sensor
+reading</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#psu">PSU</a></p></td>
+<td><p>Package: Power
+supplies</p></td>
+<td><p>Get details about the
+power supplyQuery
+current state
+(temperature,current,
+fan)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#fan">Fan</a></p></td>
+<td><p>Package: Fans</p></td>
+<td><p>Get details (max fan
+speed)Get config
+(fixed fan speed,
+temperature-speed
+table)Query current
+fan speed</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#led">LED</a></p></td>
+<td><p>Package: LEDs</p></td>
+<td><p>Get details (supports
+RGB
+configuration)Query
+current state
+(on,color)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ras">RAS</a></p></td>
+<td><p>Sub-device 0: One set
+of RAS error
+countersSub-device 1:
+One set of RAS error
+counters</p></td>
+<td><p>Read RAS total
+correctable and
+uncorrectable error
+counter.Read
+breakdown of errors
+by category:- no.
+resets- no.
+programming errors-
+no. driver errors-
+no. compute errors-
+no. cache errors- no.
+memory errors- no.
+PCI errors- no.
+fabric port errors-
+no. display errors-
+no. non-compute
+errors</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#diagnostics">Diagnostics</a></p></td>
+<td><p>Package: SCAN test
+suitePackage: ARRAY
+test suite</p></td>
+<td><p>Get list of all
+diagnostics tests in
+the test suite</p></td>
+</tr>
+</tbody>
+</table>
+<p>The table below summarizes the classes that provide device controls and
+an example list of components that would be enumerated for a device with
+two sub-devices. The table shows the operations (controls) that will be
+provided for all components in each class.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Components</p></th>
+<th class="head"><p>Operations</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="#pwr">Power</a></p></td>
+<td><p>Package: power</p></td>
+<td><p>Set sustained power
+limitSet burst power
+limitSet peak power
+limit</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="#frq">Frequency</a></p></td>
+<td><p>Sub-device 0: GPU
+frequencySub-device
+0: Memory
+frequencySub-device
+1: GPU
+frequencySub-device
+1: Memory frequency</p></td>
+<td><p>Set frequency range</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="#sby">Standby</a></p></td>
+<td><p>Sub-device 0: Control
+entire
+sub-deviceSub-device
+1: Control entire
+sub-device</p></td>
+<td><p>Disable opportunistic
+standby</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="#fmw">Firmware</a></p></td>
+<td><p>Sub-device 0:
+Enumerates each
+firmwareSub-device 1:
+Enumerates each
+firmware</p></td>
+<td><p>Flash new firmware</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="#con">Fabric
+port</a></p></td>
+<td><p>Sub-device 0: Control
+each portSub-device
+1: Control each port</p></td>
+<td><p>Configure port
+UP/DOWNTurn beaconing
+ON/OFF</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="#fan">Fan</a></p></td>
+<td><p>Package: Fans</p></td>
+<td><p>Set config (fixed
+speed,
+temperature-speed
+table)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="#led">LED</a></p></td>
+<td><p>Package: LEDs</p></td>
+<td><p>Turn LED on/off and
+set color where
+applicable</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="#con">Diagnostics</a></p></td>
+<td><p>SCAN test suiteARRAY
+test suite</p></td>
+<td><p>Run all or a subset
+of diagnostic tests
+in the test suite</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="device-component-enumeration">
+<h2>Device component enumeration<a class="headerlink" href="#device-component-enumeration" title="Permalink to this headline">¶</a></h2>
+<p>The Sysman API provides functions to enumerate all components in a class
+that can be managed.</p>
+<p>For example, there is a frequency class which is used to control the
+frequency of different parts of the device. On most devices, the
+enumerator will provide two handles, one to control the GPU frequency
+and one to enumerate the device memory frequency. This is illustrated in
+the figure below:</p>
+<img alt="../_images/tools_sysman_freq_flow.png" src="../_images/tools_sysman_freq_flow.png" />
+<p>In the C API, each class is associated with a unique handle type
+(e.g. ::zet_sysman_freq_handle_t refers to a frequency component). In
+the C++ API, each class is a C++ class (e.g. An instance of the class ::zet::SysmanFrequency
+refers to a frequency component).</p>
+<p>The pseudo code below shows how to use the Sysman API to enumerate all
+GPU frequency components and fix each to a specific frequency if this is
+supported:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">FixGpuFrequency</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">,</span> <span class="kt">double</span> <span class="n">FreqMHz</span><span class="p">)</span>
+    <span class="kt">uint32_t</span> <span class="n">numFreqDomains</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">zetSysmanFrequencyGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFreqDomains</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">))</span>
+        <span class="n">zet_sysman_freq_handle_t</span><span class="o">*</span> <span class="n">pFreqHandles</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numFreqDomains</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_freq_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFrequencyGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFreqDomains</span><span class="p">,</span> <span class="n">pFreqHandles</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numFreqDomains</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">zet_freq_properties_t</span> <span class="n">props</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFrequencyGetProperties</span><span class="p">(</span><span class="n">pFreqHandles</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">props</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="cp"># Only change the frequency of the domain if:</span>
+                    <span class="cp"># 1. The domain controls a GPU accelerator</span>
+                    <span class="cp"># 2. The domain frequency can be changed</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">props</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">ZET_FREQ_DOMAIN_GPU</span>
+                        <span class="n">and</span> <span class="n">props</span><span class="p">.</span><span class="n">canControl</span><span class="p">)</span>
+                            <span class="cp"># Fix the frequency</span>
+                            <span class="n">zet_freq_range_t</span> <span class="n">range</span>
+                            <span class="n">range</span><span class="p">.</span><span class="n">min</span> <span class="o">=</span> <span class="n">FreqMHz</span>
+                            <span class="n">range</span><span class="p">.</span><span class="n">max</span> <span class="o">=</span> <span class="n">FreqMHz</span>
+                            <span class="n">zetSysmanFrequencySetRange</span><span class="p">(</span><span class="n">pFreqHandles</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">range</span><span class="p">)</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sub-device-management">
+<h2>Sub-device management<a class="headerlink" href="#sub-device-management" title="Permalink to this headline">¶</a></h2>
+<p>A Sysman handle cannot be created for a sub-device - ::zetSysmanGet() will return error
+::ZE_RESULT_ERROR_INVALID_ARGUMENT if a device handle for a sub-device is passed to this function.
+Instead, the enumerator for device components will return a list of components that are located in each
+sub-device. Properties for each component will indicate in which sub-device it is located. If software
+wishing to manage components in only one sub-device should filter the enumerated components using the
+sub-device ID (see ::ze_device_properties_t.subdeviceId).</p>
+<p>The figure below shows the frequency components that will be enumerated on a device with two sub-devices where each sub-device has a GPU and
+device memory frequency control:</p>
+<img alt="../_images/tools_sysman_freq_subdevices.png" src="../_images/tools_sysman_freq_subdevices.png" />
+<p>The pseudo code below shows how to fix the GPU frequency on a specific
+sub-device (notice the additional sub-device check):</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">FixSubdeviceGpuFrequency</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">subdeviceId</span><span class="p">,</span> <span class="kt">double</span> <span class="n">FreqMHz</span><span class="p">)</span>
+    <span class="kt">uint32_t</span> <span class="n">numFreqDomains</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">zetSysmanFrequencyGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFreqDomains</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">))</span>
+        <span class="n">zet_sysman_freq_handle_t</span><span class="o">*</span> <span class="n">pFreqHandles</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numFreqDomains</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_freq_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFrequencyGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFreqDomains</span><span class="p">,</span> <span class="n">pFreqHandles</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numFreqDomains</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">zet_freq_properties_t</span> <span class="n">props</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFrequencyGetProperties</span><span class="p">(</span><span class="n">pFreqHandles</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">props</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="cp"># Only change the frequency of the domain if:</span>
+                    <span class="cp"># 1. The domain controls a GPU accelerator</span>
+                    <span class="cp"># 2. The domain frequency can be changed</span>
+                    <span class="cp"># 3. The domain is located in the specified sub-device</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">props</span><span class="p">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">ZET_FREQ_DOMAIN_GPU</span>
+                        <span class="n">and</span> <span class="n">props</span><span class="p">.</span><span class="n">canControl</span>
+                        <span class="n">and</span> <span class="n">props</span><span class="p">.</span><span class="n">subdeviceId</span> <span class="o">==</span> <span class="n">subdeviceId</span><span class="p">)</span>
+                            <span class="cp"># Fix the frequency</span>
+                            <span class="n">zet_freq_range_t</span> <span class="n">range</span>
+                            <span class="n">range</span><span class="p">.</span><span class="n">min</span> <span class="o">=</span> <span class="n">FreqMHz</span>
+                            <span class="n">range</span><span class="p">.</span><span class="n">max</span> <span class="o">=</span> <span class="n">FreqMHz</span>
+                            <span class="n">zetSysmanFrequencySetRange</span><span class="p">(</span><span class="n">pFreqHandles</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">range</span><span class="p">)</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="events">
+<h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<p>Events are a way to determine if changes have occurred on a device
+e.g. new RAS errors without polling the Sysman API. An application
+registers the events that it wishes to receive notification about and
+then it listens for notifications. The application can choose to block
+when listening - this will put the calling application thread to sleep
+until new notifications are received.</p>
+<p>The API enables registering for events from multiple devices and
+listening for any events coming from any devices by using one function
+call.</p>
+<p>Once notifications have occurred, the application can use the query
+Sysman interface functions to get more details.</p>
+<p>The following events are provided:</p>
+<ul class="simple">
+<li><p>Any RAS errors have occurred</p></li>
+</ul>
+<p>The full list of available functions for handling events is described
+<a class="reference external" href="#evd">below</a>.</p>
+</div>
+</div>
+<div class="section" id="interface-details">
+<h1>Interface details<a class="headerlink" href="#interface-details" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="global-operations">
+<h2>Global operations<a class="headerlink" href="#global-operations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="device-properties">
+<h3>Device properties<a class="headerlink" href="#device-properties" title="Permalink to this headline">¶</a></h3>
+<p>The following operations permit getting properties about the entire
+device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanDeviceGetProperties()</p></td>
+<td><p>Get static device properties -
+device UUID, sub-device ID,
+device brand/model/vendor strings</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanDeviceGetRepairStatus()</p></td>
+<td><p>Determine if the device has
+undergone repairs, either through
+the running of diagnostics or by
+manufacturing.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to display general information about a
+device:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">ShowDeviceInfo</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+    <span class="n">zet_sysman_properties_t</span> <span class="n">devProps</span>
+    <span class="n">zet_repair_status_t</span> <span class="n">repaired</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanDeviceGetProperties</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">devProps</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    UUID:           %s&quot;</span><span class="p">,</span> <span class="n">devProps</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">uuid</span><span class="p">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    #subdevices:    %u&quot;</span><span class="p">,</span> <span class="n">devProps</span><span class="p">.</span><span class="n">numSubdevices</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    brand:          %s&quot;</span><span class="p">,</span> <span class="n">devProps</span><span class="p">.</span><span class="n">brandName</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    model:          %s&quot;</span><span class="p">,</span> <span class="n">devProps</span><span class="p">.</span><span class="n">modelName</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanDeviceGetRepairStatus</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">repaired</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Was repaired:   %s&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">repaired</span> <span class="o">==</span> <span class="n">ZET_REPAIR_STATUS_PERFORMED</span><span class="p">)</span> <span class="o">?</span> <span class="s">&quot;yes&quot;</span> <span class="o">:</span> <span class="s">&quot;no&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="host-processes">
+<h3>Host processes<a class="headerlink" href="#host-processes" title="Permalink to this headline">¶</a></h3>
+<p>The following functions provide information about host processes that
+are using the device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanProcessesGetState()</p></td>
+<td><p>Get information about all
+processes that are using this
+device - process ID, device
+memory allocation size,
+accelerators being used.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Using the process ID, an application can determine the owner and the
+path to the executable - this information is not returned by the API.</p>
+</div>
+<div class="section" id="scheduler-operations">
+<h3>Scheduler operations<a class="headerlink" href="#scheduler-operations" title="Permalink to this headline">¶</a></h3>
+<p>On some devices, it is possible to change the way the scheduler executes
+workloads. To find out if this is supported, execute the function
+::zetSysmanSchedulerGetCurrentMode() and check that it does not return
+an error.</p>
+<p>The available scheduler operating modes are given by the enum ::zet_sched_mode_t:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Scheduler mode</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_SCHED_MODE_TIMEOUT</p></td>
+<td><p>This mode is optimized for
+multiple applications or contexts
+submitting work to the hardware.
+When higher priority work
+arrives, the scheduler attempts
+to pause the current executing
+work within some timeout
+interval, then submits the other
+work.It is possible to configure
+(::zet_sched_timeout_properties_t)</p>
+<p>the watchdog timeout which
+controls the maximum time the
+scheduler will wait for a
+workload to complete a batch of
+work or yield to other
+applications before it is
+terminated.If the watchdog
+timeout is set to
+::ZET_SCHED_WATCHDOG_DISABLE, the
+scheduler enforces no fairness.
+This means that if there is other
+work to execute, the scheduler
+will try to submit it but will
+not terminate an executing
+process that does not complete
+quickly.</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SCHED_MODE_TIMESLICE</p></td>
+<td><p>This mode is optimized to provide
+fair sharing of hardware
+execution time between multiple
+contexts submitting work to the
+hardware concurrently.It is
+possible to configure
+(::zet_sched_timeslice_properties_t)</p>
+<p>the timeslice interval and the
+amount of time the scheduler will
+wait for work to yield to another
+application before it is
+terminated.</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>::ZET_SCHED_MODE_EXCLUSIVE</p></td>
+<td><p>This mode is optimized for single
+application/context use-cases. It
+permits a context to run
+indefinitely on the hardware
+without being preempted or
+terminated. All pending work for
+other contexts must wait until
+the running context completes
+with no further submitted work.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SCHED_MODE_COMPUTE_UNIT_DEBUG</p></td>
+<td><p>This mode is optimized for
+application debug. It ensures
+that only one command queue can
+execute work on the hardware at a
+given time. Work is permitted to
+run as long as needed without
+enforcing any scheduler fairness
+policies.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following functions are available for changing the behavior of the
+scheduler:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanSchedulerGetCurrentMode()</p></td>
+<td><p>Get the current scheduler mode
+(timeout, timeslice, exclusive,
+single command queue)</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanSchedulerGetTimeoutModeProperties()</p></td>
+<td><p>Get the settings for the timeout
+scheduler mode</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanSchedulerGetTimesliceModeProperties()</p></td>
+<td><p>Get the settings for the
+timeslice scheduler mode</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanSchedulerSetTimeoutMode()</p></td>
+<td><p>Change to timeout scheduler mode
+and/or change properties</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanSchedulerSetTimesliceMode()</p></td>
+<td><p>Change to timeslice scheduler
+mode and/or change properties</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanSchedulerSetExclusiveMode()</p></td>
+<td><p>Change to exclusive scheduler
+mode and/or change properties</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanSchedulerSetComputeUnitDebugMode()</p></td>
+<td><p>Change to compute unit debug
+scheduler mode and/or change
+properties</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to stop the scheduler enforcing fairness
+while permitting other work to attempt to run:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">DisableSchedulerWatchdog</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+     <span class="n">ze_result_t</span> <span class="n">res</span>
+     <span class="n">zet_sched_mode_t</span> <span class="n">currentMode</span>
+     <span class="n">res</span> <span class="o">=</span> <span class="n">zetSysmanSchedulerGetCurrentMode</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">currentMode</span><span class="p">)</span>
+     <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+         <span class="n">ze_bool_t</span> <span class="n">requireReboot</span>
+         <span class="n">zet_sched_timeout_properties_t</span> <span class="n">props</span>
+         <span class="n">props</span><span class="p">.</span><span class="n">watchdogTimeout</span> <span class="o">=</span> <span class="n">ZET_SCHED_WATCHDOG_DISABLE</span>
+         <span class="n">res</span> <span class="o">=</span> <span class="n">zetSysmanSchedulerSetTimeoutMode</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">props</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">requireReboot</span><span class="p">)</span>
+         <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">requireReboot</span><span class="p">)</span>
+                 <span class="n">output</span><span class="p">(</span><span class="s">&quot;WARNING: Reboot required to complete desired configuration.&quot;</span><span class="p">)</span>
+             <span class="k">else</span>
+                 <span class="n">output</span><span class="p">(</span><span class="s">&quot;Schedule mode changed successfully.&quot;</span><span class="p">)</span>
+         <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="n">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span><span class="p">)</span>
+             <span class="n">output</span><span class="p">(</span><span class="s">&quot;ERROR: The timeout scheduler mode is not supported on this device.&quot;</span><span class="p">)</span>
+         <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="n">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span><span class="p">)</span>
+             <span class="n">output</span><span class="p">(</span><span class="s">&quot;ERROR: Don&#39;t have permissions to change the scheduler mode.&quot;</span><span class="p">)</span>
+         <span class="k">else</span>
+             <span class="n">output</span><span class="p">(</span><span class="s">&quot;ERROR: Problem calling the API to change the scheduler mode.&quot;</span><span class="p">)</span>
+     <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="n">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span><span class="p">)</span>
+         <span class="n">output</span><span class="p">(</span><span class="s">&quot;ERROR: Scheduler modes are not supported on this device.&quot;</span><span class="p">)</span>
+     <span class="k">else</span>
+         <span class="n">output</span><span class="p">(</span><span class="s">&quot;ERROR: Problem calling the API.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="device-reset">
+<h3>Device reset<a class="headerlink" href="#device-reset" title="Permalink to this headline">¶</a></h3>
+<p>The device can be reset using the following function:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanDeviceReset()</p></td>
+<td><p>Requests that the driver reset
+the device. If the hardware is
+hung, this will perform an PCI
+bus reset.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="pci-link-operations">
+<h3>PCI link operations<a class="headerlink" href="#pci-link-operations" title="Permalink to this headline">¶</a></h3>
+<p>The following functions permit getting data about the PCI endpoint for the device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanPciGetProperties()</p></td>
+<td><p>Get static properties for the PCI
+port - BDF address, number of
+bars, maximum supported speed</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPciGetState()</p></td>
+<td><p>Get current PCI port speed
+(number of lanes, generation)</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPciGetBars()</p></td>
+<td><p>Get information about each
+configured PCI bar</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPciGetStats()</p></td>
+<td><p>Get PCI statistics - throughput,
+total packets, number of packet
+replays</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to output the PCI BDF address:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="nf">ShowPciInfo</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+    <span class="n">zet_pci_properties_t</span> <span class="n">pciProps</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanPciGetProperties</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">pciProps</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    PCI address:        %04u:%02u:%02u.%u&quot;</span><span class="p">,</span>
+            <span class="n">pciProps</span><span class="p">.</span><span class="n">address</span><span class="p">.</span><span class="n">domain</span><span class="p">,</span>
+            <span class="n">pciProps</span><span class="p">.</span><span class="n">address</span><span class="p">.</span><span class="n">bus</span><span class="p">,</span>
+            <span class="n">pciProps</span><span class="p">.</span><span class="n">address</span><span class="p">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="n">pciProps</span><span class="p">.</span><span class="n">address</span><span class="p">.</span><span class="n">function</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="operations-on-power-domains">
+<span id="power"></span><h2>Operations on power domains<a class="headerlink" href="#operations-on-power-domains" title="Permalink to this headline">¶</a></h2>
+<p>The PSU (Power Supply Unit) provides power to a device. The amount of
+power drawn by a device is a function of the voltage and frequency, both
+of which are controlled by the Punit, a micro-controller on the device.
+If the voltage and frequency are too high, two conditions can occur:</p>
+<ol class="arabic simple">
+<li><p>Over-current - This is where the current drawn by the device exceeds
+the maximum current that the PSU can supply. The PSU asserts a signal
+when this occurs, and it is processed by the Punit.</p></li>
+<li><p>Over-temperature - The device is generating too much heat that cannot
+be dissipated fast enough. The Punit monitors temperatures and reacts
+when the sensors show the maximum temperature exceeds the threshold
+TjMax (typically 100 degrees Celsius).</p></li>
+</ol>
+<p>When either of these conditions occurs, the Punit throttles the
+frequencies/voltages of the device down to their minimum values,
+severely impacting performance. The Punit avoids such severe throttling
+by measuring the actual power being consumed by the system and slowly
+throttling the frequencies down when power exceeds some limits. Three
+limits are monitored by the Punit:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Limit</p></th>
+<th class="head"><p>Window</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Peak</p></td>
+<td><p>Instantaneous</p></td>
+<td><p>Punit tracks the
+instantaneous power.
+When this exceeds a
+programmable
+threshold, the Punit
+will aggressively
+throttle
+frequencies/voltages.
+The threshold is
+referred to as PL4 -
+Power Limit 4 - or
+peak power.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Burst</p></td>
+<td><p>2ms</p></td>
+<td><p>Punit tracks the 2ms
+moving average of
+power. When this
+exceeds a
+programmable
+threshold, the Punit
+starts throttling
+frequencies/voltages.
+The threshold is
+referred to as PL2 -
+Power Limit 2 - or
+burst power.</p></td>
+</tr>
+<tr class="row-even"><td><p>Sustained</p></td>
+<td><p>28sec</p></td>
+<td><p>Punit tracks the
+28sec moving average
+of power. When this
+exceeds a
+programmable
+threshold, the Punit
+throttles
+frequencies/voltages.
+The threshold is
+referred to as PL1 -
+Power Limit 1 - or
+sustained power.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Peak power limit is generally greater than the burst power limit which
+is generally greater than the sustained power limit. The default factory
+values are tuned assuming the device is operating at normal temperatures
+running significant workloads:</p>
+<ul class="simple">
+<li><p>The peak power limit is tuned to avoid tripping the PSU over-current
+signal for all but the most intensive compute workloads. Most
+workloads should be able to run at maximum frequencies without
+hitting this condition.</p></li>
+<li><p>The burst power limit permits most workloads to run at maximum
+frequencies for short periods.</p></li>
+<li><p>The sustained power limit will be triggered if high frequencies are
+requested for lengthy periods (configurable, default is 28sec) and
+the frequencies will be throttled if the high requests and
+utilization of the device continues.</p></li>
+</ul>
+<p>Some power domains support requesting the event
+::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED be generated when the
+energy consumption exceeds some value. This can be a useful technique to
+suspend an application until the GPU becomes busy. The technique
+involves calling ::zetSysmanPowerSetEnergyThreshold() with some delta
+energy threshold, registering to receive the event using the function
+::zetSysmanEventSetConfig() and then calling ::zetSysmanEventListen() to
+block until the event is triggered. When the energy consumed by the
+power domain from the time the call is made exceeds the specified delta,
+the event is triggered, and the application is woken up.</p>
+<p>The following functions are provided to manage the power of the device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanPowerGet()</p></td>
+<td><p>Enumerate the power domains.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPowerGetProperties()</p></td>
+<td><p>Get the maximum power limit that
+can be specified when changing
+the power limits of a specific
+power domain.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPowerGetEnergyCounter()</p></td>
+<td><p>Read the energy consumption of
+the specific domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPowerGetLimits()</p></td>
+<td><p>Get the sustained/burst/peak
+power limits for the specific
+power domain.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPowerSetLimits()</p></td>
+<td><p>Set the sustained/burst/peak
+power limits for the specific
+power domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPowerGetEnergyThreshold()</p></td>
+<td><p>Get the current energy threshold.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPowerSetEnergyThreshold()</p></td>
+<td><p>Set the energy threshold. Event
+::ZET_SYSMAN_EVENT_TYPE_ENERGY_THRESHOLD_CROSSED</p>
+<p>will be generated when the energy
+consumed since calling this
+function exceeds the specified
+threshold.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to output information about each power
+domain on a device:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">ShowPowerDomains</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+    <span class="kt">uint32_t</span> <span class="n">numPowerDomains</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanPowerGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numPowerDomains</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">zet_sysman_pwr_handle_t</span><span class="o">*</span> <span class="n">phPower</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numPowerDomains</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_pwr_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanPowerGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numPowerDomains</span><span class="p">,</span> <span class="n">phPower</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">pwrIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numPowerDomains</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">zet_power_properties_t</span> <span class="n">props</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanPowerGetProperties</span><span class="p">(</span><span class="n">phPower</span><span class="p">[</span><span class="n">pwrIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">props</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">props</span><span class="p">.</span><span class="n">onSubdevice</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;Sub-device %u power:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">subdeviceId</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Can control: %s&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">canControl</span> <span class="o">?</span> <span class="s">&quot;yes&quot;</span> <span class="o">:</span> <span class="s">&quot;no&quot;</span><span class="p">)</span>
+                        <span class="n">call_function</span> <span class="n">ShowPowerLimits</span><span class="p">(</span><span class="n">phPower</span><span class="p">[</span><span class="n">pwrIndex</span><span class="p">])</span>
+                    <span class="k">else</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;Total package power:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Can control: %s&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">canControl</span> <span class="o">?</span> <span class="s">&quot;yes&quot;</span> <span class="o">:</span> <span class="s">&quot;no&quot;</span><span class="p">)</span>
+                        <span class="n">call_function</span> <span class="n">ShowPowerLimits</span><span class="p">(</span><span class="n">phPower</span><span class="p">[</span><span class="n">pwrIndex</span><span class="p">])</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+<span class="p">}</span>
+
+<span class="n">function</span> <span class="n">ShowPowerLimits</span><span class="p">(</span><span class="n">zet_sysman_pwr_handle_t</span> <span class="n">hPower</span><span class="p">)</span>
+    <span class="n">zet_power_sustained_limit_t</span> <span class="n">sustainedLimits</span>
+    <span class="n">zet_power_burst_limit_t</span> <span class="n">burstLimits</span>
+    <span class="n">zet_power_peak_limit_t</span> <span class="n">peakLimits</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanPowerGetLimits</span><span class="p">(</span><span class="n">hPower</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sustainedLimits</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">burstLimits</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">peakLimits</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Power limits</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sustainedLimits</span><span class="p">.</span><span class="n">enabled</span><span class="p">)</span>
+            <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Sustained: %.3f W %.3f sec&quot;</span><span class="p">,</span>
+                <span class="n">sustainedLimits</span><span class="p">.</span><span class="n">power</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span>
+                <span class="n">sustainedLimits</span><span class="p">.</span><span class="n">interval</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="k">else</span>
+            <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Sustained: Disabled&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">burstLimits</span><span class="p">.</span><span class="n">enabled</span><span class="p">)</span>
+            <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Burst:     %.3f&quot;</span><span class="p">,</span> <span class="n">burstLimits</span><span class="p">.</span><span class="n">power</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="k">else</span>
+            <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Burst:     Disabled&quot;</span><span class="p">)</span>
+        <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Burst:     %.3f&quot;</span><span class="p">,</span> <span class="n">peakLimits</span><span class="p">.</span><span class="n">power</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The pseudo code shows how to output the average power. It assumes that
+the function is called regularly (say every 100ms).</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="nf">ShowAveragePower</span><span class="p">(</span><span class="n">zet_sysman_pwr_handle_t</span> <span class="n">hPower</span><span class="p">,</span> <span class="n">zet_power_energy_counter_t</span><span class="o">*</span> <span class="n">pPrevEnergyCounter</span><span class="p">)</span>
+    <span class="n">zet_power_energy_counter_t</span> <span class="n">newEnergyCounter</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanPowerGetEnergyCounter</span><span class="p">(</span><span class="n">hPower</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">newEnergyCounter</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="kt">uint64_t</span> <span class="n">deltaTime</span> <span class="o">=</span> <span class="n">newEnergyCounter</span><span class="p">.</span><span class="n">timestamp</span> <span class="o">-</span> <span class="n">pPrevEnergyCounter</span><span class="o">-&gt;</span><span class="n">timestamp</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">deltaTime</span><span class="p">)</span>
+            <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Average power: %.3f W&quot;</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">newEnergyCounter</span><span class="p">.</span><span class="n">energy</span> <span class="o">-</span> <span class="n">pPrevEnergyCounter</span><span class="o">-&gt;</span><span class="n">energy</span><span class="p">)</span> <span class="o">/</span> <span class="n">deltaTime</span><span class="p">);</span>
+            <span class="o">*</span><span class="n">pPrevEnergyCounter</span> <span class="o">=</span> <span class="n">newEnergyCounter</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="operations-on-frequency-domains">
+<span id="frequency"></span><h2>Operations on frequency domains<a class="headerlink" href="#operations-on-frequency-domains" title="Permalink to this headline">¶</a></h2>
+<p>The hardware manages frequencies to achieve a balance between best
+performance and power consumption. Most devices have one or more
+frequency domains.</p>
+<p>The following functions are provided to manage the frequency domains on
+the device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 55%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanFrequencyGet()</p></td>
+<td><p>Enumerate all the frequency
+domains on the device and
+sub-devices.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyGetProperties()</p></td>
+<td><p>Find out which domain
+::zet_freq_domain_t is controlled
+by this frequency and min/max
+hardware frequencies.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyGetAvailableClocks()</p></td>
+<td><p>Get an array of all available
+frequencies that can be requested
+on this domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyGetRange()</p></td>
+<td><p>Get the current min/max frequency
+between which the hardware can
+operate for a frequency domain.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencySetRange()</p></td>
+<td><p>Set the min/max frequency between
+which the hardware can operate
+for a frequency domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyGetState()</p></td>
+<td><p>Get the current frequency
+request, actual frequency, TDP
+frequency and throttle reasons
+for a frequency domain.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyGetThrottleTime()</p></td>
+<td><p>Gets the amount of time a
+frequency domain has been
+throttled.</p></td>
+</tr>
+</tbody>
+</table>
+<p>It is only permitted to set the frequency range if the device property
+::zet_freq_properties_t.canControl is true for the specific frequency
+domain.</p>
+<p>By setting the min/max frequency range to the same value, software is
+effectively disabling the hardware-controlled frequency and getting a
+fixed stable frequency providing the Punit does not need to throttle due
+to excess power/heat.</p>
+<p>Based on the power/thermal conditions, the frequency requested by
+software or the hardware may not be respected. This situation can be
+determined using the function ::zetSysmanFrequencyGetState() which will
+indicate the current frequency request, the actual (resolved) frequency
+and other frequency information that depends on the current conditions.
+If the actual frequency is below the requested frequency,
+::zet_freq_state_t.throttleReasons will provide the reasons why the
+frequency is being limited by the Punit.</p>
+<p>When a frequency domain starts being throttled, the event
+::ZET_SYSMAN_EVENT_TYPE_FREQ_THROTTLED is triggered if this is supported
+(check ::zet_freq_properties_t.isThrottleEventSupported).</p>
+<div class="section" id="frequency-voltage-overclocking">
+<h3>Frequency/Voltage overclocking<a class="headerlink" href="#frequency-voltage-overclocking" title="Permalink to this headline">¶</a></h3>
+<p>Overclocking involves modifying the voltage-frequency (V-F) curve to
+either achieve better performance by permitting the hardware to reach
+higher frequencies or better efficiency by lowering the voltage for the
+same frequency.</p>
+<p>By default, the hardware imposes a factory-fused maximum frequency and a
+voltage-frequency curve. The voltage-frequency curve specifies how much
+voltage is needed to safely reach a given frequency without hitting
+overcurrent conditions. If the hardware detects overcurrent (IccMax), it
+will severely throttle frequencies in order to protect itself. Also, if
+the hardware detects that any part of the chip exceeds a maximum
+temperature limit (TjMax) it will also severely throttle frequencies.</p>
+<p>To improve maximum performance, the following modifications can be made:</p>
+<ul class="simple">
+<li><p>Increase the maximum frequency.</p></li>
+<li><p>Increase the voltage to ensure stability at the higher frequency.</p></li>
+<li><p>Increase the maximum current (IccMax).</p></li>
+<li><p>Increase the maximum temperature (TjMax).</p></li>
+</ul>
+<p>All these changes come with the risk of damage the device.</p>
+<p>To improve efficiency for a given workload that is not excercising the
+full circuitry of the device, the following modifications can be made:</p>
+<ul class="simple">
+<li><p>Decrease the voltage</p></li>
+</ul>
+<p>Frequency/voltage overclocking is accomplished by calling ::zetSysmanFrequencyOcSetConfig()
+with a new overclock configuration ::zet_oc_config_t. There are two modes that control the
+way voltage is handled when overclocking the frequency:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Voltage overclock mode</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_OC_MODE_OVERRIDE</p></td>
+<td><p>In this mode, a fixed
+user-supplied voltage
+(::zet_oc_config_t.voltageTarget +
+::zet_oc_config_t.voltageOffset)
+is applied at all times,
+independent of the frequency
+request. This is not efficient but
+can improve stability by avoiding
+power-supply voltage changes as the
+frequency changes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_OC_MODE_OVERRIDE</p></td>
+<td><p>In this mode, a fixed
+user-supplied voltage is applied
+at all times, independent of the
+frequency request. This is not
+efficient but can improve
+stability by avoiding
+power-supply voltage changes as
+the frequency changes. Generally,
+this mode is used in conjunction
+with a fixed frequency.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following functions are provided to handle overclocking:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 54%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcGetCapabilities()</p></td>
+<td><p>Determine the overclock
+capabilities of the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyOcGetConfig()</p></td>
+<td><p>Get the overclock configuration
+in effect.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcSetConfig()</p></td>
+<td><p>Set a new overclock
+configuration.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyOcGetIccMax()</p></td>
+<td><p>Get the maximum current limit in
+effect.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcSetIccMax()</p></td>
+<td><p>Set a new maximum current limit.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyOcGetTjMax()</p></td>
+<td><p>Get the maximum temperature limit
+in effect.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcSetTjMax()</p></td>
+<td><p>Set a new maximum temperature
+limit.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Overclocking can be turned off by calling
+::zetSysmanFrequencyOcSetConfig() with mode ::ZET_OC_MODE_OFF and by
+calling zetSysmanFrequencyOcGetIccMax() and ::zetSysmanFrequencyOcSetTjMax() with values of 0.0.</p>
+</div>
+</div>
+<div class="section" id="operations-on-engine-groups">
+<span id="engines"></span><h2>Operations on engine groups<a class="headerlink" href="#operations-on-engine-groups" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to monitor the activity of one or engines combined into
+an <strong>engine group</strong>. A device can have multiple engine groups and the
+possible types are defined in ::zet_engine_group_t. The current engine
+groups supported are global activity across all engines, activity across
+all compute accelerators, activity across all media accelerators and
+activity across all copy engines.</p>
+<p>By taking two snapshots of the activity counters, it is possible to
+calculate the average utilization of different parts of the device.</p>
+<p>The following functions are provided:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanEngineGet()</p></td>
+<td><p>Enumerate the engine groups that
+can be queried.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEngineGetProperties()</p></td>
+<td><p>Get the properties of an engine
+group. This will return the type
+of engine group (one of
+::zet_engine_group_t) and on
+which sub-device the group is
+making measurements.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanEngineGetActivity()</p></td>
+<td><p>Returns the activity counters for
+an engine group.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-standby-domains">
+<h2>Operations on standby domains<a class="headerlink" href="#operations-on-standby-domains" title="Permalink to this headline">¶</a></h2>
+<p>When a device is idle, it will enter a low-power state. Since exit from
+low-power states have associated latency, it can hurt performance. The
+hardware attempts to stike a balance between saving power when there are
+large idle times between workload submissions to the device and keeping
+the device awake when it determines that the idle time between submissions
+is short.</p>
+<p>A device can consist of one or more standby domains - the list of
+domains is given by ::zet_standby_type_t.</p>
+<p>The following functions can be used to control how the hardware promotes
+to standby states:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanStandbyGet()</p></td>
+<td><p>Enumerate the standby domains.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanStandbyGetProperties()</p></td>
+<td><p>Get the properties of a standby
+domain. This will return the
+parts of the device that are
+affected by this domain (one of
+::zet_engine_group_t) and on
+which sub-device the domain is
+located.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanStandbyGetMode()</p></td>
+<td><p>Get the current promotion mode
+(one of
+::zet_standby_promo_mode_t) for a
+standby domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanStandbySetMode()</p></td>
+<td><p>Set the promotion mode (one of
+::zet_standby_promo_mode_t) for a
+standby domain.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-firmwares">
+<span id="firmware"></span><h2>Operations on firmwares<a class="headerlink" href="#operations-on-firmwares" title="Permalink to this headline">¶</a></h2>
+<p>The following functions are provided to manage firmwares on the device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanFirmwareGet()</p></td>
+<td><p>Enumerate all firmwares that can
+be managed on the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFirmwareGetProperties()</p></td>
+<td><p>Find out the name and version of
+a firmware.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFirmwareGetChecksum()</p></td>
+<td><p>Get the checksum for an installed
+firmware.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFirmwareFlash()</p></td>
+<td><p>Flash a new firmware image.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="querying-memory-modules">
+<span id="memory"></span><h2>Querying memory modules<a class="headerlink" href="#querying-memory-modules" title="Permalink to this headline">¶</a></h2>
+<p>The API provides an enumeration of all device memory modules. For each
+memory module, the current and maximum bandwidth can be queried. The API
+also provides a health metric which can take one of the following values
+(::zet_mem_health_t):</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Memory health</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_MEM_HEALTH_OK</p></td>
+<td><p>All memory channels are healthy.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_MEM_HEALTH_DEGRADED</p></td>
+<td><p>Excessive correctable errors have
+been detected on one or more
+channels. Device should be reset.</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_MEM_HEALTH_CRITICAL</p></td>
+<td><p>Operating with reduced memory to
+cover banks with too many
+uncorrectable errors.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_MEM_HEALTH_REPLACE</p></td>
+<td><p>Device should be replaced due to
+excessive uncorrectable errors.</p></td>
+</tr>
+</tbody>
+</table>
+<p>When the health state of a memory module changes, the event
+::ZET_SYSMAN_EVENT_TYPE_MEM_HEALTH is triggered.</p>
+<p>The following functions provide access to information about the device
+memory modules:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanMemoryGet()</p></td>
+<td><p>Enumerate the memory modules.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanMemoryGetProperties()</p></td>
+<td><p>Find out the type of memory and
+maximum physical memory of a
+module.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanMemoryGetBandwidth()</p></td>
+<td><p>Returns memory bandwidth counters
+for a module.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanMemoryGetState()</p></td>
+<td><p>Returns the currently health and
+allocated memory size for a
+module.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-fabric-ports">
+<span id="fabric-port"></span><h2>Operations on Fabric ports<a class="headerlink" href="#operations-on-fabric-ports" title="Permalink to this headline">¶</a></h2>
+<p><strong>Fabric</strong> is the term given to describe high-speed interconnections
+between accelerator devices, primarily used to provide low latency fast
+access to remote device memory. Devices have one or more <strong>fabric
+ports</strong> that transmit and receive data over physical links. Links
+connect fabric ports, thus permitting data to travel between devices.
+Routing rules determine the flow of traffic through the fabric.</p>
+<p>The figure below shows four devices, each with two fabric ports. Each
+port has a link that connects it to a port on another device. In this
+example, the devices are connected in a ring. Device A and D can access
+each other’s memory through either device B or device C depending on how
+the fabric routing rules are configured. If the connection between
+device B and D goes down, the routing rules can be modified such that
+device B and D can still access each other’s memory by going through two
+hops in the fabric (device A and C).</p>
+<img alt="../_images/tools_sysman_fabric.png" src="../_images/tools_sysman_fabric.png" />
+<p>The API permits enumerating all the ports available on a device. Each
+port has a universal unique identifier (UUID). If the port is connected
+to another port, the API will provide the remote port’s UUID. By
+enumerating all ports on all devices that are connected to the fabric,
+an application can build a topology map of connectivity.</p>
+<p>For each port, the API permits querying its configuration (UP/DOWN) and
+its health which can take one of the following values:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Fabric port health</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_FABRIC_PORT_STATUS_GREEN</p></td>
+<td><p>The port is up and operating as
+expected.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_FABRIC_PORT_STATUS_YELLOW</p></td>
+<td><p>The port is up but has quality
+and/or bandwidth degradation.</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_FABRIC_PORT_STATUS_RED</p></td>
+<td><p>Port connection instabilities are
+preventing workloads making
+forward progress.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_FABRIC_PORT_STATUS_BLACK</p></td>
+<td><p>The port is configured down.</p></td>
+</tr>
+</tbody>
+</table>
+<p>If the port is in a yellow state, the API provides additional
+information about the types of quality degradation that are being
+observed. If the port is in a red state, the API provides additional
+information about the causes of the instability.</p>
+<p>When a port’s health state changes, the event
+::ZET_SYSMAN_EVENT_TYPE_FABRIC_PORT_HEALTH is triggered.</p>
+<p>The API permits measuring the receive and transmit bandwidth flowing
+through each port. It also provides the maximum receive and transmit
+speed (frequency/number of lanes) of each port and the current speeds
+which can be lower if operating in a degraded state. Note that a port’s
+receive and transmit speeds are not necessarily the same.</p>
+<p>Since ports can pass data directly through to another port, the measured
+bandwidth at a port can be higher than the actual bandwidth generated by
+the accelerators directly connected by two ports. As such, bandwidth
+metrics at each port are more relevant for determining points of
+congestion in the fabric and less relevant for measuring the total
+bandwidth passing between two accelerators.</p>
+<p>The following functions can be used to manage Fabric ports:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanFabricPortGet()</p></td>
+<td><p>Enumerate all fabric ports on the
+device.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFabricPortGetProperties()</p></td>
+<td><p>Get static properties about the
+port (model, UUID, max
+receive/transmit speed).</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortGetLinkType()</p></td>
+<td><p>Get details about the physical
+link connected to the port.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFabricPortGetConfig()</p></td>
+<td><p>Determine if the port is
+configured UP and if beaconing is
+on or off.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortSetConfig()</p></td>
+<td><p>Configure the port UP or DOWN and
+turn beaconing on or off.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFabricPortGetState()</p></td>
+<td><p>Determine the health of the port
+connection, reasons for link
+degradation or connection issues
+and the current receive/transmit
+speed.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortGetThroughput()</p></td>
+<td><p>Get port receive/transmit
+counters along with current
+receive/transmit port speed.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For devices with sub-devices, the fabric ports are usually located in
+the sub-device. Given a device handle, ::zetSysmanFabricPortGet() will
+include the ports on each sub-device. In this case,
+::zet_fabric_port_properties_t.onSubdevice will be set to true and
+::zet_fabric_port_properties_t.subdeviceId will give the subdevice ID
+where that port is located.</p>
+<p>The pseudo-code below shows how to get the state of all fabric ports in
+the device and sub-devices:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="nf">ShowFabricPorts</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+    <span class="kt">uint32_t</span> <span class="n">numPorts</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">zetSysmanFabricPortGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numPorts</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">))</span>
+        <span class="n">zet_sysman_fabric_port_handle_t</span><span class="o">*</span> <span class="n">phPorts</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numPorts</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_fabric_port_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFabricPortGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numPorts</span><span class="p">,</span> <span class="n">phPorts</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numPorts</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="cp"># Show information about a particular port</span>
+                <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Port %u:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+                <span class="n">call_function</span> <span class="n">ShowFabricPortInfo</span><span class="p">(</span><span class="n">phPorts</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+
+<span class="n">function</span> <span class="n">ShowFabricPortInfo</span><span class="p">(</span><span class="n">zet_sysman_fabric_port_handle_t</span> <span class="n">hPort</span><span class="p">)</span>
+    <span class="n">zet_fabric_port_properties_t</span> <span class="n">props</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFabricPortGetProperties</span><span class="p">(</span><span class="n">hPort</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">props</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">zet_fabric_port_state_t</span> <span class="n">state</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFabricPortGetState</span><span class="p">(</span><span class="n">hPort</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">state</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="n">zet_fabric_link_type_t</span> <span class="n">link</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFabricPortGetLinkType</span><span class="p">(</span><span class="n">hPort</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">link</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                <span class="n">zet_fabric_port_config_t</span> <span class="n">config</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFabricPortGetConfig</span><span class="p">(</span><span class="n">hPort</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">config</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Model:                 %s&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">model</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">props</span><span class="p">.</span><span class="n">onSubdevice</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;        On sub-device:         %u&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">subdeviceId</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">enabled</span><span class="p">)</span>
+                    <span class="p">{</span>
+                        <span class="n">var</span> <span class="n">status</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Config:                UP&quot;</span><span class="p">)</span>
+                        <span class="k">switch</span> <span class="p">(</span><span class="n">state</span><span class="p">.</span><span class="n">status</span><span class="p">)</span>
+                            <span class="k">case</span> <span class="nl">ZET_FABRIC_PORT_STATUS_GREEN</span><span class="p">:</span>
+                                <span class="n">status</span> <span class="o">=</span> <span class="s">&quot;GREEN - The port is up and operating as expected&quot;</span>
+                            <span class="k">case</span> <span class="nl">ZET_FABRIC_PORT_STATUS_YELLOW</span><span class="p">:</span>
+                                <span class="n">status</span> <span class="o">=</span> <span class="s">&quot;YELLOW - The port is up but has quality and/or bandwidth degradation&quot;</span>
+                            <span class="k">case</span> <span class="nl">ZET_FABRIC_PORT_STATUS_RED</span><span class="p">:</span>
+                                <span class="n">status</span> <span class="o">=</span> <span class="s">&quot;RED - Port connection instabilities&quot;</span>
+                            <span class="k">case</span> <span class="nl">ZET_FABRIC_PORT_STATUS_BLACK</span><span class="p">:</span>
+                                <span class="n">status</span> <span class="o">=</span> <span class="s">&quot;BLACK - The port is configured down&quot;</span>
+                            <span class="k">default</span><span class="o">:</span>
+                                <span class="n">status</span> <span class="o">=</span> <span class="s">&quot;UNKNOWN&quot;</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Status:                %s&quot;</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Link type:             %s&quot;</span><span class="p">,</span> <span class="n">link</span><span class="p">.</span><span class="n">desc</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span>
+                            <span class="s">&quot;        Max speed (rx/tx):     %llu/%llu bytes/sec&quot;</span><span class="p">,</span>
+                            <span class="n">props</span><span class="p">.</span><span class="n">maxRxSpeed</span><span class="p">.</span><span class="n">maxBandwidth</span><span class="p">,</span>
+                            <span class="n">props</span><span class="p">.</span><span class="n">maxTxSpeed</span><span class="p">.</span><span class="n">maxBandwidth</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span>
+                            <span class="s">&quot;        Current speed (rx/tx): %llu/%llu bytes/sec&quot;</span><span class="p">,</span>
+                            <span class="n">state</span><span class="p">.</span><span class="n">rxSpeed</span><span class="p">.</span><span class="n">maxBandwidth</span><span class="p">,</span>
+                            <span class="n">state</span><span class="p">.</span><span class="n">txSpeed</span><span class="p">.</span><span class="n">maxBandwidth</span><span class="p">)</span>
+                    <span class="k">else</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Config:                DOWN&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="querying-temperature">
+<span id="temperature"></span><h2>Querying temperature<a class="headerlink" href="#querying-temperature" title="Permalink to this headline">¶</a></h2>
+<p>A device has multiple temperature sensors embedded at different
+locations. The following locations are supported:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Temperature sensor location</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_TEMP_SENSORS_GLOBAL</p></td>
+<td><p>Returns the maximum measured
+across all sensors in the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_TEMP_SENSORS_GPU</p></td>
+<td><p>Returns the maximum measured
+across all sensors in the GPU
+accelerator.</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_TEMP_SENSORS_MEMORY</p></td>
+<td><p>Returns the maximum measured
+across all sensors in the device
+memory.</p></td>
+</tr>
+</tbody>
+</table>
+<p>For some sensors, it is possible to request that events be triggered
+when temperatures cross thresholds. This is accomplished using the
+function ::zetSysmanTemperatureGetConfig() and
+::zetSysmanTemperatureSetConfig(). Support for specific events is
+accomplished by calling ::zetSysmanTemperatureGetProperties(). In
+general, temperature events are only supported on the temperature sensor
+of type ::ZET_TEMP_SENSORS_GLOBAL. The list below describes the list of
+temperature events:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 26%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Check support</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL</p></td>
+<td><p>::zet_temp_properties
+_t.isCriticalTempSupp
+orted</p></td>
+<td><p>The event is
+triggered when the
+temperature crosses
+into the critical
+zone where severe
+frequency throttling
+will be taking place.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1</p></td>
+<td><p>::zet_temp_properties
+_t.isThreshold1Suppor
+ted</p></td>
+<td><p>The event is
+triggered when the
+temperature crosses
+the custom threshold
+1. Flags can be set
+to limit the trigger
+to when crossing from
+high to low or low to
+high.</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD2
+PE_TEMP_THRESHOLD2</p></td>
+<td><p>::zet_temp_properties
+_t.isThreshold2Suppor
+ted</p></td>
+<td><p>The event is
+triggered when the
+temperature crosses
+the custom threshold
+2. Flags can be set
+to limit the trigger
+to when crossing from
+high to low or low to
+high.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following function can be used to manage temperature sensors:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanTemperatureGet()</p></td>
+<td><p>Enumerate the temperature sensors
+on the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanTemperatureGetProperties()</p></td>
+<td><p>Get static properties for a
+temperature sensor. In
+particular, this will indicate
+which parts of the device the
+sensor measures (one of
+::zet_temp_sensors_t).</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanTemperatureGetConfig()</p></td>
+<td><p>Get information about the current
+temperature thresholds -
+enabled/threshold/processID.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanTemperatureSetConfig()</p></td>
+<td><p>Set new temperature thresholds.
+Events will be triggered when the
+temperature crosses these
+thresholds.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanTemperatureGetState()</p></td>
+<td><p>Read the temperature of a sensor.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-power-supplies">
+<span id="psu"></span><h2>Operations on power supplies<a class="headerlink" href="#operations-on-power-supplies" title="Permalink to this headline">¶</a></h2>
+<p>The following functions can be used to access information about each
+power-supply on a device:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanPsuGet()</p></td>
+<td><p>Enumerate the power supplies on
+the device that can be managed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPsuGetProperties()</p></td>
+<td><p>Get static details about the
+power supply.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPsuGetState()</p></td>
+<td><p>Get information about the health
+(temperature, current, fan) of
+the power supply.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations-on-fans">
+<span id="fan"></span><h2>Operations on fans<a class="headerlink" href="#operations-on-fans" title="Permalink to this headline">¶</a></h2>
+<p>If ::zetSysmanFanGet() returns one or more fan handles, it is possible to
+manage their speed. The hardware can be instructed to run the fan at a fixed
+speed (or 0 for silent operations) or to provide a table of temperature-speed
+points in which case the hardware will dynamically change the fan speed based
+on the current temperature of the chip. This configuration information is
+described in the structure ::zet_fan_config_t. When specifying speed, one
+can provide the value in revolutions per minute (::ZET_FAN_SPEED_UNITS_RPM)
+or as a percentage of the maximum RPM (::ZET_FAN_SPEED_UNITS_PERCENT).</p>
+<p>The following functions are available:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanFanGet()</p></td>
+<td><p>Enumerate the fans on the device.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFanGetProperties()</p></td>
+<td><p>Get the maximum RPM of the fan
+and the maximum number of points
+that can be specified in the
+temperature-speed table for a
+fan.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFanGetConfig()</p></td>
+<td><p>Get the current configuration
+(speed) of a fan.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFanSetConfig()</p></td>
+<td><p>Change the configuration (speed)
+of a fan.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFanGetState()</p></td>
+<td><p>Get the current speed of a fan.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to output the fan speed of all fans:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">ShowFans</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+    <span class="kt">uint32_t</span> <span class="n">numFans</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFanGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFans</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">zet_sysman_fan_handle_t</span><span class="o">*</span> <span class="n">phFans</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numFans</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_fan_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFanGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFans</span><span class="p">,</span> <span class="n">phFans</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Fans&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">fanIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numFans</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="kt">uint32_t</span> <span class="n">speed</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFanGetState</span><span class="p">(</span><span class="n">phFans</span><span class="p">[</span><span class="n">fanIndex</span><span class="p">],</span> <span class="n">ZET_FAN_SPEED_UNITS_RPM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">speed</span><span class="p">)</span>
+                    <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Fan %u: %u RPM&quot;</span><span class="p">,</span> <span class="n">fanIndex</span><span class="p">,</span> <span class="n">speed</span><span class="p">)</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The next example shows how to set the fan speed for all fans to a fixed
+value in RPM, but only if control is permitted:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="nf">SetFanSpeed</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">,</span> <span class="kt">uint32_t</span> <span class="n">SpeedRpm</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">numFans</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFanGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFans</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+        <span class="n">zet_sysman_fan_handle_t</span><span class="o">*</span> <span class="n">phFans</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numFans</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_fan_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFanGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numFans</span><span class="p">,</span> <span class="n">phFans</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="n">zet_fan_config_t</span> <span class="n">config</span>
+            <span class="n">config</span><span class="p">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">ZET_FAN_SPEED_MODE_FIXED</span>
+            <span class="n">config</span><span class="p">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">SpeedRpm</span>
+            <span class="n">config</span><span class="p">.</span><span class="n">speedUnits</span> <span class="o">=</span> <span class="n">ZET_FAN_SPEED_UNITS_RPM</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">fanIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numFans</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">zet_fan_properties_t</span> <span class="n">fanprops</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanFanGetProperties</span><span class="p">(</span><span class="n">phFans</span><span class="p">[</span><span class="n">fanIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">fanprops</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">fanprops</span><span class="p">.</span><span class="n">canControl</span><span class="p">)</span>
+                        <span class="n">zetSysmanFanSetConfig</span><span class="p">(</span><span class="n">phFans</span><span class="p">[</span><span class="n">fanIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">config</span><span class="p">)</span>
+                    <span class="k">else</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;ERROR: Can&#39;t control fan %u.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">fanIndex</span><span class="p">)</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="operations-on-leds">
+<span id="led"></span><h2>Operations on LEDs<a class="headerlink" href="#operations-on-leds" title="Permalink to this headline">¶</a></h2>
+<p>If ::zetSysmanLedGet() returns one or more LED handles, it is possible
+to manage LEDs on the device. This includes turning them off/on and
+where the capability exists, changing their color in real-time.</p>
+<p>The following functions are available:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanLedGet()</p></td>
+<td><p>Enumerate the LEDs on the device
+that can be managed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanLedGetProperties()</p></td>
+<td><p>Find out if a LED supports color
+changes.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanLedGetState()</p></td>
+<td><p>Find out if a LED is currently
+off/on and the color where the
+capability is available.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanLedSetState()</p></td>
+<td><p>Turn a LED off/on and set the
+color where the capability is
+available.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="querying-ras-errors">
+<span id="ras"></span><h2>Querying RAS errors<a class="headerlink" href="#querying-ras-errors" title="Permalink to this headline">¶</a></h2>
+<p>RAS stands for Reliability, Availability and Serviceability. It is a
+feature of certain devices that attempts to correct random bit errors
+and provide redundancy where permanent damage has occurred.</p>
+<p>If a device supports RAS, it maintains counters for hardware and software
+errors. There are two types of errors and they are defined in ::zet_ras_error_type_t:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_RAS_ERROR_TYPE_UNCORRECTABLE</p></td>
+<td><p>Hardware errors occurred which
+most likely resulted in loss of
+data or even a device hang. If an
+error results in device lockup, a
+warm boot is required before
+those errors will be reported.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_RAS_ERROR_TYPE_CORRECTABLE</p></td>
+<td><p>These are errors that were
+corrected by the hardware and did
+not cause data corruption.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Software can use the function ::zetSysmanRasGetProperties() to find out
+if the device supports RAS and if it is enabled. This information is
+returned in the structure ::zet_ras_properties_t.</p>
+<p>The function ::zetSysmanRasGet() enumerates the available sets of RAS
+errors. If no handles are returned, the device does not support RAS. A
+device without sub-devices will return one handle if RAS is supported. A
+device with sub-devices will return a handle for each sub-device.</p>
+<p>To determine if errors have occurred, software uses the function
+::zetSysmanRasGetState(). This will return the total number of errors of
+a given type (correctable/uncorrectable) that have occurred.</p>
+<p>When calling ::zetSysmanRasGetState(), software can request that the
+error counters be cleared. When this is done, all counters of the
+specified type (correctable/uncorrectable) will be set to zero and any
+subsequent calls to this function will only show new errors that have
+occurred. If software intends to clear errors, it should be the only
+application doing so and it should store the counters in an appropriate
+database for historical analysis.</p>
+<p>When calling ::zetSysmanRasGetState(), an optional pointer to a
+structure of type ::zet_ras_details_t can be supplied. This will give a
+breakdown of the main device components where the errors occurred. The
+categories are defined in the structure ::zet_ras_details_t. The meaning
+of each category depends on the error type (correctable, uncorrectable).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 37%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Error category</p></th>
+<th class="head"><p>::ZET_RAS_ERROR_TYPE_CORRECTABLE</p></th>
+<th class="head"><p>::ZET_RAS_ERROR_TYPE_UNCORRECTABLE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zet_ras_details_t.n
+umResets</p></td>
+<td><p>Always zero.</p></td>
+<td><p>Number of device resets that have
+taken place.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zet_ras_details_t.n
+umProgrammingErrors</p></td>
+<td><p>Always zero.</p></td>
+<td><p>Number of hardware
+exceptions generated
+by the way workloads
+have programmed the
+hardware.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zet_ras_details_t.n
+umDriverErrors</p></td>
+<td><p>Always zero.</p></td>
+<td><p>Number of low level
+driver communication
+errors have occurred.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zet_ras_details_t.n
+umComputeErrors</p></td>
+<td><p>Number of errors that
+have occurred in the
+accelerator hardware
+that were corrected.</p></td>
+<td><p>Number of errors that
+have occurred in the
+accelerator hardware
+that were not
+corrected. These
+would have caused the
+hardware to hang and
+the driver to reset.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zet_ras_details_t.n
+umNonComputeErrors</p></td>
+<td><p>Number of errors
+occurring in
+fixed-function
+accelerator hardware
+that were corrected.</p></td>
+<td><p>Number of errors
+occurring in the
+fixed-function
+accelerator hardware
+there could not be
+corrected. Typically
+these will result in
+a PCI bus reset and
+driver reset.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zet_ras_details_t.n
+umCacheErrors</p></td>
+<td><p>Number of ECC
+correctable errors
+that have occurred in
+the on-chip caches
+(caches/register
+file/shared local
+memory).</p></td>
+<td><p>Number of ECC
+uncorrectable errors
+that have occurred in
+the on-chip caches
+(caches/register
+file/shared local
+memory). These would
+have caused the
+hardware to hang and
+the driver to reset.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zet_ras_details_t.n
+umMemoryErrors</p></td>
+<td><p>Number of times the
+device memory has
+transitioned from a
+healthy state to a
+degraded state.
+Degraded state occurs
+when the number of
+correctable errors
+cross a threshold.</p></td>
+<td><p>Number of times the
+device memory has
+transitioned from a
+healthy/degraded
+state to a
+critical/replace
+state.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zet_ras_details_t.n
+umPciErrors:</p></td>
+<td><p>controllerNumber of
+PCI packet replays
+that have occurred.</p></td>
+<td><p>Number of PCI bus
+resets.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zet_ras_details_t.n
+umFabricErrors</p></td>
+<td><p>Number of times one
+or more ports have
+transitioned from a
+green status to a
+yellow status. This
+indicates that links
+are experiencing
+quality degradation.</p></td>
+<td><p>Number of times one
+or more ports have
+transitioned from a
+green/yellow status
+to a red status. This
+indicates that links
+are experiencing
+connectivity
+statibility issues.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zet_ras_details_t.n
+umDisplayErrors</p></td>
+<td><p>Number of ECC
+correctable errors
+that have occurred in
+the display.</p></td>
+<td><p>Number of ECC
+uncorrectable errors
+that have occurred in
+the display.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Each RAS error type can trigger events when the error counters exceed
+thresholds. The events are listed in the table below. Software can use
+the functions ::zetSysmanRasGetConfig() and ::zetSysmanRasSetConfig() to
+get and set the thresholds for each error type. The default is for all
+thresholds to be 0 which means that no events are generated. Thresholds
+can be set on the total RAS error counter or on each of the detailed
+error counters.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>RAS error Type</p></th>
+<th class="head"><p>Event</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_RAS_ERROR_TYPE_UNCORRECTABL
+E</p></td>
+<td><p>::ZET_SYSMAN_EVENT_TYPE_RAS_UNCOR
+RECTABLE_ERRORS</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_RAS_ERROR_TYPE_CORRECTABLE</p></td>
+<td><p>::ZET_SYSMAN_EVENT_TYPE_RAS_CORRE
+CTABLE_ERRORS</p></td>
+</tr>
+</tbody>
+</table>
+<p>The table below summaries all the RAS management functions:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanRasGet()</p></td>
+<td><p>Get handles to the available RAS
+error groups.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanRasGetProperties()</p></td>
+<td><p>Get properties about a RAS error
+group - type of RAS errors and if
+they are enabled.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanRasGetConfig()</p></td>
+<td><p>Get the current list of
+thresholds for each counter in
+the RAS group. RAS error events
+will be generated when the
+thresholds are exceeded.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanRasSetConfig()</p></td>
+<td><p>Set current list of thresholds
+for each counter in the RAS
+group. RAS error events will be
+generated when the thresholds are
+exceeded.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanRasGetState()</p></td>
+<td><p>Get the current state of the RAS
+error counters. The counters can
+also be cleared.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to determine if RAS is supported and the
+current state of RAS errors:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">ShowRasErrors</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+    <span class="kt">uint32_t</span> <span class="n">numRasErrorSets</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">zetSysmanRasGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numRasErrorSets</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">))</span>
+        <span class="n">zet_sysman_ras_handle_t</span><span class="o">*</span> <span class="n">phRasErrorSets</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numRasErrorSets</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_ras_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanRasGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numRasErrorSets</span><span class="p">,</span> <span class="n">phRasErrorSets</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">rasIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numRasErrorSets</span><span class="p">)</span>
+                <span class="n">zet_ras_properties_t</span> <span class="n">props</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanRasGetProperties</span><span class="p">(</span><span class="n">phRasErrorSets</span><span class="p">[</span><span class="n">rasIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">props</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="n">var</span> <span class="n">pErrorType</span>
+                    <span class="k">switch</span> <span class="p">(</span><span class="n">props</span><span class="p">.</span><span class="n">type</span><span class="p">)</span>
+                        <span class="k">case</span> <span class="nl">ZET_RAS_ERROR_TYPE_CORRECTABLE</span><span class="p">:</span>
+                            <span class="n">pErrorType</span> <span class="o">=</span> <span class="s">&quot;Correctable&quot;</span>
+                        <span class="k">case</span> <span class="nl">ZET_RAS_ERROR_TYPE_UNCORRECTABLE</span><span class="p">:</span>
+                            <span class="n">pErrorType</span> <span class="o">=</span> <span class="s">&quot;Uncorrectable&quot;</span>
+                        <span class="k">default</span><span class="o">:</span>
+                            <span class="n">pErrorType</span> <span class="o">=</span> <span class="s">&quot;Unknown&quot;</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;RAS %s errors&quot;</span><span class="p">,</span> <span class="n">pErrorType</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">props</span><span class="p">.</span><span class="n">onSubdevice</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;    On sub-device: %u&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">subdeviceId</span><span class="p">)</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;    RAS supported: %s&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">supported</span> <span class="o">?</span> <span class="s">&quot;yes&quot;</span> <span class="o">:</span> <span class="s">&quot;no&quot;</span><span class="p">)</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;    RAS enabled: %s&quot;</span><span class="p">,</span> <span class="n">props</span><span class="p">.</span><span class="n">enabled</span> <span class="o">?</span> <span class="s">&quot;yes&quot;</span> <span class="o">:</span> <span class="s">&quot;no&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">props</span><span class="p">.</span><span class="n">supported</span> <span class="n">and</span> <span class="n">props</span><span class="p">.</span><span class="n">enabled</span><span class="p">)</span>
+                        <span class="kt">uint64_t</span> <span class="n">newErrors</span>
+                        <span class="n">zet_ras_details_t</span> <span class="n">errorDetails</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanRasGetState</span><span class="p">(</span><span class="n">phRasErrorSets</span><span class="p">[</span><span class="n">rasIndex</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">newErrors</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">errorDetails</span><span class="p">)</span>
+                            <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                                <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Number new errors: %llu</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="p">)</span><span class="n">newErrors</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="n">newErrors</span><span class="p">)</span>
+                                    <span class="n">call_function</span> <span class="n">OutputRasDetails</span><span class="p">(</span><span class="o">&amp;</span><span class="n">errorDetails</span><span class="p">)</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+
+<span class="n">function</span> <span class="n">OutputRasDetails</span><span class="p">(</span><span class="n">zet_ras_details_t</span><span class="o">*</span> <span class="n">pDetails</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new resets:                %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numResets</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new programming errors:    %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numProgrammingErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new driver errors:         %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numDriverErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new compute errors:        %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numComputeErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new non-compute errors:    %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numNonComputeErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new cache errors:          %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numCacheErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new memory errors:         %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numMemoryErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new PCI errors:            %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numPciErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new fabric errors:         %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numFabricErrors</span><span class="p">)</span>
+    <span class="n">output</span><span class="p">(</span><span class="s">&quot;        Number new display errors:        %llu&quot;</span><span class="p">,</span> <span class="n">pDetails</span><span class="o">-&gt;</span><span class="n">numDisplayErrors</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="performing-diagnostics">
+<span id="diagnostics"></span><h2>Performing diagnostics<a class="headerlink" href="#performing-diagnostics" title="Permalink to this headline">¶</a></h2>
+<p>Diagnostics is the process of taking a device offline and requesting
+that the hardware run self-checks and repairs. This is achieved using
+the function ::zetSysmanDiagnosticsRunTests(). On return from the
+function, software can use the diagnostics return code
+(::zet_diag_result_t) to determine the new course of action:</p>
+<ol class="arabic simple">
+<li><p>::ZET_DIAG_RESULT_NO_ERRORS - No errors found and workloads can
+resume submission to the hardware.</p></li>
+<li><p>::ZET_DIAG_RESULT_ABORT - Hardware had problems running diagnostic
+tests.</p></li>
+<li><p>::ZET_DIAG_RESULT_FAIL_CANT_REPAIR - Hardware had problems setting up
+repair. Card should be removed from the system.</p></li>
+<li><p>::ZET_DIAG_RESULT_REBOOT_FOR_REPAIR - Hardware has prepared for
+repair and requires a reboot after which time workloads can resume
+submission.</p></li>
+</ol>
+<p>The function ::zetSysmanDeviceGetRepairStatus() can be used to determine if
+the device has been repaired.</p>
+<p>There are multiple diagnostic test suites that can be run and these are
+defined in the enumerator ::zet_diag_type_t. The function
+::zetSysmanDiagnosticsGet() will enumerate each available test suite and
+the function ::zetSysmanDiagnosticsGetProperties() can be used to
+determine the type and name of each test suite
+(::zet_diag_properties_t.type and ::zet_diag_properties_t.type).</p>
+<p>Each test suite contains one or more diagnostic tests. On some systems,
+it is possible to run only a subset of the tests. Use the function
+::zetSysmanDiagnosticsGetProperties() and check that
+::zet_diag_properties_t.haveTests is true to determine if this feature
+is available. If it is, the function ::zetSysmanDiagnosticsGetTests()
+can be called to get the list of individual tests that can be run.</p>
+<p>When running diagnostics for a test suite using
+::zetSysmanDiagnosticsRunTests(), it is possible to specify the start
+and index of tests in the suite. Setting to ::ZET_DIAG_FIRST_TEST_INDEX
+and ::ZET_DIAG_LAST_TEST_INDEX will run all tests in the suite. If it is
+possible to run a subset of tests, specify the index of the start test
+and the end test - all tests that have an index in this range will be
+run.</p>
+<p>The table below summaries all the diagnostic management functions:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanDiagnosticsGet()</p></td>
+<td><p>Get handles to the available
+diagnostic test suites that can
+be run.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanDiagnosticsGetProperties()</p></td>
+<td><p>Get information about a test
+suite - type, name, location and
+if individual tests can be run.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanDiagnosticsGetTests()</p></td>
+<td><p>Get list of individual diagnostic
+tests that can be run.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanDiagnosticsRunTests()</p></td>
+<td><p>Run either all or individual
+diagnostic tests.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to discover all test suites and the
+tests in each:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="nf">ListDiagnosticTests</span><span class="p">(</span><span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">uint32_t</span> <span class="n">numTestSuites</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">zetSysmanDiagnosticsGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numTestSuites</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">))</span>
+        <span class="n">zet_sysman_diag_handle_t</span><span class="o">*</span> <span class="n">phTestSuites</span> <span class="o">=</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numTestSuites</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_diag_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanDiagnosticsGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numTestSuites</span><span class="p">,</span> <span class="n">phTestSuites</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">suiteIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numTestSuites</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="kt">uint32_t</span> <span class="n">numTests</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">zet_diag_test_t</span><span class="o">*</span> <span class="n">pTests</span>
+                <span class="n">zet_diag_properties_t</span> <span class="n">suiteProps</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanDiagnosticsGetProperties</span><span class="p">(</span><span class="n">phTestSuites</span><span class="p">[</span><span class="n">suiteIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">suiteProps</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="n">next_loop</span><span class="p">(</span><span class="n">suiteIndex</span><span class="p">)</span>
+                <span class="n">output</span><span class="p">(</span><span class="s">&quot;Diagnostic test suite %s:&quot;</span><span class="p">,</span> <span class="n">suiteProps</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">suiteProps</span><span class="p">.</span><span class="n">haveTests</span><span class="p">)</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;    There are no individual tests that can be selected.&quot;</span><span class="p">)</span>
+                    <span class="n">next_loop</span><span class="p">(</span><span class="n">suiteIndex</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanDiagnosticsGetTests</span><span class="p">(</span><span class="n">phTestSuites</span><span class="p">[</span><span class="n">suiteIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">numTests</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Problem getting list of individual tests.&quot;</span><span class="p">)</span>
+                    <span class="n">next_loop</span><span class="p">(</span><span class="n">suiteIndex</span><span class="p">)</span>
+                <span class="n">pTests</span> <span class="o">=</span> <span class="n">allocate_memory</span><span class="p">(</span><span class="n">numTests</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_diag_test_t</span><span class="o">*</span><span class="p">))</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanDiagnosticsGetTests</span><span class="p">(</span><span class="n">phTestSuites</span><span class="p">[</span><span class="n">suiteIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">numTests</span><span class="p">,</span> <span class="n">pTests</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Problem getting list of individual tests.&quot;</span><span class="p">)</span>
+                    <span class="n">next_loop</span><span class="p">(</span><span class="n">suiteIndex</span><span class="p">)</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numTests</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">output</span><span class="p">(</span><span class="s">&quot;    Test %u: %s&quot;</span><span class="p">,</span> <span class="n">pTests</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">index</span><span class="p">,</span> <span class="n">pTests</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">free_memory</span><span class="p">(...)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="events-2">
+<span id="id1"></span><h2>Events<a class="headerlink" href="#events-2" title="Permalink to this headline">¶</a></h2>
+<p>Events are a way to determine if changes have occurred on a device
+e.g. new RAS errors. An application registers the events that it wishes
+to receive notification about and then it queries to receive
+notifications. The query can request a blocking wait - this will put the
+calling application thread to sleep until new notifications are
+received.</p>
+<p>For every device on which the application wants to receive events, it
+should perform the following actions:</p>
+<ol class="arabic simple">
+<li><p>Use ::zetSysmanEventGet() to get an event handler from the Sysman
+handle for the device.</p></li>
+<li><p>Use ::zetSysmanEventSetConfig() to indicate which events it wasnts to
+listen to.</p></li>
+<li><p>For each event, call the appropriate function to set conditions that
+will trigger the event.</p></li>
+</ol>
+<p>Finally, the application calls ::zetSysmanEventListen() with a list of
+event handles that it wishes to listen for events on. A wait timeout is
+used to request non-blocking operations (timeout =
+::ZET_EVENT_WAIT_NONE) or blocking operations (timeout =
+::ZET_EVENT_WAIT_INFINITE) or to return after a specified amount of time
+even if no events have been received.</p>
+<p>Once events have occurred, the application can call
+::zetSysmanEventGetState() to determine the list of events that have
+been received for each event handle. If events have been received, the
+application can use the function relevant to the event to determine the
+actual state.</p>
+<p>The list of events is given in the table below. For each event, the
+corresponding configuration and state functions are shown. Where a
+configuration function is not shown, the event is generated
+automatically; where a configuration function is shown, it must be
+called to enable the event and/or provide threshold conditions.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Event</p></th>
+<th class="head"><p>Trigger</p></th>
+<th class="head"><p>Configuration
+function</p></th>
+<th class="head"><p>State function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_DEVICE
+_RESET</p></td>
+<td><p>Device is about
+to be reset by
+the driver</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_DEVICE
+_SLEEP_STATE_EN
+TER</p></td>
+<td><p>Device is about
+to enter a deep
+sleep state</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_DEVICE
+_SLEEP_STATE_EX
+IT</p></td>
+<td><p>Device is
+exiting a deep
+sleep state</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_FREQ_T
+HROTTLED</p></td>
+<td><p>Frequency
+starts being
+throttled</p></td>
+<td></td>
+<td><p>::zetSysmanFreq
+uencyGetState()</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_ENERGY
+_THRESHOLD_CROS
+SED</p></td>
+<td><p>Energy
+consumption
+threshold is
+reached</p></td>
+<td><p>::zetSysmanPowe
+rSetEnergyThres
+hold()</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_TEMP_C
+RITICAL</p></td>
+<td><p>Critical
+temperature is
+reached</p></td>
+<td><p>::zetSysmanTemp
+eratureSetConfi
+g()</p></td>
+<td><p>::zetSysmanTemp
+eratureGetState
+()</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_TEMP_T
+HRESHOLD1</p></td>
+<td><p>Temperature
+crosses
+threshold 1</p></td>
+<td><p>::zetSysmanTemp
+eratureSetConfi
+g()</p></td>
+<td><p>::zetSysmanTemp
+eratureGetState
+()</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_TEMP_T
+HRESHOLD2</p></td>
+<td><p>Temperature
+crosses
+threshold 2</p></td>
+<td><p>::zetSysmanTemp
+eratureSetConfi
+g()</p></td>
+<td><p>::zetSysmanTemp
+eratureGetState
+()</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_MEM_HE
+ALTH</p></td>
+<td><p>Health of
+device memory
+changes</p></td>
+<td></td>
+<td><p>::zetSysmanMemo
+ryGetState()</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_FABRIC
+_PORT_HEALTH</p></td>
+<td><p>Health of
+fabric ports
+change</p></td>
+<td></td>
+<td><p>::zetSysmanFabr
+icPortGetState(
+)</p></td>
+</tr>
+<tr class="row-even"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_RAS_CO
+RRECTABLE_ERROR
+S</p></td>
+<td><p>RAS correctable
+errors cross
+thresholds</p></td>
+<td><p>::zetSysmanRasS
+etConfig()</p></td>
+<td><p>::zetSysmanRasG
+etState()</p></td>
+</tr>
+<tr class="row-odd"><td><p>::ZET_SYSMAN_EV
+ENT_TYPE_RAS_UN
+CORRECTABLE_ERR
+ORS</p></td>
+<td><p>RAS
+uncorrectable
+errors cross
+thresholds</p></td>
+<td><p>::zetSysmanRasS
+etConfig()</p></td>
+<td><p>::zetSysmanRasG
+etState()</p></td>
+</tr>
+</tbody>
+</table>
+<p>The call to ::zetSysmanEventListen() requires the driver handle. The
+list of event handles must only be for devices that have been enumerated
+from that driver, otherwise and error will be returned. If the
+application is managing devices from multiple drivers, it will need to
+call this function separately for each driver.</p>
+<p>The table below summaries all the event management functions:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanEventGet()</p></td>
+<td><p>Get the event handle for a
+specific Sysman device.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEventGetConfig()</p></td>
+<td><p>Get the current list of events
+for a given event handle that
+have been registered.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanEventSetConfig()</p></td>
+<td><p>Set the events that should be
+registered on a given event
+handle.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEventGetState()</p></td>
+<td><p>Get the list of events that have
+been received for a given event
+handle.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanEventListen()</p></td>
+<td><p>Wait for events to arrive for a
+given list of event handles.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The pseudo code below shows how to configure all temperature sensors to
+trigger an event when the temperature exceeds a specified threshold or
+when the critical temperature is reached.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="nf">WaitForExcessTemperatureEvent</span><span class="p">(</span><span class="n">zet_driver_handle_t</span> <span class="n">hDriver</span><span class="p">,</span> <span class="kt">double</span> <span class="n">tempLimit</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="cp"># This will contain the number of event handles (devices) that we will listen for events from</span>
+    <span class="n">var</span> <span class="n">numEventHandles</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="cp"># Get list of all devices under this driver</span>
+    <span class="kt">uint32_t</span> <span class="n">deviceCount</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">zeDeviceGet</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">nullptr</span><span class="p">)</span>
+    <span class="cp"># Allocate memory for all device handles</span>
+    <span class="n">ze_device_handle_t</span><span class="o">*</span> <span class="n">phDevices</span> <span class="o">=</span>
+        <span class="n">allocate_memory</span><span class="p">(</span><span class="n">deviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ze_device_handle_t</span><span class="p">))</span>
+    <span class="cp"># Allocate memory for the event handle for each device</span>
+    <span class="n">zet_sysman_event_handle_t</span><span class="o">*</span> <span class="n">phEvents</span> <span class="o">=</span>
+        <span class="n">allocate_memory</span><span class="p">(</span><span class="n">deviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_event_handle_t</span><span class="p">))</span>
+    <span class="cp"># Allocate memory for the event handles that we will actually listen to</span>
+    <span class="n">zet_sysman_event_handle_t</span><span class="o">*</span> <span class="n">phListenEvents</span> <span class="o">=</span>
+        <span class="n">allocate_memory</span><span class="p">(</span><span class="n">deviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_event_handle_t</span><span class="p">))</span>
+    <span class="cp"># Allocate memory so that we can map an event handle in phListenEvent to the device handle</span>
+    <span class="kt">uint32_t</span><span class="o">*</span> <span class="n">pListenDeviceIndex</span> <span class="o">=</span> <span class="n">allocate_memory</span><span class="p">(</span><span class="n">deviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">uint32_t</span><span class="p">))</span>
+
+    <span class="cp"># Get all device handles</span>
+    <span class="n">zeDeviceGet</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">deviceCount</span><span class="p">,</span> <span class="n">phDevices</span><span class="p">)</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">devIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">deviceCount</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="cp"># Get Sysman handle for the device</span>
+        <span class="n">zet_sysman_handle_t</span> <span class="n">hSysmanDevice</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanGet</span><span class="p">(</span><span class="n">phDevices</span><span class="p">[</span><span class="n">devIndex</span><span class="p">],</span> <span class="n">ZET_SYSMAN_VERSION_CURRENT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hSysmanDevice</span><span class="p">)</span>
+            <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                <span class="n">next_loop</span><span class="p">(</span><span class="n">devIndex</span><span class="p">)</span>
+
+        <span class="cp"># Get event handle for this device</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanEventGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">phEvents</span><span class="p">[</span><span class="n">devIndex</span><span class="p">])</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="n">next_loop</span><span class="p">(</span><span class="n">devIndex</span><span class="p">)</span>
+
+        <span class="cp"># Get handles to all temperature sensors</span>
+        <span class="kt">uint32_t</span> <span class="n">numTempSensors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanTemperatureGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numTempSensors</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="n">next_loop</span><span class="p">(</span><span class="n">devIndex</span><span class="p">)</span>
+        <span class="n">zet_sysman_temp_handle_t</span><span class="o">*</span> <span class="n">allTempSensors</span>
+            <span class="n">allocate_memory</span><span class="p">(</span><span class="n">deviceCount</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">zet_sysman_temp_handle_t</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanTemperatureGet</span><span class="p">(</span><span class="n">hSysmanDevice</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">numTempSensors</span><span class="p">,</span> <span class="n">allTempSensors</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+            <span class="cp"># Configure each temperature sensor to trigger a critical event and a threshold1 event</span>
+            <span class="n">var</span> <span class="n">numConfiguredTempSensors</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">tempIndex</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">numTempSensors</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanTemperatureGetConfig</span><span class="p">(</span><span class="n">allTempSensors</span><span class="p">[</span><span class="n">tempIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">config</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="n">next_loop</span><span class="p">(</span><span class="n">tempIndex</span><span class="p">)</span>
+                <span class="n">zet_temp_config_t</span> <span class="n">config</span>
+                <span class="n">config</span><span class="p">.</span><span class="n">enableCritical</span> <span class="o">=</span> <span class="nb">true</span>
+                <span class="n">config</span><span class="p">.</span><span class="n">threshold1</span><span class="p">.</span><span class="n">enableHighToLow</span> <span class="o">=</span> <span class="nb">false</span>
+                <span class="n">config</span><span class="p">.</span><span class="n">threshold1</span><span class="p">.</span><span class="n">enableLowToHigh</span> <span class="o">=</span> <span class="nb">true</span>
+                <span class="n">config</span><span class="p">.</span><span class="n">threshold1</span><span class="p">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">tempLimit</span>
+                <span class="n">config</span><span class="p">.</span><span class="n">threshold2</span><span class="p">.</span><span class="n">enableHighToLow</span> <span class="o">=</span> <span class="nb">false</span>
+                <span class="n">config</span><span class="p">.</span><span class="n">threshold2</span><span class="p">.</span><span class="n">enableLowToHigh</span> <span class="o">=</span> <span class="nb">false</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanTemperatureSetConfig</span><span class="p">(</span><span class="n">allTempSensors</span><span class="p">[</span><span class="n">tempIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">config</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                    <span class="n">numConfiguredTempSensors</span><span class="o">++</span>
+
+        <span class="cp"># If we configured any sensors to generate events, we can now register to receive on this device</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">numConfiguredTempSensors</span><span class="p">)</span>
+            <span class="n">zet_event_config_t</span> <span class="n">eventConfig</span>
+            <span class="n">eventConfig</span><span class="p">.</span><span class="n">registered</span> <span class="o">=</span>
+                <span class="n">ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL</span> <span class="o">|</span> <span class="n">ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanEventSetConfig</span><span class="p">(</span><span class="n">phEvents</span><span class="p">[</span><span class="n">devIndex</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">eventConfig</span><span class="p">)</span> <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                <span class="n">phListenEvents</span><span class="p">[</span><span class="n">numEventHandles</span><span class="p">]</span> <span class="o">=</span> <span class="n">phEvents</span><span class="p">[</span><span class="n">devIndex</span><span class="p">]</span>
+                <span class="n">pListenDeviceIndex</span><span class="p">[</span><span class="n">numEventHandles</span><span class="p">]</span> <span class="o">=</span> <span class="n">devIndex</span>
+                <span class="n">numEventHandles</span><span class="o">++</span>
+
+    <span class="cp"># If we registered to receive events on any devices, start listening now</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">numEventHandles</span><span class="p">)</span>
+        <span class="cp"># Block until we receive events</span>
+        <span class="kt">uint32_t</span> <span class="n">events</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanEventListen</span><span class="p">(</span><span class="n">hDriver</span><span class="p">,</span> <span class="n">ZET_EVENT_WAIT_INFINITE</span><span class="p">,</span> <span class="n">deviceCount</span><span class="p">,</span> <span class="n">phListenEvents</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">events</span><span class="p">)</span>
+            <span class="o">==</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">evtIndex</span> <span class="p">..</span> <span class="n">numEventHandles</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">zetSysmanEventGetState</span><span class="p">(</span><span class="n">phListenEvents</span><span class="p">[</span><span class="n">evtIndex</span><span class="p">],</span> <span class="nb">true</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">events</span><span class="p">)</span>
+                        <span class="o">!=</span> <span class="n">ZE_RESULT_SUCCESS</span><span class="p">)</span>
+                            <span class="n">next_loop</span><span class="p">(</span><span class="n">evtIndex</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">ZET_SYSMAN_EVENT_TYPE_TEMP_CRITICAL</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;Device %u: Went above the critical temperature.&quot;</span><span class="p">,</span>
+                            <span class="n">pListenDeviceIndex</span><span class="p">[</span><span class="n">evtIndex</span><span class="p">])</span>
+                    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">ZET_SYSMAN_EVENT_TYPE_TEMP_THRESHOLD1</span><span class="p">)</span>
+                        <span class="n">output</span><span class="p">(</span><span class="s">&quot;Device %u: Went above the temperature threshold %f.&quot;</span><span class="p">,</span>
+                            <span class="n">pListenDeviceIndex</span><span class="p">[</span><span class="n">evtIndex</span><span class="p">],</span> <span class="n">tempLimit</span><span class="p">)</span>
+
+    <span class="n">free_memory</span><span class="p">(...)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="security">
+<h1>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h2>
+<p>The default security provided by the accelerator driver is to permit
+querying and controlling of system resources to the UNIX user <strong>root</strong>,
+querying only for users that are members of the UNIX group <strong>root</strong> and
+no access to any other user. Some queries are permitted from any user
+(e.g requesting current frequency, checking standby state).</p>
+<p>It is the responsibility of the Linux distribution or the systems
+administrator to relax or tighten these permissions. This is typically
+done by adding udev daemon rules. For example, many distributions of
+Linux have the following rule:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">root</span>    <span class="n">video</span>   <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">dri</span><span class="o">/</span><span class="n">card0</span>
+</pre></div>
+</div>
+<p>This will permit all users in the UNIX group <strong>video</strong> to query
+information about system resources. In order to open up control access
+to users of the video group, udev rules need to be added for each
+relevant control. For example, to permit someone in the video group to
+disable standby, the following udev daemon rule would be needed:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">chmod</span> <span class="n">g</span><span class="o">+</span><span class="n">w</span> <span class="o">/</span><span class="n">sys</span><span class="o">/</span><span class="n">class</span><span class="o">/</span><span class="n">drm</span><span class="o">/</span><span class="n">card0</span><span class="o">/</span><span class="n">rc6_enable</span>
+</pre></div>
+</div>
+<p>The full list of sysfs files used by the API are described in the table
+below. For each file, the list of affected API functions is given.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 44%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>sysfs file</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Functions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>/sys/class/drm/card0/
+rc6_enable</p></td>
+<td><p>Used to
+enable/disable
+standby.</p></td>
+<td><p>::zetSysmanStandbyGet()
+::zetSysmanStandbyGetProperties()
+::zetSysmanStandbyGetMode()
+::zetSysmanStandbySetMode()</p></td>
+</tr>
+<tr class="row-odd"><td><p>TBD</p></td>
+<td><p>In development</p></td>
+<td><p>TBD</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h2>
+<p>At this time, Level0 Sysman does not support Windows.</p>
+</div>
+<div class="section" id="privileged-telemetry">
+<h2>Privileged telemetry<a class="headerlink" href="#privileged-telemetry" title="Permalink to this headline">¶</a></h2>
+<p>Certain telemetry makes a system vulnerable to side-channel attacks. By
+default, these will only be available to the administrator user on the
+system. It is up to the administrator to relax those requirements, as
+described in the preceding sections. This is the case for the following
+API calls:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanPciGetStats()</p></td>
+<td><p>Access to total PCI throughput
+and number of packets can reveal
+useful information about the
+workload</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanMemoryGetBandwidth()</p></td>
+<td><p>Access to real-time device local
+memory bandwidth can reveal
+useful information about the
+workload</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortGetThroughput()</p></td>
+<td><p>Access to real-time fabric data
+bandwidth can reveal useful
+information about the workload</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="privileged-controls">
+<h2>Privileged controls<a class="headerlink" href="#privileged-controls" title="Permalink to this headline">¶</a></h2>
+<p>Certain controls can be used in denial-of-service attacks. By default,
+these will only be available to the administrator user on the system. It
+is up to the administrator to relax those requirements, as described in
+the preceding sections. This is the case for the following API calls:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 51%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanDeviceReset()</p></td>
+<td><p>Device resets cause loss of data
+for running workloads.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFirmwareGet()</p></td>
+<td><p>All firmware operations must be
+handled with care.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFirmwareGetProperties()</p></td>
+<td><p>All firmware operations must be
+handled with care.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFirmwareGetChecksum()</p></td>
+<td><p>All firmware operations must be
+handled with care.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFirmwareFlash()</p></td>
+<td><p>All firmware operations must be
+handled with care.</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFabricPortSetConfig()</p></td>
+<td><p>Putting fabric ports offline can
+distrupt workloads, causing
+uncorrectable errors.</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanDiagnosticsRunTests()</p></td>
+<td><p>Diagnostics take a device
+offline.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="virtualization">
+<h2>Virtualization<a class="headerlink" href="#virtualization" title="Permalink to this headline">¶</a></h2>
+<p>In virtualization environments, only the host is permitted to access any
+features of the API. Attempts to use the API in virtual machines will
+fail.</p>
+</div>
+<div class="section" id="function-summary">
+<h2>Function summary<a class="headerlink" href="#function-summary" title="Permalink to this headline">¶</a></h2>
+<p>The table below summarizes the default permissions for each API
+function:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 49%" />
+<col style="width: 14%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+<col style="width: 12%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Administrator
+access</p></th>
+<th class="head"><p>Group
+access</p></th>
+<th class="head"><p>Other
+access</p></th>
+<th class="head"><p>Virtual
+machine</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>::zetSysmanDeviceGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanDeviceWasRepaired()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanSchedulerGetCurrentMode()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanSchedulerGetTimeoutModeProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanSchedulerGetTimesliceModeProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanSchedulerSetTimeoutMode()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanSchedulerSetTimesliceMode()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanSchedulerSetExclusiveMode()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanSchedulerSetComputeUnitDebugMode()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanDeviceReset()</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPciGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPciGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPciGetBars()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPciGetStats</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPowerGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPowerGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPowerGetEnergyCounter()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPowerGetEnergyThreshold()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPowerSetEnergyThreshold()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPowerGetLimits()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPowerSetLimits()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyGetAvailableClocks()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyGetRange()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencySetRange()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyGetThrottleTime()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcGetCapabilities()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyOcGetConfig()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcSetConfig()</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyOcGetIccMax()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcSetIccMax()</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFrequencyOcGetTjMax()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFrequencyOcSetTjMax()</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEngineGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanEngineGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEngineGetActivity()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanStandbyGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanStandbyGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanStandbyGetMode()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanStandbySetMode()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFirmwareGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFirmwareGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFirmwareGetChecksum()</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFirmwareFlash()</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanMemoryGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanMemoryGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanMemoryGetBandwidth()</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanMemoryGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFabricPortGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortGetLinkType()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFabricPortGetConfig()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortSetConfig()</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFabricPortGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFabricPortGetThroughput()</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanTemperatureGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanTemperatureGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanTemperatureGetConfig()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanTemperatureSetConfig()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanTemperatureGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPsuGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanPsuGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanPsuGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFanGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFanGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFanGetConfig()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanFanSetConfig()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanFanGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanLedGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanLedGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanLedGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanLedSetState()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanRasGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanRasGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanRasGetConfig()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanRasSetConfig()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanRasGetState()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEventGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanEventGetConfig()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEventSetConfig()</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanEventGetState()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanEventListen()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanDiagnosticsGet()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanDiagnosticsGetProperties()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-even"><td><p>::zetSysmanDiagnosticsGetTests()</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>read-only</p></td>
+<td><p>no-access</p></td>
+</tr>
+<tr class="row-odd"><td><p>::zetSysmanDiagnosticsRunTests()</p></td>
+<td><p>read-write</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+<td><p>no-access</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../core/SPIRV.html" class="btn btn-neutral float-right" title="Introduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="PROG.html" class="btn btn-neutral float-left" title="Initialization" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Intel
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

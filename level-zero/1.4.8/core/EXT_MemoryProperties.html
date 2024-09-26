@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Device Memory Properties Extension &mdash; Level Zero Specification  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Level Zero Specification
+          </a>
+              <div class="version">
+                1.4.8
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EXT.html">Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://spec.oneapi.io/releases/index.html#level-zero">Versions</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Level Zero Specification</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+
+
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="device-memory-properties-extension">
+<span id="ze-extension-device-memory-properties"></span><h1>Device Memory Properties Extension<a class="headerlink" href="#device-memory-properties-extension" title="Permalink to this headline"></a></h1>
+<div class="section" id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-device-memory-properties-ext-version-t"><span class="std std-ref">ze_device_memory_properties_ext_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-device-memory-ext-type-t"><span class="std std-ref">ze_device_memory_ext_type_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-device-memory-ext-properties-t"><span class="std std-ref">ze_device_memory_ext_properties_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="extended-device-memory-properties">
+<h3>Extended Device Memory Properties<a class="headerlink" href="#extended-device-memory-properties" title="Permalink to this headline"></a></h3>
+<p>Users may wish to build a cost model for computation on accelerators exposed through ‘oneAPI’ Level-Zero. Such cost models require detailed information about the properties of the accelerator such as memory bandwidth. This extension provides extended information about the memories exposed as part of a device. The extension introduces the <a class="reference internal" href="api.html#ze-device-memory-ext-properties-t"><span class="std std-ref">ze_device_memory_ext_properties_t</span></a> struct which can be passed to <a class="reference internal" href="api.html#zedevicegetmemoryproperties"><span class="std std-ref">zeDeviceGetMemoryProperties</span></a> via the <cite>pNext</cite> member of <a class="reference internal" href="api.html#ze-device-memory-properties-t"><span class="std std-ref">ze_device_memory_properties_t</span></a>.</p>
+<p>The following psuedo-code demonstrates a sequence for obtaining extended information about the memory properties of a memory module exposed as part of a device:</p>
+<pre class="literal-block">...
+// Discover memories on device
+uint32_t memCount = 0;
+<a class="reference internal" href="api.html#zedevicegetmemoryproperties"><span class="std std-ref">zeDeviceGetMemoryProperties</span></a>(hDevice, &amp;memCount, nullptr);
+
+// Allocate properties structs
+<a class="reference internal" href="api.html#ze-device-memory-properties-t"><span class="std std-ref">ze_device_memory_properties_t</span></a>* pMemProps = allocate(memCount*sizeof(<a class="reference internal" href="api.html#ze-device-memory-properties-t"><span class="std std-ref">ze_device_memory_properties_t</span></a>));
+<a class="reference internal" href="api.html#ze-device-memory-ext-properties-t"><span class="std std-ref">ze_device_memory_ext_properties_t</span></a>* pExtMemProps = allocate(memCount*sizeof(<a class="reference internal" href="api.html#ze-device-memory-ext-properties-t"><span class="std std-ref">ze_device_memory_ext_properties_t</span></a>));
+
+// Make pNext in memProps point at corresponding extMemProps
+for (uint32_t i = 0; i &lt; memCount; ++i) {
+  pMemProps[i].stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIES</span></a>;
+  pMemProps[i].pNext = &amp;pExtMemProps[i];
+  pExtMemProps[i].stype = <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_MEMORY_EXT_PROPERTIES</span></a>;
+  pExtMemProps[i].pNext = nullptr;
+}
+
+// Obtain memory &amp; extended memory properties
+<a class="reference internal" href="api.html#zedevicegetmemoryproperties"><span class="std std-ref">zeDeviceGetMemoryProperties</span></a>(hDevice, &amp;memCount, pMemProps);</pre>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
