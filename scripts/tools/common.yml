@@ -137,6 +137,14 @@ etors:
       desc: $t_metric_programmable_param_value_info_exp_t
       version: "1.9"
       value: "0x00010005"
+    - name: METRIC_GROUP_TYPE_EXP
+      desc: $t_metric_group_type_exp_t
+      version: "1.11"
+      value: "0x00010006"
+    - name: EXPORT_DMA_EXP_PROPERTIES
+      desc: $t_export_dma_buf_exp_properties_t
+      version: "1.11"
+      value: "0x00010007"
     - name: METRIC_TRACER_EXP_DESC
       desc: $t_metric_tracer_exp_desc_t
       version: "1.10"

@@ -114,6 +114,10 @@ etors:
       desc: "Metric type: ratio"
     - name: RAW
       desc: "Metric type: raw"
+    - name: EXPORT_DMA_BUF
+      desc: "Metric which exports linux dma_buf, which could be imported/mapped to the host process"
+      version: "1.11"
+      value: "0x7ffffffd"
     - name: IP_EXP
       desc:
             "1.6": "Metric type: instruction pointer"
