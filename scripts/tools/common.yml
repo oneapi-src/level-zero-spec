@@ -148,7 +148,7 @@ etors:
     - name: METRIC_TRACER_EXP_DESC
       desc: $t_metric_tracer_exp_desc_t
       version: "1.10"
-      value: "0x00010006"
+      value: "0x00010008"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
