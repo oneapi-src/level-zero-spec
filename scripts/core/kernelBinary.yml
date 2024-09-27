@@ -1,0 +1,40 @@
+#
+# Copyright (C) 2024 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for retrieving kernel binary program data."
+version: "1.11"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Get Kernel Binary Extension Name"
+version: "1.11"
+name: $X_GET_KERNEL_BINARY_EXP_NAME
+value: '"$X_extension_kernel_binary_exp"'
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves kernel binary program data (ISA GEN format)."
+version: "1.11"
+class: $xKernel
+name: GetBinaryExp
+decl: static
+ordinal: "0"
+details:
+    - "A valid kernel handle must be created with zeKernelCreate."
+    - "Returns Intel Graphics Assembly (GEN ISA) format binary program data for kernel handle."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] Kernel handle"
+    - type: "size_t*"
+      name: pSize
+      desc: "[in, out] pointer to variable with size of GEN ISA binary"
+    - type: "char*"
+      name: pKernelBinary
+      desc: [in,out] pointer to storage area for GEN ISA binary function
