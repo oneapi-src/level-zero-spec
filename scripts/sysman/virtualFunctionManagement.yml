@@ -26,7 +26,93 @@ etors:
       desc: "version 1.0 (deprecated)"
     - name: "1_1"
       value: "$X_MAKE_VERSION( 1, 1 )"
-      desc: "version 1.1"
+      desc: "version 1.1 (deprecated)"  
+    - name: "1_2"
+      value: "$X_MAKE_VERSION( 1, 2 )"
+      desc: "version 1.2"    
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Virtual function memory types (deprecated)"
+version: "1.9"
+class: $sVFManagement
+name: $s_vf_info_mem_type_exp_flags_t
+etors:
+    - name: MEM_TYPE_SYSTEM
+      desc: "System memory"
+    - name: MEM_TYPE_DEVICE
+      desc: "Device local memory"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Virtual function utilization flag bit fields (deprecated)"
+version: "1.9"
+class: $sVFManagement
+name: $s_vf_info_util_exp_flags_t
+etors:
+    - name: INFO_NONE
+      desc: "No info associated with virtual function"
+    - name: INFO_MEM_CPU
+      desc: "System memory utilization associated with virtual function"
+    - name: INFO_MEM_GPU
+      desc: "Device memory utilization associated with virtual function"
+    - name: INFO_ENGINE
+      desc: 'Engine utilization associated with virtual function'
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Virtual function management properties (deprecated)"
+version: "1.9"
+class: $sVFManagement
+name: $s_vf_exp_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_pci_address_t
+      name: "address"
+      desc: "[out] Virtual function BDF address"
+    - type: $s_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier of the device"
+    - type: $s_vf_info_util_exp_flags_t
+      name: "flags"
+      desc: "[out] utilization flags available. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Provides memory utilization values for a virtual function (deprecated)"
+version: "1.9"
+class: $sVFManagement
+name: $s_vf_util_mem_exp_t
+base: $s_base_state_t
+members:
+    - type: $s_vf_info_mem_type_exp_flags_t
+      name: "memTypeFlags"
+      desc: "[out] Memory type flags."
+    - type: uint64_t
+      name: "free"
+      desc: "[out] Free memory size in bytes."
+    - type: uint64_t
+      name: "size"
+      desc: "[out] Total allocatable memory in bytes."
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Wall clock time from VF when value was sampled."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Provides engine utilization values for a virtual function (deprecated)"
+version: "1.9"
+class: $sVFManagement
+name: $s_vf_util_engine_exp_t
+base: $s_base_state_t
+members:
+    - type: $s_engine_group_t
+      name: "type"
+      desc: "[out] The engine group."
+    - type: uint64_t
+      name: "activeCounterValue"
+      desc: "[out] Represents active counter."
+    - type: uint64_t
+      name: "samplingCounterValue"
+      desc: "[out] Represents counter value when activeCounterValue was sampled."
+    - type: uint64_t
+      name: "timestamp"
+      desc: "[out] Wall clock time when the activeCounterValue was sampled."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Virtual function management capabilities"
@@ -49,7 +135,7 @@ type: struct
 desc: "Provides memory utilization values for a virtual function"
 version: "1.10"
 class: $sVFManagement
-name: $s_vf_util_mem_exp_t
+name: $s_vf_util_mem_exp2_t
 base: $s_base_state_t
 members:
     - type: $s_mem_loc_t
@@ -63,9 +149,9 @@ type: struct
 desc: "Provides engine utilization values for a virtual function"
 details:
     - "Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: %util = (s2.activeCounterValue - s1.activeCounterValue) / (s2.samplingCounterValue - s1.samplingCounterValue)"
-version: "1.9"
+version: "1.10"
 class: $sVFManagement
-name: $s_vf_util_engine_exp_t
+name: $s_vf_util_engine_exp2_t
 base: $s_base_state_t
 members:
     - type: $s_engine_group_t
@@ -81,6 +167,142 @@ members:
 type: function
 desc: "Get handle of virtual function modules"
 version: "1.9"
+class: $sDevice
+name: EnumActiveVFExp
+details:
+    - "1.11" : "[DEPRECATED] No longer supported. Use $sDeviceEnumEnabledVFExp."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of components of this type.
+            if count is zero, then the driver shall update the value with the total number of components of this type that are available.
+            if count is greater than the number of components of this type that are available, then the driver shall update the value with the correct number of components.
+    - type: "$s_vf_handle_t*"
+      name: phVFhandle
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of handle of components of this type.
+            if count is less than the number of components of this type that are available, then the driver shall only retrieve that number of component handles.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get virtual function management properties"
+version: "1.9"
+class: $sVFManagement
+name: GetVFPropertiesExp
+details:
+    - "1.11": "[DEPRECATED] No longer supported. Use $sVFManagementGetVFCapabilitiesExp."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_vf_handle_t
+      name: hVFhandle
+      desc: "[in] Sysman handle for the VF component."
+    - type: $s_vf_exp_properties_t*
+      name: pProperties
+      desc: "[in,out] Will contain VF properties."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get memory activity stats for each available memory types associated with Virtual Function (VF)"
+version: "1.9"
+class: $sVFManagement
+name: GetVFMemoryUtilizationExp
+details:
+    - "1.11": "[DEPRECATED] No longer supported. Use $sVFManagementGetVFMemoryUtilizationExp2."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_vf_handle_t
+      name: hVFhandle
+      desc: "[in] Sysman handle for the component."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] Pointer to the number of VF memory stats descriptors.
+              - if count is zero, the driver shall update the value with the total number of memory stats available.
+              - if count is greater than the total number of memory stats available, the driver shall update the value with the correct number of memory stats available.
+              - The count returned is the sum of number of VF instances currently available and the PF instance.
+    - type: $s_vf_util_mem_exp_t*
+      name: pMemUtil
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of memory group activity counters.
+              - if count is less than the total number of memory stats available, then driver shall only retrieve that number of stats.
+              - the implementation shall populate the vector pCount-1 number of VF memory stats.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get engine activity stats for each available engine group associated with Virtual Function (VF)"
+version: "1.9"
+class: $sVFManagement
+name: GetVFEngineUtilizationExp
+details:
+    - "1.11": "[DEPRECATED] No longer supported. Use $sVFManagementGetVFEngineUtilizationExp2."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_vf_handle_t
+      name: hVFhandle
+      desc: "[in] Sysman handle for the component."
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] Pointer to the number of VF engine stats descriptors.
+              - if count is zero, the driver shall update the value with the total number of engine stats available.
+              - if count is greater than the total number of engine stats available, the driver shall update the value with the correct number of engine stats available.
+              - The count returned is the sum of number of VF instances currently available and the PF instance.
+    - type: $s_vf_util_engine_exp_t*
+      name: pEngineUtil
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of engine group activity counters.
+              - if count is less than the total number of engine stats available, then driver shall only retrieve that number of stats.
+              - the implementation shall populate the vector pCount-1 number of VF engine stats.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Configure utilization telemetry enabled or disabled associated with Virtual Function (VF)"
+version: "1.9"
+class: $sVFManagement
+name: SetVFTelemetryModeExp
+details:
+    - "1.11": "[DEPRECATED] No longer supported."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_vf_handle_t
+      name: hVFhandle
+      desc: "[in] Sysman handle for the component."
+    - type: $s_vf_info_util_exp_flags_t
+      name: "flags"
+      desc: "[in] utilization flags to enable or disable. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
+    - type: $x_bool_t
+      name: "enable"
+      desc: "[in] Enable utilization telemetry."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set sampling interval to monitor for a particular utilization telemetry associated with Virtual Function (VF)"
+version: "1.9"
+class: $sVFManagement
+name: SetVFTelemetrySamplingIntervalExp
+details:
+    - "1.11": "[DEPRECATED] No longer supported."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_vf_handle_t
+      name: hVFhandle
+      desc: "[in] Sysman handle for the component."
+    - type: $s_vf_info_util_exp_flags_t
+      name: "flag"
+      desc: "[in] utilization flags to set sampling interval. May be 0 or a valid combination of $s_vf_info_util_exp_flag_t."
+    - type: uint64_t
+      name: "samplingInterval"
+      desc: "[in] Sampling interval value."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get handle of virtual function modules"
+version: "1.10"
 class: $sDevice
 name: EnumEnabledVFExp
 details:
@@ -120,9 +342,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get memory activity stats for each available memory types associated with Virtual Function (VF)"
-version: "1.9"
+version: "1.10"
 class: $sVFManagement
-name: GetVFMemoryUtilizationExp
+name: GetVFMemoryUtilizationExp2
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -137,7 +359,7 @@ params:
             [in,out] Pointer to the number of VF memory stats descriptors.
               - if count is zero, the driver shall update the value with the total number of memory stats available.
               - if count is greater than the total number of memory stats available, the driver shall update the value with the correct number of memory stats available.
-    - type: $s_vf_util_mem_exp_t*
+    - type: $s_vf_util_mem_exp2_t*
       name: pMemUtil
       desc: |
             [in,out][optional][range(0, *pCount)] array of memory group activity counters.
@@ -146,9 +368,9 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Get engine activity stats for each available engine group associated with Virtual Function (VF)"
-version: "1.9"
+version: "1.10"
 class: $sVFManagement
-name: GetVFEngineUtilizationExp
+name: GetVFEngineUtilizationExp2
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
@@ -163,7 +385,7 @@ params:
             [in,out] Pointer to the number of VF engine stats descriptors.
               - if count is zero, the driver shall update the value with the total number of engine stats available.
               - if count is greater than the total number of engine stats available, the driver shall update the value with the correct number of engine stats available.
-    - type: $s_vf_util_engine_exp_t*
+    - type: $s_vf_util_engine_exp2_t*
       name: pEngineUtil
       desc: |
             [in,out][optional][range(0, *pCount)] array of engine group activity counters.

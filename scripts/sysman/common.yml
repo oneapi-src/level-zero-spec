@@ -233,9 +233,9 @@ etors:
       value: "0x00020004"
       desc: $s_subdevice_exp_properties_t
       version: "1.9"
-    - name: VF_EXP_CAPABILITIES
+    - name: VF_EXP_PROPERTIES
       value: "0x00020005"
-      desc: $s_vf_exp_capabilities_t
+      desc: $s_vf_exp_properties_t
       version: "1.10"
     - name: VF_UTIL_MEM_EXP
       value: "0x00020006"
@@ -245,6 +245,18 @@ etors:
       value: "0x00020007"
       desc: $s_vf_util_engine_exp_t
       version: "1.9"
+    - name: VF_EXP_CAPABILITIES
+      value: "0x00020008"
+      desc: $s_vf_exp_capabilities_t
+      version: "1.10"
+    - name: VF_UTIL_MEM_EXP2
+      value: "0x00020009"
+      desc: $s_vf_util_mem_exp2_t
+      version: "1.10"
+    - name: VF_UTIL_ENGINE_EXP2
+      value: "0x00020010"
+      desc: $s_vf_util_engine_exp2_t
+      version: "1.10"  
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

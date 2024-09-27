@@ -22,17 +22,28 @@ API
 * Functions
 
     * ${s}DeviceEnumEnabledVFExp
+    * ${s}DeviceEnumActiveVFExp
     * ${s}VFManagementGetVFCapabilitiesExp
+    * ${s}VFManagementGetVFMemoryUtilizationExp2
+    * ${s}VFManagementGetVFEngineUtilizationExp2    
+    * ${s}VFManagementGetVFPropertiesExp
     * ${s}VFManagementGetVFMemoryUtilizationExp
     * ${s}VFManagementGetVFEngineUtilizationExp
+    * ${s}VFManagementSetVFTelemetryModeExp
+    * ${s}VFManagementSetVFTelemetrySamplingIntervalExp
 
 * Enumerations
 
     * ${s}_vf_management_exp_version_t
+    * ${s}_vf_info_mem_type_exp_flags_t
+    * ${s}_vf_info_util_exp_flags_t
    
 * Structures
 
     * ${s}_vf_exp_capabilities_t
+    * ${s}_vf_util_mem_exp2_t
+    * ${s}_vf_util_engine_exp2_t
+    * ${s}_vf_exp_properties_t
     * ${s}_vf_util_mem_exp_t
     * ${s}_vf_util_engine_exp_t
    
@@ -40,7 +51,7 @@ Virtual Function Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 This feature adds the ability to retrieve telemetry from PF domain for monitoring per VF memory and engine utilization. 
 This telemetry is used to determine if a VM has oversubscribed GPU memory or observe engine business for a targeted workload.
-If VF has no activity value to report, then implementation shall reflect that appropriately in ${s}_vf_util_engine_exp_t struct so that percentage
+If VF has no activity value to report, then implementation shall reflect that appropriately in ${s}_vf_util_engine_exp2_t struct so that percentage
 calculation results in value of 0.
 
 The following pseudo-code demonstrates a sequence for obtaining the engine activity for all Virtual Functions from Physical Function environment:
@@ -57,9 +68,9 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
     ${s}DeviceEnumEnabledVFExp(hDevice, &numVf, vfs.data());
 
     // Gather VF properties
-    std::vector <${s}_vf_exp_capabilities_t> vfProps(numVf);
+    std::vector <${s}_vf_exp_capabilities_t> vfCapabs(numVf);
     for (uint32_t i = 0; i < numVf; i++) {
-        ${s}VFManagementGetVFCapabilitiesExp(vfs[i], &vfProps[i]);
+        ${s}VFManagementGetVFCapabilitiesExp(vfs[i], &vfCapabs[i]);
     }
 
     // Detect the info types a particular VF supports
@@ -68,10 +79,10 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
     ${s}_vf_handle_t activeVf = vfs[0];
     uint32_t engineStatCount = 0;
     
-    ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineStatCount, nullptr);
+    ${s}VFManagementGetVFEngineUtilizationExp2(activeVf, &engineStatCount, nullptr);
     // Allocate memory for vf engine stats
-    ${s}_vf_util_engine_exp_t* engineStats0 = (${s}_vf_util_engine_exp_t*) allocate(engineStatCount * sizeof(${s}_vf_util_engine_exp_t));
-    ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineStatCount, engineStats0);
+    ${s}_vf_util_engine_exp2_t* engineStats0 = (${s}_vf_util_engine_exp2_t*) allocate(engineStatCount * sizeof(${s}_vf_util_engine_exp2_t));
+    ${s}VFManagementGetVFEngineUtilizationExp2(activeVf, &engineStatCount, engineStats0);
     sleep(1)
-    ${s}_vf_util_engine_exp_t* engineStats1 = (${s}_vf_util_engine_exp_t*) allocate(engineStatCount * sizeof(${s}_vf_util_engine_exp_t));
-    ${s}VFManagementGetVFEngineUtilizationExp(activeVf, &engineStatCount, &engineStats1);
+    ${s}_vf_util_engine_exp2_t* engineStats1 = (${s}_vf_util_engine_exp2_t*) allocate(engineStatCount * sizeof(${s}_vf_util_engine_exp2_t));
+    ${s}VFManagementGetVFEngineUtilizationExp2(activeVf, &engineStatCount, &engineStats1);
