@@ -110,7 +110,6 @@ class: $xPhysicalMem
 name: $x_physical_mem_flags_t
 etors:
     - name: ALLOCATE_ON_DEVICE
-      value: "0"
       desc: "[default] allocate physical device memory."
     - name: ALLOCATE_ON_HOST
       desc: "Allocate physical host memory instead."

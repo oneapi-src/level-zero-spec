@@ -836,10 +836,10 @@ params:
       desc: "[in] handle of the device"
     - type: "uint64_t*"
       name: hostTimestamp
-      desc: "[out] value of the Host's global timestamp that correlates with the Device's global timestamp value"
+      desc: "[out] value of the Host's global timestamp that correlates with the Device's global timestamp value."
     - type: "uint64_t*"
       name: deviceTimestamp
-      desc: "[out] value of the Device's global timestamp that correlates with the Host's global timestamp value"
+      desc: "[out] value of the Device's global timestamp that correlates with the Host's global timestamp value."
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "The feature is not supported by the underlying platform."     
