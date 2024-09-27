@@ -29,12 +29,12 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
-    - type: "$x_kernel_handle_t"
+    - type: $x_kernel_handle_t
       name: hKernel
-      desc: "[in] Kernel handle"
-    - type: "size_t*"
+      desc: "[in] Kernel handle."
+    - type: size_t*
       name: pSize
-      desc: "[in, out] pointer to variable with size of GEN ISA binary"
-    - type: "char*"
+      desc: "[in, out] pointer to variable with size of GEN ISA binary."
+    - type: uint8_t*
       name: pKernelBinary
-      desc: [in,out] pointer to storage area for GEN ISA binary function
+      desc: "[in,out] pointer to storage area for GEN ISA binary function."
