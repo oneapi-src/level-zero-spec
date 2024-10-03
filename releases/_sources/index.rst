@@ -26,6 +26,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.11`_
+    - 2024-10-03
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__  	
   * - `Level Zero v1.10`_
     - 2024-09-06
     - `HTML <https://spec.oneapi.io/level-zero/1.10/index.html>`__  	
@@ -99,6 +102,22 @@ Level Zero
 Release Notes
 -------------
 
+Level Zero v1.11
+~~~~~~~~~~~~~~~~~~
+
+* Updated Features:
+
+	- zePhysicalMemCreate to support physical system memory.
+	- Added a new error code in GetGlobalTimestamps function.
+	- Add support for metrics and groups to export memory.
+	- Add API specification to retrieve kernel binary program data.
+
+* Pathes to v1.10 release:
+
+	- Addressed level-zero loader ABI breakage issue with spec v1.10.
+	- Documentation update to spec to relax restriction to allow driver to create internal threads.
+	- rename Programmable1Exp to ProgrammableExp2.
+	
 Level Zero v1.10
 ~~~~~~~~~~~~~~~~~~
 

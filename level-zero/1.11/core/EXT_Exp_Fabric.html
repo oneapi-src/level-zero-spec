@@ -1,0 +1,546 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fabric Topology Discovery Extension &#8212; Level Zero Specification  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/EXT_Exp_Fabric';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EXT.html">Extensions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html">Core API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/api.html">Tools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/api.html">Sysman API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/core/EXT_Exp_Fabric.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Fabric Topology Discovery Extension</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-topology-discovery">Fabric Topology Discovery</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-vertices">Fabric Vertices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-edges">Fabric Edges</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discovery">Discovery</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="fabric-topology-discovery-extension">
+<span id="ze-experimental-fabric"></span><h1>Fabric Topology Discovery Extension<a class="headerlink" href="#fabric-topology-discovery-extension" title="Link to this heading">#</a></h1>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>Macros</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ZE_MAX_FABRIC_EDGE_MODEL_EXP_SIZE</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-fabric-vertex-exp-type-t"><span class="std std-ref">ze_fabric_vertex_exp_type_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-fabric-edge-exp-duplexity-t"><span class="std std-ref">ze_fabric_edge_exp_duplexity_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-fabric-vertex-pci-exp-address-t"><span class="std std-ref">ze_fabric_vertex_pci_exp_address_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-fabric-vertex-exp-properties-t"><span class="std std-ref">ze_fabric_vertex_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-fabric-edge-exp-properties-t"><span class="std std-ref">ze_fabric_edge_exp_properties_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetsubverticesexp"><span class="std std-ref">zeFabricVertexGetSubVerticesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetpropertiesexp"><span class="std std-ref">zeFabricVertexGetPropertiesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricvertexgetdeviceexp"><span class="std std-ref">zeFabricVertexGetDeviceExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zedevicegetfabricvertexexp"><span class="std std-ref">zeDeviceGetFabricVertexExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricedgegetverticesexp"><span class="std std-ref">zeFabricEdgeGetVerticesExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zefabricedgegetpropertiesexp"><span class="std std-ref">zeFabricEdgeGetPropertiesExp</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<section id="fabric-topology-discovery">
+<h3>Fabric Topology Discovery<a class="headerlink" href="#fabric-topology-discovery" title="Link to this heading">#</a></h3>
+<p>The API supports two forms of topology discovery - logical &amp; physical.</p>
+<p>The API architecture exposes both the logical topology as well as the physical topology of the fabrics interconnecting accelerators. Accelerators are logically connected if they are able to access peer memory, even if the access passes through other accelerators. Accelerators are physically connected if there is a direct fabric connection between the two accelerators that allows the accelerators access to peer memory without passing through other accelerators in the fabrics.</p>
+<p>Two accelerators can be checked for logical connectivity using <a class="reference internal" href="api.html#zedevicecanaccesspeer"><span class="std std-ref">zeDeviceCanAccessPeer</span></a>. Support for remote memory access &amp; atomic capabilities can be checked using the <a class="reference internal" href="api.html#zedevicegetp2pproperties"><span class="std std-ref">zeDeviceGetP2PProperties</span></a> function. The <a class="reference internal" href="api.html#ze-device-p2p-bandwidth-exp-properties-t"><span class="std std-ref">ze_device_p2p_bandwidth_exp_properties_t</span></a> extension struct passed to <a class="reference internal" href="api.html#zedevicegetp2pproperties"><span class="std std-ref">zeDeviceGetP2PProperties</span></a> as the pNext member of  <a class="reference internal" href="api.html#ze-device-p2p-properties-t"><span class="std std-ref">ze_device_p2p_properties_t</span></a> provides the bandwidth &amp; latency of the connection between the two accelerators both logical as well as physical topology. This bandwidth &amp; latency information can be used to create the logical &amp; physical adjacency matrix representations of the fabric topology.</p>
+<p>The API architecture also exposes the physical topology of scale-up fabrics interconnecting accelerators (exposed as devices and subdevices) and switches in the form of the adjacency graph representation of the fabric topology. Both accelerators and switches are represented as fabric vertices. The physical links that interconnect accelerators and switches are represented as fabric edges. The API supports a hierarchy of fabric vertices and fabric subvertices in keeping with the hierarchy of devices and subdevices. Devices always correspond to fabric vertices while subdevices always correspond to fabric subvertices. Both fabric vertices and fabric subvertices are represented by the same opaque handle. Fabric vertices may be remote, i.e. be associated with accelerator devices on remote nodes.</p>
+</section>
+</section>
+<section id="fabric-vertices">
+<h2>Fabric Vertices<a class="headerlink" href="#fabric-vertices" title="Link to this heading">#</a></h2>
+<p>A fabric vertex object represents either a physical accelerator or switch in a system that supports Level-Zero.</p>
+<ul class="simple">
+<li><p>The application may query the number of fabric vertices supported by a driver, and their respective handles, using <a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a>.</p></li>
+<li><p>The application may also obtain fabric vertex handles directly from the underlying device handles using <a class="reference internal" href="api.html#zedevicegetfabricvertexexp"><span class="std std-ref">zeDeviceGetFabricVertexExp</span></a>.</p></li>
+<li><p>Fabric vertices objects are read-only, global constructs. i.e. multiple calls to <a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a> or <a class="reference internal" href="api.html#zedevicegetfabricvertexexp"><span class="std std-ref">zeDeviceGetFabricVertexExp</span></a> will return identical fabric vertex handles.</p></li>
+<li><p>Fabric vertices may expose sub-vertices that allow finer-grained querying of the  topological properties of the system.</p></li>
+<li><p>The device represented by a fabric vertex may be obtainable from the fabric vertex handle using <a class="reference internal" href="api.html#zefabricvertexgetdeviceexp"><span class="std std-ref">zeFabricVertexGetDeviceExp</span></a>.</p></li>
+<li><p>Fabric vertices may represent remote accelerators or switches, i.e. accelerators or switches on a remote node, that are connected to the accelerators and switches in the local node via scale-out links. Such accelerators cannot be programmed from the local node &amp; the corresponding device handles cannot be obtained from the fabric vertex handles representing the remote accelerator.</p></li>
+<li><p>A fabric vertex handle is primarily used for identifying topological properties of the L0 system that can be used for optimization of the algorithm used for compute/communication.</p></li>
+</ul>
+</section>
+<section id="fabric-edges">
+<h2>Fabric Edges<a class="headerlink" href="#fabric-edges" title="Link to this heading">#</a></h2>
+<p>A fabric edge object represents one or more physical links between fabric vertices in a system that supports Level-Zero.</p>
+<ul class="simple">
+<li><p>The application may query the number of fabric edges connected to a fabric vertex, and their respective handles, using <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a>.</p></li>
+<li><p>Fabric edge objects are read-only, global constructs. Multiple calls to <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a> made with the same fabric vertices will return identical fabric edge handles.</p></li>
+<li><p>A single fabric edge may represent multiple physical links between two fabric vertices as long as traffic is automatically spread over all links when a single engine is used to drive the transfer.</p></li>
+<li><p>A fabric edge handle is primarily used for identifying topological properties of the L0 system that can be used for optimization of the algorithm used for compute/communication.</p></li>
+</ul>
+</section>
+<section id="discovery">
+<h2>Discovery<a class="headerlink" href="#discovery" title="Link to this heading">#</a></h2>
+<p>Assuming that the application is using a graph API to construct a graph, the following pseudo-code demonstrates a basic topology discovery sequence:</p>
+<pre class="literal-block">// Create graph object
+
+// Find all fabric vertices &amp; the edges connecting them
+ze_fabric_vertex_handle_t* vertices = nullptr;
+
+uint32_t vertexCount = 0;
+<a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a>(drivers[0], &amp;vertexCount, nullptr);
+
+vertices = allocate(vertexCount * sizeof(ze_fabric_vertex_handle_t));
+
+<a class="reference internal" href="api.html#zefabricvertexgetexp"><span class="std std-ref">zeFabricVertexGetExp</span></a>(drivers[0], &amp;vertexCount, vertices);
+
+// Copy all vertices into graph
+
+for (u = 0; u &lt; vertexCount; ++u) {
+     for (v = u + 1; u &lt; vertexCount; ++v) {
+
+          uint32_t edgeCount = 0;
+
+          <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a>(vertices[u], vertices[v], &amp;edgeCount, nullptr);
+
+          ze_fabric_edge_handle_t* edges = nullptr;
+
+          edges = allocate(edgeCount * sizeof(ze_fabric_edge_handle_t));
+
+          <a class="reference internal" href="api.html#zefabricedgegetexp"><span class="std std-ref">zeFabricEdgeGetExp</span></a>(vertices[u], vertices[v], &amp;edgeCount, edges);
+
+          // Copy edges into graph
+
+          free(edges);
+
+     }
+}
+
+free(vertices);
+
+...</pre>
+<p>The following diagrams illustrates examples of topologies exposed via the fabric vertex &amp; fabric edge API.</p>
+<p>A six device system with all-to-all connectivity between the devices.</p>
+<img alt="../_images/A21_Vertex.png" src="../_images/A21_Vertex.png" />
+<p>Subvertex discovery reveals that each device in the system is actually composed of two subdevices with two planes of all-to-all connectivity (light-green &amp; dark-green) and one plane of 2-d mesh connectivity (blue) between the subdevices.</p>
+<img alt="../_images/A21_Subvertex.png" src="../_images/A21_Subvertex.png" />
+<p>Same as above, but with remote subdevices that manifest as subvertices but do not expose a subdevice handle.</p>
+<img alt="../_images/A21_Subvertex%2BRemote.png" src="../_images/A21_Subvertex%2BRemote.png" />
+<p>The API also supports mixing &amp; matching vertices &amp; subvertices, both local as well as remote in the same set of queries.</p>
+<img alt="../_images/A21_Vertex%2BSubvertex%2BRemote.png" src="../_images/A21_Vertex%2BSubvertex%2BRemote.png" />
+<p>An eight device system with six switches establishing all-to-all connectivity between the devices.</p>
+<img alt="../_images/DGXA100_Vertex.png" src="../_images/DGXA100_Vertex.png" />
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-topology-discovery">Fabric Topology Discovery</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-vertices">Fabric Vertices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-edges">Fabric Edges</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discovery">Discovery</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
