@@ -877,7 +877,7 @@ def get_class_function_objs(specs, cname, version = None, includeExt = False):
                     else:
                         objects.append(obj)
 
-    return sorted(objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))
+    return sorted(objects, key=lambda obj: (float(obj.get('version',"1.0").split(".")[0]) * 10000000) + (float(obj.get('version',"1.0").split(".")[1])*10000) + int(obj.get('ordinal',"100")))
 
 """
 Public:
@@ -895,8 +895,8 @@ def get_class_function_objs_exp(specs, cname):
                     exp_objects.append(obj)
                 else:
                     objects.append(obj)
-    objects = sorted(objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))
-    exp_objects = sorted(exp_objects, key=lambda obj: (float(obj.get('version',"1.0"))*10000) + int(obj.get('ordinal',"100")))              
+    objects = sorted(objects, key=lambda obj: (float(obj.get('version',"1.0").split(".")[0]) * 10000000) + (float(obj.get('version',"1.0").split(".")[1]) * 10000) + int(obj.get('ordinal',"100")))
+    exp_objects = sorted(exp_objects, key=lambda obj: (float(obj.get('version',"1.0").split(".")[0]) * 10000000) + (float(obj.get('version',"1.0").split(".")[1])* 10000) + int(obj.get('ordinal',"100")))              
     return objects, exp_objects
 
 """ 
