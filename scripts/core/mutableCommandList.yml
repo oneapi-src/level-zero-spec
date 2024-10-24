@@ -8,7 +8,7 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Extension for supporting compute graphs with dynamic properties."
-version: "1.10"
+version: "1.9"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Mutable Command List Extension Name"
@@ -18,7 +18,7 @@ value: '"$X_experimental_mutable_command_list"'
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable Command List Extension Version(s)"
-version: "1.10"
+version: "1.9"
 name: $x_mutable_command_list_exp_version_t
 etors:
     - name: "1_0"
@@ -27,10 +27,11 @@ etors:
     - name: "1_1"
       value: "$X_MAKE_VERSION( 1, 1 )"
       desc: "version 1.1"
+      version: "1.10"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable command flags"
-version: "1.10"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_exp_flags_t
 etors:
@@ -48,12 +49,14 @@ etors:
       desc: "command wait events"
     - name: KERNEL_INSTRUCTION
       desc: "command kernel"
+      version: "1.10"
     - name: GRAPH_ARGUMENTS
       desc: "graph arguments"
+      version: "1.10"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Mutable command identifier descriptor"
-version: "1.10"
+version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_id_exp_desc_t
 base: $x_base_desc_t
@@ -253,7 +256,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Updates mutable commands."
-version: "1.10"
+version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandsExp
 details:
@@ -275,7 +278,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Updates the signal event for a mutable command in a mutable command list."
-version: "1.10"
+version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandSignalEventExp
 details:

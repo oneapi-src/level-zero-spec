@@ -398,7 +398,7 @@ params:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create metric handles by applying parameter values on the metric programmable handle."
-version: "1.11"
+version: "1.9"
 class: $tMetric
 name: CreateFromProgrammableExp
 decl: static
@@ -477,7 +477,7 @@ returns:
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Create metric group handle."
-version: "1.11"
+version: "1.9"
 class: $tMetricGroup
 name: CreateExp
 decl: static
