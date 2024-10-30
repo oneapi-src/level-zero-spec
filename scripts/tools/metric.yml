@@ -114,29 +114,34 @@ etors:
       desc: "Metric type: ratio"
     - name: RAW
       desc: "Metric type: raw"
+    - name: EVENT_EXP_TIMESTAMP
+      desc: "Metric type: event with only timestamp and value has no meaning"
+      version: "1.10"
+      value: "0x7ffffff9"
+    - name: EVENT_EXP_START
+      desc: "Metric type: the first event of a start/end event pair"
+      version: "1.10"
+      value: "0x7ffffffa"
+    - name: EVENT_EXP_END
+      desc: "Metric type: the second event of a start/end event pair"
+      version: "1.10"
+      value: "0x7ffffffb"
+    - name: EVENT_EXP_MONOTONIC_WRAPS_VALUE
+      desc: "Metric type: value of the event is a monotonically increasing value that can wrap around"
+      version: "1.10"
+      value: "0x7ffffffc"
+    - name: EXPORT_DMA_BUF_EXP
+      desc: "Metric which exports linux dma_buf, which could be imported/mapped to the host process"
+      version: "1.11"
+      value: "0x7ffffffd"
     - name: IP_EXP
       desc:
             "1.6": "Metric type: instruction pointer"
             "1.7": "Metric type: instruction pointer. Deprecated, use $T_METRIC_TYPE_IP."
+      value: "0x7ffffffe"
     - name: IP
       desc: "Metric type: instruction pointer"
       version: "1.7"
-    - name: EVENT_EXP_TIMESTAMP
-      desc: "Metric type: event with only timestamp and value has no meaning"
-      version: "1.10"
-    - name: EVENT_EXP_START
-      desc: "Metric type: the first event of a start/end event pair"
-      version: "1.10"
-    - name: EVENT_EXP_END
-      desc: "Metric type: the second event of a start/end event pair"
-      version: "1.10"
-    - name: EXPORT_DMA_BUF
-      desc: "Metric which exports linux dma_buf, which could be imported/mapped to the host process"
-      version: "1.11"
-      value: "0x7ffffffd"
-    - name: EVENT_EXP_MONOTONIC_WRAPS_VALUE
-      desc: "Metric type: value of the event is a monotonically increasing value that can wrap around"
-      version: "1.10"
       value: "0x7ffffffe"
 --- #--------------------------------------------------------------------------
 type: enum
