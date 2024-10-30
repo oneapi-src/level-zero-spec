@@ -78,7 +78,7 @@ The following pseudo-code demonstrates how to map memory exported by metrics:
        metricProperties.stype = ${T}_STRUCTURE_TYPE_METRIC_PROPERTIES;
        zetMetricGetProperties(hMetric, &metricProperties);
 
-       if(metricProperties.metricType == ZET_METRIC_TYPE_EXPORT_DMA_BUF){
+       if(metricProperties.metricType == ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUF){
             zet_export_dma_buf_exp_properties_t dmaBufProperties;
             dmaBufProperties.stype = ${T}_STRUCTURE_TYPE_EXPORT_DMA_EXP_PROPERTIES;
             metricProperties.pNext = &dmaBufProperties;

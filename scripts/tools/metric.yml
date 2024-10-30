@@ -130,7 +130,7 @@ etors:
       desc: "Metric type: value of the event is a monotonically increasing value that can wrap around"
       version: "1.10"
       value: "0x7ffffffc"
-    - name: EXPORT_DMA_BUF_EXP
+    - name: EXP_EXPORT_DMA_BUF
       desc: "Metric which exports linux dma_buf, which could be imported/mapped to the host process"
       version: "1.11"
       value: "0x7ffffffd"
