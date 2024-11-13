@@ -884,6 +884,7 @@ Entry-point:
 def parse(section, version, tags, meta, ref):
     path = os.path.join("./", section)
     specs = []
+    successful = True
     for f in util.findFiles(path, "*.yml"):
         print("Parsing %s..."%f)
         docs = util.yamlRead(f)
@@ -895,6 +896,7 @@ def parse(section, version, tags, meta, ref):
         for i, d in enumerate(docs):
             d = _preprocess(d)
             if not _validate_doc(f, d, tags, line_nums[i]):
+                successful = False
                 continue
 
             d = _filter_version(d, version)
@@ -929,4 +931,8 @@ def parse(section, version, tags, meta, ref):
     for key in meta:
         print(" - %s %s(s)"%(len(meta[key]),key))
     print("")
+
+    if not successful:
+        raise Exception("Errors occurred")
+
     return specs, meta, ref
