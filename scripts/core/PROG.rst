@@ -32,9 +32,11 @@ Drivers
 
 A driver object represents a collection of physical devices in the system accessed by the same Level-Zero driver.
 
-- The application may query the number of Level-Zero drivers installed on the system, and their respective handles, using ${x}DriverGet.
-- More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver supports a GPU from a different vendor, and finally a different driver may support an FPGA.
-- Driver objects are read-only, global constructs. i.e. Multiple calls to ${x}DriverGet will return identical driver handles.
+- The application may query the number of Level-Zero drivers installed on the system, and their respective handles, using zeInitDrivers, NOTE zeDriverGet is deprecated as of v1.10 of the L0 Spec.
+- zeInitDrivers replaces both zeInit and zeDriverGet as of v1.10 of the L0 Spec to both initialize the driver and query the number of drivers.
+- Usage of zeInitDrivers and zeDriverGet is mutually exclusive and should not be used together. Usage of them together will result in undefined behavior.
+- More than one driver may be available in the system. For example, one driver may support two GPUs from one vendor, another driver supports a GPU from a different vendor, and finally a different driver may support an NPU.
+- Driver objects are read-only, global constructs. i.e. Multiple calls to zeInitDrivers with the same flags will return identical driver handles.
 - A driver handle is primarily used during device discovery and during creation and management of contexts.
 
 Device
@@ -63,40 +65,45 @@ The definition of what a root-device and a sub-device is for a specific device i
 Initialization and Discovery
 ----------------------------
 
-The Level-Zero API must be initialized by calling ${x}Init before calling any other API function.
-This function will load all Level-Zero driver(s) in the system into memory for the current process, for use by all Host threads.
-Simultaneous calls to ${x}Init are thread-safe and only one instance of each driver will be loaded.
+The Level-Zero API must be initialized by calling zeInitDrivers before calling any other API function. NOTE: zeInit is deprecated as of v1.10 of the L0 Spec.
+These functions will load all Level-Zero driver(s) in the system into memory for the current process, for use by all Host threads.
+Simultaneous calls to zeInitDrivers are thread-safe and only one instance of each driver will be loaded.
 
-The following pseudo-code demonstrates a basic initialization and device discovery sequence:
+The following pseudo-code demonstrates a basic initialization and device discovery sequence for Core Drivers:
 
 .. parsed-literal::
-
-       // Initialize the driver
-       ${x}Init(0);
-
        // Discover all the driver instances
+       ze_init_driver_type_desc_t desc = {ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESC};
+       desc.pNext = nullptr;
+       desc.driverType = UINT32_MAX; // all driver types requested
        uint32_t driverCount = 0;
-       ${x}DriverGet(&driverCount, nullptr);
+       ze_result_t result = zeInitDrivers(&driverCount, nullptr, &desc); // Query the number of drivers
+       if (result != ZE_RESULT_SUCCESS) {
+           return result; // no drivers found
+       }
 
-       ${x}_driver_handle_t* allDrivers = allocate(driverCount * sizeof(${x}_driver_handle_t));
-       ${x}DriverGet(&driverCount, allDrivers);
+       ze_driver_handle_t* allDrivers = allocate(driverCount * sizeof(ze_driver_handle_t));
+       result = zeInitDrivers(&driverCount, allDrivers, &desc); // Read the driver handles
+       if (result != ZE_RESULT_SUCCESS) {
+           return result; // no driver handles found
+       }
 
-       // Find a driver instance with a GPU device
-       ${x}_driver_handle_t hDriver = nullptr;
-       ${x}_device_handle_t hDevice = nullptr;
+       // Find a driver Handle that supports a GPU device type
+       ze_driver_handle_t hDriver = nullptr;
+       ze_device_handle_t hDevice = nullptr;
        for(i = 0; i < driverCount; ++i) {
            uint32_t deviceCount = 0;
-           ${x}DeviceGet(allDrivers[i], &deviceCount, nullptr);
+           zeDeviceGet(allDrivers[i], &deviceCount, nullptr);
 
-           ${x}_device_handle_t* allDevices = allocate(deviceCount * sizeof(${x}_device_handle_t));
-           ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices);
+           ze_device_handle_t* allDevices = allocate(deviceCount * sizeof(ze_device_handle_t));
+           zeDeviceGet(allDrivers[i], &deviceCount, allDevices);
 
            for(d = 0; d < deviceCount; ++d) {
-               ${x}_device_properties_t device_properties {};
-               device_properties.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
-               ${x}DeviceGetProperties(allDevices[d], &device_properties);
+               ze_device_properties_t device_properties {};
+               device_properties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+               zeDeviceGetProperties(allDevices[d], &device_properties);
 
-               if(${X}_DEVICE_TYPE_GPU == device_properties.type) {
+               if(ZE_DEVICE_TYPE_GPU == device_properties.type) {
                    hDriver = allDrivers[i];
                    hDevice = allDevices[d];
                    break;
