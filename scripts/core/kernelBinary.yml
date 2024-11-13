@@ -24,7 +24,7 @@ name: GetBinaryExp
 decl: static
 ordinal: "0"
 details:
-    - "A valid kernel handle must be created with zeKernelCreate."
+    - "A valid kernel handle must be created with $xKernelCreate."
     - "Returns Intel Graphics Assembly (GEN ISA) format binary program data for kernel handle."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
@@ -34,7 +34,7 @@ params:
       desc: "[in] Kernel handle."
     - type: size_t*
       name: pSize
-      desc: "[in, out] pointer to variable with size of GEN ISA binary."
+      desc: "[in,out] pointer to variable with size of GEN ISA binary."
     - type: uint8_t*
       name: pKernelBinary
       desc: "[in,out] pointer to storage area for GEN ISA binary function."
