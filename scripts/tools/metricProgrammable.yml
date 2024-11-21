@@ -38,6 +38,12 @@ name: $T_MAX_PROGRAMMABLE_METRICS_ELEMENT_DESCRIPTION_EXP
 value: "256"
 --- #--------------------------------------------------------------------------
 type: macro
+desc: "Maximum count of characters in metric group name prefix"
+version: "1.12"
+name: $T_MAX_METRIC_GROUP_NAME_PREFIX_EXP
+value: "64"
+--- #--------------------------------------------------------------------------
+type: macro
 desc: "Maximum metric programmable name string size"
 version: "1.9"
 name: $T_MAX_METRIC_PROGRAMMABLE_NAME_EXP
@@ -458,7 +464,7 @@ params:
       desc: "[in] metric handles to be added to the metric groups."
     - type: "const char *"
       name: pMetricGroupNamePrefix
-      desc: "[in] prefix to the name created for the metric groups. Must point to a null-terminated character array no longer than ZEX_MAX_METRIC_GROUP_NAME_PREFIX."
+      desc: "[in] prefix to the name created for the metric groups. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_NAME_PREFIX_EXP."
     - type: "const char *"
       name: pDescription
       desc: "[in] pointer to description of the metric groups. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_DESCRIPTION."
