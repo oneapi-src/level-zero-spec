@@ -567,6 +567,26 @@ etors:
       desc: $x_init_driver_type_desc_t
       version: "1.10"
       value: "0x00020021"
+    - name: EXTERNAL_SEMAPHORE_EXT_DESC
+      desc: $x_external_semaphore_ext_desc_t
+      version: "1.12"
+      value: "0x00020022"
+    - name: EXTERNAL_SEMAPHORE_WIN32_EXT_DESC
+      desc: $x_external_semaphore_win32_ext_desc_t
+      version: "1.12"
+      value: "0x00020023"
+    - name: EXTERNAL_SEMAPHORE_FD_EXT_DESC
+      desc: $x_external_semaphore_fd_ext_desc_t
+      version: "1.12"
+      value: "0x00020024"
+    - name: EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_EXT
+      desc: $x_external_semaphore_signal_params_ext_t
+      version: "1.12"
+      value: "0x00020025"
+    - name: EXTERNAL_SEMAPHORE_WAIT_PARAMS_EXT
+      desc: $x_external_semaphore_wait_params_ext_t
+      version: "1.12"
+      value: "0x00020026"
     - name: COMMAND_GRAPH_EXP_DESC
       desc: $x_command_graph_exp_desc_t
       version: "2.0"

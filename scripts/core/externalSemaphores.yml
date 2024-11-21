@@ -1,0 +1,261 @@
+#
+# Copyright (C) 2024 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for external semaphores"
+version: "1.12"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "External Semaphores Extension Name"
+version: "1.12"
+name: $X_EXTERNAL_SEMAPHORES_EXTENSION_NAME
+value: '"$X_extension_external_semaphores"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "External Semaphores Extension Version"
+version: "1.12"
+name: $x_external_semaphore_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of external semaphore object"
+version: "1.12"
+class: $xExternalSemaphore
+name: "$x_external_semaphore_ext_handle_t"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "External Semaphores Type Flags"
+version: "1.12"
+name: $x_external_semaphore_ext_flags_t
+etors:
+    - name: "OPAQUE_FD"
+      desc: "Semaphore is an Linux opaque file descriptor"
+    - name: "OPAQUE_WIN32"
+      desc: "Semaphore is an opaque Win32 handle for monitored fence"
+    - name: "OPAQUE_WIN32_KMT"
+      desc: "Semaphore is an opaque Win32 KMT handle for monitored fence"
+    - name: "D3D12_FENCE"
+      desc: "Semaphore is a D3D12 fence"
+    - name: "D3D11_FENCE"
+      desc: "Semaphore is a D3D11 fence"
+    - name: "KEYED_MUTEX"
+      desc: "Semaphore is a keyed mutex for Win32"
+    - name: "KEYED_MUTEX_KMT"
+      desc: "Semaphore is a keyed mutex for Win32 KMT"
+    - name: "VK_TIMELINE_SEMAPHORE_FD"
+      desc: "Semaphore is a Vulkan Timeline semaphore for Linux"
+    - name: "VK_TIMELINE_SEMAPHORE_WIN32"
+      desc: "Semaphore is a Vulkan Timeline semaphore for Win32"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "External Semaphore Descriptor"
+version: "1.12"
+class: $xExternalSemaphore
+name: $x_external_semaphore_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: "$x_external_semaphore_ext_flags_t"
+      name: "flags"
+      desc: |
+            [in] The flags describing the type of the semaphore.
+            must be 0 (default) or a valid combination of $x_external_semaphore_ext_flag_t.
+            When importing a semaphore, pNext should be pointing to one of the following structures: $x_external_semaphore_win32_ext_desc_t or $x_external_semaphore_fd_ext_desc_t.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "External Semaphore Win32 Descriptor"
+version: "1.12"
+class: $xExternalSemaphore
+name: $x_external_semaphore_win32_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: "void*"
+      name: "handle"
+      desc: |
+            [in] Win32 handle of the semaphore.
+            Must be a valid Win32 handle.
+    - type: "const char*"
+      name: "name"
+      desc: |
+            [in] Name of the semaphore.
+            Must be a valid null-terminated string.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "External Semaphore FD Descriptor"
+version: "1.12"
+class: $xExternalSemaphore
+name: $x_external_semaphore_fd_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: "int"
+      name: "fd"
+      desc: |
+            [in] File descriptor of the semaphore.
+            Must be a valid file descriptor.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "External Semaphore Signal parameters"
+version: "1.12"
+class: $xExternalSemaphore
+name: $x_external_semaphore_signal_params_ext_t
+base: $x_base_desc_t
+members:
+    - type: "uint64_t"
+      name: "value"
+      desc: |
+            [in] [optional] Value to signal.
+            Specified by user as an expected value with some of semaphore types, such as $X_EXTERNAL_SEMAPHORE_EXT_FLAG_D3D12_FENCE.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "External Semaphore Wait parameters"
+version: "1.12"
+class: $xExternalSemaphore
+name: $x_external_semaphore_wait_params_ext_t
+base: $x_base_desc_t
+members:
+    - type: "uint64_t"
+      name: "value"
+      desc: |
+            [in] [optional] Value to wait for.
+            Specified by user as an expected value with some of semaphore types, such as $X_EXTERNAL_SEMAPHORE_EXT_FLAG_D3D12_FENCE.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Import an external semaphore"
+version: "1.12"
+class: $xDevice
+name: ImportExternalSemaphoreExt
+decl: static
+ordinal: "0"
+details:
+    - "Imports an external semaphore."
+    - "This function may be called from simultaneous threads with the same device handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_device_handle_t"
+      name: "hDevice"
+      desc: |
+            [in] The device handle.
+    - type: "const $x_external_semaphore_ext_desc_t*"
+      name: "desc"
+      desc: |
+            [in] The pointer to external semaphore descriptor.
+    - type: "$x_external_semaphore_ext_handle_t*"
+      name: "phSemaphore"
+      desc: |
+            [out] The handle of the external semaphore imported.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Release an external semaphore"
+version: "1.12"
+class: $xDevice
+name: ReleaseExternalSemaphoreExt
+decl: static
+ordinal: "0"
+details:
+    - "The application must ensure the device is not currently referencing the semaphore before it is released."
+    - "The application must **not** call this function from simultaneous threads with the same semaphore handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: "$x_external_semaphore_ext_handle_t"
+      name: "hSemaphore"
+      desc: |
+            [in] The handle of the external semaphore.
+returns:
+    - $X_RESULT_ERROR_HANDLE_OBJECT_IN_USE
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Signal an external semaphore"
+version: "1.12"
+class: $xCommandList
+name: AppendSignalExternalSemaphoreExt
+details:
+    - "Signals an external semaphore."
+    - "This function must only be used with an immediate command list."
+    - "This function may be called from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_command_list_handle_t"
+      name: "hCommandList"
+      desc: |
+            [in] The command list handle.
+    - type: "uint32_t"
+      name: "numSemaphores"
+      desc: |
+            [in] The number of external semaphores.
+    - type: "$x_external_semaphore_ext_handle_t*"
+      name: "phSemaphores"
+      desc: |
+            [in][range(0, numSemaphores)] The vector of external semaphore handles to be appended into command list.
+    - type: "$x_external_semaphore_signal_params_ext_t*"
+      name: "signalParams"
+      desc: |
+            [in] Signal parameters.
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+        - "`(nullptr == phSemaphores) && (0 < numSemaphores)`"
+        - "`(nullptr == signalParams) && (0 < numSemaphores)`"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "Commandlist handle does not correspond to an immediate command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Wait on external semaphores"
+version: "1.12"
+class: $xCommandList
+name: AppendWaitExternalSemaphoreExt
+details:
+    - "Waits on external semaphores."
+    - "This function must only be used with an immediate command list."
+    - "This function may be called from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_command_list_handle_t"
+      name: "hCommandList"
+      desc: |
+            [in] The command list handle.
+    - type: "uint32_t"
+      name: "numSemaphores"
+      desc: |
+            [in] The number of external semaphores.
+    - type: "$x_external_semaphore_ext_handle_t*"
+      name: "phSemaphores"
+      desc: |
+            [in] [range(0,numSemaphores)] The vector of external semaphore handles to append into command list.
+    - type: "$x_external_semaphore_wait_params_ext_t*"
+      name: "waitParams"
+      desc: |
+            [in] Wait parameters.
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion" 
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+        - "`(nullptr == phSemaphores) && (0 < numSemaphores)`"
+        - "`(nullptr == waitParams) && (0 < numSemaphores)`"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "Commandlist handle does not correspond to an immediate command list"
