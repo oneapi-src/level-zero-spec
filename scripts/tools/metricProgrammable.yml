@@ -132,6 +132,9 @@ etors:
     - name: NORMALIZATION_BYTES
       version: "1.10"
       desc: "Produces normalization average using raw_metric * n bytes."
+    - name: GENERIC
+      version: "1.12"
+      desc: "Generic Parameter type. Please refer the parameter's description."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported value info types"
