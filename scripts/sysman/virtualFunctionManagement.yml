@@ -115,7 +115,7 @@ members:
       desc: "[out] Wall clock time when the activeCounterValue was sampled."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Virtual function management capabilities"
+desc: "Virtual function management capabilities (deprecated)"
 version: "1.10"
 class: $sVFManagement
 name: $s_vf_exp_capabilities_t
@@ -125,6 +125,23 @@ members:
       name: "address"
       desc: "[out] Virtual function BDF address"
     - type: uint32_t
+      name: "vfDeviceMemSize"
+      desc: "[out] Virtual function memory size in kilo bytes"
+    - type: uint32_t
+      name: "vfID"
+      desc: "[out] Virtual Function ID"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Virtual function management capabilities"
+version: "1.12"
+class: $sVFManagement
+name: $s_vf_exp2_capabilities_t
+base: $s_base_properties_t
+members:
+    - type: $s_pci_address_t
+      name: "address"
+      desc: "[out] Virtual function BDF address"
+    - type: uint64_t
       name: "vfDeviceMemSize"
       desc: "[out] Virtual function memory size in bytes"
     - type: uint32_t
@@ -143,7 +160,7 @@ members:
       desc: "[out] Location of this memory (system, device)"
     - type: uint64_t
       name: "vfMemUtilized"
-      desc: "[out] Free memory size in bytes."
+      desc: "[out] Utilized memory size in bytes."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Provides engine utilization values for a virtual function"
@@ -330,6 +347,7 @@ version: "1.10"
 class: $sVFManagement
 name: GetVFCapabilitiesExp
 details:
+    - "1.12": "[DEPRECATED] No longer supported. Use $sVFManagementGetVFCapabilitiesExp2."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -391,6 +409,22 @@ params:
             [in,out][optional][range(0, *pCount)] array of engine group activity counters.
               - if count is less than the total number of engine stats available, then driver shall only retrieve that number of stats.
               - the implementation shall populate the vector pCount-1 number of VF engine stats.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get virtual function management capabilities"
+version: "1.12"
+class: $sVFManagement
+name: GetVFCapabilitiesExp2
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_vf_handle_t
+      name: hVFhandle
+      desc: "[in] Sysman handle for the VF component."
+    - type: $s_vf_exp2_capabilities_t*
+      name: pCapability
+      desc: "[in,out] Will contain VF capability."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman virtual function management  group"

@@ -256,7 +256,11 @@ etors:
     - name: VF_UTIL_ENGINE_EXP2
       value: "0x00020010"
       desc: $s_vf_util_engine_exp2_t
-      version: "1.10"  
+      version: "1.10"
+    - name: VF_EXP2_CAPABILITIES
+      value: "0x00020011"
+      desc: $s_vf_exp2_capabilities_t
+      version: "1.12"    
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

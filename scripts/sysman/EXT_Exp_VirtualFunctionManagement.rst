@@ -24,6 +24,7 @@ API
     * ${s}DeviceEnumEnabledVFExp
     * ${s}DeviceEnumActiveVFExp
     * ${s}VFManagementGetVFCapabilitiesExp
+    * ${s}VFManagementGetVFCapabilitiesExp2
     * ${s}VFManagementGetVFMemoryUtilizationExp2
     * ${s}VFManagementGetVFEngineUtilizationExp2    
     * ${s}VFManagementGetVFPropertiesExp
@@ -46,6 +47,7 @@ API
     * ${s}_vf_exp_properties_t
     * ${s}_vf_util_mem_exp_t
     * ${s}_vf_util_engine_exp_t
+    * ${s}_vf_exp2_capabilities_t
    
 Virtual Function Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,10 +69,10 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
     std::vector<${s}_vf_handle_t> vfs(numVf, nullptr);
     ${s}DeviceEnumEnabledVFExp(hDevice, &numVf, vfs.data());
 
-    // Gather VF properties
-    std::vector <${s}_vf_exp_capabilities_t> vfCapabs(numVf);
+    // Gather VF capabilities
+    std::vector <${s}_vf_exp2_capabilities_t> vfCapabs(numVf);
     for (uint32_t i = 0; i < numVf; i++) {
-        ${s}VFManagementGetVFCapabilitiesExp(vfs[i], &vfCapabs[i]);
+        ${s}VFManagementGetVFCapabilitiesExp2(vfs[i], &vfCapabs[i]);
     }
 
     // Detect the info types a particular VF supports
