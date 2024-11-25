@@ -62,7 +62,6 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
 
     // Gather count of VF handles
     uint32_t numVf = 0;
-    ${s}_vf_exp_capabilities_t vfProps {};
     ${s}DeviceEnumEnabledVFExp(hDevice, &numVf, nullptr);
 
     // Allocate memory for vf handles and call back in to gather handles
