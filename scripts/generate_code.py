@@ -69,6 +69,26 @@ def _mako_ddi_h(path, namespace, tags, version, revision, specs, meta):
         meta=meta)
 
 """
+    generates ddi_common header
+"""
+def _mako_ddi_common_h(path, namespace, tags, version, revision, specs, meta):
+    template = "ddi_common.h.mako"
+    fin = os.path.join("templates", template)
+
+    filename = "%s_ddi_common.h"%(namespace)
+    fout = os.path.join(path, filename)
+
+    print("Generating %s..."%fout)
+    return util.makoWrite(
+        fin, fout,
+        ver=version,
+        rev=revision,
+        namespace=namespace,
+        tags=tags,
+        specs=specs,
+        meta=meta)
+
+"""
     generates python files from the specification documents
 """
 def _mako_api_py(path, namespace, tags, version, revision, specs, meta):
@@ -95,6 +115,8 @@ def _generate_api_cpp(incpath, srcpath, namespace, tags, version, revision, spec
     loc = _mako_api_h(incpath, namespace, tags, version, revision, specs, meta)
     loc += _mako_api_cpp(srcpath, namespace, tags, version, revision, specs, meta)
     loc += _mako_ddi_h(incpath, namespace, tags, version, revision, specs, meta)
+    if namespace == "ze":
+        loc += _mako_ddi_common_h(incpath, namespace, tags, version, revision, specs, meta)
 
     return loc
 

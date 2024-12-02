@@ -922,6 +922,7 @@ def get_pfntables(specs, meta, namespace, tags):
         if len(objs) > 0:
             name = get_table_name(namespace, tags, objs[0])
             table = "%s_%s_dditable_t"%(namespace, _camel_to_snake(name))
+            pTable = "%s_%s_dditable_t *"%(namespace, _camel_to_snake(name))
 
             params = []
             params.append({
@@ -944,6 +945,7 @@ def get_pfntables(specs, meta, namespace, tags):
             tables.append({
                 'name': name, 
                 'type': table,
+                'ptype': pTable,
                 'export': export,
                 'pfn': pfn,
                 'functions': objs
@@ -951,6 +953,7 @@ def get_pfntables(specs, meta, namespace, tags):
         if len(exp_objs) > 0:
             name = get_table_name(namespace, tags, exp_objs[0])
             table = "%s_%s_dditable_t"%(namespace, _camel_to_snake(name))
+            pTable = "%s_%s_dditable_t *"%(namespace, _camel_to_snake(name))
 
             params = []
             params.append({
@@ -973,6 +976,7 @@ def get_pfntables(specs, meta, namespace, tags):
             tables.append({
                 'name': name, 
                 'type': table,
+                'ptype': pTable,
                 'export': export,
                 'pfn': pfn,
                 'functions': exp_objs

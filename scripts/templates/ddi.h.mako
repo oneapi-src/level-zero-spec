@@ -95,6 +95,15 @@ typedef struct _${n}_dditable_t
     ${th.append_ws(tbl['type'], 35)} ${tbl['name']};
 %endfor
 } ${n}_dditable_t;
+/// @brief Container for all DDI tables with version and tables set by the Driver
+typedef struct _${n}_dditable_driver_t
+{
+    ze_api_version_t    version;
+    uint8_t             isValidFlag;
+%for tbl in th.get_pfntables(specs, meta, n, tags):
+    ${th.append_ws(tbl['ptype'], 35)} ${tbl['name']};
+%endfor
+} ${n}_dditable_driver_t;
 
 #if defined(__cplusplus)
 } // extern "C"
