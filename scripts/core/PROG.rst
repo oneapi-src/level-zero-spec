@@ -2063,7 +2063,7 @@ ${X}_AFFINITY_MASK = `1, 2, 7`: tile 1 from parent device 0 is reported as devic
 |       1       |  3   |  Yes    | Device handle 2                        |
 +---------------+------+---------+----------------------------------------+
 
-${X}_AFFINITY_MASK = `0.0`: is not valid, as with ${X}_FLAT_DEVICE_HIERARCHY set to 1, the device handles reported by ${x}DeviceGet are those which do not contain further sub-devices.
+${X}_AFFINITY_MASK = `0.0`: is not valid, as with ${X}_FLAT_DEVICE_HIERARCHY set to `FLAT`, the device handles reported by ${x}DeviceGet are those which do not contain further sub-devices.
 %endif
 
 Sub-Device Support
