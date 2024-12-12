@@ -10,9 +10,9 @@ from templates import helper as th
 
 .. _ZE_extension_driver_ddi_handles:
 
-==========================================
+=======================================================
  Driver Direct Device Interface (DDI) Handles Extension
-==========================================
+=======================================================
 
 API
 ----
@@ -32,21 +32,25 @@ See `ze*_ddi.h` for definitions of `ze_dditable_driver_t`, `zet_dditable_driver_
 `ze_handle_t` is defined in ze_ddi_common.h. To use it, include `ze_ddi_common.h`.
 
 Handle Structures:
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
     /// @brief Handle with pointer to Dispatch Container allocated by the driver at the beginning of every L0 Core handle
-    typedef struct _ze_handle_t
-    {
-        ze_dditable_driver_t *pCore; // [in] pointer to _ze_dditable_t_ object related to this handle
-        zet_dditable_driver_t *pTools; // [in] pointer to _zet_dditable_t_ object related to this handle
-        zes_dditable_driver_t *pSysman; // [in] pointer to _zes_dditable_t_ object related to this handle
-    } ze_handle_t;
+
+    .. code-block:: c
+
+        typedef struct _ze_handle_t
+        {
+            ze_dditable_driver_t *pCore; // [in] pointer to _ze_dditable_t_ object related to this handle
+            zet_dditable_driver_t *pTools; // [in] pointer to _zet_dditable_t_ object related to this handle
+            zes_dditable_driver_t *pSysman; // [in] pointer to _zes_dditable_t_ object related to this handle
+        } ze_handle_t;
 
 DDI Handles Extension:
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 Nowadays there are many possible scenarios of multiple Level Zero runtimes in the system (GPU + NPU, dGPU + iGPU on Windows, mainstream GPU + legacy GPU on Linux).
 Our current handling of multi runtime scenario in Loader has many issues:
+
   - performance degradation
   - Level Zero API handles are stored in per-type maps, accessing these maps costs, especially in hot paths
   - putting and removing entries from map needs additional mutex to ensure thread-safety
@@ -62,9 +66,11 @@ Backward compatibility is covered as new loader will still support runtimes that
 Loader should verify the support based on extension property queried from zeDriverGetExtensionProperties.
 
 Example Implementation of L0 Loader functions:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. parsed-literal::
+.. code-block:: cpp
+
+    ///////////////////////////////////////////////////////////////////////////////
     ZE_APIEXPORT ze_result_t ZE_APICALL zeContextCreate(
         ze_driver_handle_t hDriver,
         const ze_context_desc_t *desc,
