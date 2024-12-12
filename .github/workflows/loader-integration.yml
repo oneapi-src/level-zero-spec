@@ -8,6 +8,7 @@ on:
 env:
   http_proxy: http://proxy-dmz.intel.com:912
   https_proxy: http://proxy-dmz.intel.com:912
+  DOCKER_BUILDKIT: '1'
   VER: '1.12'
 
 jobs:
@@ -15,17 +16,24 @@ jobs:
     runs-on: [self-hosted, Linux]
     if: github.repository_owner == 'intel-innersource'
     steps:
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.x'
-    - name: Install dependencies
-      run: pip install Mako==1.1.0 PyYAML==5.2
     - uses: actions/checkout@v4
       with:
         clean: true
         fetch-depth: 0
         fetch-tags: true
         path: spec
+    - name: Build container image
+      run: | #bash
+        docker build \
+          --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
+          --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
+          -t ghcr.io/oneapi-src/spec-build:latest \
+          - < spec/.github/docker/build.Dockerfile
     - name: Generate spec artifacts
-      working-directory: spec/scripts
-      run: python3 ./run.py --debug '--!build' --ver $VER
+      run: | #bash
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD/spec/scripts \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 ./run.py --debug '--!build' --ver $VER
