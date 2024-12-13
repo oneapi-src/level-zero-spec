@@ -20,7 +20,7 @@ etors:
             Metric group and metrics exports memory using linux dma-buf, which could be imported/mapped to the host process.
             Properties of the dma_buf could be queried using $t_export_dma_buf_exp_properties_t.
     - name: USER_CREATED
-      desc: "Metric group created using $tMetricGroupCreateExp"
+      desc: "Metric group created using $tDeviceCreateMetricGroupsFromMetricsExp"
     - name: OTHER
       desc: "Metric group which has a collection of metrics"
 --- #--------------------------------------------------------------------------

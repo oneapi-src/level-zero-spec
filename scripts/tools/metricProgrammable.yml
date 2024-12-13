@@ -482,7 +482,7 @@ class: $tMetricGroup
 name: CreateExp
 decl: static
 details:
-    - "This API is deprecated. Please use $tCreateMetricGroupsFromMetricsExp() "
+    - "This API is deprecated. Please use $tDeviceCreateMetricGroupsFromMetricsExp "
 params:
     - type: $t_device_handle_t
       name: hDevice
@@ -501,7 +501,7 @@ params:
       desc: "[in,out] Created Metric group handle"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Add a metric handle to the metric group handle created using $tMetricGroupCreateExp."
+desc: "Add a metric handle to the metric group handle created using $tDeviceCreateMetricGroupsFromMetricsExp."
 version: "1.9"
 class: $tMetricGroup
 name: AddMetricExp
@@ -535,7 +535,7 @@ returns:
         - "If the metric group is currently activated."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Remove a metric from the metric group handle created using $tMetricGroupCreateExp."
+desc: "Remove a metric from the metric group handle created using $tDeviceCreateMetricGroupsFromMetricsExp."
 version: "1.9"
 class: $tMetricGroup
 name: RemoveMetricExp
@@ -558,7 +558,7 @@ returns:
         - "If the input metric group is a pre-defined metric group"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Closes a created metric group using $tMetricGroupCreateExp, so that it can be activated."
+desc: "Closes a created metric group using $tDeviceCreateMetricGroupsFromMetricsExp, so that it can be activated."
 version: "1.9"
 class: $tMetricGroup
 name: CloseExp
@@ -580,7 +580,7 @@ returns:
        - "If the metric group is currently activated"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Destroy a metric group created using $tMetricGroupCreateExp."
+desc: "Destroy a metric group created using $tDeviceCreateMetricGroupsFromMetricsExp."
 version: "1.9"
 class: $tMetricGroup
 name: DestroyExp
