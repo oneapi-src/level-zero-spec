@@ -257,14 +257,14 @@ Mutation of kernels must obey two rules:
 
     // Prepare to modify Kernel Argument
     int argValue = 1;
-    void *usmPointer;
+    void ``*``\usmPointer;
 
     ${x}_mutable_kernel_argument_exp_desc_t krnlArgMemoryDesc = {
         ${X}_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC,     // stype
         &groupSizeDesc,                                         // pNext
         mutableKernelCommandId,                                 // commandId
         0,                                                      // argIndex
-        sizeof(void *),                                         // argSize
+        sizeof(void ``*``\),                                         // argSize
         &usmPointer                                             // pArgValue
     };
 

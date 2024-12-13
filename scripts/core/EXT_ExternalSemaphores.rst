@@ -61,10 +61,10 @@ Semantics and Behavior model
 
 Following pseudo-code demonstrates a sequence for importing external semaphore from Vulkan and using it in L0:
 
-..parsed-literal::
+.. parsed-literal::
     // Import external semaphore from Vulkan
     VkSemaphore vkSemaphore = ...;  // Create Vulkan semaphores
-    void *vkSemHandle = ...; //export VK semaphore
+    void ``*``\vkSemHandle = ...; //export VK semaphore
 
     ${x}_external_semaphore_win32_ext_desc_t win32Desc = {};
     win32Desc.handle = vkSemHandle;
@@ -87,4 +87,4 @@ Following pseudo-code demonstrates a sequence for importing external semaphore f
     ${x}_external_semaphore_signal_params_ext_t signalParams = {};
     signalParams.pNext = nullptr;
     ${x}CommandListAppendLaunchKernel(commandList, kernel, ..., event2, 0, nullptr);
-    ${x}CommandListAppendSignalExternalSemaphoreExt(commandList, &semaphore0, &signalParams, 1, event3, 1, &event2); 
+    ${x}CommandListAppendSignalExternalSemaphoreExt(commandList, &semaphore0, &signalParams, 1, event3, 1, &event2);

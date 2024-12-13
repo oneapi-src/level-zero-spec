@@ -267,7 +267,7 @@ params:
       name: phMetrics 
       desc: |
             [in] [range(0, metricsCount)] array of handles of decodable metrics in the decoder for which the hMetricDecoder handle was 
-            provided. Metrics handles are expected to be for decodable metrics, see $tMetricDecoderGetDecodableMetrics() 
+            provided. Metrics handles are expected to be for decodable metrics, see $tMetricDecoderGetDecodableMetricsExp() 
     - type: uint32_t*
       name: pSetCount
       desc: |

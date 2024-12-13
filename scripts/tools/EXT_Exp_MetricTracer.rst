@@ -71,18 +71,18 @@ Configuration
 -------------
 
 Use the ${t}ContextActivateMetricGroups API call to configure the device for data collection.
- 
+
 Collection
 ----------
 
-Metric Tracer based collection mode allows the creation of a tracer object for multiple metric groups than can be collected concurrently. Once metric groups are 
-activated the tracer can be created using ${t}MetricTracerCreateExp. Tracers are created in disabled state, applications have the flexibility to to enable 
-(${t}MetricTracerEnableExp) and disable (${t}MetricTracerDisableExp) during workload execution to selectively decide sections on which to collect metrics. 
+Metric Tracer based collection mode allows the creation of a tracer object for multiple metric groups than can be collected concurrently. Once metric groups are
+activated the tracer can be created using ${t}MetricTracerCreateExp. Tracers are created in disabled state, applications have the flexibility to to enable
+(${t}MetricTracerEnableExp) and disable (${t}MetricTracerDisableExp) during workload execution to selectively decide sections on which to collect metrics.
 ata can be retrieved from the tracer with ${t}MetricTracerReadDataExp.
 
 Decoding
 --------
-Metric Tracer collects the data in device specific, raw form that is not suitable for application processing. To convert data into a format that allows 
+Metric Tracer collects the data in device specific, raw form that is not suitable for application processing. To convert data into a format that allows
 application parsing a decoder object can be used. The decoder object is created with ${t}MetricDecoderCreateExp and data can be converted using
 ${t}MetricTracerDecodeExp. Each event in the data is associated with a decodable metric, which can be retrieved with ${t}MetricDecoderGetDecodableMetricsExp.
 
@@ -101,7 +101,7 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     ${x}_event_pool_handle_t       hEventPool             = nullptr;
     ${x}_event_pool_desc_t         eventPoolDesc          = {${X}_STRUCTURE_TYPE_EVENT_POOL_DESC, nullptr, 0, 1};
     ${x}_event_desc_t              eventDesc              = {${X}_STRUCTURE_TYPE_EVENT_DESC};
-    ${t}_metric_tracer_exp_handle_t hMetricTracer         = nullptr; 
+    ${t}_metric_tracer_exp_handle_t hMetricTracer         = nullptr;
     ${t}_metric_tracer_exp_desc_t tracerDescriptor = { ${T}_STRUCTURE_TYPE_METRIC_TRACER_EXP_DESC, nullptr, 1024};
     ${t}_metric_decoder_exp_handle_t hMetricDecoder       = nullptr;
 

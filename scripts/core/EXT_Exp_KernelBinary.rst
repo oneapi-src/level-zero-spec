@@ -42,12 +42,12 @@ The following pseudo-code shows how to obtain the kernel binary program data sav
     #include <fstream>
     //hKernel = valid kernel handle
     size_t kBinarySize = 0;
-    char *progArray;
+    char ``*``\progArray;
     ${x}KernelGetBinaryExp(hKernel, &KBinarysize, nullptr);
     progArray = new char[kBinarySize];
     ${x}KernelGetBinaryExp(hKernel, &kBinarySize, progArray);
     const std::string filePath = "program.bin";
     std::ofstream stream(filePath, std::ios::out | std::ios::binary);
-    stream.write(reinterpret_cast<const char *>(progArray), kBinarySize);
+    stream.write(reinterpret_cast<const char ``*``\>(progArray), kBinarySize);
     stream.close();
     delete[] progArray;

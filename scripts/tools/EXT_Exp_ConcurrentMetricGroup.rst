@@ -12,9 +12,9 @@ from templates import helper as th
 
 .. _ZET_experimental_concurrent_metric_groups:
 
-==========================================
+=======================================================
 Concurrent Metric Groups Experimental Extension
-==========================================
+=======================================================
 
 API
 ----

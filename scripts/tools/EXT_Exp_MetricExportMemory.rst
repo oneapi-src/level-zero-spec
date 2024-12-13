@@ -12,9 +12,10 @@ from templates import helper as th
 
 .. _ZET_experimental_metric_export_memory:
 
-==============================================
- MetricGroup and Metric Export Memory Extension
-==============================================
+
+=======================================================
+MetricGroup and Metric Export Memory Extension
+=======================================================
 
 API
 ----
