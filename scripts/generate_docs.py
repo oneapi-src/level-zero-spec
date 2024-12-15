@@ -247,7 +247,9 @@ def generate_common(dstpath, sections, ver, rev):
     # Doxygen generates XML files needed by sphinx breathe plugin for API documentation
     print("Generating doxygen...")
     cmdline = "doxygen Doxyfile"
-    os.system(cmdline)
+    rc = os.waitstatus_to_exitcode(os.system(cmdline))
+    if rc > 0:
+        raise Exception("doxygen returned %d"%rc)
 
     # workaround for C++ standard keywords redefined due to missing Doxygen options to set the preferred C++ standard
     _postprocess_generated_xml(xmlpath)
@@ -263,8 +265,10 @@ def generate_html(dstpath):
     cmdline = "sphinx-build -M html %s ../docs"%sourcepath
     print(cmdline)
     os.environ["PYTHONWARNINGS"] = "ignore"
-    os.system(cmdline)
+    rc = os.waitstatus_to_exitcode(os.system(cmdline))
     os.environ.pop("PYTHONWARNINGS")
+    if rc > 0:
+        raise Exception("sphinx-build returned %d"%rc)
 
 """
 Entry-point:
