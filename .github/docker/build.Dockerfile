@@ -11,10 +11,12 @@ apt-get install -y \
   doxygen \
   git \
   python3 \
+  python3-breathe \
   python3-mako \
   python3-pip \
   python3-yaml \
   python3-sphinx-book-theme \
+  rst2pdf \
   sphinx
 EOF
 

@@ -35,5 +35,6 @@ jobs:
           --rm \
           -v $PWD:$PWD \
           -w $PWD/spec/scripts \
+          -e TZ=UTC \
           ghcr.io/oneapi-src/spec-build:latest \
-          python3 ./run.py --debug '--!build' --ver $VER
+          python3 ./run.py --debug --html '--!build' --ver $VER
