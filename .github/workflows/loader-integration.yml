@@ -1,7 +1,4 @@
 on:
-  push:
-    branches: [master]
-    tags: [v*]
   pull_request:
     branches: [master]
 
@@ -16,25 +13,179 @@ jobs:
     runs-on: [self-hosted, Linux]
     if: github.repository_owner == 'intel-innersource'
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout spec-head
+      uses: actions/checkout@v4
       with:
         clean: true
         fetch-depth: 0
         fetch-tags: true
-        path: spec
+        path: spec-head
+    - name: Checkout spec-base
+      uses: actions/checkout@v4
+      with:
+        ref: master
+        clean: true
+        fetch-depth: 0
+        fetch-tags: true
+        path: spec-base
     - name: Build container image
       run: | #bash
         docker build \
           --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
           --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
           -t ghcr.io/oneapi-src/spec-build:latest \
-          - < spec/.github/docker/build.Dockerfile
-    - name: Generate spec artifacts
+          - < spec-head/.github/docker/build.Dockerfile
+    - name: Generate spec-head artifacts
       run: | #bash
         docker run \
           --rm \
           -v $PWD:$PWD \
-          -w $PWD/spec/scripts \
+          -w $PWD/spec-head/scripts \
           -e TZ=UTC \
           ghcr.io/oneapi-src/spec-build:latest \
           python3 ./run.py --debug --html '--!build' --ver $VER
+    - name: Generate spec-base artifacts
+      run: | #bash
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD/spec-base/scripts \
+          -e TZ=UTC \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 ./run.py --debug '--!build' --ver $VER
+    - name: Checkout loader-head
+      uses: actions/checkout@v4
+      with:
+        clean: true
+        repository: oneapi-src/level-zero
+        ref: spec-1.12
+        path: loader-head
+    - name: Checkout loader-base
+      uses: actions/checkout@v4
+      with:
+        clean: true
+        repository: oneapi-src/level-zero
+        ref: spec-1.12
+        path: loader-base
+    - uses: intel-sandbox/action-setup-jq@main
+    - name: Copy head include files
+      working-directory: spec-head
+      run: | #bash
+        set -o pipefail
+        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
+        cut -c 4- |
+        sort |
+        xargs -I{} cp -v ./{} ../loader-head/{}
+    - name: Copy base include files
+      working-directory: spec-base
+      run: | #bash
+        set -o pipefail
+        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
+        cut -c 4- |
+        sort |
+        xargs -I{} cp -v ./{} ../loader-base/{}
+    - name: json2src head
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD/loader-head \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 ./scripts/json2src.py --ver $VER . < spec-head/scripts/input.json
+    - name: json2src base
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD/loader-base \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 ./scripts/json2src.py --ver $VER . < spec-base/scripts/input.json
+    - name: Build loader-head
+      working-directory: loader-head
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD \
+          -e CXXFLAGS="-Og -g" \
+          ghcr.io/oneapi-src/spec-build:latest \
+          bash -e <<EOF
+        mkdir -p build
+        cd build
+        cmake -D CMAKE_BUILD_TYPE=Debug ..
+        make -j$(nproc)
+        EOF
+    - name: Build loader-base
+      working-directory: loader-base
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD \
+          -e CXXFLAGS="-Og -g" \
+          ghcr.io/oneapi-src/spec-build:latest \
+          bash -e <<EOF
+        mkdir -p build
+        cd build
+        cmake -D CMAKE_BUILD_TYPE=Debug ..
+        make -j$(nproc)
+        EOF
+    - name: Checkout abi-dumper
+      uses: actions/checkout@v4
+      with:
+        clean: true
+        repository: lvc/abi-dumper
+        path: abi-dumper
+    - name: Setup abi-dumper
+      run: | #bash
+        cp abi-dumper/abi-dumper.pl .
+        chmod +x abi-dumper.pl
+    - name: Dump loader-head
+      run: | #bash
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          ./abi-dumper.pl \
+            loader-head/build/lib/libze_loader.so \
+            -lver $(cat loader-head/build/VERSION)-1 \
+            -public-headers loader-head/include \
+            -o head.dump
+    - name: Dump loader-base
+      run: | #bash
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          ./abi-dumper.pl \
+            loader-base/build/lib/libze_loader.so \
+            -lver $(cat loader-base/build/VERSION) \
+            -public-headers loader-base/include \
+            -o base.dump
+    - name: Download and setup abi-compliance-checker
+      run: |
+        wget https://github.com/lvc/abi-compliance-checker/tarball/master -O abi-compliance-checker.tar.gz
+        tar -xzf abi-compliance-checker.tar.gz
+        chmod +x lvc-abi-compliance-checker-*/abi-compliance-checker.pl
+    - name: Compare dumps
+      run: |
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          lvc-abi-compliance-checker-*/abi-compliance-checker.pl \
+            -l libze_loader \
+            -old base.dump \
+            -new head.dump \
+            -report-path report.html
+    - uses: actions/upload-artifact@v4
+      with:
+        name: abi-report
+        path: report.html

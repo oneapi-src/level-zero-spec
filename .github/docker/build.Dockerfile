@@ -7,8 +7,11 @@ RUN --mount=type=cache,target=/var/cache/apt <<EOF
 rm /etc/apt/apt.conf.d/docker-clean
 apt-get update
 apt-get install -y \
+  build-essential \
   ca-certificates \
+  cmake \
   doxygen \
+  elfutils \
   git \
   python3 \
   python3-breathe \
@@ -17,7 +20,9 @@ apt-get install -y \
   python3-yaml \
   python3-sphinx-book-theme \
   rst2pdf \
-  sphinx
+  sphinx \
+  universal-ctags \
+  vtable-dumper
 EOF
 
 # RUN pip install Mako==1.1.0 PyYAML==5.2 sphinx-book-theme
