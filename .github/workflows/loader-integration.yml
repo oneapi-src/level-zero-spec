@@ -53,6 +53,46 @@ jobs:
           -e TZ=UTC \
           ghcr.io/oneapi-src/spec-build:latest \
           python3 ./run.py --debug '--!build' --ver $VER
+    - name: Determine if there is a diff between header files
+      id: include-diff
+      run: | #bash
+        if git diff --quiet --exit-code -- spec-head/include spec-base/include; then
+            echo "diff=0" >> $GITHUB_OUTPUT
+        else
+            echo "diff=1" >> $GITHUB_OUTPUT
+        fi
+    - name: Get header diff
+      if: steps.include-diff.outputs.diff == '1'
+      run: git diff --no-index spec-base/include spec-head/include > header-diff.patch || true
+    - name: Write comment with formatting to DIFF_COMMENT
+      if: steps.include-diff.outputs.diff == '1'
+      shell: python3 {0}
+      run: |
+        import os
+        with open('header-diff.patch', 'r') as f:
+            diff_content = f.read()
+        diff_comment = f"```diff\n{diff_content}\n```"
+        # https://trstringer.com/github-actions-multiline-strings/#option-2---environment-variable
+        with open(os.environ['GITHUB_ENV'], 'a') as env:
+            print('RESULTS_COMMENT<<EOF', file = env)
+            print(diff_comment, file = env)
+            print('EOF', file = env)
+    - name: Write comment to PR
+      uses: actions/github-script@v6
+      if: steps.include-diff.outputs.diff == '1'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
+          github.rest.issues.createComment({
+            issue_number: pullRequestId,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: process.env.RESULTS_COMMENT
+          });
+    - name: Write job summary
+      if: steps.include-diff.outputs.diff == '1'
+      run: echo "${RESULTS_COMMENT}" >> ${GITHUB_STEP_SUMMARY}
     - name: Checkout loader-head
       uses: actions/checkout@v4
       with:
