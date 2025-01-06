@@ -17,6 +17,10 @@ from templates import helper as th
 API
 ----
 
+* Enumerations
+
+    * ${x}_kernel_get_binary_exp_version_t
+
 * Functions
 
     * ${x}KernelGetBinaryExp
