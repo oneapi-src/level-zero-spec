@@ -4,4 +4,4 @@
  Versions
 ===================
 
-https://spec.oneapi.io/releases/index.html#level-zero
+https://oneapi-src.github.io/level-zero-spec/releases/index.html#level-zero
