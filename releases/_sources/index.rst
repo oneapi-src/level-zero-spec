@@ -9,10 +9,10 @@
 
 The oneapi spec has moved to `oneAPI Spec`_. Level Zero continues to
 be available at this site. All other specs have been archived. For any
-questions, file an issue at `spec.oneapi.io issues`_.
+questions, file an issue at `level-zero-spec issues`_.
 
 .. _`oneAPI Spec`: https://oneapi-spec.uxlfoundation.org/
-.. _`spec.oneapi.io issues`: https://github.com/uxlfoundation/spec.oneapi.io
+.. _`level-zero-spec issues`: https://github.com/oneapi-src/level-zero-spec/issues
 
 
 
@@ -26,81 +26,95 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.11.8`_
+    - 2024-11-13
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html>`__  
   * - `Level Zero v1.11`_
     - 2024-10-03
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__  	
   * - `Level Zero v1.10`_
     - 2024-09-06
-    - `HTML <https://spec.oneapi.io/level-zero/1.10/index.html>`__  	
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html>`__  	
   * - `Level Zero v1.9.3`_
     - 2024-05-03
-    - `HTML <https://spec.oneapi.io/level-zero/1.9.3/index.html>`__  
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html>`__  
   * - `Level Zero v1.9.2`_
     - 2024-02-20
-    - `HTML <https://spec.oneapi.io/level-zero/1.9.2/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.2/index.html>`__
   * - `Level Zero v1.9.1`_
     - 2024-02-09
-    - `HTML <https://spec.oneapi.io/level-zero/1.9.1/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.1/index.html>`__
   * - `Level Zero v1.9.0`_
     - 2024-02-02
-    - `HTML <https://spec.oneapi.io/level-zero/1.9.0/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.0/index.html>`__
   * - `Level Zero v1.8.0`_
     - 2023-10-13
-    - `HTML <https://spec.oneapi.io/level-zero/1.8.0/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.8.0/index.html>`__
   * - `Level Zero v1.7.8`_
     - 2023-8-28
-    - `HTML <https://spec.oneapi.io/level-zero/1.7.8/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.7.8/index.html>`__
   * - `Level Zero v1.7.0`_
     - 2023-7-9
-    - `HTML <https://spec.oneapi.io/level-zero/1.7.0/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.7.0/index.html>`__
   * - `Level Zero v1.6.10`_
     - 2023-5-19
-    - `HTML <https://spec.oneapi.io/level-zero/1.6.10/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.10/index.html>`__
   * - `Level Zero v1.6.3`_
     - 2023-4-25
-    - `HTML <https://spec.oneapi.io/level-zero/1.6.3/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.3/index.html>`__
   * - `Level Zero v1.6.0`_
     - 2023-3-31
-    - `HTML <https://spec.oneapi.io/level-zero/1.6.0/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.0/index.html>`__
   * - `Level Zero v1.5.17`_
     - 2023-3-2
-    - `HTML <https://spec.oneapi.io/level-zero/1.5.17/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.17/index.html>`__
   * - `Level Zero v1.5.16`_
     - 2023-2-28
-    - `HTML <https://spec.oneapi.io/level-zero/1.5.16/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.16/index.html>`__
   * - `Level Zero v1.5.8`_
     - 2023-1-19
-    - `HTML <https://spec.oneapi.io/level-zero/1.5.8/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.8/index.html>`__
   * - `Level Zero v1.5.0`_
     - 2023-1-11
-    - `HTML <https://spec.oneapi.io/level-zero/1.5.0/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.0/index.html>`__
   * - `Level Zero v1.4.8`_
     - 2022-07-22
-    - `HTML <https://spec.oneapi.io/level-zero/1.4.8/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.4.8/index.html>`__
   * - `Level Zero v1.4`_
     - 2022-05-05
-    - `HTML <https://spec.oneapi.io/level-zero/1.4.0/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.4.0/index.html>`__
   * - `Level Zero v1.3`_
     - 2021-11-27
-    - `HTML <https://spec.oneapi.io/level-zero/1.3.7/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.3.7/index.html>`__
   * - `Level Zero v1.2`_
     - 2021-05-11
-    - `HTML <https://spec.oneapi.io/level-zero/1.2.43/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.2.43/index.html>`__
   * - `Level Zero v1.1`_
     - 2021-02-04
-    - `HTML <https://spec.oneapi.io/level-zero/1.1.2/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.1.2/index.html>`__
   * - `Level Zero v1.0`_
     - 2020-10-02
-    - `HTML <https://spec.oneapi.io/level-zero/1.0.4/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.0.4/index.html>`__
   * - `Level Zero v0.95`_
     - 2020-05-28
-    - `HTML <https://spec.oneapi.io/level-zero/0.95/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/0.95/index.html>`__
   * - `Level Zero v0.91`_
     - 2020-03-04
-    - `HTML <https://spec.oneapi.io/level-zero/0.91/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/0.91/index.html>`__
 
 Release Notes
 -------------
+
+Level Zero v1.11.8
+~~~~~~~~~~~~~~~~~~
+
+* Patches to v1.11 release:
+
+	- Fixing ABI compatibility issues with v1.11.
+	- Fix metric types for new experimental types.
+	- Scripts updated to raise a proper exception when parse errors occur.
+	- Fix zeKernelGetBinaryExp's inclusion.
+	- Update documentation on Init and add deprecation comments for init changes.  
 
 Level Zero v1.11
 ~~~~~~~~~~~~~~~~~~
@@ -112,7 +126,7 @@ Level Zero v1.11
 	- Add support for metrics and groups to export memory.
 	- Add API specification to retrieve kernel binary program data.
 
-* Pathes to v1.10 release:
+* Patches to v1.10 release:
 
 	- Addressed level-zero loader ABI breakage issue with spec v1.10.
 	- Documentation update to spec to relax restriction to allow driver to create internal threads.
