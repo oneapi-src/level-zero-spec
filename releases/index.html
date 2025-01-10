@@ -14,41 +14,37 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+  
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -56,16 +52,31 @@
 
   
   
-  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -73,6 +84,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -80,15 +92,10 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
-
-  <div class="pst-async-banner-revealer d-none">
-  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
-</div>
-
+</form></div>
+  </div>
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
     </header>
   
 
@@ -99,33 +106,13 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
-
-  
-  <div class="sidebar-header-items sidebar-primary__section">
-    
-    
-    
-    
-  </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
-  </div>
 
 
       </div>
       
-      <main id="main-content" class="bd-main" role="main">
+      <main id="main-content" class="bd-main">
         
         
 
@@ -134,14 +121,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article d-print-none">
+              <div class="bd-header-article">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -232,19 +219,27 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -267,6 +262,7 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero">Level Zero</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-notes">Release Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-12-15">Level Zero v1.12.15</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-11-8">Level Zero v1.11.8</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-11">Level Zero v1.11</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-10">Level Zero v1.10</a></li>
@@ -314,7 +310,7 @@ be available at this site. All other specs have been archived. For any
 questions, file an issue at <a class="reference external" href="https://github.com/oneapi-src/level-zero-spec/issues">level-zero-spec issues</a>.</p>
 <section id="level-zero">
 <h2>Level Zero<a class="headerlink" href="#level-zero" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="table">
+<table class="table">
 <colgroup>
 <col style="width: 30.0%" />
 <col style="width: 20.0%" />
@@ -327,111 +323,139 @@ questions, file an issue at <a class="reference external" href="https://github.c
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-11-8">Level Zero v1.11.8</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-12-15">Level Zero v1.12.15</a></p></td>
+<td><p>2025-1-10</p></td>
+<td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.12.15/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-11-8">Level Zero v1.11.8</a></p></td>
 <td><p>2024-11-13</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-11">Level Zero v1.11</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-11">Level Zero v1.11</a></p></td>
 <td><p>2024-10-03</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-10">Level Zero v1.10</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-10">Level Zero v1.10</a></p></td>
 <td><p>2024-09-06</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-3">Level Zero v1.9.3</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-3">Level Zero v1.9.3</a></p></td>
 <td><p>2024-05-03</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-2">Level Zero v1.9.2</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-2">Level Zero v1.9.2</a></p></td>
 <td><p>2024-02-20</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.2/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-1">Level Zero v1.9.1</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-1">Level Zero v1.9.1</a></p></td>
 <td><p>2024-02-09</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.1/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-0">Level Zero v1.9.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-0">Level Zero v1.9.0</a></p></td>
 <td><p>2024-02-02</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-8-0">Level Zero v1.8.0</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-8-0">Level Zero v1.8.0</a></p></td>
 <td><p>2023-10-13</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.8.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-7-8">Level Zero v1.7.8</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-7-8">Level Zero v1.7.8</a></p></td>
 <td><p>2023-8-28</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.7.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-7-0">Level Zero v1.7.0</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-7-0">Level Zero v1.7.0</a></p></td>
 <td><p>2023-7-9</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.7.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-10">Level Zero v1.6.10</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-6-10">Level Zero v1.6.10</a></p></td>
 <td><p>2023-5-19</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.10/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-6-3">Level Zero v1.6.3</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-3">Level Zero v1.6.3</a></p></td>
 <td><p>2023-4-25</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.3/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-0">Level Zero v1.6.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-6-0">Level Zero v1.6.0</a></p></td>
 <td><p>2023-3-31</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-17">Level Zero v1.5.17</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-17">Level Zero v1.5.17</a></p></td>
 <td><p>2023-3-2</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.17/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-16">Level Zero v1.5.16</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-16">Level Zero v1.5.16</a></p></td>
 <td><p>2023-2-28</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.16/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-8">Level Zero v1.5.8</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-8">Level Zero v1.5.8</a></p></td>
 <td><p>2023-1-19</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-0">Level Zero v1.5.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-0">Level Zero v1.5.0</a></p></td>
 <td><p>2023-1-11</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-4-8">Level Zero v1.4.8</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-4-8">Level Zero v1.4.8</a></p></td>
 <td><p>2022-07-22</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.4.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-4">Level Zero v1.4</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-4">Level Zero v1.4</a></p></td>
 <td><p>2022-05-05</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.4.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-3">Level Zero v1.3</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-3">Level Zero v1.3</a></p></td>
 <td><p>2021-11-27</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.3.7/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-2">Level Zero v1.2</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-2">Level Zero v1.2</a></p></td>
 <td><p>2021-05-11</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.2.43/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-1">Level Zero v1.1</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-1">Level Zero v1.1</a></p></td>
 <td><p>2021-02-04</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.1.2/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-0">Level Zero v1.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-0">Level Zero v1.0</a></p></td>
 <td><p>2020-10-02</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.0.4/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v0-95">Level Zero v0.95</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v0-95">Level Zero v0.95</a></p></td>
 <td><p>2020-05-28</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/0.95/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v0-91">Level Zero v0.91</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v0-91">Level Zero v0.91</a></p></td>
 <td><p>2020-03-04</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/0.91/index.html">HTML</a></p></td>
 </tr>
 </tbody>
 </table>
-</div>
 <section id="release-notes">
 <h3>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">#</a></h3>
+<section id="level-zero-v1-12-15">
+<h4>Level Zero v1.12.15<a class="headerlink" href="#level-zero-v1-12-15" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Updated Features:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Add External semaphores API</p></li>
+<li><p>Add Driver DDI Handles Extension</p></li>
+<li><p>Add GENERIC type into Metrics</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Patches to v1.11.8 release:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Fix Spec Documentation Links</p></li>
+<li><p>Add missing version structure for zeKernelGetBinaryExp</p></li>
+<li><p>Corrected and added METRIC_GROUP_NAME_PREFIX_EXP</p></li>
+<li><p>Fix Multiple Documentation Syntax to remove warnings</p></li>
+<li><p>Fix for vf telemetry APIs</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
 <section id="level-zero-v1-11-8">
 <h4>Level Zero v1.11.8<a class="headerlink" href="#level-zero-v1-11-8" title="Link to this heading">#</a></h4>
 <ul>
@@ -1027,7 +1051,7 @@ scheduler and memory components.</p></li>
               
               
               
-                <footer class="prev-next-footer d-print-none">
+                <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
 </div>
@@ -1037,8 +1061,7 @@ scheduler and memory components.</p></li>
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1049,6 +1072,7 @@ scheduler and memory components.</p></li>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero">Level Zero</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-notes">Release Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-12-15">Level Zero v1.12.15</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-11-8">Level Zero v1.11.8</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-11">Level Zero v1.11</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-10">Level Zero v1.10</a></li>
@@ -1091,10 +1115,6 @@ scheduler and memory components.</p></li>
   
   <div class="footer-item">
     
-<p class="component-author">
-By Author name not set
-</p>
-
   </div>
   
   <div class="footer-item">
@@ -1126,8 +1146,8 @@ By Author name not set
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>

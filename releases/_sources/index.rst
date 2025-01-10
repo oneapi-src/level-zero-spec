@@ -26,18 +26,21 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.12.15`_
+    - 2025-1-10
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.12.15/index.html>`__
   * - `Level Zero v1.11.8`_
     - 2024-11-13
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html>`__  
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html>`__
   * - `Level Zero v1.11`_
     - 2024-10-03
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__  	
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__
   * - `Level Zero v1.10`_
     - 2024-09-06
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html>`__  	
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html>`__
   * - `Level Zero v1.9.3`_
     - 2024-05-03
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html>`__  
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html>`__
   * - `Level Zero v1.9.2`_
     - 2024-02-20
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.2/index.html>`__
@@ -104,6 +107,23 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.12.15
+~~~~~~~~~~~~~~~~~~~
+
+* Updated Features:
+
+	- Add External semaphores API
+	- Add Driver DDI Handles Extension
+	- Add GENERIC type into Metrics
+
+* Patches to v1.11.8 release:
+
+	- Fix Spec Documentation Links
+	- Add missing version structure for zeKernelGetBinaryExp
+	- Corrected and added METRIC_GROUP_NAME_PREFIX_EXP
+	- Fix Multiple Documentation Syntax to remove warnings
+	- Fix for vf telemetry APIs
 
 Level Zero v1.11.8
 ~~~~~~~~~~~~~~~~~~
