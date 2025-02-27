@@ -597,6 +597,7 @@ decl: static
 details:
     - "Metric handles created using $tMetricCreateFromProgrammableExp2 and are part of the metricGroup are not destroyed."
     - "It is necessary to call $tMetricDestroyExp for each of the metric handles (created from $tMetricCreateFromProgrammableExp2) to destroy them."
+    - "It is not necessary to remove the metrics in the metricGroup before destroying it."
 params:
     - type: $t_metric_group_handle_t 
       name: hMetricGroup
