@@ -1,0 +1,40 @@
+#
+# Copyright (C) 2025 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for CacheLine Size"
+version: "1.13"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "CacheLine Size Extension Name"
+version: "1.13"
+name: $X_CACHELINE_SIZE_EXT_NAME
+value: '"$X_extension_device_cache_line_size"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "CacheLine Size Extension Version(s)"
+version: "1.13"
+name: $x_device_cache_line_size_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "CacheLine Size queried using $xDeviceGetCacheProperties"
+version: "1.13"
+class: $xDevice
+name: $x_device_cache_line_size_ext_t
+base: $x_base_desc_t
+members:
+    - type: size_t
+      name: cacheLineSize
+      desc: "[out] The cache line size in bytes."
+details:
+    - "This structure may be returned from $xDeviceGetCacheProperties via the `pNext` member of $x_device_cache_properties_t."
+    - "Used for determining the cache line size supported on a device."
