@@ -898,6 +898,9 @@ def parse(section, version, tags, meta, ref):
             if not _validate_doc(f, d, tags, line_nums[i]):
                 successful = False
                 continue
+            if 'version' not in d:
+                print(d)
+                d['version'] = default_version
 
             d = _filter_version(d, version)
             if not d:
