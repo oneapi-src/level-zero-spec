@@ -100,14 +100,14 @@ jobs:
       with:
         clean: true
         repository: oneapi-src/level-zero
-        ref: spec-1.12
+        ref: master
         path: loader-head
     - name: Checkout loader-base
       uses: actions/checkout@v4
       with:
         clean: true
         repository: oneapi-src/level-zero
-        ref: spec-1.12
+        ref: master
         path: loader-base
     - uses: intel-sandbox/action-setup-jq@main
     - name: Copy head include files
