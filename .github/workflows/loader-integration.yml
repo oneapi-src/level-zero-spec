@@ -72,27 +72,29 @@ jobs:
         with open('header-diff.patch', 'r') as f:
             diff_content = f.read()
         diff_comment = f"```diff\n{diff_content}\n```"
-        # https://trstringer.com/github-actions-multiline-strings/#option-2---environment-variable
-        with open(os.environ['GITHUB_ENV'], 'a') as env:
-            print('RESULTS_COMMENT<<EOF', file = env)
-            print(diff_comment, file = env)
-            print('EOF', file = env)
-    - name: Write comment to PR
-      uses: actions/github-script@v6
+        with open('results_comment.txt', 'w') as results_file:
+            results_file.write(diff_comment)
+    - uses: actions/upload-artifact@v4
       if: steps.include-diff.outputs.diff == '1'
+      id: upload-diff-artifact
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
-          github.rest.issues.createComment({
-            issue_number: pullRequestId,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: process.env.RESULTS_COMMENT
-          });
-    - name: Write job summary
+        name: Level Zero Header Diff
+        path: results_comment.txt
+    - name: Output artifact URL
+      run:  echo 'Artifact URL is ${{ steps.upload-diff-artifact.outputs.artifact-url }}'
+    - name: Write comment to PR
       if: steps.include-diff.outputs.diff == '1'
-      run: echo "${RESULTS_COMMENT}" >> ${GITHUB_STEP_SUMMARY}
+      uses: actions/github-script@v6
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
+            github.rest.issues.createComment({
+              issue_number: pullRequestId,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "The Level Zero header diff can be found [here](${{ steps.upload-diff-artifact.outputs.artifact-url }})."
+            });
     - name: Checkout loader-head
       uses: actions/checkout@v4
       with:
