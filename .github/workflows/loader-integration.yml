@@ -81,6 +81,7 @@ jobs:
         name: Level Zero Header Diff
         path: results_comment.txt
     - name: Output artifact URL
+      if: steps.include-diff.outputs.diff == '1'
       run:  echo 'Artifact URL is ${{ steps.upload-diff-artifact.outputs.artifact-url }}'
     - name: Write comment to PR
       if: steps.include-diff.outputs.diff == '1'
@@ -144,6 +145,49 @@ jobs:
           -w $PWD/loader-base \
           ghcr.io/oneapi-src/spec-build:latest \
           python3 ./scripts/json2src.py --ver $VER . < spec-base/scripts/input.json
+    - name: Determine if there is a diff between loader source files
+      id: loader-source-diff
+      run: | #bash
+        if git diff --quiet --exit-code -- loader-head/source loader-base/source; then
+            echo "diff=0" >> $GITHUB_OUTPUT
+        else
+            echo "diff=1" >> $GITHUB_OUTPUT
+        fi
+    - name: Get loader diff
+      if: steps.loader-source-diff.outputs.diff == '1'
+      run: git diff --no-index loader-base/source loader-head/source > loader-diff.patch || true
+    - name: Write comment with formatting to LOADER_DIFF_COMMENT
+      if: steps.loader-source-diff.outputs.diff == '1'
+      shell: python3 {0}
+      run: |
+        import os
+        with open('loader-diff.patch', 'r') as f:
+            loader_diff_content = f.read()
+        loader_diff_comment = f"```diff\n{loader_diff_content}\n```"
+        with open('loader_results_comment.txt', 'w') as results_file:
+            results_file.write(loader_diff_comment)
+    - uses: actions/upload-artifact@v4
+      if: steps.loader-source-diff.outputs.diff == '1'
+      id: upload-loader-diff-artifact
+      with:
+        name: Level Zero Loader Diff
+        path: loader_results_comment.txt
+    - name: Output loader diff artifact URL
+      if: steps.loader-source-diff.outputs.diff == '1'
+      run:  echo 'Artifact URL is ${{ steps.upload-loader-diff-artifact.outputs.artifact-url }}'
+    - name: Write loader diff comment to PR
+      if: steps.loader-source-diff.outputs.diff == '1'
+      uses: actions/github-script@v6
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
+            github.rest.issues.createComment({
+              issue_number: pullRequestId,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "The Level Zero Loader diff can be found [here](${{ steps.loader-source-diff.outputs.artifact-url }})."
+            });
     - name: Build loader-head
       working-directory: loader-head
       run: | #bash
@@ -176,6 +220,10 @@ jobs:
         cmake -D CMAKE_BUILD_TYPE=Debug ..
         make -j$(nproc)
         EOF
+    - name: Install dependencies for abi-dumper
+      run: |
+          sudo apt update
+          sudo apt install -y elfutils universal-ctags vtable-dumper
     - name: Checkout abi-dumper
       uses: actions/checkout@v4
       with:
@@ -228,6 +276,20 @@ jobs:
             -new head.dump \
             -report-path report.html
     - uses: actions/upload-artifact@v4
+      id: abi-report-artifact
       with:
         name: abi-report
         path: report.html
+    - name: Write loader ABI Report comment to PR
+      if: "steps.loader-source-diff.outputs.diff == '1' || steps.include-diff.outputs.diff == '1'"
+      uses: actions/github-script@v6
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
+            github.rest.issues.createComment({
+              issue_number: pullRequestId,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "The Level Zero ABI Report can be found [here](${{ steps.abi-report-artifact.outputs.artifact-url }})."
+            });
