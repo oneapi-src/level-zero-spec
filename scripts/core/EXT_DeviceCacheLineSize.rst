@@ -40,6 +40,7 @@ Accelerator devices have a cache line size which is the size of the smallest uni
         devProps.pNext = &devCacheLineSize;
         devCacheLineSize.stype = ${X}_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXT;
         devCacheLineSize.pNext = nullptr;
-       // Get the Device Cache Properties and the Device CacheLine Size Properties
-       ${x}_result_t result = ${x}DeviceGetCacheProperties(dev, &devProps);
-       auto device_cache_line_size = devCacheLineSize.cacheLineSize;
+        uint32_t count = 1;
+        // Get the Device Cache Properties and the Device CacheLine Size Properties
+        ${x}_result_t result = ${x}DeviceGetCacheProperties(dev, &count, &devProps);
+        auto device_cache_line_size = devCacheLineSize.cacheLineSize;
