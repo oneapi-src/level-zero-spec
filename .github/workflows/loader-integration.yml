@@ -220,10 +220,6 @@ jobs:
         cmake -D CMAKE_BUILD_TYPE=Debug ..
         make -j$(nproc)
         EOF
-    - name: Install dependencies for abi-dumper
-      run: |
-          sudo apt update
-          sudo apt install -y elfutils universal-ctags vtable-dumper
     - name: Checkout abi-dumper
       uses: actions/checkout@v4
       with:
