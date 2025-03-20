@@ -480,7 +480,7 @@ params:
       desc: "[in] the starting offset into the register state area; must be less than the `count` member of $t_debug_regset_properties_t for the type"
     - type: uint32_t
       name: count
-      desc: "[in] the number of registers to read; start+count must be less than or equal to the `count` member of $t_debug_register_group_properties_t for the type"
+      desc: "[in] the number of registers to read; start+count must be less than or equal to the `count` member of $t_debug_regset_properties_t for the type"
     - type: "void*"
       name: pRegisterValues
       desc: "[in,out][optional][range(0, count)] buffer of register values"
@@ -507,7 +507,7 @@ params:
       desc: "[in] the starting offset into the register state area; must be less than the `count` member of $t_debug_regset_properties_t for the type"
     - type: uint32_t
       name: count
-      desc: "[in] the number of registers to write; start+count must be less than or equal to the `count` member of $t_debug_register_group_properties_t for the type"
+      desc: "[in] the number of registers to write; start+count must be less than or equal to the `count` member of $t_debug_regset_properties_t for the type"
     - type: "void*"
       name: pRegisterValues
       desc: "[in,out][optional][range(0, count)] buffer of register values"

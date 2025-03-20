@@ -58,7 +58,7 @@ When image view is created from bindless sampled image, sampling modes can be re
 Image view created from bindless sampled image without setting ${X}_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE is an unsampled image.
 Sampled image view can be created from bindless unsampled image by setting ${X}_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE and passing sampler descriptor in pNext field of ${x}_image_bindless_exp_desc_t struct.
 
-This extension is complimentary to and may be used in conjunction with the `ZE_extension_image_view <https://spec.oneapi.io/level-zero/latest/core/EXT_ImageView.html#image-view-extension>`_ extension
+This extension is complimentary to and may be used in conjunction with the `ZE_extension_image_view <https://oneapi-src.github.io/level-zero-spec/level-zero/latest/core/EXT_ImageView.html#image-view-extension>`_ extension
 
 Programming example with Bindless images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

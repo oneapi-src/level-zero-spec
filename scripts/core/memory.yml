@@ -576,7 +576,7 @@ details:
       associated with the allocation.
     - |
       If the atomic access attribute select is not supported by the driver,
-      $X_RESULT_INVALID_ARGUMENT is returned.
+      $X_RESULT_ERROR_INVALID_ARGUMENT is returned.
     - |
       The atomic access attribute may be only supported at a device-specific
       granularity, such as at a page boundary. In this case, the memory range

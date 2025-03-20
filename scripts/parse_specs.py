@@ -524,6 +524,8 @@ def _filter_version(d, max_ver):
             for k, v in d['desc'].items():
                 if _version_compare_lequal(k, max_ver):
                     desc = v
+                else:
+                    desc = "No description provided"
             d['desc'] = desc
         return d
 
