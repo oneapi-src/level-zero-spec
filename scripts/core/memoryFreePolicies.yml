@@ -32,9 +32,9 @@ class: $xDriver
 name: $x_driver_memory_free_policy_ext_flags_t
 etors:
     - name: BLOCKING_FREE
-      desc: "blocks until all commands using the memory are complete before freeing"
+      desc: "Blocks until all commands using the memory are complete before scheduling memory to be freed. Does not guarantee memory is freed upon return, only that it is safe and is scheduled to be freed. Actual freeing of memory is specific to user mode driver and kernel mode driver implementation and may be done asynchronously."
     - name: DEFER_FREE
-      desc: "schedules the memory to be freed but does not free immediately"
+      desc: "Immediately schedules the memory to be freed and returns without blocking. Memory may be freed after all commands using the memory are complete. Actual freeing of memory is specific to user mode driver and kernel mode driver implementation and may be done asynchronously."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Driver memory free properties queried using $xDriverGetProperties"
@@ -67,12 +67,13 @@ members:
             default behavior is to free immediately.
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Frees allocated host memory, device memory, or shared memory using the specified free policy."
+desc: "Frees allocated host memory, device memory, or shared memory on the context using the specified free policy."
 version: "1.3"
 class: $xMem
 name: FreeExt
 details:
-    - "The memory free policy is specified by the memory free descriptor."
+    - "Similar to zeMemFree, with added parameter to choose the free policy."
+    - "Does not gaurantee memory is freed upon return. See free policy descriptions for details."
     - "The application must **not** call this function from simultaneous threads with the same pointer."
     - "The implementation of this function must be thread-safe."
 params:
