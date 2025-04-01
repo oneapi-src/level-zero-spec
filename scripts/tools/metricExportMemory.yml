@@ -12,6 +12,7 @@ version: "1.11"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric group type"
+version: "1.13"
 class: $tMetricGroup
 name: $t_metric_group_type_exp_flags_t
 etors:
@@ -23,6 +24,8 @@ etors:
       desc: "Metric group created using $tDeviceCreateMetricGroupsFromMetricsExp"
     - name: OTHER
       desc: "Metric group which has a collection of metrics"
+    - name: MARKER
+      desc: "Metric group is capable of generating Marker metric"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Query the metric group type using `pNext` of $t_metric_group_properties_t"
