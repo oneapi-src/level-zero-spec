@@ -295,6 +295,15 @@ etors:
     - name: ERROR_INVALID_KERNEL_HANDLE
       desc: "[Core, Validation] kernel handle is invalid for the operation"
       version: "1.10"
+    - name: EXT_RTAS_BUILD_RETRY
+      desc: "[Core, Extension] ray tracing acceleration structure build operation failed due to insufficient resources, retry with a larger acceleration structure buffer allocation"
+      version: "1.13"
+    - name: EXT_RTAS_BUILD_DEFERRED
+      desc: "[Core, Extension] ray tracing acceleration structure build operation deferred to parallel operation join"
+      version: "1.13"
+    - name: EXT_ERROR_OPERANDS_INCOMPATIBLE
+      desc: "[Core, Extension] operands of comparison are not compatible"
+      version: "1.13"
     - name: ERROR_UNKNOWN
       value: "0x7ffffffe"
       desc: "[Core] unknown or internal error"
@@ -595,6 +604,30 @@ etors:
       desc: $x_device_cache_line_size_ext_t
       version: "1.13"
       value: "0x00020028"
+    - name: RTAS_BUILDER_EXT_DESC
+      desc: $x_rtas_builder_ext_desc_t
+      version: "1.13"
+      value: "0x00020030"
+    - name: RTAS_BUILDER_BUILD_OP_EXT_DESC
+      desc: $x_rtas_builder_build_op_ext_desc_t
+      version: "1.13"
+      value: "0x00020031"
+    - name: RTAS_BUILDER_EXT_PROPERTIES
+      desc: $x_rtas_builder_ext_properties_t
+      version: "1.13"
+      value: "0x00020032"
+    - name: RTAS_PARALLEL_OPERATION_EXT_PROPERTIES
+      desc: $x_rtas_parallel_operation_ext_properties_t
+      version: "1.13"
+      value: "0x00020033"
+    - name: RTAS_DEVICE_EXT_PROPERTIES
+      desc: $x_rtas_device_ext_properties_t
+      version: "1.13"
+      value: "0x00020034"
+    - name: RTAS_GEOMETRY_AABBS_EXT_CB_PARAMS
+      desc: $x_rtas_geometry_aabbs_ext_cb_params_t
+      version: "1.13"
+      value: "0x00020035"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

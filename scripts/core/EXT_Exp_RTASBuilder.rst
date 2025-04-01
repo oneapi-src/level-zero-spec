@@ -14,6 +14,8 @@ from templates import helper as th
  Ray Tracing Acceleration Structure Builder Extension
 ======================================================
 
+**DEPRECATION WARNING: The RTAS Builder Experimental Extension has been deprecated as of Level Zero Spec Release 1.13. Users should switch to the RTAS Standard Extension as soon as possible.** 
+
 API
 ----
 
