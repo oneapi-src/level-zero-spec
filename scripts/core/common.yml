@@ -604,6 +604,10 @@ etors:
       desc: $x_device_cache_line_size_ext_t
       version: "1.13"
       value: "0x00020028"
+    - name: DEVICE_VECTOR_WIDTH_PROPERTIES_EXT
+      desc: $x_device_vector_width_properties_ext_t
+      version: "1.13"
+      value: "0x00020029"
     - name: RTAS_BUILDER_EXT_DESC
       desc: $x_rtas_builder_ext_desc_t
       version: "1.13"
