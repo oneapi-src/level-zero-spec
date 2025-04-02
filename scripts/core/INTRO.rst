@@ -119,6 +119,8 @@ There are multiple versions that should be used by the application to determine 
   - Minor version increment consist of additional functionality, including promoted extensions, and must retain backwards-compatibility
   - The value is determined from calling ${x}DriverGetApiVersion
   - The value returned will be the minimum of the ${x}_api_version_t supported by the device and known by the driver
+  - A Supported API Version reported by the driver must indicate the minimum version in which all APIs up to the version reported have at least an empty implementation that reports unsupported.
+  - If the driver reports an API version, it must provide implementations of all API's up to and including that version.
 
 **Driver Version** - this is the version of the driver installed in the system.
 
