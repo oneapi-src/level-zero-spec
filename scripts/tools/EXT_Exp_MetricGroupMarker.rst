@@ -10,7 +10,7 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZET_experimental_metricgroup_marker:
+.. _ZET_experimental_metric_group_marker:
 
 ====================================
 MetricGroup Marker Support Extension
