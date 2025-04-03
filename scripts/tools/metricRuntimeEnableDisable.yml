@@ -1,0 +1,60 @@
+#
+# Copyright (C) 2025 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Tool Experimental Extension for Runtime Enabling and Disabling metrics"
+version: "1.13"
+--- #---------------------------------------------------------------------------------------------------
+type: macro
+desc: "Runtime Enabling and Disabling Metrics Extension Name"
+version: "1.13"
+name: $T_METRICS_RUNTIME_ENABLE_DISABLE_EXP_NAME
+value: '"$XT_experimental_metrics_runtime_enable_disable"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Runtime Enabling and Disabling Metrics Extension Version(s)"
+version: "1.13"
+name: $t_metrics_runtime_enable_disable_exp_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Enable Metrics collection during runtime."
+version: "1.13"
+class: $tDevice
+name: EnableMetricsExp
+decl: static
+details:
+    - "This API enables metric collection for a device/sub-device if not already enabled."
+    - "if ZET_ENABLE_METRICS=1 was already set, then calling this api would be a NOP."
+    - "This api should be called after calling zeInit()."
+    - "If device is a root-device handle, then its sub-devices are also enabled."
+    - "$tDeviceDisableMetricsExp need not be called if if this api returns error."
+    - "This API can be used as runtime alternative to setting ZET_ENABLE_METRICS=1."
+params:
+    - type: "$t_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device where metrics collection has to be enabled."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Disable Metrics collection during runtime, if it was already enabled."
+version: "1.13"
+class: $tDevice
+name: DisableMetricsExp
+decl: static
+details:
+    - "This API disables metrics collection for a device/sub-device, if it was previously enabled."
+    - "If device is a root-device handle, then its sub-devices are also disabled."
+    - "The application has to ensure that all metric operations are complete and all metric resources are released before this API is called."
+    - "If there are metric operations in progress or metric resources are not released, then ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE is returned."
+params:
+    - type: "$t_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device where metrics collection has to be disabled"
