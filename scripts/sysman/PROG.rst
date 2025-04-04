@@ -2391,6 +2391,40 @@ when the critical temperature is reached.
 
        free_memory(...)
 
+
+Survivability mode
+------------------
+
+Survivability mode is designed to allow the driver to enter a state capable of firmware upgrades on critical failures. This enables system recovery even when a device is in a failed boot state.
+
+The flow of detecting and recovering from a Survivability mode using Level-Zero Sysman APIs is below.
+
+.. parsed-literal::
+
+   zesInit(0);
+   uint32_t driversCount = 1;
+   zes_driver_handle_t driver;
+   zesDriverGet(&driversCount, &driver);
+
+   uint32_t deviceCount = 0;
+   zesDeviceGet(driver, &deviceCount, nullptr)
+   zes_device_handle_t* hSysmanDevices = allocate_memory(deviceCount * sizeof(zes_device_handle_t))
+   zesDeviceGet(driver, &deviceCount, hSysmanDevices);
+
+   # Survivability mode detection
+   for(devIndex = 0 .. deviceCount-1){
+	ze_device_properties_t device_properties {};
+	device_properties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+
+	result = zeDeviceGetProperties(hSysmanDevices[devIndex], &device_properties);
+	if(result == ZE_RESULT_ERROR_SURVIVABILITY_MODE_DETECTED){
+		# Device is in Survivability mode, flash firmware image to recover the device
+		# Recovery using zesDeviceEnumFirmwares(), zesFirmwareFlash() APIs
+	}
+   }
+   free_memory(...)
+
+
 Security
 ========
 

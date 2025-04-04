@@ -304,6 +304,9 @@ etors:
     - name: EXT_ERROR_OPERANDS_INCOMPATIBLE
       desc: "[Core, Extension] operands of comparison are not compatible"
       version: "1.13"
+    - name: ERROR_SURVIVABILITY_MODE_DETECTED
+      desc: "[Sysman] device is in survivability mode, firmware update needed"
+      version: "1.13"
     - name: ERROR_UNKNOWN
       value: "0x7ffffffe"
       desc: "[Core] unknown or internal error"
