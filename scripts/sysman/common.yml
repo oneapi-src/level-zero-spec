@@ -261,6 +261,10 @@ etors:
       value: "0x00020011"
       desc: $s_vf_exp2_capabilities_t
       version: "1.12"    
+    - name: DEVICE_ECC_DEFAULT_PROPERTIES_EXT
+      value: "0x00020012"
+      desc: $s_device_ecc_default_properties_ext_t
+      version: "1.13"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
