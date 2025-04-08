@@ -64,4 +64,6 @@ base: $x_base_desc_t
 members:
     - type: uint32_t
       name: planeIndex
-      desc: "[in] the 0-based plane index (e.g. NV12 is 0 = Y plane, 1 UV plane)"
+      desc:
+        "1.0": "[in] the 0-based plane index (e.g. NV12 is 0 = Y plane, 1 UV plane)"
+        "1.5": "[DEPRECATED] no longer supported, use $x_image_view_planar_ext_desc_t instead"

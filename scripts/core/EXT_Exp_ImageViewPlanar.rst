@@ -19,9 +19,7 @@ from templates import helper as th
  Image View Planar Extension
 =============================
 
-%if _version_compare_gequal(ver, "1.5"):
-This experimental extension is deprecated and replaced by the :ref:`${th.subt(namespace, tags, X)}_extension_image_view_planar <${th.subt(namespace, tags, X)}_extension_image_view_planar>` standard extension.
-%endif
+This experimental extension is deprecated since version 1.5 onwards and replaced by the :ref:`${th.subt(namespace, tags, X)}_extension_image_view_planar <${th.subt(namespace, tags, X)}_extension_image_view_planar>` standard extension.
 
 API
 ----
