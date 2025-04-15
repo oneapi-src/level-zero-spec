@@ -73,7 +73,7 @@ members:
       name: index
       desc: |
             [in] command queue index within the group;
-            must be zero if $X_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY is not set. 
+            must be zero. 
     - type: $x_command_queue_flags_t
       name: flags
       desc: |
