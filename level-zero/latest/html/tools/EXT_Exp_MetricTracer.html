@@ -1,0 +1,613 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Metric Tracer Experimental Extension &#8212; Level Zero Specification  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tools/EXT_Exp_MetricTracer';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../core/api.html">Core API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html">Tools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/api.html">Sysman API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/tools/EXT_Exp_MetricTracer.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Metric Tracer Experimental Extension</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-tracer">Metric Tracer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enumeration">Enumeration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#collection">Collection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decoding">Decoding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-code">Sample Code</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="metric-tracer-experimental-extension">
+<span id="zet-experimental-metric-tracer"></span><h1>Metric Tracer Experimental Extension<a class="headerlink" href="#metric-tracer-experimental-extension" title="Link to this heading">#</a></h1>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<ul>
+<li><dl>
+<dt>Enumerations</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zet-metric-tracer-exp-version-t"><span class="std std-ref">zet_metric_tracer_exp_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">zet_metric_group_sampling_type_flags_t</span></a></p></li>
+</ul>
+<p>New value <a class="reference internal" href="api.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#zet-metric-type-t"><span class="std std-ref">zet_metric_type_t</span></a></p></li>
+</ul>
+<dl class="simple">
+<dt>New Values</dt><dd><dl class="simple">
+<dt><a class="reference internal" href="api.html#zet-metric-type-t"><span class="std std-ref">ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMP</span></a></dt><dd><p>Metric type:  have only timestamp and value has no meaning.</p>
+</dd>
+<dt><a class="reference internal" href="api.html#zet-metric-type-t"><span class="std std-ref">ZET_METRIC_TYPE_EVENT_EXP_START</span></a></dt><dd><p>Metric type: the first event of a start/stop event pair.</p>
+</dd>
+<dt><a class="reference internal" href="api.html#zet-metric-type-t"><span class="std std-ref">ZET_METRIC_TYPE_EVENT_EXP_END</span></a></dt><dd><p>Metric type: the second event of a start/stop event pair.</p>
+</dd>
+<dt><a class="reference internal" href="api.html#zet-metric-type-t"><span class="std std-ref">ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUE</span></a></dt><dd><p>Metric type: value of the event is a monotonic increasing value that can wrap around.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zet-metric-tracer-exp-desc-t"><span class="std std-ref">zet_metric_tracer_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zet-metric-entry-exp-t"><span class="std std-ref">zet_metric_entry_exp_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zetmetrictracercreateexp"><span class="std std-ref">zetMetricTracerCreateExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetrictracerdestroyexp"><span class="std std-ref">zetMetricTracerDestroyExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetrictracerenableexp"><span class="std std-ref">zetMetricTracerEnableExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetrictracerdisableexp"><span class="std std-ref">zetMetricTracerDisableExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetrictracerreaddataexp"><span class="std std-ref">zetMetricTracerReadDataExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricdecodercreateexp"><span class="std std-ref">zetMetricDecoderCreateExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricdecoderdestroyexp"><span class="std std-ref">zetMetricDecoderDestroyExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetricdecodergetdecodablemetricsexp"><span class="std std-ref">zetMetricDecoderGetDecodableMetricsExp</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zetmetrictracerdecodeexp"><span class="std std-ref">zetMetricTracerDecodeExp</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<section id="metric-tracer">
+<h3>Metric Tracer<a class="headerlink" href="#metric-tracer" title="Link to this heading">#</a></h3>
+<p>Metrics collection model that allows retrieving metrics from events generated in asynchronous fashion. A Metrics Tracer is a software interface that allows
+configuration for collection of such metrics. Collected raw data can be converted into parsable data with the use of a decoder object.</p>
+</section>
+</section>
+<section id="enumeration">
+<h2>Enumeration<a class="headerlink" href="#enumeration" title="Link to this heading">#</a></h2>
+<p>Application can use <a class="reference internal" href="api.html#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a> to enumerate the list of metric groups and <a class="reference internal" href="api.html#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a> to get metric group sampling type
+and search for <a class="reference internal" href="api.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED</span></a>.</p>
+</section>
+<section id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h2>
+<p>Use the <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a> API call to configure the device for data collection.</p>
+</section>
+<section id="collection">
+<h2>Collection<a class="headerlink" href="#collection" title="Link to this heading">#</a></h2>
+<p>Metric Tracer based collection mode allows the creation of a tracer object for multiple metric groups than can be collected concurrently. Once metric groups are
+activated the tracer can be created using <a class="reference internal" href="api.html#zetmetrictracercreateexp"><span class="std std-ref">zetMetricTracerCreateExp</span></a>. Tracers are created in disabled state, applications have the flexibility to to enable
+(<a class="reference internal" href="api.html#zetmetrictracerenableexp"><span class="std std-ref">zetMetricTracerEnableExp</span></a>) and disable (<a class="reference internal" href="api.html#zetmetrictracerdisableexp"><span class="std std-ref">zetMetricTracerDisableExp</span></a>) during workload execution to selectively decide sections on which to collect metrics.
+ata can be retrieved from the tracer with <a class="reference internal" href="api.html#zetmetrictracerreaddataexp"><span class="std std-ref">zetMetricTracerReadDataExp</span></a>.</p>
+</section>
+<section id="decoding">
+<h2>Decoding<a class="headerlink" href="#decoding" title="Link to this heading">#</a></h2>
+<p>Metric Tracer collects the data in device specific, raw form that is not suitable for application processing. To convert data into a format that allows
+application parsing a decoder object can be used. The decoder object is created with <a class="reference internal" href="api.html#zetmetricdecodercreateexp"><span class="std std-ref">zetMetricDecoderCreateExp</span></a> and data can be converted using
+<a class="reference internal" href="api.html#zetmetrictracerdecodeexp"><span class="std std-ref">zetMetricTracerDecodeExp</span></a>. Each event in the data is associated with a decodable metric, which can be retrieved with <a class="reference internal" href="api.html#zetmetricdecodergetdecodablemetricsexp"><span class="std std-ref">zetMetricDecoderGetDecodableMetricsExp</span></a>.</p>
+</section>
+<section id="sample-code">
+<h2>Sample Code<a class="headerlink" href="#sample-code" title="Link to this heading">#</a></h2>
+<p>The following pseudo-code demonstrates how to enumerate Tracer based metric groups and collect data.</p>
+<pre class="literal-block">  zet_metric_group_handle_t     hMetricGroup           = nullptr;
+  ze_event_handle_t            hNotificationEvent     = nullptr;
+  ze_event_pool_handle_t       hEventPool             = nullptr;
+  <a class="reference internal" href="../core/api.html#ze-event-pool-desc-t"><span class="std std-ref">ze_event_pool_desc_t</span></a>         eventPoolDesc          = {<a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_POOL_DESC</span></a>, nullptr, 0, 1};
+  <a class="reference internal" href="../core/api.html#ze-event-desc-t"><span class="std std-ref">ze_event_desc_t</span></a>              eventDesc              = {<a class="reference internal" href="../core/api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_DESC</span></a>};
+  zet_metric_tracer_exp_handle_t hMetricTracer         = nullptr;
+  <a class="reference internal" href="api.html#zet-metric-tracer-exp-desc-t"><span class="std std-ref">zet_metric_tracer_exp_desc_t</span></a> tracerDescriptor = { <a class="reference internal" href="api.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_METRIC_TRACER_EXP_DESC</span></a>, nullptr, 1024};
+  zet_metric_decoder_exp_handle_t hMetricDecoder       = nullptr;
+
+  // Find the first metric group suitable for Tracer Based collection
+  FindMetricGroup(hDevice,  <a class="reference internal" href="api.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED</span></a>, &amp;hMetricGroup );
+
+  // Configure the HW
+  <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a>( hContext, hDevice, /* count= */ 1, &amp;hMetricGroup );
+
+  // Create notification event
+  <a class="reference internal" href="../core/api.html#zeeventpoolcreate"><span class="std std-ref">zeEventPoolCreate</span></a>( hContext, &amp;eventPoolDesc, 1, &amp;hDevice, &amp;hEventPool );
+  eventDesc.index  = 0;
+  eventDesc.signal = <a class="reference internal" href="../core/api.html#ze-event-scope-flags-t"><span class="std std-ref">ZE_EVENT_SCOPE_FLAG_HOST</span></a>;
+  eventDesc.wait   = <a class="reference internal" href="../core/api.html#ze-event-scope-flags-t"><span class="std std-ref">ZE_EVENT_SCOPE_FLAG_HOST</span></a>;
+  <a class="reference internal" href="../core/api.html#zeeventcreate"><span class="std std-ref">zeEventCreate</span></a>( hEventPool, &amp;eventDesc, &amp;hNotificationEvent );
+
+  // Create tracer
+  <a class="reference internal" href="api.html#zetmetrictracercreateexp"><span class="std std-ref">zetMetricTracerCreateExp</span></a>(hContext, hDevice, 1, &amp;hMetricGroup , &amp;tracerDescriptor, hNotificationEvent, &amp;hMetricTracer);
+
+  // create decoder
+  <a class="reference internal" href="api.html#zetmetricdecodercreateexp"><span class="std std-ref">zetMetricDecoderCreateExp</span></a>( hMetricTracer,  &amp;hMetricDecoder);
+
+  // Get decodable metrics
+  uint32_t numDecodableMetrics = 0;
+  <a class="reference internal" href="api.html#zetmetricdecodergetdecodablemetricsexp"><span class="std std-ref">zetMetricDecoderGetDecodableMetricsExp</span></a>(hMetricDecoder, &amp;numDecodableMetrics, nullptr);
+  std::vector&lt;zet_metric_handle_t&gt;decodableMetrics(numDecodableMetrics);
+  <a class="reference internal" href="api.html#zetmetricdecodergetdecodablemetricsexp"><span class="std std-ref">zetMetricDecoderGetDecodableMetricsExp</span></a>(hMetricDecoder, &amp;numDecodableMetrics, decodableMetrics.data());
+
+  // Enable the tracer
+  <a class="reference internal" href="api.html#zetmetrictracerenableexp"><span class="std std-ref">zetMetricTracerEnableExp</span></a>(hMetricTracer, true);
+
+  // Run your workload
+  Workload(hDevice);
+
+  // Wait for data, optional in this example
+  <a class="reference internal" href="../core/api.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>( hNotificationEvent, 1000 /*timeout*/ );
+  // reset the event if it fired
+
+  // Read raw data
+  size_t rawDataSize = 0;
+  <a class="reference internal" href="api.html#zetmetrictracerreaddataexp"><span class="std std-ref">zetMetricTracerReadDataExp</span></a>(hMetricTracer, &amp;rawDataSize, nullptr);
+  std::vector&lt;uint8_t&gt;rawData(rawDataSize);
+  <a class="reference internal" href="api.html#zetmetrictracerreaddataexp"><span class="std std-ref">zetMetricTracerReadDataExp</span></a>(hMetricTracer, &amp;rawDataSize, rawData.data());
+
+  // decode
+  uint32_t totalNumEntries = 0;
+  uint32_t setCount = 0;
+  <a class="reference internal" href="api.html#zetmetrictracerdecodeexp"><span class="std std-ref">zetMetricTracerDecodeExp</span></a>(hMetricDecoder,  &amp;rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &amp;setCount, nullptr, &amp;totalNumEntries, nullptr);
+  std::vector&lt;ze_metric_entry_exp_t&gt; decodedEntries(totalNumEntries)
+  std::vector&lt;uint32_t&gt; metricEntriesCountPerSet(setCount);
+  <a class="reference internal" href="api.html#zetmetrictracerdecodeexp"><span class="std std-ref">zetMetricTracerDecodeExp</span></a>(hMetricDecoder,  &amp;rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &amp;setCount, metricEntriesCountPerSet.data(), &amp;totalNumEntries, decodedEntries.data());
+
+uint32_t setEntryStart = 0;
+  for (uint8_t setIndex = 0; setIndex &lt; setCount; setIndex++) {
+      for (uint32_t index = setEntryStart;  index &lt; metricEntriesCountPerSet[setIndex]; index++) {
+          <a class="reference internal" href="api.html#zet-metric-entry-exp-t"><span class="std std-ref">zet_metric_entry_exp_t</span></a> metricEntry = decodedEntries[index];
+          <a class="reference internal" href="api.html#zet-metric-properties-t"><span class="std std-ref">zet_metric_properties_t</span></a> metricProperties = {};
+          <a class="reference internal" href="api.html#zetmetricgetproperties"><span class="std std-ref">zetMetricGetProperties</span></a>(decodableMetrics[metricEntry.metricIndex], &amp;metricProperties);
+          std::cout &lt;&lt; &quot;Component: &quot; &lt;&lt; metricProperties.component &quot;. Decodable metric name: &quot; &lt;&lt; metricProperties.name;
+          switch (metricProperties.resultType) {
+          case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_UINT8</span></a>:
+          case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_UINT16</span></a>:
+          case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_UINT32</span></a>:
+              std::cout &lt;&lt; &quot;.t value: &quot; &lt;&lt; metricEntry.value.ui32 &lt;&lt; std::endl;
+          break;
+          case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_UINT64</span></a>:
+              std::cout &lt;&lt; &quot;.t value: &quot; &lt;&lt; metricEntry.value.ui64 &lt;&lt; std::endl;
+          break;
+          case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_FLOAT32</span></a>:
+              std::cout &lt;&lt; &quot;.t value: &quot; &lt;&lt; metricEntry.value.fp32 &lt;&lt; std::endl;
+          break;
+          case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_FLOAT64</span></a>:
+              std::cout &lt;&lt; &quot;.t value: &quot; &lt;&lt; metricEntry.value.fp64 &lt;&lt; std::endl;
+          break;
+          case <a class="reference internal" href="api.html#zet-value-type-t"><span class="std std-ref">ZET_VALUE_TYPE_BOOL8</span></a>:
+              if( metricEntry.value.b8 ){
+                  std::cout &lt;&lt; &quot;.t value: true&quot; &lt;&lt; std::endl;
+              else
+                  std::cout &lt;&lt; &quot;.t value: false&quot; &lt;&lt; std::endl;
+              }
+          break;
+          default:
+          break;
+          }
+
+          setEntryStart = metricEntriesCountPerSet[setIndex];
+      }
+  }
+
+  // Close metric tracer
+  <a class="reference internal" href="api.html#zetmetrictracerdisableexp"><span class="std std-ref">zetMetricTracerDisableExp</span></a>(hMetricTracer, true);
+  <a class="reference internal" href="api.html#zetmetricdecoderdestroyexp"><span class="std std-ref">zetMetricDecoderDestroyExp</span></a>(hMetricDecoder);
+  <a class="reference internal" href="api.html#zetmetrictracerdestroyexp"><span class="std std-ref">zetMetricTracerDestroyExp</span></a>(hMetricTracer);
+  <a class="reference internal" href="../core/api.html#zeeventdestroy"><span class="std std-ref">zeEventDestroy</span></a>( hNotificationEvent );
+  <a class="reference internal" href="../core/api.html#zeeventpooldestroy"><span class="std std-ref">zeEventPoolDestroy</span></a>( hEventPool );
+
+  // Clean device configuration and free memory
+  <a class="reference internal" href="api.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a>( hContext, hDevice, 0, nullptr );</pre>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-tracer">Metric Tracer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enumeration">Enumeration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#collection">Collection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decoding">Decoding</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-code">Sample Code</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

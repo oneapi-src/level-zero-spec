@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>External Semaphores Extension Specification &#8212; Level Zero Specification  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/EXT_ExternalSemaphores';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EXT.html">Extensions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html">Core API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/api.html">Tools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/api.html">Sysman API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/core/EXT_ExternalSemaphores.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>External Semaphores Extension Specification</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#external-semaphores">External Semaphores</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semantics-and-behavior-model">Semantics and Behavior model</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="external-semaphores-extension-specification">
+<span id="ze-external-semaphores"></span><h1>External Semaphores Extension Specification<a class="headerlink" href="#external-semaphores-extension-specification" title="Link to this heading">#</a></h1>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#zedeviceimportexternalsemaphoreext"><span class="std std-ref">zeDeviceImportExternalSemaphoreExt</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zedevicereleaseexternalsemaphoreext"><span class="std std-ref">zeDeviceReleaseExternalSemaphoreExt</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zecommandlistappendsignalexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendSignalExternalSemaphoreExt</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#zecommandlistappendwaitexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendWaitExternalSemaphoreExt</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-external-semaphore-ext-version-t"><span class="std std-ref">ze_external_semaphore_ext_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-external-semaphore-ext-flags-t"><span class="std std-ref">ze_external_semaphore_ext_flags_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api.html#ze-external-semaphore-ext-desc-t"><span class="std std-ref">ze_external_semaphore_ext_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-external-semaphore-win32-ext-desc-t"><span class="std std-ref">ze_external_semaphore_win32_ext_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-external-semaphore-fd-ext-desc-t"><span class="std std-ref">ze_external_semaphore_fd_ext_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-external-semaphore-signal-params-ext-t"><span class="std std-ref">ze_external_semaphore_signal_params_ext_t</span></a></p></li>
+<li><p><a class="reference internal" href="api.html#ze-external-semaphore-wait-params-ext-t"><span class="std std-ref">ze_external_semaphore_wait_params_ext_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<section id="external-semaphores">
+<h3>External Semaphores<a class="headerlink" href="#external-semaphores" title="Link to this heading">#</a></h3>
+<p>Currently L0 supports importing external buffers and images from other graphics APIs such as DX12 and Vulkan, but does not support importing external semaphores.
+The only solution that exists is to do synchronization at the host level, which may not be applicable for interop
+with a fullying asynchronous rendering pipeline. Therefore, we need a new API that will accept the external semaphores
+from other graphics APIs for synchronization to support interoperability. To this end, this extension introduces
+APIs to import external semaphores, to append wait/signal using semaphores in the command list, and to release imported external semaphores.</p>
+</section>
+<section id="semantics-and-behavior-model">
+<h3>Semantics and Behavior model<a class="headerlink" href="#semantics-and-behavior-model" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>The semaphore signal command waits for a list of events to complete and then signals a list of semaphore objects.</p></li>
+<li><p>The semaphore wait command waits for a list of events to complete and waits on a list of semaphore objects.</p></li>
+<li><p>phWaitEvents points to the list of events that need to complete before <a class="reference internal" href="api.html#zecommandlistappendsignalexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendSignalExternalSemaphoreExt</span></a> or <a class="reference internal" href="api.html#zecommandlistappendwaitexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendWaitExternalSemaphoreExt</span></a> can be executed. If phWaitEvents is NULL, then the command does not wait on any event to complete.</p></li>
+<li><p>Signal/Wait on the semaphore are async non blocking operation which doesn’t cause serialization within a queue.</p></li>
+<li><p>Application must perform semaphore signal and waits in alternate manner and order producer first. Repetitive signals and wait on same semaphore object is not supported.</p></li>
+<li><p>The semaphore objects are currently only allowed to be imported into L0 and therefore the semaphore semantics/definitions of the exporter API needs to be honoured by the application.</p></li>
+<li><p>Resetting semaphore object needs to be handled by the exporter as L0 capabilities are only to import and perform operations on the semaphore object itself.</p></li>
+<li><p><a class="reference internal" href="api.html#zecommandlistappendsignalexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendSignalExternalSemaphoreExt</span></a> and <a class="reference internal" href="api.html#zecommandlistappendwaitexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendWaitExternalSemaphoreExt</span></a> calls must only be executed on an immediate commandlist.</p></li>
+</ol>
+<p>Following pseudo-code demonstrates a sequence for importing external semaphore from Vulkan and using it in L0:</p>
+<pre class="literal-block">// Import external semaphore from Vulkan
+VkSemaphore vkSemaphore = ...;  // Create Vulkan semaphores
+void <code class="docutils literal notranslate"><span class="pre">*</span></code>vkSemHandle = ...; //export VK semaphore
+
+<a class="reference internal" href="api.html#ze-external-semaphore-win32-ext-desc-t"><span class="std std-ref">ze_external_semaphore_win32_ext_desc_t</span></a> win32Desc = {};
+win32Desc.handle = vkSemHandle;
+<a class="reference internal" href="api.html#ze-external-semaphore-ext-desc-t"><span class="std std-ref">ze_external_semaphore_ext_desc_t</span></a> desc = {<a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_EXT_DESC</span></a>, &amp;win32Desc, <a class="reference internal" href="api.html#ze-external-semaphore-ext-flags-t"><span class="std std-ref">ZE_EXTERNAL_SEMAPHORE_EXT_FLAG_OPAQUE_WIN32</span></a>};
+
+ze_external_semaphore_ext_handle_t semaphore0 = nullptr;
+<a class="reference internal" href="api.html#zedeviceimportexternalsemaphoreext"><span class="std std-ref">zeDeviceImportExternalSemaphoreExt</span></a>(device, &amp;semaphore0, &amp;desc);
+
+// Create command list and command queue
+ze_command_list_handle_t commandList = ...;
+ze_command_queue_handle_t commandQueue = ...;
+
+// Append wait on external semaphore in the command list and then launch kernel
+<a class="reference internal" href="api.html#ze-external-semaphore-wait-params-ext-t"><span class="std std-ref">ze_external_semaphore_wait_params_ext_t</span></a> waitParams = {};
+waitParams.pNext = nullptr;
+<a class="reference internal" href="api.html#zecommandlistappendwaitexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendWaitExternalSemaphoreExt</span></a>(commandList, &amp;semaphore0, &amp;waitParams, 1, event0, 0, nullptr);
+<a class="reference internal" href="api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(commandList, kernel, ..., event1, 1, &amp;event0);
+
+// Append signal on external semaphore in the command after completion of kernel execution
+<a class="reference internal" href="api.html#ze-external-semaphore-signal-params-ext-t"><span class="std std-ref">ze_external_semaphore_signal_params_ext_t</span></a> signalParams = {};
+signalParams.pNext = nullptr;
+<a class="reference internal" href="api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(commandList, kernel, ..., event2, 0, nullptr);
+<a class="reference internal" href="api.html#zecommandlistappendsignalexternalsemaphoreext"><span class="std std-ref">zeCommandListAppendSignalExternalSemaphoreExt</span></a>(commandList, &amp;semaphore0, &amp;signalParams, 1, event3, 1, &amp;event2);</pre>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#external-semaphores">External Semaphores</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semantics-and-behavior-model">Semantics and Behavior model</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

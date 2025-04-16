@@ -26,21 +26,24 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.13.0`_
+    - 2025-4-15
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.13.0/index.html>`__  
   * - `Level Zero v1.12.15`_
     - 2025-1-10
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.12.15/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.12.15/index.html>`__  
   * - `Level Zero v1.11.8`_
     - 2024-11-13
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html>`__  
   * - `Level Zero v1.11`_
     - 2024-10-03
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__  	
   * - `Level Zero v1.10`_
     - 2024-09-06
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html>`__  	
   * - `Level Zero v1.9.3`_
     - 2024-05-03
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html>`__  
   * - `Level Zero v1.9.2`_
     - 2024-02-20
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.2/index.html>`__
@@ -108,22 +111,47 @@ Level Zero
 Release Notes
 -------------
 
+Level Zero v1.13.0
+~~~~~~~~~~~~~~~~~~
+
+* Update Features:
+
+    - Deprecated flags ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY and ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY
+    - Add extension mechanism for getting ECC state
+    - Adds new error code to report survivability mode
+    - Add support for metrics runtime enable and disable
+    - Add support for querying the device vector widths
+    - Promote the RTAS Builder experimental extension to a standard extension
+    - Add support for metric group based markers
+    - Add Extension: Device CacheLine Size Query
+
+
+* Patches to v1.12.5 release
+    - Clarify documentation for zeKernelGetSourceAttributes
+    - Add deprecation warning to image_view_planar_exp
+    - Clarify API Versioning reported by drivers
+    - Clarify Documentation for zeMemFree() and zeMemFreeExt() policies
+    - Fix various build warnings and broken web links
+    - Grammar Fix Replace informal "thru" with "through"
+    - Add clarification for MetricGroupDestroy API
+
 Level Zero v1.12.15
 ~~~~~~~~~~~~~~~~~~~
 
 * Updated Features:
 
-	- Add External semaphores API
-	- Add Driver DDI Handles Extension
-	- Add GENERIC type into Metrics
+    - Add External semaphores API
+    - Add Driver DDI Handles Extension
+    - Add GENERIC type into Metrics
 
-* Patches to v1.11.8 release:
+* Patches to v.1.11.8 release:
 
-	- Fix Spec Documentation Links
-	- Add missing version structure for zeKernelGetBinaryExp
-	- Corrected and added METRIC_GROUP_NAME_PREFIX_EXP
-	- Fix Multiple Documentation Syntax to remove warnings
-	- Fix for vf telemetry APIs
+    - Fix Spec Documentation Links
+    - Add missing version structure for zeKernelGetBinaryExp
+    - Corrected and added METRIC_GROUP_NAME_PREFIX_EXP
+    - Fix Multiple Documentation Syntax to remove warnings
+    - Fix for vf telemetry APIs
+
 
 Level Zero v1.11.8
 ~~~~~~~~~~~~~~~~~~
@@ -134,7 +162,7 @@ Level Zero v1.11.8
 	- Fix metric types for new experimental types.
 	- Scripts updated to raise a proper exception when parse errors occur.
 	- Fix zeKernelGetBinaryExp's inclusion.
-	- Update documentation on Init and add deprecation comments for init changes.  
+	- Update documentation on Init and add deprecation comments for init changes.
 
 Level Zero v1.11
 ~~~~~~~~~~~~~~~~~~
@@ -151,7 +179,7 @@ Level Zero v1.11
 	- Addressed level-zero loader ABI breakage issue with spec v1.10.
 	- Documentation update to spec to relax restriction to allow driver to create internal threads.
 	- rename Programmable1Exp to ProgrammableExp2.
-	
+
 Level Zero v1.10
 ~~~~~~~~~~~~~~~~~~
 
