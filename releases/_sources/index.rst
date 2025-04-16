@@ -127,6 +127,7 @@ Level Zero v1.13.0
 
 
 * Patches to v1.12.5 release
+
     - Clarify documentation for zeKernelGetSourceAttributes
     - Add deprecation warning to image_view_planar_exp
     - Clarify API Versioning reported by drivers
