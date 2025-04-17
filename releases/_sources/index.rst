@@ -117,13 +117,13 @@ Level Zero v1.13.0
 * Update Features:
 
     - Deprecated flags ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY and ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY
-    - Add extension mechanism for getting ECC state
-    - Adds new error code to report survivability mode
-    - Add support for metrics runtime enable and disable
-    - Add support for querying the device vector widths
     - Promote the RTAS Builder experimental extension to a standard extension
-    - Add support for metric group based markers
-    - Add Extension: Device CacheLine Size Query
+    - Add Extension querying the device vector widths
+    - Add Extension APIs for querying device cache line size
+    - Add Sysman Extension mechanism for getting ECC state
+    - Add Sysman extension error ERROR_SURVIVABILITY_MODE_DETECTED
+    - Add Metrics Extension for runtime enabling and disabling
+    - Add Metrics Extension for group based markers
 
 
 * Patches to v1.12.5 release
