@@ -500,6 +500,7 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_INDEX
     - $X_RESULT_ERROR_INVALID_KERNEL_ARGUMENT_SIZE
+    - $X_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Kernel indirect access flags"

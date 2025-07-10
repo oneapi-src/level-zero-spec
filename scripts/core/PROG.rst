@@ -1567,6 +1567,21 @@ Kernel arguments represent only the explicit kernel arguments that are within br
 - The ${x}CommandListAppendLaunchKernel et al. functions will make a copy of the kernel arguments to send to the device.
 - Kernel arguments can be updated at any time and used across multiple append calls.
 
+Note that when using images as arguments, implementation can check whether the image format is valid as an
+argument to a SPIRv module. If the image format is invalid, implementation may return ZE_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT.
+
+If the image type allocated is valid, implementation cannot return unsupported during image creation.
+The images may be used in kernels that are not limited to the SPIRv image types,
+for example VC Runtime built Native binaries that support more image types than SPIRv and do not use the channel data type argument.
+
+Since `SPIRv channel type`_ and `OpenCL images`_ share the same channel data type restrictions,
+implementation can reuse the OpenCL type check to verify if the image can be set as argument for a kernel in SPIRv Module.
+
+.. _SPIRv channel type:
+   https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#_image_channel_data_type
+
+.. _OpenCL images: https://registry.khronos.org/OpenCL/sdk/2.1/docs/man/xhtml/cl_image_format.html
+
 The following pseudo-code demonstrates a sequence for setting kernel arguments and launching the kernel:
 
 .. parsed-literal::
