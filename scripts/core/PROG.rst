@@ -954,6 +954,36 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
        ${x}CommandListAppendLaunchKernel(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
        ...
 
+Appending kernels with additional parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- New funtion is added to pass extra parameters when appending the kernel.
+- New parameters can be passed from extension and be vendor specific.
+- This function will allow to pass cooperative kernel using dedicated descriptor.
+- Multiple additional parameters can be passed as a linked list of descriptors.
+- If additional parameter or any combination is not supported, driver can return an error.
+
+The following pseudo-code demonstrates appending both regular and cooperative kernels
+
+.. parsed-literal::
+
+       // existing command list
+       ${x}_command_list_handle_t hCommandList;
+
+       // When appending regular kernel, just pass null pointer to extension argument
+       void *pNext = nullptr;
+       ${x}CommandListAppendLaunchKernelWithParameters(hCommandList, hKernel, &launchArgs, pNext, nullptr, 0, nullptr);
+
+       // When appending cooperative kernel create cooperative descriptor
+       ${x}_command_list_append_launch_kernel_param_cooperative_desc_t cooperativeDesc = {
+           ${X}_STRUCTURE_TYPE_COMMAND_LIST_APPEND_PARAM_COOPERATIVE_DESC,
+           nullptr,
+           true
+       };
+       void *pNext = &cooperativeDesc;
+       ${x}CommandListAppendLaunchKernelWithParameters(hCommandList, hKernel, &launchArgs, pNext, nullptr, 0, nullptr);
+       ...
+
 Synchronization Primitives
 ==========================
 

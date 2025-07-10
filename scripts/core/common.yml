@@ -635,6 +635,10 @@ etors:
       desc: $x_rtas_geometry_aabbs_ext_cb_params_t
       version: "1.13"
       value: "0x00020035"
+    - name: COMMAND_LIST_APPEND_PARAM_COOPERATIVE_DESC
+      desc: $x_command_list_append_launch_kernel_param_cooperative_desc_t
+      version: "1.14"
+      value: "0x00020036"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
