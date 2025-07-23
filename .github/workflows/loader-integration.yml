@@ -6,7 +6,7 @@ env:
   http_proxy: http://proxy-dmz.intel.com:912
   https_proxy: http://proxy-dmz.intel.com:912
   DOCKER_BUILDKIT: '1'
-  VER: '1.13'
+  VER: '1.14'
 
 jobs:
   build:
@@ -111,22 +111,6 @@ jobs:
         ref: master
         path: loader-base
     - uses: intel-sandbox/action-setup-jq@main
-    - name: Copy head include files
-      working-directory: spec-head
-      run: | #bash
-        set -o pipefail
-        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
-        cut -c 4- |
-        sort |
-        xargs -I{} cp -v ./{} ../loader-head/{}
-    - name: Copy base include files
-      working-directory: spec-base
-      run: | #bash
-        set -o pipefail
-        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
-        cut -c 4- |
-        sort |
-        xargs -I{} cp -v ./{} ../loader-base/{}
     - name: json2src head
       run: | #bash
         docker run \
@@ -136,15 +120,14 @@ jobs:
           -w $PWD/loader-head \
           ghcr.io/oneapi-src/spec-build:latest \
           python3 ./scripts/json2src.py --ver $VER . < spec-head/scripts/input.json
-    - name: json2src base
+    - name: Copy head include files
+      working-directory: spec-head
       run: | #bash
-        docker run \
-          --rm \
-          --interactive \
-          -v $PWD:$PWD \
-          -w $PWD/loader-base \
-          ghcr.io/oneapi-src/spec-build:latest \
-          python3 ./scripts/json2src.py --ver $VER . < spec-base/scripts/input.json
+        set -o pipefail
+        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
+        cut -c 4- |
+        sort |
+        xargs -I{} cp -v ./{} ../loader-head/{}
     - name: Determine if there is a diff between loader source files
       id: loader-source-diff
       run: | #bash
@@ -260,6 +243,8 @@ jobs:
         tar -xzf abi-compliance-checker.tar.gz
         chmod +x lvc-abi-compliance-checker-*/abi-compliance-checker.pl
     - name: Compare dumps
+      id: abi-check
+      continue-on-error: true
       run: |
         docker run \
           --rm \
@@ -271,21 +256,66 @@ jobs:
             -old base.dump \
             -new head.dump \
             -report-path report.html
+    - name: Check for reviewer approval of ABI failure
+      id: check-approval
+      if: steps.abi-check.outcome == 'failure'
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { data: reviews } = await github.rest.pulls.listReviews({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number,
+          });
+          
+          const approvedReviews = reviews.filter(review => 
+            review.state === 'APPROVED' && 
+            review.body && 
+            review.body.toLowerCase().includes('abi-failure-approved')
+          );
+          
+          if (approvedReviews.length > 0) {
+            console.log('ABI failure has been approved by reviewer');
+            core.setOutput('approved', 'true');
+          } else {
+            console.log('No reviewer approval found for ABI failure');
+            core.setOutput('approved', 'false');
+          }
     - uses: actions/upload-artifact@v4
       id: abi-report-artifact
+      continue-on-error: true
       with:
         name: abi-report
         path: report.html
     - name: Write loader ABI Report comment to PR
+      continue-on-error: true
       if: "steps.loader-source-diff.outputs.diff == '1' || steps.include-diff.outputs.diff == '1'"
       uses: actions/github-script@v6
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
+            const abiStatus = "${{ steps.abi-check.outcome }}";
+            let body = "The Level Zero ABI Report can be found [here](${{ steps.abi-report-artifact.outputs.artifact-url }}).";
+            
+            if (abiStatus === 'failure') {
+              body += "\n\n⚠️ **ABI Compliance Check Failed**\n\n";
+              body += "If this ABI change is intentional and acceptable, a reviewer can approve it by:\n";
+              body += "1. Reviewing the ABI report above\n";
+              body += "2. Leaving an **approval review** with the keyword `abi-failure-approved` in the comment\n\n";
+              body += "This will allow the workflow to pass despite the ABI compliance failure.";
+            }
+            
             github.rest.issues.createComment({
               issue_number: pullRequestId,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "The Level Zero ABI Report can be found [here](${{ steps.abi-report-artifact.outputs.artifact-url }})."
+              body: body
             });
+    - name: Fail if ABI check failed and not approved
+      if: steps.abi-check.outcome == 'failure' && steps.check-approval.outputs.approved != 'true'
+      run: |
+        echo "ABI compliance check failed and no reviewer approval found."
+        echo "To approve this failure, a reviewer must leave an approval review containing 'abi-failure-approved' in the comment."
+        exit 1
