@@ -1,0 +1,43 @@
+#
+# Copyright (C) 2025 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Mapping External Memory as part of host llocation"
+version: "1.14"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "External Memory Mapping Extension Name"
+version: "1.14"
+name: $X_EXTERNAL_MEMORY_MAPPING_EXT_NAME
+value: '"$X_extension_external_memmap_sysmem"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "External Memory Mapping Extension Version(s)"
+version: "1.14"
+name: $x_external_memmap_sysmem_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Maps external system memory for an allocation"
+version: "1.14"
+class: $xMem
+name: $x_external_memmap_sysmem_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: const void*
+      name: pSystemMemory
+      desc: "[in] system memory pointer to map; must be page-aligned."
+    - type: const uint64_t
+      name: size
+      desc: "[in] size of the system memory to map; must be page-aligned."
+details:
+    - "This structure may be passed to $xMemAllocHost, via the `pNext` member of $x_host_mem_alloc_desc_t to map system memory for a host allocation."
+    - "The system memory pointer and size being mapped must be page aligned based on the supported page sizes on the device."

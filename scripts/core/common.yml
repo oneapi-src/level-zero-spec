@@ -639,6 +639,10 @@ etors:
       desc: $x_command_list_append_launch_kernel_param_cooperative_desc_t
       version: "1.14"
       value: "0x00020036"
+    - name:  EXTERNAL_MEMMAP_SYSMEM_EXT_DESC
+      desc: $x_external_memmap_sysmem_ext_desc_t
+      version: "1.14"
+      value: "0x00020037" 
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
@@ -666,6 +670,9 @@ etors:
     - name: D3D12_RESOURCE
       desc: "an NT handle referring to a Direct3D 12 committed resource"
       version: "1.2"
+    - name: MEMMAP_ALLOCATION
+      desc: "a pointer to external memory to be mapped into the allocation"
+      version: "1.14"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Bandwidth unit"
