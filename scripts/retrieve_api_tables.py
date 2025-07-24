@@ -33,7 +33,8 @@ def extract_apis_by_version(directory):
                                 namespace_map = {
                                     'core': 'ze',
                                     'tools': 'zet',
-                                    'sysman': 'zes'
+                                    'sysman': 'zes',
+                                    'runtime': 'zer',
                                 }
                                 namespace = namespace_map.get(top_level_folder, '')  # Default to empty if not matched
                                 # Replace $t in the name with the namespace
@@ -52,11 +53,20 @@ def extract_apis_by_version(directory):
                                 # Replace $X in the name with the namespace
                                 if '$X' in name:
                                     name = name.replace('$X', namespace)
-                                # Replace $x in the name with empty
-                                if ('$x' in symbol_class or '$t' in symbol_class or '$s' in symbol_class) and type == 'function':
+                                # Replace $r in the name with the namespace
+                                if '$r' in name:
+                                    name = name.replace('$r', namespace)
+                                # Replace $R in the name with the namespace
+                                if '$R' in name:
+                                    name = name.replace('$R', namespace)
+                                # If the symbol_class contains any of the placeholders ($x, $t, $s, $r) and the type is 'function',
+                                # remove those placeholders from symbol_class and construct the full symbol name by prepending the namespace and symbol_class to the name.
+                                # Otherwise, use the name as-is for the full symbol name.
+                                if ('$x' in symbol_class or '$t' in symbol_class or '$s' in symbol_class or '$r' in symbol_class) and type == 'function':
                                     symbol_class = symbol_class.replace('$x', '')
                                     symbol_class = symbol_class.replace('$s', '')
                                     symbol_class = symbol_class.replace('$t', '')
+                                    symbol_class = symbol_class.replace('$r', '')
                                     full_name = f"{namespace}{symbol_class}{name}"
                                 else:
                                     full_name = f"{name}"

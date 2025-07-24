@@ -9,7 +9,7 @@ from templates import helper as th
     X=x.upper()
 %>/*
  *
- * Copyright (C) 2019-2021 Intel Corporation
+ * Copyright (C) 2019-2025 Intel Corporation
  *
  * SPDX-License-Identifier: MIT
  *
@@ -208,6 +208,7 @@ typedef struct _${tbl['type']}
 } ${tbl['type']};
 
 %endfor
+%if namespace == x:
 ///////////////////////////////////////////////////////////////////////////////
 /// @brief Container for all callbacks
 typedef struct _ze_callbacks_t
@@ -230,6 +231,7 @@ typedef struct _ze_callbacks_t
     ze_mem_callbacks_t                  Mem;
     ze_virtual_mem_callbacks_t          VirtualMem;
 } ze_callbacks_t;
+%endif
 #if !defined(__GNUC__)
 #pragma endregion
 #endif
