@@ -957,7 +957,7 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
 Appending kernels with additional parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- New funtion is added to pass extra parameters when appending the kernel.
+- New function is added to pass extra parameters when appending the kernel.
 - New parameters can be passed from extension and be vendor specific.
 - This function will allow to pass cooperative kernel using dedicated descriptor.
 - Multiple additional parameters can be passed as a linked list of descriptors.

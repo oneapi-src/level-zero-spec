@@ -795,7 +795,7 @@ details:
     - "The implementation of this function should be lock-free."
     - "This function allows to pass additional parameters in the form of `${x}_base_desc_t`"
     - "This function can replace $xCommandListAppendLaunchCooperativeKernel with additional parameter `${x}_command_list_append_launch_kernel_param_cooperative_desc_t`"
-    - "Function supports both immediate and regular command lists."
+    - "This function supports both immediate and regular command lists."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
