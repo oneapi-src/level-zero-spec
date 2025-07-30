@@ -149,6 +149,10 @@ etors:
       desc: $t_metric_tracer_exp_desc_t
       version: "1.10"
       value: "0x00010008"
+    - name: METRIC_SOURCE_ID_EXP
+      desc: $t_metric_source_id_exp_t
+      version: "1.13"
+      value: "0x00010009"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
