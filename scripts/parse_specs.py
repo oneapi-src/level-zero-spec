@@ -396,6 +396,88 @@ def _validate_doc(f, d, tags, line_num):
         return False
 
 """
+    validate that all structs have an associated _structure_type_t enum entry
+"""
+def _validate_struct_enum_mapping(specs, tags):
+    """
+    Validates that for each struct, there exists a corresponding enum entry in a _structure_type_t enum.
+    The validation checks that the enum entry's 'desc' field matches the struct name.
+    
+    This function also validates structs that have a "base" field, ensuring they have their own
+    enum entries and are not just relying on their base struct's enum entry.
+    
+    Excludes certain struct types that don't require structure type enum entries:
+    - kernel_max_group_size_properties_ext_t
+    - Base structs themselves (*_base_*_t) 
+    - Simple data container structs that don't have stype fields
+    """
+    structs_info = []
+    structure_type_enums = {}
+    
+    # Collect all struct names (including base info) and structure_type enums
+    for spec in specs:
+        for obj in spec['objects']:
+            if obj['type'] == 'struct':
+                structs_info.append({
+                    'name': obj['name'],
+                    'base': obj.get('base', None)
+                })
+            elif obj['type'] == 'enum' and obj['name'].endswith('_structure_type_t'):
+                # Collect enum entries with their desc fields
+                structure_type_enums[obj['name']] = [
+                    {'name': etor['name'], 'desc': etor.get('desc', '')} 
+                    for etor in obj['etors']
+                ]
+    
+    # Check each struct has a corresponding enum entry
+    for struct_info in structs_info:
+        struct_name = struct_info['name']
+        base_struct = struct_info['base']
+        
+        # Get namespace from struct name for base validation
+        namespace = re.sub(r"(\$[a-z])\w+", r"\1", struct_name)
+        base_struct_names = [
+            "%s_base_desc_t" % namespace,
+            "%s_base_properties_t" % namespace,
+            "%s_base_cb_params_t" % namespace,
+            "%s_driver_extension_properties_t" % namespace
+        ]
+        
+        # Skip validation for base structs themselves (they don't need enum entries)
+        if struct_name in base_struct_names:
+            continue
+
+        if base_struct == None:
+            continue  # Skip structs without a base struct
+
+        if struct_name.endswith("_kernel_max_group_size_properties_ext_t"):
+            continue  # Skip specific structs that don't require enum entries
+
+        # Check if any enum entry's desc field matches this struct name
+        found = False
+        matching_enum_entry = None
+        for enum_name, enum_entries in structure_type_enums.items():
+            for enum_entry in enum_entries:
+                if enum_entry['desc'] == struct_name:
+                    found = True
+                    matching_enum_entry = enum_entry['name']
+                    break
+            if found:
+                break
+        
+        if not found:
+            base_info = " (inherits from '%s')" % base_struct if base_struct else ""
+            print("Struct-Enum Mapping Validation Error:")
+            print("Struct '%s'%s does not have a corresponding enum entry with matching 'desc' field in any '*_structure_type_t' enum!" % (struct_name, base_info))
+            print("Available enum entries in structure_type_t enums:")
+            for enum_name, enum_entries in structure_type_enums.items():
+                entry_names = [entry['name'] for entry in enum_entries[:5]]
+                print("  %s: %s" % (enum_name, ", ".join(entry_names) + ("..." if len(enum_entries) > 5 else "")))
+            return False
+    
+    return True
+
+"""
     filters object by version
 """
 def _version_compare_greater(a, b):
@@ -931,6 +1013,10 @@ def parse(section, version, tags, meta, ref):
     _generate_extra(specs, meta)
 
     ref = _generate_ref(specs, tags, ref)
+
+    # Validate struct-enum mappings after all documents are parsed
+    if not _validate_struct_enum_mapping(specs, tags):
+        successful = False
 
     print("Parsed %s files and found:"%len(specs))
     for key in meta:
