@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2025 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -495,6 +495,7 @@ details:
     - "The argument values will be used when a $xCommandListAppendLaunchKernel variant is called."
     - "The application must **not** call this function from simultaneous threads with the same kernel handle."
     - "The implementation of this function should be lock-free."
+    - "If argument is SLM (size), then SLM size in bytes for this resource is provided as argument size and argument value is null"
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
@@ -824,6 +825,78 @@ returns:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "when passed additional parameters are invalid or incompatible with the device or command list"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Kernel dispatch group sizes."
+version: "1.14"
+class: $xCommandList
+name: $x_group_size_t
+members:
+    - type: "uint32_t"
+      name: groupSizeX
+      desc: "[in] size of thread group in X dimension"
+      init: "0"
+    - type: "uint32_t"
+      name: groupSizeY
+      desc: "[in] size of thread group in Y dimension"
+      init: "0"
+    - type: "uint32_t"
+      name: groupSizeZ
+      desc: "[in] size of thread group in Z dimension"
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Launch kernel over one or more work groups with specifying work group size and all kernel arguments and allow to pass additional extensions."
+version: "1.14"
+class: $xCommandList
+name: AppendLaunchKernelWithArguments
+details:
+    - "The application must ensure the kernel and events are accessible by the device on which the command list was created."
+    - "This may **only** be called for a command list created with command queue group ordinal that supports compute."
+    - "The application must ensure the command list, kernel and events were created on the same context."
+    - "This function may **not** be called from simultaneous threads with the same command list handle."
+    - "The implementation of this function should be lock-free."
+    - "This function supports both immediate and regular command lists."
+    - "This function changes kernel state as if separate ${x}KernelSetGroupSize and ${x}KernelSetArgumentValue functions were called."
+    - "This function allows to pass additional extensions in the form of `${x}_base_desc_t`"
+params:
+    - type: "$x_command_list_handle_t"
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_kernel_handle_t"
+      name: hKernel
+      desc: "[in] handle of the kernel object"
+    - type: "const $x_group_count_t"
+      name: groupCounts
+      desc: "[in] thread group counts"
+    - type: "const $x_group_size_t"
+      name: groupSizes
+      desc: "[in] thread group sizes"
+    - type: const void **
+      name: pArguments
+      desc: "[in]pointer to an array of pointers"
+    - type: const void *
+      name: pNext
+      desc: "[in][optional] additional extensions passed to the function"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "when passed additional extensions are invalid or incompatible with the device or command list"
+    - $X_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION
+        - "as per ${x}KernelSetGroupSize"
+    - $X_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT
+        - "as per ${x}KernelSetArgumentValue"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch kernel cooperatively over one or more work groups."

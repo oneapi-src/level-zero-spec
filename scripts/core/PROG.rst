@@ -984,6 +984,58 @@ The following pseudo-code demonstrates appending both regular and cooperative ke
        ${x}CommandListAppendLaunchKernelWithParameters(hCommandList, hKernel, &launchArgs, pNext, nullptr, 0, nullptr);
        ...
 
+Appending kernels with arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- New function is added to pass group size, arguments and additional extensions when appending the kernel.
+- Kernel object state is updated with new work group size and new arguments, as if separate ${x}KernelSetGroupSize and ${x}KernelSetArgumentValue functions were called.
+- Kernel arguments are passed as a pointer list where each argument represents a pointer to the argument value on specific index.
+- All kernel arguments must be provided.
+- If argument is SLM (size), then SLM size in bytes for this resource is provided under pointer on specific index and its type is size_t.
+- If argument is an immediate type (i.e. structure, non pointer type), then values under pointer must contain full size of immediate type.
+- Additional extensions can be passed from extension and be vendor specific.
+- Multiple additional extensions can be passed as a linked list of descriptors.
+- If additional extension or any combination is not supported, driver must return an error.
+
+The following pseudo-code demonstrates appending kernel with pointer, SLM and immediate type arguments
+
+.. parsed-literal::
+
+        // kernel signature
+        __kernel void foo(__global unsigned int \*dstBuff, __local unsigned int \*localArray, unsigned int addValue);
+
+        // existing command list
+        ${x}_command_list_handle_t hCommandList;
+
+        // existing kernel
+        ${x}_command_list_handle_t hKernel;
+
+        // output buffer
+        void \*dstBuff;
+
+        // SLM sizes for array
+        size_t localArraySizeInBytes;
+
+        // immediate arg
+        unsigned int addValue;
+
+        const void* args[] = { &dstBuff, &localArraySizeInBytes, &addValue};
+        ${x}_group_count_t groupCounts = {1,2,3};
+        ${x}_group_size_t groupSizes = {1,2,3};
+        ${x}CommandListAppendLaunchKernelWithArguments(
+            hCommandList,
+            hKernel,
+            groupCounts,
+            groupSizes,
+            args,
+            nullptr,
+            nullptr,
+            0,
+            nullptr
+        );
+
+       ...
+
 Synchronization Primitives
 ==========================
 
