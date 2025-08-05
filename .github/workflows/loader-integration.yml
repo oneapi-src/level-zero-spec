@@ -242,6 +242,16 @@ jobs:
         wget https://github.com/lvc/abi-compliance-checker/tarball/master -O abi-compliance-checker.tar.gz
         tar -xzf abi-compliance-checker.tar.gz
         chmod +x lvc-abi-compliance-checker-*/abi-compliance-checker.pl
+    - name: Fix API_CURRENT_VERSION check
+      id: fix_current_version
+      continue-on-error: true
+      run: |
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 spec-head/scripts/update_ze_api_version.py base.dump head.dump
     - name: Compare dumps
       id: abi-check
       continue-on-error: true
