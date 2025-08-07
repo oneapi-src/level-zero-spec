@@ -35,7 +35,7 @@ extern "C" {
 %if 'condition' in obj:
 #if ${th.subt(n, tags, obj['condition'])}
 %endif
-typedef ${x}_result_t (${X}_APICALL *${th.make_pfn_type(n, tags, obj)})(
+typedef ${obj['return_type']} (${X}_APICALL *${th.make_pfn_type(n, tags, obj)})(
     %for line in th.make_param_lines(n, tags, obj, format=["type", "delim"]):
     ${line}
     %endfor

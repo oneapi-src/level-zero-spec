@@ -105,7 +105,7 @@ typedef ${obj['type']} _${th.make_type_name(n, tags, obj)}
 %for line in th.make_returns_lines(n, tags, obj, meta=meta):
 /// ${line}
 %endfor
-${X}_APIEXPORT ${x}_result_t ${X}_APICALL
+${X}_APIEXPORT ${obj['return_type']} ${X}_APICALL
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}
@@ -181,7 +181,7 @@ typedef struct _${th.make_pfncb_param_type(n, tags, obj)}
 %endif
 typedef void (${X}_APICALL *${th.make_pfncb_type(n, tags, obj)})(
     ${th.make_pfncb_param_type(n, tags, obj)}* params,
-    ${x}_result_t result,
+    ${obj['return_type']} result,
     void* pTracerUserData,
     void** ppTracerInstanceUserData
     );

@@ -863,9 +863,9 @@ def _generate_returns(obj, meta):
         def _append(lst, key, val):
             idx = next((i for i, v in enumerate(lst) if v.get(key)), len(lst))
             if idx == len(lst):
-                rets.append({key:[]})
-            if val and val not in rets[idx][key]:
-                rets[idx][key].append(val)
+                lst.append({key:[]})
+            if val and val not in lst[idx][key]:
+                lst[idx][key].append(val)
 
         # generate results based on parameters
         for item in obj['params']:
@@ -905,17 +905,55 @@ def _generate_returns(obj, meta):
                             if re.match(r"stype", m['name']):
                                 _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
 
+        return_type = None
+        return_desc = None
+        set_type_returns = []
         # finally, append all user entries
         for item in obj.get('returns', []):
+            if item == 'type':
+                for key, value in obj.get('returns', {}).items():
+                    if key == 'type':
+                        return_type = value
+                        continue
+                    if key == 'desc':
+                        return_desc = value
+                        continue
+                    if key == 'success':
+                        success_key = value
+                        _append(set_type_returns, success_key, None)
+                        continue
+                    if key == 'failure':
+                        if isinstance(value, dict):
+                            # Handle dictionary format: {'key': ['val1', 'val2']}
+                            for key, values in value.items():
+                                for val in values:
+                                    _append(set_type_returns, key, val)
+                        elif isinstance(value, list):
+                            # Handle list format: ['key1', {'key2': ['val1', 'val2']}]
+                            for item in value:
+                                if isinstance(item, str):
+                                    _append(set_type_returns, item, None)
+                                elif isinstance(item, dict):
+                                    for key, values in item.items():
+                                        for val in values:
+                                            _append(set_type_returns, key, val)
+                        continue
+                break
             if isinstance(item, dict):
                 for key, values in item.items():
                     for val in values:
                         _append(rets, key, val)
             else:
                 _append(rets, item, None)
-
         # update doc
-        obj['returns'] = rets
+        if return_type:
+            obj['return_type'] = return_type
+            obj['return_desc'] = return_desc
+            obj['returns'] = set_type_returns
+        else:
+            obj['return_type'] = "ze_result_t"
+            obj['return_desc'] = "[out] ze_result_t API result"
+            obj['returns'] = rets
     return obj
 
 """
@@ -983,7 +1021,6 @@ def parse(section, version, tags, meta, ref):
                 successful = False
                 continue
             if 'version' not in d:
-                print(d)
                 d['version'] = default_version
 
             d = _filter_version(d, version)

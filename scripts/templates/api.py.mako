@@ -90,9 +90,9 @@ ${"#############################################################################
 ${"##"} @brief Function-pointer for ${th.make_func_name(n, tags, obj)}
 %if 'condition' not in obj:
 if __use_win_types:
-    _${th.make_func_name(n, tags, obj)}_t = WINFUNCTYPE( ${x}_result_t, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
+    _${th.make_func_name(n, tags, obj)}_t = WINFUNCTYPE( ${obj['return_type']}, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
 else:
-    _${th.make_func_name(n, tags, obj)}_t = CFUNCTYPE( ${x}_result_t, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
+    _${th.make_func_name(n, tags, obj)}_t = CFUNCTYPE( ${obj['return_type']}, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
 %endif # condition
 
 %endfor # functions

@@ -593,9 +593,13 @@ details:
 analogue:
     - another_function
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "`0 == value`"
-    - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
+      type: return_type
+      desc: "[out] description of the return"
+      success: success return value
+      failure:
+        - failure_result_value1_with_validation_layer_check:
+            - "`0 == value`"
+        - failure_result_value2_without_validation_layer_check
 params:
     - type: $x_cls_handle_t
       name: hClsName
