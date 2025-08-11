@@ -17,6 +17,10 @@ Bandwidth Extension Properties
 API
 ----
 
+* Enumerations
+
+    * ${x}_bandwidth_properties_exp_version_t
+
 * Structures
 
 
