@@ -23,6 +23,8 @@ API
 
 * Enumerations
 
+    * ${x}_fabric_exp_version_t
+
     * ${x}_fabric_vertex_exp_type_t
 
     * ${x}_fabric_edge_exp_duplexity_t
