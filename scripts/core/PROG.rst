@@ -1019,7 +1019,7 @@ The following pseudo-code demonstrates appending kernel with pointer, SLM and im
         // immediate arg
         unsigned int addValue;
 
-        const void* args[] = { &dstBuff, &localArraySizeInBytes, &addValue};
+        void* args[] = { &dstBuff, &localArraySizeInBytes, &addValue};
         ${x}_group_count_t groupCounts = {1,2,3};
         ${x}_group_size_t groupSizes = {1,2,3};
         ${x}CommandListAppendLaunchKernelWithArguments(

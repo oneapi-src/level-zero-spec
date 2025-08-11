@@ -872,7 +872,7 @@ params:
     - type: "const $x_group_size_t"
       name: groupSizes
       desc: "[in] thread group sizes"
-    - type: const void **
+    - type: void **
       name: pArguments
       desc: "[in]pointer to an array of pointers"
     - type: const void *
