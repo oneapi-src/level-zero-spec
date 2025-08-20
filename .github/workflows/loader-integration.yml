@@ -100,16 +100,18 @@ jobs:
       uses: actions/checkout@v4
       with:
         clean: true
-        repository: oneapi-src/level-zero
+        repository: intel-innersource/libraries.compute.oneapi.level-zero.loader
         ref: master
         path: loader-head
+        token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
     - name: Checkout loader-base
       uses: actions/checkout@v4
       with:
         clean: true
-        repository: oneapi-src/level-zero
+        repository: intel-innersource/libraries.compute.oneapi.level-zero.loader
         ref: master
         path: loader-base
+        token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
     - uses: intel-sandbox/action-setup-jq@main
     - name: json2src head
       run: | #bash
