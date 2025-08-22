@@ -1816,28 +1816,133 @@ The following table documents the supported knobs for overriding default functio
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Device          | ${X}_AFFINITY_MASK                    | list       | Forces driver to only report devices (and sub-devices) as specified by values     |
+| Device          | ${X}_AFFINITY_MASK                    | list       | Forces driver to only report devices (and sub-devices) as specified by values   |
 +                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1} | Forces driver to report devices from lowest to highest PCI bus ID                 |
+|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1} | Forces driver to report devices from lowest to highest PCI bus ID               |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                  |
+| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1} | Forces all shared allocations into device memory                                |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 
 %endif
 
 %if _version_compare_gequal(ver, "1.7"):
 
-+-----------------+-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-| Category        | Name                                | Values                            | Description                                                                       |
-+=================+=====================================+===================================+===================================================================================+
-| Device          | ${X}_FLAT_DEVICE_HIERARCHY            | {**COMPOSITE**, FLAT, COMBINED}   | Defines device hierarchy model exposed by Level Zero driver implementation        |
-+                 +-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_AFFINITY_MASK                    | list                              | Forces driver to only report devices (and sub-devices) as specified by values     |
-+                 +-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-|                 | ${X}_ENABLE_PCI_ID_DEVICE_ORDER       | {**0**, 1}                        | Forces driver to report devices from lowest to highest PCI bus ID                 |
-+-----------------+-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
-| Memory          | ${X}_SHARED_FORCE_DEVICE_ALLOC        | {**0**, 1}                        | Forces all shared allocations into device memory                                  |
-+-----------------+-------------------------------------+-----------------------------------+-----------------------------------------------------------------------------------+
+.. list-table:: Environment Variables
+   :widths: 15 35 20 30
+   :header-rows: 1
+
+   * - Category
+     - Name
+     - Values
+     - Description
+   * - Device
+     - ${X}_FLAT_DEVICE_HIERARCHY
+     - {**COMPOSITE**, FLAT, COMBINED}
+     - Defines device hierarchy model exposed by Level Zero driver implementation
+   * - 
+     - ${X}_AFFINITY_MASK
+     - list
+     - Forces driver to only report devices (and sub-devices) as specified by values
+   * - 
+     - ${X}_ENABLE_PCI_ID_DEVICE_ORDER
+     - {**0**, 1}
+     - Forces driver to report devices from lowest to highest PCI bus ID
+   * - Memory
+     - ${X}_SHARED_FORCE_DEVICE_ALLOC
+     - {**0**, 1}
+     - Forces all shared allocations into device memory
+   * - Drivers
+     - ${X}L_DRIVERS_ORDER
+     - string
+     - Defines ordering of drivers reported to user. See Driver Ordering section for syntax details.
+
+Driver Ordering
+~~~~~~~~~~~~~~~~
+
+The Level Zero Runtime provides the ability to change the default driver used in "zer" Level Zero Runtime APIs through an environment variable to enable flexible driver selection and ordering.
+
+This environment variable is read by the Level Zero Loader to determine the order in which drivers are initialized and used.
+
+A robust driver selector is created considering multiple drivers of different types with the following supported syntax:
+
+1. **Specify specific type and index within that type:**
+   ``ZEL_DRIVERS_ORDER=<driver_type>:<driver_index>[,<driver_type>:<driver_index>]``
+
+2. **Specify specific type:**
+   ``ZEL_DRIVERS_ORDER=<driver_type>[,<driver_type>]``
+
+3. **Specify only the driver index (Refers to the original global driver index):**
+   ``ZEL_DRIVERS_ORDER=<driver_index>[,<driver_index>]``
+
+**Supported Driver Types:**
+
+- ``DISCRETE_GPU_ONLY``
+- ``GPU``
+- ``INTEGRATED_GPU_ONLY``
+- ``NPU``
+
+This allows ordering all the drivers or reordering the drivers with those specified at the front. Due to reliance of other libraries that drivers are not "masked", one cannot mask drivers and devices through an environment variable read at the loader level.
+Devices or driver types not explicitly specified in the ``ZEL_DRIVERS_ORDER`` environment variable will still be exposed by the Level Zero Loader, but will appear at the end of the driver list in their default order.
+
+**Example Usage**
+
+1. ``ZEL_DRIVERS_ORDER = DISCRETE_GPU_ONLY:1, NPU``
+
+   On a system with 2 GPU Drivers (discrete:0, discrete:1) and 1 NPU Driver, where the default order is : Discrete:0, Discrete:1, NPU, this setting will change the order to:
+
+   - Discrete:1, NPU:0, Discrete:0
+   - Index 0 used in zer == Discrete:1
+
+2. ``ZEL_DRIVERS_ORDER = 2,0``
+
+   On a system with 2 GPU Drivers (discrete, integrated) and 1 NPU Driver, where the default order is : Discrete, integrated, NPU, this setting will change the order to:
+   
+   - NPU, Discrete, Integrated
+   - Index 0 used in zer == NPU
+
+3. ``ZEL_DRIVERS_ORDER = GPU:1, NPU:0``
+
+   On a system with 2 GPU Drivers (discrete, integrated) and 1 NPU Driver, where the default order is : Discrete, Integrated, NPU, and the indexes per type are:
+
+   - GPU: Discrete, Integrated
+   - NPU: NPU
+
+   Resulting order:
+
+   - Integrated, NPU, Discrete
+   - Index 0 used in zer == Integrated
+
+4. ``ZEL_DRIVERS_ORDER = NPU``
+
+   On a system with 2 GPU Drivers (discrete, integrated) and 1 NPU Driver, where the default order is : Discrete, integrated, NPU, this setting will change the order to:
+   
+   - NPU, Discrete, Integrated
+   - Index 0 used in zer == NPU
+
+**Device Discovery Tool**
+
+For debugging and system inspection purposes, you can use the ``show_devices_l0`` tool from the Intel compute-benchmarks repository to easily view driver information and device properties on your system:
+
+.. parsed-literal::
+
+   # Clone and build the compute-benchmarks repository
+   git clone https://github.com/intel/compute-benchmarks.git
+   cd compute-benchmarks
+   mkdir build && cd build
+   cmake ..
+   make show_devices_l0
+
+   # Run the tool to display driver index, driver type, and device information
+   ./source/tools/show_devices_l0
+
+This tool will display:
+
+- Driver index and driver type for each Level-Zero driver
+- Device properties including device type, name, and capabilities
+- Sub-device information if available
+- Memory properties and other device-specific details
+
+The ``show_devices_l0`` tool provides a convenient way to inspect the Level-Zero driver and device hierarchy, which is particularly useful when configuring driver ordering with the ``ZEL_DRIVERS_ORDER`` environment variable.
 
 
 Device Hierarchy

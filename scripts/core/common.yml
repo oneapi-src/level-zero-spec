@@ -777,3 +777,10 @@ name: $X_FLAT_DEVICE_HIERARCHY
 category: "Device"
 version: "1.7"
 values: "String"
+--- #--------------------------------------------------------------------------
+type: env
+desc: "Defines/Refines ordering of drivers reported to user"
+name: $XL_DRIVERS_ORDER
+category: "Driver"
+version: "1.14"
+values: "String"
