@@ -805,7 +805,7 @@ params:
       name: hKernel
       desc: "[in] handle of the kernel object"
     - type: "const $x_group_count_t*"
-      name: pLaunchFuncArgs
+      name: pGroupCounts
       desc: "[in] thread group launch arguments"
     - type: const void *
       name: pNext
