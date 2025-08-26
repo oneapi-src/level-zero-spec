@@ -125,6 +125,18 @@ def _validate_doc(f, d, tags, line_num):
     def __validate_name(d, key, tags, case='lower', prefix=""):
         if not isinstance(d[key], str):
             raise Exception(prefix+"'%s' must be a string: '%s'"%(key, type(d[key])))
+        if isinstance(d.get('type'), str) and d['type'] == 'default_struct' and key == 'name':
+            # Name must start with Default, then two uppercase letters, and be camel case
+            if not any(d[key].startswith(tag + 'Default') for tag in ['$r', '$t', '$x', '$s']):
+                raise Exception(prefix+"'%s' must start with one of ['$rDefault', '$tDefault', '$xDefault', '$sDefault']: '%s'" % (key, d[key]))
+            if d[key].endswith('_t'):
+                raise Exception(prefix+"'%s' must not end with '_t': '%s'" % (key, d[key]))
+            name = _subt(d[key], tags)
+            print("Validating default_struct name '%s'..." % name)
+            # Check that name is CamelCase (starts with uppercase, contains at least one lowercase, no underscores)
+            if (name.isupper() or name.islower()):
+                raise Exception(prefix+"'%s' must be CamelCase: '%s'" % (key, name))
+            return  # Early return for default_struct case
 
         if not __validate_tag(d, key, tags, case):
             raise Exception(prefix+"'%s' must start with {%s}: '%s'"%(key, ", ".join([x.upper() if case == 'upper' else x for x in tags if x != "$OneApi"]), d[key]))
@@ -360,6 +372,17 @@ def _validate_doc(f, d, tags, line_num):
 
             __validate_type(d, 'name', tags)
             __validate_base(d)
+            __validate_members(d, tags)
+            __validate_details(d)
+            __validate_ordinal(d)
+            __validate_version(d)
+
+        elif 'default_struct' == d['type']:
+            print("Validating default_struct '%s'..." % d['name'])
+            if ('desc' not in d) or ('name' not in d):
+                raise Exception("'%s' requires the following scalar fields: {`desc`, `name`}"%d['type'])
+
+            __validate_name(d, 'name', tags)
             __validate_members(d, tags)
             __validate_details(d)
             __validate_ordinal(d)
@@ -761,6 +784,16 @@ def _generate_meta(d, ordinal, meta):
                     })
 
         elif 'struct' == type or 'union' == type:
+            meta[type][name]['members'] = []
+            for m in d['members']:
+                meta[type][name]['members'].append({
+                    'type': m['type'],
+                    'name': m['name'],
+                    'desc': m['desc'],
+                    'init': m.get('init')
+                    })
+
+        elif 'default_struct' == type:
             meta[type][name]['members'] = []
             for m in d['members']:
                 meta[type][name]['members'].append({

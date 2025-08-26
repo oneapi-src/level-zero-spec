@@ -99,6 +99,12 @@ typedef ${obj['type']} _${th.make_type_name(n, tags, obj)}
     %endfor
 
 } ${th.make_type_name(n, tags, obj)};
+%elif re.match(r"default_struct", obj['type']):
+static const ${obj['base']} ${th.make_type_name(n, tags, obj)} = {
+    %for line in th.make_member_lines_with_defaults(n, tags, obj):
+    ${line}
+    %endfor
+};
 ## FUNCTION ###################################################################
 %elif re.match(r"function", obj['type']):
 /// 

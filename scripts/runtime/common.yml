@@ -9,3 +9,97 @@
 type: header
 desc: "Intel $OneApi Level-Zero Runtime API common types"
 ordinal: "0"
+
+--- #--------------------------------------------------------------------------
+type: default_struct
+desc: "Immediate Command List default descriptor for GPU devices"
+class: $r
+name: $xDefaultGPUImmediateCommandQueueDesc
+base: ze_command_queue_desc_t
+version: "1.14"
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_COMMAND_QUEUE_DESC
+    - type: void *
+      name: pNext
+      desc: "[in] pointer possible next extension structure in a chain"
+      init: NULL
+    - type: uint32_t
+      name: ordinal
+      desc: "[in] command queue group ordinal"
+      init: 0
+    - type: uint32_t
+      name: index
+      desc: |
+            [in] command queue index within the group;
+            must be zero.
+      init: 0
+    - type: $x_command_queue_flags_t
+      name: flags
+      desc: |
+            [in] usage flags.
+            must be 0 (default) or a valid combination of $x_command_queue_flag_t;
+            default behavior may use implicit driver-based heuristics to balance latency and throughput.
+      init: $X_COMMAND_QUEUE_FLAG_IN_ORDER | $X_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINT
+    - type: $x_command_queue_mode_t
+      name: mode
+      desc: "[in] operation mode"
+      init: $X_COMMAND_QUEUE_MODE_ASYNCHRONOUS
+    - type: $x_command_queue_priority_t
+      name: priority
+      desc: "[in] priority"
+      init: $X_COMMAND_QUEUE_PRIORITY_NORMAL
+--- #--------------------------------------------------------------------------
+type: default_struct
+desc: "Device Unified Shared Memory Allocation default descriptor for GPU devices"
+class: $r
+name: $xDefaultGPUDeviceMemAllocDesc
+base: ze_device_mem_alloc_desc_t
+version: "1.14"
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC
+    - type: void *
+      name: pNext
+      desc: "[in] pointer possible next extension structure in a chain"
+      init: NULL
+    - type: "$x_device_mem_alloc_flags_t"
+      name: flags
+      desc: |
+            [in] flags specifying additional allocation controls.
+            must be 0 (default) or a valid combination of $x_device_mem_alloc_flag_t;
+            default behavior may use implicit driver-based heuristics.
+      init: $X_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED
+    - type: uint32_t
+      name: ordinal
+      desc: |
+            [in] ordinal of the device's local memory to allocate from.
+            must be less than the count returned from $xDeviceGetMemoryProperties.
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: default_struct
+desc: "Host Unified Shared Memory Allocation default descriptor for GPU devices"
+class: $r
+name: $xDefaultGPUHostMemAllocDesc
+base: ze_host_mem_alloc_desc_t
+version: "1.14"
+members:
+    - type: $x_structure_type_t
+      name: stype
+      desc: "[in] type of this structure"
+      init: $X_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESC
+    - type: void *
+      name: pNext
+      desc: "[in] pointer possible next extension structure in a chain"
+      init: NULL
+    - type: "$x_host_mem_alloc_flags_t"
+      name: flags
+      desc: |
+            [in] flags specifying additional allocation controls.
+            must be 0 (default) or a valid combination of $x_host_mem_alloc_flag_t;
+            default behavior may use implicit driver-based heuristics.
+      init: $X_HOST_MEM_ALLOC_FLAG_BIAS_CACHED | $X_HOST_MEM_ALLOC_FLAG_BIAS_INITIAL_PLACEMENT

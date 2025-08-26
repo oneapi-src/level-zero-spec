@@ -397,6 +397,9 @@ Public:
     if comment, then insert doxygen '::' notation at beginning (for autogen links)
 """
 def subt(namespace, tags, string, comment=False, remove_namespace=False):
+    if string is None:
+        return ""
+    string = str(string)  # Convert to string to handle int/other types
     for key, value in tags.items():
         if remove_namespace:
             repl = ""                                                           # remove namespace; e.g. "$x" -> ""
@@ -659,6 +662,40 @@ def make_member_name(namespace, tags, item, prefix="", remove_array=False):
         name = value_traits.get_array_name(name)
 
     return name
+
+"""
+Public:
+    returns a list of strings for each member of a structure with the default values.
+"""
+def make_member_lines_with_defaults(namespace, tags, obj, prefix="", py=False, meta=None):
+    lines = []
+    if 'members' not in obj:
+        return lines
+
+    for i, item in enumerate(obj['members']):
+        name = make_member_name(namespace, tags, item, prefix, remove_array=py)
+
+        if py:
+            tname = get_ctype_name(namespace, tags, item)
+        else:
+            tname = _get_type_name(namespace, tags, obj, item)
+
+        init = "0"
+        if 'init' in item and item['init'] is not None:
+            init = subt(namespace, tags, str(item['init']))
+
+        if py:
+            delim = "," if i < (len(obj['members'])-1) else ""
+            prologue = "(\"%s\", %s)%s"%(name, tname, delim)
+        else:
+            prologue = "%s,"%(init)
+
+        comment_style = "##" if py else "///<"
+        ws_count = 64 if py else 72
+        for line in split_line(subt(namespace, tags, item['name'], True), 70):
+            lines.append("%s%s %s"%(append_ws(prologue, ws_count), comment_style, line))
+            prologue = ""
+    return lines
 
 """
 Public:
