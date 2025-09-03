@@ -103,3 +103,81 @@ members:
             must be 0 (default) or a valid combination of $x_host_mem_alloc_flag_t;
             default behavior may use implicit driver-based heuristics.
       init: $X_HOST_MEM_ALLOC_FLAG_BIAS_CACHED | $X_HOST_MEM_ALLOC_FLAG_BIAS_INITIAL_PLACEMENT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves a string describing the last error code returned by the default driver in the current thread."
+version: "1.14"
+class: $r
+name: GetLastErrorDescription
+details:
+    - "String returned is thread local."
+    - "String is only updated on calls returning an error, i.e., not on calls returning $X_RESULT_SUCCESS."
+    - "String may be empty if driver considers error code is already explicit enough to describe cause."
+    - "Memory pointed to by ppString is owned by the default driver."
+    - "String returned is null-terminated."
+params:
+    - type: "const char**"
+      name: ppString
+      desc: "[in,out] pointer to a null-terminated array of characters describing cause of error."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Translates device handle to integer identifier."
+version: "1.14"
+class: $r
+name: TranslateDeviceHandleToIdentifier
+details:
+    - "The implementation of this function should be lock-free."
+    - "This function does not return error code, to get info about failure user may use $rDriverGetLastErrorDescription function."
+    - "In case of failure, this function returns UINT32_MAX."
+params:
+    - type: "$x_device_handle_t"
+      name: hDevice
+      desc: "[in] handle of the device"
+returns:
+    type: "uint32_t"
+    desc: "integer identifier for the device"
+    success: "integer identifier for the device"
+    failure:
+      - UINT32_MAX
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Translates to integer identifier to a device handle."
+version: "1.14"
+class: $r
+name: TranslateIdentifierToDeviceHandle
+details:
+    - "The driver must be initialized before calling this function."
+    - "The implementation of this function should be lock-free."
+    - "This function does not return error code, to get info about failure user may use $rGetLastErrorDescription function."
+    - "In case of failure, this function returns null."
+    - "Details on the error can be retrieved using $rGetLastErrorDescription function."
+params:
+    - type: "uint32_t"
+      name: identifier
+      desc: "[in] integer identifier of the device"
+returns:
+    type: "ze_device_handle_t"
+    desc: "handle of the device"
+    success: "handle of the device with the given identifier"
+    failure:
+      - nullptr
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves handle to default context from the default driver."
+version: "1.14"
+class: $r
+name: GetDefaultContext
+details:
+    - "The driver must be initialized before calling this function."
+    - "The implementation of this function should be lock-free."
+    - "This returned context contains all the devices available in the default driver."
+    - "This function does not return error code, to get info about failure user may use $rGetLastErrorDescription function."
+    - "In case of failure, this function returns null."
+    - "Details on the error can be retrieved using $rGetLastErrorDescription function."
+params: []
+returns:
+    type: "ze_context_handle_t"
+    desc: "handle of the context"
+    success: "handle of the default context"
+    failure:
+      - nullptr

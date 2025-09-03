@@ -746,35 +746,35 @@ def make_param_lines(namespace, tags, obj, py=False, decl=False, meta=None, form
     lines = []
 
     params = obj['params']
+    if isinstance(obj['params'], list):
+        for i, item in enumerate(params):
+            name = _get_param_name(namespace, tags, item)
+            if py:
+                tname = get_ctype_name(namespace, tags, item)
+            else:
+                tname = _get_type_name(namespace, tags, obj, item)
 
-    for i, item in enumerate(params):
-        name = _get_param_name(namespace, tags, item)
-        if py:
-            tname = get_ctype_name(namespace, tags, item)
-        else:
-            tname = _get_type_name(namespace, tags, obj, item)
+            words = []
+            if "type*" in format:
+                words.append(tname+"*")
+                name = "p"+name
+            elif "type" in format:
+                words.append(tname)
+            if "name" in format:
+                words.append(name)
 
-        words = []
-        if "type*" in format:
-            words.append(tname+"*")
-            name = "p"+name
-        elif "type" in format:
-            words.append(tname)
-        if "name" in format:
-            words.append(name)
+            prologue = " ".join(words)
+            if "delim" in format:
+                if i < len(params)-1:
+                    prologue += delim
 
-        prologue = " ".join(words)
-        if "delim" in format:
-            if i < len(params)-1:
-                prologue += delim
-
-        if "desc" in format:
-            desc = item['desc']
-            for line in split_line(subt(namespace, tags, desc, True), 70):
-                lines.append("%s///< %s"%(append_ws(prologue, 72), line))
-                prologue = ""
-        else:
-            lines.append(prologue)
+            if "desc" in format:
+                desc = item['desc']
+                for line in split_line(subt(namespace, tags, desc, True), 70):
+                    lines.append("%s///< %s"%(append_ws(prologue, 72), line))
+                    prologue = ""
+            else:
+                lines.append(prologue)
 
     if "type" in format and len(lines) == 0 and not py:
         lines = ["void"]

@@ -108,7 +108,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         clean: true
-        repository: intel-innersource/libraries.compute.oneapi.level-zero.loader
+        repository: oneapi-src/level-zero
         ref: master
         path: loader-base
         token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}

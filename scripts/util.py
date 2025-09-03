@@ -170,7 +170,7 @@ def makoWrite(inpath, outpath, **args):
         return len(rendered.splitlines())
     except:
         traceback = RichTraceback()
-        #for (filename, lineno, function, line) in traceback.traceback:
+        # for (filename, lineno, function, line) in traceback.traceback:
         #    print("%s(%s) : error in %s" % (filename, lineno, function))
         #    print(line, "\n")
         line = "%s: %s" % (str(traceback.error.__class__.__name__), traceback.error)

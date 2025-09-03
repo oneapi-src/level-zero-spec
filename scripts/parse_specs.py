@@ -274,8 +274,14 @@ def _validate_doc(f, d, tags, line_num):
         if 'params' not in d:
             raise Exception("'function' requires the following sequence of mappings: {`params`}")
 
+        runtime = False
+        if 'class' in d and '$r' in d['class']:
+            runtime = True
         if not isinstance(d['params'], list):
-            raise Exception("'params' must be a sequence: '%s'"%type(d['params']))
+            if not runtime:
+                raise Exception("'params' must be a sequence: '%s'"%type(d['params']))
+            else:
+                return
 
         d_ver = d.get('version', default_version)
         max_ver = d_ver
@@ -298,7 +304,10 @@ def _validate_doc(f, d, tags, line_num):
             if min['[out]'] and ("[in]" == annotation or "[in,out]" == annotation):
                 raise Exception(prefix+"'%s' must come before '[out]'"%annotation)
 
-            if d.get('decl') != "static" and i == 0 and not type_traits.is_handle(item['type']):
+            runtime = False
+            if 'class' in d and '$r' in d['class']:
+                runtime = True
+            if d.get('decl') != "static" and i == 0 and not runtime and not type_traits.is_handle(item['type']):
                 raise Exception(prefix+"'type' must be '*_handle_t': %s"%item['type'])
 
             if item['type'].endswith("flag_t"):
@@ -671,11 +680,12 @@ def _filter_version(d, max_ver):
         d['etors'] = flt
 
     elif 'function' == type:
-        for p in d['params']:
-            ver = p.get('version', default_version)
-            if _version_compare_lequal(ver, max_ver):
-                flt.append(__filter_desc(p))
-        d['params'] = flt
+        if isinstance(d['params'], list):
+            for p in d['params']:
+                ver = p.get('version', default_version)
+                if _version_compare_lequal(ver, max_ver):
+                    flt.append(__filter_desc(p))
+            d['params'] = flt
 
     elif 'struct' == type or 'union' == type or 'class' == type:
         for m in d.get('members',[]):
@@ -778,10 +788,11 @@ def _generate_meta(d, ordinal, meta):
 
         elif 'function' == type:
             meta[type][name]['params'] = []
-            for p in d['params']:
-                meta[type][name]['params'].append({
-                    'type':p['type']
-                    })
+            if isinstance(d['params'], list):
+                for p in d['params']:
+                    meta[type][name]['params'].append({
+                        'type':p['type']
+                        })
 
         elif 'struct' == type or 'union' == type:
             meta[type][name]['members'] = []
@@ -854,8 +865,9 @@ def _generate_hash(obj):
         hash = hashlib.sha256()
         # hashcode of function signature...
         hash.update(obj['name'].encode())
-        for p in obj['params']:
-            hash.update(p['type'].encode())
+        if isinstance(obj['params'], list):
+            for p in obj['params']:
+                hash.update(p['type'].encode())
         # hashcode of class
         if 'class' in obj:
             hash.update(obj['class'].encode())
@@ -901,42 +913,49 @@ def _generate_returns(obj, meta):
                 lst[idx][key].append(val)
 
         # generate results based on parameters
-        for item in obj['params']:
-            if not param_traits.is_optional(item) and not param_traits.is_mbz(item):
-                typename = type_traits.base(item['type'])
+        runtime = False
+        if 'class' in obj and '$r' in obj['class']:
+            runtime = True
+        no_params = False
+        if not isinstance(obj['params'], list) and runtime:
+            no_params = True
+        if not no_params:
+            for item in obj['params']:
+                if not param_traits.is_optional(item) and not param_traits.is_mbz(item):
+                    typename = type_traits.base(item['type'])
 
-                if type_traits.is_pointer(item['type']):
-                    _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s`"%item['name'])
+                    if type_traits.is_pointer(item['type']):
+                        _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s`"%item['name'])
 
-                elif type_traits.is_handle(item['type']) and not type_traits.is_ipc_handle(item['type']):
-                    _append(rets, "$X_RESULT_ERROR_INVALID_NULL_HANDLE", "`nullptr == %s`"%item['name'])
+                    elif type_traits.is_handle(item['type']) and not type_traits.is_ipc_handle(item['type']):
+                        _append(rets, "$X_RESULT_ERROR_INVALID_NULL_HANDLE", "`nullptr == %s`"%item['name'])
 
-                elif type_traits.is_enum(item['type'], meta):
-                    _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s`"%(meta['enum'][typename]['max'], item['name']))
+                    elif type_traits.is_enum(item['type'], meta):
+                        _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s`"%(meta['enum'][typename]['max'], item['name']))
 
-                if type_traits.is_descriptor(item['type']):
-                    # walk each entry in the desc for pointers and enums
-                    for i, m in enumerate(meta['struct'][typename]['members']):
-                        mtypename = type_traits.base(m['type'])
+                    if type_traits.is_descriptor(item['type']):
+                        # walk each entry in the desc for pointers and enums
+                        for i, m in enumerate(meta['struct'][typename]['members']):
+                            mtypename = type_traits.base(m['type'])
 
-                        if type_traits.is_pointer(m['type']) and not param_traits.is_optional({'desc': m['desc']}):
-                            _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], m['name']))
+                            if type_traits.is_pointer(m['type']) and not param_traits.is_optional({'desc': m['desc']}):
+                                _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], m['name']))
 
-                        elif type_traits.is_enum(m['type'], meta):
-                            if re.match(r"stype", m['name']):
-                                _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
-                            else:
-                                if "$x_init_driver_type_flags_t" == mtypename:
-                                    _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s == %s->%s`"%('0x0', item['name'], m['name']))
+                            elif type_traits.is_enum(m['type'], meta):
+                                if re.match(r"stype", m['name']):
+                                    _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
                                 else:
-                                    _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], m['name']))
+                                    if "$x_init_driver_type_flags_t" == mtypename:
+                                        _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s == %s->%s`"%('0x0', item['name'], m['name']))
+                                    else:
+                                        _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], m['name']))
 
-                elif type_traits.is_properties(item['type']):
-                    # walk each entry in the properties
-                    for i, m in enumerate(meta['struct'][typename]['members']):
-                        if type_traits.is_enum(m['type'], meta):
-                            if re.match(r"stype", m['name']):
-                                _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
+                    elif type_traits.is_properties(item['type']):
+                        # walk each entry in the properties
+                        for i, m in enumerate(meta['struct'][typename]['members']):
+                            if type_traits.is_enum(m['type'], meta):
+                                if re.match(r"stype", m['name']):
+                                    _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_VERSION", "`%s != %s->stype`"%(re.sub(r"(\$\w)_(.*)_t.*", r"\1_STRUCTURE_TYPE_\2", typename).upper(), item['name']))
 
         return_type = None
         return_desc = None

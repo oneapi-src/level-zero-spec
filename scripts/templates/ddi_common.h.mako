@@ -25,6 +25,7 @@ from templates import helper as th
 #include "ze_ddi.h"
 #include "zet_ddi.h"
 #include "zes_ddi.h"
+#include "zer_ddi.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -36,6 +37,7 @@ typedef struct _${n}_handle_t
     ze_dditable_driver_t *pCore; // [in] pointer to _ze_dditable_t_ object related to this handle
     zet_dditable_driver_t *pTools; // [in] pointer to _zet_dditable_t_ object related to this handle
     zes_dditable_driver_t *pSysman; // [in] pointer to _zes_dditable_t_ object related to this handle
+    zer_dditable_driver_t *pRuntime; // [in] pointer to _zer_dditable_t_ object related to this handle
 } ${n}_handle_t;
 
 #if defined(__cplusplus)
