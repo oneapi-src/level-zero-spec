@@ -856,3 +856,22 @@ members:
     - type: $xDriver*
       name: pDriver
       desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Synchronizes all command queues related to the device."
+version: "1.14"
+class: $xDevice
+name: Synchronize
+details:
+    - "The application may call this function from simultaneous threads with the same device handle."
+    - "The implementation of this function should be thread-safe."
+    - "This function blocks until all preceding submissions to all queues on the device are completed."
+    - "This function returns an error if device execution fails."
+    - "This function hangs indefinitely if the device is blocked on a non-signaled event."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+returns::
+    - $X_RESULT_ERROR_DEVICE_LOST:
+       - "Device execution failed."
