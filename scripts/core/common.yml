@@ -670,9 +670,6 @@ etors:
     - name: D3D12_RESOURCE
       desc: "an NT handle referring to a Direct3D 12 committed resource"
       version: "1.2"
-    - name: MEMMAP_ALLOCATION
-      desc: "a pointer to external memory to be mapped into the allocation"
-      version: "1.14"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Bandwidth unit"

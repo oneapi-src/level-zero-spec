@@ -35,7 +35,7 @@ members:
     - type: const void*
       name: pSystemMemory
       desc: "[in] system memory pointer to map; must be page-aligned."
-    - type: const uint64_t
+    - type: uint64_t
       name: size
       desc: "[in] size of the system memory to map; must be page-aligned."
 details:
