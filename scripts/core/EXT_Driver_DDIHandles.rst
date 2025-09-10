@@ -27,8 +27,9 @@ API
     * ze_dditable_driver_t
     * zet_dditable_driver_t
     * zes_dditable_driver_t
+    * zer_dditable_driver_t
 
-See `ze*_ddi.h` for definitions of `ze_dditable_driver_t`, `zet_dditable_driver_t`, `zes_dditable_driver_t`.
+See `ze*_ddi.h` for definitions of `ze_dditable_driver_t`, `zet_dditable_driver_t`, `zes_dditable_driver_t`, `zer_dditable_driver_t`.
 `ze_handle_t` is defined in ze_ddi_common.h. To use it, include `ze_ddi_common.h`.
 
 Handle Structures:
@@ -40,9 +41,10 @@ Handle Structures:
 
         typedef struct _ze_handle_t
         {
-            ze_dditable_driver_t *pCore; // [in] pointer to _ze_dditable_t_ object related to this handle
-            zet_dditable_driver_t *pTools; // [in] pointer to _zet_dditable_t_ object related to this handle
-            zes_dditable_driver_t *pSysman; // [in] pointer to _zes_dditable_t_ object related to this handle
+            ze_dditable_driver_t *pCore;     // [in] pointer to _ze_dditable_t_ object related to this handle
+            zet_dditable_driver_t *pTools;   // [in] pointer to _zet_dditable_t_ object related to this handle
+            zes_dditable_driver_t *pSysman;  // [in] pointer to _zes_dditable_t_ object related to this handle
+            zer_dditable_driver_t *pRuntime; // [in] pointer to _zer_dditable_t_ object related to this handle
         } ze_handle_t;
 
 DDI Handles Extension:
@@ -64,6 +66,7 @@ Our current handling of multi runtime scenario in Loader has many issues:
 The solution which solves this problem is to define a base layout of every handle type directly in L0 spec ensuring that all L0 API handles contain a header with pointers to appropriate driver ddi tables.
 Backward compatibility is covered as new loader will still support runtimes that do not support this extension.
 Loader should verify the support based on extension property queried from zeDriverGetExtensionProperties.
+Version 1.1 of the extension adds a new member `pRuntime` which represents zer API. Loader should verify the extension version before accessing the `pRuntime` object.
 
 Example Implementation of L0 Loader functions:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
