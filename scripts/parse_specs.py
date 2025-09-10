@@ -1002,6 +1002,7 @@ def _generate_returns(obj, meta):
             obj['return_type'] = return_type
             obj['return_desc'] = return_desc
             obj['returns'] = set_type_returns
+            obj['return_fail_value'] = next(iter(set_type_returns[1]))
         else:
             obj['return_type'] = "ze_result_t"
             obj['return_desc'] = "[out] ze_result_t API result"

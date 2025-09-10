@@ -34,14 +34,18 @@ from templates import helper as th
 %for line in th.make_returns_lines(n, tags, obj, meta=meta):
 /// ${line}
 %endfor
-${x}_result_t ${X}_APICALL
+${obj['return_type']} ${X}_APICALL
 ${th.make_func_name(n, tags, obj)}(
     %for line in th.make_param_lines(n, tags, obj):
     ${line}
     %endfor
     )
 {
+    %if 'return_fail_value' in obj:
+    ${obj['return_type']} result = ${obj['return_fail_value']};
+    %else:
     ${x}_result_t result = ${X}_RESULT_SUCCESS;
+    %endif
     return result;
 }
 %if 'condition' in obj:
