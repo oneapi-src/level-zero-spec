@@ -76,6 +76,18 @@ etors:
       desc: "GDDR6X memory"
     - name: GDDR7
       desc: "GDDR7 memory"
+    - name: HBM2E
+      desc: "HBM2E memory"
+      version: "1.14"
+    - name: HBM3
+      desc: "HBM3 memory"
+      version: "1.14"
+    - name: HBM3E
+      desc: "HBM3E memory"
+      version: "1.14"
+    - name: HBM4
+      desc: "HBM4 memory"
+      version: "1.14"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory properties"
