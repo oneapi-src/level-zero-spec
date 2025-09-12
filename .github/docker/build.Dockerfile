@@ -1,10 +1,9 @@
 # syntax=docker/dockerfile:1.4
-FROM amr-registry.caas.intel.com/level-zero-linux-compute/ubuntu:24.10
+FROM amr-registry.caas.intel.com/level-zero-linux-compute/oneapi-src/level-zero/ubuntu-24.04:master
 
 SHELL ["/bin/bash", "-e", "-c"]
 
 RUN --mount=type=cache,target=/var/cache/apt <<EOF
-rm /etc/apt/apt.conf.d/docker-clean
 apt-get update
 apt-get install -y \
   build-essential \
