@@ -75,7 +75,7 @@ The following pseudo-code demonstrates a basic initialization and device discove
        // Discover all the driver instances
        ze_init_driver_type_desc_t desc = {ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESC};
        desc.pNext = nullptr;
-       desc.driverType = UINT32_MAX; // all driver types requested
+       desc.flags = UINT32_MAX; // all driver types requested
        uint32_t driverCount = 0;
        ze_result_t result = zeInitDrivers(&driverCount, nullptr, &desc); // Query the number of drivers
        if (result != ZE_RESULT_SUCCESS) {
@@ -91,19 +91,19 @@ The following pseudo-code demonstrates a basic initialization and device discove
        // Find a driver Handle that supports a GPU device type
        ze_driver_handle_t hDriver = nullptr;
        ze_device_handle_t hDevice = nullptr;
-       for(i = 0; i < driverCount; ++i) {
+       for(uint32_t i = 0; i < driverCount; ++i) {
            uint32_t deviceCount = 0;
            zeDeviceGet(allDrivers[i], &deviceCount, nullptr);
 
            ze_device_handle_t* allDevices = allocate(deviceCount * sizeof(ze_device_handle_t));
            zeDeviceGet(allDrivers[i], &deviceCount, allDevices);
 
-           for(d = 0; d < deviceCount; ++d) {
-               ze_device_properties_t device_properties {};
-               device_properties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
-               zeDeviceGetProperties(allDevices[d], &device_properties);
+           for(uint32_t d = 0; d < deviceCount; ++d) {
+               ze_device_properties_t deviceProperties {};
+               deviceProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+               zeDeviceGetProperties(allDevices[d], &deviceProperties);
 
-               if(ZE_DEVICE_TYPE_GPU == device_properties.type) {
+               if(ZE_DEVICE_TYPE_GPU == deviceProperties.type) {
                    hDriver = allDrivers[i];
                    hDevice = allDevices[d];
                    break;
@@ -1189,12 +1189,12 @@ A kernel timestamp event is a special type of event that records device timestam
 
        // Get timestamp frequency
 %if _version_compare_gequal(ver, "1.1"):
-       const double timestampFreq = NS_IN_SEC / device_properties.timerResolution;
+       const double timestampFreq = NS_IN_SEC / deviceProperties.timerResolution;
 %endif
 %if _version_compare_less(ver, "1.1"):
-       const uint64_t timestampFreq = device_properties.timerResolution;
+       const uint64_t timestampFreq = deviceProperties.timerResolution;
 %endif
-       const uint64_t timestampMaxValue = ~(-1L << device_properties.kernelTimestampValidBits);
+       const uint64_t timestampMaxValue = ~(-1L << deviceProperties.kernelTimestampValidBits);
 
        // Create event pool
        ${x}_event_pool_desc_t tsEventPoolDesc = {
@@ -1839,11 +1839,11 @@ The following table documents the supported knobs for overriding default functio
      - ${X}_FLAT_DEVICE_HIERARCHY
      - {**COMPOSITE**, FLAT, COMBINED}
      - Defines device hierarchy model exposed by Level Zero driver implementation
-   * - 
+   * -
      - ${X}_AFFINITY_MASK
      - list
      - Forces driver to only report devices (and sub-devices) as specified by values
-   * - 
+   * -
      - ${X}_ENABLE_PCI_ID_DEVICE_ORDER
      - {**0**, 1}
      - Forces driver to report devices from lowest to highest PCI bus ID
@@ -1896,7 +1896,7 @@ Devices or driver types not explicitly specified in the ``ZEL_DRIVERS_ORDER`` en
 2. ``ZEL_DRIVERS_ORDER = 2,0``
 
    On a system with 2 GPU Drivers (discrete, integrated) and 1 NPU Driver, where the default order is : Discrete, integrated, NPU, this setting will change the order to:
-   
+
    - NPU, Discrete, Integrated
    - Index 0 used in zer == NPU
 
@@ -1915,7 +1915,7 @@ Devices or driver types not explicitly specified in the ``ZEL_DRIVERS_ORDER`` en
 4. ``ZEL_DRIVERS_ORDER = NPU``
 
    On a system with 2 GPU Drivers (discrete, integrated) and 1 NPU Driver, where the default order is : Discrete, integrated, NPU, this setting will change the order to:
-   
+
    - NPU, Discrete, Integrated
    - Index 0 used in zer == NPU
 
@@ -2462,7 +2462,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 
        // Method of sending to receiving process is not defined by Level-Zero:
        send_to_receiving_process(hIPC);
-       
+
 
 2. Next, the allocation is received and un-packaged on the receiving
    process:
@@ -2475,7 +2475,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 
        void* dptr = nullptr;
        ${x}MemOpenIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
-       
+
 
 3. Each process may now refer to the same device memory allocation via its ``dptr``.
    Note, there is no guaranteed address equivalence for the values of ``dptr`` in each process.
@@ -2485,7 +2485,7 @@ The following code examples demonstrate how to use the memory IPC APIs:
 .. parsed-literal::
 
        ${x}MemCloseIpcHandle(hContext, dptr);
-       
+
 
 %if _version_compare_gequal(ver, "1.6"):
 5. Finally, return the IPC handle to the driver with  ${x}MemPutIpcHandle and
