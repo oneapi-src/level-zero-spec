@@ -971,7 +971,7 @@ The following pseudo-code demonstrates appending both regular and cooperative ke
        ${x}_command_list_handle_t hCommandList;
 
        // When appending regular kernel, just pass null pointer to extension argument
-       void *pNext = nullptr;
+       void \*pNext = nullptr;
        ${x}CommandListAppendLaunchKernelWithParameters(hCommandList, hKernel, &launchArgs, pNext, nullptr, 0, nullptr);
 
        // When appending cooperative kernel create cooperative descriptor
@@ -980,7 +980,7 @@ The following pseudo-code demonstrates appending both regular and cooperative ke
            nullptr,
            true
        };
-       void *pNext = &cooperativeDesc;
+       void \*pNext = &cooperativeDesc;
        ${x}CommandListAppendLaunchKernelWithParameters(hCommandList, hKernel, &launchArgs, pNext, nullptr, 0, nullptr);
        ...
 
@@ -1019,20 +1019,10 @@ The following pseudo-code demonstrates appending kernel with pointer, SLM and im
         // immediate arg
         unsigned int addValue;
 
-        void* args[] = { &dstBuff, &localArraySizeInBytes, &addValue};
+        void \*args[] = { &dstBuff, &localArraySizeInBytes, &addValue};
         ${x}_group_count_t groupCounts = {1,2,3};
         ${x}_group_size_t groupSizes = {1,2,3};
-        ${x}CommandListAppendLaunchKernelWithArguments(
-            hCommandList,
-            hKernel,
-            groupCounts,
-            groupSizes,
-            args,
-            nullptr,
-            nullptr,
-            0,
-            nullptr
-        );
+        ${x}CommandListAppendLaunchKernelWithArguments(hCommandList, hKernel, groupCounts, groupSizes, args, nullptr, nullptr, 0, nullptr);
 
        ...
 
