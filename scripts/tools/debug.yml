@@ -304,6 +304,9 @@ etors:
     - name: ELF
       desc: "ELF file memory space"
       version: "1.10"
+    - name: BARRIER
+      desc: "Barrier memory space"
+      version: "1.14"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device memory space descriptor"
