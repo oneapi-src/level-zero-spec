@@ -221,6 +221,8 @@ etors:
       desc: "the memory pointed to is a device allocation"
     - name: SHARED
       desc: "the memory pointed to is a shared ownership allocation"
+    - name: HOST_IMPORTED
+      desc: "the memory pointed to is a host allocation created from external system memory"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory allocation properties queried using $xMemGetAllocProperties"
