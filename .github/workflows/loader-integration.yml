@@ -43,7 +43,7 @@ jobs:
           -w $PWD/spec-head/scripts \
           -e TZ=UTC \
           ghcr.io/oneapi-src/spec-build:latest \
-          python3 ./run.py --debug --html '--!build' --ver $VER
+          python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
     - name: Generate spec-base artifacts
       run: | #bash
         docker run \
@@ -52,7 +52,7 @@ jobs:
           -w $PWD/spec-base/scripts \
           -e TZ=UTC \
           ghcr.io/oneapi-src/spec-build:latest \
-          python3 ./run.py --debug '--!build' --ver $VER
+          python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
     - name: Determine if there is a diff between header files
       id: include-diff
       run: | #bash
@@ -95,6 +95,92 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "The Level Zero header diff can be found [here](${{ steps.upload-diff-artifact.outputs.artifact-url }})."
+            });
+    - name: Determine if there is a diff between RST files
+      id: rst-diff
+      run: | #bash
+        if git diff --quiet --exit-code -- spec-head/docs/source spec-base/docs/source; then
+            echo "diff=0" >> $GITHUB_OUTPUT
+        else
+            echo "diff=1" >> $GITHUB_OUTPUT
+        fi
+    - name: Get RST diff
+      if: steps.rst-diff.outputs.diff == '1'
+      run: git diff --no-index spec-base/docs/source spec-head/docs/source > rst-diff.patch || true
+    - name: Write comment with formatting to RST_DIFF_COMMENT
+      if: steps.rst-diff.outputs.diff == '1'
+      shell: python3 {0}
+      run: |
+        import os
+        with open('rst-diff.patch', 'r') as f:
+            diff_content = f.read()
+        diff_comment = f"```diff\n{diff_content}\n```"
+        with open('rst_results_comment.txt', 'w') as results_file:
+            results_file.write(diff_comment)
+    - uses: actions/upload-artifact@v4
+      if: steps.rst-diff.outputs.diff == '1'
+      id: upload-rst-diff-artifact
+      with:
+        name: Level Zero RST Diff
+        path: rst_results_comment.txt
+    - name: Output RST artifact URL
+      if: steps.rst-diff.outputs.diff == '1'
+      run:  echo 'RST Artifact URL is ${{ steps.upload-rst-diff-artifact.outputs.artifact-url }}'
+    - name: Write RST diff comment to PR
+      if: steps.rst-diff.outputs.diff == '1'
+      uses: actions/github-script@v6
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
+            github.rest.issues.createComment({
+              issue_number: pullRequestId,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "The Level Zero RST diff can be found [here](${{ steps.upload-rst-diff-artifact.outputs.artifact-url }})."
+            });
+    - name: Determine if there is a diff between HTML files
+      id: html-diff
+      run: | #bash
+        if git diff --quiet --exit-code -- spec-head/docs/html spec-base/docs/html; then
+            echo "diff=0" >> $GITHUB_OUTPUT
+        else
+            echo "diff=1" >> $GITHUB_OUTPUT
+        fi
+    - name: Get HTML diff
+      if: steps.html-diff.outputs.diff == '1'
+      run: git diff --no-index spec-base/docs/html spec-head/docs/html > html-diff.patch || true
+    - name: Write comment with formatting to HTML_DIFF_COMMENT
+      if: steps.html-diff.outputs.diff == '1'
+      shell: python3 {0}
+      run: |
+        import os
+        with open('html-diff.patch', 'r') as f:
+            diff_content = f.read()
+        diff_comment = f"```diff\n{diff_content}\n```"
+        with open('html_results_comment.txt', 'w') as results_file:
+            results_file.write(diff_comment)
+    - uses: actions/upload-artifact@v4
+      if: steps.html-diff.outputs.diff == '1'
+      id: upload-html-diff-artifact
+      with:
+        name: Level Zero HTML Diff
+        path: html_results_comment.txt
+    - name: Output HTML artifact URL
+      if: steps.html-diff.outputs.diff == '1'
+      run:  echo 'HTML Artifact URL is ${{ steps.upload-html-diff-artifact.outputs.artifact-url }}'
+    - name: Write HTML diff comment to PR
+      if: steps.html-diff.outputs.diff == '1'
+      uses: actions/github-script@v6
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            [, pullRequestId] = /refs\/pull\/(\d+)\/merge/g.exec(context.ref);
+            github.rest.issues.createComment({
+              issue_number: pullRequestId,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "The Level Zero HTML diff can be found [here](${{ steps.upload-html-diff-artifact.outputs.artifact-url }})."
             });
     - name: Checkout loader-head
       uses: actions/checkout@v4
@@ -302,7 +388,7 @@ jobs:
         path: report.html
     - name: Write loader ABI Report comment to PR
       continue-on-error: true
-      if: "steps.loader-source-diff.outputs.diff == '1' || steps.include-diff.outputs.diff == '1'"
+      if: "steps.loader-source-diff.outputs.diff == '1' || steps.include-diff.outputs.diff == '1' || steps.rst-diff.outputs.diff == '1' || steps.html-diff.outputs.diff == '1'"
       uses: actions/github-script@v6
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

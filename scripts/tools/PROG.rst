@@ -44,132 +44,28 @@ The following environment variables are required to be enabled during ${x}Init f
 
 .. _API-Tracing:
 
-API Tracing
-===========
+API Tracing Support via Loader Layer
+====================================
 
-**Experimental Extension** - this feature will be removed post-1.0 and replaced with custom loader layers.
+The loader layer provides infrastructure for tools to observe and interact with Level Zero (L0) API calls made by an application.
+This is achieved through a tracing mechanism that allows tools to register callback functions, which are invoked at specific points during API execution.
+These callbacks offer direct access to the input and output parameters of L0 API functions, enabling inspection and modification.
+Additionally, tools can leverage these callbacks to block or inject API calls into the command stream—for example, to collect metrics or implement debugging features.
 
-Introduction
-------------
+Tracing is facilitated through the creation of one or more tracers. Each tracer is represented by a unique handle and is associated with a set of prologue and epilogue functions.
+Prologue functions are executed before the corresponding L0 API call, while epilogue functions are executed after the call completes.
+This dual-hook model allows tools to monitor and manipulate API behavior at both entry and exit points.
 
-API tracing provides a way for tools to receive notifications of API
-calls made by an application. The callbacks provide direct access to the
-input and output parameters for viewing and modification. Tools may also
-use these notifications as triggers to block and inject new API calls
-into the command stream, such as metrics.
+In summary, the loader layer enables tracing by exposing functions to:
 
-Registration
-------------
+- Create tracers and obtain tracer handles
+- Register prologue and epilogue callbacks for each tracer
+- Enable or disable tracing dynamically
+- Destroy tracers when no longer needed
 
-Tools may independently register for enter and exit callbacks for individual API calls, per driver instance.
+This design provides a flexible and extensible mechanism for tool developers to integrate tracing capabilities into their workflows.
 
-* ${t}TracerExpSetPrologues is used to specify all the enter callbacks
-* ${t}TracerExpSetEpilogues is used to specify all the exit callbacks
-* If the value of a callback is nullptr, then it will be ignored.
-
-The callbacks are defined as a collection of per-API function pointers, with the following parameters:
-
-* params : a structure capturing pointers to the input and output parameters of the current instance
-* result : the current value of the return value
-* pTracerUserData : the user's pointer for the tracer's data
-* ppTracerInstanceUserData : a per-tracer, per-instance thread-local storage location; typically used for passing data from the prologue to the epilogue
-
-Note: since the creation of a tracer requires a device, on first glance
-it appears that ${x}Init, ${x}DriverGet and ${x}DeviceGet are not
-traceable. However, these APIs **are** traceable for all calls
-subsequent from the creation and enabling of the tracer itself.
-
-Enabling/Disabling and Destruction
-----------------------------------
-
-The tracer is created in a disabled state and must be explicitly enabled
-by calling ${t}TracerExpSetEnabled. The implementation guarantees that
-prologues and epilogues will always be executed in pairs; i.e.
-
-* if the prologue was called then the epilogue is guaranteed to be called, even if another thread disabled the tracer between execution
-* if the prologue was not called then the epilogue is guaranteed not to be called, even if another thread enabled the tracer between execution
-
-The tracer should be disabled by the application before the tracer is
-destroyed. If multiple threads are in-flight, then it is still possible
-that callbacks will continue to execute even after the tracer is
-disabled; specifically, due to the pairing rules above. Due to the
-complexity involved in ensuring no threads are still or will be
-executing a callback even after its been disabled, the implementation
-will stall and wait for any outstanding threads during ${t}TracerExpDestroy.
-
-The following pseudo-code demonstrates a basic usage of API tracing:
-
-
-.. parsed-literal::
-
-## --validate=off
-       typedef struct _my_tracer_data_t
-       {
-           uint32_t instance;
-       } my_tracer_data_t;
-
-       typedef struct _my_instance_data_t
-       {
-           clock_t start;
-       } my_instance_data_t;
-
-       void OnEnterCommandListAppendLaunchKernel(
-           ${x}_command_list_append_launch_kernel_params_t* params,
-           ${x}_result_t result,
-           void* pTracerUserData,
-           void** ppTracerInstanceUserData )
-       {
-           my_instance_data_t* instance_data = malloc( sizeof(my_instance_data_t) );
-           \*ppTracerInstanceUserData = instance_data;
-           
-           instance_data->start = clock();
-       }
-
-       void OnExitCommandListAppendLaunchKernel(
-           ${x}_command_list_append_launch_kernel_params_t* params,
-           ${x}_result_t result,
-           void* pTracerUserData,
-           void** ppTracerInstanceUserData )
-       {
-           clock_t end = clock();
-           
-           my_tracer_data_t* tracer_data = (my_tracer_data_t*)pTracerUserData;
-           my_instance_data_t* instance_data = *(my_instance_data_t**)ppTracerInstanceUserData;
-           
-           float time = 1000.f * ( end - instance_data->start ) / CLOCKS_PER_SEC;
-           printf("${x}CommandListAppendLaunchKernel #%d takes %.4f ms\n", tracer_data->instance++, time);
-           
-           free(instance_data);
-       }
-## --validate=on
-
-       void TracingExample( ... )
-       {
-           my_tracer_data_t tracer_data = {};
-           ${t}_tracer_exp_desc_t tracer_desc {};
-           tracer_desc.stype = ${T}_STRUCTURE_TYPE_TRACER_EXP_DESC;
-           tracer_desc.pUserData = &tracer_data;
-           ${t}_tracer_exp_handle_t hTracer;
-           ${t}TracerExpCreate(hDevice, &tracer_desc, &hTracer);
-
-           // Set all callbacks
-           ${t}_core_callbacks_t prologCbs = {};
-           ${t}_core_callbacks_t epilogCbs = {};
-           prologCbs.CommandList.pfnAppendLaunchFunction = OnEnterCommandListAppendLaunchKernel;
-           epilogCbs.CommandList.pfnAppendLaunchFunction = OnExitCommandListAppendLaunchKernel;
-
-           ${t}TracerExpSetPrologues(hTracer, &prologCbs);
-           ${t}TracerExpSetEpilogues(hTracer, &epilogCbs);
-
-           ${t}TracerExpSetEnabled(hTracer, true);
-
-           ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-           ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-           ${x}CommandListAppendLaunchKernel(hCommandList, hFunction, &launchArgs, nullptr, 0, nullptr);
-
-           ${t}TracerExpSetEnabled(hTracer, false);
-           ${t}TracerExpDestroy(hTracer);
-       }
+Please review the full summary of the functionality provided by the loader layer in the https://github.com/oneapi-src/level-zero/blob/master/source/layers/tracing/README.md document.
 
 Metrics
 =======
