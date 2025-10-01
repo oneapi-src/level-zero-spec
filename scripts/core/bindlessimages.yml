@@ -85,8 +85,24 @@ members:
 details:
     - "This structure may be passed to $xDeviceGetImageProperties via the pNext member of $x_device_image_properties_t."
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Pitch information for 2-dimensional linear pitched allocations"
+version: "1.14"
+class: $xDevice
+name: $x_pitched_alloc_2dimage_linear_pitch_exp_info_t
+base: $x_base_properties_t
+members:
+    - type: size_t
+      name: pitchAlign 
+      desc: "[out] Required pitch Aligment."
+    - type: size_t
+      name: maxSupportedPitch 
+      desc: "[out] Maximum allowed pitch."
+details:
+    - "This structure may be passed to $xDeviceGetImageProperties via the pNext member of x_device_pitched_alloc_exp_properties_t."
+--- #--------------------------------------------------------------------------
 type: function
-desc: "Allocate pitched USM memory for images"
+desc: "Retrieves pitch information that can be used to allocate USM memory for a given image."
 version: "1.9"
 class: $xMem
 name: GetPitchFor2dImage
