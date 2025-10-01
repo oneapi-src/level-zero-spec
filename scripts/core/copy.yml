@@ -57,8 +57,9 @@ desc: "Initializes host, device, or shared memory."
 class: $xCommandList
 name: AppendMemoryFill
 details:
-    - "The application must ensure the memory pointed to by dstptr is accessible by the device on which the command list was created."
-    - "The implementation must not access the memory pointed to by dstptr as it is free to be modified by either the Host or device up until execution."
+    - "The application must ensure the memory pointed to by ptr is accessible by the device on which the command list was created."
+    - "The implementation must not access the memory pointed to by ptr as it is free to be modified by either the Host or device up until execution."
+    - "The ptr must be aligned to pattern_size"
     - "The value to initialize memory to is described by the pattern and the pattern size."
     - "The pattern size must be a power-of-two and less than or equal to the `maxMemoryFillPatternSize` member of $x_command_queue_group_properties_t."
     - "The application must ensure the events are accessible by the device on which the command list was created."
