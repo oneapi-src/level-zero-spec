@@ -307,6 +307,9 @@ etors:
     - name: ERROR_SURVIVABILITY_MODE_DETECTED
       desc: "[Sysman] device is in survivability mode, firmware update needed"
       version: "1.13"
+    - name: ERROR_ADDRESS_NOT_FOUND
+      desc: "[Core] address not found within specified or current context"
+      version: "1.14"
     - name: ERROR_UNKNOWN
       value: "0x7ffffffe"
       desc: "[Core] unknown or internal error"

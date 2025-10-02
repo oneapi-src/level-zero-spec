@@ -284,6 +284,8 @@ params:
     - type: size_t*
       name: pSize
       desc: "[in,out][optional] size of the allocation"
+returns:
+    - $X_RESULT_ERROR_ADDRESS_NOT_FOUND
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an IPC memory handle for the specified allocation"
