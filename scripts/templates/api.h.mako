@@ -152,7 +152,7 @@ typedef struct _${th.make_type_name(n, tags, obj)} ${th.make_type_name(n, tags, 
 #endif
 %endif
 %endfor # spec in specs
-%if n not in ["zet", "zes"]:
+%if n not in ["zet", "zes", "zer"]:
 // Intel ${tags['$OneApi']} Level-Zero API Callbacks
 #if !defined(__GNUC__)
 #pragma region callbacks
@@ -241,7 +241,7 @@ typedef struct _ze_callbacks_t
 #if !defined(__GNUC__)
 #pragma endregion
 #endif
-%endif # not in ["zet", "zes"]:
+%endif # not in ["zet", "zes", "zer"]:
 
 #if defined(__cplusplus)
 } // extern "C"

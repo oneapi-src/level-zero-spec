@@ -21,7 +21,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Level Zero Specification'
-copyright = u'2024, Intel'
+copyright = u'2025, Intel'
 author = u'Intel'
 
 # The short X.Y version
@@ -208,7 +208,7 @@ epub_exclude_files = ['search.html']
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-cpp_index_common_prefix = ['ze::', 'zet::', 'zes::']
+cpp_index_common_prefix = ['ze::', 'zet::', 'zes::', 'zer::']
 
 cpp_id_attributes = ['ZE_APIEXPORT', 'ZE_APICALL']
 

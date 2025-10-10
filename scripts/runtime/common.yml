@@ -127,7 +127,7 @@ class: $r
 name: TranslateDeviceHandleToIdentifier
 details:
     - "The implementation of this function should be lock-free."
-    - "This function does not return error code, to get info about failure user may use $rDriverGetLastErrorDescription function."
+    - "This function does not return error code, to get info about failure user may use $rGetLastErrorDescription function."
     - "In case of failure, this function returns UINT32_MAX."
 params:
     - type: "$x_device_handle_t"
