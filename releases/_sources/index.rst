@@ -26,24 +26,27 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.14.33`_
+    - 2025-10-10
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.14.33/index.html>`__
   * - `Level Zero v1.13.0`_
     - 2025-4-15
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.13.0/index.html>`__  
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.13.0/index.html>`__
   * - `Level Zero v1.12.15`_
     - 2025-1-10
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.12.15/index.html>`__  
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.12.15/index.html>`__
   * - `Level Zero v1.11.8`_
     - 2024-11-13
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html>`__  
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html>`__
   * - `Level Zero v1.11`_
     - 2024-10-03
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__  	
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html>`__
   * - `Level Zero v1.10`_
     - 2024-09-06
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html>`__  	
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html>`__
   * - `Level Zero v1.9.3`_
     - 2024-05-03
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html>`__  
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html>`__
   * - `Level Zero v1.9.2`_
     - 2024-02-20
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.2/index.html>`__
@@ -111,6 +114,33 @@ Level Zero
 Release Notes
 -------------
 
+Level Zero v1.14.33
+~~~~~~~~~~~~~~~~~~~
+
+* Update Features:
+
+    - Add additional UNSUPPORTED_IMAGE_FORMAT error code to kernel argument API
+    - Add Core API zeCommandListAppendLaunchKernelWithParameters
+    - Add new external memory system type for memmap allocations
+    - Add new class of APIs zer*, r for Runtime, for simplified execution
+    - Add command queue flag to hint offloading copy oerates to different engines
+    - Add new environment variables ZEL_DRIVERS_ORDER to adjust driver load ordering
+    - Add new HBM memory types to memory module types
+    - Add new ABARRIER type into memory descriptor for debugger
+    - Add new HOST_IMPORTED type into memory allocation type
+    - Add new ZE_RESULT_ERROR_ADDRESS_NOT_FOUND error code type
+    - Add new expiremental extension to retrieve kernel allocation properties
+
+* Patches to v1.13.0 release
+
+    - Update pitch info for 2d images with linear pitch
+    - Clarify AppendMemoryFill ptr alignment requirements
+    - Fix improper const from pArguments argument in append with arguments
+    - Deprecate Copy BW properties extension
+    - Deprecate Driver API Tracing, in favor of layered API tracing approach
+    - Various fixes to init and discovery examples
+    - Various formatting and build error fixes
+
 Level Zero v1.13.0
 ~~~~~~~~~~~~~~~~~~
 
@@ -124,7 +154,6 @@ Level Zero v1.13.0
     - Add Sysman extension error ERROR_SURVIVABILITY_MODE_DETECTED
     - Add Metrics Extension for runtime enabling and disabling
     - Add Metrics Extension for group based markers
-
 
 * Patches to v1.12.5 release
 
