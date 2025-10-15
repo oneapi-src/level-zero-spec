@@ -654,6 +654,10 @@ etors:
       desc: $x_kernel_allocation_exp_properties_t
       version: "1.14"
       value: "0x00020039"
+    - name:  EVENT_COUNTER_BASED_DESC
+      desc: $x_event_counter_based_desc_t
+      version: "1.15"
+      value: "0x0002003A"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
@@ -758,6 +762,15 @@ members:
       name: pNext
       desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
       init: nullptr
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "IPC handle to counter based event"
+name: "$x_ipc_event_counter_based_handle_t"
+version: "1.15"
+members:
+    - type: char
+      name: "data[$X_MAX_IPC_HANDLE_SIZE]"
+      desc: "[out] Opaque data representing an IPC handle"
 --- #--------------------------------------------------------------------------
 type: env
 desc: "Forces driver to only report devices (and sub-devices) as specified by values"

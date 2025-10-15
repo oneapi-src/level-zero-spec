@@ -1238,6 +1238,107 @@ A kernel timestamp event is a special type of event that records device timestam
            : (( timestampMaxValue - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * timestampFreq;
        ...
 
+Counter Based Events
+~~~~~~~~~~~~~~~~~~~~~~~
+
+This type of event, referred to as a Counter Based (CB) Event, does not require an event pool, as the related allocations are managed internally by the driver. This reduces the overhead on the host for managing pool allocations.  
+The CB Event can only be signaled on the GPU using an in-order command list.  
+
+Every in-order command list has an internal submission counter that is updated with each append call. This counter manages internal in-order dependencies. The next append call waits for that counter implicitly.
+Note that some operations may be optimized, and the counter value may not directly correspond to the number of append calls.  
+
+When a CB Event is passed as a signal event, it points to a specific counter value and memory location. Since the command list manages the counter allocation, this method avoids producing additional GPU memory operations (except timestamps). As a result, users do not need to explicitly control event completion before reusing it.  
+
+Key features
+^^^^^^^^^^^^^^^^^^^^^
+- After creation, a CB Event is initially marked as completed. The completion state changes if the event is assigned as a `signalEvent` to an append call or if external storage is specified during creation.
+- CB Event can be waited for from any command list type.
+- ${x}EventHostReset is not allowed. Can be reused on any in-order command list without explicit reset. A new API call just replaces its previous state (counter/allocation)
+- ${x}EventHostSignal is not allowed. Can be signaled only from in-order command list
+- No need to wait for completion before reusing/destroying
+- CB Event doesn't own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver
+- IPC sharing is one-directional. IPC CB Event opened in different process can be used only for waiting. If original Event state is changed (for example by next append call) and second process needs to see that update, IPC handle must be opened again.
+- Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section
+- When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion
+- Event can be destroyed without waiting for completion, even if profiling is enabled
+
+Regular Event rely on memory state controlled by the User (explicit Reset calls). CB Event represents host programming sequence, without managing the state. For example:
+
+.. parsed-literal::
+       ${x}EventCounterBasedCreate(context, device, &desc, &event1); // counter not yet assigned
+
+       ${x}CommandListAppendLaunchKernel(cmdList1, kernel, &groupCount, &event1, 0, nullptr); // assigned counter=X on memory CL1_alloc
+       ${x}CommandListAppendLaunchKernel(cmdList2, kernel, &groupCount, nullptr, 1, &event1); // cmdList2 waits for counter=X on memory CL1_alloc
+
+       // reuse without waiting/reset
+       ${x}CommandListAppendLaunchKernel(cmdList3, kernel, &groupCount, &event1, 0, nullptr); // Replace state. Assigned counter=Y on memory CL3_alloc
+
+       // Event1 is implicitly reset to different state.
+       // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc. 
+       // Its also safe to delete Event object.
+
+       ${x}EventHostSynchronize(event1); // wait for counter=Y on memory CL3_alloc
+
+IPC sharing
+^^^^^^^^^^^^^^^^^^^^^
+As mentioned previously, signaling CB Event replaces its state. This is why IPC sharing is one-directional. Opened event can be used only for waiting/querying (on host and GPU).
+
+Both Event object (original and shared) are independent. There is no need to wait for completion before reusing.  
+Second process points to the original state until ${x}EventCounterBasedCloseIpcHandle is called.  
+Original Event state may be changed without waiting for completion. Second process is not affected.  
+
+Counter Based Event has dedicated API calls to handle IPC operations:${x}EventCounterBasedGetIpcHandle, ${x}EventCounterBasedOpenIpcHandle, ${x}EventCounterBasedCloseIpcHandle
+
+**Timestamps are not allowed for IPC sharing.**
+
+Obtaining counter memory and value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User may obtain counter memory location and value using ${x}EventCounterBasedGetDeviceAddress. For example, waiting for completion outside the L0 Driver.  
+If Event state is replaced by new append call or ${x}CommandQueueExecuteCommandLists that signals such Event, below API must be called again to obtain new data.
+
+Multi directional dependencies on Regular command lists
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Regular command list with overlapping dependencies may be executed multiple times. For example, two command lists are executed in parallel with bi-directional dependencies.  
+Its important to understand counter (Event) state transition, to correctly reflect Users intention.  
+
+
+.. parsed-literal::
+       regularCmdList1:       (A)      ------------->   (wait for B)   ----->   (C)
+                               |                            ^
+                               |                            |
+                               V                            |
+       regularCmdList2:   (wait for A)  ------------->     (B)         ----->   (D)
+
+In this example, all Events are synchronized to "ready" state after the first execution. 
+It means that second execution of `regularCmdList1` waits again for "ready" `{1->2->3}` state of `regularCmdList2` (first execution) instead of `{4->5->6}`.  
+This is because `regularCmdList2` was not yet executed for the second time. And their counters were not updated.
+
+First execution:
+
+.. parsed-literal::
+       // All Events are in "not ready" state
+       ${x}CommandQueueExecuteCommandLists(cmdQueue1, 1, &regularCmdList1, nullptr); // Counter updated to {1->2->3}
+       ${x}CommandQueueExecuteCommandLists(cmdQueue2, 1, &regularCmdList2, nullptr); // Counter updated to {1->2->3}
+
+       // All Events are "ready" now
+       ${x}CommandQueueSynchronize(cmdQueue1, timeout); // wait for counter=3
+       ${x}CommandQueueSynchronize(cmdQueue2, timeout); // wait for counter=3
+
+Second execution:
+
+.. parsed-literal::
+       // regularCmdList1 waits for "ready" {1->2->3} Events from first execution of regularCmdList2
+       // regularCmdList1 changes Events state to "not ready"
+       ${x}CommandQueueExecuteCommandLists(cmdQueue1, 1, &regularCmdList1, nullptr); // Counter updated to {4->5->6}
+
+       // regularCmdList2 waits for "not ready" {4->5->6} Events from second execution of regularCmdList1
+       ${x}CommandQueueExecuteCommandLists(cmdQueue2, 1, &regularCmdList2, nullptr); // Counter updated to {4->5->6}
+
+Different approach:
+
+To avoid above situation, User must remove all bi-directional dependencies. By using single command list (if possible) or split the workload into different command lists with single-directional dependencies.  
+
+Using Counter Based Events for such scenarios is not always the most optimal usage mode. It may be better to use Regular Events with explicit Reset calls.
 
 Barriers
 ========

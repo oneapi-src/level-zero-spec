@@ -110,6 +110,37 @@ etors:
       value: "$X_BIT(2)"
       desc: "cache hierarchies are flushed or invalidated sufficient for device and host access"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported flags for defining counter based event"
+class: $xEvent
+name: $x_event_counter_based_flags_t
+version: "1.15"
+etors:
+    - name: IMMEDIATE
+      value: "$X_BIT(0)"
+      desc: "Counter-based event is used for immediate command lists (default)"
+    - name: NON_IMMEDIATE
+      value: "$X_BIT(1)"
+      desc: "Counter-based event is used for non-immediate command lists"
+    - name: HOST_VISIBLE
+      value: "$X_BIT(2)"
+      desc: "Signals and waits are also visible to host"
+    - name: IPC
+      value: "$X_BIT(3)"
+      desc: "Event can be shared across processes for waiting"
+    - name: DEVICE_TIMESTAMP
+      value: "$X_BIT(4)"
+      desc: |
+            Event contains timestamps populated in the device time domain.
+            Implementation of this can be vendor specific, but typically pulled from timers on the offload device and not the host.
+            Cannot be combined with $X_EVENT_COUNTER_BASED_FLAG_HOST_TIMESTAMP
+    - name: HOST_TIMESTAMP
+      value: "$X_BIT(5)"
+      desc: |
+            Indicates that event will contain timestamps converted to the host time domain
+            Cannot be combined with $X_EVENT_COUNTER_BASED_FLAG_DEVICE_TIMESTAMP
+            It is recommended to use this flag for most users that want to correlate timestamps from the host and device into a single timeline. For host timestamps see $xDeviceGetGlobalTimestamps.
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Event descriptor"
 class: $xEvent
@@ -119,6 +150,34 @@ members:
     - type: uint32_t
       name: index
       desc: "[in] index of the event within the pool; must be less than the count specified during pool creation"
+    - type: $x_event_scope_flags_t
+      name: signal
+      desc: |
+            [in] defines the scope of relevant cache hierarchies to flush on a signal action before the event is triggered.
+            must be 0 (default) or a valid combination of $x_event_scope_flag_t;
+            default behavior is synchronization within the command list only, no additional cache hierarchies are flushed.
+      init: "0"
+    - type: $x_event_scope_flags_t
+      name: wait
+      desc: |
+            [in] defines the scope of relevant cache hierarchies to invalidate on a wait action after the event is complete.
+            must be 0 (default) or a valid combination of $x_event_scope_flag_t;
+            default behavior is synchronization within the command list only, no additional cache hierarchies are invalidated.
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Counter Based Event descriptor"
+class: $xEvent
+name: $x_event_counter_based_desc_t
+base: $x_base_desc_t
+version: "1.15"
+members:
+    - type: $x_event_counter_based_flags_t
+      name: flags
+      desc: |
+            [in] counter based event flags.
+            Must be 0 (default) or a valid combination of $x_event_counter_based_flag_t
+      init: "0"
     - type: $x_event_scope_flags_t
       name: signal
       desc: |
@@ -158,6 +217,29 @@ params:
     - type: "$x_event_handle_t*"
       name: phEvent
       desc: "[out] pointer to handle of event object created"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates Counter Based Event"
+class: $xEvent
+name: CounterBasedCreate
+decl: static
+ordinal: "0"
+version: "1.15"
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device object"
+    - type: "const $x_event_counter_based_desc_t*"
+      name: desc
+      desc: "[in] pointer to counter based event descriptor"
+    - type: "$x_event_handle_t*"
+      name: phEvent
+      desc: "[out] pointer to handle of event object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."
@@ -259,6 +341,71 @@ params:
     - type: $x_event_pool_handle_t
       name: hEventPool
       desc: "[in][release] handle of event pool object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets an IPC counter based event handle that can be shared with another process."
+class: $xEvent
+name: CounterBasedGetIpcHandle
+version: "1.15"
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of event object"
+    - type: $x_ipc_event_counter_based_handle_t*
+      name: phIpc
+      desc: "[out] Returned IPC event handle"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_ARGUMENT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Opens an IPC event handle to retrieve from another process."
+class: $xEvent
+name: CounterBasedOpenIpcHandle
+decl: static
+version: "1.15"
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object to associate with the IPC event handle"
+    - type: $x_ipc_event_counter_based_handle_t
+      name: hIpc
+      desc: "[in] IPC event handle"
+    - type: "$x_event_handle_t*"
+      name: phEvent
+      desc: "[out] pointer handle of event object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Closes an IPC event handle in the current process."
+class: $xEvent
+name: CounterBasedCloseIpcHandle
+version: "1.15"
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in][release] handle of event object"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns Counter Based Event completion value (counter) and its device address"
+class: $xEvent
+name: CounterBasedGetDeviceAddress
+version: "1.15"
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of event object"
+    - type: "uint64_t*"
+      name: completionValue
+      desc: "[in][out] completion value"
+    - type: "uint64_t*"
+      name: deviceAddress
+      desc: "[in][out] counter device address"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends a signal of the event from the device into a command list."
