@@ -658,6 +658,10 @@ etors:
       desc: $x_event_counter_based_desc_t
       version: "1.15"
       value: "0x0002003A"
+    - name:  EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESC
+      desc: $x_event_counter_based_external_sync_allocation_desc_t
+      version: "1.15"
+      value: "0x0002003B"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

@@ -1340,6 +1340,18 @@ To avoid above situation, User must remove all bi-directional dependencies. By u
 
 Using Counter Based Events for such scenarios is not always the most optimal usage mode. It may be better to use Regular Events with explicit Reset calls.
 
+External synchronization allocation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User may optionally specify externally managed counter allocation and value. This can be done by passing ${x}_event_counter_based_external_sync_allocation_desc_t as extension of ${x}_event_counter_based_desc_t  
+
+Requirements:
+
+- Counter allocation is managed by the User
+- User must ensure device allocation (`deviceAddress`) residency (${x}ContextMakeMemoryResident). It must be GPU accessible USM allocation
+- Host allocation (`hostAddress`) must be CPU accessible USM allocation (eg. waiting for completion)
+- User is responsible for updating both memory locations to >= `completionValue` to signal Event completion
+- Using such event for signaling on new API call, replaces the state (as described previously)
+
 Barriers
 ========
 

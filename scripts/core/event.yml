@@ -193,6 +193,23 @@ members:
             default behavior is synchronization within the command list only, no additional cache hierarchies are invalidated.
       init: "0"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Counter Based Event external sync allocation descriptor. Passed as pNext to $x_event_counter_based_desc_t"
+class: $xEvent
+name: $x_event_counter_based_external_sync_allocation_desc_t
+base: $x_base_desc_t
+version: "1.15"
+members:
+    - type: uint64_t*
+      name: deviceAddress
+      desc: "[in] device address for external synchronization allocation"
+    - type: uint64_t*
+      name: hostAddress
+      desc: "[in] host address for external synchronization allocation"
+    - type: uint64_t
+      name: completionValue
+      desc: "[in] completion value for external synchronization allocation"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event from the pool."
 class: $xEvent
