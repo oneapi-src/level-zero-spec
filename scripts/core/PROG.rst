@@ -1237,6 +1237,26 @@ A kernel timestamp event is a special type of event that records device timestam
            ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart ) * timestampFreq
            : (( timestampMaxValue - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * timestampFreq;
        ...
+	   
+Event synchronization mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+User can adjust Event synchronization modes by passing ${x}_event_sync_mode_desc_t struct as pNext during Event creation.
+
+Low power wait
+^^^^^^^^^^^^^^^^^^
+
+When ${X}_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAIT flag is enabled, driver will optimize Event host synchronization calls like ${x}EventHostSynchronize to use CPU threads more efficiently. For example, instead of active polling on memory location, it may use OS methods to sleep CPU thread.  
+Changing this mode may impact completion latency.
+
+Interrups
+^^^^^^^^^^^^^^^^^^^^^
+
+When ${X}_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPT flag is enabled, driver may program additional GPU commands related to signaling Event on the Device. Those commands will generate system interrupt.  
+Interrupt may be used as additional signal to wake up CPU thread that is waiting for Event completion in low power mode.  
+Driver may select which API calls are applicable for generating interrupts.
+
+Additionally, user may provide external interrupt id (${X}_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT). OS methods will be used for Event host synchronization calls, to optimize waiting for completion. Similar to low power mode. 
+It can be used only with Counter Based Events.
 
 Counter Based Events
 ~~~~~~~~~~~~~~~~~~~~~~~

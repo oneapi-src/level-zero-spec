@@ -141,6 +141,37 @@ etors:
             Cannot be combined with $X_EVENT_COUNTER_BASED_FLAG_DEVICE_TIMESTAMP
             It is recommended to use this flag for most users that want to correlate timestamps from the host and device into a single timeline. For host timestamps see $xDeviceGetGlobalTimestamps.
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported event sync mode flags"
+class: $xEvent
+name: $x_event_sync_mode_flags_t
+version: "1.15"
+etors:
+    - name: LOW_POWER_WAIT
+      value: "$X_BIT(0)"
+      desc: "Low power host synchronization mode, for better CPU utilization"
+    - name: SIGNAL_INTERRUPT
+      value: "$X_BIT(1)"
+      desc: "Generate interrupt when Event is signalled on Device. It may be used to optimize low power CPU synchronization"
+    - name: EXTERNAL_INTERRUPT_WAIT
+      value: "$X_BIT(2)"
+      desc: "Host synchronization APIs wait for external interrupt id. Can be used only for Counter Based Events"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event sync mode descriptor"
+class: $xEvent
+name: $x_event_sync_mode_desc_t
+base: $x_base_desc_t
+version: "1.15"
+members:
+    - type: $x_event_sync_mode_flags_t
+      name: syncModeFlags
+      desc: "[in] valid combination of $x_event_sync_mode_flag_t"
+    - type: uint32_t
+      name: externalInterruptId
+      desc: "[in] External interrupt id. Used only when $X_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT flag is set"
+      init: "0"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Event descriptor"
 class: $xEvent
