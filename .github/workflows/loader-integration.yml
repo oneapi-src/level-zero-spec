@@ -6,7 +6,7 @@ env:
   http_proxy: http://proxy-dmz.intel.com:912
   https_proxy: http://proxy-dmz.intel.com:912
   DOCKER_BUILDKIT: '1'
-  VER: '1.14'
+  VER: '1.15'
 
 jobs:
   build:

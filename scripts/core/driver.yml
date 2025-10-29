@@ -213,12 +213,16 @@ etors:
       value: "$X_MAKE_VERSION( 1, 14 )"
       desc: "version 1.14"
       version: "1.14"
+    - name: "1_15"
+      value: "$X_MAKE_VERSION( 1, 15 )"
+      desc: "version 1.15"
+      version: "1.15"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Current API version as a macro"
 version: "1.10"
 name: "$X_API_VERSION_CURRENT_M"
-value: "$X_MAKE_VERSION( 1, 14 )"
+value: "$X_MAKE_VERSION( 1, 15 )"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the API version supported by the specified driver"
