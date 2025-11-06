@@ -1,0 +1,300 @@
+name: Deploy Documentation to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  http_proxy: http://proxy-dmz.intel.com:912
+  https_proxy: http://proxy-dmz.intel.com:912
+  DOCKER_BUILDKIT: '1'
+  VER: '1.15'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  pull-requests: write
+
+# Allow only one concurrent deployment per branch
+concurrency:
+  group: "pages-${{ github.ref_name }}"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: [self-hosted, Linux]
+    if: github.repository_owner == 'intel-innersource'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          clean: true
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Build container image
+        run: | #bash
+          docker build \
+            --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
+            --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
+            -t ghcr.io/oneapi-src/spec-build:latest \
+            - < .github/docker/build.Dockerfile
+
+      - name: Generate documentation
+        run: | #bash
+          docker run \
+            --rm \
+            -v $PWD:$PWD \
+            -w $PWD/scripts \
+            -e TZ=UTC \
+            ghcr.io/oneapi-src/spec-build:latest \
+            python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
+
+      - name: Prepare GitHub Pages structure
+        run: | #bash
+          # Create a staging directory for GitHub Pages
+          mkdir -p gh-pages-staging
+          
+          # Determine the directory name based on event type
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # For PRs, use pr-<number> format
+            DIR_NAME="pr-${{ github.event.pull_request.number }}"
+            echo "Preparing documentation for PR #${{ github.event.pull_request.number }}"
+          else
+            # For pushes, use branch name (sanitize it for use in URLs)
+            BRANCH_NAME="${{ github.ref_name }}"
+            DIR_NAME=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_-]/_/g')
+            echo "Preparing documentation for branch: $BRANCH_NAME"
+          fi
+          
+          # Copy HTML docs to the determined directory
+          mkdir -p "gh-pages-staging/$DIR_NAME"
+          cp -r docs/html/* "gh-pages-staging/$DIR_NAME/"
+          
+          # Create/update index page that lists all available versions
+          cat > gh-pages-staging/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Level Zero Specification Documentation</title>
+              <style>
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                      max-width: 900px;
+                      margin: 50px auto;
+                      padding: 20px;
+                      line-height: 1.6;
+                      color: #333;
+                  }
+                  h1 {
+                      color: #0066cc;
+                      border-bottom: 3px solid #0066cc;
+                      padding-bottom: 10px;
+                  }
+                  .version-card {
+                      background: #f5f5f5;
+                      border-left: 4px solid #0066cc;
+                      padding: 20px;
+                      margin: 20px 0;
+                      border-radius: 4px;
+                  }
+                  .version-card h2 {
+                      margin-top: 0;
+                      color: #0066cc;
+                  }
+                  .version-card a {
+                      display: inline-block;
+                      background: #0066cc;
+                      color: white;
+                      padding: 10px 20px;
+                      text-decoration: none;
+                      border-radius: 4px;
+                      margin-top: 10px;
+                  }
+                  .version-card a:hover {
+                      background: #0052a3;
+                  }
+                  .branch-name {
+                      font-family: 'Courier New', monospace;
+                      background: #e0e0e0;
+                      padding: 2px 6px;
+                      border-radius: 3px;
+                  }
+                  .updated {
+                      color: #666;
+                      font-size: 0.9em;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>Level Zero Specification Documentation</h1>
+              <p>Welcome to the Level Zero Specification documentation. Select a version below to view the documentation.</p>
+              
+              <div id="versions"></div>
+              
+              <script>
+                  // This will be populated by the deployment script
+                  const versions = VERSIONS_PLACEHOLDER;
+                  
+                  const container = document.getElementById('versions');
+                  versions.forEach(version => {
+                      const card = document.createElement('div');
+                      card.className = 'version-card';
+                      card.innerHTML = \`
+                          <h2>\${version.name}</h2>
+                          <p>Branch: <span class="branch-name">\${version.branch}</span></p>
+                          <p class="updated">Last updated: \${version.updated}</p>
+                          <a href="\${version.url}">View Documentation →</a>
+                      \`;
+                      container.appendChild(card);
+                  });
+              </script>
+          </body>
+          </html>
+          EOF
+          
+          echo "Prepared documentation in directory: $DIR_NAME"
+          echo "DIR_NAME=$DIR_NAME" >> $GITHUB_ENV
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages-repo
+          clean: false
+        continue-on-error: true
+
+      - name: Initialize gh-pages branch if needed
+        run: | #bash
+          if [ ! -d "gh-pages-repo/.git" ]; then
+            echo "gh-pages branch doesn't exist, creating it..."
+            mkdir -p gh-pages-repo
+            cd gh-pages-repo
+            git init
+            git checkout -b gh-pages
+            echo "# Level Zero Specification Documentation" > README.md
+            git add README.md
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "Initialize gh-pages branch"
+            cd ..
+          fi
+
+      - name: Update gh-pages content
+        run: | #bash
+          cd gh-pages-repo
+          
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Remove old version of this directory's docs
+          rm -rf "${{ env.DIR_NAME }}"
+          
+          # Copy new docs
+          cp -r ../gh-pages-staging/${{ env.DIR_NAME }} .
+          
+          # Create .nojekyll to disable Jekyll processing
+          touch .nojekyll
+          
+          # Update the index page with all available versions
+          python3 <<'PYTHON'
+          import os
+          import json
+          import re
+          from datetime import datetime
+          
+          versions = []
+          
+          # Scan for all directories
+          for item in os.listdir('.'):
+              if os.path.isdir(item) and item not in ['.git', '.github']:
+                  # Check if it has an index.html (valid documentation)
+                  if os.path.exists(os.path.join(item, 'index.html')):
+                      # Determine if it's a PR or branch
+                      if item.startswith('pr-'):
+                          pr_num = item[3:]
+                          name = f"PR #{pr_num}"
+                          sort_key = ('pr', int(pr_num))
+                      elif item == 'master':
+                          name = "Master Documentation"
+                          sort_key = ('master', 0)
+                      else:
+                          name = f"{item.replace('_', ' ').title()} Branch"
+                          sort_key = ('branch', item)
+                      
+                      versions.append({
+                          'name': name,
+                          'branch': item,
+                          'url': f'./{item}/index.html',
+                          'updated': datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC'),
+                          'sort_key': sort_key
+                      })
+          
+          # Sort versions: master first, then PRs (newest first), then branches alphabetically
+          versions.sort(key=lambda x: (
+              x['sort_key'][0] != 'master',
+              x['sort_key'][0] != 'pr',
+              -x['sort_key'][1] if isinstance(x['sort_key'][1], int) else x['sort_key'][1]
+          ))
+          
+          # Remove sort_key from output
+          for v in versions:
+              del v['sort_key']
+          
+          # Read the template index.html from staging
+          with open('../gh-pages-staging/index.html', 'r') as f:
+              html = f.read()
+          
+          # Replace the placeholder with actual version data
+          versions_json = json.dumps(versions, indent=2)
+          html = html.replace('VERSIONS_PLACEHOLDER', versions_json)
+          
+          # Write the updated index.html
+          with open('index.html', 'w') as f:
+              f.write(html)
+          
+          print(f"Updated index with {len(versions)} version(s)")
+          PYTHON
+          
+          # Add all changes
+          git add .
+          
+          # Commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            COMMIT_MSG="Deploy documentation for ${{ env.DIR_NAME }}"
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              COMMIT_MSG="$COMMIT_MSG (PR #${{ github.event.pull_request.number }})"
+            fi
+            git commit -m "$COMMIT_MSG"
+            git push origin gh-pages
+            echo "Documentation deployed successfully!"
+          fi
+
+      - name: Output deployment info
+        run: | #bash
+          # Extract repository name without owner
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
+          
+          echo "✅ Documentation deployed successfully!"
+          echo ""
+          echo "📚 View your documentation at:"
+          echo "   https://${{ github.repository_owner }}.github.io/${REPO_NAME}/${{ env.DIR_NAME }}/"
+          echo ""
+          echo "🔗 All versions:"
+          echo "   https://${{ github.repository_owner }}.github.io/${REPO_NAME}/"
+          echo ""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ℹ️  This is a PR preview. Documentation will be updated on each push."
+          fi
+          echo ""
+          echo "💡 Note: You can configure a custom domain in repository Settings → Pages"
+          echo "   Example: https://docs.level-zero.io or https://spec.level-zero.io"

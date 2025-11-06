@@ -85,7 +85,7 @@ jobs:
       run:  echo 'Artifact URL is ${{ steps.upload-diff-artifact.outputs.artifact-url }}'
     - name: Write comment to PR
       if: steps.include-diff.outputs.diff == '1'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -128,7 +128,7 @@ jobs:
       run:  echo 'RST Artifact URL is ${{ steps.upload-rst-diff-artifact.outputs.artifact-url }}'
     - name: Write RST diff comment to PR
       if: steps.rst-diff.outputs.diff == '1'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -171,7 +171,7 @@ jobs:
       run:  echo 'HTML Artifact URL is ${{ steps.upload-html-diff-artifact.outputs.artifact-url }}'
     - name: Write HTML diff comment to PR
       if: steps.html-diff.outputs.diff == '1'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -181,6 +181,49 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: "The Level Zero HTML diff can be found [here](${{ steps.upload-html-diff-artifact.outputs.artifact-url }})."
+            });
+    - name: Upload HTML documentation artifacts for preview
+      if: steps.html-diff.outputs.diff == '1'
+      uses: actions/upload-artifact@v4
+      id: upload-html-docs
+      with:
+        name: html-documentation-preview
+        path: |
+          spec-head/docs/html/
+          spec-base/docs/html/
+        retention-days: 30
+    - name: Comment with HTML preview info
+      if: steps.html-diff.outputs.diff == '1'
+      uses: actions/github-script@v7
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const branchName = context.payload.pull_request.head.ref;
+            const repoOwner = context.repo.owner;
+            const repoName = context.repo.repo;
+            
+            // Check if custom domain is configured (set in workflow env or repo settings)
+            const customDomain = process.env.PAGES_CUSTOM_DOMAIN || '';
+            const baseUrl = customDomain 
+              ? `https://${customDomain}` 
+              : `https://${repoOwner}.github.io/${repoName}`;
+            
+            let body = "## 📚 HTML Documentation Preview\n\n";
+            body += "The HTML documentation artifacts have been uploaded. ";
+            body += "You can download and view them locally, or wait for the automatic GitHub Pages deployment.\n\n";
+            body += `**Artifact**: [Download HTML Documentation](${{ steps.upload-html-docs.outputs.artifact-url }})\n\n`;
+            body += "### 🔗 GitHub Pages Links (after deployment):\n\n";
+            body += `- **This PR #${prNumber} (branch: \`${branchName}\`)**: ${baseUrl}/pr-${prNumber}/\n`;
+            body += `- **Master branch (base)**: ${baseUrl}/master/\n`;
+            body += `- **All versions**: ${baseUrl}/\n\n`;
+            body += "*Note: GitHub Pages links will be available after the deploy-docs workflow completes.*";
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
             });
     - name: Checkout loader-head
       uses: actions/checkout@v4
@@ -248,7 +291,7 @@ jobs:
       run:  echo 'Artifact URL is ${{ steps.upload-loader-diff-artifact.outputs.artifact-url }}'
     - name: Write loader diff comment to PR
       if: steps.loader-source-diff.outputs.diff == '1'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -357,7 +400,7 @@ jobs:
     - name: Check for reviewer approval of ABI failure
       id: check-approval
       if: steps.abi-check.outcome == 'failure'
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -389,7 +432,7 @@ jobs:
     - name: Write loader ABI Report comment to PR
       continue-on-error: true
       if: "steps.loader-source-diff.outputs.diff == '1' || steps.include-diff.outputs.diff == '1' || steps.rst-diff.outputs.diff == '1' || steps.html-diff.outputs.diff == '1'"
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
