@@ -1979,6 +1979,8 @@ The following table documents the supported knobs for overriding default functio
      - string
      - Defines ordering of drivers reported to user. See Driver Ordering section for syntax details.
 
+.. _driver-ordering:
+
 Driver Ordering
 ~~~~~~~~~~~~~~~~
 

@@ -15,6 +15,7 @@
    core/PROG.rst
    tools/PROG.rst
    sysman/PROG.rst
+   runtime/PROG.rst
    core/SPIRV.rst
    core/EXT.rst
    api.rst
