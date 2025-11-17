@@ -875,3 +875,33 @@ params:
 returns::
     - $X_RESULT_ERROR_DEVICE_LOST:
        - "Device execution failed."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported Event properties flags"
+class: $xDevice
+name: $x_device_event_properties_flags_t
+version: "1.15"
+etors:
+    - name: COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE
+      value: "$X_BIT(0)"
+      desc: "Counter-based Event with external aggregate storage supported"
+    - name: COUNTER_BASED_IPC
+      value: "$X_BIT(1)"
+      desc: "Counter-based Event IPC sharing supported"
+    - name: COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION
+      value: "$X_BIT(2)"
+      desc: "Counter-based Event with external sync allocation supported"
+    - name: COUNTER_BASED_EXTERNAL_INTERRUPT_WAIT
+      value: "$X_BIT(3)"
+      desc: "Counter-based Event waiting for external interrupt id supported"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device Event properties struct. Can be passed as pNext to $x_device_properties_t to obtain properties"
+class: $xEvent
+name: $x_device_event_properties_t
+base: $x_base_properties_t
+version: "1.15"
+members:
+    - type: $x_device_event_properties_flags_t
+      name: flags
+      desc: "[out] Supported Event properties. Valid combination of $x_device_event_properties_flag_t."
