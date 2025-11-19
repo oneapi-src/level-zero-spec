@@ -1,0 +1,77 @@
+#
+# Copyright (C) 2025 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for setting the IPC memory handle type requested at memory allocation time."
+version: "1.15"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "IPC Memory Handle Type Extension Name"
+version: "1.15"
+name: $X_IPC_MEM_HANDLE_TYPE_EXT_NAME
+value: '"$X_extension_ipc_mem_handle_type"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "IPC Memory Handle Type Extension Version(s)"
+version: "1.15"
+name: $x_ipc_mem_handle_type_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported IPC memory handle type flags"
+class: $xMem
+name: $x_ipc_mem_handle_type_flags_t
+version: "1.15"
+etors:
+    - name: DEFAULT
+      value: "$X_BIT(0)"
+      desc: "Local IPC memory handle type for use within the same machine."
+    - name: FABRIC_ACCESSIBLE
+      value: "$X_BIT(1)"
+      desc: "Fabric accessible IPC memory handle type for use across machines via a supported fabric."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: 
+    - "IPC Memory Handle Type Extension Descriptor"
+    - "Used in $xMemGetIpcHandleWithProperties, $xMemAllocDevice, and $xMemAllocHost, $xPhysicalMemCreate to specify the IPC memory handle type to create for this allocation."
+version: "1.15"
+class: $xMem
+name: $x_ipc_mem_handle_type_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_ipc_mem_handle_type_flags_t
+      name: typeFlags
+      desc: "[in] valid combination of $x_ipc_mem_handle_type_flag_t"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an IPC memory handle for the specified allocation with properties for the requested handle."
+version: "1.15"
+class: $xMem
+name: GetIpcHandleWithProperties
+decl: static
+details:
+    - "Takes a pointer to a device or host memory allocation and creates an IPC memory handle for exporting it for use in another process."
+    - "The pointer must be the base pointer of a device or host memory allocation; i.e. the value returned from $xMemAllocDevice or from $xMemAllocHost, respectively or allocated from $xPhysicalMemCreate."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: "const void*"
+      name: ptr
+      desc: "[in] pointer to the device memory allocation"
+    - type: void*
+      name: pNext
+      desc: "[in][optional] Pointer to extension-specific structure."
+    - type: $x_ipc_mem_handle_t*
+      name: pIpcHandle
+      desc: "[out] Returned IPC memory handle"
