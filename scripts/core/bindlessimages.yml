@@ -118,7 +118,7 @@ details:
     - |
       The implementation of this function should be lock-free.
     - |
-      The implementation must support ::ZE_experimental_bindless_image extension.
+      The implementation must support $X_BINDLESS_IMAGE_EXP_NAME extension.
 params:
     - type: $x_context_handle_t
       name: hContext
@@ -149,7 +149,7 @@ details:
     - "The application may call this function from simultaneous threads"
     - "The implementation of this function must be thread-safe."
     - "The implementation of this function should be lock-free."
-    - "The implementation must support ::ZE_experimental_bindless_image extension."
+    - "The implementation must support $X_BINDLESS_IMAGE_EXP_NAME extension."
 params:
     - type: $x_image_handle_t
       name: hImage

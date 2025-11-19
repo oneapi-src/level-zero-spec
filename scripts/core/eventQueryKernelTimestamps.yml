@@ -100,7 +100,7 @@ details:
     - "The destination memory will be unmodified if the event has not been signaled."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
-    - "The implementation must support $X_extension_event_query_kernel_timestamps."
+    - "The implementation must support $X_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_NAME extension."
     - "The implementation must return all timestamps for the specified event and device pair."
     - "The implementation must return all timestamps for all sub-devices when device handle is parent device."
     - "The implementation may return all timestamps for sub-devices when device handle is sub-device or may return 0 for count."

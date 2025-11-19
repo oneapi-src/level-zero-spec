@@ -35,7 +35,7 @@ ordinal: "0"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
-    - "The implementation must support $X_experimental_event_query_timestamps."
+    - "The implementation must support $X_EVENT_QUERY_TIMESTAMPS_EXP_NAME extension."
     - "The implementation must return all timestamps for the specified event and device pair."
     - "The implementation must return all timestamps for all sub-devices when device handle is parent device."
     - "The implementation may return all timestamps for sub-devices when device handle is sub-device or may return 0 for count."

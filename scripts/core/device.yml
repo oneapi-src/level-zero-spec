@@ -18,7 +18,7 @@ decl: static
 ordinal: "0"
 details:
     - "Multiple calls to this function will return identical device handles, in the same order."
-    - "The number and order of handles returned from this function is affected by the $X_AFFINITY_MASK and $X_ENABLE_PCI_ID_DEVICE_ORDER environment variables."
+    - "The number and order of handles returned from this function is affected by the `ZE_AFFINITY_MASK` and `ZE_ENABLE_PCI_ID_DEVICE_ORDER` environment variables."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -70,7 +70,7 @@ analogue:
 details:
     - "1.7": "When the device handle passed does not contain any sub-device, a pCount of 0 is returned."
     - "Multiple calls to this function will return identical device handles, in the same order."
-    - "The number of handles returned from this function is affected by the $X_AFFINITY_MASK environment variable."
+    - "The number of handles returned from this function is affected by the `ZE_AFFINITY_MASK` environment variable."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

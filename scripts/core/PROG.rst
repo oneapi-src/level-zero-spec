@@ -1297,7 +1297,7 @@ Regular Event rely on memory state controlled by the User (explicit Reset calls)
        // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc. 
        // Its also safe to delete Event object.
 
-       ${x}EventHostSynchronize(event1); // wait for counter=Y on memory CL3_alloc
+       ${x}EventHostSynchronize(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc
 
 IPC sharing
 ^^^^^^^^^^^^^^^^^^^^^

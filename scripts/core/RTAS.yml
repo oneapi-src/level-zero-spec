@@ -764,7 +764,7 @@ params:
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
-    - "The implementation must support $X_extension_rtas extension."
+    - "The implementation must support $X_RTAS_EXT_NAME extension."
 results:
     - $X_RESULT_ERROR_DEPENDENCY_UNAVAILABLE:
         - "Runtime dependency failed to load"
@@ -960,7 +960,7 @@ params:
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
-    - "The implementation must support $X_extension_rtas extension."
+    - "The implementation must support $X_RTAS_EXT_NAME extension."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves ray tracing acceleration structure builder parallel operation properties"
