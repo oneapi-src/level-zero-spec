@@ -901,7 +901,15 @@ def _generate_returns(obj, meta):
             {"$X_RESULT_ERROR_UNINITIALIZED":[]},
             {"$X_RESULT_ERROR_DEVICE_LOST":[]},
             {"$X_RESULT_ERROR_OUT_OF_HOST_MEMORY":[]},
-            {"$X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY":[]}
+            {"$X_RESULT_ERROR_OUT_OF_DEVICE_MEMORY":[]},
+            {"$X_RESULT_ERROR_INVALID_ARGUMENT":[]},
+            {"$X_RESULT_ERROR_UNSUPPORTED_FEATURE":[]},
+            {"$X_RESULT_ERROR_DEPENDENCY_UNAVAILABLE":[]},
+            {"$X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS":[]},
+            {"$X_RESULT_ERROR_NOT_AVAILABLE":[]},
+            {"$X_RESULT_ERROR_DEVICE_REQUIRES_RESET":[]},
+            {"$X_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE":[]},
+            {"$X_RESULT_ERROR_UNKNOWN":[]}
             ]
 
         # special function for appending to our list of dicts; avoiding duplicates
@@ -932,6 +940,7 @@ def _generate_returns(obj, meta):
 
                     elif type_traits.is_enum(item['type'], meta):
                         _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s`"%(meta['enum'][typename]['max'], item['name']))
+                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_ENUMERATION", [])
 
                     if type_traits.is_descriptor(item['type']):
                         # walk each entry in the desc for pointers and enums
@@ -947,8 +956,10 @@ def _generate_returns(obj, meta):
                                 else:
                                     if "$x_init_driver_type_flags_t" == mtypename:
                                         _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s == %s->%s`"%('0x0', item['name'], m['name']))
+                                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_ENUMERATION", [])
                                     else:
                                         _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`%s < %s->%s`"%(meta['enum'][mtypename]['max'], item['name'], m['name']))
+                                        _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_ENUMERATION", [])
 
                     elif type_traits.is_properties(item['type']):
                         # walk each entry in the properties
@@ -997,6 +1008,20 @@ def _generate_returns(obj, meta):
                         _append(rets, key, val)
             else:
                 _append(rets, item, None)
+        # Remove duplicate result entries keeping the last (user-specified) occurrence.
+        # Each entry is expected to be a single-key dict like {"$X_RESULT_ERROR_INVALID_ARGUMENT": [...]}
+        if not return_type:  # Only dedupe the default path
+            seen = set()
+            dedup = []
+            for entry in reversed(rets):
+                if isinstance(entry, dict) and len(entry) == 1:
+                    key = next(iter(entry))
+                    if key in seen:
+                        continue  # drop earlier duplicate (default at top)
+                    seen.add(key)
+                dedup.append(entry)
+            rets = list(reversed(dedup))
+
         # update doc
         if return_type:
             obj['return_type'] = return_type
