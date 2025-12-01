@@ -1282,7 +1282,7 @@ Key features
 - When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion
 - Event can be destroyed without waiting for completion, even if profiling is enabled
 
-Regular Event rely on memory state controlled by the User (explicit Reset calls). CB Event represents host programming sequence, without managing the state. For example:
+Regular Event rely on memory state controlled by the user (explicit Reset calls). CB Event represents host programming sequence, without managing the state. For example:
 
 .. parsed-literal::
        ${x}EventCounterBasedCreate(context, device, &desc, &event1); // counter not yet assigned
@@ -1319,7 +1319,7 @@ If Event state is replaced by new append call or ${x}CommandQueueExecuteCommandL
 Multi directional dependencies on Regular command lists
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Regular command list with overlapping dependencies may be executed multiple times. For example, two command lists are executed in parallel with bi-directional dependencies.  
-Its important to understand counter (Event) state transition, to correctly reflect Users intention.  
+Its important to understand counter (Event) state transition, to correctly reflect users intention.  
 
 
 .. parsed-literal::
@@ -1356,7 +1356,7 @@ Second execution:
 
 Different approach:
 
-To avoid above situation, User must remove all bi-directional dependencies. By using single command list (if possible) or split the workload into different command lists with single-directional dependencies.  
+To avoid above situation, user must remove all bi-directional dependencies. By using single command list (if possible) or split the workload into different command lists with single-directional dependencies.  
 
 Using Counter Based Events for such scenarios is not always the most optimal usage mode. It may be better to use Regular Events with explicit Reset calls.
 
@@ -1366,11 +1366,31 @@ User may optionally specify externally managed counter allocation and value. Thi
 
 Requirements:
 
-- Counter allocation is managed by the User
+- Counter allocation is managed by the user
 - User must ensure device allocation (`deviceAddress`) residency (${x}ContextMakeMemoryResident). It must be GPU accessible USM allocation
 - Host allocation (`hostAddress`) must be CPU accessible USM allocation (eg. waiting for completion)
 - User is responsible for updating both memory locations to >= `completionValue` to signal Event completion
 - Using such event for signaling on new API call, replaces the state (as described previously)
+
+
+External aggregate storage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Aggregated storage event is a special use case for CB Events. It can be signaled from multiple append calls, but waiting requires only one memory compare operation.  
+It can be created by passing ${x}_event_counter_based_external_aggregate_storage_desc_t as extension of ${x}_event_counter_based_desc_t.
+
+Requirements:
+
+- This extension cannot be used with "external storage" extension
+- User must ensure device allocation (`deviceAddress`) residency. It must be accessible by GPU
+- Driver will use `deviceAddress` for host synchronization as USM allocation
+- If Driver is not able to lock provided device allocation for CPU access, host waits are not possible
+- Apart from signaling operation, driver will not write anything else to the memory. Initial value is fully under users responsiblility
+- Signaling such event, will not replace its state (as described previously). It can be passed to multiple append calls and each append will increment the storage by `incrementValue` (atomically) on GPU
+- Using aggregated event as dependency, requires only one memory compare operation against final value: `completionValue` >=  `*deviceAddress`
+- Device storage is under users control. It must be reset by the user if needed
+- Profiling is not possible if producers originate on different GPUs (different timestamp domains)
+- User can programatically obtain increment value that would work even if underlying append API would be distributed to multiple engines via ${x}DeviceGetAggregatedCopyOffloadIncrementValue query.
 
 Barriers
 ========

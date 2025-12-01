@@ -905,3 +905,22 @@ members:
     - type: $x_device_event_properties_flags_t
       name: flags
       desc: "[out] Supported Event properties. Valid combination of $x_device_event_properties_flag_t."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns unified increment value that can be used for Counter Based Events created with $x_event_counter_based_external_aggregate_storage_desc_t"
+version: "1.15"
+class: $xDevice
+name: GetAggregatedCopyOffloadIncrementValue
+details:
+    - "Value is applicable only to this specific device"
+    - "It may be used, when user is not able define number of internal driver operations during given append call, for example dividing copy into multiple engines. More details can be found in programming guide."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint32_t*
+      name: incrementValue
+      desc: "[out] increment value that can be used for Event creation"
+returns::
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "Provided invalid hDevice or incrementValue pointer"

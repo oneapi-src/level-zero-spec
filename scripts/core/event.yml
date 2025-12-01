@@ -241,6 +241,23 @@ members:
       name: completionValue
       desc: "[in] completion value for external synchronization allocation"
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Counter Based Event external aggregate storage. Passed as pNext to $x_event_counter_based_desc_t"
+class: $xEvent
+name: $x_event_counter_based_external_aggregate_storage_desc_t
+base: $x_base_desc_t
+version: "1.15"
+members:
+    - type: uint64_t*
+      name: deviceAddress
+      desc: "[in] device address that would be updated with atomic_add upon signaling of this event, must be device USM memory"
+    - type: uint64_t
+      name: incrementValue
+      desc: "[in] value which would by atomically added upon each completion"
+    - type: uint64_t
+      name: completionValue
+      desc: "[in] final completion value, when value under deviceAddress is equal or greater then this value then event is considered as completed"
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event from the pool."
 class: $xEvent
