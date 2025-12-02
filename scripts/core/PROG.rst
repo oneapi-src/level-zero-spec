@@ -434,8 +434,84 @@ The following pseudo-code demonstrates a basic sequence for creating a physical 
 
         ${x}PhysicalMemCreate(hContext, hDevice, &pmemDesc, &hPhysicalAlloc);
 
-Mapping Virtual Memory Pages
+Reading Physical Memory Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An application can query properties of a physical memory object using ${x}PhysicalMemGetProperties.
+
+The following pseudo-code demonstrates querying properties of a physical memory object:
+
+.. parsed-literal::
+ 
+    // Set up the request for an exportable allocation 
+
+    ze_external_memory_export_desc_t export_desc = { 
+        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC, 
+        nullptr, // pNext 
+        ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD
+    }; 
+
+    ze_physical_mem_desc_t alloc_desc = { 
+    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, 
+    .pNext = &export_desc, 
+    .flags = 0, 
+    .size = 1024 
+    };
+
+    ze_physical_mem_handle_t hPhysicalMemory; 
+
+    ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &hPhysicalMemory) 
+    
+    // Set up the request to export the external memory handle 
+
+    ze_external_memory_export_fd_t export_fd = { 
+        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD, 
+        nullptr, // pNext 
+        ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD, 
+        0 // [out] fd 
+    }; 
+
+    // Link the export request into the query 
+
+    ze_physical_mem_properties_t physicalMemProperties = { 
+        ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES 
+    }; 
+
+    physicalMemProperties.pNext = &export_fd; 
+
+    ${x}PhysicalMemGetProperties(hContext, hPhysicalMemory, &physicalMemProperties) 
+
+    // User sends exportFd.fd to a peer process 
+    int imported_fd = /\* fd received from peer process \*/;
+    // For importing reuse existing structs 
+
+    ze_external_memory_import_fd_t import_fd = { 
+
+    .stype = ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD, 
+
+    .pNext = nullptr, 
+
+    .flags = ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+
+    .fd = imported_fd 
+
+    };
+
+    ze_physical_mem_desc_t alloc_desc = { 
+
+    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, 
+
+    .pNext = &import_fd, 
+
+    .flags = 0, 
+    .size = 1024 
+    };
+
+    ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &physicalMemImporter);
+
+
+Mapping Virtual Memory Pages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Reserved virtual memory pages can be mapped to physical memory using ${x}VirtualMemMap.
 An application can map the entire reserved virtual address range or can sparsely map the
@@ -684,8 +760,7 @@ The following pseudo-code demonstrates how to import a Linux dma_buf as an exter
         alloc_desc.pNext = &import_fd;
         ${x}MemAllocDevice(hContext, &alloc_desc, size, alignment, hDevice, &ptr);
 
-Another example, which the following pseudo-code demonstrates, is how to import a Linux dma_buf as an external
-memory handle for :ref:`Images`:
+The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for :ref:`Images`:
 
 .. parsed-literal::
 
@@ -706,6 +781,26 @@ memory handle for :ref:`Images`:
 
         ${x}ImageCreate(hContext, hDevice, &image_desc, &hImage);
 
+The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for Physical Memory:
+
+.. parsed-literal::
+    
+        // Set up the request to import the external memory handle
+        ${x}_external_memory_import_fd_t import_fd = {
+            ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
+            nullptr, // pNext
+            ${X}_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF,
+            fd
+        };
+
+        ze_physical_mem_desc_t allocDesc = { 
+        .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, 
+        .pNext = &import_fd, 
+        .flags = 0, 
+        .size = 1024 
+        };
+
+        ${x}PhysicalMemCreate(hContext, hDevice, &allocDesc, &physicalMemImporter);
 
 Command Queues and Command Lists
 ================================

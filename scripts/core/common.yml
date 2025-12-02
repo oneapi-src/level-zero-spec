@@ -678,6 +678,10 @@ etors:
       desc: $x_event_counter_based_external_aggregate_storage_desc_t
       version: "1.15"
       value: "0x0002003F"
+    - name: PHYSICAL_MEM_PROPERTIES
+      desc: $x_physical_mem_properties_t
+      version: "1.15"
+      value: "0x00020040"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

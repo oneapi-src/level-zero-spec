@@ -130,6 +130,42 @@ members:
       name: size
       desc: "[in] size in bytes to reserve; must be page aligned."
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Physical memory properties queried using $xPhysicalMemGetProperties"
+class: $xPhysicalMem
+version: "1.15"
+name: $x_physical_mem_properties_t
+base: $x_base_properties_t
+members:
+    - type: uint64_t
+      name: id
+      desc: "[out] unique identifier for the physical memory object"
+    - type: uint64_t
+      name: size
+      desc: "[out] size of the physical memory object in bytes"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves memory properties of the physical memory object."
+class: $xPhysicalMem
+version: "1.15"
+name: GetProperties
+decl: static
+ordinal: "0"
+details:
+    - "The application must only use the physical memory object on the context for which it was created." 
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context object"
+    - type: $x_physical_mem_handle_t
+      name: hPhysicalMem
+      desc: "[in] handle of the physical memory object"
+    - type: $x_physical_mem_properties_t*
+      name: pMemProperties
+      desc: "[in,out] pointer to physical memory properties structure."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a physical memory object for the context."
 class: $xPhysicalMem

@@ -316,7 +316,7 @@ class: $xMem
 name: GetIpcHandleFromFileDescriptorExp
 decl: static
 details:
-    - "Handle passed must be a valid file descriptor obtained with $x_external_memory_export_fd_t via $xMemGetAllocProperties."
+    - "Handle passed must be a valid file descriptor obtained with $x_external_memory_export_fd_t via $xMemGetAllocProperties or $xPhysicalMemGetProperties."
     - "Returned IPC handle may contain metadata in addition to the file descriptor."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
@@ -360,7 +360,7 @@ name: PutIpcHandle
 decl: static
 details:
     - |
-      This call may be used for IPC handles previously obtained with either $xMemGetIpcHandle or with $x_external_memory_export_fd_t via $xMemGetAllocProperties.
+      This call may be used for IPC handles previously obtained with either $xMemGetIpcHandle or with $x_external_memory_export_fd_t via $xMemGetAllocProperties or $xPhysicalMemGetProperties.
     - |
       Upon call, driver may release any underlying resources associated with the IPC handle.
       For instance, it may close the file descriptor contained in the IPC handle, if such type of handle is being used by the driver.
@@ -450,6 +450,7 @@ members:
 details:
     - "1.0": "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to indicate an exportable memory allocation."
       "1.5": "This structure may be passed to $xMemAllocDevice and $xMemAllocHost, via the `pNext` member of $x_device_mem_alloc_desc_t or $x_host_mem_alloc_desc_t, respectively, to indicate an exportable memory allocation."
+      "1.15": "This structure may be passed to $xMemAllocDevice, $xMemAllocHost, or $xPhysicalMemCreate, via the `pNext` member of $x_device_mem_alloc_desc_t or $x_host_mem_alloc_desc_t, or $x_physical_mem_alloc_desc_t, respectively, to indicate an exportable memory allocation."
     - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to indicate an exportable image."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -470,6 +471,7 @@ members:
 details:
     - "1.0": "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to import memory from a file descriptor."
       "1.5": "This structure may be passed to $xMemAllocDevice or $xMemAllocHost, via the `pNext` member of $x_device_mem_alloc_desc_t or of $x_host_mem_alloc_desc_t, respectively, to import memory from a file descriptor."
+      "1.15": "This structure may be passed to $xMemAllocDevice, $xMemAllocHost, or $xPhysicalMemCreate, via the `pNext` member of $x_device_mem_alloc_desc_t or $x_host_mem_alloc_desc_t, or $x_physical_mem_alloc_desc_t, respectively, to import memory from a file descriptor."
     - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to import memory from a file descriptor."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -490,6 +492,7 @@ members:
 details:
     - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a file descriptor."
     - "This structure may be passed to $xImageGetAllocPropertiesExt, via the `pNext` member of $x_image_allocation_ext_properties_t, to export an image as a file descriptor."
+    - "This structure may be passed to $xPhysicalMemGetProperties, via the `pNext` member of $x_physical_mem_properties_t, to export physical memory as a file descriptor."
     - "The requested memory export type must have been specified when the allocation was made."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -517,6 +520,7 @@ details:
     - "When `flags` is $X_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_WIN32_KMT, `name` must be `nullptr`."
     - "1.0": "This structure may be passed to $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t, to import memory from a Win32 handle."
       "1.5": "This structure may be passed to $xMemAllocDevice or $xMemAllocHost, via the `pNext` member of $x_device_mem_alloc_desc_t or of $x_host_mem_alloc_desc_t, respectively, to import memory from a Win32 handle."
+      "1.15": "This structure may be passed to $xMemAllocDevice, $xMemAllocHost, or $xPhysicalMemCreate, via the `pNext` member of $x_device_mem_alloc_desc_t or $x_host_mem_alloc_desc_t, or $x_physical_mem_alloc_desc_t, respectively, to import memory from a Win32 handle."
     - "This structure may be passed to $xImageCreate, via the `pNext` member of $x_image_desc_t, to import memory from a Win32 handle."
 --- #--------------------------------------------------------------------------
 type: struct
@@ -538,6 +542,7 @@ members:
 details:
     - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a Win32 handle."
     - "This structure may be passed to $xImageGetAllocPropertiesExt, via the `pNext` member of $x_image_allocation_ext_properties_t, to export an image as a Win32 handle."
+    - "This structure may be passed to $xPhysicalMemGetProperties, via the `pNext` member of $x_physical_mem_properties_t, to export physical memory as a Win32 handle."
     - "The requested memory export type must have been specified when the allocation was made."
 --- #--------------------------------------------------------------------------
 type: class
