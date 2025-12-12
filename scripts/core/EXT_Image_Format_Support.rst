@@ -54,7 +54,7 @@ Example Usage
 -------------
 
 Single Image Format Validation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 
 .. code-block:: cpp
 
@@ -87,7 +87,7 @@ Single Image Format Validation
     }
 
 Testing Multiple Image Formats on the Same Device
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------------------------------
 
 .. code-block:: cpp
 
@@ -135,7 +135,7 @@ Testing Multiple Image Formats on the Same Device
     }
 
 Testing the Same Image Format Across Multiple Devices
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------------------------
 
 .. code-block:: cpp
 

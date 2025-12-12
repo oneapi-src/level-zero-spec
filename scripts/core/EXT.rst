@@ -7,6 +7,10 @@ from templates import helper as th
     X=x.upper()
     s=tags['$s']
     S=s.upper()
+    t=tags['$t']
+    T=t.upper()
+    r=tags['$r']
+    R=r.upper()
 %>
 ============
  Extensions
@@ -166,43 +170,47 @@ Each extension must document which specific structures and functions can be exte
 
 List of Standard Core Extensions
 ================================
-
+## --validate=off
 %for name in meta['macro']:
 %if name.endswith("EXT_NAME") and name.startswith('$X' + '_'):
     - :ref:`${th.subt(namespace, tags, meta['macro'][name]['values'][0])} <${th.subt(namespace, tags, meta['macro'][name]['values'][0]).replace('"', '')}>`\
 
 %endif
 %endfor
+## --validate=on
 
 List of Standard Tools Extensions
 =================================
-
+## --validate=off
 %for name in meta['macro']:
 %if name.endswith("EXT_NAME") and name.startswith('$T' + '_'):
     - :ref:`${th.subt(namespace, tags, meta['macro'][name]['values'][0])} <${th.subt(namespace, tags, meta['macro'][name]['values'][0]).replace('"', '')}>`\
 
 %endif
 %endfor
+## --validate=on
 
 List of Standard Sysman Extensions
 ==================================
-
+## --validate=off
 %for name in meta['macro']:
 %if name.endswith("EXT_NAME") and name.startswith('$S' + '_'):
     - :ref:`${th.subt(namespace, tags, meta['macro'][name]['values'][0])} <${th.subt(namespace, tags, meta['macro'][name]['values'][0]).replace('"', '')}>`\
 
 %endif
 %endfor
+## --validate=on
 
 List of Standard Runtime Extensions
 ===================================
-
+## --validate=off
 %for name in meta['macro']:
 %if name.endswith("EXT_NAME") and name.startswith('$R' + '_'):
     - :ref:`${th.subt(namespace, tags, meta['macro'][name]['values'][0])} <${th.subt(namespace, tags, meta['macro'][name]['values'][0]).replace('"', '')}>`\
 
 %endif
 %endfor
+## --validate=on
 
 List of All Experimental Extensions
 ===================================
