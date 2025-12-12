@@ -1,11 +1,8 @@
-﻿
-<%
+﻿<%
     OneApi=tags['$OneApi']
     x=tags['$x']
     X=x.upper()
-%>
-
-<%!
+%><%!
     from parse_specs import _version_compare_less, _version_compare_gequal
 %>
 
@@ -442,69 +439,69 @@ An application can query properties of a physical memory object using ${x}Physic
 The following pseudo-code demonstrates querying properties of a physical memory object:
 
 .. parsed-literal::
- 
-    // Set up the request for an exportable allocation 
 
-    ze_external_memory_export_desc_t export_desc = { 
-        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC, 
-        nullptr, // pNext 
+    // Set up the request for an exportable allocation
+
+    ze_external_memory_export_desc_t export_desc = {
+        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC,
+        nullptr, // pNext
         ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD
-    }; 
-
-    ze_physical_mem_desc_t alloc_desc = { 
-    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, 
-    .pNext = &export_desc, 
-    .flags = 0, 
-    .size = 1024 
     };
 
-    ze_physical_mem_handle_t hPhysicalMemory; 
+    ze_physical_mem_desc_t alloc_desc = {
+    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+    .pNext = &export_desc,
+    .flags = 0,
+    .size = 1024
+    };
+
+    ze_physical_mem_handle_t hPhysicalMemory;
 
     ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &hPhysicalMemory)
-    
-    // Set up the request to export the external memory handle 
 
-    ze_external_memory_export_fd_t export_fd = { 
-        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD, 
-        nullptr, // pNext 
-        ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD, 
-        0 // [out] fd 
-    }; 
+    // Set up the request to export the external memory handle
 
-    // Link the export request into the query 
+    ze_external_memory_export_fd_t export_fd = {
+        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD,
+        nullptr, // pNext
+        ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+        0 // [out] fd
+    };
 
-    ze_physical_mem_properties_t physicalMemProperties = { 
-        ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES 
-    }; 
+    // Link the export request into the query
 
-    physicalMemProperties.pNext = &export_fd; 
+    ze_physical_mem_properties_t physicalMemProperties = {
+        ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES
+    };
 
-    ${x}PhysicalMemGetProperties(hContext, hPhysicalMemory, &physicalMemProperties) 
+    physicalMemProperties.pNext = &export_fd;
 
-    // User sends exportFd.fd to a peer process 
+    ${x}PhysicalMemGetProperties(hContext, hPhysicalMemory, &physicalMemProperties)
+
+    // User sends exportFd.fd to a peer process
     int imported_fd = /\* fd received from peer process \*/;
-    // For importing reuse existing structs 
+    // For importing reuse existing structs
 
-    ze_external_memory_import_fd_t import_fd = { 
+    ze_external_memory_import_fd_t import_fd = {
 
-    .stype = ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD, 
+    .stype = ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
 
-    .pNext = nullptr, 
+    .pNext = nullptr,
 
     .flags = ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
 
-    .fd = imported_fd 
+    .fd = imported_fd
 
     };
 
-    ze_physical_mem_desc_t alloc_desc = { 
+    ze_physical_mem_desc_t alloc_desc = {
 
-    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, 
+    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
 
-    .pNext = &import_fd, 
+    .pNext = &import_fd,
 
-    .flags = 0, 
-    .size = 1024 
+    .flags = 0,
+    .size = 1024
     };
 
     ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &physicalMemImporter);
@@ -784,7 +781,7 @@ The following pseudo-code demonstrates how to import a Linux dma_buf as an exter
 The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for Physical Memory:
 
 .. parsed-literal::
-    
+
         // Set up the request to import the external memory handle
         ${x}_external_memory_import_fd_t import_fd = {
             ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
@@ -793,11 +790,11 @@ The following pseudo-code demonstrates how to import a Linux dma_buf as an exter
             fd
         };
 
-        ze_physical_mem_desc_t allocDesc = { 
-        .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, 
-        .pNext = &import_fd, 
-        .flags = 0, 
-        .size = 1024 
+        ze_physical_mem_desc_t allocDesc = {
+        .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+        .pNext = &import_fd,
+        .flags = 0,
+        .size = 1024
         };
 
         ${x}PhysicalMemCreate(hContext, hDevice, &allocDesc, &physicalMemImporter);
@@ -1273,12 +1270,12 @@ A kernel timestamp event is a special type of event that records device timestam
 .. parsed-literal::
 
        // Get timestamp frequency
-%if _version_compare_gequal(ver, "1.1"):
+     %if _version_compare_gequal(ver, "1.1"):
        const double timestampFreq = NS_IN_SEC / deviceProperties.timerResolution;
-%endif
-%if _version_compare_less(ver, "1.1"):
+     %endif
+     %if _version_compare_less(ver, "1.1"):
        const uint64_t timestampFreq = deviceProperties.timerResolution;
-%endif
+     %endif
        const uint64_t timestampMaxValue = ~(-1L << deviceProperties.kernelTimestampValidBits);
 
        // Create event pool
@@ -1331,39 +1328,43 @@ A kernel timestamp event is a special type of event that records device timestam
        double contextTimeInNs = ( tsResult->context.kernelEnd >= tsResult->context.kernelStart )
            ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart ) * timestampFreq
            : (( timestampMaxValue - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * timestampFreq;
+
        ...
-	   
+
+
 Event synchronization mode
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 User can adjust Event synchronization modes by passing ${x}_event_sync_mode_desc_t struct as pNext during Event creation.
 
 Low power wait
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
-When ${X}_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAIT flag is enabled, driver will optimize Event host synchronization calls like ${x}EventHostSynchronize to use CPU threads more efficiently. For example, instead of active polling on memory location, it may use OS methods to sleep CPU thread.  
+When ${X}_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAIT flag is enabled, driver will optimize Event host synchronization calls like ${x}EventHostSynchronize to use CPU threads more efficiently. For example, instead of active polling on memory location, it may use OS methods to sleep CPU thread.
 Changing this mode may impact completion latency.
 
 Interrups
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^
 
-When ${X}_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPT flag is enabled, driver may program additional GPU commands related to signaling Event on the Device. Those commands will generate system interrupt.  
-Interrupt may be used as additional signal to wake up CPU thread that is waiting for Event completion in low power mode.  
+When ${X}_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPT flag is enabled, driver may program additional GPU commands related to signaling Event on the Device. Those commands will generate system interrupt.
+Interrupt may be used as additional signal to wake up CPU thread that is waiting for Event completion in low power mode.
 Driver may select which API calls are applicable for generating interrupts.
 
-Additionally, user may provide external interrupt id (${X}_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT). OS methods will be used for Event host synchronization calls, to optimize waiting for completion. Similar to low power mode. 
+Additionally, user may provide external interrupt id (${X}_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT). OS methods will be used for Event host synchronization calls, to optimize waiting for completion. Similar to low power mode.
 It can be used only with Counter Based Events.
 
 .. _counter-based-events:
-Counter Based Events
-~~~~~~~~~~~~~~~~~~~~~~~
 
-This type of event, referred to as a Counter Based (CB) Event, does not require an event pool, as the related allocations are managed internally by the driver. This reduces the overhead on the host for managing pool allocations.  
-The CB Event can only be signaled on the GPU using an in-order command list.  
+Counter Based Events
+~~~~~~~~~~~~~~~~~~~~
+
+This type of event, referred to as a Counter Based (CB) Event, does not require an event pool, as the related allocations are managed internally by the driver. This reduces the overhead on the host for managing pool allocations.
+The CB Event can only be signaled on the GPU using an in-order command list.
 
 Every in-order command list has an internal submission counter that is updated with each append call. This counter manages internal in-order dependencies. The next append call waits for that counter implicitly.
-Note that some operations may be optimized, and the counter value may not directly correspond to the number of append calls.  
+Note that some operations may be optimized, and the counter value may not directly correspond to the number of append calls.
 
-When a CB Event is passed as a signal event, it points to a specific counter value and memory location. Since the command list manages the counter allocation, this method avoids producing additional GPU memory operations (except timestamps). As a result, users do not need to explicitly control event completion before reusing it.  
+When a CB Event is passed as a signal event, it points to a specific counter value and memory location. Since the command list manages the counter allocation, this method avoids producing additional GPU memory operations (except timestamps). As a result, users do not need to explicitly control event completion before reusing it.
 
 Key features
 ^^^^^^^^^^^^^^^^^^^^^
@@ -1390,32 +1391,31 @@ Regular Event rely on memory state controlled by the user (explicit Reset calls)
        ${x}CommandListAppendLaunchKernel(cmdList3, kernel, &groupCount, &event1, 0, nullptr); // Replace state. Assigned counter=Y on memory CL3_alloc
 
        // Event1 is implicitly reset to different state.
-       // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc. 
+       // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc.
        // Its also safe to delete Event object.
 
        ${x}EventHostSynchronize(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc
 
 IPC sharing
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
 As mentioned previously, signaling CB Event replaces its state. This is why IPC sharing is one-directional. Opened event can be used only for waiting/querying (on host and GPU).
 
-Both Event object (original and shared) are independent. There is no need to wait for completion before reusing.  
-Second process points to the original state until ${x}EventCounterBasedCloseIpcHandle is called.  
-Original Event state may be changed without waiting for completion. Second process is not affected.  
+Both Event object (original and shared) are independent. There is no need to wait for completion before reusing.
+Second process points to the original state until ${x}EventCounterBasedCloseIpcHandle is called.
+Original Event state may be changed without waiting for completion. Second process is not affected.
 
 Counter Based Event has dedicated API calls to handle IPC operations:${x}EventCounterBasedGetIpcHandle, ${x}EventCounterBasedOpenIpcHandle, ${x}EventCounterBasedCloseIpcHandle
 
 **Timestamps are not allowed for IPC sharing.**
 
 Obtaining counter memory and value
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-User may obtain counter memory location and value using ${x}EventCounterBasedGetDeviceAddress. For example, waiting for completion outside the L0 Driver.  
-If Event state is replaced by new append call or ${x}CommandQueueExecuteCommandLists that signals such Event, below API must be called again to obtain new data.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User may obtain counter memory location and value using ${x}EventCounterBasedGetDeviceAddress. For example, waiting for completion outside the L0 Driver. If Event state is replaced by new append call or ${x}CommandQueueExecuteCommandLists that signals such Event, below API must be called again to obtain new data.
 
 Multi directional dependencies on Regular command lists
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Regular command list with overlapping dependencies may be executed multiple times. For example, two command lists are executed in parallel with bi-directional dependencies.  
-Its important to understand counter (Event) state transition, to correctly reflect users intention.  
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Regular command list with overlapping dependencies may be executed multiple times. For example, two command lists are executed in parallel with bi-directional dependencies.
+Its important to understand counter (Event) state transition, to correctly reflect users intention.
 
 
 .. parsed-literal::
@@ -1425,8 +1425,8 @@ Its important to understand counter (Event) state transition, to correctly refle
                                V                            |
        regularCmdList2:   (wait for A)  ------------->     (B)         ----->   (D)
 
-In this example, all Events are synchronized to "ready" state after the first execution. 
-It means that second execution of `regularCmdList1` waits again for "ready" `{1->2->3}` state of `regularCmdList2` (first execution) instead of `{4->5->6}`.  
+In this example, all Events are synchronized to "ready" state after the first execution.
+It means that second execution of `regularCmdList1` waits again for "ready" `{1->2->3}` state of `regularCmdList2` (first execution) instead of `{4->5->6}`.
 This is because `regularCmdList2` was not yet executed for the second time. And their counters were not updated.
 
 First execution:
@@ -1452,13 +1452,13 @@ Second execution:
 
 Different approach:
 
-To avoid above situation, user must remove all bi-directional dependencies. By using single command list (if possible) or split the workload into different command lists with single-directional dependencies.  
+To avoid above situation, user must remove all bi-directional dependencies. By using single command list (if possible) or split the workload into different command lists with single-directional dependencies.
 
 Using Counter Based Events for such scenarios is not always the most optimal usage mode. It may be better to use Regular Events with explicit Reset calls.
 
 External synchronization allocation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-User may optionally specify externally managed counter allocation and value. This can be done by passing ${x}_event_counter_based_external_sync_allocation_desc_t as extension of ${x}_event_counter_based_desc_t  
+User may optionally specify externally managed counter allocation and value. This can be done by passing ${x}_event_counter_based_external_sync_allocation_desc_t as extension of ${x}_event_counter_based_desc_t
 
 Requirements:
 
@@ -1472,7 +1472,7 @@ Requirements:
 External aggregate storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Aggregated storage event is a special use case for CB Events. It can be signaled from multiple append calls, but waiting requires only one memory compare operation.  
+Aggregated storage event is a special use case for CB Events. It can be signaled from multiple append calls, but waiting requires only one memory compare operation.
 It can be created by passing ${x}_event_counter_based_external_aggregate_storage_desc_t as extension of ${x}_event_counter_based_desc_t.
 
 Requirements:
