@@ -104,7 +104,7 @@ members:
       desc: "[out] Location of this memory (system, device)"
     - type: uint64_t
       name: physicalSize
-      desc: "[out] Physical memory size in bytes. A value of 0 indicates that this property is not known. However, a call to $sMemoryGetState() will correctly return the total size of usable memory."
+      desc: "[out] Physical memory capacity in bytes. A value of 0 indicates that this property is not known. However, a call to zesMemoryGetState() will return the available free physical memory."
     - type: int32_t
       name: busWidth
       desc: "[out] Width of the memory bus. A value of -1 means that this property is unknown."
@@ -118,18 +118,20 @@ class: $sMemory
 name: $s_mem_state_t
 base: $s_base_state_t
 details:
-    - "Percent allocation is given by 100 * (size - free / size."
-    - "Percent free is given by 100 * free / size."
+    - "Percent free is given by 100 * free / pysical mem size."
 members:
     - type: $s_mem_health_t
       name: health
       desc: "[out] Indicates the health of the memory"
     - type: uint64_t
       name: free
-      desc: "[out] The free memory in bytes"
+      desc: "[out] The free physical memory in bytes"
     - type: uint64_t
       name: size
-      desc: "[out] The total allocatable memory in bytes (can be less than the `physicalSize` member of $s_mem_properties_t)"
+      desc: |
+            [out] The total allocatable memory in bytes (can be less than the `physicalSize` member of $s_mem_properties_t). *DEPRECATED* 
+             This member can no longer track the allocatable memory reliably. Clients depending on this information can use the 
+             zeDeviceGetMemoryProperties with  ze_device_usablemem_size_ext_properties_t extention to get information of the available usable memory.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory bandwidth"
