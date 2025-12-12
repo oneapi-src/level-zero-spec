@@ -7,7 +7,7 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Extension APIs for Counter-based Event Pools"
+desc: "Intel $OneApi Level-Zero Extension APIs for Counter-based Event Pools. @deprecated since 1.15"
 version: "1.8"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -37,7 +37,7 @@ etors:
       desc: "Counter-based event pool is for non-immediate command lists"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Event pool descriptor for counter-based events. This structure may be passed to $xEventPoolCreate as pNext member of $x_event_pool_desc_t."
+desc: "Event pool descriptor for counter-based events. This structure may be passed to $xEventPoolCreate as pNext member of $x_event_pool_desc_t. @deprecated since 1.15"
 class: $xEventPool
 version: "1.8"
 name: $x_event_pool_counter_based_exp_desc_t

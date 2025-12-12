@@ -460,7 +460,7 @@ The following pseudo-code demonstrates querying properties of a physical memory 
 
     ze_physical_mem_handle_t hPhysicalMemory; 
 
-    ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &hPhysicalMemory) 
+    ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &hPhysicalMemory)
     
     // Set up the request to export the external memory handle 
 
@@ -507,7 +507,7 @@ The following pseudo-code demonstrates querying properties of a physical memory 
     .size = 1024 
     };
 
-    ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &physicalMemImporter);
+    ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &physicalMemImporter);
 
 
 Mapping Virtual Memory Pages
@@ -800,7 +800,7 @@ The following pseudo-code demonstrates how to import a Linux dma_buf as an exter
         .size = 1024 
         };
 
-        ${x}PhysicalMemCreate(hContext, hDevice, &allocDesc, &physicalMemImporter);
+        ${x}PhysicalMemCreate(hContext, hDevice, &allocDesc, &physicalMemImporter);
 
 Command Queues and Command Lists
 ================================
@@ -1353,6 +1353,7 @@ Driver may select which API calls are applicable for generating interrupts.
 Additionally, user may provide external interrupt id (${X}_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT). OS methods will be used for Event host synchronization calls, to optimize waiting for completion. Similar to low power mode. 
 It can be used only with Counter Based Events.
 
+.. _counter-based-events:
 Counter Based Events
 ~~~~~~~~~~~~~~~~~~~~~~~
 

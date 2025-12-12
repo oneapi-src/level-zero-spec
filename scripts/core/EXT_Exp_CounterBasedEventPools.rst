@@ -14,6 +14,8 @@ from templates import helper as th
  Counter-Based Event Pools Extension
 =====================================
 
+    - This experimental extension is deprecated and replaced by the :ref:`Counter-based events<counter-based-events>`
+
 API
 ----
  
