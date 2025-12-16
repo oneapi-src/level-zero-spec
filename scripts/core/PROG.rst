@@ -1971,6 +1971,12 @@ cooperative kernel launch may be determined by calling ${x}KernelSuggestMaxCoope
 
 .. parsed-literal::
 
+       // query and set kernel work-group size
+       uint32_t groupSizeX;
+       uint32_t groupSizeY;
+       ${x}KernelSuggestGroupSize(hKernel, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
+       ${x}KernelSetGroupSize(hKernel, groupSizeX, groupSizeY, 1);
+
        // query the maximum cooperative kernel launch for the kernel
        uint32_t maxGroupCount;
        ${x}KernelSuggestMaxCooperativeGroupCount(hKernel, &maxGroupCount);

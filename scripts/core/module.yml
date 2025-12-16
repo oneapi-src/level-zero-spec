@@ -479,6 +479,7 @@ name: SuggestMaxCooperativeGroupCount
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "Applications are recommended to use $xKernelSuggestGroupSize and $xKernelSetGroupSize first before calling this function and launching cooperative kernels. Otherwise, implementation may return $X_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION."
 params:
     - type: "$x_kernel_handle_t"
       name: hKernel
