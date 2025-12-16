@@ -463,9 +463,9 @@ ordinal: "1"
 analogue:
     - "**vkGetPhysicalDeviceQueueFamilyProperties**"
 details:
-    - "Properties are reported for each physical command queue type supported by the device."
+    - "Properties are reported for each physical command queue group available on the device."
     - "Multiple calls to this function will return properties in the same order."
-    - "The order in which the properties are returned defines the command queue group's ordinal."
+    - "The order in which the properties are returned is defined by the command queue group's ordinal."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
@@ -475,14 +475,16 @@ params:
     - type: uint32_t*
       name: pCount
       desc: |
-            [in,out] pointer to the number of command queue group properties.
-            if count is zero, then the driver shall update the value with the total number of command queue group properties available.
-            if count is greater than the number of command queue group properties available, then the driver shall update the value with the correct number of command queue group properties available.
+            [in,out] pointer to the number of available command queue groups.
+            If count is zero, then the driver shall update the value with the total number of command queue groups available.
+            If count is less than the number of command queue groups available, then the driver shall only retrieve command queue group properties for the given number of command queue groups.
+            If count is greater than or equal to the number of command queue groups available, then the driver shall retrieve command queue group properties for all available command queue groups.
     - type: "$x_command_queue_group_properties_t*"
       name: pCommandQueueGroupProperties
       desc: |
             [in,out][optional][range(0, *pCount)] array of query results for command queue group properties.
-            if count is less than the number of command queue group properties available, then driver shall only retrieve that number of command queue group properties.
+            If count is less than the number of command queue groups available, then the driver shall only retrieve that number of command queue group properties.
+            The order of properties in the array corresponds to the command queue group ordinal.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device memory property flags"
