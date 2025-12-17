@@ -12,6 +12,7 @@ import generate_docs
 import os, sys, platform
 import time
 import subprocess
+import warnings
 
 """
     helper for adding mutually-exclusive boolean arguments "--name" and "--!name"
@@ -48,7 +49,7 @@ def update_spec(target):
 """
 def build():
     if "Windows" == platform.system():
-        result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 17 2022" -A x64')
+        result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 17 2022" -A x64"')
     else:
         result = os.system('cmake -B ../build/ -S ..')
     if result == 0:
@@ -84,6 +85,9 @@ Main entry:
     Do everything...
 """
 def main():
+    # Configure Python to treat warnings as errors
+    warnings.filterwarnings('error')
+
     # phase 0: parse cmdline arguments
     configParser = util.configRead("config.ini")
 
@@ -159,8 +163,9 @@ def main():
                 generate_docs.generate_rst(docpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
         if util.makeErrorCount():
+            util.printAllErrors()
             print("\n%s Errors found during generation, stopping execution!"%util.makeErrorCount())
-            return
+            sys.exit(1)
 
     if args['debug']:
         util.makoFileListWrite("generated.json")

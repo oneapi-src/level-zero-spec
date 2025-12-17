@@ -184,6 +184,18 @@ def makoFileListWrite(outpath):
 def makeErrorCount():
     return len(makoErrorList)
 
+def makeError(message):
+    makoErrorList.append(message)
+
+def printAllErrors():
+    if len(makoErrorList) > 0:
+        print("\n" + "="*80)
+        print("ERRORS SUMMARY (%d error(s) found):" % len(makoErrorList))
+        print("="*80)
+        for idx, error in enumerate(makoErrorList, 1):
+            print("%d. %s" % (idx, error))
+        print("="*80)
+
 """
     write to array of string lines to file
 """

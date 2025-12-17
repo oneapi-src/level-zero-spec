@@ -14,8 +14,8 @@ from parse_specs import _version_compare_less, _version_compare_equal, _version_
 RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
 RE_DISABLE  = r"^\#\#\s*\-\-validate\s*\=\s*off$"
 
-RE_PYCODE_BLOCK_BEGIN = r"^\<\%$"
-RE_PYCODE_BLOCK_END   = r"^\%\>$"
+RE_PYCODE_BLOCK_BEGIN = r"^[\ufeff]?\<\%\!?\s*$"
+RE_PYCODE_BLOCK_END   = r"^\%\>\s*$"
 
 RE_INVALID_TAG_FORMAT  = r".*(\$\w).*"
 RE_EXTRACT_TAG_NAME    = r"\$\{(\w)\}"
@@ -113,11 +113,14 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
             outlines.append(line)
             continue
 
-        if re.match(RE_INVALID_TAG_FORMAT, line):
-            print("%s(%s) : error : invalid %s tag used"%(fin, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line)))
-
         # new line will contain proper tags for reStructuredText if needed
         newline = line
+
+        # Only validate tags when not in code blocks
+        if not code_block and re.match(RE_INVALID_TAG_FORMAT, line):
+            error_msg = "%s(%s) : error : invalid %s tag used"%(fin, iline+1, re.sub(RE_INVALID_TAG_FORMAT, r"\1", line))
+            print(error_msg)
+            util.makeError(error_msg)
         if re.match(RE_PROPER_TAG_FORMAT, line):
             words = re.findall(RE_EXTRACT_NAME, line)
 
