@@ -27,6 +27,7 @@ API
     * ${x}_device_pitched_alloc_exp_properties_t
     * ${x}_image_bindless_exp_desc_t
     * ${x}_image_pitched_exp_desc_t
+    * ${x}_custom_pitch_exp_desc_t
     * ${x}_pitched_alloc_2dimage_linear_pitch_exp_info_t
 
 * Functions

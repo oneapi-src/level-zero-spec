@@ -94,12 +94,12 @@ base: $x_base_properties_t
 members:
     - type: size_t
       name: pitchAlign 
-      desc: "[out] Required pitch Aligment."
+      desc: "[out] Required pitch Aligment in Bytes."
     - type: size_t
       name: maxSupportedPitch 
-      desc: "[out] Maximum allowed pitch."
+      desc: "[out] Maximum allowed pitch in Bytes."
 details:
-    - "This structure may be passed to $xDeviceGetImageProperties via the pNext member of x_device_pitched_alloc_exp_properties_t."
+    - "This structure may be passed to $xDeviceGetImageProperties in conjunction with the $x_device_pitched_alloc_exp_properties_t via its pNext member"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves pitch information that can be used to allocate USM memory for a given image."
@@ -157,3 +157,19 @@ params:
     - type: "uint64_t*"
       name: pDeviceOffset
       desc: "[out] bindless device offset for image"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Specify user defined pitch for pitched linear image allocations. This structure may be passed to $xImageCreate in conjunction with $x_image_pitched_exp_desc_t via its pNext member"
+class: $xDevice
+version: "1.15"
+name: $x_custom_pitch_exp_desc_t
+base: $x_base_desc_t
+members:
+    - type: size_t
+      name: rowPitch
+      desc: |
+            [in] user programmed aligned pitch for pitched linear image allocations. This pitch should satisfy the pitchAlign requirement in $x_pitched_alloc_2dimage_linear_pitch_exp_info_t 
+    - type: size_t
+      name: slicePitch
+      desc: |
+            [in] user programmed slice pitch , must be multiple of rowPitch.  For 2D image arrary or a slice of a 3D image array - this pitch should be >= rowPitch * image_height . For 1D iamge array >= rowPitch.
