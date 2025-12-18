@@ -265,6 +265,14 @@ etors:
       value: "0x00020012"
       desc: $s_device_ecc_default_properties_ext_t
       version: "1.13"
+    - name: PCI_LINK_SPEED_DOWNGRADE_EXT_STATE
+      value: "0x00020013"
+      desc: $s_pci_link_speed_downgrade_ext_state_t
+      version: "1.15"
+    - name: PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES
+      value: "0x00020014"
+      desc: $s_pci_link_speed_downgrade_ext_properties_t
+      version: "1.15"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
