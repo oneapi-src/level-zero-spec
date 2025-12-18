@@ -45,7 +45,7 @@ To check if the device supports PCIe link speed downgrade capability, pass ${s}_
 .. parsed-literal:
 
     ${s}_pci_properties_t pciProperties = {${S}_STRUCTURE_TYPE_PCI_PROPERTIES};
-    ${s}_pci_link_speed_downgrade_ext_properties_t extProperties = {${S}_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES};
+    ${s}_pci_link_speed_downgrade_ext_properties_t extProperties = {${S}_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES};
     pciProperties.pNext = &extProperties;
     ${x}_result_t result = ${s}DevicePciGetProperties(hDevice, &pciProperties);
     
@@ -62,7 +62,7 @@ To check the current PCIe downgrade status, pass ${s}_pci_link_speed_downgrade_e
 .. parsed-literal:
 
     ${s}_pci_state_t pciState = {${S}_STRUCTURE_TYPE_PCI_STATE};
-    ${s}_pci_link_speed_downgrade_ext_state_t extState = {${S}_PCI_LINK_SPEED_DOWNGRADE_EXT_STATE};
+    ${s}_pci_link_speed_downgrade_ext_state_t extState = {${S}_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATE};
     pciState.pNext = &extState;
     ${x}_result_t result = ${s}DevicePciGetState(hDevice, &pciState);
     
@@ -93,7 +93,7 @@ The following pseudo-code demonstrates an example Usage for managing PCIe link s
 
     // Step 1: Check if device supports PCIe link speed update
     ${s}_pci_properties_t pciProperties = {${S}_STRUCTURE_TYPE_PCI_PROPERTIES};
-    ${s}_pci_link_speed_downgrade_ext_properties_t extProperties = {${S}_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES};
+    ${s}_pci_link_speed_downgrade_ext_properties_t extProperties = {${S}_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES};
     pciProperties.pNext = &extProperties;
     
     if (${s}DevicePciGetProperties(hDevice, &pciProperties) == ${X}_RESULT_SUCCESS) {
@@ -107,7 +107,7 @@ The following pseudo-code demonstrates an example Usage for managing PCIe link s
     
     // Step 2: Check current downgrade status
     ${s}_pci_state_t pciState = {${S}_STRUCTURE_TYPE_PCI_STATE};
-    ${s}_pci_link_speed_downgrade_ext_state_t extState = {${S}_PCI_LINK_SPEED_DOWNGRADE_EXT_STATE};
+    ${s}_pci_link_speed_downgrade_ext_state_t extState = {${S}_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATE};
     pciState.pNext = &extState;
     
     if (${s}DevicePciGetState(hDevice, &pciState) == ${X}_RESULT_SUCCESS) {
