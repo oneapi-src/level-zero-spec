@@ -89,6 +89,15 @@ etors:
       desc: "frequency throttled due to software supplied frequency range"
     - name: HW_RANGE
       desc: "frequency throttled due to a sub block that has a lower frequency range when it receives clocks"
+    - name: VOLTAGE
+      desc: "frequency throttled due to voltage excursion"
+      version: "1.15"
+    - name: THERMAL
+      desc: "frequency throttled due to thermal conditions"
+      version: "1.15"
+    - name: POWER
+      desc: "frequency throttled due to power constraints"
+      version: "1.15"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Frequency state"
