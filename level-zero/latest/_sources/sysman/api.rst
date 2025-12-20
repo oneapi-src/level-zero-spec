@@ -3,7 +3,7 @@
 ==============================
 Sysman API
 ==============================
-oneAPI Level Zero Specification - Version 1.14.33
+oneAPI Level Zero Specification - Version 1.15.26
 
  
 
@@ -3252,6 +3252,80 @@ zes_device_ecc_default_properties_ext_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: zes_device_ecc_default_properties_ext_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Pcilinkspeeddowngrade
+============================================================
+* Functions
+
+
+    * :ref:`zesDevicePciLinkSpeedUpdateExt`
+
+ 
+* Enumerations
+
+
+    * :ref:`zes-pci-link-speed-downgrade-ext-version-t`
+
+ 
+* Structures
+
+
+    * :ref:`zes-pci-link-speed-downgrade-ext-state-t`
+    * :ref:`zes-pci-link-speed-downgrade-ext-properties-t`
+
+
+Pcilinkspeeddowngrade Functions
+------------------------------------------------------------------------------
+
+
+.. _zesDevicePciLinkSpeedUpdateExt:
+
+zesDevicePciLinkSpeedUpdateExt
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zesDevicePciLinkSpeedUpdateExt
+    :project: LevelZero
+
+
+
+Pcilinkspeeddowngrade Enums
+------------------------------------------------------------------------------
+
+
+.. _zes-pci-link-speed-downgrade-ext-version-t:
+
+zes_pci_link_speed_downgrade_ext_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: zes_pci_link_speed_downgrade_ext_version_t
+    :project: LevelZero
+
+ 
+Pcilinkspeeddowngrade Structures
+------------------------------------------------------------------------------
+
+.. _zes-pci-link-speed-downgrade-ext-state-t:
+
+zes_pci_link_speed_downgrade_ext_state_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zes_pci_link_speed_downgrade_ext_state_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _zes-pci-link-speed-downgrade-ext-properties-t:
+
+zes_pci_link_speed_downgrade_ext_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: zes_pci_link_speed_downgrade_ext_properties_t
     :project: LevelZero
     :members:
     :undoc-members:

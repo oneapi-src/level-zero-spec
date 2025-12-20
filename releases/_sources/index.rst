@@ -26,6 +26,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.15.26`_
+    - 2025-12-19
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.15.26/index.html>`__
   * - `Level Zero v1.14.33`_
     - 2025-10-10
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.14.33/index.html>`__
@@ -113,6 +116,34 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.15.26
+~~~~~~~~~~~~~~~~~~~
+
+* New Features:
+
+    - Add new Counter Based Events API and documentation
+    - Add Event properties query extension
+    - Add Event synchronization modes
+    - Add additional common return codes to all APIs
+    - Add support for using IPC Mem Handle type
+    - Add support for External memory import/export with physical memory
+    - Add extension to query image format via ze_image_format_t
+    - Add depth component enum for images
+    - Add extension to query free memory from zeDeviceProperties, no longer requires Sysman API
+    - Add support for user defined pitch for 2D linear pitched images
+    - Add APIs to support PCIe link speed downgrade in Sysman
+    - Add voltage, thermal and power aggregated reasons to Sysman
+    - Deprecate expirmental counter based event pools APIs
+
+* Patches since v1.14.0 release
+
+    - Add new Runtime API Guide documentation
+    - Updated and clarified documentation on Extension Requirements and Guidelines
+    - Fix doxygen warnings for invalid explicit links in headers
+    - Fix definitions of zes_mem_state_t for free and size members
+    - Clarify documentation for zeKernelSuggestMaxCooperativeGroupCount
+    - Clarify documentation for zeDevicGetCommandQueueGroupProperties
 
 Level Zero v1.14.33
 ~~~~~~~~~~~~~~~~~~~

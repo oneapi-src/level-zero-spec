@@ -20,6 +20,7 @@ API
     * :ref:`ze-device-pitched-alloc-exp-properties-t`
     * :ref:`ze-image-bindless-exp-desc-t`
     * :ref:`ze-image-pitched-exp-desc-t`
+    * :ref:`ze-custom-pitch-exp-desc-t`
     * :ref:`ze-pitched-alloc-2dimage-linear-pitch-exp-info-t`
 
 * Functions

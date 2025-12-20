@@ -151,6 +151,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Core Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/PROG.html">Runtime Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="EXT.html">Extensions</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -327,6 +328,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reserving-virtual-address-space">Reserving Virtual Address Space</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#growing-virtual-address-reservations">Growing Virtual Address Reservations</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-memory">Physical Memory</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-physical-memory-properties">Reading Physical Memory Properties</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-virtual-memory-pages">Mapping Virtual Memory Pages</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#access-attributes">Access Attributes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-mappings">Sparse Mappings</a></li>
@@ -364,6 +366,20 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fences">Fences</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-timestamp-events">Kernel Timestamp Events</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-synchronization-mode">Event synchronization mode</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#low-power-wait">Low power wait</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#interrups">Interrups</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#counter-based-events">Counter Based Events</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key features</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ipc-sharing">IPC sharing</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-counter-memory-and-value">Obtaining counter memory and value</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-directional-dependencies-on-regular-command-lists">Multi directional dependencies on Regular command lists</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#external-synchronization-allocation">External synchronization allocation</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#external-aggregate-storage">External aggregate storage</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -898,6 +914,76 @@ size_t physicalSize = align(allocationSize, pageSize);
 
 <a class="reference internal" href="api.html#zephysicalmemcreate"><span class="std std-ref">zePhysicalMemCreate</span></a>(hContext, hDevice, &amp;pmemDesc, &amp;hPhysicalAlloc);</pre>
 </section>
+<section id="reading-physical-memory-properties">
+<h4>Reading Physical Memory Properties<a class="headerlink" href="#reading-physical-memory-properties" title="Link to this heading">#</a></h4>
+<p>An application can query properties of a physical memory object using <a class="reference internal" href="api.html#zephysicalmemgetproperties"><span class="std std-ref">zePhysicalMemGetProperties</span></a>.</p>
+<p>The following pseudo-code demonstrates querying properties of a physical memory object:</p>
+<pre class="literal-block">// Set up the request for an exportable allocation
+
+ze_external_memory_export_desc_t export_desc = {
+    ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC,
+    nullptr, // pNext
+    ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD
+};
+
+ze_physical_mem_desc_t alloc_desc = {
+.stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+.pNext = &amp;export_desc,
+.flags = 0,
+.size = 1024
+};
+
+ze_physical_mem_handle_t hPhysicalMemory;
+
+<a class="reference internal" href="api.html#zephysicalmemcreate"><span class="std std-ref">zePhysicalMemCreate</span></a>(hContext, hDevice, &amp;alloc_desc, &amp;hPhysicalMemory)
+
+// Set up the request to export the external memory handle
+
+ze_external_memory_export_fd_t export_fd = {
+    ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD,
+    nullptr, // pNext
+    ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+    0 // [out] fd
+};
+
+// Link the export request into the query
+
+ze_physical_mem_properties_t physicalMemProperties = {
+    ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES
+};
+
+physicalMemProperties.pNext = &amp;export_fd;
+
+<a class="reference internal" href="api.html#zephysicalmemgetproperties"><span class="std std-ref">zePhysicalMemGetProperties</span></a>(hContext, hPhysicalMemory, &amp;physicalMemProperties)
+
+// User sends exportFd.fd to a peer process
+int imported_fd = /* fd received from peer process */;
+// For importing reuse existing structs
+
+ze_external_memory_import_fd_t import_fd = {
+
+.stype = ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
+
+.pNext = nullptr,
+
+.flags = ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+
+.fd = imported_fd
+
+};
+
+ze_physical_mem_desc_t alloc_desc = {
+
+.stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+
+.pNext = &amp;import_fd,
+
+.flags = 0,
+.size = 1024
+};
+
+<a class="reference internal" href="api.html#zephysicalmemcreate"><span class="std std-ref">zePhysicalMemCreate</span></a>(hContext, hDevice, &amp;alloc_desc, &amp;physicalMemImporter);</pre>
+</section>
 <section id="mapping-virtual-memory-pages">
 <h4>Mapping Virtual Memory Pages<a class="headerlink" href="#mapping-virtual-memory-pages" title="Link to this heading">#</a></h4>
 <p>Reserved virtual memory pages can be mapped to physical memory using <a class="reference internal" href="api.html#zevirtualmemmap"><span class="std std-ref">zeVirtualMemMap</span></a>.
@@ -1186,8 +1272,7 @@ alloc_props.pNext = &amp;export_fd;
 // Link the request into the allocation descriptor and allocate
 alloc_desc.pNext = &amp;import_fd;
 <a class="reference internal" href="api.html#zememallocdevice"><span class="std std-ref">zeMemAllocDevice</span></a>(hContext, &amp;alloc_desc, size, alignment, hDevice, &amp;ptr);</pre>
-<p>Another example, which the following pseudo-code demonstrates, is how to import a Linux dma_buf as an external
-memory handle for <a class="reference internal" href="#images"><span class="std std-ref">Images</span></a>:</p>
+<p>The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for <a class="reference internal" href="#images"><span class="std std-ref">Images</span></a>:</p>
 <pre class="literal-block">// Set up the request to import the external memory handle
 <a class="reference internal" href="api.html#ze-external-memory-import-fd-t"><span class="std std-ref">ze_external_memory_import_fd_t</span></a> import_fd = {
     <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD</span></a>,
@@ -1204,6 +1289,23 @@ image_desc.width = import_width;
 ...
 
 <a class="reference internal" href="api.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>(hContext, hDevice, &amp;image_desc, &amp;hImage);</pre>
+<p>The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for Physical Memory:</p>
+<pre class="literal-block">// Set up the request to import the external memory handle
+<a class="reference internal" href="api.html#ze-external-memory-import-fd-t"><span class="std std-ref">ze_external_memory_import_fd_t</span></a> import_fd = {
+    <a class="reference internal" href="api.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD</span></a>,
+    nullptr, // pNext
+    <a class="reference internal" href="api.html#ze-external-memory-type-flags-t"><span class="std std-ref">ZE_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF</span></a>,
+    fd
+};
+
+ze_physical_mem_desc_t allocDesc = {
+.stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+.pNext = &amp;import_fd,
+.flags = 0,
+.size = 1024
+};
+
+<a class="reference internal" href="api.html#zephysicalmemcreate"><span class="std std-ref">zePhysicalMemCreate</span></a>(hContext, hDevice, &amp;allocDesc, &amp;physicalMemImporter);</pre>
 </section>
 </section>
 <section id="command-queues-and-command-lists">
@@ -1693,7 +1795,138 @@ double globalTimeInNs = ( tsResult-&gt;global.kernelEnd &gt;= tsResult-&gt;globa
 double contextTimeInNs = ( tsResult-&gt;context.kernelEnd &gt;= tsResult-&gt;context.kernelStart )
     ? ( tsResult-&gt;context.kernelEnd - tsResult-&gt;context.kernelStart ) * timestampFreq
     : (( timestampMaxValue - tsResult-&gt;context.kernelStart) + tsResult-&gt;context.kernelEnd + 1 ) * timestampFreq;
+
 ...</pre>
+</section>
+<section id="event-synchronization-mode">
+<h4>Event synchronization mode<a class="headerlink" href="#event-synchronization-mode" title="Link to this heading">#</a></h4>
+<p>User can adjust Event synchronization modes by passing <a class="reference internal" href="api.html#ze-event-sync-mode-desc-t"><span class="std std-ref">ze_event_sync_mode_desc_t</span></a> struct as pNext during Event creation.</p>
+<section id="low-power-wait">
+<h5>Low power wait<a class="headerlink" href="#low-power-wait" title="Link to this heading">#</a></h5>
+<p>When <a class="reference internal" href="api.html#ze-event-sync-mode-flags-t"><span class="std std-ref">ZE_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAIT</span></a> flag is enabled, driver will optimize Event host synchronization calls like <a class="reference internal" href="api.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a> to use CPU threads more efficiently. For example, instead of active polling on memory location, it may use OS methods to sleep CPU thread.
+Changing this mode may impact completion latency.</p>
+</section>
+<section id="interrups">
+<h5>Interrups<a class="headerlink" href="#interrups" title="Link to this heading">#</a></h5>
+<p>When <a class="reference internal" href="api.html#ze-event-sync-mode-flags-t"><span class="std std-ref">ZE_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPT</span></a> flag is enabled, driver may program additional GPU commands related to signaling Event on the Device. Those commands will generate system interrupt.
+Interrupt may be used as additional signal to wake up CPU thread that is waiting for Event completion in low power mode.
+Driver may select which API calls are applicable for generating interrupts.</p>
+<p>Additionally, user may provide external interrupt id (<a class="reference internal" href="api.html#ze-event-sync-mode-flags-t"><span class="std std-ref">ZE_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT</span></a>). OS methods will be used for Event host synchronization calls, to optimize waiting for completion. Similar to low power mode.
+It can be used only with Counter Based Events.</p>
+</section>
+</section>
+<section id="counter-based-events">
+<span id="id6"></span><h4>Counter Based Events<a class="headerlink" href="#counter-based-events" title="Link to this heading">#</a></h4>
+<p>This type of event, referred to as a Counter Based (CB) Event, does not require an event pool, as the related allocations are managed internally by the driver. This reduces the overhead on the host for managing pool allocations.
+The CB Event can only be signaled on the GPU using an in-order command list.</p>
+<p>Every in-order command list has an internal submission counter that is updated with each append call. This counter manages internal in-order dependencies. The next append call waits for that counter implicitly.
+Note that some operations may be optimized, and the counter value may not directly correspond to the number of append calls.</p>
+<p>When a CB Event is passed as a signal event, it points to a specific counter value and memory location. Since the command list manages the counter allocation, this method avoids producing additional GPU memory operations (except timestamps). As a result, users do not need to explicitly control event completion before reusing it.</p>
+<section id="key-features">
+<h5>Key features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p>After creation, a CB Event is initially marked as completed. The completion state changes if the event is assigned as a <cite>signalEvent</cite> to an append call or if external storage is specified during creation.</p></li>
+<li><p>CB Event can be waited for from any command list type.</p></li>
+<li><p><a class="reference internal" href="api.html#zeeventhostreset"><span class="std std-ref">zeEventHostReset</span></a> is not allowed. Can be reused on any in-order command list without explicit reset. A new API call just replaces its previous state (counter/allocation)</p></li>
+<li><p><a class="reference internal" href="api.html#zeeventhostsignal"><span class="std std-ref">zeEventHostSignal</span></a> is not allowed. Can be signaled only from in-order command list</p></li>
+<li><p>No need to wait for completion before reusing/destroying</p></li>
+<li><p>CB Event doesn’t own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver</p></li>
+<li><p>IPC sharing is one-directional. IPC CB Event opened in different process can be used only for waiting. If original Event state is changed (for example by next append call) and second process needs to see that update, IPC handle must be opened again.</p></li>
+<li><p>Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section</p></li>
+<li><p>When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion</p></li>
+<li><p>Event can be destroyed without waiting for completion, even if profiling is enabled</p></li>
+</ul>
+<p>Regular Event rely on memory state controlled by the user (explicit Reset calls). CB Event represents host programming sequence, without managing the state. For example:</p>
+<pre class="literal-block"><a class="reference internal" href="api.html#zeeventcounterbasedcreate"><span class="std std-ref">zeEventCounterBasedCreate</span></a>(context, device, &amp;desc, &amp;event1); // counter not yet assigned
+
+<a class="reference internal" href="api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(cmdList1, kernel, &amp;groupCount, &amp;event1, 0, nullptr); // assigned counter=X on memory CL1_alloc
+<a class="reference internal" href="api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(cmdList2, kernel, &amp;groupCount, nullptr, 1, &amp;event1); // cmdList2 waits for counter=X on memory CL1_alloc
+
+// reuse without waiting/reset
+<a class="reference internal" href="api.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(cmdList3, kernel, &amp;groupCount, &amp;event1, 0, nullptr); // Replace state. Assigned counter=Y on memory CL3_alloc
+
+// Event1 is implicitly reset to different state.
+// cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc.
+// Its also safe to delete Event object.
+
+<a class="reference internal" href="api.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc</pre>
+</section>
+<section id="ipc-sharing">
+<h5>IPC sharing<a class="headerlink" href="#ipc-sharing" title="Link to this heading">#</a></h5>
+<p>As mentioned previously, signaling CB Event replaces its state. This is why IPC sharing is one-directional. Opened event can be used only for waiting/querying (on host and GPU).</p>
+<p>Both Event object (original and shared) are independent. There is no need to wait for completion before reusing.
+Second process points to the original state until <a class="reference internal" href="api.html#zeeventcounterbasedcloseipchandle"><span class="std std-ref">zeEventCounterBasedCloseIpcHandle</span></a> is called.
+Original Event state may be changed without waiting for completion. Second process is not affected.</p>
+<p>Counter Based Event has dedicated API calls to handle IPC operations:<a class="reference internal" href="api.html#zeeventcounterbasedgetipchandle"><span class="std std-ref">zeEventCounterBasedGetIpcHandle</span></a>, <a class="reference internal" href="api.html#zeeventcounterbasedopenipchandle"><span class="std std-ref">zeEventCounterBasedOpenIpcHandle</span></a>, <a class="reference internal" href="api.html#zeeventcounterbasedcloseipchandle"><span class="std std-ref">zeEventCounterBasedCloseIpcHandle</span></a></p>
+<p><strong>Timestamps are not allowed for IPC sharing.</strong></p>
+</section>
+<section id="obtaining-counter-memory-and-value">
+<h5>Obtaining counter memory and value<a class="headerlink" href="#obtaining-counter-memory-and-value" title="Link to this heading">#</a></h5>
+<p>User may obtain counter memory location and value using <a class="reference internal" href="api.html#zeeventcounterbasedgetdeviceaddress"><span class="std std-ref">zeEventCounterBasedGetDeviceAddress</span></a>. For example, waiting for completion outside the L0 Driver. If Event state is replaced by new append call or <a class="reference internal" href="api.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a> that signals such Event, below API must be called again to obtain new data.</p>
+</section>
+<section id="multi-directional-dependencies-on-regular-command-lists">
+<h5>Multi directional dependencies on Regular command lists<a class="headerlink" href="#multi-directional-dependencies-on-regular-command-lists" title="Link to this heading">#</a></h5>
+<p>Regular command list with overlapping dependencies may be executed multiple times. For example, two command lists are executed in parallel with bi-directional dependencies.
+Its important to understand counter (Event) state transition, to correctly reflect users intention.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="nl">regularCmdList1</span><span class="p">:</span><span class="w">       </span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="w">      </span><span class="o">-------------&gt;</span><span class="w">   </span><span class="p">(</span><span class="n">wait</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">B</span><span class="p">)</span><span class="w">   </span><span class="o">-----&gt;</span><span class="w">   </span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="w">                        </span><span class="o">|</span><span class="w">                            </span><span class="o">^</span>
+<span class="w">                        </span><span class="o">|</span><span class="w">                            </span><span class="o">|</span>
+<span class="w">                        </span><span class="n">V</span><span class="w">                            </span><span class="o">|</span>
+<span class="nl">regularCmdList2</span><span class="p">:</span><span class="w">   </span><span class="p">(</span><span class="n">wait</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">A</span><span class="p">)</span><span class="w">  </span><span class="o">-------------&gt;</span><span class="w">     </span><span class="p">(</span><span class="n">B</span><span class="p">)</span><span class="w">         </span><span class="o">-----&gt;</span><span class="w">   </span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this example, all Events are synchronized to “ready” state after the first execution.
+It means that second execution of <cite>regularCmdList1</cite> waits again for “ready” <cite>{1-&gt;2-&gt;3}</cite> state of <cite>regularCmdList2</cite> (first execution) instead of <cite>{4-&gt;5-&gt;6}</cite>.
+This is because <cite>regularCmdList2</cite> was not yet executed for the second time. And their counters were not updated.</p>
+<p>First execution:</p>
+<pre class="literal-block">// All Events are in &quot;not ready&quot; state
+<a class="reference internal" href="api.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>(cmdQueue1, 1, &amp;regularCmdList1, nullptr); // Counter updated to {1-&gt;2-&gt;3}
+<a class="reference internal" href="api.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>(cmdQueue2, 1, &amp;regularCmdList2, nullptr); // Counter updated to {1-&gt;2-&gt;3}
+
+// All Events are &quot;ready&quot; now
+<a class="reference internal" href="api.html#zecommandqueuesynchronize"><span class="std std-ref">zeCommandQueueSynchronize</span></a>(cmdQueue1, timeout); // wait for counter=3
+<a class="reference internal" href="api.html#zecommandqueuesynchronize"><span class="std std-ref">zeCommandQueueSynchronize</span></a>(cmdQueue2, timeout); // wait for counter=3</pre>
+<p>Second execution:</p>
+<pre class="literal-block">// regularCmdList1 waits for &quot;ready&quot; {1-&gt;2-&gt;3} Events from first execution of regularCmdList2
+// regularCmdList1 changes Events state to &quot;not ready&quot;
+<a class="reference internal" href="api.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>(cmdQueue1, 1, &amp;regularCmdList1, nullptr); // Counter updated to {4-&gt;5-&gt;6}
+
+// regularCmdList2 waits for &quot;not ready&quot; {4-&gt;5-&gt;6} Events from second execution of regularCmdList1
+<a class="reference internal" href="api.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>(cmdQueue2, 1, &amp;regularCmdList2, nullptr); // Counter updated to {4-&gt;5-&gt;6}</pre>
+<p>Different approach:</p>
+<p>To avoid above situation, user must remove all bi-directional dependencies. By using single command list (if possible) or split the workload into different command lists with single-directional dependencies.</p>
+<p>Using Counter Based Events for such scenarios is not always the most optimal usage mode. It may be better to use Regular Events with explicit Reset calls.</p>
+</section>
+<section id="external-synchronization-allocation">
+<h5>External synchronization allocation<a class="headerlink" href="#external-synchronization-allocation" title="Link to this heading">#</a></h5>
+<p>User may optionally specify externally managed counter allocation and value. This can be done by passing <a class="reference internal" href="api.html#ze-event-counter-based-external-sync-allocation-desc-t"><span class="std std-ref">ze_event_counter_based_external_sync_allocation_desc_t</span></a> as extension of <a class="reference internal" href="api.html#ze-event-counter-based-desc-t"><span class="std std-ref">ze_event_counter_based_desc_t</span></a></p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>Counter allocation is managed by the user</p></li>
+<li><p>User must ensure device allocation (<cite>deviceAddress</cite>) residency (<a class="reference internal" href="api.html#zecontextmakememoryresident"><span class="std std-ref">zeContextMakeMemoryResident</span></a>). It must be GPU accessible USM allocation</p></li>
+<li><p>Host allocation (<cite>hostAddress</cite>) must be CPU accessible USM allocation (eg. waiting for completion)</p></li>
+<li><p>User is responsible for updating both memory locations to &gt;= <cite>completionValue</cite> to signal Event completion</p></li>
+<li><p>Using such event for signaling on new API call, replaces the state (as described previously)</p></li>
+</ul>
+</section>
+<section id="external-aggregate-storage">
+<h5>External aggregate storage<a class="headerlink" href="#external-aggregate-storage" title="Link to this heading">#</a></h5>
+<p>Aggregated storage event is a special use case for CB Events. It can be signaled from multiple append calls, but waiting requires only one memory compare operation.
+It can be created by passing <a class="reference internal" href="api.html#ze-event-counter-based-external-aggregate-storage-desc-t"><span class="std std-ref">ze_event_counter_based_external_aggregate_storage_desc_t</span></a> as extension of <a class="reference internal" href="api.html#ze-event-counter-based-desc-t"><span class="std std-ref">ze_event_counter_based_desc_t</span></a>.</p>
+<p>Requirements:</p>
+<ul class="simple">
+<li><p>This extension cannot be used with “external storage” extension</p></li>
+<li><p>User must ensure device allocation (<cite>deviceAddress</cite>) residency. It must be accessible by GPU</p></li>
+<li><p>Driver will use <cite>deviceAddress</cite> for host synchronization as USM allocation</p></li>
+<li><p>If Driver is not able to lock provided device allocation for CPU access, host waits are not possible</p></li>
+<li><p>Apart from signaling operation, driver will not write anything else to the memory. Initial value is fully under users responsiblility</p></li>
+<li><p>Signaling such event, will not replace its state (as described previously). It can be passed to multiple append calls and each append will increment the storage by <cite>incrementValue</cite> (atomically) on GPU</p></li>
+<li><p>Using aggregated event as dependency, requires only one memory compare operation against final value: <cite>completionValue</cite> &gt;=  <cite>*deviceAddress</cite></p></li>
+<li><p>Device storage is under users control. It must be reset by the user if needed</p></li>
+<li><p>Profiling is not possible if producers originate on different GPUs (different timestamp domains)</p></li>
+<li><p>User can programatically obtain increment value that would work even if underlying append API would be distributed to multiple engines via <a class="reference internal" href="api.html#zedevicegetaggregatedcopyoffloadincrementvalue"><span class="std std-ref">zeDeviceGetAggregatedCopyOffloadIncrementValue</span></a> query.</p></li>
+</ul>
+</section>
 </section>
 </section>
 </section>
@@ -1788,7 +2021,7 @@ require coherency.</p>
 of the system.</p>
 <img alt="../_images/core_module.png" src="../_images/core_module.png" />
 <section id="modules">
-<span id="id6"></span><h3>Modules<a class="headerlink" href="#modules" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>Modules<a class="headerlink" href="#modules" title="Link to this heading">#</a></h3>
 <p>Modules can be created from an IL or directly from native format using <a class="reference internal" href="api.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a>.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="api.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a> takes a format argument that specifies the input format.</p></li>
@@ -1983,7 +2216,7 @@ interface.</p>
 </section>
 </section>
 <section id="kernels">
-<span id="id7"></span><h3>Kernels<a class="headerlink" href="#kernels" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>Kernels<a class="headerlink" href="#kernels" title="Link to this heading">#</a></h3>
 <p>A Kernel is a reference to a kernel within a module and it supports both explicit and implicit kernel
 arguments along with data needed for launch.</p>
 <p>The following pseudo-code demonstrates a sequence for creating a kernel from a module:</p>
@@ -2020,7 +2253,7 @@ if (result == <a class="reference internal" href="api.html#ze-result-t"><span cl
 </section>
 </section>
 <section id="execution-1">
-<span id="id8"></span><h3>Execution<a class="headerlink" href="#execution-1" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>Execution<a class="headerlink" href="#execution-1" title="Link to this heading">#</a></h3>
 <section id="kernel-group-size">
 <h4>Kernel Group Size<a class="headerlink" href="#kernel-group-size" title="Link to this heading">#</a></h4>
 <p>The group size for a kernel can be set using <a class="reference internal" href="api.html#zekernelsetgroupsize"><span class="std std-ref">zeKernelSetGroupSize</span></a>. If a group size is not
@@ -2109,7 +2342,13 @@ there is a <a class="reference internal" href="api.html#zecommandlistappendlaunc
 The command list must be submitted to a command queue that was created with an ordinal of a command queue group
 that has the <a class="reference internal" href="api.html#ze-command-queue-group-property-flags-t"><span class="std std-ref">ZE_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COOPERATIVE_KERNELS</span></a> flags set. The maximum number of groups for a
 cooperative kernel launch may be determined by calling <a class="reference internal" href="api.html#zekernelsuggestmaxcooperativegroupcount"><span class="std std-ref">zeKernelSuggestMaxCooperativeGroupCount</span></a>.</p>
-<pre class="literal-block">// query the maximum cooperative kernel launch for the kernel
+<pre class="literal-block">// query and set kernel work-group size
+uint32_t groupSizeX;
+uint32_t groupSizeY;
+<a class="reference internal" href="api.html#zekernelsuggestgroupsize"><span class="std std-ref">zeKernelSuggestGroupSize</span></a>(hKernel, imageWidth, imageHeight, 1, &amp;groupSizeX, &amp;groupSizeY, nullptr);
+<a class="reference internal" href="api.html#zekernelsetgroupsize"><span class="std std-ref">zeKernelSetGroupSize</span></a>(hKernel, groupSizeX, groupSizeY, 1);
+
+// query the maximum cooperative kernel launch for the kernel
 uint32_t maxGroupCount;
 <a class="reference internal" href="api.html#zekernelsuggestmaxcooperativegroupcount"><span class="std std-ref">zeKernelSuggestMaxCooperativeGroupCount</span></a>(hKernel, &amp;maxGroupCount);
 
@@ -2186,8 +2425,8 @@ To ensure all output has been flushed to the output stream, wait on the event as
 <section id="environment-variables">
 <h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">#</a></h3>
 <p>The following table documents the supported knobs for overriding default functional behavior.</p>
-<table class="table" id="id12">
-<caption><span class="caption-text">Environment Variables</span><a class="headerlink" href="#id12" title="Link to this table">#</a></caption>
+<table class="table" id="id14">
+<caption><span class="caption-text">Environment Variables</span><a class="headerlink" href="#id14" title="Link to this table">#</a></caption>
 <colgroup>
 <col style="width: 15.0%" />
 <col style="width: 35.0%" />
@@ -2230,7 +2469,7 @@ To ensure all output has been flushed to the output stream, wait on the event as
 </tbody>
 </table>
 <section id="driver-ordering">
-<h4>Driver Ordering<a class="headerlink" href="#driver-ordering" title="Link to this heading">#</a></h4>
+<span id="id10"></span><h4>Driver Ordering<a class="headerlink" href="#driver-ordering" title="Link to this heading">#</a></h4>
 <p>The Level Zero Runtime provides the ability to change the default driver used in “zer” Level Zero Runtime APIs through an environment variable to enable flexible driver selection and ordering.</p>
 <p>This environment variable is read by the Level Zero Loader to determine the order in which drivers are initialized and used.</p>
 <p>A robust driver selector is created considering multiple drivers of different types with the following supported syntax:</p>
@@ -3059,7 +3298,7 @@ clGetProgramInfo(cl_program, CL_PROGRAM_BINARIES, clDeviceBinary, &amp;clDeviceB
 <a class="reference internal" href="api.html#zekernelcreate"><span class="std std-ref">zeKernelCreate</span></a>(hModule, nullptr, hKernel); // same Kernel as OpenCL in Level-Zero</pre>
 </section>
 <section id="inter-process-communication">
-<span id="id9"></span><h3>Inter-Process Communication<a class="headerlink" href="#inter-process-communication" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>Inter-Process Communication<a class="headerlink" href="#inter-process-communication" title="Link to this heading">#</a></h3>
 <p>The API allows sharing of memory objects across different device
 processes. Since each process has its own virtual address space, there
 is no guarantee that the same virtual address will be available when the
@@ -3072,7 +3311,7 @@ Level-Zero allocations across processes:</p>
 <li><p><a class="reference internal" href="#events-1"><span class="std std-ref">Events</span></a></p></li>
 </ol>
 <section id="memory-1">
-<span id="id10"></span><h4>Memory<a class="headerlink" href="#memory-1" title="Link to this heading">#</a></h4>
+<span id="id12"></span><h4>Memory<a class="headerlink" href="#memory-1" title="Link to this heading">#</a></h4>
 <p>The following code examples demonstrate how to use the memory IPC APIs:</p>
 <ol class="arabic simple">
 <li><p>First, the allocation is made, packaged, and sent on the sending
@@ -3111,7 +3350,7 @@ any actions performed by that call are eventually done by <a class="reference in
 <a class="reference internal" href="api.html#zememfree"><span class="std std-ref">zeMemFree</span></a>(hContext, dptr);</pre>
 </section>
 <section id="events-1">
-<span id="id11"></span><h4>Events<a class="headerlink" href="#events-1" title="Link to this heading">#</a></h4>
+<span id="id13"></span><h4>Events<a class="headerlink" href="#events-1" title="Link to this heading">#</a></h4>
 <p>The following code examples demonstrate how to use the event IPC APIs:</p>
 <ol class="arabic simple">
 <li><p>First, the event pool is created, packaged, and sent on the sending process:</p></li>
@@ -3283,6 +3522,7 @@ the fabric can support remote access, atomics, and data copies.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reserving-virtual-address-space">Reserving Virtual Address Space</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#growing-virtual-address-reservations">Growing Virtual Address Reservations</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-memory">Physical Memory</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-physical-memory-properties">Reading Physical Memory Properties</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mapping-virtual-memory-pages">Mapping Virtual Memory Pages</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#access-attributes">Access Attributes</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sparse-mappings">Sparse Mappings</a></li>
@@ -3320,6 +3560,20 @@ the fabric can support remote access, atomics, and data copies.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fences">Fences</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-timestamp-events">Kernel Timestamp Events</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-synchronization-mode">Event synchronization mode</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#low-power-wait">Low power wait</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#interrups">Interrups</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#counter-based-events">Counter Based Events</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key features</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ipc-sharing">IPC sharing</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-counter-memory-and-value">Obtaining counter memory and value</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-directional-dependencies-on-regular-command-lists">Multi directional dependencies on Regular command lists</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#external-synchronization-allocation">External synchronization allocation</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#external-aggregate-storage">External aggregate storage</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

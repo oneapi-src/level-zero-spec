@@ -151,6 +151,7 @@
 <li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/PROG.html">Runtime Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Extensions</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -317,8 +318,15 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-core-extensions">List of Standard Core Extensions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-experimental-extensions">List of Experimental Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-tools-extensions">List of Standard Tools Extensions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-sysman-extensions">List of Standard Sysman Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-runtime-extensions">List of Standard Runtime Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-all-experimental-extensions">List of All Experimental Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#driver-extensions-ie-implementation-non-standard">Driver Extensions (ie Implementation non-standard)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Naming Convention</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -335,21 +343,17 @@ document.write(`
 <section id="objective">
 <h2>Objective<a class="headerlink" href="#objective" title="Link to this heading">#</a></h2>
 <p>Features which are device- or vendor-specific can be exposed as extensions.</p>
-<p>There are two types of extensions defined by this specification:</p>
+<p>There are three types of extensions defined by this specification:</p>
 <ol class="arabic simple">
 <li><p><strong>Standard</strong> - extensions ratified for inclusion into the current and all future versions of the specification.</p></li>
 <li><p><strong>Experimental</strong> - extensions require additional experimentation and feedback from application vendors
 before ratification, therefore applications should not rely on experimental extensions in production.</p></li>
+<li><p><strong>Implementation non-standard</strong> - extensions provided by a Level Zero driver that are not defined in this specification.</p></li>
 </ol>
-<p>In addition to above, an implementation may choose to provide non-standard extensions which are
-not defined in this specification.</p>
-<p>It is the responsibility of the implementation to define and document such non-standard extensions
-and also to ensure these extensions do not conflict or interfere with any features or extensions of the standard
-core or sysman APIs.</p>
-<p>The following table summarizes the APIs to be used for discovery of different types of extensions. Aside
-from <a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a> which has been available since inception of this specification,
-the other APIs have been added subsequently. The versions of spec in which the APIs were added is also
-noted in following table.</p>
+<p>For <strong>Implementation non-standard</strong> extensions, it is the responsibility of the Level Zero Driver to define and document such non-standard extensions
+and also to ensure these extensions do not conflict or interfere with any features or extensions of the specification APIs or features.</p>
+<p>The following table summarizes the APIs used for discovery of different extension types.
+<a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a> has been available since inception of this specification, while other APIs were added in later versions as noted below.</p>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>API Category</p></th>
@@ -395,10 +399,10 @@ noted in following table.</p>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
 <ul class="simple">
-<li><p>Extensions must use globally unique names for macros, enums, structures and functions</p></li>
-<li><p>Extensions must have globally unique extension names reported from <a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a>, <a class="reference internal" href="../sysman/api.html#zesdrivergetextensionproperties"><span class="std std-ref">zesDriverGetExtensionProperties</span></a></p></li>
-<li><p>All extensions must be defined in this specification</p></li>
-<li><p>Extensions must not break backwards compatibility of the standard APIs defined in this specification</p></li>
+<li><p>Extensions must use globally unique names for macros, enums, structures, and functions</p></li>
+<li><p>Extensions must have globally unique extension names reported from <a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a> and <a class="reference internal" href="../sysman/api.html#zesdrivergetextensionproperties"><span class="std std-ref">zesDriverGetExtensionProperties</span></a></p></li>
+<li><p>All standard and experimental extensions must be defined in this specification</p></li>
+<li><p>Extensions must not break backwards compatibility of standard APIs</p></li>
 <li><p>Standard extension versions must be backwards compatible with prior versions</p></li>
 </ul>
 <section id="naming-convention">
@@ -406,46 +410,93 @@ noted in following table.</p>
 <p>The following naming conventions must be followed for <strong>standard</strong> extensions:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>All extension functions must be postfixed with <cite>Ext</cite></p></li>
-<li><p>All macros must use all caps with the appropriate prefix. Core macros shall use <cite>ZE_NAME_EXT</cite>, Sysman macros shall use <cite>ZES_NAME_EXT</cite></p></li>
-<li><p>All structures, enumerations and other types must follow snake case convention with appropriate prefix. Core structures and enumerations shall use <cite>ze_name_ext_t</cite> and Sysman shall use <cite>zes_name_ext_t</cite></p></li>
-<li><p>All enumerator values must use all caps with appropriate prefix. Core enumerator values shall use <cite>ZE_ENUM_EXT_ETOR_NAME</cite> and Sysman shall use <cite>ZES_ENUM_EXT_ETOR_NAME</cite></p></li>
-<li><p>All handle types must end with <cite>ext_handle_t</cite></p></li>
-<li><p>All descriptor structures must end with <cite>ext_desc_t</cite></p></li>
-<li><p>All property structures must end with <cite>ext_properties_t</cite></p></li>
-<li><p>All flag enumerations must end with <cite>ext_flags_t</cite></p></li>
+<li><p><strong>Functions:</strong> Must be postfixed with <cite>Ext</cite></p></li>
+<li><p>Example: zeDeviceImportExternalSemaphoreExt</p></li>
+<li><p><strong>Macros:</strong> All caps with appropriate prefix</p>
+<ul>
+<li><p>Core: <cite>ZE_NAME_EXT_*</cite></p></li>
+<li><p>Sysman: <cite>ZES_NAME_EXT_*</cite></p></li>
+<li><p>Example: ZE_MAX_FABRIC_EDGE_MODEL_EXT_SIZE</p></li>
+</ul>
+</li>
+<li><p><strong>Structures, enumerations, and other types:</strong> Snake case with appropriate prefix</p>
+<ul>
+<li><p>Core: <cite>ze_name_ext_*_t</cite></p></li>
+<li><p>Sysman: <cite>zes_name_ext_*_t</cite></p></li>
+<li><p>Example(s): ze_device_ip_version_ext_t or ze_cache_reservation_ext_desc_t</p></li>
+</ul>
+</li>
+<li><p><strong>Enumerator values:</strong> All caps with appropriate prefix</p>
+<ul>
+<li><p>Core: <cite>ZE_ENUM_EXT_ETOR_NAME</cite></p></li>
+<li><p>Sysman: <cite>ZES_ENUM_EXT_ETOR_NAME</cite></p></li>
+<li><p>Example: ZE_RTAS_BUILDER_EXT_FLAG_RESERVED</p></li>
+</ul>
+</li>
+<li><p><strong>Handle types:</strong> Must end with <cite>ext_handle_t</cite></p></li>
+<li><p>Example: ze_external_semaphore_ext_handle_t</p></li>
+<li><p><strong>Descriptor structures:</strong> Must end with <cite>ext_desc_t</cite></p></li>
+<li><p>Example: ze_cache_reservation_ext_desc_t</p></li>
+<li><p><strong>Property structures:</strong> Must end with <cite>ext_properties_t</cite></p></li>
+<li><p>Example: ze_driver_ddi_handles_ext_properties_t</p></li>
+<li><p><strong>Flag enumerations:</strong> Must end with <cite>ext_flags_t</cite></p></li>
+<li><p>Example: ze_device_raytracing_ext_flags_t</p></li>
 </ul>
 </div></blockquote>
 <p>The following naming conventions must be followed for <strong>experimental</strong> extensions:</p>
 <blockquote>
-<div><ul class="simple">
-<li><p>Experimental extensions may be added and removed from the driver at any time.</p></li>
-<li><p>Experimental extensions are not guaranteed to be forward- or backward-compatible between versions.</p></li>
-<li><p>Experimental extensions are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.</p></li>
-<li><p>All extension functions must be postfixed with <cite>Exp</cite>. The vendor name must follow the <cite>ze</cite> or <cite>zes</cite> prefix and follow CamelCase convention.</p></li>
-<li><p>All macros must use all caps with the appropriate prefix. Core macros shall use <cite>ZE_NAME_EXP</cite>, Sysman macros shall use <cite>ZES_NAME_EXP</cite>. The vendor name must follow <cite>ZE</cite> or <cite>ZES</cite> prefix.</p></li>
-<li><p>All structures, enumerations and other types must follow snake case convention with appropriate prefix. Core structures and enumerations shall use <cite>ze_name_exp_t</cite> and Sysman shall use <cite>zes_name_exp_t</cite>. The vendor name must follow <cite>ze</cite> or <cite>ZES</cite> prefix.</p></li>
-<li><p>All enumerator values must use all caps with appropriate prefix. Core enumerator values shall use <cite>ZE_ENUM_EXP_ETOR_NAME</cite> and Sysman shall use <cite>ZES_ENUM_EXP_ETOR_NAME</cite>. The vendor name must follow <cite>ZE</cite> or <cite>ZES</cite> prefix.</p></li>
-<li><p>All handle types must end with <cite>exp_handle_t</cite></p></li>
-<li><p>All descriptor structures must end with <cite>exp_desc_t</cite></p></li>
-<li><p>All property structures must end with <cite>exp_properties_t</cite></p></li>
-<li><p>All flag enumerations must end with <cite>exp_flags_t</cite></p></li>
+<div><p><strong>Important:</strong> Experimental extensions may be added and removed at any time, are not guaranteed to be forward- or backward-compatible between versions, and may not be supported in production driver releases.</p>
+<ul class="simple">
+<li><p><strong>Functions:</strong> Must be postfixed with <cite>Exp</cite></p>
+<ul>
+<li><p>Example: zeCommandListCreateCloneExp</p></li>
+</ul>
+</li>
+<li><p><strong>Macros:</strong> All caps with appropriate prefix</p>
+<ul>
+<li><p>Core: <cite>ZE_NAME_EXP_*</cite></p></li>
+<li><p>Sysman: <cite>ZES_NAME_EXP_*</cite></p></li>
+<li><p>Example: ZE_MODULE_PROGRAM_EXP_NAME</p></li>
+</ul>
+</li>
+<li><p><strong>Structures, enumerations, and other types:</strong> Snake case with appropriate prefix</p>
+<ul>
+<li><p>Core: <cite>ze_name_exp_*_t</cite></p></li>
+<li><p>Sysman: <cite>zes_name_exp_*_t</cite></p></li>
+<li><p>Example(s): ze_command_list_clone_exp_version_t or ze_image_memory_properties_exp_t</p></li>
+</ul>
+</li>
+<li><p><strong>Enumerator values:</strong> All caps with appropriate prefix</p>
+<ul>
+<li><p>Core: <cite>ZE_ENUM_EXP_ETOR_NAME</cite></p></li>
+<li><p>Sysman: <cite>ZES_ENUM_EXP_ETOR_NAME</cite></p></li>
+<li><p>Example: ZE_COMMAND_LIST_CLONE_EXP_VERSION_CURRENT</p></li>
+</ul>
+</li>
+<li><p><strong>Handle types:</strong> Must end with <cite>exp_handle_t</cite></p></li>
+<li><p>Example: ze_rtas_builder_exp_handle_t</p></li>
+<li><p><strong>Descriptor structures:</strong> Must end with <cite>exp_desc_t</cite></p></li>
+<li><p>Example: ze_mutable_command_id_exp_desc_t</p></li>
+<li><p><strong>Property structures:</strong> Must end with <cite>exp_properties_t</cite></p></li>
+<li><p>Example: ze_fabric_vertex_exp_properties_t</p></li>
+<li><p><strong>Flag enumerations:</strong> Must end with <cite>exp_flags_t</cite></p></li>
+<li><p>Example: ze_rtas_device_exp_flags_t</p></li>
 </ul>
 </div></blockquote>
 </section>
 <section id="extending-enumerations">
 <h3>Extending Enumerations<a class="headerlink" href="#extending-enumerations" title="Link to this heading">#</a></h3>
-<p>Any existing enumeration may be extended by adding new etors.
+<p>Any existing enumeration may be extended by adding new etors (enumerator values).
 Etors must still use extension naming convention and values should be assigned to avoid future compatibility issues.</p>
 </section>
 <section id="extending-structures">
 <h3>Extending Structures<a class="headerlink" href="#extending-structures" title="Link to this heading">#</a></h3>
-<p>Any structure derived from base descriptor or base property structure types may be extended using structure chains.
-While it is possible to use other methods, this is the required method for extending existing structures.</p>
-<p>A structure chain can contain more than one extension structure, in any order. Therefore, extensions should not be
-dependent on their order relative to other extensions and the implementation must be order agnostic. In addition,
-the implementation will ignore extended structures that it does not support.</p>
-<p>The extension must document the specific structures and functions that may be extended using the structure chain.</p>
+<p>Structures derived from base descriptor or base property types may be extended using structure chains.
+This is the required method for extending existing structures.</p>
+<p>Structure chains can contain multiple extension structures in any order. Extensions must not depend on
+their order relative to other extensions, and implementations must be order agnostic. Implementations
+will ignore extended structures that are not supported.</p>
+<p>Each extension must document which specific structures and functions can be extended using the structure chain.</p>
 </section>
 </section>
 <section id="list-of-standard-core-extensions">
@@ -462,14 +513,17 @@ the implementation will ignore extended structures that it does not support.</p>
 <li><p><a class="reference internal" href="EXT_DeviceLUID.html#ze-extension-device-luid"><span class="std std-ref">“ZE_extension_device_luid”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_Device_vector_sizes.html#ze-extension-device-vector-sizes"><span class="std std-ref">“ZE_extension_device_vector_sizes”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_DeviceIpVersion.html#ze-extension-device-ip-version"><span class="std std-ref">“ZE_extension_device_ip_version”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_DeviceUsablememProperties.html#ze-extension-device-usablemem-size-properties"><span class="std std-ref">“ZE_extension_device_usablemem_size_properties”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_Driver_DDIHandles.html#ze-extension-driver-ddi-handles"><span class="std std-ref">“ZE_extension_driver_ddi_handles”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_EventQueryKernelTimestamps.html#ze-extension-event-query-kernel-timestamps"><span class="std std-ref">“ZE_extension_event_query_kernel_timestamps”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_ExternalMemMap.html#ze-extension-external-memmap-sysmem"><span class="std std-ref">“ZE_extension_external_memmap_sysmem”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_FloatAtomics.html#ze-extension-float-atomics"><span class="std std-ref">“ZE_extension_float_atomics”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_ImageCopy.html#ze-extension-image-copy"><span class="std std-ref">“ZE_extension_image_copy”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_Image_Format_Support.html#ze-extension-image-format-support"><span class="std std-ref">“ZE_extension_image_format_support”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_ImageQueryAllocProperties.html#ze-extension-image-query-alloc-properties"><span class="std std-ref">“ZE_extension_image_query_alloc_properties”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_ImageView.html#ze-extension-image-view"><span class="std std-ref">“ZE_extension_image_view”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_ImageViewPlanar.html#ze-extension-image-view-planar"><span class="std std-ref">“ZE_extension_image_view_planar”</span></a></p></li>
+<li><p><a class="reference internal" href="EXT_IPC_MEM_HANDLE_TYPE.html#ze-extension-ipc-mem-handle-type"><span class="std std-ref">“ZE_extension_ipc_mem_handle_type”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_KernelMaxGroupSizeProperties.html#ze-extension-kernel-max-group-size-properties"><span class="std std-ref">“ZE_extension_kernel_max_group_size_properties”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_LinkageInspection.html#ze-extension-linkage-inspection"><span class="std std-ref">“ZE_extension_linkage_inspection”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_LinkOnceODR.html#ze-extension-linkonce-odr"><span class="std std-ref">“ZE_extension_linkonce_odr”</span></a></p></li>
@@ -478,13 +532,28 @@ the implementation will ignore extended structures that it does not support.</p>
 <li><p><a class="reference internal" href="EXT_MemoryProperties.html#ze-extension-device-memory-properties"><span class="std std-ref">“ZE_extension_device_memory_properties”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_Raytracing.html#ze-extension-raytracing"><span class="std std-ref">“ZE_extension_raytracing”</span></a></p></li>
 <li><p><a class="reference internal" href="EXT_Subgroups.html#ze-extension-subgroups"><span class="std std-ref">“ZE_extension_subgroups”</span></a></p></li>
-<li><p><a class="reference internal" href="../sysman/EXT_Exp_EccState.html#zes-extension-device-ecc-default-properties"><span class="std std-ref">“ZES_extension_device_ecc_default_properties”</span></a></p></li>
-<li><p><a class="reference internal" href="../sysman/EXT_EngineActivity.html#zes-extension-engine-activity"><span class="std std-ref">“ZES_extension_engine_activity”</span></a></p></li>
 </ul>
 </div></blockquote>
 </section>
-<section id="list-of-experimental-extensions">
-<h2>List of Experimental Extensions<a class="headerlink" href="#list-of-experimental-extensions" title="Link to this heading">#</a></h2>
+<section id="list-of-standard-tools-extensions">
+<h2>List of Standard Tools Extensions<a class="headerlink" href="#list-of-standard-tools-extensions" title="Link to this heading">#</a></h2>
+</section>
+<section id="list-of-standard-sysman-extensions">
+<h2>List of Standard Sysman Extensions<a class="headerlink" href="#list-of-standard-sysman-extensions" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="../sysman/EXT_Exp_EccState.html#zes-extension-device-ecc-default-properties"><span class="std std-ref">“ZES_extension_device_ecc_default_properties”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_EngineActivity.html#zes-extension-engine-activity"><span class="std std-ref">“ZES_extension_engine_activity”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_PciLinkSpeedDowngrade.html#zes-extension-pci-link-speed-downgrade"><span class="std std-ref">“ZES_extension_pci_link_speed_downgrade”</span></a></p></li>
+<li><p><a class="reference internal" href="../sysman/EXT_PowerLimits.html#zes-extension-power-limits"><span class="std std-ref">“ZES_extension_power_limits”</span></a></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="list-of-standard-runtime-extensions">
+<h2>List of Standard Runtime Extensions<a class="headerlink" href="#list-of-standard-runtime-extensions" title="Link to this heading">#</a></h2>
+</section>
+<section id="list-of-all-experimental-extensions">
+<h2>List of All Experimental Extensions<a class="headerlink" href="#list-of-all-experimental-extensions" title="Link to this heading">#</a></h2>
 <blockquote>
 <div><ul class="simple">
 <li><p><a class="reference internal" href="EXT_Exp_RTASBuilder.html#ze-experimental-rtas-builder"><span class="std std-ref">“ZE_experimental_rtas_builder”</span></a></p></li>
@@ -525,13 +594,70 @@ the implementation will ignore extended structures that it does not support.</p>
 </ul>
 </div></blockquote>
 </section>
-<section id="list-of-standard-sysman-extensions">
-<h2>List of Standard Sysman Extensions<a class="headerlink" href="#list-of-standard-sysman-extensions" title="Link to this heading">#</a></h2>
+<section id="driver-extensions-ie-implementation-non-standard">
+<h2>Driver Extensions (ie Implementation non-standard)<a class="headerlink" href="#driver-extensions-ie-implementation-non-standard" title="Link to this heading">#</a></h2>
+<p>Vendors may provide driver extensions that are similar to experimental extensions but vendor-specific.
+These extensions are either previews of functionality planned for future specifications or features not intended for ratification into the Level Zero specification.</p>
+<p>Driver extensions may be added or removed at any time and are not guaranteed to be forward- or backward-compatible between versions.
+They may not be supported in production driver releases and can appear or disappear from release to release.</p>
+<section id="id1">
+<h3>Requirements<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Extensions must use globally unique names for all macros, enums, structures, and functions</p>
+<ul>
+<li><p>Names must not conflict with existing or future standard APIs in the Level Zero specification</p></li>
+</ul>
+</li>
+<li><p>Extensions must have globally unique extension names</p>
+<ul>
+<li><p>Reported from <a class="reference internal" href="api.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a> or <a class="reference internal" href="../sysman/api.html#zesdrivergetextensionproperties"><span class="std std-ref">zesDriverGetExtensionProperties</span></a></p></li>
+<li><p>Retrievable using <a class="reference internal" href="api.html#zedrivergetextensionfunctionaddress"><span class="std std-ref">zeDriverGetExtensionFunctionAddress</span></a> or <a class="reference internal" href="../sysman/api.html#zesdrivergetextensionfunctionaddress"><span class="std std-ref">zesDriverGetExtensionFunctionAddress</span></a></p></li>
+</ul>
+</li>
+<li><p>Extensions with structure types (<cite>stypes</cite>) must use unique values</p>
+<ul>
+<li><p>Values must not conflict with existing or future standard APIs</p></li>
+<li><p>Values must be defined within the range reserved for driver extensions based on the driver type:</p></li>
+<li><p>GPU Drivers: <strong>0x00030000 to 0x0005ffff</strong></p></li>
+<li><p>NPU Drivers: <strong>0x00060000 to 0x0007ffff</strong></p></li>
+<li><p><strong>Important</strong> Identifiers outside of these ranges may conflict with future standard APIs and must be avoided.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id2">
+<h3>Naming Convention<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>The following naming conventions must be followed for <strong>driver extensions</strong>:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference internal" href="../sysman/EXT_PowerLimits.html#zes-extension-power-limits"><span class="std std-ref">“ZES_extension_power_limits”</span></a></p></li>
+<li><p><strong>Entrypoints:</strong> ze&lt;Vendor&gt;*Exp</p>
+<ul>
+<li><p>Example: <cite>zeIntelImageGetFormatModifiersSupportedExp</cite></p></li>
+</ul>
+</li>
+<li><p><strong>Macros:</strong> ZE_&lt;VENDOR&gt;_*EXP</p>
+<ul>
+<li><p>Example: <cite>ZE_INTEL_KERNEL_GET_PROGRAM_BINARY_EXP_NAME</cite></p></li>
+</ul>
+</li>
+<li><p><strong>Structures:</strong> ze_&lt;vendor&gt;_*_exp_*_t</p>
+<ul>
+<li><p>Example: <cite>ze_intel_queue_allocate_msix_hint_exp_desc_t</cite></p></li>
+</ul>
+</li>
+<li><p><strong>Enums:</strong> ZE_&lt;VENDOR&gt;_&lt;ENUM_NAME&gt;*_EXP_*</p>
+<ul>
+<li><p>Example: <cite>ZE_INTEL_DEVICE_BLOCK_ARRAY_EXP_PROPERTIES_VERSION_CURRENT</cite></p></li>
+</ul>
+</li>
+<li><p><strong>Descriptors:</strong> ZE_&lt;VENDOR&gt;_STRUCTURE_TYPE_*_EXP_DESC</p>
+<ul>
+<li><p>Example: <cite>ZE_INTEL_STRUCTURE_TYPE_DEVICE_COMMAND_LIST_WAIT_ON_MEMORY_DATA_SIZE_EXP_DESC</cite></p></li>
+</ul>
+</li>
 </ul>
 </div></blockquote>
+</section>
 </section>
 </section>
 
@@ -588,8 +714,15 @@ the implementation will ignore extended structures that it does not support.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-core-extensions">List of Standard Core Extensions</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-experimental-extensions">List of Experimental Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-tools-extensions">List of Standard Tools Extensions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-sysman-extensions">List of Standard Sysman Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-standard-runtime-extensions">List of Standard Runtime Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-of-all-experimental-extensions">List of All Experimental Extensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#driver-extensions-ie-implementation-non-standard">Driver Extensions (ie Implementation non-standard)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Naming Convention</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

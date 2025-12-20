@@ -3,7 +3,7 @@
 ==============================
 Core API
 ==============================
-oneAPI Level Zero Specification - Version 1.14.33
+oneAPI Level Zero Specification - Version 1.15.26
 
  
 
@@ -30,6 +30,7 @@ Common
     * :ref:`ze-base-cb-params-t`
     * :ref:`ze-base-properties-t`
     * :ref:`ze-base-desc-t`
+    * :ref:`ze-ipc-event-counter-based-handle-t`
 
 
 
@@ -142,6 +143,16 @@ ze_base_desc_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: ze_base_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-ipc-event-counter-based-handle-t:
+
+ze_ipc_event_counter_based_handle_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_ipc_event_counter_based_handle_t
     :project: LevelZero
     :members:
     :undoc-members:
@@ -398,6 +409,7 @@ Device
     * :ref:`zeDeviceGetStatus`
     * :ref:`zeDeviceGetGlobalTimestamps`
     * :ref:`zeDeviceSynchronize`
+    * :ref:`zeDeviceGetAggregatedCopyOffloadIncrementValue`
 
  
 * Enumerations
@@ -412,6 +424,7 @@ Device
     * :ref:`ze-memory-access-cap-flags-t`
     * :ref:`ze-device-cache-property-flags-t`
     * :ref:`ze-device-p2p-property-flags-t`
+    * :ref:`ze-device-event-properties-flags-t`
 
  
 * Structures
@@ -430,6 +443,7 @@ Device
     * :ref:`ze-device-image-properties-t`
     * :ref:`ze-device-external-memory-properties-t`
     * :ref:`ze-device-p2p-properties-t`
+    * :ref:`ze-device-event-properties-t`
 
 
 Device Functions
@@ -589,6 +603,15 @@ zeDeviceSynchronize
     :project: LevelZero
 
 
+.. _zeDeviceGetAggregatedCopyOffloadIncrementValue:
+
+zeDeviceGetAggregatedCopyOffloadIncrementValue
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeDeviceGetAggregatedCopyOffloadIncrementValue
+    :project: LevelZero
+
+
 
 Device Enums
 ------------------------------------------------------------------------------
@@ -672,6 +695,15 @@ ze_device_p2p_property_flags_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenenum:: ze_device_p2p_property_flag_t
+    :project: LevelZero
+
+
+.. _ze-device-event-properties-flags-t:
+
+ze_device_event_properties_flags_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_event_properties_flag_t
     :project: LevelZero
 
  
@@ -804,6 +836,16 @@ ze_device_p2p_properties_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: ze_device_p2p_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-device-event-properties-t:
+
+ze_device_event_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_event_properties_t
     :project: LevelZero
     :members:
     :undoc-members:
@@ -1432,11 +1474,16 @@ Event
     * :ref:`zeEventPoolCreate`
     * :ref:`zeEventPoolDestroy`
     * :ref:`zeEventCreate`
+    * :ref:`zeEventCounterBasedCreate`
     * :ref:`zeEventDestroy`
     * :ref:`zeEventPoolGetIpcHandle`
     * :ref:`zeEventPoolPutIpcHandle`
     * :ref:`zeEventPoolOpenIpcHandle`
     * :ref:`zeEventPoolCloseIpcHandle`
+    * :ref:`zeEventCounterBasedGetIpcHandle`
+    * :ref:`zeEventCounterBasedOpenIpcHandle`
+    * :ref:`zeEventCounterBasedCloseIpcHandle`
+    * :ref:`zeEventCounterBasedGetDeviceAddress`
     * :ref:`zeCommandListAppendSignalEvent`
     * :ref:`zeCommandListAppendWaitOnEvents`
     * :ref:`zeEventHostSignal`
@@ -1458,13 +1505,19 @@ Event
 
     * :ref:`ze-event-pool-flags-t`
     * :ref:`ze-event-scope-flags-t`
+    * :ref:`ze-event-counter-based-flags-t`
+    * :ref:`ze-event-sync-mode-flags-t`
 
  
 * Structures
 
 
     * :ref:`ze-event-pool-desc-t`
+    * :ref:`ze-event-sync-mode-desc-t`
     * :ref:`ze-event-desc-t`
+    * :ref:`ze-event-counter-based-desc-t`
+    * :ref:`ze-event-counter-based-external-sync-allocation-desc-t`
+    * :ref:`ze-event-counter-based-external-aggregate-storage-desc-t`
     * :ref:`ze-kernel-timestamp-data-t`
     * :ref:`ze-kernel-timestamp-result-t`
 
@@ -1497,6 +1550,15 @@ zeEventCreate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenfunction:: zeEventCreate
+    :project: LevelZero
+
+
+.. _zeEventCounterBasedCreate:
+
+zeEventCounterBasedCreate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventCounterBasedCreate
     :project: LevelZero
 
 
@@ -1542,6 +1604,42 @@ zeEventPoolCloseIpcHandle
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenfunction:: zeEventPoolCloseIpcHandle
+    :project: LevelZero
+
+
+.. _zeEventCounterBasedGetIpcHandle:
+
+zeEventCounterBasedGetIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventCounterBasedGetIpcHandle
+    :project: LevelZero
+
+
+.. _zeEventCounterBasedOpenIpcHandle:
+
+zeEventCounterBasedOpenIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventCounterBasedOpenIpcHandle
+    :project: LevelZero
+
+
+.. _zeEventCounterBasedCloseIpcHandle:
+
+zeEventCounterBasedCloseIpcHandle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventCounterBasedCloseIpcHandle
+    :project: LevelZero
+
+
+.. _zeEventCounterBasedGetDeviceAddress:
+
+zeEventCounterBasedGetDeviceAddress
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeEventCounterBasedGetDeviceAddress
     :project: LevelZero
 
 
@@ -1693,6 +1791,24 @@ ze_event_scope_flags_t
 .. doxygenenum:: ze_event_scope_flag_t
     :project: LevelZero
 
+
+.. _ze-event-counter-based-flags-t:
+
+ze_event_counter_based_flags_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_event_counter_based_flag_t
+    :project: LevelZero
+
+
+.. _ze-event-sync-mode-flags-t:
+
+ze_event_sync_mode_flags_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_event_sync_mode_flag_t
+    :project: LevelZero
+
  
 Event Structures
 ------------------------------------------------------------------------------
@@ -1707,12 +1823,52 @@ ze_event_pool_desc_t
     :members:
     :undoc-members:
 
+.. _ze-event-sync-mode-desc-t:
+
+ze_event_sync_mode_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_event_sync_mode_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
 .. _ze-event-desc-t:
 
 ze_event_desc_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: ze_event_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-event-counter-based-desc-t:
+
+ze_event_counter_based_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_event_counter_based_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-event-counter-based-external-sync-allocation-desc-t:
+
+ze_event_counter_based_external_sync_allocation_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_event_counter_based_external_sync_allocation_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-event-counter-based-external-aggregate-storage-desc-t:
+
+ze_event_counter_based_external_aggregate_storage_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_event_counter_based_external_aggregate_storage_desc_t
     :project: LevelZero
     :members:
     :undoc-members:
@@ -3056,6 +3212,7 @@ Virtual
     * :ref:`zeVirtualMemReserve`
     * :ref:`zeVirtualMemFree`
     * :ref:`zeVirtualMemQueryPageSize`
+    * :ref:`zePhysicalMemGetProperties`
     * :ref:`zePhysicalMemCreate`
     * :ref:`zePhysicalMemDestroy`
     * :ref:`zeVirtualMemMap`
@@ -3075,6 +3232,7 @@ Virtual
 
 
     * :ref:`ze-physical-mem-desc-t`
+    * :ref:`ze-physical-mem-properties-t`
 
 
 Virtual Functions
@@ -3105,6 +3263,15 @@ zeVirtualMemQueryPageSize
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenfunction:: zeVirtualMemQueryPageSize
+    :project: LevelZero
+
+
+.. _zePhysicalMemGetProperties:
+
+zePhysicalMemGetProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zePhysicalMemGetProperties
     :project: LevelZero
 
 
@@ -3194,6 +3361,16 @@ ze_physical_mem_desc_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: ze_physical_mem_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-physical-mem-properties-t:
+
+ze_physical_mem_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_physical_mem_properties_t
     :project: LevelZero
     :members:
     :undoc-members:
@@ -4264,6 +4441,173 @@ ze_kernel_allocation_exp_properties_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: ze_kernel_allocation_exp_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+ 
+
+Deviceusablememproperties
+============================================================
+* Enumerations
+
+
+    * :ref:`ze-device-usablemem-size-properties-ext-version-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-device-usablemem-size-ext-properties-t`
+
+
+
+
+Deviceusablememproperties Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-device-usablemem-size-properties-ext-version-t:
+
+ze_device_usablemem_size_properties_ext_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_device_usablemem_size_properties_ext_version_t
+    :project: LevelZero
+
+ 
+Deviceusablememproperties Structures
+------------------------------------------------------------------------------
+
+.. _ze-device-usablemem-size-ext-properties-t:
+
+ze_device_usablemem_size_ext_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_device_usablemem_size_ext_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+ 
+
+Imageformatsupport
+============================================================
+* Enumerations
+
+
+    * :ref:`ze-image-format-support-ext-version-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-image-format-support-ext-properties-t`
+
+
+
+
+Imageformatsupport Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-image-format-support-ext-version-t:
+
+ze_image_format_support_ext_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_image_format_support_ext_version_t
+    :project: LevelZero
+
+ 
+Imageformatsupport Structures
+------------------------------------------------------------------------------
+
+.. _ze-image-format-support-ext-properties-t:
+
+ze_image_format_support_ext_properties_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_image_format_support_ext_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+ 
+
+Ipcmemhandletype
+============================================================
+* Functions
+
+
+    * :ref:`zeMemGetIpcHandleWithProperties`
+
+ 
+* Enumerations
+
+
+    * :ref:`ze-ipc-mem-handle-type-ext-version-t`
+    * :ref:`ze-ipc-mem-handle-type-flags-t`
+
+ 
+* Structures
+
+
+    * :ref:`ze-ipc-mem-handle-type-ext-desc-t`
+
+
+Ipcmemhandletype Functions
+------------------------------------------------------------------------------
+
+
+.. _zeMemGetIpcHandleWithProperties:
+
+zeMemGetIpcHandleWithProperties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenfunction:: zeMemGetIpcHandleWithProperties
+    :project: LevelZero
+
+
+
+Ipcmemhandletype Enums
+------------------------------------------------------------------------------
+
+
+.. _ze-ipc-mem-handle-type-ext-version-t:
+
+ze_ipc_mem_handle_type_ext_version_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_ipc_mem_handle_type_ext_version_t
+    :project: LevelZero
+
+
+.. _ze-ipc-mem-handle-type-flags-t:
+
+ze_ipc_mem_handle_type_flags_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenenum:: ze_ipc_mem_handle_type_flag_t
+    :project: LevelZero
+
+ 
+Ipcmemhandletype Structures
+------------------------------------------------------------------------------
+
+.. _ze-ipc-mem-handle-type-ext-desc-t:
+
+ze_ipc_mem_handle_type_ext_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_ipc_mem_handle_type_ext_desc_t
     :project: LevelZero
     :members:
     :undoc-members:
@@ -6456,6 +6800,7 @@ Bindlessimages
     * :ref:`ze-image-pitched-exp-desc-t`
     * :ref:`ze-device-pitched-alloc-exp-properties-t`
     * :ref:`ze-pitched-alloc-2dimage-linear-pitch-exp-info-t`
+    * :ref:`ze-custom-pitch-exp-desc-t`
 
 
 Bindlessimages Functions
@@ -6542,6 +6887,16 @@ ze_pitched_alloc_2dimage_linear_pitch_exp_info_t
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. doxygenstruct:: ze_pitched_alloc_2dimage_linear_pitch_exp_info_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+.. _ze-custom-pitch-exp-desc-t:
+
+ze_custom_pitch_exp_desc_t
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. doxygenstruct:: ze_custom_pitch_exp_desc_t
     :project: LevelZero
     :members:
     :undoc-members:

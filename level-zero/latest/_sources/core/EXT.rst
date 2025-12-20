@@ -8,23 +8,18 @@ Objective
 
 Features which are device- or vendor-specific can be exposed as extensions.
 
-There are two types of extensions defined by this specification:
+There are three types of extensions defined by this specification:
 
 1. **Standard** - extensions ratified for inclusion into the current and all future versions of the specification.
 2. **Experimental** - extensions require additional experimentation and feedback from application vendors
    before ratification, therefore applications should not rely on experimental extensions in production.
+3. **Implementation non-standard** - extensions provided by a Level Zero driver that are not defined in this specification.
 
-In addition to above, an implementation may choose to provide non-standard extensions which are
-not defined in this specification.
+For **Implementation non-standard** extensions, it is the responsibility of the Level Zero Driver to define and document such non-standard extensions
+and also to ensure these extensions do not conflict or interfere with any features or extensions of the specification APIs or features.
 
-It is the responsibility of the implementation to define and document such non-standard extensions
-and also to ensure these extensions do not conflict or interfere with any features or extensions of the standard 
-core or sysman APIs.
-
-The following table summarizes the APIs to be used for discovery of different types of extensions. Aside
-from :ref:`zeDriverGetExtensionProperties` which has been available since inception of this specification,
-the other APIs have been added subsequently. The versions of spec in which the APIs were added is also
-noted in following table.
+The following table summarizes the APIs used for discovery of different extension types.
+:ref:`zeDriverGetExtensionProperties` has been available since inception of this specification, while other APIs were added in later versions as noted below.
 
 =============== =================== ============================= ========================================
  API Category   Version API added   Extension Type                Extension Discovery API
@@ -40,10 +35,10 @@ noted in following table.
 Requirements
 ============
 
-- Extensions must use globally unique names for macros, enums, structures and functions
-- Extensions must have globally unique extension names reported from :ref:`zeDriverGetExtensionProperties`\, :ref:`zesDriverGetExtensionProperties`
-- All extensions must be defined in this specification
-- Extensions must not break backwards compatibility of the standard APIs defined in this specification
+- Extensions must use globally unique names for macros, enums, structures, and functions
+- Extensions must have globally unique extension names reported from :ref:`zeDriverGetExtensionProperties` and :ref:`zesDriverGetExtensionProperties`
+- All standard and experimental extensions must be defined in this specification
+- Extensions must not break backwards compatibility of standard APIs
 - Standard extension versions must be backwards compatible with prior versions
 
 Naming Convention
@@ -51,50 +46,113 @@ Naming Convention
 
 The following naming conventions must be followed for **standard** extensions:
 
-  - All extension functions must be postfixed with `Ext`
-  - All macros must use all caps with the appropriate prefix. Core macros shall use `ZE_NAME_EXT`, Sysman macros shall use `ZES_NAME_EXT`
-  - All structures, enumerations and other types must follow snake case convention with appropriate prefix. Core structures and enumerations shall use `ze_name_ext_t` and Sysman shall use `zes_name_ext_t`
-  - All enumerator values must use all caps with appropriate prefix. Core enumerator values shall use `ZE_ENUM_EXT_ETOR_NAME` and Sysman shall use `ZES_ENUM_EXT_ETOR_NAME`
-  - All handle types must end with `ext_handle_t`
-  - All descriptor structures must end with `ext_desc_t`
-  - All property structures must end with `ext_properties_t`
-  - All flag enumerations must end with `ext_flags_t`
+  - **Functions:** Must be postfixed with `Ext`
+
+  - Example: zeDeviceImportExternalSemaphoreExt
+
+  - **Macros:** All caps with appropriate prefix
+
+    - Core: `ZE_NAME_EXT_*`
+    - Sysman: `ZES_NAME_EXT_*`
+
+    - Example: ZE_MAX_FABRIC_EDGE_MODEL_EXT_SIZE
+
+  - **Structures, enumerations, and other types:** Snake case with appropriate prefix
+
+    - Core: `ze_name_ext_*_t`
+    - Sysman: `zes_name_ext_*_t`
+
+    - Example(s): ze_device_ip_version_ext_t or ze_cache_reservation_ext_desc_t
+
+  - **Enumerator values:** All caps with appropriate prefix
+
+    - Core: `ZE_ENUM_EXT_ETOR_NAME`
+    - Sysman: `ZES_ENUM_EXT_ETOR_NAME`
+
+    - Example: ZE_RTAS_BUILDER_EXT_FLAG_RESERVED
+
+  - **Handle types:** Must end with `ext_handle_t`
+
+  - Example: ze_external_semaphore_ext_handle_t 
+
+  - **Descriptor structures:** Must end with `ext_desc_t`
+
+  - Example: ze_cache_reservation_ext_desc_t
+
+  - **Property structures:** Must end with `ext_properties_t`
+
+  - Example: ze_driver_ddi_handles_ext_properties_t
+
+  - **Flag enumerations:** Must end with `ext_flags_t`
+
+  - Example: ze_device_raytracing_ext_flags_t
 
 The following naming conventions must be followed for **experimental** extensions:
 
-  - Experimental extensions may be added and removed from the driver at any time.
-  - Experimental extensions are not guaranteed to be forward- or backward-compatible between versions.
-  - Experimental extensions are not guaranteed to be supported in production driver releases; and may appear and disappear from release to release.
-  - All extension functions must be postfixed with `Exp`. The vendor name must follow the `ze` or `zes` prefix and follow CamelCase convention.
-  - All macros must use all caps with the appropriate prefix. Core macros shall use `ZE_NAME_EXP`, Sysman macros shall use `ZES_NAME_EXP`. The vendor name must follow `ZE` or `ZES` prefix.
-  - All structures, enumerations and other types must follow snake case convention with appropriate prefix. Core structures and enumerations shall use `ze_name_exp_t` and Sysman shall use `zes_name_exp_t`. The vendor name must follow `ze` or `ZES` prefix.
-  - All enumerator values must use all caps with appropriate prefix. Core enumerator values shall use `ZE_ENUM_EXP_ETOR_NAME` and Sysman shall use `ZES_ENUM_EXP_ETOR_NAME`. The vendor name must follow `ZE` or `ZES` prefix.
-  - All handle types must end with `exp_handle_t`
-  - All descriptor structures must end with `exp_desc_t`
-  - All property structures must end with `exp_properties_t`
-  - All flag enumerations must end with `exp_flags_t`
+  **Important:** Experimental extensions may be added and removed at any time, are not guaranteed to be forward- or backward-compatible between versions, and may not be supported in production driver releases.
+
+  - **Functions:** Must be postfixed with `Exp`
+
+    - Example: zeCommandListCreateCloneExp
+
+  - **Macros:** All caps with appropriate prefix
+
+    - Core: `ZE_NAME_EXP_*`
+    - Sysman: `ZES_NAME_EXP_*`
+
+    - Example: ZE_MODULE_PROGRAM_EXP_NAME
+
+  - **Structures, enumerations, and other types:** Snake case with appropriate prefix
+
+    - Core: `ze_name_exp_*_t`
+    - Sysman: `zes_name_exp_*_t`
+
+    - Example(s): ze_command_list_clone_exp_version_t or ze_image_memory_properties_exp_t
+
+  - **Enumerator values:** All caps with appropriate prefix
+
+    - Core: `ZE_ENUM_EXP_ETOR_NAME`
+    - Sysman: `ZES_ENUM_EXP_ETOR_NAME`
+
+    - Example: ZE_COMMAND_LIST_CLONE_EXP_VERSION_CURRENT
+
+  - **Handle types:** Must end with `exp_handle_t`
+
+  - Example: ze_rtas_builder_exp_handle_t
+
+  - **Descriptor structures:** Must end with `exp_desc_t`
+
+  - Example: ze_mutable_command_id_exp_desc_t
+
+  - **Property structures:** Must end with `exp_properties_t`
+
+  - Example: ze_fabric_vertex_exp_properties_t
+
+  - **Flag enumerations:** Must end with `exp_flags_t`
+
+  - Example: ze_rtas_device_exp_flags_t
+
 
 Extending Enumerations
 ----------------------
 
-Any existing enumeration may be extended by adding new etors.
+Any existing enumeration may be extended by adding new etors (enumerator values).
 Etors must still use extension naming convention and values should be assigned to avoid future compatibility issues.
 
 Extending Structures
 --------------------
 
-Any structure derived from base descriptor or base property structure types may be extended using structure chains.
-While it is possible to use other methods, this is the required method for extending existing structures.
+Structures derived from base descriptor or base property types may be extended using structure chains.
+This is the required method for extending existing structures.
 
-A structure chain can contain more than one extension structure, in any order. Therefore, extensions should not be
-dependent on their order relative to other extensions and the implementation must be order agnostic. In addition,
-the implementation will ignore extended structures that it does not support.
+Structure chains can contain multiple extension structures in any order. Extensions must not depend on 
+their order relative to other extensions, and implementations must be order agnostic. Implementations 
+will ignore extended structures that are not supported.
 
-The extension must document the specific structures and functions that may be extended using the structure chain.
+Each extension must document which specific structures and functions can be extended using the structure chain.
 
 List of Standard Core Extensions
 ================================
-
     - :ref:`"ZE_extension_device_cache_line_size" <ZE_extension_device_cache_line_size>`
     - :ref:`"ZE_extension_eu_count" <ZE_extension_eu_count>`
     - :ref:`"ZE_extension_pci_properties" <ZE_extension_pci_properties>`
@@ -105,14 +163,17 @@ List of Standard Core Extensions
     - :ref:`"ZE_extension_device_luid" <ZE_extension_device_luid>`
     - :ref:`"ZE_extension_device_vector_sizes" <ZE_extension_device_vector_sizes>`
     - :ref:`"ZE_extension_device_ip_version" <ZE_extension_device_ip_version>`
+    - :ref:`"ZE_extension_device_usablemem_size_properties" <ZE_extension_device_usablemem_size_properties>`
     - :ref:`"ZE_extension_driver_ddi_handles" <ZE_extension_driver_ddi_handles>`
     - :ref:`"ZE_extension_event_query_kernel_timestamps" <ZE_extension_event_query_kernel_timestamps>`
     - :ref:`"ZE_extension_external_memmap_sysmem" <ZE_extension_external_memmap_sysmem>`
     - :ref:`"ZE_extension_float_atomics" <ZE_extension_float_atomics>`
     - :ref:`"ZE_extension_image_copy" <ZE_extension_image_copy>`
+    - :ref:`"ZE_extension_image_format_support" <ZE_extension_image_format_support>`
     - :ref:`"ZE_extension_image_query_alloc_properties" <ZE_extension_image_query_alloc_properties>`
     - :ref:`"ZE_extension_image_view" <ZE_extension_image_view>`
     - :ref:`"ZE_extension_image_view_planar" <ZE_extension_image_view_planar>`
+    - :ref:`"ZE_extension_ipc_mem_handle_type" <ZE_extension_ipc_mem_handle_type>`
     - :ref:`"ZE_extension_kernel_max_group_size_properties" <ZE_extension_kernel_max_group_size_properties>`
     - :ref:`"ZE_extension_linkage_inspection" <ZE_extension_linkage_inspection>`
     - :ref:`"ZE_extension_linkonce_odr" <ZE_extension_linkonce_odr>`
@@ -121,12 +182,22 @@ List of Standard Core Extensions
     - :ref:`"ZE_extension_device_memory_properties" <ZE_extension_device_memory_properties>`
     - :ref:`"ZE_extension_raytracing" <ZE_extension_raytracing>`
     - :ref:`"ZE_extension_subgroups" <ZE_extension_subgroups>`
+
+List of Standard Tools Extensions
+=================================
+
+List of Standard Sysman Extensions
+==================================
     - :ref:`"ZES_extension_device_ecc_default_properties" <ZES_extension_device_ecc_default_properties>`
     - :ref:`"ZES_extension_engine_activity" <ZES_extension_engine_activity>`
+    - :ref:`"ZES_extension_pci_link_speed_downgrade" <ZES_extension_pci_link_speed_downgrade>`
+    - :ref:`"ZES_extension_power_limits" <ZES_extension_power_limits>`
 
+List of Standard Runtime Extensions
+===================================
 
-List of Experimental Extensions
-===============================
+List of All Experimental Extensions
+===================================
 
     - :ref:`"ZE_experimental_rtas_builder" <ZE_experimental_rtas_builder>`
     - :ref:`"ZE_experimental_bandwidth_properties" <ZE_experimental_bandwidth_properties>`
@@ -164,7 +235,57 @@ List of Experimental Extensions
     - :ref:`"ZES_experimental_sysman_device_mapping" <ZES_experimental_sysman_device_mapping>`
     - :ref:`"ZES_experimental_virtual_function_management" <ZES_experimental_virtual_function_management>`
 
-List of Standard Sysman Extensions
-==================================
+Driver Extensions (ie Implementation non-standard)
+==================================================
+Vendors may provide driver extensions that are similar to experimental extensions but vendor-specific. 
+These extensions are either previews of functionality planned for future specifications or features not intended for ratification into the Level Zero specification.
 
-    - :ref:`"ZES_extension_power_limits" <ZES_extension_power_limits>`
+Driver extensions may be added or removed at any time and are not guaranteed to be forward- or backward-compatible between versions. 
+They may not be supported in production driver releases and can appear or disappear from release to release.
+
+Requirements
+------------
+- Extensions must use globally unique names for all macros, enums, structures, and functions
+
+  - Names must not conflict with existing or future standard APIs in the Level Zero specification
+
+- Extensions must have globally unique extension names
+
+  - Reported from :ref:`zeDriverGetExtensionProperties` or :ref:`zesDriverGetExtensionProperties`
+  - Retrievable using :ref:`zeDriverGetExtensionFunctionAddress` or :ref:`zesDriverGetExtensionFunctionAddress`
+
+- Extensions with structure types (`stypes`) must use unique values
+
+  - Values must not conflict with existing or future standard APIs
+  - Values must be defined within the range reserved for driver extensions based on the driver type:
+
+  - GPU Drivers: **0x00030000 to 0x0005ffff**
+
+  - NPU Drivers: **0x00060000 to 0x0007ffff**
+
+  - **Important** Identifiers outside of these ranges may conflict with future standard APIs and must be avoided.
+
+
+Naming Convention
+-----------------
+The following naming conventions must be followed for **driver extensions**:
+
+  - **Entrypoints:** ze<Vendor>*Exp
+
+    - Example: `zeIntelImageGetFormatModifiersSupportedExp`
+
+  - **Macros:** ZE_<VENDOR>_*EXP
+
+    - Example: `ZE_INTEL_KERNEL_GET_PROGRAM_BINARY_EXP_NAME`
+
+  - **Structures:** ze_<vendor>_*_exp_*_t
+
+    - Example: `ze_intel_queue_allocate_msix_hint_exp_desc_t`
+
+  - **Enums:** ZE_<VENDOR>_<ENUM_NAME>*_EXP_*
+
+    - Example: `ZE_INTEL_DEVICE_BLOCK_ARRAY_EXP_PROPERTIES_VERSION_CURRENT`
+
+  - **Descriptors:** ZE_<VENDOR>_STRUCTURE_TYPE_*_EXP_DESC
+
+    - Example: `ZE_INTEL_STRUCTURE_TYPE_DEVICE_COMMAND_LIST_WAIT_ON_MEMORY_DATA_SIZE_EXP_DESC`

@@ -150,6 +150,7 @@
 <li class="toctree-l1"><a class="reference internal" href="core/PROG.html">Core Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools/PROG.html">Tools Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runtime/PROG.html">Runtime Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core/SPIRV.html">SPIR-V Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="core/EXT.html">Extensions</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -287,6 +288,8 @@ document.write(`
       <li><a href="core/api.html#_CPPv4N16ze_api_version_t19ZE_API_VERSION_1_13E">ze_api_version_t::ZE_API_VERSION_1_13 (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N16ze_api_version_t19ZE_API_VERSION_1_14E">ze_api_version_t::ZE_API_VERSION_1_14 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N16ze_api_version_t19ZE_API_VERSION_1_15E">ze_api_version_t::ZE_API_VERSION_1_15 (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N16ze_api_version_t18ZE_API_VERSION_1_2E">ze_api_version_t::ZE_API_VERSION_1_2 (C++ enumerator)</a>
 </li>
@@ -564,6 +567,16 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N16ze_copy_region_t5widthE">ze_copy_region_t::width (C++ member)</a>
 </li>
+      <li><a href="core/api.html#_CPPv426ze_custom_pitch_exp_desc_t">ze_custom_pitch_exp_desc_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_custom_pitch_exp_desc_t5pNextE">ze_custom_pitch_exp_desc_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_custom_pitch_exp_desc_t8rowPitchE">ze_custom_pitch_exp_desc_t::rowPitch (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_custom_pitch_exp_desc_t10slicePitchE">ze_custom_pitch_exp_desc_t::slicePitch (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N26ze_custom_pitch_exp_desc_t5stypeE">ze_custom_pitch_exp_desc_t::stype (C++ member)</a>
+</li>
       <li><a href="core/api.html#_CPPv431ze_device_cache_line_size_ext_t">ze_device_cache_line_size_ext_t (C++ struct)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N31ze_device_cache_line_size_ext_t13cacheLineSizeE">ze_device_cache_line_size_ext_t::cacheLineSize (C++ member)</a>
@@ -621,6 +634,26 @@ document.write(`
       <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t5stypeE">ze_device_compute_properties_t::stype (C++ member)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N30ze_device_compute_properties_t13subGroupSizesE">ze_device_compute_properties_t::subGroupSizes (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433ze_device_event_properties_flag_t">ze_device_event_properties_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_device_event_properties_flag_t72ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGEE">ze_device_event_properties_flag_t::ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_device_event_properties_flag_t69ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_EXTERNAL_INTERRUPT_WAITE">ze_device_event_properties_flag_t::ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_EXTERNAL_INTERRUPT_WAIT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_device_event_properties_flag_t70ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATIONE">ze_device_event_properties_flag_t::ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_device_event_properties_flag_t49ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPCE">ze_device_event_properties_flag_t::ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_device_event_properties_flag_t44ZE_DEVICE_EVENT_PROPERTIES_FLAG_FORCE_UINT32E">ze_device_event_properties_flag_t::ZE_DEVICE_EVENT_PROPERTIES_FLAG_FORCE_UINT32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ze_device_event_properties_t">ze_device_event_properties_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_event_properties_t5flagsE">ze_device_event_properties_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_event_properties_t5pNextE">ze_device_event_properties_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_device_event_properties_t5stypeE">ze_device_event_properties_t::stype (C++ member)</a>
 </li>
       <li><a href="core/api.html#_CPPv438ze_device_external_memory_properties_t">ze_device_external_memory_properties_t (C++ struct)</a>
 </li>
@@ -1044,6 +1077,22 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N16ze_device_type_t18ZE_DEVICE_TYPE_VPUE">ze_device_type_t::ZE_DEVICE_TYPE_VPU (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv441ze_device_usablemem_size_ext_properties_t">ze_device_usablemem_size_ext_properties_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N41ze_device_usablemem_size_ext_properties_t17currUsableMemSizeE">ze_device_usablemem_size_ext_properties_t::currUsableMemSize (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N41ze_device_usablemem_size_ext_properties_t5pNextE">ze_device_usablemem_size_ext_properties_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N41ze_device_usablemem_size_ext_properties_t5stypeE">ze_device_usablemem_size_ext_properties_t::stype (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv449ze_device_usablemem_size_properties_ext_version_t">ze_device_usablemem_size_properties_ext_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N49ze_device_usablemem_size_properties_ext_version_t51ZE_DEVICE_USABLEMEM_SIZE_PROPERTIES_EXT_VERSION_1_0E">ze_device_usablemem_size_properties_ext_version_t::ZE_DEVICE_USABLEMEM_SIZE_PROPERTIES_EXT_VERSION_1_0 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N49ze_device_usablemem_size_properties_ext_version_t55ZE_DEVICE_USABLEMEM_SIZE_PROPERTIES_EXT_VERSION_CURRENTE">ze_device_usablemem_size_properties_ext_version_t::ZE_DEVICE_USABLEMEM_SIZE_PROPERTIES_EXT_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N49ze_device_usablemem_size_properties_ext_version_t60ZE_DEVICE_USABLEMEM_SIZE_PROPERTIES_EXT_VERSION_FORCE_UINT32E">ze_device_usablemem_size_properties_ext_version_t::ZE_DEVICE_USABLEMEM_SIZE_PROPERTIES_EXT_VERSION_FORCE_UINT32 (C++ enumerator)</a>
+</li>
       <li><a href="core/api.html#_CPPv416ze_device_uuid_t">ze_device_uuid_t (C++ struct)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N16ze_device_uuid_t2idE">ze_device_uuid_t::id (C++ member)</a>
@@ -1176,6 +1225,58 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N25ze_eu_count_ext_version_t36ZE_EU_COUNT_EXT_VERSION_FORCE_UINT32E">ze_eu_count_ext_version_t::ZE_EU_COUNT_EXT_VERSION_FORCE_UINT32 (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv429ze_event_counter_based_desc_t">ze_event_counter_based_desc_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_desc_t5flagsE">ze_event_counter_based_desc_t::flags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_desc_t5pNextE">ze_event_counter_based_desc_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_desc_t6signalE">ze_event_counter_based_desc_t::signal (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_desc_t5stypeE">ze_event_counter_based_desc_t::stype (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_desc_t4waitE">ze_event_counter_based_desc_t::wait (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv456ze_event_counter_based_external_aggregate_storage_desc_t">ze_event_counter_based_external_aggregate_storage_desc_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N56ze_event_counter_based_external_aggregate_storage_desc_t15completionValueE">ze_event_counter_based_external_aggregate_storage_desc_t::completionValue (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N56ze_event_counter_based_external_aggregate_storage_desc_t13deviceAddressE">ze_event_counter_based_external_aggregate_storage_desc_t::deviceAddress (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N56ze_event_counter_based_external_aggregate_storage_desc_t14incrementValueE">ze_event_counter_based_external_aggregate_storage_desc_t::incrementValue (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N56ze_event_counter_based_external_aggregate_storage_desc_t5pNextE">ze_event_counter_based_external_aggregate_storage_desc_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N56ze_event_counter_based_external_aggregate_storage_desc_t5stypeE">ze_event_counter_based_external_aggregate_storage_desc_t::stype (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv454ze_event_counter_based_external_sync_allocation_desc_t">ze_event_counter_based_external_sync_allocation_desc_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N54ze_event_counter_based_external_sync_allocation_desc_t15completionValueE">ze_event_counter_based_external_sync_allocation_desc_t::completionValue (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N54ze_event_counter_based_external_sync_allocation_desc_t13deviceAddressE">ze_event_counter_based_external_sync_allocation_desc_t::deviceAddress (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N54ze_event_counter_based_external_sync_allocation_desc_t11hostAddressE">ze_event_counter_based_external_sync_allocation_desc_t::hostAddress (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N54ze_event_counter_based_external_sync_allocation_desc_t5pNextE">ze_event_counter_based_external_sync_allocation_desc_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N54ze_event_counter_based_external_sync_allocation_desc_t5stypeE">ze_event_counter_based_external_sync_allocation_desc_t::stype (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ze_event_counter_based_flag_t">ze_event_counter_based_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_flag_t44ZE_EVENT_COUNTER_BASED_FLAG_DEVICE_TIMESTAMPE">ze_event_counter_based_flag_t::ZE_EVENT_COUNTER_BASED_FLAG_DEVICE_TIMESTAMP (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_flag_t40ZE_EVENT_COUNTER_BASED_FLAG_FORCE_UINT32E">ze_event_counter_based_flag_t::ZE_EVENT_COUNTER_BASED_FLAG_FORCE_UINT32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_flag_t42ZE_EVENT_COUNTER_BASED_FLAG_HOST_TIMESTAMPE">ze_event_counter_based_flag_t::ZE_EVENT_COUNTER_BASED_FLAG_HOST_TIMESTAMP (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_flag_t40ZE_EVENT_COUNTER_BASED_FLAG_HOST_VISIBLEE">ze_event_counter_based_flag_t::ZE_EVENT_COUNTER_BASED_FLAG_HOST_VISIBLE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_flag_t37ZE_EVENT_COUNTER_BASED_FLAG_IMMEDIATEE">ze_event_counter_based_flag_t::ZE_EVENT_COUNTER_BASED_FLAG_IMMEDIATE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_flag_t31ZE_EVENT_COUNTER_BASED_FLAG_IPCE">ze_event_counter_based_flag_t::ZE_EVENT_COUNTER_BASED_FLAG_IPC (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_event_counter_based_flag_t41ZE_EVENT_COUNTER_BASED_FLAG_NON_IMMEDIATEE">ze_event_counter_based_flag_t::ZE_EVENT_COUNTER_BASED_FLAG_NON_IMMEDIATE (C++ enumerator)</a>
+</li>
       <li><a href="core/api.html#_CPPv415ze_event_desc_t">ze_event_desc_t (C++ struct)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N15ze_event_desc_t5indexE">ze_event_desc_t::index (C++ member)</a>
@@ -1285,6 +1386,26 @@ document.write(`
       <li><a href="core/api.html#_CPPv4N21ze_event_scope_flag_t24ZE_EVENT_SCOPE_FLAG_HOSTE">ze_event_scope_flag_t::ZE_EVENT_SCOPE_FLAG_HOST (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N21ze_event_scope_flag_t29ZE_EVENT_SCOPE_FLAG_SUBDEVICEE">ze_event_scope_flag_t::ZE_EVENT_SCOPE_FLAG_SUBDEVICE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ze_event_sync_mode_desc_t">ze_event_sync_mode_desc_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_desc_t19externalInterruptIdE">ze_event_sync_mode_desc_t::externalInterruptId (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_desc_t5pNextE">ze_event_sync_mode_desc_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_desc_t5stypeE">ze_event_sync_mode_desc_t::stype (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_desc_t13syncModeFlagsE">ze_event_sync_mode_desc_t::syncModeFlags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425ze_event_sync_mode_flag_t">ze_event_sync_mode_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_flag_t47ZE_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAITE">ze_event_sync_mode_flag_t::ZE_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_flag_t36ZE_EVENT_SYNC_MODE_FLAG_FORCE_UINT32E">ze_event_sync_mode_flag_t::ZE_EVENT_SYNC_MODE_FLAG_FORCE_UINT32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_flag_t38ZE_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAITE">ze_event_sync_mode_flag_t::ZE_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAIT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_event_sync_mode_flag_t40ZE_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPTE">ze_event_sync_mode_flag_t::ZE_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPT (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv436ze_external_memmap_sysmem_ext_desc_t">ze_external_memmap_sysmem_ext_desc_t (C++ struct)</a>
 </li>
@@ -1756,6 +1877,22 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YVYUE">ze_image_format_layout_t::ZE_IMAGE_FORMAT_LAYOUT_YVYU (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv440ze_image_format_support_ext_properties_t">ze_image_format_support_ext_properties_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N40ze_image_format_support_ext_properties_t5pNextE">ze_image_format_support_ext_properties_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N40ze_image_format_support_ext_properties_t5stypeE">ze_image_format_support_ext_properties_t::stype (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N40ze_image_format_support_ext_properties_t9supportedE">ze_image_format_support_ext_properties_t::supported (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv437ze_image_format_support_ext_version_t">ze_image_format_support_ext_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N37ze_image_format_support_ext_version_t39ZE_IMAGE_FORMAT_SUPPORT_EXT_VERSION_1_0E">ze_image_format_support_ext_version_t::ZE_IMAGE_FORMAT_SUPPORT_EXT_VERSION_1_0 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N37ze_image_format_support_ext_version_t43ZE_IMAGE_FORMAT_SUPPORT_EXT_VERSION_CURRENTE">ze_image_format_support_ext_version_t::ZE_IMAGE_FORMAT_SUPPORT_EXT_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N37ze_image_format_support_ext_version_t48ZE_IMAGE_FORMAT_SUPPORT_EXT_VERSION_FORCE_UINT32E">ze_image_format_support_ext_version_t::ZE_IMAGE_FORMAT_SUPPORT_EXT_VERSION_FORCE_UINT32 (C++ enumerator)</a>
+</li>
       <li><a href="core/api.html#_CPPv425ze_image_format_swizzle_t">ze_image_format_swizzle_t (C++ enum)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_0E">ze_image_format_swizzle_t::ZE_IMAGE_FORMAT_SWIZZLE_0 (C++ enumerator)</a>
@@ -1765,6 +1902,8 @@ document.write(`
       <li><a href="core/api.html#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_AE">ze_image_format_swizzle_t::ZE_IMAGE_FORMAT_SWIZZLE_A (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_BE">ze_image_format_swizzle_t::ZE_IMAGE_FORMAT_SWIZZLE_B (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_DE">ze_image_format_swizzle_t::ZE_IMAGE_FORMAT_SWIZZLE_D (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N25ze_image_format_swizzle_t36ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32E">ze_image_format_swizzle_t::ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32 (C++ enumerator)</a>
 </li>
@@ -1964,6 +2103,10 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N14ze_init_flag_t21ZE_INIT_FLAG_VPU_ONLYE">ze_init_flag_t::ZE_INIT_FLAG_VPU_ONLY (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv435ze_ipc_event_counter_based_handle_t">ze_ipc_event_counter_based_handle_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N35ze_ipc_event_counter_based_handle_t4dataE">ze_ipc_event_counter_based_handle_t::data (C++ member)</a>
+</li>
       <li><a href="core/api.html#_CPPv426ze_ipc_event_pool_handle_t">ze_ipc_event_pool_handle_t (C++ struct)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N26ze_ipc_event_pool_handle_t4dataE">ze_ipc_event_pool_handle_t::data (C++ member)</a>
@@ -1971,6 +2114,30 @@ document.write(`
       <li><a href="core/api.html#_CPPv419ze_ipc_mem_handle_t">ze_ipc_mem_handle_t (C++ struct)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_ipc_mem_handle_t4dataE">ze_ipc_mem_handle_t::data (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433ze_ipc_mem_handle_type_ext_desc_t">ze_ipc_mem_handle_type_ext_desc_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5pNextE">ze_ipc_mem_handle_type_ext_desc_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5stypeE">ze_ipc_mem_handle_type_ext_desc_t::stype (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t9typeFlagsE">ze_ipc_mem_handle_type_ext_desc_t::typeFlags (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv436ze_ipc_mem_handle_type_ext_version_t">ze_ipc_mem_handle_type_ext_version_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_ipc_mem_handle_type_ext_version_t38ZE_IPC_MEM_HANDLE_TYPE_EXT_VERSION_1_0E">ze_ipc_mem_handle_type_ext_version_t::ZE_IPC_MEM_HANDLE_TYPE_EXT_VERSION_1_0 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_ipc_mem_handle_type_ext_version_t42ZE_IPC_MEM_HANDLE_TYPE_EXT_VERSION_CURRENTE">ze_ipc_mem_handle_type_ext_version_t::ZE_IPC_MEM_HANDLE_TYPE_EXT_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N36ze_ipc_mem_handle_type_ext_version_t47ZE_IPC_MEM_HANDLE_TYPE_EXT_VERSION_FORCE_UINT32E">ze_ipc_mem_handle_type_ext_version_t::ZE_IPC_MEM_HANDLE_TYPE_EXT_VERSION_FORCE_UINT32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv429ze_ipc_mem_handle_type_flag_t">ze_ipc_mem_handle_type_flag_t (C++ enum)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_ipc_mem_handle_type_flag_t35ZE_IPC_MEM_HANDLE_TYPE_FLAG_DEFAULTE">ze_ipc_mem_handle_type_flag_t::ZE_IPC_MEM_HANDLE_TYPE_FLAG_DEFAULT (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_ipc_mem_handle_type_flag_t45ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLEE">ze_ipc_mem_handle_type_flag_t::ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N29ze_ipc_mem_handle_type_flag_t40ZE_IPC_MEM_HANDLE_TYPE_FLAG_FORCE_UINT32E">ze_ipc_mem_handle_type_flag_t::ZE_IPC_MEM_HANDLE_TYPE_FLAG_FORCE_UINT32 (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv420ze_ipc_memory_flag_t">ze_ipc_memory_flag_t (C++ enum)</a>
 </li>
@@ -2573,6 +2740,16 @@ document.write(`
       <li><a href="core/api.html#_CPPv4N22ze_physical_mem_flag_t37ZE_PHYSICAL_MEM_FLAG_ALLOCATE_ON_HOSTE">ze_physical_mem_flag_t::ZE_PHYSICAL_MEM_FLAG_ALLOCATE_ON_HOST (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N22ze_physical_mem_flag_t33ZE_PHYSICAL_MEM_FLAG_FORCE_UINT32E">ze_physical_mem_flag_t::ZE_PHYSICAL_MEM_FLAG_FORCE_UINT32 (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv428ze_physical_mem_properties_t">ze_physical_mem_properties_t (C++ struct)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_physical_mem_properties_t2idE">ze_physical_mem_properties_t::id (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_physical_mem_properties_t5pNextE">ze_physical_mem_properties_t::pNext (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_physical_mem_properties_t4sizeE">ze_physical_mem_properties_t::size (C++ member)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N28ze_physical_mem_properties_t5stypeE">ze_physical_mem_properties_t::stype (C++ member)</a>
 </li>
       <li><a href="core/api.html#_CPPv448ze_pitched_alloc_2dimage_linear_pitch_exp_info_t">ze_pitched_alloc_2dimage_linear_pitch_exp_info_t (C++ struct)</a>
 </li>
@@ -3618,11 +3795,15 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESC (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_CUSTOM_PITCH_EXP_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_CUSTOM_PITCH_EXP_DESC (C++ enumerator)</a>
+</li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXTE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXT (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_EVENT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_EVENT_PROPERTIES (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DEVICE_EXTERNAL_MEMORY_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_EXTERNAL_MEMORY_PROPERTIES (C++ enumerator)</a>
 </li>
@@ -3652,6 +3833,8 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIES (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t54ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIES (C++ enumerator)</a>
+</li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_DEVICE_VECTOR_WIDTH_PROPERTIES_EXTE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DEVICE_VECTOR_WIDTH_PROPERTIES_EXT (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_DDI_HANDLES_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_DRIVER_DDI_HANDLES_EXT_PROPERTIES (C++ enumerator)</a>
@@ -3664,6 +3847,12 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_EU_COUNT_EXTE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EU_COUNT_EXT (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_DESC (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t69ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE_DESC (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t67ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESC (C++ enumerator)</a>
+</li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_EVENT_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_DESC (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t33ZE_STRUCTURE_TYPE_EVENT_POOL_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_POOL_DESC (C++ enumerator)</a>
@@ -3671,6 +3860,8 @@ document.write(`
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t62ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIES (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t70ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIES (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_SYNC_MODE_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EVENT_SYNC_MODE_DESC (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_EXTERNAL_MEMMAP_SYSMEM_EXT_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_EXTERNAL_MEMMAP_SYSMEM_EXT_DESC (C++ enumerator)</a>
 </li>
@@ -3698,6 +3889,8 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_FABRIC_VERTEX_EXP_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_FABRIC_VERTEX_EXP_PROPERTIES (C++ enumerator)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_FENCE_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_FENCE_DESC (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_FLOAT_ATOMIC_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_FLOAT_ATOMIC_EXT_PROPERTIES (C++ enumerator)</a>
@@ -3710,6 +3903,8 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_IMAGE_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_IMAGE_DESC (C++ enumerator)</a>
 </li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_IMAGE_FORMAT_SUPPORT_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_IMAGE_FORMAT_SUPPORT_EXT_PROPERTIES (C++ enumerator)</a>
+</li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_IMAGE_MEMORY_EXP_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_IMAGE_MEMORY_EXP_PROPERTIES (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t34ZE_STRUCTURE_TYPE_IMAGE_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_IMAGE_PROPERTIES (C++ enumerator)</a>
@@ -3719,6 +3914,8 @@ document.write(`
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXT_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXT_DESC (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESC (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESC (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_KERNEL_ALLOCATION_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_KERNEL_ALLOCATION_PROPERTIES (C++ enumerator)</a>
 </li>
@@ -3764,11 +3961,11 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC (C++ enumerator)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t36ZE_STRUCTURE_TYPE_PCI_EXT_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_PCI_EXT_PROPERTIES (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESCE">ze_structure_type_t::ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC (C++ enumerator)</a>
+</li>
+      <li><a href="core/api.html#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIESE">ze_structure_type_t::ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES (C++ enumerator)</a>
 </li>
       <li><a href="core/api.html#_CPPv4N19ze_structure_type_t61ZE_STRUCTURE_TYPE_PITCHED_ALLOC_2DIMAGE_LINEAR_PITCH_EXP_INFOE">ze_structure_type_t::ZE_STRUCTURE_TYPE_PITCHED_ALLOC_2DIMAGE_LINEAR_PITCH_EXP_INFO (C++ enumerator)</a>
 </li>
@@ -3978,6 +4175,8 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv411zeDeviceGet18ze_driver_handle_tP8uint32_tP18ze_device_handle_t">zeDeviceGet (C++ function)</a>
 </li>
+      <li><a href="core/api.html#_CPPv446zeDeviceGetAggregatedCopyOffloadIncrementValue18ze_device_handle_tP8uint32_t">zeDeviceGetAggregatedCopyOffloadIncrementValue (C++ function)</a>
+</li>
       <li><a href="core/api.html#_CPPv426zeDeviceGetCacheProperties18ze_device_handle_tP8uint32_tP28ze_device_cache_properties_t">zeDeviceGetCacheProperties (C++ function)</a>
 </li>
       <li><a href="core/api.html#_CPPv438zeDeviceGetCommandQueueGroupProperties18ze_device_handle_tP8uint32_tP35ze_command_queue_group_properties_t">zeDeviceGetCommandQueueGroupProperties (C++ function)</a>
@@ -4041,6 +4240,16 @@ document.write(`
       <li><a href="core/api.html#_CPPv439zeDriverRTASFormatCompatibilityCheckExp18ze_driver_handle_t20ze_rtas_format_exp_t20ze_rtas_format_exp_t">zeDriverRTASFormatCompatibilityCheckExp (C++ function)</a>
 </li>
       <li><a href="core/api.html#_CPPv439zeDriverRTASFormatCompatibilityCheckExt18ze_driver_handle_t20ze_rtas_format_ext_t20ze_rtas_format_ext_t">zeDriverRTASFormatCompatibilityCheckExt (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv433zeEventCounterBasedCloseIpcHandle17ze_event_handle_t">zeEventCounterBasedCloseIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv425zeEventCounterBasedCreate19ze_context_handle_t18ze_device_handle_tPK29ze_event_counter_based_desc_tP17ze_event_handle_t">zeEventCounterBasedCreate (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv435zeEventCounterBasedGetDeviceAddress17ze_event_handle_tP8uint64_tP8uint64_t">zeEventCounterBasedGetDeviceAddress (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv431zeEventCounterBasedGetIpcHandle17ze_event_handle_tP35ze_ipc_event_counter_based_handle_t">zeEventCounterBasedGetIpcHandle (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv432zeEventCounterBasedOpenIpcHandle19ze_context_handle_t35ze_ipc_event_counter_based_handle_tP17ze_event_handle_t">zeEventCounterBasedOpenIpcHandle (C++ function)</a>
 </li>
       <li><a href="core/api.html#_CPPv413zeEventCreate22ze_event_pool_handle_tPK15ze_event_desc_tP17ze_event_handle_t">zeEventCreate (C++ function)</a>
 </li>
@@ -4182,6 +4391,8 @@ document.write(`
 </li>
       <li><a href="core/api.html#_CPPv438zeMemGetIpcHandleFromFileDescriptorExp19ze_context_handle_t8uint64_tP19ze_ipc_mem_handle_t">zeMemGetIpcHandleFromFileDescriptorExp (C++ function)</a>
 </li>
+      <li><a href="core/api.html#_CPPv431zeMemGetIpcHandleWithProperties19ze_context_handle_tPKvPvP19ze_ipc_mem_handle_t">zeMemGetIpcHandleWithProperties (C++ function)</a>
+</li>
       <li><a href="core/api.html#_CPPv423zeMemGetPitchFor2dImage19ze_context_handle_t18ze_device_handle_t6size_t6size_tjP6size_t">zeMemGetPitchFor2dImage (C++ function)</a>
 </li>
       <li><a href="core/api.html#_CPPv418zeMemOpenIpcHandle19ze_context_handle_t18ze_device_handle_t19ze_ipc_mem_handle_t21ze_ipc_memory_flags_tPPv">zeMemOpenIpcHandle (C++ function)</a>
@@ -4215,6 +4426,8 @@ document.write(`
       <li><a href="core/api.html#_CPPv419zePhysicalMemCreate19ze_context_handle_t18ze_device_handle_tP22ze_physical_mem_desc_tP24ze_physical_mem_handle_t">zePhysicalMemCreate (C++ function)</a>
 </li>
       <li><a href="core/api.html#_CPPv420zePhysicalMemDestroy19ze_context_handle_t24ze_physical_mem_handle_t">zePhysicalMemDestroy (C++ function)</a>
+</li>
+      <li><a href="core/api.html#_CPPv426zePhysicalMemGetProperties19ze_context_handle_t24ze_physical_mem_handle_tP28ze_physical_mem_properties_t">zePhysicalMemGetProperties (C++ function)</a>
 </li>
       <li><a href="runtime/api.html#_CPPv420zerGetDefaultContextv">zerGetDefaultContext (C++ function)</a>
 </li>
@@ -4880,11 +5093,17 @@ document.write(`
 </li>
       <li><a href="sysman/api.html#_CPPv4N31zes_freq_throttle_reason_flag_t38ZES_FREQ_THROTTLE_REASON_FLAG_HW_RANGEE">zes_freq_throttle_reason_flag_t::ZES_FREQ_THROTTLE_REASON_FLAG_HW_RANGE (C++ enumerator)</a>
 </li>
+      <li><a href="sysman/api.html#_CPPv4N31zes_freq_throttle_reason_flag_t35ZES_FREQ_THROTTLE_REASON_FLAG_POWERE">zes_freq_throttle_reason_flag_t::ZES_FREQ_THROTTLE_REASON_FLAG_POWER (C++ enumerator)</a>
+</li>
       <li><a href="sysman/api.html#_CPPv4N31zes_freq_throttle_reason_flag_t39ZES_FREQ_THROTTLE_REASON_FLAG_PSU_ALERTE">zes_freq_throttle_reason_flag_t::ZES_FREQ_THROTTLE_REASON_FLAG_PSU_ALERT (C++ enumerator)</a>
 </li>
       <li><a href="sysman/api.html#_CPPv4N31zes_freq_throttle_reason_flag_t38ZES_FREQ_THROTTLE_REASON_FLAG_SW_RANGEE">zes_freq_throttle_reason_flag_t::ZES_FREQ_THROTTLE_REASON_FLAG_SW_RANGE (C++ enumerator)</a>
 </li>
+      <li><a href="sysman/api.html#_CPPv4N31zes_freq_throttle_reason_flag_t37ZES_FREQ_THROTTLE_REASON_FLAG_THERMALE">zes_freq_throttle_reason_flag_t::ZES_FREQ_THROTTLE_REASON_FLAG_THERMAL (C++ enumerator)</a>
+</li>
       <li><a href="sysman/api.html#_CPPv4N31zes_freq_throttle_reason_flag_t43ZES_FREQ_THROTTLE_REASON_FLAG_THERMAL_LIMITE">zes_freq_throttle_reason_flag_t::ZES_FREQ_THROTTLE_REASON_FLAG_THERMAL_LIMIT (C++ enumerator)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N31zes_freq_throttle_reason_flag_t37ZES_FREQ_THROTTLE_REASON_FLAG_VOLTAGEE">zes_freq_throttle_reason_flag_t::ZES_FREQ_THROTTLE_REASON_FLAG_VOLTAGE (C++ enumerator)</a>
 </li>
       <li><a href="sysman/api.html#_CPPv424zes_freq_throttle_time_t">zes_freq_throttle_time_t (C++ struct)</a>
 </li>
@@ -5267,6 +5486,32 @@ document.write(`
       <li><a href="sysman/api.html#_CPPv4N30zes_pci_link_qual_issue_flag_t36ZES_PCI_LINK_QUAL_ISSUE_FLAG_REPLAYSE">zes_pci_link_qual_issue_flag_t::ZES_PCI_LINK_QUAL_ISSUE_FLAG_REPLAYS (C++ enumerator)</a>
 </li>
       <li><a href="sysman/api.html#_CPPv4N30zes_pci_link_qual_issue_flag_t34ZES_PCI_LINK_QUAL_ISSUE_FLAG_SPEEDE">zes_pci_link_qual_issue_flag_t::ZES_PCI_LINK_QUAL_ISSUE_FLAG_SPEED (C++ enumerator)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv445zes_pci_link_speed_downgrade_ext_properties_t">zes_pci_link_speed_downgrade_ext_properties_t (C++ struct)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N45zes_pci_link_speed_downgrade_ext_properties_t18maxPciGenSupportedE">zes_pci_link_speed_downgrade_ext_properties_t::maxPciGenSupported (C++ member)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE">zes_pci_link_speed_downgrade_ext_properties_t::pciLinkSpeedUpdateCapable (C++ member)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N45zes_pci_link_speed_downgrade_ext_properties_t5pNextE">zes_pci_link_speed_downgrade_ext_properties_t::pNext (C++ member)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N45zes_pci_link_speed_downgrade_ext_properties_t5stypeE">zes_pci_link_speed_downgrade_ext_properties_t::stype (C++ member)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv440zes_pci_link_speed_downgrade_ext_state_t">zes_pci_link_speed_downgrade_ext_state_t (C++ struct)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE">zes_pci_link_speed_downgrade_ext_state_t::pciLinkSpeedDowngradeStatus (C++ member)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N40zes_pci_link_speed_downgrade_ext_state_t5pNextE">zes_pci_link_speed_downgrade_ext_state_t::pNext (C++ member)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N40zes_pci_link_speed_downgrade_ext_state_t5stypeE">zes_pci_link_speed_downgrade_ext_state_t::stype (C++ member)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv442zes_pci_link_speed_downgrade_ext_version_t">zes_pci_link_speed_downgrade_ext_version_t (C++ enum)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t44ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0E">zes_pci_link_speed_downgrade_ext_version_t::ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0 (C++ enumerator)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t48ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENTE">zes_pci_link_speed_downgrade_ext_version_t::ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENT (C++ enumerator)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t53ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32E">zes_pci_link_speed_downgrade_ext_version_t::ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32 (C++ enumerator)</a>
 </li>
       <li><a href="sysman/api.html#_CPPv430zes_pci_link_stab_issue_flag_t">zes_pci_link_stab_issue_flag_t (C++ enum)</a>
 </li>
@@ -5828,6 +6073,10 @@ document.write(`
 </li>
       <li><a href="sysman/api.html#_CPPv4N20zes_structure_type_t41ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2E">zes_structure_type_t::ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2 (C++ enumerator)</a>
 </li>
+      <li><a href="sysman/api.html#_CPPv4N20zes_structure_type_t58ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIESE">zes_structure_type_t::ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES (C++ enumerator)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv4N20zes_structure_type_t53ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATEE">zes_structure_type_t::ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATE (C++ enumerator)</a>
+</li>
       <li><a href="sysman/api.html#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PCI_PROPERTIESE">zes_structure_type_t::ZES_STRUCTURE_TYPE_PCI_PROPERTIES (C++ enumerator)</a>
 </li>
       <li><a href="sysman/api.html#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PCI_STATEE">zes_structure_type_t::ZES_STRUCTURE_TYPE_PCI_STATE (C++ enumerator)</a>
@@ -6197,6 +6446,8 @@ document.write(`
       <li><a href="sysman/api.html#_CPPv420zesDevicePciGetState19zes_device_handle_tP15zes_pci_state_t">zesDevicePciGetState (C++ function)</a>
 </li>
       <li><a href="sysman/api.html#_CPPv420zesDevicePciGetStats19zes_device_handle_tP15zes_pci_stats_t">zesDevicePciGetStats (C++ function)</a>
+</li>
+      <li><a href="sysman/api.html#_CPPv430zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t">zesDevicePciLinkSpeedUpdateExt (C++ function)</a>
 </li>
       <li><a href="sysman/api.html#_CPPv426zesDeviceProcessesGetState19zes_device_handle_tP8uint32_tP19zes_process_state_t">zesDeviceProcessesGetState (C++ function)</a>
 </li>

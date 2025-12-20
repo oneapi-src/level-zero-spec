@@ -1,8 +1,5 @@
 
 
-
-
-
 .. _core-programming-guide:
 
 ========================
@@ -426,8 +423,84 @@ The following pseudo-code demonstrates a basic sequence for creating a physical 
 
         :ref:`zePhysicalMemCreate`\(hContext, hDevice, &pmemDesc, &hPhysicalAlloc);
 
-Mapping Virtual Memory Pages
+Reading Physical Memory Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An application can query properties of a physical memory object using :ref:`zePhysicalMemGetProperties`\.
+
+The following pseudo-code demonstrates querying properties of a physical memory object:
+
+.. parsed-literal::
+
+    // Set up the request for an exportable allocation
+
+    ze_external_memory_export_desc_t export_desc = {
+        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC,
+        nullptr, // pNext
+        ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD
+    };
+
+    ze_physical_mem_desc_t alloc_desc = {
+    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+    .pNext = &export_desc,
+    .flags = 0,
+    .size = 1024
+    };
+
+    ze_physical_mem_handle_t hPhysicalMemory;
+
+    :ref:`zePhysicalMemCreate`\(hContext, hDevice, &alloc_desc, &hPhysicalMemory)
+
+    // Set up the request to export the external memory handle
+
+    ze_external_memory_export_fd_t export_fd = {
+        ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD,
+        nullptr, // pNext
+        ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+        0 // [out] fd
+    };
+
+    // Link the export request into the query
+
+    ze_physical_mem_properties_t physicalMemProperties = {
+        ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES
+    };
+
+    physicalMemProperties.pNext = &export_fd;
+
+    :ref:`zePhysicalMemGetProperties`\(hContext, hPhysicalMemory, &physicalMemProperties)
+
+    // User sends exportFd.fd to a peer process
+    int imported_fd = /\* fd received from peer process \*/;
+    // For importing reuse existing structs
+
+    ze_external_memory_import_fd_t import_fd = {
+
+    .stype = ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
+
+    .pNext = nullptr,
+
+    .flags = ZE_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+
+    .fd = imported_fd
+
+    };
+
+    ze_physical_mem_desc_t alloc_desc = {
+
+    .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+
+    .pNext = &import_fd,
+
+    .flags = 0,
+    .size = 1024
+    };
+
+    :ref:`zePhysicalMemCreate`\(hContext, hDevice, &alloc_desc, &physicalMemImporter);
+
+
+Mapping Virtual Memory Pages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Reserved virtual memory pages can be mapped to physical memory using :ref:`zeVirtualMemMap`\.
 An application can map the entire reserved virtual address range or can sparsely map the
@@ -671,8 +744,7 @@ The following pseudo-code demonstrates how to import a Linux dma_buf as an exter
         alloc_desc.pNext = &import_fd;
         :ref:`zeMemAllocDevice`\(hContext, &alloc_desc, size, alignment, hDevice, &ptr);
 
-Another example, which the following pseudo-code demonstrates, is how to import a Linux dma_buf as an external
-memory handle for :ref:`Images`:
+The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for :ref:`Images`:
 
 .. parsed-literal::
 
@@ -693,6 +765,26 @@ memory handle for :ref:`Images`:
 
         :ref:`zeImageCreate`\(hContext, hDevice, &image_desc, &hImage);
 
+The following pseudo-code demonstrates how to import a Linux dma_buf as an external memory handle for Physical Memory:
+
+.. parsed-literal::
+
+        // Set up the request to import the external memory handle
+        :ref:`ze-external-memory-import-fd-t` import_fd = {
+            :ref:`ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD <ze-structure-type-t>`\,
+            nullptr, // pNext
+            :ref:`ZE_EXTERNAL_MEMORY_TYPE_FLAG_DMA_BUF <ze-external-memory-type-flags-t>`\,
+            fd
+        };
+
+        ze_physical_mem_desc_t allocDesc = {
+        .stype = ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+        .pNext = &import_fd,
+        .flags = 0,
+        .size = 1024
+        };
+
+        :ref:`zePhysicalMemCreate`\(hContext, hDevice, &allocDesc, &physicalMemImporter);
 
 Command Queues and Command Lists
 ================================
@@ -1218,8 +1310,165 @@ A kernel timestamp event is a special type of event that records device timestam
        double contextTimeInNs = ( tsResult->context.kernelEnd >= tsResult->context.kernelStart )
            ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart ) * timestampFreq
            : (( timestampMaxValue - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * timestampFreq;
+
        ...
 
+
+Event synchronization mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+User can adjust Event synchronization modes by passing :ref:`ze-event-sync-mode-desc-t` struct as pNext during Event creation.
+
+Low power wait
+^^^^^^^^^^^^^^^
+
+When :ref:`ZE_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAIT <ze-event-sync-mode-flags-t>` flag is enabled, driver will optimize Event host synchronization calls like :ref:`zeEventHostSynchronize` to use CPU threads more efficiently. For example, instead of active polling on memory location, it may use OS methods to sleep CPU thread.
+Changing this mode may impact completion latency.
+
+Interrups
+^^^^^^^^^^
+
+When :ref:`ZE_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPT <ze-event-sync-mode-flags-t>` flag is enabled, driver may program additional GPU commands related to signaling Event on the Device. Those commands will generate system interrupt.
+Interrupt may be used as additional signal to wake up CPU thread that is waiting for Event completion in low power mode.
+Driver may select which API calls are applicable for generating interrupts.
+
+Additionally, user may provide external interrupt id (:ref:`ZE_EVENT_SYNC_MODE_FLAG_EXTERNAL_INTERRUPT_WAIT <ze-event-sync-mode-flags-t>`\). OS methods will be used for Event host synchronization calls, to optimize waiting for completion. Similar to low power mode.
+It can be used only with Counter Based Events.
+
+.. _counter-based-events:
+
+Counter Based Events
+~~~~~~~~~~~~~~~~~~~~
+
+This type of event, referred to as a Counter Based (CB) Event, does not require an event pool, as the related allocations are managed internally by the driver. This reduces the overhead on the host for managing pool allocations.
+The CB Event can only be signaled on the GPU using an in-order command list.
+
+Every in-order command list has an internal submission counter that is updated with each append call. This counter manages internal in-order dependencies. The next append call waits for that counter implicitly.
+Note that some operations may be optimized, and the counter value may not directly correspond to the number of append calls.
+
+When a CB Event is passed as a signal event, it points to a specific counter value and memory location. Since the command list manages the counter allocation, this method avoids producing additional GPU memory operations (except timestamps). As a result, users do not need to explicitly control event completion before reusing it.
+
+Key features
+^^^^^^^^^^^^^^^^^^^^^
+- After creation, a CB Event is initially marked as completed. The completion state changes if the event is assigned as a `signalEvent` to an append call or if external storage is specified during creation.
+- CB Event can be waited for from any command list type.
+- :ref:`zeEventHostReset` is not allowed. Can be reused on any in-order command list without explicit reset. A new API call just replaces its previous state (counter/allocation)
+- :ref:`zeEventHostSignal` is not allowed. Can be signaled only from in-order command list
+- No need to wait for completion before reusing/destroying
+- CB Event doesn't own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver
+- IPC sharing is one-directional. IPC CB Event opened in different process can be used only for waiting. If original Event state is changed (for example by next append call) and second process needs to see that update, IPC handle must be opened again.
+- Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section
+- When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion
+- Event can be destroyed without waiting for completion, even if profiling is enabled
+
+Regular Event rely on memory state controlled by the user (explicit Reset calls). CB Event represents host programming sequence, without managing the state. For example:
+
+.. parsed-literal::
+       :ref:`zeEventCounterBasedCreate`\(context, device, &desc, &event1); // counter not yet assigned
+
+       :ref:`zeCommandListAppendLaunchKernel`\(cmdList1, kernel, &groupCount, &event1, 0, nullptr); // assigned counter=X on memory CL1_alloc
+       :ref:`zeCommandListAppendLaunchKernel`\(cmdList2, kernel, &groupCount, nullptr, 1, &event1); // cmdList2 waits for counter=X on memory CL1_alloc
+
+       // reuse without waiting/reset
+       :ref:`zeCommandListAppendLaunchKernel`\(cmdList3, kernel, &groupCount, &event1, 0, nullptr); // Replace state. Assigned counter=Y on memory CL3_alloc
+
+       // Event1 is implicitly reset to different state.
+       // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc.
+       // Its also safe to delete Event object.
+
+       :ref:`zeEventHostSynchronize`\(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc
+
+IPC sharing
+^^^^^^^^^^^
+As mentioned previously, signaling CB Event replaces its state. This is why IPC sharing is one-directional. Opened event can be used only for waiting/querying (on host and GPU).
+
+Both Event object (original and shared) are independent. There is no need to wait for completion before reusing.
+Second process points to the original state until :ref:`zeEventCounterBasedCloseIpcHandle` is called.
+Original Event state may be changed without waiting for completion. Second process is not affected.
+
+Counter Based Event has dedicated API calls to handle IPC operations::ref:`zeEventCounterBasedGetIpcHandle`\, :ref:`zeEventCounterBasedOpenIpcHandle`\, :ref:`zeEventCounterBasedCloseIpcHandle`
+
+**Timestamps are not allowed for IPC sharing.**
+
+Obtaining counter memory and value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User may obtain counter memory location and value using :ref:`zeEventCounterBasedGetDeviceAddress`\. For example, waiting for completion outside the L0 Driver. If Event state is replaced by new append call or :ref:`zeCommandQueueExecuteCommandLists` that signals such Event, below API must be called again to obtain new data.
+
+Multi directional dependencies on Regular command lists
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Regular command list with overlapping dependencies may be executed multiple times. For example, two command lists are executed in parallel with bi-directional dependencies.
+Its important to understand counter (Event) state transition, to correctly reflect users intention.
+
+
+.. parsed-literal::
+       regularCmdList1:       (A)      ------------->   (wait for B)   ----->   (C)
+                               |                            ^
+                               |                            |
+                               V                            |
+       regularCmdList2:   (wait for A)  ------------->     (B)         ----->   (D)
+
+In this example, all Events are synchronized to "ready" state after the first execution.
+It means that second execution of `regularCmdList1` waits again for "ready" `{1->2->3}` state of `regularCmdList2` (first execution) instead of `{4->5->6}`.
+This is because `regularCmdList2` was not yet executed for the second time. And their counters were not updated.
+
+First execution:
+
+.. parsed-literal::
+       // All Events are in "not ready" state
+       :ref:`zeCommandQueueExecuteCommandLists`\(cmdQueue1, 1, &regularCmdList1, nullptr); // Counter updated to {1->2->3}
+       :ref:`zeCommandQueueExecuteCommandLists`\(cmdQueue2, 1, &regularCmdList2, nullptr); // Counter updated to {1->2->3}
+
+       // All Events are "ready" now
+       :ref:`zeCommandQueueSynchronize`\(cmdQueue1, timeout); // wait for counter=3
+       :ref:`zeCommandQueueSynchronize`\(cmdQueue2, timeout); // wait for counter=3
+
+Second execution:
+
+.. parsed-literal::
+       // regularCmdList1 waits for "ready" {1->2->3} Events from first execution of regularCmdList2
+       // regularCmdList1 changes Events state to "not ready"
+       :ref:`zeCommandQueueExecuteCommandLists`\(cmdQueue1, 1, &regularCmdList1, nullptr); // Counter updated to {4->5->6}
+
+       // regularCmdList2 waits for "not ready" {4->5->6} Events from second execution of regularCmdList1
+       :ref:`zeCommandQueueExecuteCommandLists`\(cmdQueue2, 1, &regularCmdList2, nullptr); // Counter updated to {4->5->6}
+
+Different approach:
+
+To avoid above situation, user must remove all bi-directional dependencies. By using single command list (if possible) or split the workload into different command lists with single-directional dependencies.
+
+Using Counter Based Events for such scenarios is not always the most optimal usage mode. It may be better to use Regular Events with explicit Reset calls.
+
+External synchronization allocation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+User may optionally specify externally managed counter allocation and value. This can be done by passing :ref:`ze-event-counter-based-external-sync-allocation-desc-t` as extension of :ref:`ze-event-counter-based-desc-t`
+
+Requirements:
+
+- Counter allocation is managed by the user
+- User must ensure device allocation (`deviceAddress`) residency (:ref:`zeContextMakeMemoryResident`\). It must be GPU accessible USM allocation
+- Host allocation (`hostAddress`) must be CPU accessible USM allocation (eg. waiting for completion)
+- User is responsible for updating both memory locations to >= `completionValue` to signal Event completion
+- Using such event for signaling on new API call, replaces the state (as described previously)
+
+
+External aggregate storage
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Aggregated storage event is a special use case for CB Events. It can be signaled from multiple append calls, but waiting requires only one memory compare operation.
+It can be created by passing :ref:`ze-event-counter-based-external-aggregate-storage-desc-t` as extension of :ref:`ze-event-counter-based-desc-t`\.
+
+Requirements:
+
+- This extension cannot be used with "external storage" extension
+- User must ensure device allocation (`deviceAddress`) residency. It must be accessible by GPU
+- Driver will use `deviceAddress` for host synchronization as USM allocation
+- If Driver is not able to lock provided device allocation for CPU access, host waits are not possible
+- Apart from signaling operation, driver will not write anything else to the memory. Initial value is fully under users responsiblility
+- Signaling such event, will not replace its state (as described previously). It can be passed to multiple append calls and each append will increment the storage by `incrementValue` (atomically) on GPU
+- Using aggregated event as dependency, requires only one memory compare operation against final value: `completionValue` >=  `*deviceAddress`
+- Device storage is under users control. It must be reset by the user if needed
+- Profiling is not possible if producers originate on different GPUs (different timestamp domains)
+- User can programatically obtain increment value that would work even if underlying append API would be distributed to multiple engines via :ref:`zeDeviceGetAggregatedCopyOffloadIncrementValue` query.
 
 Barriers
 ========
@@ -1702,6 +1951,12 @@ cooperative kernel launch may be determined by calling :ref:`zeKernelSuggestMaxC
 
 .. parsed-literal::
 
+       // query and set kernel work-group size
+       uint32_t groupSizeX;
+       uint32_t groupSizeY;
+       :ref:`zeKernelSuggestGroupSize`\(hKernel, imageWidth, imageHeight, 1, &groupSizeX, &groupSizeY, nullptr);
+       :ref:`zeKernelSetGroupSize`\(hKernel, groupSizeX, groupSizeY, 1);
+
        // query the maximum cooperative kernel launch for the kernel
        uint32_t maxGroupCount;
        :ref:`zeKernelSuggestMaxCooperativeGroupCount`\(hKernel, &maxGroupCount);
@@ -1811,6 +2066,8 @@ The following table documents the supported knobs for overriding default functio
      - ZEL_DRIVERS_ORDER
      - string
      - Defines ordering of drivers reported to user. See Driver Ordering section for syntax details.
+
+.. _driver-ordering:
 
 Driver Ordering
 ~~~~~~~~~~~~~~~~

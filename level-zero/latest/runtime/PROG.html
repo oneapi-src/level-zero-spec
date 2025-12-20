@@ -44,6 +44,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'runtime/PROG';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SPIR-V Programming Guide" href="../core/SPIRV.html" />
+    <link rel="prev" title="Sysman Programming Guide" href="../sysman/PROG.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -105,8 +107,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -146,11 +146,12 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../core/INTRO.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/PROG.html">Core Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Runtime Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html">SPIR-V Programming Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../core/EXT.html">Extensions</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -309,7 +310,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-ordering">Device Ordering</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-semantics-and-considerations">API Semantics and Considerations:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-contexts">Default Contexts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-integer-indexing">Device Integer Indexing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-device-synchronization">Global Device Synchronization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-descriptors">Default Descriptors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example Usage:</a></li>
 </ul>
             </nav>
         </div>
@@ -323,17 +329,145 @@ document.write(`
                   
   <section id="runtime-programming-guide">
 <span id="id1"></span><h1>Runtime Programming Guide<a class="headerlink" href="#runtime-programming-guide" title="Link to this heading">#</a></h1>
-<p>Place holder documentation.
-These runtime API’s are intended to simplify usage of Level Zero by having default devices, contexts and drivers
-associated with the calls, thus reducing the overhead for some users to write applications and middleware.</p>
-<p>More TBD</p>
-<div class="highlight-cpp notranslate" id="default-contexts"><div class="highlight"><pre><span></span><span class="c1">//TBD Insert sample init code here</span>
+<p>The standard Level Zero APIs require explicit driver object management and complex handle passing, which can be cumbersome for simple or default use cases.</p>
+<p>To simplify this, the OneAPI Level Zero Runtime APIs provide a set of higher-level abstractions and default contexts that streamline common operations while still allowing access to the underlying Level Zero functionality when needed.</p>
+<section id="api-semantics-and-considerations">
+<h2>API Semantics and Considerations:<a class="headerlink" href="#api-semantics-and-considerations" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>New prefix “zer” indicating Level Zero Runtime APIs</p></li>
+<li><p>Design goal of the zer API’s is to be simple and easy to use</p></li>
+<li><p>zer APIs are not designed for robust fine-grained control and low-level aspects; use ze APIs for those requirements</p></li>
+<li><p>By default, zer functions always use the driver at index 0 (after loader sorting). This can be overridden using <a class="reference internal" href="../core/PROG.html#driver-ordering"><span class="std std-ref">ZEL_DRIVERS_ORDER</span></a>.</p></li>
+<li><p>Level Zero loader will always route zer functions to first driver instance that it reports</p></li>
+<li><p>By default, the Level Zero loader ensures that drivers are prioritized as follows: Discrete GPU hardware solutions are reported at index 0 when available. If no discrete GPU is present, any GPU solution will be reported at index 0. This default ordering can be overridden using <a class="reference internal" href="../core/PROG.html#driver-ordering"><span class="std std-ref">ZEL_DRIVERS_ORDER</span></a>.</p></li>
+<li><p>In the default path, the Level Zero loader routes API calls directly to driver pointers, allowing applications to bypass the loader for lower latency</p></li>
+<li><p>When tools are enabled, the Level Zero loader routes API calls through the loader to allow interception by those tools</p></li>
+<li><p>After Level Zero Init during zeInitDrivers, the zer runtime initializes the default driver (index 0), the driver at index 0 cannot be changed after initialization is called in the process</p></li>
+<li><p>zer and ze API’s use the same handle object types and can be used together</p></li>
+<li><p>zer getter APIs return the desired object directly whenever feasible</p></li>
+<li><p>For zer APIs that don’t return ze_result_t, error information can be retrieved using zerGetLastErrorDescription, similar to errno paradigms</p></li>
+</ul>
+<p><strong>Important Limitation:</strong> zer APIs are designed for applications with full control over the runtime environment and are not intended for advanced multi-driver management, low-level device management, or fine-grained control. Use ze APIs for those requirements.</p>
+</section>
+<section id="default-contexts">
+<span id="id2"></span><h2>Default Contexts<a class="headerlink" href="#default-contexts" title="Link to this heading">#</a></h2>
+<p>API Functions:</p>
+<ul class="simple">
+<li><p>ze_context_handle_t <a class="reference internal" href="api.html#zergetdefaultcontext"><span class="std std-ref">zerGetDefaultContext</span></a>();</p></li>
+<li><p>ze_context_handle_t <a class="reference internal" href="../core/api.html#zedrivergetdefaultcontext"><span class="std std-ref">zeDriverGetDefaultContext</span></a>(ze_driver_handle_t hDriver);</p></li>
+</ul>
+<p>Semantics:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api.html#zergetdefaultcontext"><span class="std std-ref">zerGetDefaultContext</span></a> returns the default context for the default driver (index 0).</p></li>
+<li><p><a class="reference internal" href="../core/api.html#zedrivergetdefaultcontext"><span class="std std-ref">zeDriverGetDefaultContext</span></a> returns the default context for a specified driver.</p></li>
+<li><p>Each driver instance has a single default context containing all its devices.</p></li>
+</ul>
+</section>
+<section id="device-integer-indexing">
+<span id="id3"></span><h2>Device Integer Indexing<a class="headerlink" href="#device-integer-indexing" title="Link to this heading">#</a></h2>
+<p>Level Zero Runtime APIs represent devices as integer identifiers.</p>
+<p>API Functions:</p>
+<ul class="simple">
+<li><p>uint32_t <a class="reference internal" href="api.html#zertranslatedevicehandletoidentifier"><span class="std std-ref">zerTranslateDeviceHandleToIdentifier</span></a>(ze_device_handle_t hDevice);</p></li>
+<li><p>ze_device_handle_t <a class="reference internal" href="api.html#zertranslateidentifiertodevicehandle"><span class="std std-ref">zerTranslateIdentifierToDeviceHandle</span></a>(uint32_t identifier);</p></li>
+</ul>
+<p>Semantics:</p>
+<ul class="simple">
+<li><p>Devices are assigned unsigned integer identifiers (uint32_t) starting from 0, corresponding to PCI order.</p></li>
+<li><p>When devices are filtered (e.g., with ZE_AFFINITY_MASK), the remaining devices are renumbered starting from 0 with no gaps.</p></li>
+<li><p>Sub-device translation is not supported.</p></li>
+<li><p><a class="reference internal" href="api.html#zertranslatedevicehandletoidentifier"><span class="std std-ref">zerTranslateDeviceHandleToIdentifier</span></a> returns the integer identifier for a device handle.</p></li>
+<li><p><a class="reference internal" href="api.html#zertranslateidentifiertodevicehandle"><span class="std std-ref">zerTranslateIdentifierToDeviceHandle</span></a> returns the device handle for a given identifier (driver must be initialized).</p></li>
+</ul>
+</section>
+<section id="global-device-synchronization">
+<span id="id4"></span><h2>Global Device Synchronization<a class="headerlink" href="#global-device-synchronization" title="Link to this heading">#</a></h2>
+<p>API Function:</p>
+<ul class="simple">
+<li><p>ze_result_t <a class="reference internal" href="../core/api.html#zedevicesynchronize"><span class="std std-ref">zeDeviceSynchronize</span></a>(ze_device_handle_t hDevice);</p></li>
+</ul>
+<p>Semantics:</p>
+<ul class="simple">
+<li><p>Blocks until all preceding submissions to all queues on the device are complete.</p></li>
+<li><p>Returns an error if device execution fails.</p></li>
+<li><p>Hangs indefinitely if the device is blocked on a non-signaled event.</p></li>
+</ul>
+</section>
+<section id="default-descriptors">
+<span id="id5"></span><h2>Default Descriptors<a class="headerlink" href="#default-descriptors" title="Link to this heading">#</a></h2>
+<p>When creating resources like command lists, command queues, and events, applications can use default descriptor structures for the default driver at index 0.</p>
+<p>The current Default Descriptor structures are:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">///////////////////////////////////////////////////////////////////////////////</span>
+<span class="c1">/// @brief Immediate Command List default descriptor for GPU devices</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">ze_command_queue_desc_t</span><span class="w"> </span><span class="n">zeDefaultGPUImmediateCommandQueueDesc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ZE_STRUCTURE_TYPE_COMMAND_QUEUE_DESC</span><span class="p">,</span><span class="w">                                       </span><span class="c1">///&lt; stype</span>
+<span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">                                                                          </span><span class="c1">///&lt; pNext</span>
+<span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">                                                                          </span><span class="c1">///&lt; ordinal</span>
+<span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">                                                                          </span><span class="c1">///&lt; index</span>
+<span class="w">    </span><span class="n">ZE_COMMAND_QUEUE_FLAG_IN_ORDER</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINT</span><span class="p">,</span><span class="w">   </span><span class="c1">///&lt; flags</span>
+<span class="w">    </span><span class="n">ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUS</span><span class="p">,</span><span class="w">                                         </span><span class="c1">///&lt; mode</span>
+<span class="w">    </span><span class="n">ZE_COMMAND_QUEUE_PRIORITY_NORMAL</span><span class="p">,</span><span class="w">                                           </span><span class="c1">///&lt; priority</span>
+<span class="p">};</span>
+
+<span class="c1">///////////////////////////////////////////////////////////////////////////////</span>
+<span class="c1">/// @brief Device Unified Shared Memory Allocation default descriptor for GPU</span>
+<span class="c1">///        devices</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">ze_device_mem_alloc_desc_t</span><span class="w"> </span><span class="n">zeDefaultGPUDeviceMemAllocDesc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC</span><span class="p">,</span><span class="w">                                </span><span class="c1">///&lt; stype</span>
+<span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">                                                                      </span><span class="c1">///&lt; pNext</span>
+<span class="w">    </span><span class="n">ZE_DEVICE_MEM_ALLOC_FLAG_BIAS_CACHED</span><span class="p">,</span><span class="w">                                   </span><span class="c1">///&lt; flags</span>
+<span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">                                                                      </span><span class="c1">///&lt; ordinal</span>
+<span class="p">};</span>
+
+<span class="c1">///////////////////////////////////////////////////////////////////////////////</span>
+<span class="c1">/// @brief Host Unified Shared Memory Allocation default descriptor for GPU</span>
+<span class="c1">///        devices</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">ze_host_mem_alloc_desc_t</span><span class="w"> </span><span class="n">zeDefaultGPUHostMemAllocDesc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ZE_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESC</span><span class="p">,</span><span class="w">                                              </span><span class="c1">///&lt; stype</span>
+<span class="w">    </span><span class="mi">0</span><span class="p">,</span><span class="w">                                                                                  </span><span class="c1">///&lt; pNext</span>
+<span class="w">    </span><span class="n">ZE_HOST_MEM_ALLOC_FLAG_BIAS_CACHED</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ZE_HOST_MEM_ALLOC_FLAG_BIAS_INITIAL_PLACEMENT</span><span class="p">,</span><span class="w"> </span><span class="c1">///&lt; flags</span>
+<span class="p">};</span>
 </pre></div>
 </div>
-<section id="device-ordering">
-<h2>Device Ordering<a class="headerlink" href="#device-ordering" title="Link to this heading">#</a></h2>
-<p>Device ordering is a key concept that configurable via environmental control.</p>
-<p>More TBD</p>
+</section>
+<section id="example-usage">
+<h2>Example Usage:<a class="headerlink" href="#example-usage" title="Link to this heading">#</a></h2>
+<p>These default descriptors can be used when creating resources for the default driver (index 0) to simplify resource creation.</p>
+<pre class="literal-block">// Default Descriptors with Simplification API Usage Example:
+ze_init_driver_type_desc_t desc = {ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESC};
+desc.pNext = nullptr;
+desc.flags = UINT32_MAX; // all driver types requested
+uint32_t driverCount = 0;
+ze_result_t result = zeInitDrivers(&amp;driverCount, nullptr, &amp;desc); // Query the number of drivers
+if (result != ZE_RESULT_SUCCESS) {
+    return result; // no drivers found
+}
+
+ze_driver_handle_t* allDrivers = allocate(driverCount * sizeof(ze_driver_handle_t));
+result = zeInitDrivers(&amp;driverCount, allDrivers, &amp;desc); // Read the driver handles
+if (result != ZE_RESULT_SUCCESS) {
+    return result; // no driver handles found
+}
+uint32_t deviceIndex = 0;
+
+//input to function are int device, size, alignment
+void *deviceUsmPtr = nullptr; //output
+void *hostUsmPtr = nullptr;
+zeMemAllocDevice(zerGetDefaultContext(), &amp;zeDefaultGPUDeviceMemAllocDesc, size, alignment, zerTranslateIdentifierToDeviceHandle(deviceIndex), &amp;deviceUsmPtr);
+zeMemAllocHost(zerGetDefaultContext(), &amp;zeDefaultGPUHostMemAllocDesc, size, alignment, &amp;hostUsmPtr);
+
+//input to function is int device
+ze_command_list_handle_t cmdList; //output
+zeCommandListCreateImmediate(zerGetDefaultContext(), zerTranslateIdentifierToDeviceHandle(deviceIndex), &amp;zeDefaultGPUImmediateCommandQueueDesc, &amp;cmdList);
+
+// zer Error Handling Usage Example:
+uint32_t deviceId = UINT32_MAX;
+const char *errorString = nullptr;
+ze_device_handle_t translatedDevice = zerTranslateIdentifierToDeviceHandle(deviceId);
+if (translatedDevice == nullptr) {
+    ze_result_t result = zerGetLastErrorDescription(&amp;errorString);
+    std::cerr &lt;&lt; &quot;Error translating device ID &quot; &lt;&lt; deviceId &lt;&lt; &quot;: &quot; &lt;&lt; errorString &lt;&lt; std::endl;
+}</pre>
 </section>
 </section>
 
@@ -348,6 +482,24 @@ associated with the calls, thus reducing the overhead for some users to write ap
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../sysman/PROG.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Sysman Programming Guide</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../core/SPIRV.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SPIR-V Programming Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -364,7 +516,12 @@ associated with the calls, thus reducing the overhead for some users to write ap
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-ordering">Device Ordering</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-semantics-and-considerations">API Semantics and Considerations:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-contexts">Default Contexts</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-integer-indexing">Device Integer Indexing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-device-synchronization">Global Device Synchronization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-descriptors">Default Descriptors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example Usage:</a></li>
 </ul>
   </nav></div>
 

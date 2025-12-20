@@ -3,7 +3,7 @@
 ==============================
 Runtime API
 ==============================
-oneAPI Level Zero Specification - Version 1.14.33
+oneAPI Level Zero Specification - Version 1.15.26
 
  
 
