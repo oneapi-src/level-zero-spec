@@ -32,8 +32,9 @@ etors:
     - name: COPY_OFFLOAD_HINT
       version: "1.14"
       desc: |
-            Try to offload copy operations to different engines. Applicable only for compute queues.
-            This is only a hint. Driver may ignore it per append call, based on platform capabilities or internal heuristics.
+            To be used only when creating immediate command lists and only for compute queues.
+            Try to offload copy operations to different engines. This is only a hint.
+            Driver may ignore it per append call, based on platform capabilities or internal heuristics.
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported command queue modes"

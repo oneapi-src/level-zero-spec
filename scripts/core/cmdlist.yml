@@ -42,6 +42,11 @@ etors:
     - name: EXP_CLONEABLE
       version: "1.9"
       desc: "this command list may be cloned using $xCommandListCreateCloneExp after $xCommandListClose."
+    - name: COPY_OFFLOAD_HINT
+      version: "1.15"
+      desc: |
+            Try to offload copy operations to different engines. Applicable only for compute queues.
+            This is only a hint. Driver may ignore it per append call, based on platform capabilities or internal heuristics.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command List descriptor"
