@@ -30,9 +30,9 @@ desc: "Module extended descriptor to support multiple input modules."
 details:
     - "Implementation must support $X_MODULE_PROGRAM_EXP_NAME extension"
     - "Modules support import and export linkage for functions and global variables."
-    - "SPIR-V import and export linkage types are used. See SPIR-V specification for linkage details."
     - "pInputModules, pBuildFlags, and pConstants from $x_module_desc_t is ignored."
-    - "Format in $x_module_desc_t needs to be set to $X_MODULE_FORMAT_IL_SPIRV."
+    - "Format in $x_module_desc_t needs to be set to $X_MODULE_FORMAT_IL_SPIRV or $X_MODULE_FORMAT_NATIVE."
+    - "All modules in the list must be of the same format and match the format specified in $x_module_desc_t."
 class: $xModule
 name: $x_module_program_exp_desc_t
 base: $x_base_desc_t
@@ -42,10 +42,10 @@ members:
       desc: "[in] Count of input modules"
     - type: "const size_t*"
       name: inputSizes
-      desc: "[in][range(0, count)] sizes of each input IL module in pInputModules."
+      desc: "[in][range(0, count)] sizes of each input module in pInputModules."
     - type: "const uint8_t**"
       name: pInputModules
-      desc: "[in][range(0, count)] pointer to an array of IL (e.g. SPIR-V modules). Valid only for SPIR-V input."
+      desc: "[in][range(0, count)] pointer to an array of binary modules in format specified as part of $x_module_desc_t."
       init: nullptr
     - type: "const char**"
       name: pBuildFlags
