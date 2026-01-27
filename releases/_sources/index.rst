@@ -26,6 +26,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.15.31`_
+    - 2026-1-27
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.15.31/index.html>`__
   * - `Level Zero v1.15.26`_
     - 2025-12-19
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.15.26/index.html>`__
@@ -116,6 +119,20 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.15.31
+~~~~~~~~~~~~~~~~~~~
+
+* New Features:
+
+    - Add new return code to zeCommandListAppendMemoryFill
+    - Add additional offload hint to command list creation flags
+
+* Patches since v1.15.26 release
+
+    - Removed limitation on module program extension, to allow native format
+      in addition to SPIRV
+    - Clarify wording for waitParams and signalParams in Appending External Semaphore extensions
 
 Level Zero v1.15.26
 ~~~~~~~~~~~~~~~~~~~
