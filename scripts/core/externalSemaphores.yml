@@ -192,11 +192,11 @@ params:
     - type: "$x_external_semaphore_ext_handle_t*"
       name: "phSemaphores"
       desc: |
-            [in][range(0, numSemaphores)] The vector of external semaphore handles to be appended into command list.
+            [in][range(0, numSemaphores)] The array of pointers to external semaphore handles to be appended into command list.
     - type: "$x_external_semaphore_signal_params_ext_t*"
       name: "signalParams"
       desc: |
-            [in] Signal parameters.
+            [in][range(0, numSemaphores)] The array of pointers to external semepahore signal parameters.
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion"
@@ -237,11 +237,11 @@ params:
     - type: "$x_external_semaphore_ext_handle_t*"
       name: "phSemaphores"
       desc: |
-            [in] [range(0,numSemaphores)] The vector of external semaphore handles to append into command list.
+            [in][range(0,numSemaphores)] The array of pointers to external semaphore handles to append into command list.
     - type: "$x_external_semaphore_wait_params_ext_t*"
       name: "waitParams"
       desc: |
-            [in] Wait parameters.
+            [in][range(0,numSemaphores)] The array of pointers to external semepahore wait parameters.
     - type: $x_event_handle_t
       name: hSignalEvent
       desc: "[in][optional] handle of the event to signal on completion" 
