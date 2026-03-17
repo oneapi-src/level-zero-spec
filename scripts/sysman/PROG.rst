@@ -29,22 +29,29 @@ Environment Variables
 ---------------------
 
 %if _version_compare_gequal(ver, "1.5"):
-The System Resource Management library may now be initialized without using environment variables by calling ${s}Init.
+The System Resource Management library should be initialized by calling ${s}Init.
+%endif
+%if _version_compare_gequal(ver, "1.16"):
+
+**DEPRECATION NOTICE:** The ZES_ENABLE_SYSMAN environment variable is deprecated as of version 1.16. 
+Applications should use ${s}Init() for initialization instead. The environment variable is maintained 
+only for backward compatibility with legacy applications.
+%endif
 
 For compatibility, the following environment variables may also be enabled during initialization for the respective feature.
-It is recommended to initialize sysman either by calling ${s}Init or using the following environment variables but not both.
-%endif
-%if _version_compare_less(ver, "1.5"):
-The following environment variables are required to be enabled during initialization for the respective feature.
-%endif
+Avoid using both the zesInit() API and the ZES_ENABLE_SYSMAN=1 environment variable simultaneously for initialization, 
+as only one method should be used at a time.
+
+The following environment variables are optional
 
 ## --validate=off
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Sysman          | ${S}_ENABLE_SYSMAN                   | {**0**, 1} | Enables driver initialization and dependencies for system management              |
+| Sysman          | ZES_ENABLE_SYSMAN                   | {**0**, 1} | **@deprecated since 1.16** Use ${s}Init() instead.                                |
+|                 |                                     |            | Enables driver initialization and dependencies for system management              |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Sysman          | ${S}_ENABLE_SYSMAN_LOW_POWER         | {**0**, 1} | Driver initialize the device in low power mode                                    |
+| Sysman          | ZES_ENABLE_SYSMAN_LOW_POWER         | {**0**, 1} | Driver initialize the device in low power mode                                    |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 ## --validate=on
 
@@ -83,61 +90,7 @@ The following pseudo-code demonstrates a basic initialization and device discove
                # Use the hSymanHandles to manage the devices
 
        free_memory(...)
-
-For compatibility, an application may also use the Level0 Core API to
-enumerate through available accelerator devices in the system. For
-each device handle, an application can cast it to a sysman device handle
-to manage the system resources of the device.
 %endif
-%if _version_compare_less(ver, "1.5"):
-An application wishing to manage power and performance for devices first
-needs to use the Level0 Core API to enumerate through available
-accelerator devices in the system and select those of interest.
-
-For each selected device handle, applications can cast it to a
-**Sysman device handle** to manage system resources of the device.
-%endif
-
-There is a unique handle for each device. Multiple threads can use the
-handle. If concurrent accesses are made to the same device property
-through the handle, the last request wins.
-
-The pseudo code below shows how to enumerate the GPU devices in the
-system and create Sysman handles for them:
-
-.. parsed-literal::
-
-   function main( ... )
-       if (${x}Init(0) != ${X}_RESULT_SUCCESS)
-           output("Can't initialize the API")
-       else
-           # Discover all the drivers
-           uint32_t driversCount = 0
-           ${x}DriverGet(&driversCount, nullptr)
-           ${x}_driver_handle_t* allDrivers = allocate(driversCount * sizeof(${x}_driver_handle_t))
-           ${x}DriverGet(&driversCount, allDrivers)
-
-           ${x}_driver_handle_t hDriver = nullptr
-           for(i = 0 .. driversCount-1)
-               # Discover devices in a driver
-               uint32_t deviceCount = 0
-               ${x}DeviceGet(allDrivers[i], &deviceCount, nullptr)
-
-               ${x}_device_handle_t* allDevices =
-                   allocate_memory(deviceCount * sizeof(${x}_device_handle_t))
-               ${x}DeviceGet(allDrivers[i], &deviceCount, allDevices)
-
-               for(devIndex = 0 .. deviceCount-1)
-                   ${x}_device_properties_t device_properties {}
-                   device_properties.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
-                   ${x}DeviceGetProperties(allDevices[devIndex], &device_properties)
-                   if(${X}_DEVICE_TYPE_GPU != device_properties.type)
-                       next
-                   # Get the Sysman device handle
-                   ${s}_device_handle_t hSysmanDevice = (${s}_device_handle_t)allDevices[devIndex]
-                   # Start using hSysmanDevice to manage the device
-
-       free_memory(...)
 
 Global device management
 ------------------------

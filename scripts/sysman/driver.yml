@@ -27,7 +27,8 @@ name: Init
 decl: static
 ordinal: "0"
 details: 
-    - "The application must call this function or $xInit with the `ZES_ENABLE_SYSMAN` environment variable set before calling any other sysman function."
+    - "The application must call zesInit() before calling any other sysman function."
+    - "1.16": "The `ZES_ENABLE_SYSMAN` environment variable method of initialization is deprecated. Applications should use zesInit() instead."
     - "If this function is not called then all other sysman functions will return $X_RESULT_ERROR_UNINITIALIZED."
     - "This function will only initialize sysman. To initialize other functions, call $xInit."
     - "There is no requirement to call this function before or after $xInit."
