@@ -27,20 +27,19 @@ High-level overview
 
 Environment Variables
 ---------------------
-
 %if _version_compare_gequal(ver, "1.5"):
+
 The System Resource Management library should be initialized by calling ${s}Init.
+
+Avoid using both the zesInit() API and the ZES_ENABLE_SYSMAN=1 environment variable simultaneously for initialization.
 %endif
 %if _version_compare_gequal(ver, "1.16"):
 
-**DEPRECATION NOTICE:** The ZES_ENABLE_SYSMAN environment variable is deprecated as of version 1.16. 
-Applications should use ${s}Init() for initialization instead. The environment variable is maintained 
+**DEPRECATION NOTICE:** The ZES_ENABLE_SYSMAN environment variable is deprecated as of version 1.16.
+Applications should use ${s}Init() for initialization instead. The environment variable is maintained
 only for backward compatibility with legacy applications.
 %endif
 
-For compatibility, the following environment variables may also be enabled during initialization for the respective feature.
-Avoid using both the zesInit() API and the ZES_ENABLE_SYSMAN=1 environment variable simultaneously for initialization, 
-as only one method should be used at a time.
 
 The following environment variables are optional
 
@@ -48,12 +47,13 @@ The following environment variables are optional
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Sysman          | ZES_ENABLE_SYSMAN                   | {**0**, 1} | **@deprecated since 1.16** Use ${s}Init() instead.                                |
+| Sysman          | ZES_ENABLE_SYSMAN                   | {**0**, 1} | **@deprecated since 1.16** Use ${s}Init() instead.                                 |
 |                 |                                     |            | Enables driver initialization and dependencies for system management              |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
-| Sysman          | ZES_ENABLE_SYSMAN_LOW_POWER         | {**0**, 1} | Driver initialize the device in low power mode                                    |
+| Sysman          | ZES_ENABLE_SYSMAN_LOW_POWER         | {**0**, 1} | Driver initializes the device in low power mode                                   |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 ## --validate=on
+
 
 Initialization
 --------------
