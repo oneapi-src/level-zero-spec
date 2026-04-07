@@ -49,7 +49,7 @@ To request an IPC handle for L0 memory that is fabric accessible, the user would
     ze_ipc_mem_handle_type_ext_desc_t desc = {
         .stype = ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESC,
         .pNext = NULL,
-        .typeFlags = ZE_IPC_MEMORY_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE
+        .typeFlags = ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE
     };
 
     ze_ipc_mem_handle_t ipcHandle;
@@ -66,7 +66,7 @@ To allocate L0 memory with an IPC handle that is fabric accessible, the user wou
     ze_ipc_mem_handle_type_ext_desc_t desc = {
         .stype = ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESC,
         .pNext = NULL,
-        .typeFlags = ZE_IPC_MEMORY_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE
+        .typeFlags = ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE
     };
 
     ze_device_mem_alloc_desc_t deviceDesc = {
