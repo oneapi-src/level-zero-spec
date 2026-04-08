@@ -6,7 +6,6 @@ env:
   http_proxy: http://proxy-dmz.intel.com:912
   https_proxy: http://proxy-dmz.intel.com:912
   DOCKER_BUILDKIT: '1'
-  VER: '1.16'
 
 jobs:
   build:
@@ -35,6 +34,18 @@ jobs:
           --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
           -t ghcr.io/oneapi-src/spec-build:latest \
           - < spec-head/.github/docker/build.Dockerfile
+    - name: Detect version from git tags
+      run: | #bash
+        # Find the most recent tag matching v<MAJOR>.<MINOR>* (single 'v' prefix only)
+        LATEST_TAG=$(git -C spec-head tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+' | head -1)
+        if [ -z "$LATEST_TAG" ]; then
+          echo "Error: No version tags matching v<MAJOR>.<MINOR>.* found" >&2
+          exit 1
+        fi
+        # Extract MAJOR.MINOR only
+        VER=$(echo "$LATEST_TAG" | grep -oP '^v\K[0-9]+\.[0-9]+')
+        echo "Detected version: $VER (from tag $LATEST_TAG)"
+        echo "VER=$VER" >> $GITHUB_ENV
     - name: Generate spec-head artifacts
       run: | #bash
         docker run \
