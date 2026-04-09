@@ -289,12 +289,27 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            //${x}EventHostSynchronize( hNotificationEvent, 1000 /\*timeout\*/ );
            // reset the event if it fired
 
-           // Read raw data
-           size_t rawSize = 0;
-           ${t}MetricStreamerReadData( hMetricStreamer, UINT32_MAX, &rawSize, nullptr );
-           uint8_t* rawData = malloc(rawSize); 
+           // Read raw data. Allocate enough space for N reports of 512b each
+           size_t rawSize = 512*1024;
+           size_t readingBufferSize = rawSize;
+           size_t totalDataRead = 0;
+           uint8_t* rawData = (uint8_t*)malloc(readingBufferSize);
            ${t}MetricStreamerReadData( hMetricStreamer, UINT32_MAX, &rawSize, rawData );
-
+           totalDataRead = rawSize;
+            
+           //This loop only executes if there was more data available than could fit in the initial read buffer
+           while (rawSize == readingBufferSize) {
+                //Since we filled the buffer in the prior read, we need to read again
+                uint8_t* rawDataExtended = (uint8_t*)malloc(readingBufferSize);
+                ${t}MetricStreamerReadData( hMetricStreamer, UINT32_MAX, &rawSize, rawDataExtended);
+        
+                //Re-Alloc the original buffer and copy the extended data into it
+                rawData = (uint8_t*)realloc(rawData, totalDataRead + rawSize);
+                memcpy(rawData + totalDataRead, rawDataExtended, rawSize);
+                free(rawDataExtended);
+                totalDataRead += rawSize;
+           }
+           
            // Close metric streamer
            ${t}MetricStreamerClose( hMetricStreamer );   
            ${x}EventDestroy( hNotificationEvent );
@@ -304,7 +319,7 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
            ${t}ContextActivateMetricGroups( hContext, hDevice, 0, nullptr );
 
            // Calculate metric data
-           CalculateMetricsExample( hMetricGroup, rawSize, rawData );
+           CalculateMetricsExample( hMetricGroup, totalDataRead, rawData );
            free(rawData);
        }
 

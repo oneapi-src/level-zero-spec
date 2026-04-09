@@ -176,10 +176,11 @@ params:
     - type: size_t*
       name: pRawDataSize
       desc: |
-            [in,out] pointer to size in bytes of raw data requested to read.
-            if size is zero, then the driver will update the value with the total size in bytes needed for all data available.
-            if size is non-zero, then driver will only retrieve that amount of data. 
-            if size is larger than size needed for all data, then driver will update the value with the actual size needed.
+            [in,out] pointer to the size in bytes of raw data requested to read.
+            The driver will only retrieve the number of reports that fit into the buffer.
+            pRawDataSize will be updated by the driver to reflect the actual number of bytes written into the buffer.
+            If the size returns the full size requested, the application may need to issue additional reads to
+            retrieve any remaining reports that did not fit into the buffer.
     - type: uint8_t*
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing tracer data in raw format"

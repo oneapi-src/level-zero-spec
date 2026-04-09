@@ -127,7 +127,7 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     // Get decodable metrics
     uint32_t numDecodableMetrics = 0;
     ${t}MetricDecoderGetDecodableMetricsExp(hMetricDecoder, &numDecodableMetrics, nullptr);
-    std::vector<zet_metric_handle_t>decodableMetrics(numDecodableMetrics);
+    std::vector<zet_metric_handle_t> decodableMetrics(numDecodableMetrics);
     ${t}MetricDecoderGetDecodableMetricsExp(hMetricDecoder, &numDecodableMetrics, decodableMetrics.data());
 
     // Enable the tracer
@@ -140,19 +140,37 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
     ${x}EventHostSynchronize( hNotificationEvent, 1000 /\*timeout\*/ );
     // reset the event if it fired
 
-    // Read raw data
-    size_t rawDataSize = 0;
-    ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, nullptr);
-    std::vector<uint8_t>rawData(rawDataSize);
-    ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, rawData.data());
+    // Allocate buffer for raw data from the tracer
+    size_t rawDataSize = 512*1024;  //Initial read size
+    size_t readingBufferSize = rawDataSize;
+    size_t totalDataRead = 0;
+    uint8_t* rawData = (uint8_t*)malloc(readingBufferSize);
+    ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, rawData);
+    totalDataRead = rawDataSize;
+
+    //This loop only executes if there was more data available than could fit in the initial read buffer
+    while (rawDataSize == readingBufferSize) {
+        //Since we filled the buffer in the prior read, we need to read again
+        uint8_t* rawDataExtended = (uint8_t*)malloc(readingBufferSize);
+        ${t}MetricTracerReadDataExp(hMetricTracer, &rawDataSize, rawDataExtended);
+
+        //Re-Alloc the original buffer and copy the extended data into it
+        rawData = (uint8_t*)realloc(rawData, totalDataRead + rawDataSize);
+        memcpy(rawData + totalDataRead, rawDataExtended, rawDataSize);
+        free(rawDataExtended);
+        totalDataRead += rawDataSize;
+    }
 
     // decode
     uint32_t totalNumEntries = 0;
     uint32_t setCount = 0;
-    ${t}MetricTracerDecodeExp(hMetricDecoder,  &rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &setCount, nullptr, &totalNumEntries, nullptr);
+    ${t}MetricTracerDecodeExp(hMetricDecoder,  &totalDataRead, rawData, numDecodableMetrics, decodableMetrics.data(),
+                              &setCount, nullptr, &totalNumEntries, nullptr);
+    
     std::vector<ze_metric_entry_exp_t> decodedEntries(totalNumEntries)
     std::vector<uint32_t> metricEntriesCountPerSet(setCount);
-    ${t}MetricTracerDecodeExp(hMetricDecoder,  &rawDataSize, rawData.data(), numDecodableMetrics, decodableMetrics.data(), &setCount, metricEntriesCountPerSet.data(), &totalNumEntries, decodedEntries.data());
+    ${t}MetricTracerDecodeExp(hMetricDecoder,  &totalDataRead, rawData, numDecodableMetrics, decodableMetrics.data(),
+                              &setCount, metricEntriesCountPerSet.data(), &totalNumEntries, decodedEntries.data());
 
   uint32_t setEntryStart = 0;
     for (uint8_t setIndex = 0; setIndex < setCount; setIndex++) {
@@ -190,6 +208,9 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
             setEntryStart = metricEntriesCountPerSet[setIndex];
         }
     }
+
+    // Free raw data buffer
+    free(rawData);
 
     // Close metric tracer
     ${t}MetricTracerDisableExp(hMetricTracer, true);
