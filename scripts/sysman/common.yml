@@ -273,6 +273,10 @@ etors:
       value: "0x00020014"
       desc: $s_pci_link_speed_downgrade_ext_properties_t
       version: "1.15"
+    - name: RAS_STATE_EXP2
+      value: "0x00020015"
+      desc: $s_ras_state_exp2_t
+      version: "1.16"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

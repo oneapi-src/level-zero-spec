@@ -24,6 +24,11 @@ etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
+      version: "1.7"
+    - name: "1_1"
+      value: "$X_MAKE_VERSION( 1, 1 )"
+      desc: "version 1.1"
+      version: "1.16"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "RAS error categories"
@@ -85,6 +90,17 @@ members:
       name: errorCounter
       desc: "[out] Current value of RAS counter for specific error category."
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "Extension structure for providing RAS error counters"
+version: "1.16"
+class: $sRas
+name: $s_ras_state_exp2_t
+base: $s_base_state_t
+members:
+    - type: uint64_t
+      name: errorCounter
+      desc: "[out] Current value of RAS counter for the corresponding error category."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Ras Get State"
 class: $sRas
@@ -129,3 +145,58 @@ params:
 returns:
     - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
         - "Don't have permissions to clear error counters."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get supported RAS error categories"
+version: "1.16"
+class: $sRas
+name: GetSupportedCategoriesExp
+details:
+    - "This function retrieves the supported RAS error categories for the given RAS handle."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
+    - type: uint32_t*
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of categories.
+            if count is zero, then the driver shall update the value with the total number of categories supported.
+            if count is non-zero, then driver shall only retrieve that number of categories.
+    - type: $s_ras_error_category_exp_t*
+      name: pCategories
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of category types.
+            if count is less than the number of categories supported, then driver shall only retrieve that number of categories.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get RAS error counters for different categories"
+version: "1.16"
+class: $sRas
+name: GetStateExp2
+details:
+    - "This function retrieves error counters for different RAS error categories."
+    - "The categories and states arrays have 1:1 correspondence - pState[i] contains the error counter for pCategories[i]."
+    - "The caller must initialize stype and pNext fields in each element of the pState array."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
+    - type: "const uint32_t"
+      name: count
+      desc: "[in] Number of elements in pCategories (same as in pState array)."
+    - type: "const $s_ras_error_category_exp_t*"
+      name: pCategories
+      desc: "[in][range(0, count)] Array of RAS error categories to query."
+    - type: $s_ras_state_exp2_t*
+      name: pState
+      desc: "[out][range(0, count)] Array of RAS error states. Caller must initialize stype and pNext for each element."
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "Invalid category value in pCategories array."
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "One or more categories in pCategories array not supported by this RAS handle."

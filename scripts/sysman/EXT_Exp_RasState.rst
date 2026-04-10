@@ -21,6 +21,8 @@ API
 
     * ${s}RasGetStateExp
     * ${s}RasClearStateExp
+    * ${s}RasGetSupportedCategoriesExp
+    * ${s}RasGetStateExp2
 
 * Enumerations
 
@@ -30,6 +32,7 @@ API
 * Structures
 
     * ${s}_ras_state_exp_t
+    * ${s}_ras_state_exp2_t
 
 
 RAS State
@@ -63,21 +66,73 @@ Error category                                                                  
 The following pseudo-code demonstrates a sequence for querying the number of error categories
 supported by a platform and for obtaining the error counters for these categories.
 
+RAS Get Supported Categories
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ${s}RasGetSupportedCategoriesExp function provides a way to query which RAS error categories
+are supported by the platform. This allows applications to discover available error categories
+before attempting to retrieve error counters.
+
+The following pseudo-code demonstrates how to query supported categories:
+
+Usage Example
+~~~~~~~~~~~~~
+
 .. parsed-literal::
 
-    // Query for number of error categories supported by platform
-    uint32_t rasCategoryCount = 0;
-    {s}RasGetStateExp(rasHandle, &rasCategoryCount, nullptr);
+    // Query for number of supported categories
+    uint32_t categoryCount = 0;
+    {s}RasGetSupportedCategoriesExp(rasHandle, &categoryCount, nullptr);
 
-    ${s}_ras_state_exp_t* rasStates = (${s}_ras_state_exp_t*) allocate(rasCategoryCount * sizeof(${s}_ras_state_exp_t));
+    ${s}_ras_error_category_exp_t* categories = (${s}_ras_error_category_exp_t*) allocate(categoryCount * sizeof(${s}_ras_error_category_exp_t));
 
-    //Gather error states
-    {s}RasGetStateExp(rasHandle, &rasCategoryCount, rasStates);
+    // Retrieve supported categories
+    {s}RasGetSupportedCategoriesExp(rasHandle, &categoryCount, categories);
 
-    // Print error details
-    for(uint32_t i = 0; i < rasCategoryCount; i++) {
-        output(" Error category: %d, Error count: %llun \n", rasStates[i]->category, rasStates[i]->errorCounter);
+    // Print supported categories
+    for(uint32_t i = 0; i < categoryCount; i++) {
+        output("Supported category: %d\\n", categories[i]);
     }
 
-    // Clear error counter for specific category, for example PROGRAMMING_ERRORS
-    {s}RasClearStateExp(rasHandle, ZES_RAS_ERROR_CAT_PROGRAMMING_ERRORS);
+
+RAS Get State 
+~~~~~~~~~~~~~
+
+${s}RasGetStateExp2 takes a separate input array of error categories, allowing selective querying of specific error categories to query error counters.
+
+Usage Example
+~~~~~~~~~~~~~
+
+.. parsed-literal::
+
+    // Step 1: Discover supported categories
+    uint32_t categoryCount = 0;
+    {s}RasGetSupportedCategoriesExp(rasHandle, &categoryCount, nullptr);
+    
+    ${s}_ras_error_category_exp_t* categories = (${s}_ras_error_category_exp_t*) 
+        allocate(categoryCount * sizeof(${s}_ras_error_category_exp_t));
+    
+    {s}RasGetSupportedCategoriesExp(rasHandle, &categoryCount, categories);
+    
+    // Step 2: Prepare output state structures
+    ${s}_ras_state_exp2_t* rasStates = (${s}_ras_state_exp2_t*) 
+        allocate(categoryCount * sizeof(${s}_ras_state_exp2_t));
+    
+    for(uint32_t i = 0; i < categoryCount; i++) {
+        rasStates[i].stype = ${S}_STRUCTURE_TYPE_RAS_STATE_EXP2;
+        rasStates[i].pNext = nullptr;
+    }
+    
+    // Step 3: Retrieve error states (all categories are supported)
+    ze_result_t result = {s}RasGetStateExp2(rasHandle, categoryCount, categories, rasStates);
+    
+    // Step 4: Process results
+    if (result == ZE_RESULT_SUCCESS) {
+        for(uint32_t i = 0; i < categoryCount; i++) {
+            output("Category %d: %llu errors\\n", 
+                   categories[i], rasStates[i].errorCounter);
+        }
+    }
+    
+    free(categories);
+    free(rasStates);
