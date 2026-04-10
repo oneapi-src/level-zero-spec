@@ -55,6 +55,8 @@ etors:
       desc: "GDDR6X memory"
     - name: GDDR7
       desc: "GDDR7 memory"
+    - name: LPDDR5X
+      desc: "LPDDR5X memory"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Memory module location"
