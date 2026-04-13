@@ -32,7 +32,7 @@ class: $xMem
 name: $x_external_memmap_sysmem_ext_desc_t
 base: $x_base_desc_t
 members:
-    - type: const void*
+    - type: void*
       name: pSystemMemory
       desc: "[in] system memory pointer to map; must be page-aligned."
     - type: uint64_t
