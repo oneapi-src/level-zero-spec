@@ -135,6 +135,7 @@ desc: "Get RAS error thresholds that control when RAS events are generated"
 class: $sRas
 name: GetConfig
 details:
+    - "@deprecated since 1.16: This function is deprecated. Please use $sRasGetConfigExp() instead."
     - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
     - "When a particular RAS correctable error counter exceeds the configured threshold, the event $S_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS will be triggered."
     - "When a particular RAS uncorrectable error counter exceeds the configured threshold, the event $S_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS will be triggered."
@@ -153,6 +154,7 @@ desc: "Set RAS error thresholds that control when RAS events are generated"
 class: $sRas
 name: SetConfig
 details:
+    - "@deprecated since 1.16: This function is deprecated. Please use $sRasSetConfigExp() instead."
     - "The driver maintains counters for all RAS error sets and error categories. Events are generated when errors occur. The configuration enables setting thresholds to limit when events are sent."
     - "When a particular RAS correctable error counter exceeds the specified threshold, the event $S_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS will be generated."
     - "When a particular RAS uncorrectable error counter exceeds the specified threshold, the event $S_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS will be generated."

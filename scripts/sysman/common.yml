@@ -277,6 +277,10 @@ etors:
       value: "0x00020015"
       desc: $s_ras_state_exp2_t
       version: "1.16"
+    - name: RAS_CONFIG_EXP
+      value: "0x00020016"
+      desc: $s_ras_config_exp_t
+      version: "1.16"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"

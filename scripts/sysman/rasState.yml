@@ -101,6 +101,20 @@ members:
       name: errorCounter
       desc: "[out] Current value of RAS counter for the corresponding error category."
 --- #--------------------------------------------------------------------------
+type: struct
+desc: "RAS error configuration for per-category threshold management"
+version: "1.16"
+class: $sRas
+name: $s_ras_config_exp_t
+base: $s_base_config_t
+members:
+    - type: $s_ras_error_category_exp_t
+      name: "category"
+      desc: "[in] RAS error category for which threshold is being configured."
+    - type: uint64_t
+      name: threshold
+      desc: "[in,out] Error count threshold to trigger RAS events. A value of 0 disables event triggering for this category."
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Ras Get State"
 class: $sRas
@@ -200,3 +214,55 @@ returns:
         - "Invalid category value in pCategories array."
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "One or more categories in pCategories array not supported by this RAS handle."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get RAS error thresholds that control when RAS events are generated"
+version: "1.16"
+class: $sRas
+name: GetConfigExp
+details:
+    - "This function retrieves the RAS error thresholds for the specified RAS error categories."
+    - "When a particular RAS error counter for a given category exceeds the configured threshold, the corresponding RAS event will be triggered."
+    - "For correctable errors: $S_EVENT_TYPE_FLAG_RAS_CORRECTABLE_ERRORS"
+    - "For uncorrectable errors: $S_EVENT_TYPE_FLAG_RAS_UNCORRECTABLE_ERRORS"
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
+    - type: "const uint32_t"
+      name: count
+      desc: |
+            [in] Number of RAS configuration structures in pConfig array.
+    - type: $s_ras_config_exp_t*
+      name: pConfig
+      desc: |
+            [in,out][range(0, count)] array of RAS configuration structures.
+            The caller should set the category field for each entry to specify which categories to query.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set RAS error thresholds that control when RAS events are generated"
+version: "1.16"
+class: $sRas
+name: SetConfigExp
+details:
+    - "This function sets the RAS error thresholds for the specified RAS error categories."
+    - "When a particular RAS error counter for a given category exceeds the specified threshold, the corresponding RAS event will be generated."
+    - "Setting a threshold of 0 disables event generation for that category."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_ras_handle_t
+      name: hRas
+      desc: "[in] Handle for the component."
+    - type: "const uint32_t"
+      name: count
+      desc: "[in] Number of RAS configuration structures in pConfig array."
+    - type: "const $s_ras_config_exp_t*"
+      name: pConfig
+      desc: "[in][range(0, count)] array of RAS configuration structures specifying thresholds for different error categories."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "Don't have permissions to set thresholds."
+
