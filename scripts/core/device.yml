@@ -293,6 +293,130 @@ members:
       name: "subGroupSizes[$X_SUBGROUPSIZE_COUNT]"
       desc: "[out] Size group sizes supported."
 --- #--------------------------------------------------------------------------
+type: enum
+version: "1.16"
+desc: "Supported device compute dot product(dp) capability flags"
+class: $xDevice
+name: $x_device_dp_capability_flags_t
+etors:
+    - name: DEVICE_NON_SYSTOLIC_DPA4_SIMD_ALL
+      desc: "Supports vector dot product instruction."
+    - name: DEVICE_SYSTOLIC_DPAS_SIMD8
+      desc: "Supports sytolic dot product with 8 SIMD lanes."
+    - name: DEVICE_SYSTOLIC_DPAS_SIMD16
+      desc: "Supports sytolic dot product with 16 SIMD lanes."
+    - name: DEVICE_SYSTOLIC_BDPAS_SIMD16
+      desc: "Supports sytolic dot product with block scaling support with 16 SIMD lanes."
+    - name: DEVICE_SYSTOLIC_DPAS_DEPTH4
+      desc: "Supports 4 deep systolic for DPAS dot product"
+    - name: DEVICE_SYSTOLIC_DPAS_DEPTH8
+      desc: "Supports 8 deep systolic for DPAS dot product"
+    - name: DEVICE_SYSTOLIC_BDPAS_DEPTH8
+      desc: "Supports 8 deep systolic for BDPAS dot product"
+    - name: DEVICE_SYSTOLIC_OUTPUT_MATRIX_ROWCOUNT_UPTO8
+      desc: "Supports output matrix row count upto 8"
+    - name: DEVICE_SYSTOLIC_OUTPUT_MATRIX_ROWCOUNT_FIXED8
+      desc: "Restricts output matrix row count to 8"
+      
+--- #--------------------------------------------------------------------------
+type: enum
+version: "1.16"
+desc: "Supported device  dot product(dp) input data types flags"
+class: $xDevice
+name: $x_device_input_data_type_flags_t
+etors:
+    - name: DEVICE_INPUT_DATA_TYPE_NONE
+      desc: "No data types available for the supported dot product operation"
+    - name: ZE_DEVICE_INPUT_DATA_INT8_PACK4_PER_SIMD_LANE
+      desc: "Supports int8 data type with 4 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_INT4_PACK8_PER_SIMD_LANE
+      desc: "Supports int4 data type with 8 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_INT2_PACK8_PER_SIMD_LANE
+      desc: "Supports int2 data type with 8 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_TF32_PACK1_PER_SIMD_LANE
+      desc: "Supports tf32 data type with 1 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_FP16_PACK2_PER_SIMD_LANE
+      desc: "Supports fp16 data type with 2 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_BF16_PACK2_PER_SIMD_LANE
+      desc: "Supports bf16 data type with 2 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_FP8_PACK4_PER_SIMD_LANE
+      desc: "Supports fp8 data type with 4 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_BF8_PACK4_PER_SIMD_LANE
+      desc: "Supports bf8 data type with 4 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_E2M1_PACK8_PER_SIMD_LANE
+      desc: "Supports e2m1 data type with 8 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_E3M0_PACK8_PER_SIMD_LANE
+      desc: "Supports e3m0 data type with 8 packed data elements per SIMD lane."
+    - name: DEVICE_INPUT_DATA_INT8_PACK4_PER_SIMD_LANE
+      desc: "Supports 8bit integer data type with 4 packed data elements per SIMD lane.This is exclusively for DP4V dot product support"      
+    - name: DEVICE_INPUT_DATA_SCALING_UINT8
+      desc: "Supports uint8 data type support for scaling, exclusive to BDPAS dot product support."
+    - name: DEVICE_INPUT_DATA_SCALING_UE5M3
+      desc: "Supports ue5m3 data type support for scaling, exclusive to BDPAS dot product support."
+    - name: DEVICE_INPUT_DATA_SCALING_UE4M3
+      desc: "Supports ue4m3 data type support for scaling, exclusive to BDPAS dot product support."
+
+--- #--------------------------------------------------------------------------
+type: enum
+version: "1.16"
+desc: "Supported device  dot product(dp) output data types or accumulator data types flags"
+class: $xDevice
+name: $x_device_output_data_type_flags_t
+etors:
+    - name: DEVICE_OUTPUT_DATA_INT32
+      desc: "Supports signed and unsigned 32bit integer data type for output"
+    - name: DEVICE_OUTPUT_DATA_FP32
+      desc: "Supports fp32 data type for output."
+    - name: DEVICE_OUTPUT_DATA_FP16
+      desc: "Supports fp16 data type for output."
+    - name: DEVICE_OUTPUT_DATA_BF16
+      desc: "Supports bf16 data type for output."   
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Device Compute DotProduct Property Extension Name"
+version: "1.16"
+name: $X_DEVICE_COMPUTE_DOTPRODUCT_PROPERTIES_EXT_NAME
+value: '"$X_extension_device_compute_dotproduct_ext_properties"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Device Compute Dot product Property Extension Version(s)"
+version: "1.16"
+name: $x_device_compute_dotproduct_properties_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+version: "1.16"
+desc: "Device compute dot product capability queried using $xDeviceGetComputeProperties"
+class: $xDevice
+name: $x_device_compute_dotproduct_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_device_dp_capability_flags_t
+      name: dp_caps
+      desc: "[out] indicates dot product capability of the device"
+    - type: $x_device_input_data_type_flags_t
+      name: dpv4_input_types
+      desc: "[out] Supported input data types when dp4v dot product capability is supported."
+    - type: $x_device_output_data_type_flags_t
+      name: dpv4_output_types
+      desc: "[out] Supported output data types when dp4v dot product capability is supported."
+    - type: $x_device_input_data_type_flags_t
+      name: dpas_input_types
+      desc: "[out] Supported input data types when dpas dot product capability is supported."
+    - type: $x_device_output_data_type_flags_t
+      name: dpas_output_types
+      desc: "[out] Supported output data types when dpas dot product capability is supported."
+    - type: $x_device_input_data_type_flags_t
+      name: bdpas_input_types
+      desc: "[out] Supported input data types when bdpas dot product capability is supported."
+    - type: $x_device_output_data_type_flags_t
+      name: bdpas_output_types
+      desc: "[out] Supported output data types when bdpas dot product capability is supported."
+
+--- #--------------------------------------------------------------------------
 type: function
 desc: "Retrieves compute properties of the device."
 class: $xDevice
