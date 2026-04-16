@@ -92,7 +92,8 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
     print("Generating %s..."%fout)
 
     outlines = []
-    for iline, line in enumerate(util.textRead(fin)):
+    lines = util.textRead(fin)
+    for iline, line in enumerate(lines):
 
         if re.match(RE_ENABLE, line) or re.match(RE_PYCODE_BLOCK_END, line):
             enable = True
@@ -134,10 +135,25 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                         continue
 
                     if code_block and 'function' == symbol_type:
-                        words = re.sub(RE_EXTRACT_PARAMS, r"\1", line)
-                        words = line.split(",")
-                        if len(words) != len(meta['function'][symbol]['params']):
-                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, len(words), len(meta['function'][symbol]['params'])))
+                        # A function call in sample code may be formatted across multiple
+                        # lines for readability. Start with the current line and accumulate
+                        # subsequent lines until parentheses are balanced (i.e. the call is
+                        # complete), so that all parameters are visible for counting.
+                        full_call = line.rstrip('\n')
+                        lookahead = iline + 1
+                        while full_call.count('(') != full_call.count(')') and lookahead < len(lines):
+                            # Strip leading whitespace from continuation lines so they join
+                            # cleanly without affecting the comma-split count below.
+                            full_call += ' ' + lines[lookahead].strip()
+                            lookahead += 1
+                        # Extract only the argument list between the outermost parentheses
+                        # using RE_EXTRACT_PARAMS, then count arguments by splitting on ','.
+                        # Without this extraction step, splitting the raw line would also
+                        # count commas inside nested calls or template arguments incorrectly.
+                        param_str = re.sub(RE_EXTRACT_PARAMS, r"\1", full_call)
+                        param_count = len(param_str.split(","))
+                        if param_count != len(meta['function'][symbol]['params']):
+                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, param_count, len(meta['function'][symbol]['params'])))
                             print("line = %s"%line)
 
                     ref = _make_ref(fin, iline, symbol, symbol_type, meta)
