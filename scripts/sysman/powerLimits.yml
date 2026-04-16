@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2022 Intel Corporation
+# Copyright (C) 2021-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -123,3 +123,40 @@ returns:
         - "User does not have permissions to make these modifications."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power limits"
+version: "1.16"
+class: $sPower
+name: GetLimitsExt2
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "This function returns the power limit associated with the power domain of the handle."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Power domain handle instance."
+    - type: uint32_t*
+      name: pLimit
+      desc: "[out] Returns limit value in milliwatts for given power domain."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set power limits"
+version: "1.16"
+class: $sPower
+name: SetLimitsExt2
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "This function sets the power limit associated with the power domain of the handle."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Power domain handle instance."
+    - type: "const uint32_t"
+      name: limit
+      desc: "[in] Limit value in milliwatts to be set for given power domain."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to make these modifications."

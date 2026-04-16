@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -7,7 +7,7 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Scheduler management"
+desc: "Intel $OneApi Level-Zero Tool APIs for System Resource Management (Sysman) - Power management"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Power Domain"
@@ -354,6 +354,26 @@ returns:
         - "User does not have permissions to request this feature."
     - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "Another running process has set the energy threshold."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get power usage"
+version: "1.16"
+class: $sPower
+name: GetUsage
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "This function returns the different power usage values associated with the power domain."
+params:
+    - type: $s_pwr_handle_t
+      name: hPower
+      desc: "[in] Handle of the power domain."
+    - type: uint32_t*
+      name: pInstantPower
+      desc: "[out] Returns the instant power usage in milliwatts."
+    - type: uint32_t*
+      name: pAveragePower
+      desc: "[out] Returns the average power usage in milliwatts."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device power domain"
