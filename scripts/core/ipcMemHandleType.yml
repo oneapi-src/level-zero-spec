@@ -33,10 +33,10 @@ version: "1.15"
 etors:
     - name: DEFAULT
       value: "$X_BIT(0)"
-      desc: "Local IPC memory handle type for use within the same machine."
+      desc: "Local IPC memory handle type for use within the same device. This is the default if no flags are specified and does not indicate if the handle is shareable across devices or machines."
     - name: FABRIC_ACCESSIBLE
       value: "$X_BIT(1)"
-      desc: "Fabric accessible IPC memory handle type for use across machines via a supported fabric."
+      desc: "Fabric accessible IPC memory handle type for use across devices or machines via a supported fabric."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: 

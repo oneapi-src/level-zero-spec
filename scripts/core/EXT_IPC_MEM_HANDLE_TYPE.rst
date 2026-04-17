@@ -39,6 +39,24 @@ When users are requesting IPC handles for L0 memory, there may be requirements f
 
 To facilitate this, the IPC Memory Handle Type Extension provides a mechanism to specify the type of IPC handle to be created during memory allocation or when obtaining an IPC handle for existing memory.
 
+Checking IPC Support
+~~~~~~~~~~~~~~~~~~~~~
+
+Before requesting a specific IPC handle type, users can query the driver to determine what IPC handle types are supported by checking the IPC property flags:
+
+.. parsed-literal::
+
+    ${x}_ipc_properties_t ipcProps;
+    ${x}DeviceGetIpcProperties(hDevice, &ipcProps);
+    
+    if (ipcProps.flags & ${X}_IPC_PROPERTY_FLAG_FABRIC_ACCESSIBLE) {
+        // Driver supports fabric accessible IPC handles
+    } else {
+        // Fabric accessible IPC handles are not supported
+    }
+
+This approach allows applications to determine available IPC capabilities before attempting to create handles or allocate memory with specific IPC requirements.
+
 Get IPC Handle Usage Example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -54,6 +72,10 @@ To request an IPC handle for L0 memory that is fabric accessible, the user would
 
     ze_ipc_mem_handle_t ipcHandle;
     ze_result_t result = zeMemGetIpcHandleWithProperties(hContext, ptr, &ipcHandle, &desc);
+
+.. note::
+
+    If the driver does not support ``ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE``, the function will return ``ZE_RESULT_ERROR_UNSUPPORTED_FEATURE``. Applications can proactively check for support by querying ``${x}_ipc_properties_t`` as shown in the "Checking IPC Support" section above.
 
 
 Memory Allocation Usage Example
@@ -95,3 +117,7 @@ To allocate L0 memory with an IPC handle that is fabric accessible, the user wou
     };
     void* physical_ptr = NULL;
     ze_result_t result = zePhysicalMemCreate(hContext, &physicalDesc, &physical_ptr);
+
+.. note::
+
+    If the driver does not support ``ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE``, the memory allocation functions (``zeMemAllocDevice``, ``zeMemAllocHost``, ``zePhysicalMemCreate``) will return ``ZE_RESULT_ERROR_UNSUPPORTED_FEATURE``. Applications can proactively check for support by querying ``${x}_ipc_properties_t`` as shown in the "Checking IPC Support" section above.

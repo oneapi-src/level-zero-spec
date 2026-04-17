@@ -299,6 +299,9 @@ etors:
       desc: "Supports passing memory allocations between processes. See $xMemGetIpcHandle."
     - name: EVENT_POOL
       desc: "Supports passing event pools between processes. See $xEventPoolGetIpcHandle."
+    - name: FABRIC_ACCESSIBLE
+      version: "1.16"
+      desc: "Supports creating a handle type for memory allocations and event pools between processes on different physical devices connected through a fabric interconnect. See $x_ipc_mem_handle_type_ext_desc_t."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "IPC properties queried using $xDriverGetIpcProperties"
