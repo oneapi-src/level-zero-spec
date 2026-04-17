@@ -14,6 +14,9 @@ from templates import helper as th
  Immediate Command List Append Extension
 =========================================
 
+This experimental extension is deprecated since version 1.16.
+Please use ${x}CommandListImmediateAppendCommandListsWithParameters instead.
+
 API
 ----
 
