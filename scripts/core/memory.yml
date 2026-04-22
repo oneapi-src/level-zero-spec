@@ -56,6 +56,9 @@ etors:
     - name: BIAS_INITIAL_PLACEMENT
       desc: "optimize shared allocation for first access on the host"
       version: "1.2"
+    - name: MEM_READ_ONLY
+      desc: "device access will be read-only, mutually exclusive with $X_HOST_MEM_ALLOC_FLAG_BIAS_WRITE_COMBINED"
+      version: "1.16"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Host memory allocation descriptor"
