@@ -81,6 +81,12 @@ class class_traits:
             return meta['class'][item['name']]['handle'][0]
         except:
             return ""
+        
+"""
+    Extracts tag prefix from a name
+"""
+def get_tag(item, tags):
+    return next((t for t in tags if item.startswith(t)), None)
 
 """
     Extracts traits from a type name
@@ -210,7 +216,7 @@ class value_traits:
     @classmethod
     def is_ver(cls, name):
         try:
-            return True if re.match(cls.RE_VERSION, name) else False
+            return True if name and re.match(cls.RE_VERSION, name) else False
         except:
             return False
 
@@ -231,7 +237,7 @@ class value_traits:
     @classmethod
     def is_bit(cls, name):
         try:
-            return True if re.match(cls.RE_BIT, name) else False
+            return True if name and  re.match(cls.RE_BIT, name) else False
         except:
             return False
 
@@ -245,7 +251,7 @@ class value_traits:
     @classmethod
     def is_hex(cls, name):
         try:
-            return True if re.match(cls.RE_HEX, name) else False
+            return True if name and re.match(cls.RE_HEX, name) else False
         except:
             return False
 

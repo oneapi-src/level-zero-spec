@@ -1050,3 +1050,132 @@ params:
 returns::
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
        - "Provided invalid hDevice or incrementValue pointer"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Describes the module for which runtime requirements are being gathered. This structure is accepted as pObjDesc to $xDeviceGetRuntimeRequirements. This structure requires ZE_extension_driver_ddi_handles to be supported by the driver."
+class: $xDevice
+base: $x_base_desc_t
+name: $x_runtime_requirements_module_desc_t
+version: "1.16"
+requires: ["ZE_extension_driver_ddi_handles"]
+members:
+    - type: "$x_module_handle_t"
+      name: requirementsSrc
+      desc: "[in] Module for which the requirements are being gathered"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Describes the graph for which runtime requirements are being gathered. This structure is accepted as pObjDesc to $xDeviceGetRuntimeRequirements. This structure requires ZE_extension_driver_ddi_handles to be supported by the driver."
+class: $xDevice
+base: $x_base_desc_t
+name: $x_runtime_requirements_graph_desc_t
+version: "1.16"
+requires: ["ZE_extension_driver_ddi_handles"]
+members:
+    - type: "$x_graph_handle_t"
+      name: requirementsSrc
+      desc: "[in] Graph for which the requirements are being gathered"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gathers null-terminated plain text representation of runtime requirements for provided object."
+version: "1.16"
+class: $xDevice
+name: GetRuntimeRequirements
+details:
+    - "To gather requirements for a given object (e.g. an L0 module or graph), pObjDesc must point to a structure (e.g. $x_runtime_requirements_module_desc_t or $x_runtime_requirements_graph_desc_t) describing object for which the requirements are being retrieved."
+    - "Requirements are copied to user-provided memory pointed to by pRequirements and pSize is set to represent the actual written length of the requirements string in bytes."
+    - "The caller can pass nullptr for pRequirements when querying only for size."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: const void*
+      name: pObjDesc
+      desc: "[in] describes the object for which the requirements are to be gathered"
+    - type: size_t*
+      name: pSize
+      desc: "[in,out] size of requirements string in bytes."
+    - type: char*
+      name: pRequirements
+      desc: "[in,out][optional] holds results of the query."
+returns:
+    - $X_RESULT_SUCCESS:
+       - "Successfully gathered requirements for provided source (e.g. module)."
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "Provided hDevice handle is invalid"
+       - "pObjDesc doesn't point to a structure that describes a supported object for which the requirements can be gathered."
+    - $X_RESULT_ERROR_INVALID_NULL_POINTER:
+       - "(nullptr != pRequirements) && (nullptr == pSize)."
+       - "(nullptr != pRequirements) && (*pSize < requiredSize)."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves requirements producer key."
+version: "1.16"
+class: $xDevice
+name: GetRuntimeRequirementsKey
+details:
+    - "Retrieves null-terminated plain text that represents the producer of requirements (Example string: 'INTEL.L0.GPU')."
+    - "Useful for bookkeeping of the requirements on user side."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: "const char**"
+      name: pKey
+      desc: "[out] returned key"
+returns:
+    - $X_RESULT_SUCCESS:
+       - "Successfully retrieved the key."
+    - $X_RESULT_ERROR_INVALID_NULL_POINTER:
+       - "(nullptr == pKey)."
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Result of runtime requirements validation"
+class: $xDevice
+name: $x_validate_runtime_requirements_result_t
+version: "1.16"
+etors:
+    - name: NOT_APPLICABLE
+      desc: "Provided requirements are not applicable to underlying device"
+    - name: REQUIREMENTS_MET
+      desc: "Provided requirements are met and optimal"
+    - name: REQUIREMENTS_MET_RECOMPILATION_ADVISABLE
+      desc: "Provided requirements are met, but recompilation is advisable"
+    - name: REQUIREMENTS_NOT_MET
+      desc: "Requirements are not met"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Output of $xDeviceValidateRuntimeRequirements"
+class: $xDevice
+name: $x_validate_runtime_requirements_output_t
+base: $x_base_properties_t
+members:
+    - type: $x_validate_runtime_requirements_result_t
+      name: result
+      desc: "[out] Result of the validation call."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Validates runtime requirements."
+version: "1.16"
+class: $xDevice
+name: ValidateRuntimeRequirements
+details:
+    - "To validate existing requirements (e.g. cached from previous runs), requirements string should be passed as pRequirements."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: const char*
+      name: pRequirements
+      desc: "[in] requirements to be validated. Requirements should be null-terminated plain text representation of runtime requirements previously retrieved from the device."
+    - type: "$x_validate_runtime_requirements_output_t*"
+      name: pOut
+      desc: "[in][out] Output of the validation call."
+returns:
+    - $X_RESULT_SUCCESS:
+       - "Validation call succeeded and result of the validation is available in pOut."
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "Provided hDevice handle is invalid"
+    - $X_RESULT_ERROR_INVALID_NULL_POINTER:
+       - "(nullptr == pRequirements)."
+       - "(nullptr == pOut)."

@@ -114,6 +114,11 @@ class: $xModule
 name: "$x_module_handle_t"
 --- #--------------------------------------------------------------------------
 type: handle
+desc: "Handle of driver's graph object"
+class: $xGraph
+name: "$x_graph_handle_t"
+--- #--------------------------------------------------------------------------
+type: handle
 desc: "Handle of module's build log object"
 class: $xModuleBuildLog
 name: "$x_module_build_log_handle_t"
@@ -697,6 +702,18 @@ etors:
       desc: $x_device_compute_dotproduct_ext_properties_t
       version: "1.16"
       value: "0x00020043"
+    - name:  RUNTIME_REQUIREMENTS_MODULE_DESC
+      desc: $x_runtime_requirements_module_desc_t
+      version: "1.16"
+      value: "0x00020044"
+    - name:  RUNTIME_REQUIREMENTS_GRAPH_DESC
+      desc: $x_runtime_requirements_graph_desc_t
+      version: "1.16"
+      value: "0x00020045"
+    - name: RUNTIME_REQUIREMENTS_OUTPUT
+      desc: $x_validate_runtime_requirements_output_t
+      version: "1.16"
+      value: "0x00020046"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

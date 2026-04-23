@@ -11,7 +11,7 @@ import hashlib
 import json
 import yaml
 import copy
-from templates.helper import param_traits, type_traits, value_traits
+from templates.helper import param_traits, type_traits, value_traits, get_tag
 
 default_version = "1.0"
 all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "2.0"]
@@ -74,6 +74,20 @@ def _get_etor_value(value, prev):
             return int(value)
     else:
         return prev+1
+    
+"""
+    check if type is declares given requirement
+"""
+def _declares_requirement(type, requirement):
+    return requirement in type.get("requires", [])
+
+"""
+    check if type is allowed to use handles as members
+"""
+def _handle_members_allowed(parent_desc, member_desc, tags):
+    return get_tag(member_desc['type'], tags) == "$x" \
+           and (_version_compare_gequal(parent_desc.get("version", default_version), "1.17")
+                or _declares_requirement(parent_desc, "ZE_extension_driver_ddi_handles"))
 
 """
     validate documents meet some basic (easily detectable) requirements of code generation
@@ -259,7 +273,7 @@ def _validate_doc(f, d, tags, line_num):
             if not annotation:
                 raise Exception(prefix+"'desc' must start with {'[in]', '[out]', '[in,out]'}")
 
-            if type_traits.is_handle(item['type']):
+            if type_traits.is_handle(item['type']) and not _handle_members_allowed(d, item, tags):
                 raise Exception(prefix+"'type' must not be '*_handle_t': %s"%item['type'])
 
             if item['type'].endswith("flag_t"):
