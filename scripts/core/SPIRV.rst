@@ -687,6 +687,35 @@ added by the extension:
 
 %endif
 
+Global Variables
+----------------
+
+${OneApi} Level-Zero API environments must accept SPIR-V modules that
+declare use of the ``SPV_INTEL_global_variable_host_access`` extension via
+**OpExtension**.
+
+When use of the ``SPV_INTEL_global_variable_host_access`` extension is declared in the
+module via **OpExtension**, the environment must accept modules that
+declare the **GlobalVariableHostAccessINTEL** SPIR-V capability:
+
+The function ${x}ModuleGetGlobalPointer can be used to retrieve a pointer to a global variable.
+
+${x}ModuleGetGlobalPointer takes a ``pGlobalName`` parameter which identifies the variable. For a ``${x}_module_handle`` created
+from SPIR-V this parameter is interpreted as follows:
+
+- The implementation first looks for an **OpVariable** that is decorated with **HostAccessINTEL** where
+  the *Name* operand is the same as ``pGlobalName``
+
+- If no such variable is found the implementation then looks for an **OpVariable** that is decorated with
+  **LinkageAttributes** where the *Name* operand is the same as ``pGlobalName``. (The implementation considers both
+  exported and imported variables as candidates)
+
+If the module was created from native code that came form a previous call to ${x}ModuleGetNativeBinary and that
+other module was created from SPIR-V, then the interpretation of ``pGlobalName`` is the same as the SPIR-V case.
+
+If ``pGlobalName`` identifies an imported SPIR-V variable, the module must be dynamically linked before the variable's pointer
+may be queried.
+
 Numerical Compliance
 ====================
 

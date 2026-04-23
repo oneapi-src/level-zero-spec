@@ -242,8 +242,8 @@ desc: "Retrieve global variable pointer from Module."
 class: $xModule
 name: GetGlobalPointer
 details:
-    - "The application may query global pointer from any module that either exports or imports it."
-    - "The application must dynamically link a module that imports a global before the global pointer can be queried from it."
+    - "For modules created from SPIR-V the interpretation of `pGlobalName` is described in the SPIR-V programming guide."
+    - "For native modules not created from SPIR-V the interpretation of `pGlobalName` is implementation defined."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:
