@@ -700,7 +700,7 @@ declare the **GlobalVariableHostAccessINTEL** SPIR-V capability:
 
 The function ${x}ModuleGetGlobalPointer can be used to retrieve a pointer to a global variable.
 
-${x}ModuleGetGlobalPointer takes a ``pGlobalName`` parameter which identifies the variable. For a ``${x}_module_handle`` created
+${x}ModuleGetGlobalPointer takes a ``pGlobalName`` parameter which identifies the variable. For a ``${x}_module_handle_t`` created
 from SPIR-V this parameter is interpreted as follows:
 
 - The implementation first looks for an **OpVariable** that is decorated with **HostAccessINTEL** where

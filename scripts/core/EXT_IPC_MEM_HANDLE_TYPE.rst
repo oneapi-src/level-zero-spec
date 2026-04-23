@@ -46,8 +46,8 @@ Before requesting a specific IPC handle type, users can query the driver to dete
 
 .. parsed-literal::
 
-    ${x}_ipc_properties_t ipcProps;
-    ${x}DeviceGetIpcProperties(hDevice, &ipcProps);
+    ${x}_driver_ipc_properties_t ipcProps;
+    ${x}DriverGetIpcProperties(hDriver, &ipcProps);
     
     if (ipcProps.flags & ${X}_IPC_PROPERTY_FLAG_FABRIC_ACCESSIBLE) {
         // Driver supports fabric accessible IPC handles
@@ -75,7 +75,7 @@ To request an IPC handle for L0 memory that is fabric accessible, the user would
 
 .. note::
 
-    If the driver does not support ``ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE``, the function will return ``ZE_RESULT_ERROR_UNSUPPORTED_FEATURE``. Applications can proactively check for support by querying ``${x}_ipc_properties_t`` as shown in the "Checking IPC Support" section above.
+    If the driver does not support ``ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE``, the function will return ``ZE_RESULT_ERROR_UNSUPPORTED_FEATURE``. Applications can proactively check for support by querying ``${x}_driver_ipc_properties_t`` as shown in the "Checking IPC Support" section above.
 
 
 Memory Allocation Usage Example
@@ -120,4 +120,4 @@ To allocate L0 memory with an IPC handle that is fabric accessible, the user wou
 
 .. note::
 
-    If the driver does not support ``ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE``, the memory allocation functions (``zeMemAllocDevice``, ``zeMemAllocHost``, ``zePhysicalMemCreate``) will return ``ZE_RESULT_ERROR_UNSUPPORTED_FEATURE``. Applications can proactively check for support by querying ``${x}_ipc_properties_t`` as shown in the "Checking IPC Support" section above.
+    If the driver does not support ``ZE_IPC_MEM_HANDLE_TYPE_FLAG_FABRIC_ACCESSIBLE``, the memory allocation functions (``zeMemAllocDevice``, ``zeMemAllocHost``, ``zePhysicalMemCreate``) will return ``ZE_RESULT_ERROR_UNSUPPORTED_FEATURE``. Applications can proactively check for support by querying ``${x}_driver_ipc_properties_t`` as shown in the "Checking IPC Support" section above.
