@@ -5,6 +5,7 @@
 
 """
 import os
+import sys
 import util
 import re
 import glob
@@ -281,7 +282,10 @@ def generate_html(dstpath):
     sourcepath = os.path.join(dstpath, "source")
 
     print("Generating HTML...")
-    cmdline = "sphinx-build -M html %s ../docs"%sourcepath
+    # Resolve sphinx-build from the same bin directory as the running Python
+    # so it works correctly when invoked via a virtualenv (e.g. /opt/spec-venv).
+    sphinx_build = os.path.join(os.path.dirname(sys.executable), "sphinx-build")
+    cmdline = "%s -M html %s ../docs" % (sphinx_build, sourcepath)
     print(cmdline)
     os.environ["PYTHONWARNINGS"] = "ignore"
     rc = os.waitstatus_to_exitcode(os.system(cmdline))

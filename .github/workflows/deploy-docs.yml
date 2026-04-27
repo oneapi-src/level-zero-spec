@@ -41,7 +41,8 @@ jobs:
             --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
             --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
             -t ghcr.io/oneapi-src/spec-build:latest \
-            - < .github/docker/build.Dockerfile
+            -f .github/docker/build.Dockerfile \
+            .
 
       - name: Detect version from git tags
         run: | #bash
@@ -64,7 +65,7 @@ jobs:
             -w $PWD/scripts \
             -e TZ=UTC \
             ghcr.io/oneapi-src/spec-build:latest \
-            python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
+            /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
 
       - name: Prepare GitHub Pages structure
         run: | #bash

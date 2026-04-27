@@ -81,10 +81,74 @@ def revision():
 
 
 """
+    Validate installed package versions against third_party/requirements.txt.
+    Exits with an error if any installed package does not satisfy its minimum
+    version requirement, preventing silent build degradation (e.g., an outdated
+    sphinx-book-theme installed via apt suppressing the light/dark theme switch).
+"""
+def check_requirements():
+    import importlib.metadata
+    try:
+        from packaging.requirements import Requirement
+        from packaging.version import Version
+    except ImportError:
+        print("WARNING: 'packaging' module not available; skipping dependency version check.")
+        return
+
+    req_file = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "third_party", "requirements.txt"))
+    if not os.path.isfile(req_file):
+        print("WARNING: requirements.txt not found at %s; skipping dependency version check." % req_file)
+        return
+
+    failures = []
+    with open(req_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            try:
+                req = Requirement(line)
+            except Exception:
+                continue
+            try:
+                installed = Version(importlib.metadata.version(req.name))
+            except importlib.metadata.PackageNotFoundError:
+                failures.append("  %-40s NOT INSTALLED" % (req.name + ":"))
+                continue
+            if not req.specifier.contains(installed, prereleases=True):
+                failures.append("  %-40s installed %s does not satisfy %s" % (req.name + ":", installed, req.specifier))
+
+    if failures:
+        print("\nERROR: The following dependencies do not meet the minimum version requirements")
+        print("       specified in third_party/requirements.txt.")
+        print("       This can cause missing build features (e.g., the light/dark theme switch")
+        print("       requires sphinx-book-theme >= 1.1.2).")
+        print()
+        print("       System packages installed via apt may shadow the required pip versions.")
+        print()
+        print("       If you have a Python virtual environment with these packages installed,")
+        print("       make sure it is activated before running this script, e.g.:")
+        print()
+        print("         source ~/.venv/bin/activate")
+        print()
+        print("       Otherwise, install the required versions with:")
+        print()
+        print("         pip install -r third_party/requirements.txt")
+        print()
+        for msg in failures:
+            print(msg)
+        print()
+        sys.exit(1)
+
+
+"""
 Main entry:
     Do everything...
 """
 def main():
+    # Validate dependency versions before doing any work.
+    check_requirements()
+
     # Configure Python to treat warnings as errors
     warnings.filterwarnings('error')
 

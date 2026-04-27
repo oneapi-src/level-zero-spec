@@ -51,6 +51,8 @@ def copyTree(src, dst):
     remove directory and all contents
 """
 def removePath(path):
+    if not os.path.exists(path):
+        return
     try:
         shutil.rmtree(path)
     except:

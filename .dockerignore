@@ -1,0 +1,8 @@
+# Only the files needed to build the Docker image are required in the build context.
+# Exclude large directories to keep the build context small and fast.
+build/
+docs/
+scripts/src/
+scripts/__pycache__/
+**/__pycache__/
+**/*.pyc
