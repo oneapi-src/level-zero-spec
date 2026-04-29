@@ -162,7 +162,6 @@ def main():
     add_argument(parser, "build", "running cmake to generate and build projects.", True)
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "html", "generation of HTML files.", True)
-    add_argument(parser, "pdf", "[deprecated, unsupported] generation of PDF file.")
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
     add_argument(parser, "ignore_git_revision", "use command-line verison (ver) as revision instead of git tag.", False)
     parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
@@ -247,9 +246,6 @@ def main():
     # phase 6: publish documentation
     if args['html']:
         generate_docs.generate_html(docpath)
-
-    if args['pdf']:
-        print("\nPDF generation has been deprecated and is no longer supported.")
 
     if args['update_spec']:
         update_spec(args['update_spec'])

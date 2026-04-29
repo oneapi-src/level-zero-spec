@@ -1,4 +1,4 @@
-# Doxyfile 1.8.15
+# Doxyfile 1.9.x
 
 # This file describes the settings to be used by the documentation system
 # doxygen (www.doxygen.org) for a project.
@@ -438,6 +438,13 @@ TYPEDEF_HIDES_STRUCT   = YES
 # Minimum value: 0, maximum value: 9, default value: 0.
 
 LOOKUP_CACHE_SIZE      = 0
+
+# NUM_PROC_THREADS specifies the number of worker threads that doxygen may use
+# during processing. When set to 0, doxygen automatically selects the number of
+# threads based on the number of available processors.
+# Minimum value: 0, maximum value: 32, default value: 1.
+
+NUM_PROC_THREADS       = 0
 
 #---------------------------------------------------------------------------
 # Build related configuration options

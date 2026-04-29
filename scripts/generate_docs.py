@@ -285,7 +285,7 @@ def generate_html(dstpath):
     # Resolve sphinx-build from the same bin directory as the running Python
     # so it works correctly when invoked via a virtualenv (e.g. /opt/spec-venv).
     sphinx_build = os.path.join(os.path.dirname(sys.executable), "sphinx-build")
-    cmdline = "%s -M html %s ../docs" % (sphinx_build, sourcepath)
+    cmdline = "%s -M html %s ../docs -j auto" % (sphinx_build, sourcepath)
     print(cmdline)
     os.environ["PYTHONWARNINGS"] = "ignore"
     rc = os.waitstatus_to_exitcode(os.system(cmdline))

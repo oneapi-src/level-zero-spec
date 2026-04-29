@@ -12,6 +12,21 @@ jobs:
     runs-on: [self-hosted, Linux]
     if: github.repository_owner == 'intel-innersource'
     steps:
+    - name: Print runner machine metrics
+      # Captures build machine capabilities at job start so we have context
+      # for diagnosing slow runs and tuning parallelism (e.g. make -j flags).
+      run: | #bash
+        echo "=== Host ==="
+        hostname
+        echo ""
+        echo "=== CPU ==="
+        lscpu | grep -E "Model name|Socket|Core|Thread|CPU\(s\)"
+        echo ""
+        echo "=== Memory ==="
+        free -h
+        echo ""
+        echo "=== Disk ==="
+        df -h --output=target,size,used,avail,pcent | grep -E "^Filesystem|^/$|^/home|^/tmp"
     - name: Checkout spec-head
       uses: actions/checkout@v4
       with:
@@ -27,6 +42,17 @@ jobs:
         fetch-depth: 0
         fetch-tags: true
         path: spec-base
+    - name: Get spec-base SHA
+      id: spec-base-sha
+      run: echo "sha=$(git -C spec-base rev-parse HEAD)" >> $GITHUB_OUTPUT
+    - name: Restore spec-base artifacts cache
+      id: cache-spec-base
+      uses: actions/cache/restore@v4
+      with:
+        path: |
+          spec-base/docs
+          spec-base/include
+        key: spec-base-artifacts-${{ steps.spec-base-sha.outputs.sha }}
     - name: Build container image
       run: | #bash
         docker build \
@@ -57,6 +83,7 @@ jobs:
           ghcr.io/oneapi-src/spec-build:latest \
           /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
     - name: Generate spec-base artifacts
+      if: steps.cache-spec-base.outputs.cache-hit != 'true'
       run: | #bash
         docker run \
           --rm \
@@ -245,6 +272,40 @@ jobs:
         ref: master
         path: loader-head
         token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
+    - name: Get loader master HEAD SHA
+      # Fetch the current HEAD SHA of the loader master branch. This SHA is used
+      # as the cache key for base.dump — so we only rebuild the base when master
+      # has actually changed, not on every PR run.
+      id: loader-master-sha
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
+        script: |
+          const { data } = await github.rest.repos.getBranch({
+            owner: 'oneapi-src',
+            repo: 'level-zero',
+            branch: 'master'
+          });
+          core.setOutput('sha', data.commit.sha);
+    - name: Restore base ABI dump cache
+      # Attempt to restore a previously generated ABI dump (base.dump) for the
+      # loader master branch, keyed on the master HEAD SHA. On a cache hit the
+      # expensive loader build and abi-dumper steps below are all skipped,
+      # saving several minutes per run.
+      # The restore-keys fallback matches any older base-abi-dump entry so the
+      # very first run after a new master commit still gets a warm start from
+      # the previous ABI dump.
+      # Cache entries are evicted by GitHub after 7 days of non-use, so storage
+      # stays bounded to a handful of small ABI dump entries at any given time.
+      # Note: save-always is deprecated — saving is handled by the explicit
+      # actions/cache/save step at the end of the job using if: always().
+      id: cache-base-abi-dump
+      uses: actions/cache/restore@v4
+      with:
+        path: base.dump
+        key: base-abi-dump-${{ steps.loader-master-sha.outputs.sha }}
+        restore-keys: |
+          base-abi-dump-
     - name: Checkout loader-base
       uses: actions/checkout@v4
       with:
@@ -322,7 +383,7 @@ jobs:
           --interactive \
           -v $PWD:$PWD \
           -w $PWD \
-          -e CXXFLAGS="-Og -g" \
+          -e CXXFLAGS="-Og -g -fno-lto" \
           ghcr.io/oneapi-src/spec-build:latest \
           bash -e <<EOF
         mkdir -p build
@@ -331,6 +392,10 @@ jobs:
         make -j$(nproc)
         EOF
     - name: Build loader-base
+      # Skipped on cache hit — base ABI dump was restored from cache, so there
+      # is no need to rebuild the loader from source. Must use Debug + -Og -g
+      # -fno-lto so that DWARF debug info is present and complete for abi-dumper.
+      if: steps.cache-base-abi-dump.outputs.cache-hit != 'true'
       working-directory: loader-base
       run: | #bash
         docker run \
@@ -338,7 +403,7 @@ jobs:
           --interactive \
           -v $PWD:$PWD \
           -w $PWD \
-          -e CXXFLAGS="-Og -g" \
+          -e CXXFLAGS="-Og -g -fno-lto" \
           ghcr.io/oneapi-src/spec-build:latest \
           bash -e <<EOF
         mkdir -p build
@@ -356,19 +421,13 @@ jobs:
       run: | #bash
         cp abi-dumper/abi-dumper.pl .
         chmod +x abi-dumper.pl
-    - name: Dump loader-head
-      run: | #bash
-        docker run \
-          --rm \
-          -v $PWD:$PWD \
-          -w $PWD \
-          ghcr.io/oneapi-src/spec-build:latest \
-          ./abi-dumper.pl \
-            loader-head/build/lib/libze_loader.so \
-            -lver $(cat loader-head/build/VERSION)-1 \
-            -public-headers loader-head/include \
-            -o head.dump
     - name: Dump loader-base
+      # Skipped on cache hit — base ABI dump was restored from cache.
+      # -lambda ensures lambda functions are included in the ABI snapshot.
+      # Run as root and chown output — same reasoning as Dump loader-head.
+      # The resulting base.dump is automatically saved to the ABI dump cache
+      # by actions/cache when this job completes successfully.
+      if: steps.cache-base-abi-dump.outputs.cache-hit != 'true'
       run: | #bash
         docker run \
           --rm \
@@ -379,12 +438,45 @@ jobs:
             loader-base/build/lib/libze_loader.so \
             -lver $(cat loader-base/build/VERSION) \
             -public-headers loader-base/include \
+            -lambda \
             -o base.dump
+        docker run --rm -v $PWD:$PWD -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          chown $(id -u):$(id -g) base.dump
+    - name: Dump loader-head
+      # Run as root (Docker default) so POSIX ACL mask entries on the
+      # self-hosted runner filesystem cannot block the write. Ownership of the
+      # output file is immediately restored to the runner user so
+      # actions/cache can read and save it.
+      run: | #bash
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          ./abi-dumper.pl \
+            loader-head/build/lib/libze_loader.so \
+            -lver $(cat loader-head/build/VERSION)-1 \
+            -public-headers loader-head/include \
+            -lambda \
+            -o head.dump
+        docker run --rm -v $PWD:$PWD -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          chown $(id -u):$(id -g) head.dump
+
+    - name: Restore abi-compliance-checker cache
+      id: cache-acc
+      uses: actions/cache/restore@v4
+      with:
+        path: abi-compliance-checker
+        key: abi-compliance-checker-2.3
     - name: Download and setup abi-compliance-checker
+      if: steps.cache-acc.outputs.cache-hit != 'true'
       run: |
-        wget https://github.com/lvc/abi-compliance-checker/tarball/master -O abi-compliance-checker.tar.gz
-        tar -xzf abi-compliance-checker.tar.gz
-        chmod +x lvc-abi-compliance-checker-*/abi-compliance-checker.pl
+        wget https://github.com/lvc/abi-compliance-checker/tarball/2.3 -O abi-compliance-checker.tar.gz
+        mkdir -p abi-compliance-checker
+        tar -xzf abi-compliance-checker.tar.gz --strip-components=1 -C abi-compliance-checker
+        chmod +x abi-compliance-checker/abi-compliance-checker.pl
     - name: Fix API_CURRENT_VERSION check
       id: fix_current_version
       continue-on-error: true
@@ -404,7 +496,7 @@ jobs:
           -v $PWD:$PWD \
           -w $PWD \
           ghcr.io/oneapi-src/spec-build:latest \
-          lvc-abi-compliance-checker-*/abi-compliance-checker.pl \
+          abi-compliance-checker/abi-compliance-checker.pl \
             -l libze_loader \
             -old base.dump \
             -new head.dump \
@@ -466,6 +558,30 @@ jobs:
               repo: context.repo.repo,
               body: body
             });
+    - name: Save spec-base artifacts cache
+      if: always() && steps.cache-spec-base.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          spec-base/docs
+          spec-base/include
+        key: ${{ steps.cache-spec-base.outputs.cache-primary-key }}
+    - name: Save abi-compliance-checker cache
+      if: always() && steps.cache-acc.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: abi-compliance-checker
+        key: ${{ steps.cache-acc.outputs.cache-primary-key }}
+    - name: Save base ABI dump cache
+      # Always runs (even on job failure) so base.dump is persisted regardless
+      # of ABI check outcome. base.dump reflects loader master state, not PR
+      # outcome — skipped only when the restore step already had a cache hit
+      # to avoid overwriting an identical entry.
+      if: always() && steps.cache-base-abi-dump.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: base.dump
+        key: ${{ steps.cache-base-abi-dump.outputs.cache-primary-key }}
     - name: Fail if ABI check failed and not approved
       if: steps.abi-check.outcome == 'failure' && steps.check-approval.outputs.approved != 'true'
       run: |
