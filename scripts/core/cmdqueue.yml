@@ -235,6 +235,54 @@ params:
       name: pIndex
       desc: "[out] command queue index within the group"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Gets command queue creation flags."
+class: $xCommandQueue
+name: GetFlags
+version: "1.17"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCmdQueue
+      desc: "[in] handle of the command queue"
+    - type: "$x_command_queue_flags_t*"
+      name: pFlags
+      desc: "[out] pointer to flags used during command queue creation"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets command queue operation mode."
+class: $xCommandQueue
+name: GetMode
+version: "1.17"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCmdQueue
+      desc: "[in] handle of the command queue"
+    - type: "$x_command_queue_mode_t*"
+      name: pMode
+      desc: "[out] pointer to mode used during command queue creation"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets command queue priority."
+class: $xCommandQueue
+name: GetPriority
+version: "1.17"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCmdQueue
+      desc: "[in] handle of the command queue"
+    - type: "$x_command_queue_priority_t*"
+      name: pPriority
+      desc: "[out] pointer to priority used during command queue creation"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command queue"
 name: $xCommandQueue

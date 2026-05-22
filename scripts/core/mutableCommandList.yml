@@ -277,6 +277,22 @@ returns:
        - "Invalid kernel argument or not matching update descriptor provided"
 --- #--------------------------------------------------------------------------
 type: function
+desc: "Query whether a command list was created with the mutable command list extension."
+version: "1.17"
+class: $xCommandList
+name: IsMutableExp
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_bool_t*"
+      name: pIsMutable
+      desc: "[out] pointer bool determining whether command list was created with mutable extension"
+--- #--------------------------------------------------------------------------
+type: function
 desc: "Updates the signal event for a mutable command in a mutable command list."
 version: "1.9"
 class: $xCommandList

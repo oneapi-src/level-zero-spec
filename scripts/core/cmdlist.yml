@@ -311,6 +311,82 @@ params:
       name: pIsImmediate
       desc: "[out] Boolean indicating whether the command list is an immediate command list (true) or not (false)"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Gets command list creation flags."
+class: $xCommandList
+name: GetFlags
+version: "1.17"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_command_list_flags_t*"
+      name: pFlags
+      desc: "[out] pointer to flags used during command list creation"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets immediate command list command queue flags."
+class: $xCommandList
+name: ImmediateGetFlags
+version: "1.17"
+details:
+    - "The application must call this function only with command lists created with $xCommandListCreateImmediate."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_command_queue_flags_t*"
+      name: pFlags
+      desc: "[out] pointer to flags used during command list creation"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "handle does not correspond to an immediate command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets immediate command list command queue mode."
+class: $xCommandList
+name: ImmediateGetMode
+version: "1.17"
+details:
+    - "The application must call this function only with command lists created with $xCommandListCreateImmediate."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_command_queue_mode_t*"
+      name: pMode
+      desc: "[out] pointer to mode used during command list creation"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "handle does not correspond to an immediate command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets immediate command list command queue priority."
+class: $xCommandList
+name: ImmediateGetPriority
+version: "1.17"
+details:
+    - "The application must call this function only with command lists created with $xCommandListCreateImmediate."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: "$x_command_queue_priority_t*"
+      name: pPriority
+      desc: "[out] pointer to priority used during command list creation"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "handle does not correspond to an immediate command list"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for command list"
 name: $xCommandList
