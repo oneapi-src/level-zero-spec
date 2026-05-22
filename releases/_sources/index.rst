@@ -26,6 +26,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.16.24`_
+    - 2026-4-24
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.16.24/index.html>`__
   * - `Level Zero v1.15.31`_
     - 2026-1-27
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.15.31/index.html>`__
@@ -119,6 +122,33 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.16.24
+~~~~~~~~~~~~~~~~~~~
+
+* New Features in v1.16
+
+    - New Sysman APIs for Power Usage and Power Limits
+    - New Sysman RAS Error types
+    - New Sysman APIs for RAS, SetConfigExp and GetConfigExp to handle extended error types
+    - Add FABRIC_ACCESIBLE flags for IPC handles
+    - Add READ_ONLY flag to indicate memory acecss to allocated host memory
+    - New Core API for querying ORTC Compatibilty Strings
+    - New Core API for AppendMemoryCopy/MemoryFill/CommandLists with Parameters
+    - New Core API for querying BDPAS and DPAS HW support and data types
+
+* Deprecations:
+
+    - Deprecate zetMetricsStreamerReadData behavior for querying for available sizes
+    - Deprecate zesSetConfig and zesGetConfig due to limited error type
+
+* Patches since v1.15.31 release
+
+    - Fix issue where MetricGroup and Metric Export Memory extensions not being listed in Exp Extensions list
+    - Fix incorrect name of ZE_IPC_MEM_HANDLE in sample code
+    - Improve docs for zeModuleGetGlobalPointer extension
+    - Fix the description of size in zes_mem_state_t
+    - Remove const qualifier for pSystemMemory member in ze_external_memmap_sysmem_ext_desc_t
 
 Level Zero v1.15.31
 ~~~~~~~~~~~~~~~~~~~
