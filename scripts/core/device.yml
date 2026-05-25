@@ -1051,6 +1051,28 @@ returns::
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
        - "Provided invalid hDevice or incrementValue pointer"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Returns maximum value supported by the driver for Counter Based Events created with externally managed counter storage (see $x_event_counter_based_external_sync_allocation_desc_t and $x_event_counter_based_external_aggregate_storage_desc_t)."
+version: "1.17"
+class: $xDevice
+name: GetCounterBasedEventMaxValue
+details:
+    - "Value is applicable only to this specific device."
+    - "User must query this value before creating a Counter Based Event with externally managed counter storage and ensure that `completionValue` provided in the descriptor does not exceed it."
+    - "User must also ensure that any value written by the application to `deviceAddress` or `hostAddress` of an externally managed counter storage (including values aggregated under `deviceAddress` of $x_event_counter_based_external_aggregate_storage_desc_t) does not exceed this maximum at any point in time."
+    - "Driver does not validate values written by the user to externally managed memory; exceeding this maximum results in undefined behavior."
+    - "$xEventCounterBasedCreate returns $X_RESULT_ERROR_INVALID_ARGUMENT if the descriptor specifies a value greater than the value returned by this query."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: uint64_t*
+      name: maxValue
+      desc: "[out] maximum value that may appear under externally managed counter storage and that may be passed as `completionValue` when creating a Counter Based Event"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "Provided invalid hDevice or maxValue pointer"
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Describes the module for which runtime requirements are being gathered. This structure is accepted as pObjDesc to $xDeviceGetRuntimeRequirements. This structure requires ZE_extension_driver_ddi_handles to be supported by the driver."
 class: $xDevice

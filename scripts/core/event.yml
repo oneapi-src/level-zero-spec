@@ -239,7 +239,10 @@ members:
       desc: "[in] host address for external synchronization allocation"
     - type: uint64_t
       name: completionValue
-      desc: "[in] completion value for external synchronization allocation"
+      desc: |
+            [in] completion value for external synchronization allocation.
+            Must not exceed the value returned by $xDeviceGetCounterBasedEventMaxValue.
+            User is also responsible for ensuring that any value written by the application to `deviceAddress` or `hostAddress` does not exceed that maximum.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Counter Based Event external aggregate storage. Passed as pNext to $x_event_counter_based_desc_t"
@@ -256,7 +259,10 @@ members:
       desc: "[in] value which would by atomically added upon each completion"
     - type: uint64_t
       name: completionValue
-      desc: "[in] final completion value, when value under deviceAddress is equal or greater then this value then event is considered as completed"
+      desc: |
+            [in] final completion value, when value under deviceAddress is equal or greater then this value then event is considered as completed.
+            Must not exceed the value returned by $xDeviceGetCounterBasedEventMaxValue.
+            User is responsible for ensuring that the value aggregated under `deviceAddress` (initial value plus any number of `incrementValue` additions) does not exceed that maximum at any point in time.
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event from the pool."
@@ -304,7 +310,8 @@ params:
       name: phEvent
       desc: "[out] pointer to handle of event object created"
 returns:
-    - $X_RESULT_ERROR_INVALID_ARGUMENT
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+       - "`completionValue` provided in `pNext` $x_event_counter_based_external_sync_allocation_desc_t or $x_event_counter_based_external_aggregate_storage_desc_t exceeds the value returned by $xDeviceGetCounterBasedEventMaxValue"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."

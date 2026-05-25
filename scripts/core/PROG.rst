@@ -1467,6 +1467,9 @@ Requirements:
 - Host allocation (`hostAddress`) must be CPU accessible USM allocation (eg. waiting for completion)
 - User is responsible for updating both memory locations to >= `completionValue` to signal Event completion
 - Using such event for signaling on new API call, replaces the state (as described previously)
+- Driver defines a maximum value supported for externally managed counter storage. User must query it via ${x}DeviceGetCounterBasedEventMaxValue prior to event creation.
+- `completionValue` provided in ${x}_event_counter_based_external_sync_allocation_desc_t must not exceed the value returned by ${x}DeviceGetCounterBasedEventMaxValue. Otherwise ${x}EventCounterBasedCreate returns ${X}_RESULT_ERROR_INVALID_ARGUMENT.
+- Any value written by the user to `deviceAddress` or `hostAddress` (including explicit signaling writes) must also not exceed the value returned by ${x}DeviceGetCounterBasedEventMaxValue. Exceeding this maximum results in undefined behavior.
 
 
 External aggregate storage
@@ -1487,6 +1490,8 @@ Requirements:
 - Device storage is under users control. It must be reset by the user if needed
 - Profiling is not possible if producers originate on different GPUs (different timestamp domains)
 - User can programatically obtain increment value that would work even if underlying append API would be distributed to multiple engines via ${x}DeviceGetAggregatedCopyOffloadIncrementValue query.
+- `completionValue` provided in ${x}_event_counter_based_external_aggregate_storage_desc_t must not exceed the value returned by ${x}DeviceGetCounterBasedEventMaxValue. Otherwise ${x}EventCounterBasedCreate returns ${X}_RESULT_ERROR_INVALID_ARGUMENT.
+- User is responsible for ensuring that the value aggregated under `deviceAddress` (initial value plus any number of `incrementValue` additions performed by signaling append calls or by the user directly) does not exceed the value returned by ${x}DeviceGetCounterBasedEventMaxValue at any point in time. Exceeding this maximum results in undefined behavior.
 
 Barriers
 ========
