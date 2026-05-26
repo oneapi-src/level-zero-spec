@@ -793,6 +793,23 @@ params:
       name: pFlags
       desc: "[out] creation flags used to create the event pool; may be 0 or a valid combination of $x_event_pool_flag_t"
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Gets counter based flags of an event."
+class: $xEvent
+name: GetCounterBasedFlags
+version: "1.17"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "Returns 0 for regular events created with $xEventCreate, and a valid combination of $x_event_counter_based_flag_t for counter based events created with $xEventCounterBasedCreate."
+params:
+    - type: $x_event_handle_t
+      name: hEvent
+      desc: "[in] handle of the event"
+    - type: $x_event_counter_based_flags_t*
+      name: pFlags
+      desc: "[out] flags used during creation of a counter based event; may be 0 or a valid combination of $x_event_counter_based_flag_t"
+--- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for event pool"
 name: $xEventPool
