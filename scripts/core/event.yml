@@ -436,6 +436,11 @@ class: $xEvent
 name: CounterBasedOpenIpcHandle
 decl: static
 version: "1.15"
+details:
+    - "The `hContext` parameter has no requirement to match the context that was used to create the event in the exporting process. Any context of the importing process may be used, including the driver's default context."
+    - "Device association of the opened event depends on its current state at the time of the call: if the event has not yet been enqueued for signaling, no device is yet associated with it; if the event has been enqueued for signaling, it is associated with the device performing that signal operation."
+    - "Any device of the importing process may signal the opened event. Enqueuing a signal operation overwrites the previous tracking point."
+    - "A device may wait on the opened event only if it has P2P access to the device associated with the current tracking point. The set of devices that may wait therefore depends on the P2P capabilities relative to the signaling device."
 params:
     - type: $x_context_handle_t
       name: hContext

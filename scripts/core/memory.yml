@@ -397,6 +397,9 @@ name: OpenIpcHandle
 decl: static
 details:
     - "Takes an IPC memory handle from a remote process and associates it with a device pointer usable in this process."
+    - "The 'hDevice' parameter identifies the device into which the allocation is imported. If this device differs from the one where the memory was originally allocated, it must have P2P access to the exporting device. P2P accessibility can be verified using $xDeviceGetP2PProperties or $xDeviceCanAccessPeer."
+    - "The `hContext` parameter has no requirement to match the context used during the original allocation in the exporting process. Any context of the importing process may be used."
+    - "After the handle is successfully opened, the returned pointer may be accessed by `hDevice` and by any other device of the importing process that has P2P connectivity to the exporting device."
     - "The device pointer in this process should not be freed with $xMemFree, but rather with $xMemCloseIpcHandle."
     - "Multiple calls to this function with the same IPC handle will return unique pointers."
     - "The application may call this function from simultaneous threads."
