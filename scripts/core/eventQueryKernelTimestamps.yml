@@ -56,10 +56,10 @@ name: $x_synchronized_timestamp_data_ext_t
 members:
     - type: uint64_t
       name: kernelStart
-      desc: "[out] synchronized clock at start of kernel execution"
+      desc: "[out] start of kernel execution in nanoseconds, on the host time domain."
     - type: uint64_t
       name: kernelEnd
-      desc: "[out] synchronized clock at end of kernel execution"
+      desc: "[out] end of kernel execution in nanoseconds, on the host time domain."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Synchronized kernel timestamp result"
@@ -69,10 +69,10 @@ name: $x_synchronized_timestamp_result_ext_t
 members:
     - type: $x_synchronized_timestamp_data_ext_t
       name: global
-      desc: "[out] wall-clock data"
+      desc: "[out] wall-clock data; free running device clock when device was active,on the host time domain"
     - type: $x_synchronized_timestamp_data_ext_t
       name: context
-      desc: "[out] context-active data; only includes clocks while device context was actively executing."
+      desc: "[out] context specific active data; only includes clocks while context was actively executing on the device, on the host time domain"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Event query kernel timestamps results properties"

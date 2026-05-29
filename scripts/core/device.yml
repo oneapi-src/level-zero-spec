@@ -196,10 +196,12 @@ members:
             "1.2": "[out] Returns the resolution of device timer used for profiling, timestamps, etc. When stype==$X_STRUCTURE_TYPE_DEVICE_PROPERTIES the units are in nanoseconds. When stype==$X_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 units are in cycles/sec"
     - type: uint32_t
       name: timestampValidBits
-      desc: "[out] Returns the number of valid bits in the timestamp value."
+      desc: |
+            [out] Returns the number of valid bits in the timestamp value. (i.e can be used to calculate the max value of the device timestamp in hardware or get the mask of valid bits in the timestamp value).
+            timestampValidBits may or may not be same as the kernelTimestampValidBits as they may be tracked using different register sizes which are platform specific.
     - type: uint32_t
       name: kernelTimestampValidBits
-      desc: "[out] Returns the number of valid bits in the kernel timestamp values"
+      desc: "[out] Returns the number of valid bits in the kernel timestamp values. (i.e can beused to calculate the max value of the  kernel timestamp in hardware or get the mask of valid bits in the kernel timestamp value)."
     - type: $x_device_uuid_t
       name: uuid
       desc: "[out] universal unique identifier. Note: Subdevices will have their own uuid."
@@ -956,16 +958,22 @@ name: GetGlobalTimestamps
 details:
     - "The application may call this function from simultaneous threads with the same device handle."
     - "The implementation of this function must be thread-safe."
+    - "The hostTimestamp value needs to return a sample from a RAW_MONOTONIC_CLOCK source that is not affected by system time changes or by software adjustments to the clock."
+    - "The hostTimestamp and deviceTimestamp values should be coordinated to be sampled at the same time/close together"
 params:
     - type: $x_device_handle_t
       name: hDevice
       desc: "[in] handle of the device"
     - type: "uint64_t*"
       name: hostTimestamp
-      desc: "[out] value of the Host's global timestamp that correlates with the Device's global timestamp value."
+      desc: "[out] value of the Host's global timestamp in nanoseconds at the time of invoking the function."
     - type: "uint64_t*"
       name: deviceTimestamp
-      desc: "[out] value of the Device's global timestamp that correlates with the Host's global timestamp value."
+      desc: |
+            [out] value of the Device's global timestamp in tick counts at the time of invoking the function.
+            To get the devicetime stamp in nanoseconds, resolve the tick counts using the timestampValidBits as mask together with timerResolution members of the $x_device_properties_t structure.
+            For example: deviceTimestampinNS = (deviceTimestamp & timestampValidBits) * 1/timerResolution.(when timer resolution is in cycle/sec)
+
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "The feature is not supported by the underlying platform."     

@@ -633,14 +633,14 @@ class: $xEvent
 name: $x_kernel_timestamp_data_t
 details:
     - "The timestamp frequency can be queried from the `timerResolution` member of $x_device_properties_t."
-    - "The number of valid bits in the timestamp value can be queried from the `kernelTimestampValidBits` member of $x_device_properties_t."
+    - "The number of valid bits in the timestamp values can be inferred from the `kernelTimestampValidBits` member of $x_device_properties_t."    
 members:
     - type: uint64_t
       name: kernelStart
-      desc: "[out] device clock at start of kernel execution"
+      desc: "[out] time sample in tick counts at start of kernel execution"
     - type: uint64_t
       name: kernelEnd
-      desc: "[out] device clock at end of kernel execution"
+      desc: "[out] time sample in tick counts at end of kernel execution"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel timestamp result"
@@ -649,10 +649,10 @@ name: $x_kernel_timestamp_result_t
 members:
     - type: $x_kernel_timestamp_data_t
       name: global
-      desc: "[out] wall-clock data"
+      desc: "[out] wall-clock data; free running device clock indicating active device state."
     - type: $x_kernel_timestamp_data_t
       name: context
-      desc: "[out] context-active data; only includes clocks while device context was actively executing."
+      desc: "[out] context specific active data; only includes clocks while context was actively executing on the device."
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Queries an event's timestamp value on the host."
