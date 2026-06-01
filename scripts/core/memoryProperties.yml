@@ -88,6 +88,12 @@ etors:
     - name: HBM4
       desc: "HBM4 memory"
       version: "1.14"
+    - name: LPDDR5X
+      desc: "LPDDR5X memory"
+      version: "1.17"
+    - name: LPDDR6
+      desc: "LPDDR6 memory"
+      version: "1.17"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory properties"
