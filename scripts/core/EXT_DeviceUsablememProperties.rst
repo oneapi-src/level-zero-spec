@@ -47,7 +47,7 @@ The following psuedo-code demonstrates a sequence for obtaining extended informa
         ${x}_device_usablemem_size_ext_properties_t* pUsablememProps = allocate(sizeof(${x}_device_usablemem_size_ext_properties_t));
 
         pUsablememProps.stype =  ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIES;
-        deviceProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+        deviceProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2; // ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
         deviceProperties.pNext = pUsablememProps;
 
         //obtain device and extended memory properties

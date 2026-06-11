@@ -97,7 +97,7 @@ The following pseudo-code demonstrates a basic initialization and device discove
 
            for(uint32_t d = 0; d < deviceCount; ++d) {
                ze_device_properties_t deviceProperties {};
-               deviceProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+               deviceProperties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2; // ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
                zeDeviceGetProperties(allDevices[d], &deviceProperties);
 
                if(ZE_DEVICE_TYPE_GPU == deviceProperties.type) {
@@ -1314,9 +1314,20 @@ timestampValidBits and kernelTimestampValidBits members of ${x}_device_propertie
 
 .. parsed-literal::
 
-       // Get timestamp duration
-       const double timestampDuration = 1 / deviceProperties.timerResolution; (i.e deviceProperties.timerResolution in cycles/sec)
-       const uint64_t timestampMaxValue = ~(-1L << deviceProperties.kernelTimestampValidBits);
+       // Note: ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES is deprecated since 1.17 for timer resolution queries.
+       // Use ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 to obtain timerResolution in cycles/sec.
+       ${x}_device_properties_t deviceProperties {};
+       deviceProperties.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2;
+       ${x}DeviceGetProperties(hDevice, &deviceProperties);
+
+       // timerResolution is the timer frequency in cycles/sec (Hz) when
+       // stype == ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2.
+       // Build a mask of kernelTimestampValidBits ones, used to detect counter roll over.
+       // (Avoid ~(-1L << bits): shifting a signed value is undefined behavior, and
+       //  `long` is only 32 bits on some platforms, e.g. Windows.)
+       const uint64_t timestampMaxValue = ( deviceProperties.kernelTimestampValidBits >= 64 )
+           ? ~(uint64_t)0
+           : ( (uint64_t)1 << deviceProperties.kernelTimestampValidBits ) - 1;
 
        // Create event pool
        ${x}_event_pool_desc_t tsEventPoolDesc = {
@@ -1336,7 +1347,7 @@ timestampValidBits and kernelTimestampValidBits members of ${x}_device_propertie
            0  // no additional memory/cache coherency required on wait
        };
        ${x}_event_handle_t hTSEvent;
-       ${x}EventCreate(hEventPool, &tsEventDesc, &hTSEvent);
+       ${x}EventCreate(hTSEventPool, &tsEventDesc, &hTSEvent);
 
        // allocate memory for results
        ${x}_device_mem_alloc_desc_t tsResultDesc = {
@@ -1361,13 +1372,20 @@ timestampValidBits and kernelTimestampValidBits members of ${x}_device_propertie
        ${x}EventHostSynchronize(hEvent, 0);
 
        // Calculation execution time(s)
-       double globalTimeInNs = ( tsResult->global.kernelEnd >= tsResult->global.kernelStart )
-           ? ( tsResult->global.kernelEnd - tsResult->global.kernelStart ) * timestampDuration
-           : (( timestampMaxValue - tsResult->global.kernelStart) + tsResult->global.kernelEnd + 1 ) * timestampDuration;
+       // First compute the elapsed tick count on each timeline, handling counter roll over.
+       uint64_t globalElapsed = ( tsResult->global.kernelEnd >= tsResult->global.kernelStart )
+           ? ( tsResult->global.kernelEnd - tsResult->global.kernelStart )                          // no wrap
+           : ( timestampMaxValue - tsResult->global.kernelStart ) + tsResult->global.kernelEnd + 1; // counter wrapped
 
-       double contextTimeInNs = ( tsResult->context.kernelEnd >= tsResult->context.kernelStart )
-           ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart ) * timestampDuration
-           : (( timestampMaxValue - tsResult->context.kernelStart) + tsResult->context.kernelEnd + 1 ) * timestampDuration;
+       uint64_t contextElapsed = ( tsResult->context.kernelEnd >= tsResult->context.kernelStart )
+           ? ( tsResult->context.kernelEnd - tsResult->context.kernelStart )                            // no wrap
+           : ( timestampMaxValue - tsResult->context.kernelStart ) + tsResult->context.kernelEnd + 1;   // counter wrapped
+
+       // timerResolution is in cycles/sec (Hz), so nanoseconds = (tick count) / frequency * NS_IN_SEC.
+       // Multiply by NS_IN_SEC first to preserve precision.
+       const double NS_IN_SEC = 1e9;
+       double globalTimeInNs  = (double)globalElapsed  * NS_IN_SEC / (double)deviceProperties.timerResolution;
+       double contextTimeInNs = (double)contextElapsed * NS_IN_SEC / (double)deviceProperties.timerResolution;
 
        ...
 
@@ -2590,7 +2608,7 @@ or sub-device using ${x}DeviceGetProperties.
 
        // Query sub-device properties.
        ${x}_device_properties_t subdeviceProps {};
-       subDeviceProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+       subDeviceProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2; // ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
        ${x}DeviceGetProperties(hSubdevice, &subdeviceProps);
 
        assert(subdeviceProps.flags & ${X}_DEVICE_PROPERTY_FLAG_SUBDEVICE); // Ensure that we have a handle to a sub-device.

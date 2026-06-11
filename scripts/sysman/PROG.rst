@@ -478,7 +478,7 @@ device:
 
   function ShowDeviceInfo(${s}_device_handle_t hSysmanDevice)
       ${s}_device_properties_t devProps {}
-      devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
+      devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2    // ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
       ${s}_device_state_t devState
       if (${s}DeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
           output("    UUID:           %s", devProps.core.uuid.id)
@@ -2366,14 +2366,13 @@ The flow of detecting and recovering from a Survivability mode using Level-Zero 
 
    # Survivability mode detection
    for(devIndex = 0 .. deviceCount-1){
-	ze_device_properties_t device_properties {};
-	device_properties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES;
-
-	result = zeDeviceGetProperties(hSysmanDevices[devIndex], &device_properties);
-	if(result == ZE_RESULT_ERROR_SURVIVABILITY_MODE_DETECTED){
-		# Device is in Survivability mode, flash firmware image to recover the device
-		# Recovery using zesDeviceEnumFirmwares(), zesFirmwareFlash() APIs
-	}
+       ze_device_properties_t device_properties {};
+       device_properties.stype = ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2; // ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
+       result = zeDeviceGetProperties(hSysmanDevices[devIndex], &device_properties);
+       if(result == ZE_RESULT_ERROR_SURVIVABILITY_MODE_DETECTED){
+           # Device is in Survivability mode, flash firmware image to recover the device
+           # Recovery using zesDeviceEnumFirmwares(), zesFirmwareFlash() APIs
+       }
    }
    free_memory(...)
 

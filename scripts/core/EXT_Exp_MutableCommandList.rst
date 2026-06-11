@@ -65,7 +65,7 @@ API
     };
 
     ${x}_device_properties_t deviceProps = {
-        ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES
+        ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2   // ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
     };
     deviceProps.pNext = &mutCmdListProps;
 

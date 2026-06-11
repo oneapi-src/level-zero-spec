@@ -39,9 +39,9 @@ the read-only capability supported by the device.
 
 The ``readonlyCapability`` field reports one of the following values:
 
-- **${X}_DEVICE_READONLY_MEMORY_CAPABILITY_NONE**: The read-only attribute has no effect.
-- **${X}_DEVICE_READONLY_MEMORY_CAPABILITY_HINT**: The read-only attribute is forwarded to the OS as a performance hint.
-- **${X}_DEVICE_READONLY_MEMORY_CAPABILITY_ENFORCED**: The read-only attribute is hardware-enforced.
+- ``${X}_DEVICE_READONLY_MEMORY_CAPABILITY_NONE``: The read-only attribute has no effect.
+- ``${X}_DEVICE_READONLY_MEMORY_CAPABILITY_HINT``: The read-only attribute is forwarded to the OS as a performance hint.
+- ``${X}_DEVICE_READONLY_MEMORY_CAPABILITY_ENFORCED``: The read-only attribute is hardware-enforced.
 
 The following pseudo-code demonstrates how to query the read-only memory capability:
 
@@ -53,7 +53,7 @@ The following pseudo-code demonstrates how to query the read-only memory capabil
        roProps.pNext = nullptr;
 
        ${x}_device_properties_t devProps = {};
-       devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+       devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2; // ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
        devProps.pNext = &roProps;
 
        ${x}DeviceGetProperties(hDevice, &devProps);

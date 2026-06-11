@@ -148,7 +148,7 @@ The next step is to query the target device for acceleration structure propertie
         rtasDeviceProps.pNext = nullptr;
 
         ${x}_device_properties_t deviceProps;
-        deviceProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES;
+        deviceProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2; // ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
         deviceProps.pNext = &rtasDeviceProps;
 
         ${x}DeviceGetProperties(hDevice, &deviceProps);

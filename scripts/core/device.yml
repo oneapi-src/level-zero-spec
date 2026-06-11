@@ -194,6 +194,7 @@ members:
             "1.0": "[out] Returns the resolution of device timer in nanoseconds used for profiling, timestamps, etc."
             "1.1": "[out] Returns the resolution of device timer in cycles per second used for profiling, timestamps, etc."
             "1.2": "[out] Returns the resolution of device timer used for profiling, timestamps, etc. When stype==$X_STRUCTURE_TYPE_DEVICE_PROPERTIES the units are in nanoseconds. When stype==$X_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 units are in cycles/sec"
+            "1.17": "[out] @deprecated when using $X_STRUCTURE_TYPE_DEVICE_PROPERTIES since 1.17: Use $X_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 to obtain timerResolution in cycles/sec for profiling and timestamps."
     - type: uint32_t
       name: timestampValidBits
       desc: |

@@ -336,7 +336,7 @@ etors:
     - name: DRIVER_IPC_PROPERTIES
       desc: $x_driver_ipc_properties_t
     - name: DEVICE_PROPERTIES
-      desc: $x_device_properties_t
+      desc: "$x_device_properties_t. @deprecated since 1.17: Use $X_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 instead."
     - name: DEVICE_COMPUTE_PROPERTIES
       desc: $x_device_compute_properties_t
     - name: DEVICE_MODULE_PROPERTIES
