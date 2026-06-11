@@ -73,7 +73,11 @@ extern "C" {
 typedef ${th.subt(n, tags, obj['value'])} ${th.make_type_name(n, tags, obj)};
 ## CALLBACK ####################################################################
 %elif re.match(r"callback", obj['type']):
+%if 'convention' in obj:
+typedef ${th.subt(n, tags, obj['returntype'])} (${th.subt(n, tags, obj['convention'])} *${th.subt(n, tags, obj['name'])})(
+%else:
 typedef ${th.subt(n, tags, obj['returntype'])} (*${th.subt(n, tags, obj['name'])})(
+%endif
         %for line in th.make_param_lines(n, tags, obj):
         ${line}
         %endfor

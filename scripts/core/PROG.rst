@@ -1118,6 +1118,49 @@ The following pseudo-code demonstrates appending kernel with pointer, SLM and im
 
        ...
 
+Appending Host Functions
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Host functions enable inserting host-side function calls into a command list.
+When the device reaches a host function entry during command list execution, it invokes the specified callback on the host before proceeding with subsequent commands.
+The runtime invokes the callback on the host asynchronously with respect to API calls.
+
+.. note::
+    - The host function callback must match the `pfnHostFunction` parameter type accepted by ${x}CommandListAppendHostFunction.
+    - The host function must **not** call any Level Zero API functions.
+    - The host function may access USM shared and USM host allocations.
+    - In contrast to event-based synchronization - where the application must call ${x}EventHostSynchronize and block its own thread until the device reaches that point - a host function lets the runtime invoke the host-side work asynchronously, without blocking any application thread.
+
+The following example demonstrates a simplified producer-consumer pattern using an in-order immediate
+command list for image processing. A kernel processes each frame on the GPU, and a host
+function notifies a consumer thread that the frame is ready. The consumer thread can begin
+displaying or saving the frame while the GPU is already processing the next one:
+
+.. parsed-literal::
+
+        // Host function - signals consumer thread
+        void ${X}_CALLBACK_CONV onFrameReady(void* pUserData)
+        {
+            FrameContext* frame = static_cast<FrameContext*>(pUserData);
+            frame->ready = true;
+            signalConsumer(frame);
+        }
+
+        // ...
+        // Create in-order immediate command list
+        // Create consumer thread that waits for frames
+
+        for (int i = 0; i < nFrames; i++) {
+            // GPU processes frame i
+            ${x}CommandListAppendLaunchKernel(hImmCmdList, hKernel, &launchArgs[i], nullptr, 0, nullptr);
+
+            // Host function notifies consumer thread that frame i is ready
+            ${x}CommandListAppendHostFunction(hImmCmdList, onFrameReady, &frames[i], nullptr, 0, nullptr);
+        }
+
+        // Wait for all GPU work to complete
+        ${x}CommandListHostSynchronize(hImmCmdList, UINT64_MAX);
+
 Synchronization Primitives
 ==========================
 

@@ -1,0 +1,66 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Append Host Function"
+version: "1.17"
+--- #--------------------------------------------------------------------------
+type: callback
+desc: "Host Function callback type"
+version: "1.17"
+convention: $X_CALLBACK_CONV
+returntype: void
+name: $x_host_function_callback_t
+params:
+    - type: void*
+      name: pUserData
+      desc: "[in][optional] user data pointer"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends a host function call into a command list."
+version: "1.17"
+class: $xCommandList
+name: AppendHostFunction
+details:
+    - "The application must ensure the events are accessible by the device on which the command list was created."
+    - "The host function will be executed on the host when the command list reaches this point during execution."
+    - "The host function callback must be of type $x_host_function_callback_t."
+    - "The host function must **not** call any Level Zero API functions."
+    - "The host function may access USM shared and USM host allocations."
+    - "The runtime invokes the host function asynchronously to API calls."
+    - "Device may wait for preceding commands to finish before invoking the callback (i.e. callbacks may introduce implicit synchronization point on the device)."
+    - "Device will wait for all phWaitEvents to be signaled before executing the host function."
+    - "The application must **not** call this function from simultaneous threads with the same command list handle."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+    - type: $x_host_function_callback_t
+      name: pfnHostFunction
+      desc: "[in] host function to call, expected to be lightweight and non-blocking"
+    - type: void*
+      name: pUserData
+      desc: "[in][optional] user specific data that would be passed to function; neither the runtime nor the device will dereference it"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] additional extensions passed to the function"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] count of phWaitEvents; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "an extension passed via pNext is not supported"
