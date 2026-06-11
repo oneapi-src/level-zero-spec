@@ -111,6 +111,7 @@ details:
     - "The ptr must be aligned to pattern_size"
     - "The value to initialize memory to is described by the pattern and the pattern size."
     - "The pattern size must be a power-of-two and less than or equal to the `maxMemoryFillPatternSize` member of $x_command_queue_group_properties_t."
+    - "The size must be a multiple of pattern size."
     - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -148,6 +149,7 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+        - "`size % pattern_size != 0`"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initializes host, device, or shared memory with additional parameters."
@@ -160,6 +162,7 @@ details:
     - "The ptr must be aligned to pattern_size."
     - "The value to initialize memory to is described by the pattern and the pattern size."
     - "The pattern size must be a power-of-two and less than or equal to the `maxMemoryFillPatternSize` member of $x_command_queue_group_properties_t."
+    - "The size must be a multiple of pattern size."
     - "The application must ensure the events are accessible by the device on which the command list was created."
     - "The application must ensure the command list and events were created, and the memory was allocated, on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -200,6 +203,7 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_ALIGNMENT
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+        - "`size % pattern_size != 0`"
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "an extension passed via pNext is not supported"
 --- #--------------------------------------------------------------------------
