@@ -299,6 +299,8 @@ details:
     - "Takes a pointer to a device memory allocation and creates an IPC memory handle for exporting it for use in another process."
     - "1.0": "The pointer must be base pointer of a device memory allocation; i.e. the value returned from $xMemAllocDevice."
       "1.5": "The pointer must be base pointer of a device or host memory allocation; i.e. the value returned from $xMemAllocDevice or from $xMemAllocHost, respectively."
+      "1.17": "The pointer may also be a physical memory handle cast to ``void*`` (i.e. ``(void*)hPhysicalMem``); in that case, the IPC handle represents the physical memory object directly and no virtual address mapping is required in the sending process."
+    - "Only one physical memory object may be associated with a single IPC handle at a time; the virtual address range passed must map to exactly one physical memory object."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:
@@ -400,8 +402,10 @@ details:
     - "The 'hDevice' parameter identifies the device into which the allocation is imported. If this device differs from the one where the memory was originally allocated, it must have P2P access to the exporting device. P2P accessibility can be verified using $xDeviceGetP2PProperties or $xDeviceCanAccessPeer."
     - "The `hContext` parameter has no requirement to match the context used during the original allocation in the exporting process. Any context of the importing process may be used."
     - "After the handle is successfully opened, the returned pointer may be accessed by `hDevice` and by any other device of the importing process that has P2P connectivity to the exporting device."
+    - "When the IPC handle was originally created from a physical memory object (directly via a mapped virtual address), opening the handle assigns a new virtual address in the importing process that maps to the underlying physical memory; no prior $xVirtualMemReserve or $xVirtualMemMap call is required in the importing process."
     - "The device pointer in this process should not be freed with $xMemFree, but rather with $xMemCloseIpcHandle."
     - "Multiple calls to this function with the same IPC handle will return unique pointers."
+    - "The driver must not release the underlying physical memory until all IPC handles referencing it have been closed via $xMemCloseIpcHandle or returned via $xMemPutIpcHandle."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

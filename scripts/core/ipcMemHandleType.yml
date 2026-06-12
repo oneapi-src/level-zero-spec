@@ -60,6 +60,8 @@ decl: static
 details:
     - "Takes a pointer to a device or host memory allocation and creates an IPC memory handle for exporting it for use in another process."
     - "The pointer must be the base pointer of a device or host memory allocation; i.e. the value returned from $xMemAllocDevice or from $xMemAllocHost, respectively or allocated from $xPhysicalMemCreate."
+    - "The pointer may also be a virtual address that was mapped to a physical memory object via $xVirtualMemMap; in that case, the IPC handle represents the underlying physical memory object."
+    - "Only one physical memory object may be associated with a single IPC handle at a time; the virtual address range passed must map to exactly one physical memory object."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function must be thread-safe."
 params:

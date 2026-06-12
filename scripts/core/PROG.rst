@@ -506,6 +506,186 @@ The following pseudo-code demonstrates querying properties of a physical memory 
 
     ${x}PhysicalMemCreate(hContext, hDevice, &alloc_desc, &physicalMemImporter);
 
+External Memory IPC with Physical Memory — Export Without Local Mapping
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An application can share a physical memory object with a peer process using only a file
+descriptor obtained via ${x}PhysicalMemGetProperties, without the exporting process needing
+to map the memory itself. The exporting process creates the physical memory object with an
+export descriptor, retrieves the file descriptor, and passes it to the peer via an OS IPC
+mechanism (e.g. a Unix domain socket). The importing process then reconstructs the physical
+memory object and maps it into its own virtual address space.
+
+The following pseudo-code demonstrates export without a local mapping on the exporting side:
+
+.. parsed-literal::
+
+    // === Exporting process ===
+
+    // Allocate a page-aligned physical memory object with export capability
+    size_t pageSize;
+    size_t allocationSize = 1048576; // 1 MB
+    ${x}VirtualMemQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
+    size_t physicalSize = align(allocationSize, pageSize);
+
+    ${x}_external_memory_export_desc_t exportDesc = {
+        ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC,
+        nullptr,
+        ${X}_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD
+    };
+
+    ${x}_physical_mem_desc_t physMemDesc = {
+        ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+        &exportDesc, // pNext chains the export request
+        0,           // flags
+        physicalSize
+    };
+
+    ${x}_physical_mem_handle_t hPhysicalMemory;
+    ${x}PhysicalMemCreate(hContext, hDevice, &physMemDesc, &hPhysicalMemory);
+
+    // Query properties to retrieve the exportable file descriptor
+    ${x}_external_memory_export_fd_t exportFd = {
+        ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD,
+        nullptr,
+        ${X}_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+        0 // [out] fd populated by the driver
+    };
+
+    ${x}_physical_mem_properties_t physMemProps = {
+        ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES,
+        &exportFd
+    };
+
+    ${x}PhysicalMemGetProperties(hContext, hPhysicalMemory, &physMemProps);
+    // exportFd.fd now holds a valid OS file descriptor
+
+    // Transfer exportFd.fd to the peer process via an OS IPC mechanism
+    // (e.g. Unix domain socket). No local VA mapping is required on this side.
+
+    // === Importing process ===
+
+    // Reconstruct the physical memory object from the received file descriptor
+    int imported_fd = /\* fd received from the exporting process \*/;
+
+    ${x}_external_memory_import_fd_t importFd = {
+        ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
+        nullptr,
+        ${X}_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+        imported_fd
+    };
+
+    ${x}_physical_mem_desc_t importMemDesc = {
+        ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+        &importFd, // pNext chains the import request
+        0,         // flags
+        physicalSize
+    };
+
+    ${x}_physical_mem_handle_t hPhysicalMemoryImport;
+    ${x}PhysicalMemCreate(hContext, hDevice, &importMemDesc, &hPhysicalMemoryImport);
+
+    // Map the imported physical memory into this process's virtual address space
+    void* importPtr = nullptr;
+    ${x}VirtualMemReserve(hContext, nullptr, physicalSize, &importPtr);
+    ${x}VirtualMemMap(hContext, importPtr, physicalSize, hPhysicalMemoryImport, 0,
+        ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
+
+    // The importing process can now access the shared physical pages via importPtr.
+
+External Memory IPC with Physical Memory — Export With Local Mapping
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Alternatively, the exporting process may also map the physical memory into its own virtual
+address space before sharing the file descriptor. This allows both the exporting and
+importing processes to access the same underlying physical pages concurrently via their
+respective virtual address mappings.
+
+The following pseudo-code demonstrates export with an optional local mapping on the
+exporting side:
+
+.. parsed-literal::
+
+    // === Exporting process ===
+
+    // Allocate a page-aligned physical memory object with export capability
+    size_t pageSize;
+    size_t allocationSize = 1048576; // 1 MB
+    ${x}VirtualMemQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
+    size_t physicalSize = align(allocationSize, pageSize);
+
+    ${x}_external_memory_export_desc_t exportDesc = {
+        ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC,
+        nullptr,
+        ${X}_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD
+    };
+
+    ${x}_physical_mem_desc_t physMemDesc = {
+        ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+        &exportDesc, // pNext chains the export request
+        0,           // flags
+        physicalSize
+    };
+
+    ${x}_physical_mem_handle_t hPhysicalMemory;
+    ${x}PhysicalMemCreate(hContext, hDevice, &physMemDesc, &hPhysicalMemory);
+
+    // Query properties to retrieve the exportable file descriptor
+    ${x}_external_memory_export_fd_t exportFd = {
+        ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD,
+        nullptr,
+        ${X}_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+        0 // [out] fd populated by the driver
+    };
+
+    ${x}_physical_mem_properties_t physMemProps = {
+        ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES,
+        &exportFd
+    };
+
+    ${x}PhysicalMemGetProperties(hContext, hPhysicalMemory, &physMemProps);
+    // exportFd.fd now holds a valid OS file descriptor
+
+    // Optionally map the physical memory into the exporting process's VA space
+    void* exportPtr = nullptr;
+    ${x}VirtualMemReserve(hContext, nullptr, physicalSize, &exportPtr);
+    ${x}VirtualMemMap(hContext, exportPtr, physicalSize, hPhysicalMemory, 0,
+        ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
+
+    // Transfer exportFd.fd to the peer process via an OS IPC mechanism
+    // (e.g. Unix domain socket). The receiving side gets imported_fd.
+
+    // === Importing process ===
+
+    // Reconstruct the physical memory object from the received file descriptor
+    int imported_fd = /\* fd received from the exporting process \*/;
+
+    ${x}_external_memory_import_fd_t importFd = {
+        ${X}_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD,
+        nullptr,
+        ${X}_EXTERNAL_MEMORY_TYPE_FLAG_OPAQUE_FD,
+        imported_fd
+    };
+
+    ${x}_physical_mem_desc_t importMemDesc = {
+        ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+        &importFd, // pNext chains the import request
+        0,         // flags
+        physicalSize
+    };
+
+    ${x}_physical_mem_handle_t hPhysicalMemoryImport;
+    ${x}PhysicalMemCreate(hContext, hDevice, &importMemDesc, &hPhysicalMemoryImport);
+
+    // Map the imported physical memory into this process's virtual address space
+    void* importPtr = nullptr;
+    ${x}VirtualMemReserve(hContext, nullptr, physicalSize, &importPtr);
+    ${x}VirtualMemMap(hContext, importPtr, physicalSize, hPhysicalMemoryImport, 0,
+        ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
+
+    // Both processes now access the same underlying physical pages via their
+    // respective virtual address mappings (exportPtr and importPtr).
+
 
 Mapping Virtual Memory Pages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2757,6 +2937,29 @@ Level-Zero allocations across processes:
 Memory
 ~~~~~~
 
+Physical memory handles (``${x}_physical_mem_handle_t``) may be used as the source for IPC handles
+in both ${x}MemGetIpcHandle and ${x}MemGetIpcHandleWithProperties. There are two ways to obtain an
+IPC handle backed by physical memory:
+
+1. **Direct from a mapped virtual address**: After mapping a physical memory object to a virtual
+   address using ${x}VirtualMemMap, the mapped virtual address pointer can be passed directly to
+   ${x}MemGetIpcHandle or ${x}MemGetIpcHandleWithProperties. Only one physical memory object may
+   be associated with a single IPC handle at a time.
+
+2. **From a physical memory handle allocated via** ``${x}PhysicalMemCreate``: The handle returned
+   from ${x}PhysicalMemCreate can be used to obtain an IPC handle via ${x}MemGetIpcHandleWithProperties.
+
+When an IPC handle backed by physical memory is opened in the receiving process via
+${x}MemOpenIpcHandle, the driver assigns a new virtual address in the importing process that maps
+to the underlying physical memory. No prior ${x}VirtualMemReserve or ${x}VirtualMemMap call is
+required in the importing process.
+
+.. note::
+   The driver must not release the underlying physical memory until all IPC handles referencing
+   it have been closed via ${x}MemCloseIpcHandle or returned via ${x}MemPutIpcHandle. Applications
+   should ensure that all receiving processes close their IPC handles before the originating process
+   frees the allocation.
+
 The following code examples demonstrate how to use the memory IPC APIs:
 
 1. First, the allocation is made, packaged, and sent on the sending
@@ -2770,8 +2973,9 @@ The following code examples demonstrate how to use the memory IPC APIs:
        ${x}_ipc_mem_handle_t hIPC;
        ${x}MemGetIpcHandle(hContext, dptr, &hIPC);
 
-       // Method of sending to receiving process is not defined by Level-Zero:
-       send_to_receiving_process(hIPC);
+       // NOTE: Transferring IPC handles is not a Level Zero API. The application is responsible
+       // for sending the handle to the receiving process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
 
 
 2. Next, the allocation is received and un-packaged on the receiving
@@ -2779,9 +2983,10 @@ The following code examples demonstrate how to use the memory IPC APIs:
 
 .. parsed-literal::
 
-       // Method of receiving from sending process is not defined by Level-Zero:
+       // NOTE: Receiving IPC handles is not a Level Zero API. The application is responsible
+       // for receiving the handle from the sending process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
        ${x}_ipc_mem_handle_t hIPC;
-       hIPC = receive_from_sending_process();
 
        void* dptr = nullptr;
        ${x}MemOpenIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
@@ -2813,6 +3018,139 @@ The following code examples demonstrate how to use the memory IPC APIs:
 %endif
        ${x}MemFree(hContext, dptr);
 
+IPC with Physical Memory — Direct Handle
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example demonstrates passing a physical memory handle directly to ${x}MemGetIpcHandle without
+any prior virtual address reservation or mapping. The physical handle is cast to ``void*`` and
+passed directly as the ``ptr`` argument. No VA mapping is needed in the sending process.
+The receiving process gets a virtual address assigned automatically when it opens the handle.
+
+**Sending process:**
+
+.. parsed-literal::
+
+       // Create a physical memory object on the sending device
+       size_t pageSize;
+       size_t allocationSize = 1048576; // 1MB
+       ${x}VirtualMemQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
+       size_t physicalSize = align(allocationSize, pageSize);
+
+       ${x}_physical_mem_desc_t pmemDesc = {
+           ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+           nullptr,
+           0, // flags
+           physicalSize
+       };
+       ${x}_physical_mem_handle_t hPhysicalMem;
+       ${x}PhysicalMemCreate(hContext, hDevice, &pmemDesc, &hPhysicalMem);
+
+       // Cast the physical memory handle directly to void* — no VirtualMemReserve
+       // or VirtualMemMap is required in the sending process.
+       ${x}_ipc_mem_handle_t hIPC;
+       ${x}MemGetIpcHandle(hContext, (void*)hPhysicalMem, &hIPC);
+
+       // NOTE: Transferring IPC handles is not a Level Zero API. The application is responsible
+       // for sending the handle to the receiving process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
+
+       // Cleanup in sending process (after receiving process has closed its handle)
+%if _version_compare_gequal(ver, "1.6"):
+       ${x}MemPutIpcHandle(hContext, hIPC);
+%endif
+       ${x}PhysicalMemDestroy(hContext, hPhysicalMem);
+
+**Receiving process:**
+
+.. parsed-literal::
+
+       // NOTE: Receiving IPC handles is not a Level Zero API. The application is responsible
+       // for receiving the handle from the sending process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
+       ${x}_ipc_mem_handle_t hIPC;
+
+       // Opening the handle assigns a new VA in this process for the physical memory.
+       // No VirtualMemReserve/VirtualMemMap is needed in the receiving process.
+       void* dptr = nullptr;
+       ${x}MemOpenIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
+
+       // dptr is now a valid device pointer backed by the sender's physical memory
+
+       // Cleanup in receiving process
+       ${x}MemCloseIpcHandle(hContext, dptr);
+
+IPC with Physical Memory — Mapped VA as IPC Source
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example demonstrates a scenario where the sending process maps physical memory to a virtual
+address and then creates an IPC handle from that mapped VA. The IPC handle represents the single
+underlying physical memory object; only one physical memory object may be associated with an
+IPC handle at a time.
+
+**Sending process:**
+
+.. parsed-literal::
+
+       // Create a physical memory object
+       size_t pageSize;
+       size_t allocationSize = 1048576; // 1MB
+       ${x}VirtualMemQueryPageSize(hContext, hDevice, allocationSize, &pageSize);
+       size_t physicalSize = align(allocationSize, pageSize);
+
+       ${x}_physical_mem_desc_t pmemDesc = {
+           ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+           nullptr,
+           0, // flags
+           physicalSize
+       };
+       ${x}_physical_mem_handle_t hPhysicalMem;
+       ${x}PhysicalMemCreate(hContext, hDevice, &pmemDesc, &hPhysicalMem);
+
+       // Reserve VA and map the physical memory to it in this (parent) process
+       void* mappedPtr = nullptr;
+       ${x}VirtualMemReserve(hContext, nullptr, physicalSize, &mappedPtr);
+       ${x}VirtualMemMap(hContext, mappedPtr, physicalSize, hPhysicalMem, 0,
+           ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
+
+       // Create an IPC handle from the mapped VA in this process.
+       // The IPC handle encapsulates the physical memory object that mappedPtr is backed by.
+       ${x}_ipc_mem_handle_t hIPC;
+       ${x}MemGetIpcHandle(hContext, mappedPtr, &hIPC);
+
+       // mappedPtr can be used for local compute work while also being shared via IPC
+       // NOTE: Transferring IPC handles is not a Level Zero API. The application is responsible
+       // for sending the handle to the receiving process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
+
+       // ... use mappedPtr locally ...
+
+       // Cleanup: wait for receiving process to close its handle first,
+       // then release the IPC handle and free local resources.
+%if _version_compare_gequal(ver, "1.6"):
+       ${x}MemPutIpcHandle(hContext, hIPC);
+%endif
+       ${x}VirtualMemUnmap(hContext, mappedPtr, physicalSize);
+       ${x}VirtualMemFree(hContext, mappedPtr, physicalSize);
+       ${x}PhysicalMemDestroy(hContext, hPhysicalMem);
+
+**Receiving process:**
+
+.. parsed-literal::
+
+       // NOTE: Receiving IPC handles is not a Level Zero API. The application is responsible
+       // for receiving the handle from the sending process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
+       ${x}_ipc_mem_handle_t hIPC;
+
+       // The driver assigns a new VA in the receiving process for the shared physical memory.
+       void* dptr = nullptr;
+       ${x}MemOpenIpcHandle(hContext, hDevice, hIPC, 0, &dptr);
+
+       // dptr is now accessible in this process and backed by the sender's physical memory
+
+       // Cleanup
+       ${x}MemCloseIpcHandle(hContext, dptr);
+
 .. _events-1:
 
 Events
@@ -2837,15 +3175,18 @@ The following code examples demonstrate how to use the event IPC APIs:
        // get IPC handle and send to another process
        ${x}_ipc_event_pool_handle_t hIpcEvent;
        ${x}EventPoolGetIpcHandle(hEventPool, &hIpcEventPool);
-       send_to_receiving_process(hIpcEventPool);
+       // NOTE: Transferring IPC handles is not a Level Zero API. The application is responsible
+       // for sending the handle to the receiving process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
 
 2. Next, the event pool is received and un-packaged on the receiving process:
 
 .. parsed-literal::
 
-       // get IPC handle from other process
+       // NOTE: Receiving IPC handles is not a Level Zero API. The application is responsible
+       // for receiving the handle from the sending process using its preferred out of band method
+       // (e.g., Shared memory, TCP/IP, fabric, etc.)
        ${x}_ipc_event_pool_handle_t hIpcEventPool;
-       receive_from_sending_process(&hIpcEventPool);
 
        // open event pool
        ${x}_event_pool_handle_t hEventPool;
@@ -2944,4 +3285,141 @@ The following Peer-to-Peer functionalities are provided through the API:
 - Copy data between devices over peer-to-peer fabric: ${x}CommandListAppendMemoryCopy
 
 Both ${x}DeviceCanAccessPeer & ${x}DeviceGetP2PProperties return the same information - do two devices support peer-to-peer access? ${x}DeviceGetP2PProperties provides more detail than ${x}DeviceCanAccessPeer, such as support for atomics, bandwidths, latencies, etc...
+
+P2P Access to Physical Memory on Another Device
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When a physical memory object resides on one device and needs to be accessed from another device,
+the physical memory must first be mapped to a virtual address before it can be used in an append
+operation (e.g., ${x}CommandListAppendMemoryCopy, ${x}CommandListAppendLaunchKernel) or in a
+residency call (${x}ContextMakeMemoryResident).
+
+This cross-device physical memory access is only valid if ${x}DeviceCanAccessPeer returns success
+for the two devices involved. Attempting to use physical memory from a device without verified P2P
+access results in undefined behavior.
+
+The following example demonstrates accessing physical memory allocated on ``hDevice1`` from a
+command list created on ``hDevice0``, where P2P access between the two devices is supported:
+
+.. parsed-literal::
+
+       // Verify P2P access from hDevice0 to hDevice1
+       ze_bool_t canAccess = ZE_FALSE;
+       ${x}DeviceCanAccessPeer(hDevice0, hDevice1, &canAccess);
+       assert(canAccess == ZE_TRUE);
+
+       // Create a physical memory object on hDevice1
+       size_t pageSize;
+       size_t allocationSize = 1048576; // 1MB
+       ${x}VirtualMemQueryPageSize(hContext, hDevice1, allocationSize, &pageSize);
+       size_t physicalSize = align(allocationSize, pageSize);
+
+       ${x}_physical_mem_desc_t pmemDesc1 = {
+           ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC,
+           nullptr,
+           0, // flags
+           physicalSize
+       };
+       ${x}_physical_mem_handle_t hPhysicalMem1;
+       ${x}PhysicalMemCreate(hContext, hDevice1, &pmemDesc1, &hPhysicalMem1);
+
+       // Reserve a VA range and map the physical memory from hDevice1 to a VA
+       // accessible from hDevice0 (requires P2P support).
+       void* peerPtr = nullptr;
+       ${x}VirtualMemReserve(hContext, nullptr, physicalSize, &peerPtr);
+       ${x}VirtualMemMap(hContext, peerPtr, physicalSize, hPhysicalMem1, 0,
+           ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
+
+       // Allocate a local buffer on hDevice0 for the copy destination
+       void* localPtr = nullptr;
+       ${x}MemAllocDevice(hContext, &deviceAllocDesc, physicalSize, 0, hDevice0, &localPtr);
+
+       // peerPtr can now be used in a command list on hDevice0 via P2P access
+       ${x}CommandListAppendMemoryCopy(hCommandList0, localPtr, peerPtr, physicalSize,
+           nullptr, 0, nullptr);
+       ${x}CommandListClose(hCommandList0);
+       ${x}CommandQueueExecuteCommandLists(hCommandQueue0, 1, &hCommandList0, nullptr);
+       ${x}CommandQueueSynchronize(hCommandQueue0, UINT64_MAX);
+
+       // Cleanup
+       ${x}VirtualMemUnmap(hContext, peerPtr, physicalSize);
+       ${x}VirtualMemFree(hContext, peerPtr, physicalSize);
+       ${x}PhysicalMemDestroy(hContext, hPhysicalMem1);
+       ${x}MemFree(hContext, localPtr);
+
+P2P with Multiple Physical Memory Objects from Different Devices Mapped to the Same VA
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An application may map physical memory objects from different devices into a contiguous or
+adjacent virtual address range. The device that owns the command list or command queue determines
+which device is the "home" device for each access:
+
+- Accesses to VA regions backed by physical memory on the command list's own device are serviced
+  locally.
+- Accesses to VA regions backed by physical memory on another device are serviced via P2P, and
+  are only valid if ${x}DeviceCanAccessPeer returns success for those two devices.
+
+This pattern is useful for applications that want to present a unified VA space over heterogeneous
+physical memory, letting the hardware transparently route each access based on the backing device.
+
+The following example creates a contiguous VA range backed by physical memory from two different
+devices (``hDevice0`` and ``hDevice1``). A command list on ``hDevice0`` operates on the combined
+range; the first half is local, and the second half is remote (P2P):
+
+.. parsed-literal::
+
+       // Verify P2P access between the two devices
+       ze_bool_t canAccess = ZE_FALSE;
+       ${x}DeviceCanAccessPeer(hDevice0, hDevice1, &canAccess);
+       assert(canAccess == ZE_TRUE);
+
+       size_t pageSize;
+       size_t halfSize = 1048576; // 1MB per segment
+       ${x}VirtualMemQueryPageSize(hContext, hDevice0, halfSize, &pageSize);
+       size_t segmentSize = align(halfSize, pageSize);
+       size_t totalSize = segmentSize * 2;
+
+       // Create physical memory on hDevice0 (local segment)
+       ${x}_physical_mem_desc_t pmemDesc0 = {
+           ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, nullptr, 0, segmentSize
+       };
+       ${x}_physical_mem_handle_t hPhysMem0;
+       ${x}PhysicalMemCreate(hContext, hDevice0, &pmemDesc0, &hPhysMem0);
+
+       // Create physical memory on hDevice1 (remote segment, accessed via P2P)
+       ${x}_physical_mem_desc_t pmemDesc1 = {
+           ${X}_STRUCTURE_TYPE_PHYSICAL_MEM_DESC, nullptr, 0, segmentSize
+       };
+       ${x}_physical_mem_handle_t hPhysMem1;
+       ${x}PhysicalMemCreate(hContext, hDevice1, &pmemDesc1, &hPhysMem1);
+
+       // Reserve a contiguous VA range large enough to hold both segments
+       void* vaBase = nullptr;
+       ${x}VirtualMemReserve(hContext, nullptr, totalSize, &vaBase);
+
+       // Map first half of the VA range to hDevice0's physical memory (local)
+       ${x}VirtualMemMap(hContext, vaBase, segmentSize, hPhysMem0, 0,
+           ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
+
+       // Map second half of the VA range to hDevice1's physical memory (P2P)
+       void* vaSecondHalf = (uint8_t*)vaBase + segmentSize;
+       ${x}VirtualMemMap(hContext, vaSecondHalf, segmentSize, hPhysMem1, 0,
+           ${X}_MEMORY_ACCESS_ATTRIBUTE_READWRITE);
+
+       // A command list created on hDevice0 can use both halves of the VA range.
+       // - Accesses to vaBase..vaBase+segmentSize are local to hDevice0.
+       // - Accesses to vaSecondHalf..vaSecondHalf+segmentSize go via P2P to hDevice1.
+       // This is valid because canAccess == ZE_TRUE for (hDevice0, hDevice1).
+       ${x}CommandListAppendMemoryFill(hCommandList0, vaBase, &pattern, sizeof(pattern),
+           totalSize, nullptr, 0, nullptr);
+       ${x}CommandListClose(hCommandList0);
+       ${x}CommandQueueExecuteCommandLists(hCommandQueue0, 1, &hCommandList0, nullptr);
+       ${x}CommandQueueSynchronize(hCommandQueue0, UINT64_MAX);
+
+       // Cleanup
+       ${x}VirtualMemUnmap(hContext, vaBase, segmentSize);
+       ${x}VirtualMemUnmap(hContext, vaSecondHalf, segmentSize);
+       ${x}VirtualMemFree(hContext, vaBase, totalSize);
+       ${x}PhysicalMemDestroy(hContext, hPhysMem0);
+       ${x}PhysicalMemDestroy(hContext, hPhysMem1);
 
