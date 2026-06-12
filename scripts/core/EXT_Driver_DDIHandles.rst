@@ -47,6 +47,26 @@ Handle Structures:
             zer_dditable_driver_t *pRuntime; // [in] pointer to _zer_dditable_t_ object related to this handle
         } ze_handle_t;
 
+Mandatory Support (Spec v1.17+):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Starting from Level Zero spec version 1.17, support for this extension is **required** for any driver reporting API version 1.17 or later via ``${x}DriverGetApiVersion``.
+The loader does **not** need to query the extension property for such drivers — DDI handles are unconditionally available.
+
+.. note::
+
+    Drivers reporting API version 1.17 or later must support **extension version 1.1** of this extension, which corresponds to the full ``ze_handle_t`` structure including the ``pRuntime`` member (pointer to ``zer_dditable_driver_t``).
+    Such drivers **must** initialize ``pRuntime`` in every handle they allocate — at minimum with zeroed/empty function pointer values — so that the loader can safely dereference it without a null-pointer check.
+    A driver that sets ``pRuntime`` to ``nullptr`` while reporting API version 1.17 is non-conformant; any loader or application attempt to dispatch a ``zer_*`` call through that handle will result in undefined behavior (null pointer dereference / crash).
+
+For drivers reporting API version 1.16 or earlier, the loader must continue to check for this extension via ``${x}DriverGetExtensionProperties``
+before using DDI handles, preserving full backwards compatibility.
+
+This guarantee enables Level Zero extensions introduced in spec v1.17 or later to embed handles directly inside Level Zero structures
+(e.g., via ``pNext`` chains) without requiring the loader to translate or unwrap the handles.
+Additionally, drivers may assume the loader will dispatch calls exclusively via the DDI tables embedded in their handles;
+the only exception is the global DDI table used during driver initialization and to read the driver's reported API version.
+
 DDI Handles Extension:
 ~~~~~~~~~~~~~~~~~~~~~~
 

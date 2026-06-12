@@ -49,3 +49,7 @@ members:
             [out] 0 (none) or a valid combination of ::ze_driver_ddi_handle_ext_flags_t
 details:
     - "This structure may be returned from $xDriverGetProperties, via the `pNext` member of $x_driver_properties_t."
+    - "Starting from spec version 1.17, support for this extension is assumed for any driver reporting API version 1.17 or later via $xDriverGetApiVersion; the loader does NOT need to query the extension property for such drivers."
+    - "For drivers reporting API version 1.16 or earlier, the loader must check for this extension before using DDI handles."
+    - "This guarantee enables Level Zero extensions introduced in spec v1.17 or later to embed handles directly inside Level Zero structures (e.g., via pNext chains) without requiring the loader to translate or unwrap handles."
+    - "Additionally, drivers may assume the loader will dispatch calls exclusively via the DDI tables embedded in their handles; the only exception is the global DDI table used during driver initialization and to read the reported API version."

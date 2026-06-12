@@ -240,6 +240,7 @@ ordinal: "1"
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
+    - "Starting from API version 1.17, any driver reporting version 1.17 or later is assumed to support the $X_DRIVER_DDI_HANDLES_EXT_NAME extension; see $x_driver_ddi_handles_ext_properties_t for details."
 params:
     - type: $x_driver_handle_t
       name: hDriver
