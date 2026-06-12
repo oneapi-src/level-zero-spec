@@ -29,8 +29,8 @@ API Semantics and Considerations:
 - By default, zer functions always use the driver at index 0 (after loader sorting). This can be overridden using :ref:`ZEL_DRIVERS_ORDER <driver-ordering>`. 
 - Level Zero loader will always route zer functions to first driver instance that it reports
 - By default, the Level Zero loader ensures that drivers are prioritized as follows: Discrete GPU hardware solutions are reported at index 0 when available. If no discrete GPU is present, any GPU solution will be reported at index 0. This default ordering can be overridden using :ref:`ZEL_DRIVERS_ORDER <driver-ordering>`.
-- In the default path, the Level Zero loader routes API calls directly to driver pointers, allowing applications to bypass the loader for lower latency
-- When tools are enabled, the Level Zero loader routes API calls through the loader to allow interception by those tools
+- When only one driver is present, the Level Zero loader populates the DDI table with driver function pointers directly, enabling API calls to reach the driver without traversing the loader's intercept layer; with multiple drivers, the loader's intercept layer is always active
+- When tools such as the validation or tracing layer are enabled (via ``ZE_ENABLE_VALIDATION_LAYER`` or ``ZE_ENABLE_TRACING_LAYER``), the Level Zero loader inserts intercept functions into the DDI table so that API calls pass through those layers before reaching the driver
 - After Level Zero Init during zeInitDrivers, the zer runtime initializes the default driver (index 0), the driver at index 0 cannot be changed after initialization is called in the process
 - zer and ze API's use the same handle object types and can be used together
 - zer getter APIs return the desired object directly whenever feasible
