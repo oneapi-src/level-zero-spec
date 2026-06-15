@@ -1612,6 +1612,7 @@ Key features
 - ${x}EventHostSignal is not allowed. Can be signaled only from in-order command list
 - No need to wait for completion before reusing/destroying
 - CB Event doesn't own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver
+- A CB Event's device association is not fixed at creation. It re-associates with the signaling device on each signal operation. See `Device association`_.
 - IPC sharing is one-directional. IPC CB Event opened in different process can be used only for waiting. If original Event state is changed (for example by next append call) and second process needs to see that update, IPC handle must be opened again.
 - Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section
 - When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion
@@ -1633,6 +1634,21 @@ Regular Event rely on memory state controlled by the user (explicit Reset calls)
        // Its also safe to delete Event object.
 
        ${x}EventHostSynchronize(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc
+
+Device association
+^^^^^^^^^^^^^^^^^^^
+Unlike Regular Events, a CB Event's device association is not fixed by the device passed to ${x}EventCounterBasedCreate. Its association follows the latest signaling point:
+
+- After creation, the Event is associated with the device passed to ${x}EventCounterBasedCreate. This initial association does not restrict on which device the Event may later be signaled.
+- When the Event is passed as a signal event to an append call, it drops its previous tracking point and re-associates with the device on which that command list was created. The Event may be signaled on any device, regardless of the device used to create it or the device that signaled it previously. No peer-to-peer access between the previous and the new signaling device is required.
+- Waiting on the Event (for example ${x}CommandListAppendWaitOnEvents) does not change its association. The waiting device must have peer-to-peer access to the device that last had the Event enqueued for signaling (or, if the Event has not been enqueued for signaling yet, the device it is currently associated with).
+
+.. parsed-literal::
+       ${x}EventCounterBasedCreate(context, deviceA, &desc, &event); // associated with deviceA
+       ${x}CommandListAppendSignalEvent(cmdListDeviceB, event);       // re-associates with deviceB (no P2P deviceA<->deviceB required)
+       ${x}CommandListAppendWaitOnEvents(cmdListDeviceC, 1, &event);  // deviceC must have P2P access to deviceB
+
+This is also the basis for IPC sharing: an opened IPC CB Event tracks the signaling device and can be waited on from any device that has peer-to-peer access to it.
 
 IPC sharing
 ^^^^^^^^^^^

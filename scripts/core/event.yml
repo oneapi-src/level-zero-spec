@@ -492,7 +492,8 @@ analogue:
     - "**clSetUserEventStatus**"
     - vkCmdSetEvent
 details:
-    - "The application must ensure the events are accessible by the device on which the command list was created."
+    - "The application must ensure the events are accessible by the device on which the command list was created. This requirement does not apply to counter-based events."
+    - "For counter-based events, the event may be signaled on any device, regardless of the device used to create the event. When a counter-based event is passed for signaling, it drops its previous tracking point and re-associates with the device on which the command list was created, tracking the new signaling point. No peer-to-peer access between the previously associated device and the new signaling device is required."
     - "The duration of an event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP or $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flags is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
@@ -513,6 +514,7 @@ class: $xCommandList
 name: AppendWaitOnEvents
 details:
     - "The application must ensure the events are accessible by the device on which the command list was created."
+    - "For counter-based events, the device on which the command list was created must have peer-to-peer access to the device that last signaled the event. Unlike signaling, waiting on a counter-based event does not re-associate it with another device."
     - "The application must ensure the command list and events were created on the same context."
     - "The application must **not** call this function from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
