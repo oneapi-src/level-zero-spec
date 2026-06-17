@@ -104,7 +104,7 @@ etors:
       desc: "Apply FLR reset"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device state"
+desc: "Device state. To retrieve the current device state, please use $s_device_ext_state_t as pNext."
 class: $sDevice
 name: $s_device_state_t
 base: $s_base_state_t
