@@ -7,7 +7,7 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Extension APIs for Mapping External Memory as part of host llocation"
+desc: "Intel $OneApi Level-Zero Extension APIs for Mapping External Memory as part of host allocation"
 version: "1.14"
 --- #--------------------------------------------------------------------------
 type: macro
@@ -37,7 +37,14 @@ members:
       desc: "[in] system memory pointer to map; must be page-aligned."
     - type: uint64_t
       name: size
-      desc: "[in] size of the system memory to map; must be page-aligned."
+      desc: "[in] size of the system memory to map; must be a multiple of the page size."
 details:
     - "This structure may be passed to $xMemAllocHost, via the `pNext` member of $x_host_mem_alloc_desc_t to map system memory for a host allocation."
-    - "The system memory pointer and size being mapped must be page aligned based on the supported page sizes on the device."
+    - "The `pSystemMemory` pointer and `size` being mapped must be aligned to the host page size. The host page size must be queried using operating-system-specific calls, as the mapped memory originates from the system allocator rather than from Level-Zero; there is no Level-Zero query for this value."
+    - "On success, the pointer returned from $xMemAllocHost is identical to `pSystemMemory`; the mapping preserves the virtual address, so the same address is valid on both the host and the device."
+    - "Memory from the application's heap, stack, or statically-allocated (global) storage is supported. Support for memory obtained by other means is platform- and driver-dependent and is not guaranteed. If `pSystemMemory` points to a memory type that cannot be mapped, $xMemAllocHost returns $X_RESULT_ERROR_INVALID_ARGUMENT."
+    - "Host memory that is read-only can only be mapped successfully when the $X_HOST_MEM_ALLOC_FLAG_MEM_READ_ONLY flag is set in $x_host_mem_alloc_desc_t; in that case device access to the mapped memory is read-only."
+    - "The system memory referenced by `pSystemMemory` must remain valid for the entire lifetime of the resulting allocation. Freeing or unmapping the underlying system memory before the allocation is released results in undefined behavior."
+    - "Mapped memory ranges must not overlap. Releasing a mapping with $xMemFree tears down the device page-table entries for its virtual address range. Because these page tables are shared across imports, releasing a mapping that overlaps another import also tears down the overlapping device page-table entries, leaving the other allocation invalid for device access. The host system memory itself is unaffected."
+    - "After mapping, $xMemGetAllocProperties reports the allocation type as $X_MEMORY_TYPE_HOST_IMPORTED."
+    - "The mapping is released by passing the pointer to $xMemFree, like any other host allocation."
