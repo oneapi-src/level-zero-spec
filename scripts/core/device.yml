@@ -1180,6 +1180,7 @@ desc: "Output of $xDeviceValidateRuntimeRequirements"
 class: $xDevice
 name: $x_validate_runtime_requirements_output_t
 base: $x_base_properties_t
+version: "1.16"
 members:
     - type: $x_validate_runtime_requirements_result_t
       name: result

@@ -60,14 +60,14 @@ Usage Example
     ${s}DeviceGetState(hDevice, &deviceState);
     
     // Check extended device state flags
-    if (extendedState.flags & ${S}_DEVICE_EXT_STATE_FLAGS_WEDGED) {
+    if (extendedState.flags & ${S}_DEVICE_STATE_EXT_FLAG_WEDGED) {
         // Device is wedged - recovery action needed
     }
     
-    if (extendedState.flags & ${S}_DEVICE_EXT_STATE_FLAGS_SURVIVABILITY) {
+    if (extendedState.flags & ${S}_DEVICE_STATE_EXT_FLAG_SURVIVABILITY) {
         // Device is in survivability mode
     }
     
-    if (extendedState.flags & ${S}_DEVICE_EXT_STATE_FLAGS_FLASH_OVERRIDE) {
+    if (extendedState.flags & ${S}_DEVICE_STATE_EXT_FLAG_FLASH_OVERRIDE) {
         // Device has flash override enabled
     }

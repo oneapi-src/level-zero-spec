@@ -1335,7 +1335,7 @@ displaying or saving the frame while the GPU is already processing the next one:
             ${x}CommandListAppendLaunchKernel(hImmCmdList, hKernel, &launchArgs[i], nullptr, 0, nullptr);
 
             // Host function notifies consumer thread that frame i is ready
-            ${x}CommandListAppendHostFunction(hImmCmdList, onFrameReady, &frames[i], nullptr, 0, nullptr);
+            ${x}CommandListAppendHostFunction(hImmCmdList, onFrameReady, &frames[i], nullptr, nullptr, 0, nullptr);
         }
 
         // Wait for all GPU work to complete
