@@ -33,6 +33,7 @@ name: CreateCloneExp
 decl: static
 ordinal: "0"
 details:
+    - "@deprecated since 1.17"
     - "The source command list must be created with the $X_COMMAND_LIST_FLAG_EXP_CLONEABLE flag."
     - "The source command list must be closed prior to cloning."
     - "The source command list may be cloned while it is running on the device."
