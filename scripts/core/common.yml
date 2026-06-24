@@ -322,6 +322,33 @@ etors:
     - name: ERROR_ADDRESS_NOT_FOUND
       desc: "[Core] address not found within specified or current context"
       version: "1.14"
+    - name: QUERY_TRUE
+      desc: "[Core, Extension] query API returned true"
+      version: "1.17"
+    - name: QUERY_FALSE
+      desc: "[Core, Extension] query API returned false"
+      version: "1.17"
+    - name: ERROR_INVALID_GRAPH
+      desc: "[Core, Extension] graph object is invalid"
+      version: "1.17"
+    - name: ERROR_GRAPH_CAPTURE_UNSUPPORTED
+      desc: "[Core, Extension] operation is not supported during graph capture"
+      version: "1.17"
+    - name: ERROR_GRAPH_CAPTURE_INVALIDATED
+      desc: "[Core, Extension] operations failed and invalidated graph capture session"
+      version: "1.17"
+    - name: ERROR_GRAPH_CAPTURE_MERGE_ATTEMPT
+      desc: "[Core, Extension] operation failed because it would merge two graph capture sessions"
+      version: "1.17"
+    - name: ERROR_COMMAND_LIST_NOT_CAPTURING
+      desc: "[Core, Extension] command list is not in graph capture mode"
+      version: "1.17"
+    - name: ERROR_GRAPH_UNJOINED_FORKS
+      desc: "[Core, Extension] graph contains unjoined forks"
+      version: "1.17"
+    - name: ERROR_GRAPH_INTERNAL_EVENT
+      desc: "[Core, Extension] operation failed because it uses a graph-internal counter-based event outside of the graph"
+      version: "1.17"
     - name: ERROR_UNKNOWN
       value: "0x7ffffffe"
       desc: "[Core] unknown or internal error"
@@ -724,6 +751,14 @@ etors:
       desc: $x_validate_runtime_requirements_output_t
       version: "1.16"
       value: "0x00020046"
+    - name: RECORD_REPLAY_GRAPH_EXT_PROPERTIES
+      desc: $x_record_replay_graph_ext_properties_t
+      version: "1.17"
+      value: "0x00020047"
+    - name: RECORD_REPLAY_GRAPH_EXT_DUMP_DESC
+      desc: $x_record_replay_graph_ext_dump_desc_t
+      version: "1.17"
+      value: "0x00020048"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

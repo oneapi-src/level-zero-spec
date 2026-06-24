@@ -140,6 +140,11 @@ etors:
             Indicates that event will contain timestamps converted to the host time domain
             Cannot be combined with $X_EVENT_COUNTER_BASED_FLAG_DEVICE_TIMESTAMP
             It is recommended to use this flag for most users that want to correlate timestamps from the host and device into a single timeline. For host timestamps see $xDeviceGetGlobalTimestamps.
+    - name: GRAPH_EXTERNAL
+      value: "$X_BIT(6)"
+      desc: |
+            Counter-based event is used for synchronization between recorded graph commands and commands submitted outside the graph (see $xGraphInstantiateExt in $X_RECORD_REPLAY_GRAPH_EXT_NAME for details).
+      version: "1.17"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported event sync mode flags"

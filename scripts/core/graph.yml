@@ -1,0 +1,401 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Level-Zero Extension for Record and Replay of Graphs."
+version: "1.17"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Record and Replay Graph Extension Name"
+version: "1.17"
+name: $X_RECORD_REPLAY_GRAPH_EXT_NAME
+value: '"$X_extension_record_replay_graph"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Record and Replay Graph Extension Version(s)"
+version: "1.17"
+name: $x_record_replay_graph_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Record and Replay Graph capability flags"
+version: "1.17"
+name: $x_record_replay_graph_ext_flags_t
+etors:
+    - name: IMMUTABLE_GRAPH
+      value: "$X_BIT(0)"
+      desc: "Supports graphs that can't mutate"
+    - name: MUTABLE_GRAPH
+      value: "$X_BIT(1)"
+      desc: "Supports graphs that can mutate"
+    - name: SUBGRAPHS
+      value: "$X_BIT(2)"
+      desc: "Supports appending a subgraph into a graph"
+    - name: APPEND_COMMANDLIST
+      value: "$X_BIT(3)"
+      desc: "Supports appending a command list into a graph"
+    - name: CB_EXTERNAL_IPC
+      value: "$X_BIT(4)"
+      desc: "Supports waiting/signaling events that were created with both ZEX_COUNTER_BASED_EVENT_FLAG_IPC and ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Supported Record and Replay Graph properties. This structure is accepted as pNext to $x_device_properties_t"
+version: "1.17"
+name: $x_record_replay_graph_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_record_replay_graph_ext_flags_t
+      name: graphFlags
+      desc: "[out] record and replay flags"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle of an executable graph object"
+class: $xExecutableGraph
+version: "1.17"
+name: "$x_executable_graph_handle_t"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Record and Replay Graph dump mode"
+version: "1.17"
+name: $x_record_replay_graph_ext_dump_mode_t
+etors:
+    - name: DETAILED
+      value: "0x0"
+      desc: "detailed mode (default)"
+    - name: SIMPLE
+      value: "0x1"
+      desc: "simple mode"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Record and Replay Graph dump descriptor"
+version: "1.17"
+name: $x_record_replay_graph_ext_dump_desc_t
+base: $x_base_desc_t
+details:
+    - "Accepted as pNext in $xGraphDumpContentsExt."
+members:
+    - type: $x_record_replay_graph_ext_dump_mode_t
+      name: mode
+      desc: "[in] graph dump mode"
+--- #--------------------------------------------------------------------------
+type: callback
+desc: "Callback function pointer type invoked when a graph is destroyed"
+version: "1.17"
+name: zex_mem_graph_free_callback_fn_t
+convention: $X_CALLBACK_CONV
+returntype: void
+params:
+    - type: void*
+      name: pUserData
+      desc: "[in][optional] user data pointer provided at callback registration time"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates a new graph object."
+class: $xGraph
+version: "1.17"
+name: CreateExt
+decl: static
+details:
+    - "A newly created graph is an empty container for captured operations."
+    - "The application may instantiate executable graph objects from a recorded graph using $xGraphInstantiateExt."
+    - "The application may begin capturing into an empty graph using $xCommandListBeginCaptureIntoGraphExt."
+params:
+    - type: $x_context_handle_t
+      name: hContext
+      desc: "[in] handle of the context"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+    - type: "$x_graph_handle_t*"
+      name: phGraph
+      desc: "[out] pointer to handle of the graph object created"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Begins recording asynchronous append operations into a new graph associated with an immediate command list."
+class: $xCommandList
+version: "1.17"
+name: BeginGraphCaptureExt
+details:
+    - "Graph capture is intended for asynchronous append operations only; synchronous operations are not supported while capture is active and return $X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED."
+    - "The application must call this function only with an immediate command list."
+    - "The application must not call this function with a synchronous immediate command list."
+    - "After this call succeeds, append operations issued to the command list are recorded into a graph and are not submitted to the device. Events used by these operations are not signaled until capture ends and the graph is instantiated and executed."
+    - "If the device does not support $X_RECORD_REPLAY_GRAPH_EXT_FLAG_APPEND_COMMANDLIST, then while capture is active, calling $xCommandListImmediateAppendCommandListsExp on the capturing command list returns an error ($X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED)."
+    - "If the device does not support $X_RECORD_REPLAY_GRAPH_EXT_FLAG_SUBGRAPHS, then while capture is active, calling $xCommandListAppendGraphExt on the capturing command list returns an error ($X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED)."
+    - "While capture is active, host-side synchronization operations on recorded work, such as $xCommandListHostSynchronize or $xEventHostSynchronize, return $X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED."
+    - "While capture is active, internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) captured in the graph cannot be used outside the graph; such use returns an error ($X_RESULT_ERROR_GRAPH_INTERNAL_EVENT)."
+    - "The command list on which capture starts is called the primary command list for a given capture session."
+    - "If an event signaled by a captured command list is used in the wait list of another immediate command list, that command list also enters graph capture mode. This creates a fork. The command list from which the fork originated is called the parent, and the forked command list is called the child. A child command list may itself be used to create additional forks, resulting in a tree of command lists participating in the same graph capture."
+    - "Subsequent signals from the parent command list to a child command list are allowed and do not create additional forks or capture sessions; the child command list remains in the same capture session as the parent command list."
+    - "Each fork must be joined by signaling on the child command list and by waiting on the parent command list."
+    - "A child command list may signal multiple times back to the parent command list, but only the last signal on the child command list may become part of the join operation."
+    - "Child command lists continue recording as long as the primary command list is in capture mode."
+    - "Commands that append work (for example, compute kernels or data transfers) to a recording child command list after the intended join operation are treated as unjoined work, and the graph is considered invalid. Commands that do not append work (for example, event signal and wait operations) are allowed after the join operation and do not invalidate the graph."
+    - "All restrictions described for $xCommandListBeginGraphCaptureExt apply to recording child command lists as well."
+    - "It is invalid to merge two separate graph capture sessions (i.e. with different primary command lists) by waiting on an event associated with a different graph (operation will return $X_RESULT_ERROR_GRAPH_CAPTURE_MERGE_ATTEMPT)."
+    - "If the device does not support $X_RECORD_REPLAY_GRAPH_EXT_FLAG_CB_EXTERNAL_IPC, then using an event that was created with both ZEX_COUNTER_BASED_EVENT_FLAG_IPC and ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL returns an error ($X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED) during append operations."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list to start capture on"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Begins recording asynchronous append operations into an existing graph."
+class: $xCommandList
+version: "1.17"
+name: BeginCaptureIntoGraphExt
+details:
+  - "The graph must be created with $xGraphCreateExt before calling this function."
+  - "The graph must be empty when capture begins."
+  - "After this call succeeds, the command list enters graph capture mode and all restrictions described for $xCommandListBeginGraphCaptureExt apply."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list to start capture on"
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the graph to capture into"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries whether a command list is in graph capture mode."
+class: $xCommandList
+version: "1.17"
+name: IsGraphCaptureEnabledExt
+details:
+    - "The function returns `ZE_RESULT_QUERY_TRUE` when the command list is in graph capture mode."
+    - "The function returns `ZE_RESULT_QUERY_FALSE` when the command list is not in graph capture mode."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Ends graph capture on the primary command list and returns the recorded graph."
+class: $xCommandList
+version: "1.17"
+name: EndGraphCaptureExt
+details:
+  - "This function may only be called on the primary command list used with $xCommandListBeginGraphCaptureExt or $xCommandListBeginCaptureIntoGraphExt."
+  - "If capture was started with $xCommandListBeginCaptureIntoGraphExt, the returned graph handle is the same graph handle that was provided when capture began."
+  - "The returned graph must be instantiated before execution."
+  - "This call ends graph capture mode on all command lists participating in the same graph capture (including forks)."
+  - "After this call succeeds, subsequent append operations submit work to the device normally."
+  - "If capture mode is not active on the command list, an error is returned."
+  - "After this call succeeds, events signaled by previously captured commands do not create new forks."
+  - "After this call succeeds, internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) can be reused by the application and don't interfere with recorded state."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list to end capture on"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+    - type: "$x_graph_handle_t*"
+      name: phGraph
+      desc: "[out] pointer to the captured graph handle"
+returns:
+    - $ZE_RESULT_ERROR_GRAPH_UNJOINED_FORKS:
+        - "if graph contains unjoined forks"
+    - $ZE_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
+        - "if command list is not in graph capture mode"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns the graph associated with a command list that is in graph capture mode."
+class: $xCommandList
+version: "1.17"
+name: GetGraphExt
+details:
+    - "This function may only be called while the command list is in graph capture mode."
+    - "The returned graph handle cannot be instantiated until capture is ended by $xCommandListEndGraphCaptureExt."
+    - "This function does not transfer ownership of the graph handle."
+    - "If the command list is not in graph capture mode, an error is returned and `*phGraph` is set to null."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list that is in capture mode"
+    - type: "$x_graph_handle_t*"
+      name: phGraph
+      desc: "[out] pointer to the graph handle associated with the command list"
+returns:
+    - $ZE_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
+        - "if command list is not in graph capture mode"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns the primary command list associated with a graph capture session."
+class: $xGraph
+version: "1.17"
+name: GetPrimaryCommandListExt
+details:
+    - "The returned command list is the command list that initiated capture for the graph during its recording stage."
+    - "This function can be called while the graph is being recorded and after capture has ended."
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the graph"
+    - type: "$x_command_list_handle_t*"
+      name: phCommandList
+      desc: "[out] pointer to the primary command list handle associated with the graph"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Registers a host callback that is invoked when a graph is destroyed."
+class: $xGraph
+version: "1.17"
+name: SetDestructionCallbackExt
+details:
+    - "Callbacks may be registered while a graph is being recorded or after executable graph instances have been created from it."
+    - "Multiple callbacks may be registered for the same graph."
+    - "All registered callbacks are invoked when the graph is destroyed."
+    - "The callback must not call Level Zero APIs that use the graph being destroyed."
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the graph"
+    - type: zex_mem_graph_free_callback_fn_t
+      name: pfnCallback
+      desc: "[in] callback function to invoke when the graph is destroyed"
+    - type: void*
+      name: pUserData
+      desc: "[in][optional] user data to pass to the callback"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Creates an executable graph object from a recorded graph."
+class: $xGraph
+version: "1.17"
+name: InstantiateExt
+details:
+    - "Multiple executable graph objects may be created from a single recorded graph."
+    - "Recorded regular events (not counter-based) are shared between executable graph instances; the application is responsible for avoiding data races during concurrent execution of multiple graph instances."
+    - "Recorded internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used only for synchronization within the graph. Their state is tied to the underlying execution queue and is not shared between executable graph instances."
+    - "Recorded external counter-based events (i.e. with ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used to synchronize the graph with device commands submitted outside the graph (for example, before or after $xCommandListAppendGraphExt) and with the host. External counter-based events may incur additional overhead compared to internal counter-based events."
+    - "Resources used in captured commands (e.g. buffers passed to kernels as arguments) are shared between instances; the application is responsible for avoiding data races during concurrent execution."
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the recorded graph"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+    - type: "$x_executable_graph_handle_t*"
+      name: phExecutableGraph
+      desc: "[out] pointer to handle of the executable graph"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Appends execution of an executable graph to a command list."
+class: $xCommandList
+version: "1.17"
+name: AppendGraphExt
+details:
+    - "The destination command list must match the type and execution characteristics of the command list used to initiate recording, including the queue group ordinal and immediate mode configuration."
+    - "Only one execution of the same executable graph object may run at a time; concurrent graph execution requires multiple executable graph instances."
+    - "If this function is called while the executable graph is already running, the new execution is scheduled after the current execution completes."
+    - "Graph execution obeys the implicit in-order dependency semantics of the destination command list."
+    - "If `hSignalEvent` is provided, it is signaled after all recorded append operations on all recorded queues complete."
+    - "If wait events are provided, graph execution does not begin until all wait events are satisfied."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of the command list to execute the graph on"
+    - type: $x_executable_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the executable graph"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before launching; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns the recorded graph used to instantiate an executable graph."
+class: $xExecutableGraph
+version: "1.17"
+name: GetSourceGraphExt
+params:
+    - type: $x_executable_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the executable graph"
+    - type: "$x_graph_handle_t*"
+      name: phSourceGraph
+      desc: "[out] pointer to the source recorded graph handle"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Queries whether a graph is empty."
+class: $xGraph
+version: "1.17"
+name: IsEmptyExt
+details:
+    - "The function returns `ZE_RESULT_QUERY_TRUE` when the graph contains no operations."
+    - "The function returns `ZE_RESULT_QUERY_FALSE` when the graph contains recorded operations."
+    - "The function returns `ZE_RESULT_ERROR_INVALID_GRAPH` when the recorded graph is invalid."
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the graph"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Writes a DOT description of a recorded graph to disk."
+class: $xGraph
+version: "1.17"
+name: DumpContentsExt
+details:
+    - "The generated DOT output captures the graph structure and recorded append operations."
+    - "Kernel node output includes kernel names, argument lists, and argument types and values."
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of the graph"
+    - type: "const char*"
+      name: filePath
+      desc: "[in] path where the DOT file is written"
+    - type: "const void*"
+      name: pNext
+      desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys an executable graph object."
+class: $xExecutableGraph
+version: "1.17"
+name: DestroyExt
+details:
+    - "The executable graph must not be in use or executing on any command list when it is destroyed."
+    - "After destruction, the handle becomes invalid and must not be used in further API calls."
+params:
+    - type: $x_executable_graph_handle_t
+      name: hGraph
+      desc: "[in][release] handle of the executable graph to destroy"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Destroys a recorded graph object."
+class: $xGraph
+version: "1.17"
+name: DestroyExt
+details:
+    - "All executable graph instances created from the recorded graph must be destroyed before this function is called."
+    - "After destruction, the handle becomes invalid and must not be used in further API calls."
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in][release] handle of the graph to destroy"
