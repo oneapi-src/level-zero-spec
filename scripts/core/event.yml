@@ -683,7 +683,7 @@ class: $xCommandList
 name: AppendQueryKernelTimestamps
 details:
     - "The application must ensure the events are accessible by the device on which the command list was created."
-    - "The application must ensure the events were created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag."
+    - "The application must ensure the events were created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP or $X_EVENT_POOL_FLAG_KERNEL_MAPPED_TIMESTAMP flag."
     - "The application must ensure the memory pointed to by both dstptr and pOffsets is accessible by the device on which the command list was created."
     - "The value(s) written to the destination buffer are undefined if any timestamp event has not been signaled."
     - "If pOffsets is nullptr, then multiple results will be appended sequentially into memory in the same order as phEvents."
