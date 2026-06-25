@@ -6,6 +6,11 @@ from templates import helper as th
     x=tags['$x']
     X=x.upper()
 %>
+
+<%!
+    from parse_specs import _version_compare_gequal
+%>
+
 :orphan:
 
 .. _ZE_experimental_relaxed_allocation_limits:
@@ -13,6 +18,8 @@ from templates import helper as th
 =====================================
  Relaxed Allocation Limits Extension
 =====================================
+
+This experimental extension is deprecated since version 1.17 onwards and replaced by the :ref:`${th.subt(namespace, tags, X)}_extension_relaxed_allocation_limits <${th.subt(namespace, tags, X)}_extension_relaxed_allocation_limits>` standard extension.
 
 API
 ----
