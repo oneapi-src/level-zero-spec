@@ -26,6 +26,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.17.23`_
+    - 2026-6-25
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.17.23/index.html>`__
   * - `Level Zero v1.16.24`_
     - 2026-4-24
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.16.24/index.html>`__
@@ -122,6 +125,50 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.17.23
+~~~~~~~~~~~~~~~~~~~
+
+* New Features in v1.17
+
+    - New class of APIs for introspection
+
+      - zeCommandQueueGetFlags, zeCommandQueueGetMode, zeCommandQueueGetPriority
+      - zeCommandListGetFlags, zeCommandListImmediateGetFlag, zeCommandListImmediateGetMode, zeCommandListImmediateGetMode
+      - zeCommandListIsMutableExp
+      - zeDeviceGetCounterBasedEventMaxValue query for maximum value for external memory counter based events
+      - zeEventGetCounterBasedFlags introspection API
+
+    - Add Record and Replay Graph extension to capture, instantiate, and replay command lists
+
+      - zeGraphCreateExt, zeGraphInstantiateExt, zeGraphDumpContentsExt, zeGraphIsEmptyExt, zeGraphDestroyExt
+      - zeCommandListBeginGraphCaptureExt, zeCommandListBeginCaptureIntoGraphExt, zeCommandListIsGraphCaptureEnabledExt, zeCommandListEndGraphCaptureExt, zeCommandListGetGraphExt, zeCommandListAppendGraphExt
+      - zeGraphGetPrimaryCommandListExt, zeGraphSetDestructionCallbackExt, zeExecutableGraphGetSourceGraphExt, zeExecutableGraphDestroyExt
+
+    - Add zeCommandListAppendHostFunction API for enqueuing host callbacks
+    - Promote the Relaxed Allocation Limits experimental extension to a standard extension
+    - Add Virtual Memory Read-Only Properties extension to query device read-only memory capability
+    - Add Sysman extended Device State extension
+    - Add Sysman OEM serial number extension structure
+    - Synchronize Core and Sysman memory types
+
+* Deprecations:
+
+    - Deprecate zeCommandListCreateCloneExp
+    - Deprecate ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES versio
+
+* Patches since v1.16.24 release
+
+    - Clarify External Memory Mapping (sysmem) extension semantics
+    - Clarify counter-based events device assignment
+    - Update docs to show DDI Driver Handles are default as of 1.17
+    - Update docs on IPC/P2P usage of reserved memory
+    - Clarify loader dispatch given number of drivers and tools
+    - Update specification for zeCommandListAppendMemoryFill
+    - Add 'or' verbiage for MAPPED_TIMESTAMP to AppendQuery
+    - Fix timestamp documentation in the spec
+    - Clarify Context/Device usage for IPC objects
+
 
 Level Zero v1.16.24
 ~~~~~~~~~~~~~~~~~~~
