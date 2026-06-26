@@ -26,9 +26,9 @@ Level Zero
   * - Version
     - Date
     - View
-  * - `Level Zero v1.17.23`_
+  * - `Level Zero v1.17.24`_
     - 2026-6-25
-    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.17.23/index.html>`__
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.17.24/index.html>`__
   * - `Level Zero v1.16.24`_
     - 2026-4-24
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.16.24/index.html>`__
@@ -126,7 +126,7 @@ Level Zero
 Release Notes
 -------------
 
-Level Zero v1.17.23
+Level Zero v1.17.24
 ~~~~~~~~~~~~~~~~~~~
 
 * New Features in v1.17
