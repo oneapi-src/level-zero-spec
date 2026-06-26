@@ -11,7 +11,7 @@ import hashlib
 import json
 import yaml
 import copy
-from templates.helper import param_traits, type_traits, value_traits, get_tag
+from templates.helper import param_traits, type_traits, value_traits, get_tag, version_key
 
 default_version = "1.0"
 all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "2.0"]
@@ -526,120 +526,22 @@ def _validate_struct_enum_mapping(specs, tags):
 """
     filters object by version
 """
+# Version comparisons route through helper.version_key (single source of truth
+# for major/minor decomposition). Do NOT reintroduce float(version) here.
 def _version_compare_greater(a, b):
-    a_major = int(a.split('.')[0])
-    a_minor = int(a.split('.')[1])
-
-    b_major = int(b.split('.')[0])
-    b_minor = int(b.split('.')[1])
-
-    if (a_major > b_major):
-        # print("DEBUG: greater(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    if (a_major < b_major):
-        # print("DEBUG: greater(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
-        return False
-
-    # a_major == b_major
-
-    if (a_minor > b_minor):
-        # print("DEBUG: greater(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    # a_minor <= b_minor
-
-    # print("DEBUG: greater(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
-    return False
+    return version_key(a) > version_key(b)
 
 def _version_compare_equal(a, b):
-    a_major = int(a.split('.')[0])
-    a_minor = int(a.split('.')[1])
-
-    b_major = int(b.split('.')[0])
-    b_minor = int(b.split('.')[1])
-
-    ret_val = ((a_major == b_major) and (a_minor == b_minor))
-    # print("DEBUG: equal(%d.%d, %d.%d) -> %s" % (a_major, a_minor, b_major, b_minor, ret_val))
-    return ret_val
+    return version_key(a) == version_key(b)
 
 def _version_compare_less(a, b):
-    a_major = int(a.split('.')[0])
-    a_minor = int(a.split('.')[1])
-
-    b_major = int(b.split('.')[0])
-    b_minor = int(b.split('.')[1])
-
-    if a_major > b_major:
-        # print("DEBUG: less(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
-        return False
-
-    if a_major < b_major:
-        # print("DEBUG: less(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    # a_major == b_major
-
-    if a_minor < b_minor:
-        # print("DEBUG: less(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    # a_minor >= b_minor
-
-    # print("DEBUG: less(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
-    return False
+    return version_key(a) < version_key(b)
 
 def _version_compare_lequal(a, b):
-    a_major = int(a.split('.')[0])
-    a_minor = int(a.split('.')[1])
-
-    b_major = int(b.split('.')[0])
-    b_minor = int(b.split('.')[1])
-
-    if a_major > b_major:
-        # print("DEBUG: lequal(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
-        return False
-
-    if a_major < b_major:
-        # print("DEBUG: lequal(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    # a_major == b_major
-
-    if a_minor <= b_minor:
-        # print("DEBUG: lequal(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    # a_minor > b_minor
-
-    # print("DEBUG: lequal(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
-    return False
+    return version_key(a) <= version_key(b)
 
 def _version_compare_gequal(a, b):
-    a_major = int(a.split('.')[0])
-    a_minor = int(a.split('.')[1])
-
-    b_major = int(b.split('.')[0])
-    b_minor = int(b.split('.')[1])
-
-    if a_major > b_major:
-        # print("DEBUG: gequal(%d.%d, %d.%d) -> True (major)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    if a_major < b_major:
-        # print("DEBUG: gequal(%d.%d, %d.%d) -> False (major)" % (a_major, a_minor, b_major, b_minor))
-        return False
-
-    # a_major == b_major
-
-    if a_minor >= b_minor:
-        # print("DEBUG: gequal(%d.%d, %d.%d) -> True (minor)" % (a_major, a_minor, b_major, b_minor))
-        return True
-
-    # a_minor < b_minor
-
-    # print("DEBUG: gequal(%d.%d, %d.%d) -> False (minor)" % (a_major, a_minor, b_major, b_minor))
-    return False
+    return version_key(a) >= version_key(b)
 
 def _filter_version(d, max_ver):
     ver = d.get('version', default_version)
@@ -662,7 +564,7 @@ def _filter_version(d, max_ver):
             detail = None
             for k, v in det.items():
                 try:
-                    version = float(k)
+                    version_key(k)
                 except:
                     return det
                 if _version_compare_lequal(k,  max_ver):
@@ -1122,7 +1024,12 @@ def parse(section, version, tags, meta, ref):
             # extract header from objects
             if re.match(r"header", d['type']):
                 header = d
-                header['ordinal'] = int(int(header.get('ordinal',"1000")) * float(header.get('version',"1.0")))
+                # Header ordinal drives DDI table/class order (and the global
+                # spec emission sort below). version_key() decomposes major/minor
+                # so e.g. "1.17" sorts after "1.4"; a naive float(version) would
+                # treat "1.17" as 1.17 < "1.4"==1.4 and misplace sub-tables,
+                # breaking N-1 ABI. See helper.version_key.
+                header['ordinal'] = int(int(header.get('ordinal',"1000")) * version_key(header.get('version',"1.0")))
                 header['ordinal'] *= 1000 if re.match(r"extension", header.get('desc',"").lower()) else 1
                 header['ordinal'] *= 1000 if re.match(r"experimental", header.get('desc',"").lower()) else 1
 

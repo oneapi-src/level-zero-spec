@@ -446,6 +446,7 @@ desc: "Create multiple metric group handles from metric handles."
 version: "1.10"
 class: $tDevice
 name: CreateMetricGroupsFromMetricsExp
+ordinal: "2"
 decl: static
 details:
     - "Creates multiple metric groups from metrics which were created using $tMetricCreateFromProgrammableExp2()."

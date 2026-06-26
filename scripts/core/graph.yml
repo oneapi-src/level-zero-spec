@@ -399,3 +399,27 @@ params:
     - type: $x_graph_handle_t
       name: hGraph
       desc: "[in][release] handle of the graph to destroy"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a recorded graph object"
+name: $xGraph
+owner: $xContext
+members:
+    - type: $x_graph_handle_t
+      name: handle
+      desc: "[in] handle of graph object"
+    - type: $xContext*
+      name: pContext
+      desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for an executable graph object"
+name: $xExecutableGraph
+owner: $xGraph
+members:
+    - type: $x_executable_graph_handle_t
+      name: handle
+      desc: "[in] handle of executable graph object"
+    - type: $xGraph*
+      name: pGraph
+      desc: "[in] pointer to owner object"

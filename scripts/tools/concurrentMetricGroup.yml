@@ -30,6 +30,7 @@ desc: "Get sets of metric groups which could be collected concurrently."
 version: "1.10"
 class: $tDevice
 name: GetConcurrentMetricGroupsExp
+ordinal: "1"
 decl: static
 details:
     - "Re-arrange the input metric groups to provide sets of concurrent metric groups."

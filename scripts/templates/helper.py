@@ -7,6 +7,34 @@
 import re
 
 """
+    Single source of truth for version ordering.
+
+    Maps a "major.minor" version string to a sortable/comparable integer
+    ("1.10" -> 10010, "1.4" -> 10004) via major/minor decomposition.
+
+    NEVER use float(version) for version comparison or sorting:
+    float("1.10") == 1.1, which is *less* than float("1.4") == 1.4, so any
+    two-digit minor version silently sorts before lower real versions. That
+    misplaces DDI sub-tables in the container struct and breaks N-1 ABI.
+"""
+_VERSION_MINOR_BASE = 10000   # major*BASE + minor; a minor >= BASE aliases (major+1).0
+
+def version_key(version):
+    major, _, minor = str(version).partition(".")
+    minor = int(minor) if minor else 0
+    # Loud failure beats a silent wrap that would reorder a DDI table and break ABI.
+    assert 0 <= minor < _VERSION_MINOR_BASE, \
+        "minor version %d exceeds version_key headroom (%d); raise _VERSION_MINOR_BASE" % (minor, _VERSION_MINOR_BASE)
+    return int(major) * _VERSION_MINOR_BASE + minor
+
+"""
+    Stable ordering key for a function/object within a DDI table: order by
+    version first, then by the object's explicit 'ordinal' (default 100).
+"""
+def function_sort_key(obj):
+    return (version_key(obj.get('version', "1.0")), int(obj.get('ordinal', "100")))
+
+"""
     Extracts traits from a spec object
 """
 class obj_traits:
@@ -913,14 +941,14 @@ def get_class_function_objs(specs, cname, version = None, includeExt = False):
             is_function = obj_traits.is_function(obj)
             match_cls = cname == obj_traits.class_name(obj)
             if is_function and match_cls:
-                if version is None or (float(obj.get('version',"1.0")) <= version):
+                if version is None or (version_key(obj.get('version',"1.0")) <= version_key(version)):
                     if obj_traits.is_extension(obj):
                         if includeExt: 
                             objects.append(obj)
                     else:
                         objects.append(obj)
 
-    return sorted(objects, key=lambda obj: (float(obj.get('version',"1.0").split(".")[0]) * 10000000) + (float(obj.get('version',"1.0").split(".")[1])*10000) + int(obj.get('ordinal',"100")))
+    return sorted(objects, key=function_sort_key)
 
 """
 Public:
@@ -938,8 +966,8 @@ def get_class_function_objs_exp(specs, cname):
                     exp_objects.append(obj)
                 else:
                     objects.append(obj)
-    objects = sorted(objects, key=lambda obj: (float(obj.get('version',"1.0").split(".")[0]) * 10000000) + (float(obj.get('version',"1.0").split(".")[1]) * 10000) + int(obj.get('ordinal',"100")))
-    exp_objects = sorted(exp_objects, key=lambda obj: (float(obj.get('version',"1.0").split(".")[0]) * 10000000) + (float(obj.get('version',"1.0").split(".")[1])* 10000) + int(obj.get('ordinal',"100")))              
+    objects = sorted(objects, key=function_sort_key)
+    exp_objects = sorted(exp_objects, key=function_sort_key)
     return objects, exp_objects
 
 """ 
@@ -1035,7 +1063,7 @@ Public:
 def get_pfncbtables(specs, meta, namespace, tags):
     tables = []
     for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
-        objs = get_class_function_objs(specs, cname, 1.0)
+        objs = get_class_function_objs(specs, cname, "1.0")
         if len(objs) > 0:
             name = get_table_name(namespace, tags, {'class': cname})
             table = "%s_%s_callbacks_t"%(namespace, _camel_to_snake(name))
