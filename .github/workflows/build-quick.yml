@@ -1,0 +1,161 @@
+# Builds the spec-generated loader across several Linux distros, runs CTest, then
+# installs the loader + NULL driver and smoke-tests zello_world.
+#
+# Unlike the upstream oneapi-src/level-zero build-quick.yml (which builds a loader
+# checkout directly), there is no buildable loader in this spec repo. The loader is
+# generated from the spec: we build the spec headers, check out oneapi-src/level-zero,
+# run its json2src.py against this spec's input.json, and copy the generated headers in.
+# This generation preamble mirrors loader-integration.yml. The per-distro build/test is
+# the re-created build-quick logic.
+name: Build Quick
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  http_proxy: http://proxy-dmz.intel.com:912
+  https_proxy: http://proxy-dmz.intel.com:912
+  DOCKER_BUILDKIT: '1'
+
+jobs:
+  build-linux:
+    runs-on: [self-hosted, Linux]
+    if: github.repository_owner == 'intel-innersource'
+    strategy:
+      fail-fast: false
+      matrix:
+        container:
+          - ubuntu:22.04
+          - ubuntu:24.04
+          - redhat/ubi9:latest
+    steps:
+    # ----- Spec-generated loader preamble (see loader-integration.yml) -----
+    - name: Checkout spec-head
+      uses: actions/checkout@v4
+      with:
+        clean: true
+        fetch-depth: 0
+        fetch-tags: true
+        path: spec-head
+    - name: Build container image
+      run: | #bash
+        docker build \
+          --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
+          --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
+          -t ghcr.io/oneapi-src/spec-build:latest \
+          -f spec-head/.github/docker/build.Dockerfile \
+          spec-head/
+    - name: Detect version from git tags
+      run: | #bash
+        # Find the most recent tag matching v<MAJOR>.<MINOR>* (single 'v' prefix only)
+        LATEST_TAG=$(git -C spec-head tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+' | head -1)
+        if [ -z "$LATEST_TAG" ]; then
+          echo "Error: No version tags matching v<MAJOR>.<MINOR>.* found" >&2
+          exit 1
+        fi
+        VER=$(echo "$LATEST_TAG" | grep -oP '^v\K[0-9]+\.[0-9]+')
+        echo "Detected version: $VER (from tag $LATEST_TAG)"
+        echo "VER=$VER" >> $GITHUB_ENV
+    - name: Generate spec-head headers
+      # --debug writes scripts/input.json (consumed by json2src) and scripts/generated.json
+      # (consumed by the copy step). --!html --!rst skips the slow Sphinx docs build.
+      run: | #bash
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD/spec-head/scripts \
+          -e TZ=UTC \
+          ghcr.io/oneapi-src/spec-build:latest \
+          /opt/spec-venv/bin/python3 ./run.py --debug '--!html' '--!rst' '--!build' --ver $VER
+    - name: Checkout loader-head
+      uses: actions/checkout@v4
+      with:
+        clean: true
+        repository: oneapi-src/level-zero
+        ref: master
+        path: loader-head
+        token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
+    - uses: intel-sandbox/action-setup-jq@main
+    - name: json2src head
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD/loader-head \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 ./scripts/json2src.py --ver $VER . < spec-head/scripts/input.json
+    - name: Copy head include files
+      working-directory: spec-head
+      run: | #bash
+        set -o pipefail
+        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
+        cut -c 4- |
+        sort |
+        xargs -I{} cp -v ./{} ../loader-head/{}
+    # ----- Re-created build-quick logic, run in the matrix distro container -----
+    - name: Build loader on ${{ matrix.container }}
+      id: build_test
+      continue-on-error: true
+      run: | #bash
+        # Capture all build/test output so a later step can post failures to the
+        # GitHub job summary. set -o pipefail makes the docker exit code survive the
+        # pipe to tee, so continue-on-error reports the real outcome.
+        set -o pipefail
+        {
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD/loader-head \
+          -e http_proxy=http://proxy-dmz.intel.com:912 \
+          -e https_proxy=http://proxy-dmz.intel.com:912 \
+          ${{ matrix.container }} \
+          bash -e <<'EOF'
+        if [ -f /etc/redhat-release ]; then
+          # RHEL/UBI-based system
+          yum install -y gcc gcc-c++ cmake make git
+        else
+          # Ubuntu-based system
+          apt-get update
+          apt-get install -y build-essential cmake git
+        fi
+        mkdir -p build
+        cd build
+        cmake \
+          -D CMAKE_BUILD_TYPE=Release \
+          -D BUILD_L0_LOADER_TESTS=1 \
+          -D INSTALL_NULL_DRIVER=1 \
+          ..
+        make -j$(nproc)
+        export ZEL_LIBRARY_PATH=$PWD/lib
+        ls $ZEL_LIBRARY_PATH
+        ctest -V
+        make install
+        ldconfig
+        # Smoke-test the installed loader with the NULL driver
+        export ZE_ENABLE_NULL_DRIVER=1
+        export ZE_ENABLE_LOADER_DEBUG_TRACE=1
+        ./bin/zello_world
+        echo "✓ zello_world ran successfully with installed loader and NULL driver"
+        make uninstall || xargs rm -v < install_manifest.txt
+        EOF
+        } 2>&1 | tee "${{ github.workspace }}/build-test.log"
+    - name: Post failures to job summary
+      if: steps.build_test.outcome == 'failure'
+      run: | #bash
+        {
+          echo "## ❌ Build/test failed on ${{ matrix.container }}"
+          echo ""
+          echo '<details><summary>Output (last 300 lines)</summary>'
+          echo ""
+          echo '```'
+          tail -n 300 "${{ github.workspace }}/build-test.log" 2>/dev/null || echo "(no log captured)"
+          echo '```'
+          echo '</details>'
+        } >> "$GITHUB_STEP_SUMMARY"
+    - name: Fail if build/test failed
+      if: steps.build_test.outcome == 'failure'
+      run: exit 1

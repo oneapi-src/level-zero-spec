@@ -1,0 +1,164 @@
+# Builds a static and a dynamic loader from the spec-generated loader source, then runs
+# the static loader's CTest against the dynamic loader via ZEL_LIBRARY_PATH.
+#
+# As in build-quick.yml, the loader is generated from this spec (build spec headers ->
+# checkout oneapi-src/level-zero -> json2src -> copy generated headers), mirroring the
+# loader-integration.yml preamble. The static/dynamic build + cross-loader CTest is the
+# re-created build-quick-static logic.
+name: Build Quick Static
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  http_proxy: http://proxy-dmz.intel.com:912
+  https_proxy: http://proxy-dmz.intel.com:912
+  DOCKER_BUILDKIT: '1'
+
+jobs:
+  build-linux:
+    runs-on: [self-hosted, Linux]
+    if: github.repository_owner == 'intel-innersource'
+    steps:
+    # ----- Spec-generated loader preamble (see loader-integration.yml) -----
+    - name: Checkout spec-head
+      uses: actions/checkout@v4
+      with:
+        clean: true
+        fetch-depth: 0
+        fetch-tags: true
+        path: spec-head
+    - name: Build container image
+      run: | #bash
+        docker build \
+          --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
+          --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
+          -t ghcr.io/oneapi-src/spec-build:latest \
+          -f spec-head/.github/docker/build.Dockerfile \
+          spec-head/
+    - name: Detect version from git tags
+      run: | #bash
+        # Find the most recent tag matching v<MAJOR>.<MINOR>* (single 'v' prefix only)
+        LATEST_TAG=$(git -C spec-head tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+' | head -1)
+        if [ -z "$LATEST_TAG" ]; then
+          echo "Error: No version tags matching v<MAJOR>.<MINOR>.* found" >&2
+          exit 1
+        fi
+        VER=$(echo "$LATEST_TAG" | grep -oP '^v\K[0-9]+\.[0-9]+')
+        echo "Detected version: $VER (from tag $LATEST_TAG)"
+        echo "VER=$VER" >> $GITHUB_ENV
+    - name: Generate spec-head headers
+      # --debug writes scripts/input.json (consumed by json2src) and scripts/generated.json
+      # (consumed by the copy step). --!html --!rst skips the slow Sphinx docs build.
+      run: | #bash
+        docker run \
+          --rm \
+          -v $PWD:$PWD \
+          -w $PWD/spec-head/scripts \
+          -e TZ=UTC \
+          ghcr.io/oneapi-src/spec-build:latest \
+          /opt/spec-venv/bin/python3 ./run.py --debug '--!html' '--!rst' '--!build' --ver $VER
+    - name: Checkout loader-head
+      uses: actions/checkout@v4
+      with:
+        clean: true
+        repository: oneapi-src/level-zero
+        ref: master
+        path: loader-head
+        token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
+    - uses: intel-sandbox/action-setup-jq@main
+    - name: json2src head
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD/loader-head \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 ./scripts/json2src.py --ver $VER . < spec-head/scripts/input.json
+    - name: Copy head include files
+      working-directory: spec-head
+      run: | #bash
+        set -o pipefail
+        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
+        cut -c 4- |
+        sort |
+        xargs -I{} cp -v ./{} ../loader-head/{}
+    # ----- Re-created build-quick-static logic -----
+    - name: Build static loader
+      working-directory: loader-head
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          bash -e <<'EOF'
+        mkdir -p build
+        cd build
+        cmake \
+          -D CMAKE_BUILD_TYPE=Release \
+          -D BUILD_L0_LOADER_TESTS=1 \
+          -D BUILD_STATIC=1 \
+          ..
+        make -j$(nproc)
+        EOF
+    - name: Build dynamic loader
+      working-directory: loader-head
+      run: | #bash
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          bash -e <<'EOF'
+        mkdir -p dynamic_build
+        cd dynamic_build
+        cmake \
+          -D CMAKE_BUILD_TYPE=Release \
+          -D BUILD_L0_LOADER_TESTS=1 \
+          -D BUILD_STATIC=0 \
+          ..
+        make -j$(nproc)
+        EOF
+    - name: Run CTest on static loader against dynamic loader
+      id: ctest
+      continue-on-error: true
+      working-directory: loader-head
+      run: | #bash
+        # Capture CTest output so a later step can post failures to the GitHub job
+        # summary. set -o pipefail makes the docker exit code survive the pipe to tee.
+        set -o pipefail
+        {
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD/build \
+          -e ZEL_LIBRARY_PATH=$PWD/dynamic_build/lib \
+          ghcr.io/oneapi-src/spec-build:latest \
+          bash -e <<'EOF'
+        ls $ZEL_LIBRARY_PATH
+        ctest -V
+        EOF
+        } 2>&1 | tee "${{ github.workspace }}/ctest.log"
+    - name: Post test failures to job summary
+      if: steps.ctest.outcome == 'failure'
+      run: | #bash
+        {
+          echo "## ❌ CTest failed (static loader vs dynamic loader)"
+          echo ""
+          echo '<details><summary>CTest output (last 300 lines)</summary>'
+          echo ""
+          echo '```'
+          tail -n 300 "${{ github.workspace }}/ctest.log" 2>/dev/null || echo "(no log captured)"
+          echo '```'
+          echo '</details>'
+        } >> "$GITHUB_STEP_SUMMARY"
+    - name: Fail if CTest failed
+      if: steps.ctest.outcome == 'failure'
+      run: exit 1
