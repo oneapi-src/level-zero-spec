@@ -1,0 +1,43 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Command Queue Set Priority"
+version: "1.18"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Command Queue Set Priority Extension Name"
+version: "1.18"
+name: $X_COMMAND_QUEUE_SET_PRIORITY_EXT_NAME
+value: '"$X_extension_command_queue_set_priority"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Command Queue Set Priority Extension Version(s)"
+version: "1.18"
+name: $x_command_queue_set_priority_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets the priority of a command queue."
+version: "1.18"
+class: $xCommandQueue
+name: SetPriorityExt
+details:
+    - "The application may call this function from simultaneous threads."
+    - "This function changes the priority of an existing command queue, overriding the priority specified at creation through $x_command_queue_desc_t; the updated value is reported by $xCommandQueueGetPriority."
+    - "Whether the new priority affects commands already submitted to the command queue, or only commands submitted after this call, is implementation-defined."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: $x_command_queue_priority_t
+      name: priority
+      desc: "[in] priority to set for the command queue"
