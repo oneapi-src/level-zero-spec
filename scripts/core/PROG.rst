@@ -1740,6 +1740,7 @@ Requirements:
 - If Driver is not able to lock provided device allocation for CPU access, host waits are not possible
 - Apart from signaling operation, driver will not write anything else to the memory. Initial value is fully under users responsiblility
 - Signaling such event, will not replace its state (as described previously). It can be passed to multiple append calls and each append will increment the storage by `incrementValue` (atomically) on GPU
+- Signaling is implemented as an atomic increment (atomic_add) of `deviceAddress`. When signaling append calls originate on more than one device (targeting the same aggregate storage), these atomics cross device boundaries. Not all devices support cross-device atomic operations. The user must ensure that atomics are supported between the involved devices, for example by querying ${X}_DEVICE_P2P_PROPERTY_FLAG_ATOMICS via ${x}DeviceGetP2PProperties (and/or the cross-device capabilities returned by ${x}DeviceGetMemoryAccessProperties). Signaling the same aggregate storage from devices that do not support cross-device atomics results in undefined behavior.
 - Using aggregated event as dependency, requires only one memory compare operation against final value: `completionValue` >=  `*deviceAddress`
 - Device storage is under users control. It must be reset by the user if needed
 - Profiling is not possible if producers originate on different GPUs (different timestamp domains)

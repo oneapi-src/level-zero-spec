@@ -258,7 +258,9 @@ version: "1.15"
 members:
     - type: uint64_t*
       name: deviceAddress
-      desc: "[in] device address that would be updated with atomic_add upon signaling of this event, must be device USM memory"
+      desc: |
+            [in] device address that would be updated with atomic_add upon signaling of this event, must be device USM memory.
+            When this event is signaled from append operations that execute on more than one device, the driver performs cross-device (peer) atomic updates to this address. Not all devices support cross-device atomic operations; the user must ensure atomics are supported between the involved devices (see $X_DEVICE_P2P_PROPERTY_FLAG_ATOMICS returned by $xDeviceGetP2PProperties, and cross-device capabilities returned by $xDeviceGetMemoryAccessProperties). Using cross-device signaling on devices that do not support cross-device atomics results in undefined behavior.
     - type: uint64_t
       name: incrementValue
       desc: "[in] value which would by atomically added upon each completion"
