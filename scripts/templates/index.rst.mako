@@ -19,4 +19,4 @@
    core/SPIRV.rst
    core/EXT.rst
    api.rst
-   versions.rst
+   Versions <${versions_url}>

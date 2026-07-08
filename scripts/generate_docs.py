@@ -244,7 +244,7 @@ def _postprocess_generated_xml(pathname='', extension='xml'):
             f.write(data)
             f.truncate()
 
-def generate_common(dstpath, sections, ver, rev):
+def generate_common(dstpath, sections, ver, rev, versions_url):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
     xmlpath = os.path.join(dstpath, "xml")
@@ -262,7 +262,8 @@ def generate_common(dstpath, sections, ver, rev):
             os.path.join(sourcepath, fn),
             ver=rev,
             sourcepath=sourcepath,
-            sections=sections)
+            sections=sections,
+            versions_url=versions_url)
 
     # Doxygen generates XML files needed by sphinx breathe plugin for API documentation
     print("Generating doxygen...")

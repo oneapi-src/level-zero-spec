@@ -57,6 +57,30 @@ jobs:
           echo "Detected version: $VER (from tag $LATEST_TAG)"
           echo "VER=$VER" >> $GITHUB_ENV
 
+      - name: Determine deploy target
+        run: | #bash
+          # Resolve the publish directory BEFORE the build so the docs can bake the
+          # correct sidebar "Versions" link. DIR_NAME is a pure function of the event
+          # context (no build artifact needed).
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            DIR_NAME="pr-${{ github.event.pull_request.number }}"
+            # Point the sidebar "Versions" link at THIS build's own local
+            # versions.html (internal doc ref). Sphinx computes correct relative
+            # paths at any depth, so the PR preview shows its own version list
+            # without needing the ephemeral preview subdomain. NOTE: a Sphinx
+            # toctree external link requires an http(s):// scheme, so a
+            # root-relative path like /pr-N/versions.html does NOT work here.
+            VERSIONS_URL_OVERRIDE="versions"
+          else
+            BRANCH_NAME="${{ github.ref_name }}"
+            DIR_NAME=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_-]/_/g')
+            # Non-PR builds keep the default canonical latest URL (empty = no override).
+            VERSIONS_URL_OVERRIDE=""
+          fi
+          echo "DIR_NAME=$DIR_NAME" >> $GITHUB_ENV
+          echo "VERSIONS_URL_OVERRIDE=$VERSIONS_URL_OVERRIDE" >> $GITHUB_ENV
+          echo "Deploy dir: $DIR_NAME ; versions_url_override: '${VERSIONS_URL_OVERRIDE:-<default>}'"
+
       - name: Generate documentation
         run: | #bash
           docker run \
@@ -65,24 +89,15 @@ jobs:
             -w $PWD/scripts \
             -e TZ=UTC \
             ghcr.io/oneapi-src/spec-build:latest \
-            /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
+            /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER --versions_url_override "$VERSIONS_URL_OVERRIDE"
 
       - name: Prepare GitHub Pages structure
         run: | #bash
           # Create a staging directory for GitHub Pages
           mkdir -p gh-pages-staging
           
-          # Determine the directory name based on event type
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # For PRs, use pr-<number> format
-            DIR_NAME="pr-${{ github.event.pull_request.number }}"
-            echo "Preparing documentation for PR #${{ github.event.pull_request.number }}"
-          else
-            # For pushes, use branch name (sanitize it for use in URLs)
-            BRANCH_NAME="${{ github.ref_name }}"
-            DIR_NAME=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9_-]/_/g')
-            echo "Preparing documentation for branch: $BRANCH_NAME"
-          fi
+          # DIR_NAME was resolved before the build (see "Determine deploy target").
+          echo "Preparing documentation in directory: $DIR_NAME"
           
           # Copy HTML docs to the determined directory
           mkdir -p "gh-pages-staging/$DIR_NAME"
@@ -173,7 +188,6 @@ jobs:
           EOF
           
           echo "Prepared documentation in directory: $DIR_NAME"
-          echo "DIR_NAME=$DIR_NAME" >> $GITHUB_ENV
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v5

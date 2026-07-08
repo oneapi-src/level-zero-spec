@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
  Copyright (C) 2019-2022 Intel Corporation
 
@@ -13,6 +14,11 @@ import os, sys, platform
 import time
 import subprocess
 import warnings
+
+# Default target for the sidebar "Versions" nav link. Points at the canonical,
+# always-current version index (the clone of the newest release). Override per
+# environment (e.g. PR previews) with --versions_url_override.
+DEFAULT_VERSIONS_URL = "https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html"
 
 """
     helper for adding mutually-exclusive boolean arguments "--name" and "--!name"
@@ -33,18 +39,6 @@ def clean():
     util.makePath("../build")
 
 """
-    help for updating spec documentation
-"""
-def update_spec(target):
-    inc = "%s/source/elements/l0/include" % target
-    src = "%s/source/elements/l0/source" % target
-    util.copyTree("../include", inc)
-    util.copyTree("../docs/source", src)
-    util.removePath("%s/experimental" % inc)
-    util.removePath("%s/experimental" % src)
-
-
-"""
     helper for running cmake windows build
 """
 def build():
@@ -55,6 +49,28 @@ def build():
     if result == 0:
         result = os.system('cmake --build ../build --clean-first')
     return result == 0
+
+"""
+    Auto-detect the MAJOR.MINOR spec version from the most recent git tag
+    reachable from the current branch. The result is branch-specific: checking
+    out a different branch may yield a different version if that branch has a
+    different most-recent tag in its history.
+    Returns a string like '1.17', or None if detection fails.
+"""
+def detect_version_git_major_minor():
+    result = subprocess.run(
+        ['git', 'describe', '--tags', '--abbrev=0'],
+        cwd=os.path.dirname(os.path.abspath(__file__)),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    if result.returncode != 0:
+        return None
+    tag = result.stdout.decode().strip().lstrip('v')
+    parts = tag.split('.')
+    if len(parts) >= 2:
+        return '%s.%s' % (parts[0], parts[1])
+    return None
 
 """
     helper for getting revision number from git repository
@@ -164,19 +180,36 @@ def main():
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
     add_argument(parser, "ignore_git_revision", "use command-line verison (ver) as revision instead of git tag.", False)
-    parser.add_argument("--update_spec", type=str, help="root of integrated spec directory to update")
-    parser.add_argument("--ver", type=str, default="1.4", required=False, help="specification version to generate.")
+    parser.add_argument("--ver", type=str, default=None, required=False, help="specification version to generate (e.g. 1.17). If omitted, detected from the most recent git tag.")
+    parser.add_argument("--versions_url_override", type=str, default=None, required=False, help="override the sidebar 'Versions' link target. Accepts a full URL (rendered as an external link) or an internal doc name like 'versions' (links to this build's own versions.html). If unset, uses the canonical latest versions page.")
 
     args = vars(parser.parse_args())
+
+    if args['ver'] is None:
+        args['ver'] = detect_version_git_major_minor()
+        if args['ver'] is None:
+            print("\nERROR: Could not detect specification version from git tags.")
+            print("       Please specify the version explicitly with --ver <MAJOR.MINOR>")
+            print()
+            parser.print_help()
+            sys.exit(1)
+        print("Detected version from git tags: %s" % args['ver'])
 
     if (args['ignore_git_revision']):
         args['rev'] = args['ver']
     else:
         args['rev'] = revision()
 
-    print("--------------------------------------------")
+    sep = "--------------------------------------------"
+    sections_on = [s for s in configParser.sections() if args.get(s, False)]
+    outputs_on  = [o for o in ["rst", "html", "build", "clean", "debug"] if args.get(o, False)]
+
+    print(sep)
     print("Building Level Zero Spec Version: %s" % args['rev'])
-    print("--------------------------------------------")
+    print(sep)
+    print("  Sections : %s" % (", ".join(sections_on) if sections_on else "(none)"))
+    print("  Outputs  : %s" % (", ".join(outputs_on)  if outputs_on  else "(none)"))
+    print(sep)
 
     start = time.time()
 
@@ -241,16 +274,24 @@ def main():
 
     # phase 5: prep for publication of html
     if args['html']:
-        generate_docs.generate_common(docpath, configParser.sections(), args['ver'], args['rev'])
+        versions_url = args['versions_url_override'] or DEFAULT_VERSIONS_URL
+        generate_docs.generate_common(docpath, configParser.sections(), args['ver'], args['rev'], versions_url)
 
     # phase 6: publish documentation
     if args['html']:
         generate_docs.generate_html(docpath)
 
-    if args['update_spec']:
-        update_spec(args['update_spec'])
-
-    print("\nCompleted in %.1f seconds!"%(time.time() - start))
+    produced = (
+        (["rst"]            if args["rst"]           else []) +
+        (["html"]           if args["html"]          else []) +
+        (["headers/source"] if any(args.get(s) for s in configParser.sections()) else []) +
+        (["cmake build"]    if args["build"]                        else [])
+    )
+    print("\n" + sep)
+    print("Completed in %.1f seconds!" % (time.time() - start))
+    print("  Version  : %s" % args["rev"])
+    print("  Produced : %s" % (", ".join(produced) if produced else "(none)"))
+    print(sep)
 
 if __name__ == '__main__':
     main()
