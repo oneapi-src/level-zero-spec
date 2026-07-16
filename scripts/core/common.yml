@@ -762,6 +762,10 @@ etors:
       desc: $x_record_replay_graph_ext_dump_desc_t
       version: "1.17"
       value: "0x00020048"
+    - name: DEVICE_NPU_PROPERTIES_EXT
+      desc: $x_device_npu_properties_ext_t
+      version: "1.18"
+      value: "0x00020049"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
