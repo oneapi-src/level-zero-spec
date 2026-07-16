@@ -1,5 +1,5 @@
 """
- Copyright (C) 2019-2022 Intel Corporation
+ Copyright (C) 2019-2026 Intel Corporation
 
  SPDX-License-Identifier: MIT
 
@@ -501,6 +501,33 @@ def _camel_to_snake(name):
     str = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     str = re.sub('([a-z0-9])([A-Z])', r'\1_\2', str).lower()
     return str
+
+"""
+Public:
+    human-readable display title for an API class/family used as a doc page title.
+    Strips the namespace tag and splits CamelCase (acronym-aware), e.g.
+    "$xCommandList" -> "Command List", "$xRTASBuilder" -> "RTAS Builder".
+    The bare-namespace class ("$x") has no name and renders as "Global".
+"""
+def make_class_title(namespace, tags, cname):
+    bare = subt(namespace, tags, cname, remove_namespace=True)
+    if not bare:
+        return "Global"
+    # split acronym-to-word (RTASBuilder -> RTAS Builder) then word-to-word (CommandList -> Command List)
+    title = re.sub(r'([A-Z]+)([A-Z][a-z])', r'\1 \2', bare)
+    title = re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', title)
+    return title
+
+"""
+Public:
+    stable, readable page slug (URL) for an API class/family, e.g.
+    "$xCommandList" -> "command_list". The bare-namespace class ("$x") -> "global".
+"""
+def make_class_slug(namespace, tags, cname):
+    bare = subt(namespace, tags, cname, remove_namespace=True)
+    if not bare:
+        return "global"
+    return _camel_to_snake(bare)
 
 """
 Public:

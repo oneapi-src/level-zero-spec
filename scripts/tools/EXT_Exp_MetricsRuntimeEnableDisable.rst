@@ -24,3 +24,7 @@ API
 
     * ${t}DeviceEnableMetricsExp
     * ${t}DeviceDisableMetricsExp
+
+* Enumerations
+
+    * ${t}_metrics_runtime_enable_disable_exp_version_t

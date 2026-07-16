@@ -1,5 +1,5 @@
 ..
-  Copyright 2020 Intel Corporation
+  Copyright 2020-2026 Intel Corporation
 
 .. oneAPI Level Zero Specification v${ver}
 
@@ -10,6 +10,7 @@
 ===================================
 
 .. toctree::
+   :maxdepth: 2
 
    core/INTRO.rst
    core/PROG.rst

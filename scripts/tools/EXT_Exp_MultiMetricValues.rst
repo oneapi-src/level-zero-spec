@@ -23,6 +23,10 @@ API
 
     * ${t}MetricGroupCalculateMultipleMetricValuesExp
 
+* Enumerations
+
+    * ${x}_calculate_multiple_metrics_exp_version_t
+
 Sample Code
 ------------
 

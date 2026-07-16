@@ -23,6 +23,10 @@ API
 
     * ${t}DeviceGetConcurrentMetricGroupsExp
 
+* Enumerations
+
+    * ${t}_concurrent_metric_groups_exp_version_t
+
 Concurrent Metric Groups
 ~~~~~~~~~~~~~~~~~~~~~~~~
 

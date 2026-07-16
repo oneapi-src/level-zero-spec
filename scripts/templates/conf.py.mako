@@ -21,7 +21,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'Level Zero Specification'
-copyright = u'2025, Intel'
+copyright = u'2026, Intel'
 author = u'Intel'
 
 # The short X.Y version
@@ -91,13 +91,35 @@ html_theme = 'sphinx_book_theme'
 # documentation.
 #
 html_theme_options = {
-    'navigation_with_keys': 'false'
+    'navigation_with_keys': 'false',
+    # Render our custom right-sidebar component. It shows the full "In this class"
+    # TOC on paginated class pages and falls back to the stock page-TOC elsewhere.
+    'secondary_sidebar_items': ["class-toc"],
 }
+
+# Title shown in the sidebar logo area. Overrides Sphinx's default
+# "<project> <release> documentation" (which rendered a double space and a
+# redundant trailing "documentation" since `release` is empty). `version`
+# above is the full MAJOR.MINOR.count revision (e.g. 1.18.6).
+html_title = project + u' v' + version
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = []
+html_static_path = ['_static']
+
+# Load the generated per-page "In this class" sidebar TOC map (written by
+# generate_docs as class_toc.json alongside this file) and expose it to templates
+# via html_context. The _templates/class-toc.html component looks up the current
+# `pagename`; pages absent from the map fall back to the stock page-TOC.
+import os as _os, json as _json
+_class_toc_file = _os.path.join(_os.path.dirname(__file__), 'class_toc.json')
+class_toc_map = {}
+if _os.path.exists(_class_toc_file):
+    with open(_class_toc_file, encoding='utf-8') as _f:
+        class_toc_map = _json.load(_f)
+
+html_context = {'class_toc_map': class_toc_map}
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.

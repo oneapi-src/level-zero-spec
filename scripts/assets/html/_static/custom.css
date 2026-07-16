@@ -1,3 +1,207 @@
-.wy-side-nav-search, .wy-nav-top {
-	background: #4308E5;
+/* Copyright (C) 2026 Intel Corporation */
+/* SPDX-License-Identifier: MIT */
+
+/* Sample/example code blocks only (parsed-literal -> pre.literal-block; code-block /
+   Doxygen @code -> div.highlight pre). Scoped to article content, so this never
+   affects the left nav, right TOC, API signatures (.sig), or inline <code>. On wide
+   monitors the fluid content column would otherwise let sample lines sprawl the full
+   width; cap them at a readable column and wrap long lines there instead of forcing a
+   horizontal scrollbar. `100ch` is the one knob to tune. */
+/* Cap the whole code box (the outer `.highlight` container for code-block/@code, or
+   the standalone pre for parsed-literal) so the grey background sizes WITH the code --
+   capping only the inner <pre> left the container's background sprawling past it. */
+.bd-article div.highlight,
+.bd-article pre.literal-block {
+    max-width: 120ch;
 }
+/* Wrap long lines within that width, on the text element. */
+.bd-article div.highlight pre,
+.bd-article pre.literal-block {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* "Added in version X" note under each API/enum/struct name (emitted by
+   api_spec.mako via `.. rst-class:: api-version`). Small and muted so it reads as
+   metadata, not body text. */
+.api-version {
+    font-size: 0.8em;
+    color: var(--pst-color-text-muted, #666);
+    margin-top: 0.15rem;
+    margin-bottom: 0.6rem;
+}
+
+/* "Introduced in Level Zero version X.Y" note under an extension doc page's title
+   (emitted by generate_docs for EXT_*/EXT_Exp_* pages via `.. rst-class:: ext-version`). */
+.ext-version {
+    font-size: 0.85em;
+    color: var(--pst-color-text-muted, #666);
+    margin-top: 0.15rem;
+    margin-bottom: 0.9rem;
+}
+
+/* "(since vX)" note appended to enum values added after their enum (injected into
+   the final HTML by generate_docs._inject_etor_versions_html). Small + muted. */
+.since-note {
+    font-size: 0.85em;
+    color: var(--pst-color-text-muted, #666);
+    font-style: italic;
+}
+
+/* Make better use of wide displays -- responsively.
+ *
+ * The theme (pydata/sphinx_book_theme) traps the ENTIRE layout band
+ * (left nav + content + right TOC) inside `.bd-page-width{max-width:88rem}`
+ * (~1408px), centered with dead margins on either side. So raising only the
+ * content column's cap does nothing on a wide screen -- the content is already
+ * clipped by that outer band. The three rules below work together instead of
+ * fighting that cap:
+ *
+ * All of this is gated by the theme's own min-width media queries: below
+ * ~960px both sidebars collapse to overlay drawers, so none of this affects
+ * phones/narrow windows. It only relaxes the desktop ceiling.
+ */
+
+/* 1. Let the layout band fill the window instead of stopping at 88rem. It
+ *    already has width:100%, so uncapping makes it auto-track the viewport. */
+.bd-page-width {
+    max-width: 100%;
+}
+
+/* 2. Pin the left nav to a fixed width (theme default is 25%, which would just
+ *    inflate the nav on wide screens). A fixed basis routes the extra window
+ *    space to the CONTENT. Wide enough for the nested
+ *    "API Docs -> <Section> -> {APIs, Extensions, Experimental}" tree. */
+.bd-sidebar-primary {
+    flex-basis: 22rem;
+}
+
+/* 3. Content grows with the window up to a readable ceiling. Combined with the
+ *    above, content width = viewport - nav - TOC - padding, capped here so long
+ *    prose pages (PROG) don't stretch to unreadable line lengths on 4K. */
+.bd-article-container {
+    max-width: 120em;
+}
+
+/* Bottom paginator on paginated class pages ("< Prev  1 2 3  Next >").
+   Emitted as a raw-HTML <nav class="api-pager"> by api_spec.mako when a class's
+   functions overflow one page. */
+.api-pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--pst-color-border, #ccc);
+    /* Keep the pager pinned to the bottom of the viewport while the (long) page
+       scrolls, so page position + Prev/Next stay reachable without scrolling to
+       the very end. Opaque background so content scrolling underneath stays clean. */
+    position: sticky;
+    bottom: 0;
+    padding-bottom: 0.75rem;
+    background-color: var(--pst-color-background, #fff);
+    z-index: 1;
+}
+
+.api-pager a,
+.api-pager strong,
+.api-pager span {
+    padding: 0.15rem 0.5rem;
+    text-decoration: none;
+}
+
+/* Current page: bold and visually distinct, not a link. */
+.api-pager strong.current {
+    font-weight: 700;
+    border-radius: 0.25rem;
+    background-color: var(--pst-color-surface, #eee);
+}
+
+/* Disabled Prev/Next at the ends. */
+.api-pager .disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+/* "In this class" secondary-sidebar TOC (paginated class pages). A static
+   cross-page index of the whole class, with collapsible groups (native <details>)
+   and the current page's entries emphasized. Uses its own markup/classes rather
+   than the theme's nav classes, which force nowrap + scroll-spy collapse. */
+
+/* Widen the right rail so most identifiers fit on one line (the layout is fluid on
+   wide screens, so this mostly just reclaims dead margin). Theme default 17rem. */
+:root {
+    --pst-sidebar-secondary: 22rem;
+}
+
+/* Collapsible group headers ("Functions (42)" etc.). */
+.class-toc .ctoc-group {
+    margin: 0 0 0.35rem;
+}
+
+.class-toc summary {
+    cursor: pointer;
+    font-weight: 600;
+    padding: 0.25rem 0;
+    list-style: none;          /* hide the default disclosure triangle... */
+}
+.class-toc summary::-webkit-details-marker {
+    display: none;
+}
+.class-toc summary::before {   /* ...and draw our own, rotating one */
+    content: "\25B8";          /* right-pointing triangle */
+    display: inline-block;
+    width: 1rem;
+    color: var(--pst-color-text-muted, #666);
+    transition: transform 0.15s ease;
+}
+.class-toc details[open] > summary::before {
+    transform: rotate(90deg);
+}
+.class-toc .ctoc-count {
+    color: var(--pst-color-text-muted, #666);
+    font-weight: 400;
+    font-size: 0.85em;
+}
+
+/* Static, unlinked shared function prefix (e.g. "zeCommandList"), shown once above
+   the shortened "...Create" tails. */
+.class-toc .ctoc-prefix {
+    font-family: var(--pst-font-family-monospace, monospace);
+    font-size: 0.8em;
+    color: var(--pst-color-text-muted, #666);
+    padding: 0.1rem 0 0.15rem 0.25rem;
+    white-space: nowrap;
+}
+
+.class-toc .ctoc-list {
+    list-style: none;
+    margin: 0;
+    padding-left: 1rem;
+}
+.class-toc .ctoc-list li {
+    padding: 0.12rem 0;
+}
+
+/* The key wrap fix: allow long identifiers (no spaces) to break, with a hanging
+   indent so continuation lines sit under the name, not the bullet position. */
+.class-toc .ctoc-list a {
+    display: block;
+    text-decoration: none;
+    font-size: var(--pst-sidebar-font-size, 0.9em);
+    color: var(--pst-color-text-muted, #666);
+    padding-left: 1rem;
+    text-indent: -1rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+.class-toc .ctoc-list a:hover {
+    color: var(--pst-color-primary, #0071c5);
+}
+
+/* Note: entries are rendered uniformly. The generator still tags current-page
+   entries with a `.current-page` class (kept as a styling hook), but no bold /
+   marker is applied -- the emphasis widened the text (extra wrapping) and the
+   "you are here" cue read as odd emphasis rather than orientation. */

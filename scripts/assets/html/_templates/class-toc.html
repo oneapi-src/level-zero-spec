@@ -1,0 +1,19 @@
+{#-
+  Secondary-sidebar component. On class pages that paginate across multiple pages
+  (see generate_docs.py), render the full "In this class" TOC -- every function,
+  enum and struct of the class, with cross-page links -- so the whole class stays
+  discoverable regardless of which page you are on. Every other page falls back to
+  the theme's stock "On this page" TOC, so behaviour there is unchanged.
+-#}
+{%- set class_toc = (class_toc_map.get(pagename) if (class_toc_map is defined and class_toc_map) else None) %}
+{%- if class_toc %}
+  {%- set heading_id = unique_html_id("pst-class-toc-heading") %}
+  <div id="{{ heading_id }}" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> {{ _('In this class') }}
+  </div>
+  <nav class="class-toc" aria-labelledby="{{ heading_id }}">
+    {{ class_toc }}
+  </nav>
+{%- else %}
+{%- include "components/page-toc.html" %}
+{%- endif %}
