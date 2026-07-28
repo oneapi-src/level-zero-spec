@@ -208,9 +208,9 @@ params:
       name: phGraph
       desc: "[out] pointer to the captured graph handle"
 returns:
-    - $ZE_RESULT_ERROR_GRAPH_UNJOINED_FORKS:
+    - $X_RESULT_ERROR_GRAPH_UNJOINED_FORKS:
         - "if graph contains unjoined forks"
-    - $ZE_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
+    - $X_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
         - "if command list is not in graph capture mode"
 --- #--------------------------------------------------------------------------
 type: function
@@ -231,7 +231,7 @@ params:
       name: phGraph
       desc: "[out] pointer to the graph handle associated with the command list"
 returns:
-    - $ZE_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
+    - $X_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
         - "if command list is not in graph capture mode"
 --- #--------------------------------------------------------------------------
 type: function
@@ -423,3 +423,42 @@ members:
     - type: $xGraph*
       name: pGraph
       desc: "[in] pointer to owner object"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Pauses recording to the specified graph. Affected immediate command lists (both primary command lists and child command lists from which graph was recording) can be reused for any purpose during this pause without affecting the paused recording."
+class: $xGraph
+version: "1.18"
+name: PauseCaptureExt
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle to the graph to pause capture"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "Graph is not in a recording state"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Resumes capturing commands to the graph after a pause."
+class: $xGraph
+version: "1.18"
+name: ResumeCaptureExt
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle to the graph to resume capture"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "Graph is not in a paused state"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets monotonically increasing, process-unique ID of the graph."
+class: $xGraph
+version: "1.18"
+name: GetIdExt
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle to the graph"
+    - type: "uint64_t*"
+      name: pGraphId
+      desc: "[out] pointer to the memory where the graph ID will be written"

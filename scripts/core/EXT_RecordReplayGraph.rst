@@ -35,7 +35,9 @@ API
     * ${x}GraphDumpContentsExt
     * ${x}ExecutableGraphDestroyExt
     * ${x}GraphDestroyExt
-
+    * ${x}GraphPauseCaptureExt
+    * ${x}GraphResumeCaptureExt
+    * ${x}GraphGetIdExt
 
 * Enumerations
 
