@@ -198,6 +198,14 @@ def printAllErrors():
             print("%d. %s" % (idx, error))
         print("="*80)
 
+def writeAllErrors(outpath):
+    # Persist the accumulated errors (one per line) so CI can quote just the
+    # actionable lines into a PR comment, mirroring generate_common's
+    # doxygen-warnings.log. Only called when there is at least one error.
+    with open(outpath, 'w') as fout:
+        for error in makoErrorList:
+            fout.write(error + "\n")
+
 """
     write to array of string lines to file
 """

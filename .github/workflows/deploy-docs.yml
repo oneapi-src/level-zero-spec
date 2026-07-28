@@ -148,6 +148,57 @@ jobs:
               });
             }
 
+      # RST generation (generate_docs.py) resolves the symbols referenced in the
+      # hand-authored scripts/<section>/*.rst pages and sample code. An unresolved
+      # reference is collected via util.makeError and fails run.py in phase 3 -- before
+      # doxygen runs -- with the actionable lines saved to docs/rst-errors.log.
+      - name: Report reference errors
+        if: steps.gen_docs.outcome == 'failure'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'docs/rst-errors.log';
+
+            if (!fs.existsSync(path) || !fs.readFileSync(path, 'utf8').trim()) {
+              core.info('No RST error log; documentation generation failed for another reason.');
+              return;
+            }
+
+            // Strip the runner's absolute workspace prefix so paths read as repo-relative.
+            let lines = fs.readFileSync(path, 'utf8')
+              .split('\n')
+              .filter(l => l.trim())
+              .map(l => l.replace(`${process.env.GITHUB_WORKSPACE}/`, ''));
+
+            const total = lines.length;
+            const MAX = 50;
+            const shown = lines.slice(0, MAX);
+            const omitted = total - shown.length;
+
+            let body = '## ❌ Documentation build failed\n\n';
+            body += `Generation reported **${total}** unresolved `;
+            body += `${total === 1 ? 'reference' : 'references'} in the spec RST/sample code:\n\n`;
+            body += '```\n' + shown.join('\n') + '\n```\n';
+            if (omitted > 0) {
+              body += `\n_…and ${omitted} more. See the workflow log for the full list._\n`;
+            }
+            body += '\n> These reference symbols that do not exist in the parsed spec. ';
+            body += 'Fix the reference in the source `scripts/<section>/*.rst` page ';
+            body += '(or add the missing symbol to `scripts/<section>/*.yml`).\n';
+
+            core.summary.addRaw(body).write();
+
+            if (context.eventName === 'pull_request') {
+              await github.rest.issues.createComment({
+                issue_number: context.payload.pull_request.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }
+
       - name: Fail if documentation generation failed
         if: steps.gen_docs.outcome == 'failure'
         run: exit 1

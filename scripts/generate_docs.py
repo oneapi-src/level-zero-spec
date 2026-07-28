@@ -78,7 +78,9 @@ def _make_ref(fin, iline, symbol, symbol_type, meta):
         if target:
             ref = ":ref:`" + ref + " <" + target.replace("_", "-") + ">`"
         else:
-            print("%s(%s) : error : enum symbol not found for etor %s"%(fin, iline+1, symbol))
+            error_msg = "%s(%s) : error : enum symbol not found for etor %s"%(fin, iline+1, symbol)
+            print(error_msg)
+            util.makeError(error_msg)
     elif not re.match("function", symbol_type):
         ref = ":ref:`" + ref.replace("_", "-") + "`"
     else:
@@ -135,7 +137,9 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                 if symbol:
                     symbol_type = _find_symbol_type(symbol, meta)
                     if not symbol_type:
-                        print("%s(%s) : error : symbol '%s' not found"%(fin, iline+1, symbol))
+                        error_msg = "%s(%s) : error : symbol '%s' not found"%(fin, iline+1, symbol)
+                        print(error_msg)
+                        util.makeError(error_msg)
                         continue
 
                     if code_block and 'function' == symbol_type:
@@ -157,7 +161,9 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                         param_str = re.sub(RE_EXTRACT_PARAMS, r"\1", full_call)
                         param_count = len(param_str.split(","))
                         if param_count != len(meta['function'][symbol]['params']):
-                            print("%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, param_count, len(meta['function'][symbol]['params'])))
+                            error_msg = "%s(%s) : error : %s parameter count mismatch - %s actual vs. %s expected"%(fin, iline+1, symbol, param_count, len(meta['function'][symbol]['params']))
+                            print(error_msg)
+                            util.makeError(error_msg)
                             print("line = %s"%line)
 
                     ref = _make_ref(fin, iline, symbol, symbol_type, meta)

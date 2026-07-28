@@ -261,6 +261,10 @@ def main():
 
         if util.makeErrorCount():
             util.printAllErrors()
+            # Persist the errors so CI can quote just the actionable lines into a PR
+            # comment (mirrors the doxygen-warnings.log path in generate_common).
+            # docpath was cleaned by generate_docs.prepare(), so this is never stale.
+            util.writeAllErrors(os.path.join(docpath, "rst-errors.log"))
             print("\n%s Errors found during generation, stopping execution!"%util.makeErrorCount())
             sys.exit(1)
 
