@@ -82,6 +82,11 @@ jobs:
           echo "Deploy dir: $DIR_NAME ; versions_url_override: '${VERSIONS_URL_OVERRIDE:-<default>}'"
 
       - name: Generate documentation
+        id: gen_docs
+        # continue-on-error so the doc-warning reporting steps below can run and surface
+        # the diagnostics before the job is failed explicitly. The deploy steps are all
+        # after "Fail if documentation generation failed", so nothing publishes on failure.
+        continue-on-error: true
         run: | #bash
           docker run \
             --rm \
@@ -90,6 +95,62 @@ jobs:
             -e TZ=UTC \
             ghcr.io/oneapi-src/spec-build:latest \
             /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER --versions_url_override "$VERSIONS_URL_OVERRIDE"
+
+      # Doxygen runs with WARN_AS_ERROR=FAIL_ON_WARNINGS (scripts/Doxyfile), so any
+      # unresolvable doc reference fails the build. generate_docs.py saves doxygen's
+      # stderr -- which is diagnostics only, no progress noise -- to this file, so we can
+      # quote just the actionable lines rather than the whole build log.
+      - name: Report documentation warnings
+        if: steps.gen_docs.outcome == 'failure'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'docs/doxygen-warnings.log';
+
+            if (!fs.existsSync(path) || !fs.readFileSync(path, 'utf8').trim()) {
+              core.info('No doxygen warning log; documentation generation failed for another reason.');
+              return;
+            }
+
+            // Strip the runner's absolute workspace prefix so paths read as repo-relative.
+            let lines = fs.readFileSync(path, 'utf8')
+              .split('\n')
+              .filter(l => l.trim())
+              .map(l => l.replace(`${process.env.GITHUB_WORKSPACE}/`, ''));
+
+            const total = lines.length;
+            const MAX = 50;
+            const shown = lines.slice(0, MAX);
+            const omitted = total - shown.length;
+
+            let body = '## ❌ Documentation build failed\n\n';
+            body += `Doxygen reported **${total}** unresolved documentation `;
+            body += `${total === 1 ? 'reference' : 'references'}:\n\n`;
+            body += '```\n' + shown.join('\n') + '\n```\n';
+            if (omitted > 0) {
+              body += `\n_…and ${omitted} more. See the workflow log for the full list._\n`;
+            }
+            body += '\n> Line numbers refer to the **generated** headers. Fix the source ';
+            body += 'YAML in `scripts/<section>/*.yml` instead.\n';
+            body += '> To reference a struct member write ``` `memberName` member of ';
+            body += '$x_some_struct_t ``` rather than `$x_some_struct_t.memberName`.\n';
+
+            core.summary.addRaw(body).write();
+
+            if (context.eventName === 'pull_request') {
+              await github.rest.issues.createComment({
+                issue_number: context.payload.pull_request.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: body
+              });
+            }
+
+      - name: Fail if documentation generation failed
+        if: steps.gen_docs.outcome == 'failure'
+        run: exit 1
 
       - name: Prepare GitHub Pages structure
         run: | #bash

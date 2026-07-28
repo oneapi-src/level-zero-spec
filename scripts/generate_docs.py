@@ -11,6 +11,7 @@ import re
 import glob
 import json
 import fnmatch
+import subprocess
 from parse_specs import _version_compare_less, _version_compare_equal, _version_compare_greater, _version_compare_lequal, _version_compare_gequal
 from templates import helper as th
 
@@ -216,6 +217,12 @@ _CLASS_TOC_FILENAME = "class_toc.json"
 # --rst and --html phases as SEPARATE processes (the html process reloads it).
 _ETOR_SINCE = {}
 _ETOR_SINCE_FILENAME = "etor_since.json"
+
+# Doxygen writes progress to stdout and diagnostics to stderr, so its stderr is exactly
+# the set of lines a contributor needs to act on. generate_common() saves it here so CI
+# can quote just those lines into a PR comment instead of the whole multi-thousand-line
+# build log. Written under docs/, which is gitignored.
+DOXYGEN_WARNINGS_FILENAME = "doxygen-warnings.log"
 
 """
     Collect enum values whose version exceeds their enum's version (i.e. added to an
@@ -730,7 +737,7 @@ def _postprocess_generated_xml(pathname='', extension='xml'):
             f.write(data)
             f.truncate()
 
-def generate_common(dstpath, sections, ver, rev, versions_url):
+def generate_common(dstpath, sections, ver, rev, versions_url, warnings_as_errors=True):
     htmlpath = os.path.join(dstpath, "html")
     latexpath = os.path.join(dstpath, "latex")
     xmlpath = os.path.join(dstpath, "xml")
@@ -753,10 +760,41 @@ def generate_common(dstpath, sections, ver, rev, versions_url):
 
     # Doxygen generates XML files needed by sphinx breathe plugin for API documentation
     print("Generating doxygen...")
-    cmdline = "doxygen Doxyfile"
-    rc = os.waitstatus_to_exitcode(os.system(cmdline))
-    if rc > 0:
-        raise Exception("doxygen returned %d"%rc)
+    # Drop any log from a previous run so CI can never quote stale diagnostics.
+    warnlog = os.path.join(dstpath, DOXYGEN_WARNINGS_FILENAME)
+    if util.exists(warnlog):
+        os.remove(warnlog)
+
+    if warnings_as_errors:
+        argv, config = ["doxygen", "Doxyfile"], None
+    else:
+        # Doxyfile sets WARN_AS_ERROR=FAIL_ON_WARNINGS. Rather than mutate the checked-in
+        # file, feed doxygen its config on stdin ('-') with an overriding line appended;
+        # the last assignment wins, so warnings stay warnings.
+        print("  WARNING: doc warnings-as-errors DISABLED (--!warnings_as_errors)")
+        with open("Doxyfile", "r") as fh:
+            config = fh.read() + "\nWARN_AS_ERROR = NO\n"
+        argv = ["doxygen", "-"]
+
+    # Capture stderr (diagnostics only; progress goes to stdout and stays on the console)
+    # so it can be echoed AND persisted for CI to quote into a PR comment.
+    proc = subprocess.run(argv, input=config, text=True, stderr=subprocess.PIPE)
+    diagnostics = proc.stderr or ""
+    if diagnostics.strip():
+        sys.stderr.write(diagnostics)
+        sys.stderr.flush()
+        with open(warnlog, "w") as fh:
+            fh.write(diagnostics)
+
+    if proc.returncode > 0:
+        raise Exception(
+            "doxygen returned %d.\n"
+            "If the output above shows \"error: ... could not be resolved\", a doc comment "
+            "has an unresolvable reference -- fix the source YAML in scripts/<section>/*.yml, "
+            "not the generated header.\n"
+            "To reference a struct member, write '`memberName` member of $x_some_struct_t' "
+            "rather than '$x_some_struct_t.memberName'.\n"
+            "As a last resort, re-run with --!warnings_as_errors." % proc.returncode)
 
     # workaround for C++ standard keywords redefined due to missing Doxygen options to set the preferred C++ standard
     _postprocess_generated_xml(xmlpath)

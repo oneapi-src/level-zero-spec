@@ -785,8 +785,13 @@ WARN_NO_PARAMDOC       = NO
 # If the WARN_AS_ERROR tag is set to YES then doxygen will immediately stop when
 # a warning is encountered.
 # The default value is: NO.
+#
+# FAIL_ON_WARNINGS (rather than YES) so doxygen completes the run and reports
+# EVERY warning before exiting non-zero -- YES aborts on the first one, which
+# would drip-feed contributors a single error per CI run. run.py turns the
+# non-zero exit into a build failure; pass --!warnings_as_errors to override.
 
-WARN_AS_ERROR          = NO
+WARN_AS_ERROR          = FAIL_ON_WARNINGS
 
 # The WARN_FORMAT tag determines the format of the warning messages that doxygen
 # can produce. The string should contain the $file, $line, and $text tags, which
@@ -908,7 +913,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = ../images
+IMAGE_PATH             = assets/images
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -964,7 +969,8 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = INTRO.md
+# No INTRO.md exists, and INPUT is limited to ../include/ so no markdown is scanned.
+USE_MDFILE_AS_MAINPAGE =
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
