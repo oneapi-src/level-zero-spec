@@ -62,9 +62,16 @@ members:
     - type: uint64_t
       name: nnSramSizeBytes
       desc: "[out] On-chip CMX SRAM size for neural network workloads, in bytes."
+    - type: uint32_t
+      name: compilerVersion
+      desc: "[out] Version of the NPU compiler bundled with this driver, using $X_MAKE_VERSION. Use $X_MAJOR_VERSION and $X_MINOR_VERSION to extract the major and minor components."
+    - type: uint32_t
+      name: maxOVOpsetVersionSupported
+      desc: "[out] Maximum OpenVINO opset version supported by the bundled NPU compiler."
 details:
     - "This structure may be returned from $xDeviceGetProperties via the `pNext` member of $x_device_properties_t."
     - "Applicable only when the `type` member of $x_device_properties_t is $X_DEVICE_TYPE_VPU."
-    - "Exposes NPU-native topology, clock, timestamp frequency, and on-chip SRAM information that has no clean analogue in the GPU-oriented base $x_device_properties_t struct."
+    - "Exposes NPU-native topology, clock, timestamp frequency, on-chip SRAM, and compiler capability information that has no clean analogue in the GPU-oriented base $x_device_properties_t struct."
+    - "`compilerVersion` and `maxOVOpsetVersionSupported` describe the compiler bundled with the driver, and report identical values for every device reported by a given driver instance."
     - "The base $x_device_properties_t fields remain populated on NPU devices for backward compatibility with consumers that predate this extension. New consumers should prefer the NPU-native fields exposed here."
     - "Identity (`vendorId`, `deviceId`, `subdeviceId`, `uuid`, `name`), capabilities (`flags`, `maxMemAllocSize`, `maxHardwareContexts`, `maxCommandQueuePriority`), and host/global timestamp validity (`timestampValidBits`) continue to be sourced from the base $x_device_properties_t struct. NPU does not implement kernel timestamp APIs; `kernelTimestampValidBits` is 0 on NPU devices."

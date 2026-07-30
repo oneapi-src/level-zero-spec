@@ -50,6 +50,9 @@ Throughput at other precisions: 2× for INT8×INT4, 0.5× for FP16×FP16,
 used to convert raw device tick counts from ${x}DeviceGetGlobalTimestamps
 and ${x}CommandListAppendWriteGlobalTimestamp into time durations.
 
+``compilerVersion`` is packed with ``${X}_MAKE_VERSION``. Use
+``${X}_MAJOR_VERSION`` and ``${X}_MINOR_VERSION`` to extract its components.
+
 The following pseudo-code demonstrates querying NPU device properties:
 
 .. parsed-literal::
