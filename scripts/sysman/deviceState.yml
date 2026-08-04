@@ -39,6 +39,12 @@ etors:
       desc: "The device is in survivability mode"
     - name: FLASH_OVERRIDE
       desc: "The device has flash override enabled"
+    - name: GPU_LOST
+      desc: "The GPU has fallen off the pci bus or is otherwise inaccessible"
+      version: "1.18"
+    - name: DRIVER_NOT_LOADED
+      desc: "No kernel driver is bound to the device"
+      version: "1.18"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Extension properties for Device State"
@@ -52,4 +58,4 @@ members:
       desc: "[out] Device state flags. Returns 0 (if state cannot be determined) or a combination of $s_device_state_ext_flags_t"
 details:
     - "This structure may be returned from $sDeviceGetState via the `pNext` member of $s_device_state_t"
-    - "Provides extended device state information including wedged state, survivability mode, and flash override status"
+    - "Provides extended device state information including wedged state, survivability mode, flash override status, GPU lost condition, and kernel driver binding status"

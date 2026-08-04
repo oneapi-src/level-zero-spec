@@ -33,7 +33,8 @@ Device State
 
 This extension provides additional device state information beyond the basic reset and repair status
 available through the standard ${s}DeviceGetState API. The extension allows applications to query
-extended device states including wedged condition, survivability mode, and flash override status.
+extended device states including wedged condition, survivability mode, flash override status, GPU
+lost condition, and kernel driver binding status.
 
 The ${s}_device_ext_state_t structure can be passed via the pNext chain of ${s}_device_state_t to
 retrieve these additional state flags.
@@ -70,4 +71,12 @@ Usage Example
     
     if (extendedState.flags & ${S}_DEVICE_STATE_EXT_FLAG_FLASH_OVERRIDE) {
         // Device has flash override enabled
+    }
+
+    if (extendedState.flags & ${S}_DEVICE_STATE_EXT_FLAG_GPU_LOST) {
+        // Device PCI path is inaccessible - the GPU is lost
+    }
+
+    if (extendedState.flags & ${S}_DEVICE_STATE_EXT_FLAG_DRIVER_NOT_LOADED) {
+        // No kernel driver is bound to the device
     }
