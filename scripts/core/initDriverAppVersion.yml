@@ -1,0 +1,42 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for declaring the application-supported API version at initialization"
+version: "1.18"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Init Driver Application Version Extension Name"
+version: "1.18"
+name: $X_INIT_DRIVER_APP_VERSION_EXT_NAME
+value: '"$X_extension_init_driver_app_version"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Init Driver Application Version Extension Version(s)"
+version: "1.18"
+name: $x_init_driver_app_version_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Declares the maximum core API version supported by the application"
+version: "1.18"
+class: $x
+name: $x_init_driver_app_version_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_api_version_t
+      name: apiVersionHint
+      desc: "[in] maximum core $OneApi Level-Zero API version supported by the application."
+details:
+    - "This structure may be passed to $xInitDrivers, via the `pNext` member of $x_init_driver_type_desc_t, to declare the maximum core API version the application was built against and is able to handle."
+    - "$OneApi Level-Zero otherwise provides no mechanism for an application to communicate the API version it supports to a driver; $xDriverGetApiVersion only reports the version supported by the driver, not the application. A driver may use the application-declared version to gate version-dependent behavior for backward compatibility, for example only reporting enumerants or memory types introduced in newer API versions to applications that understand them."
+    - "If this structure is not provided, the driver must assume the application supports only the baseline behavior and must not rely on any version-gated behavior being understood by the application."
+    - "A driver should clamp version-gated behavior to the minimum of the version it supports and the version the application declares."

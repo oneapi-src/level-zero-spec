@@ -543,7 +543,7 @@ etors:
       version: "1.4"
       value: "0x0002000B"
     - name: FABRIC_EDGE_EXP_PROPERTIES
-      desc: $x_fabric_edge_exp_properties_t 
+      desc: $x_fabric_edge_exp_properties_t
       version: "1.4"
       value: "0x0002000C"
     - name: MEMORY_SUB_ALLOCATIONS_EXP_PROPERTIES
@@ -766,6 +766,10 @@ etors:
       desc: $x_device_npu_properties_ext_t
       version: "1.18"
       value: "0x00020049"
+    - name: INIT_DRIVER_APP_VERSION_EXT_DESC
+      desc: $x_init_driver_app_version_ext_desc_t
+      version: "1.18"
+      value: "0x0002004A"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
