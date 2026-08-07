@@ -31,7 +31,7 @@ API
 Extended Device Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-User may query support for compute capabilty support on the device using the compute dot product capabilty extension supported under device compute properties(${x}_device_compute_properties_t).
+User may query support for compute capability support on the device using the compute dot product capability extension supported under device compute properties(${x}_device_compute_properties_t).
 
 The following psuedo-code demonstrates a sequence for obtaining extended information about the device compute dot product capability:
 

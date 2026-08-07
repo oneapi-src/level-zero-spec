@@ -66,7 +66,7 @@ def _find_enum_from_etor(etor, meta):
     return None
 
 """
-    make restructedtext reference from symbol
+    make restructuredtext reference from symbol
 """
 def _make_ref(fin, iline, symbol, symbol_type, meta):
     if not re.match(r"function|struct|union|enum|etor", symbol_type):

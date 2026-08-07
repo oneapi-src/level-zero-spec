@@ -141,7 +141,7 @@ class: $sMemory
 name: $s_mem_state_t
 base: $s_base_state_t
 details:
-    - "Percent free is given by 100 * free / pysical mem size."
+    - "Percent free is given by 100 * free / physical mem size."
 members:
     - type: $s_mem_health_t
       name: health
@@ -154,7 +154,7 @@ members:
       desc: |
             [out] The total allocatable memory in bytes (can be less than the `physicalSize` member of $s_mem_properties_t). *DEPRECATED* 
              This member can no longer track the allocatable memory reliably. Clients depending on this information can use the 
-             zeDeviceGetProperties with ze_device_usablemem_size_ext_properties_t extention to get information of the available usable memory.
+             zeDeviceGetProperties with ze_device_usablemem_size_ext_properties_t extension to get information of the available usable memory.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory bandwidth"

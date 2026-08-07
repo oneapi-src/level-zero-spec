@@ -179,7 +179,7 @@ def main():
     add_argument(parser, "debug", "dump intermediate data to disk.")
     add_argument(parser, "html", "generation of HTML files.", True)
     add_argument(parser, "rst", "generation of reStructuredText files.", True)
-    add_argument(parser, "ignore_git_revision", "use command-line verison (ver) as revision instead of git tag.", False)
+    add_argument(parser, "ignore_git_revision", "use command-line version (ver) as revision instead of git tag.", False)
     add_argument(parser, "warnings_as_errors", "treating documentation warnings as build errors.", True)
     parser.add_argument("--ver", type=str, default=None, required=False, help="specification version to generate (e.g. 1.17). If omitted, detected from the most recent git tag.")
     parser.add_argument("--versions_url_override", type=str, default=None, required=False, help="override the sidebar 'Versions' link target. Accepts a full URL (rendered as an external link) or an internal doc name like 'versions' (links to this build's own versions.html). If unset, uses the canonical latest versions page.")

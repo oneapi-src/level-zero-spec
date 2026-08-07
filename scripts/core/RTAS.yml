@@ -864,7 +864,7 @@ details:
     - >
       All provided data buffers must be host-accessible. The referenced scene data (index- and vertex- buffers) have to be accessible from the host, and will **not** be referenced by the build acceleration structure.
     - >
-      The acceleration structure buffer is typicall a host allocation that is later manually copied to a device allocation. Alternatively one can also use a shared USM allocation as acceration structure buffer and skip the copy.
+      The acceleration structure buffer is typically a host allocation that is later manually copied to a device allocation. Alternatively one can also use a shared USM allocation as acceleration structure buffer and skip the copy.
     - >
       A successfully constructed acceleration structure is entirely self-contained. There is no requirement for input data to persist beyond build completion.
     - >

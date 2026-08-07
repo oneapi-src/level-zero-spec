@@ -76,7 +76,7 @@ Our current handling of multi runtime scenario in Loader has many issues:
   - performance degradation
   - Level Zero API handles are stored in per-type maps, accessing these maps costs, especially in hot paths
   - putting and removing entries from map needs additional mutex to ensure thread-safety
-  - there is significant perfomance difference between runing application when there is only one runtime active and many runtimes active, even if only one is really used by application.
+  - there is significant performance difference between running application when there is only one runtime active and many runtimes active, even if only one is really used by application.
     As initialization overhead is acceptable, any further API calls should not cause performance degradation. E.g. when running [`SetKernelArgSvmPointer`](https://github.com/intel/compute-benchmarks/blob/master/source/benchmarks/api_overhead_benchmark/implementations/l0/set_kernel_arg_svm_pointer_l0.cpp) test from [`api_overhead_benchmark`](https://github.com/intel/compute-benchmarks/tree/master/source/benchmarks/api_overhead_benchmark) there is degradation from 0.817us to 2.724us caused only by presence of second runtime on the system.
   - when using driver extensions, application bypasses Level Zero loader and calls runtime functions directly
   - handles that application got from loader is wrapped by loader's handle type and can't be passed to runtime directly, therefore translation is required;

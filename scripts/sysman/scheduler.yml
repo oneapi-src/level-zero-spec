@@ -194,7 +194,7 @@ params:
       desc: "[in] Sysman handle for the component."
     - type: $s_sched_timeout_properties_t*
       name: pProperties
-      desc: "[in] The properties to use when configurating this mode."
+      desc: "[in] The properties to use when configuring this mode."
     - type: $x_bool_t*
       name: pNeedReload
       desc: "[in,out] Will be set to TRUE if a device driver reload is needed to apply the new scheduler mode."
@@ -218,7 +218,7 @@ params:
       desc: "[in] Sysman handle for the component."
     - type: $s_sched_timeslice_properties_t*
       name: pProperties
-      desc: "[in] The properties to use when configurating this mode."
+      desc: "[in] The properties to use when configuring this mode."
     - type: $x_bool_t*
       name: pNeedReload
       desc: "[in,out] Will be set to TRUE if a device driver reload is needed to apply the new scheduler mode."

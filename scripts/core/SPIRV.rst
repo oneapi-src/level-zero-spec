@@ -31,7 +31,7 @@ in order to be considered valid.
 
 This document is written for compiler developers who are generating
 SPIR-V modules intended to be consumed by the ${OneApi} Level-Zero API,
-for implementors of the ${OneApi} Level-Zero API, and for software
+for implementers of the ${OneApi} Level-Zero API, and for software
 developers who are using SPIR-V modules with the ${OneApi} Level-Zero
 API.
 

@@ -536,7 +536,7 @@ Therefore, when the instrumentation layer is enabled, a new
 ## --validate=off
 build flag is supported: "-${t}-profile-flags \<value\>", where \<value\> must be a
 ## --validate=on
-combination of ${t}_profile_flags_t, in hexidecimal.
+combination of ${t}_profile_flags_t, in hexadecimal.
 
 As an example, a tool could use a custom loader layer to inject this build flag on each ${x}ModuleCreate call that the tool wishes to instrument.
 In another example, a tool could recompile a Module using the build flag and use a custom loader layer to replace the application's Module handle with it's own.

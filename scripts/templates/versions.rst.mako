@@ -154,7 +154,7 @@ Level Zero v1.17.24
 * Deprecations:
 
     - Deprecate zeCommandListCreateCloneExp
-    - Deprecate ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES versio
+    - Deprecate ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES version
 
 * Patches since v1.16.24 release
 
@@ -179,7 +179,7 @@ Level Zero v1.16.24
     - New Sysman APIs for RAS, SetConfigExp and GetConfigExp to handle extended error types
     - Add FABRIC_ACCESIBLE flags for IPC handles
     - Add READ_ONLY flag to indicate memory acecss to allocated host memory
-    - New Core API for querying ORTC Compatibilty Strings
+    - New Core API for querying ORTC Compatibility Strings
     - New Core API for AppendMemoryCopy/MemoryFill/CommandLists with Parameters
     - New Core API for querying BDPAS and DPAS HW support and data types
 
@@ -253,7 +253,7 @@ Level Zero v1.14.33
     - Add new ABARRIER type into memory descriptor for debugger
     - Add new HOST_IMPORTED type into memory allocation type
     - Add new ZE_RESULT_ERROR_ADDRESS_NOT_FOUND error code type
-    - Add new expiremental extension to retrieve kernel allocation properties
+    - Add new experimental extension to retrieve kernel allocation properties
 
 * Patches to v1.13.0 release
 
@@ -387,7 +387,7 @@ Level Zero v1.9.1
     - Add range to phCommandLists description in append command lists extension
     - Fix spelling error in sysman subdevice properties structure type name
     - Fix immediate command list append API parameter description to work around script limitation
-    - Convert fixed-length character array parameters to constant pointers in programmable metrics and firmware secuirty version extensions
+    - Convert fixed-length character array parameters to constant pointers in programmable metrics and firmware security version extensions
 
 Level Zero v1.9.0
 ~~~~~~~~~~~~~~~~~~
@@ -621,7 +621,7 @@ Level Zero v1.4.8
 
 * Sysman Changes
 
-  - Remove const for _zes_power_limit_ext_desc_t ouput params.
+  - Remove const for _zes_power_limit_ext_desc_t output params.
   - Modify zes_power_level_t desc entry.
   - Add missing structure type enums.
 

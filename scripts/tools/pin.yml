@@ -10,7 +10,7 @@ type: header
 desc: "Intel $OneApi Level-Zero Tool APIs for Program Instrumentation (PIN)"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supportted profile features"
+desc: "Supported profile features"
 class: $tKernel
 name: $t_profile_flags_t
 etors:

@@ -909,7 +909,7 @@ To improve maximum performance, the following modifications can be made:
 
 All these changes come with the risk of damage the device.
 
-To improve efficiency for a given workload that is not excercising the
+To improve efficiency for a given workload that is not exercising the
 full circuitry of the device, the following modifications can be made:
 
 -  Decrease the voltage

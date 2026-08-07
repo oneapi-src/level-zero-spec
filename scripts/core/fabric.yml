@@ -110,7 +110,7 @@ members:
       desc: "[out] universal unique identifier."
     - type: char
       name: "model[$X_MAX_FABRIC_EDGE_MODEL_EXP_SIZE]"
-      desc: "[out] Description of fabric edge technology. Will be set to the string \"unkown\" if this cannot be determined for this edge"
+      desc: "[out] Description of fabric edge technology. Will be set to the string \"unknown\" if this cannot be determined for this edge"
     - type: uint32_t
       name: "bandwidth"
       desc: "[out] design bandwidth"

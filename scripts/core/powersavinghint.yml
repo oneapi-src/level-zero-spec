@@ -33,7 +33,7 @@ name: $x_power_saving_hint_type_t
 etors:
     - name: MIN
       value: "0"
-      desc: "Minumum power savings. The device will make no attempt to save power while executing work submitted to this context."
+      desc: "Minimum power savings. The device will make no attempt to save power while executing work submitted to this context."
     - name: MAX
       desc: "Maximum power savings. The device will do everything to bring power to a minimum while executing work submitted to this context."
       value: "100"

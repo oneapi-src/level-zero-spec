@@ -66,7 +66,7 @@ members:
       desc: |
             [in] mutable command flags.
               - must be 0 (default, equivalent to setting all flags bar kernel instruction), or a valid combination of $x_mutable_command_exp_flag_t
-              - in order to include kernel instruction mutation, $X_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION must be explictly included
+              - in order to include kernel instruction mutation, $X_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION must be explicitly included
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Mutable command list flags"

@@ -554,9 +554,9 @@ class: $xDevice
 name: $x_command_queue_group_property_flags_t
 etors:
     - name: COMPUTE
-      desc: "Command queue group supports enqueing compute commands."
+      desc: "Command queue group supports enqueuing compute commands."
     - name: COPY
-      desc: "Command queue group supports enqueing copy commands."
+      desc: "Command queue group supports enqueuing copy commands."
     - name: COOPERATIVE_KERNELS
       desc: |
             Command queue group supports cooperative kernels.

@@ -301,7 +301,7 @@ Once the acceleration structure got build into the host buffer, one can use the 
         ${x}RTASBuilderCommandListAppendCopyExt(hCommandList, pRtasBufferDevice, pRtasBufferHost, builderProps.rtasBufferSizeBytesMaxRequired, nullptr, 0, nullptr);
 
 
-As soon as the copy is finished, the acceleration strucuture is ready to be used on the device. Alternatively, one can also use a shared USM allocation to build the acceleration structure into and skip the explicit copy.
+As soon as the copy is finished, the acceleration structure is ready to be used on the device. Alternatively, one can also use a shared USM allocation to build the acceleration structure into and skip the explicit copy.
 
 Conservative Acceleration Structure Buffer Size
 ------------------------------------------------

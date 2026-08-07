@@ -144,7 +144,7 @@ etors:
       desc: "The requested change requires a device warm reset (PCIe FLR)."
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Overclock V-F curve programing."
+desc: "Overclock V-F curve programming."
 class: $sOverclock
 name: $s_vf_program_type_t
 version: "1.5"
@@ -195,7 +195,7 @@ name: $s_overclock_properties_t
 version: "1.5"
 base: $s_base_properties_t
 details:
-    - "Information on the overclock domain type and all the contols that are part of the domain."
+    - "Information on the overclock domain type and all the controls that are part of the domain."
 members:
     - type: $s_overclock_domain_t
       name: "domainType"
@@ -561,7 +561,7 @@ params:
       desc: "[in] Handle for the component domain."
     - type: $s_vf_type_t
       name: VFType
-      desc: "[in] Voltage or Freqency point to read."
+      desc: "[in] Voltage or Frequency point to read."
     - type: $s_vf_array_type_t
       name: VFArrayType
       desc: "[in] User,Default or Live VF array to read from"
@@ -589,7 +589,7 @@ params:
       desc: "[in] Handle for the component domain."
     - type: $s_vf_type_t
       name: VFType
-      desc: "[in] Voltage or Freqency point to read."
+      desc: "[in] Voltage or Frequency point to read."
     - type: uint32_t
       name: PointIndex
       desc: "[in] Point index - number between (0, max_num_points - 1)."

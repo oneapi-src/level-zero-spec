@@ -462,7 +462,7 @@ returns:
     - $X_RESULT_ERROR_NOT_AVAILABLE:
         - "the thread is running or unavailable"
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "the thread argument specifies more than one or a non-existant thread"
+        - "the thread argument specifies more than one or a non-existent thread"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Read register state."

@@ -94,7 +94,7 @@ base: $x_base_properties_t
 members:
     - type: size_t
       name: pitchAlign 
-      desc: "[out] Required pitch Aligment in Bytes."
+      desc: "[out] Required pitch Alignment in Bytes."
     - type: size_t
       name: maxSupportedPitch 
       desc: "[out] Maximum allowed pitch in Bytes."
@@ -172,4 +172,4 @@ members:
     - type: size_t
       name: slicePitch
       desc: |
-            [in] user programmed slice pitch , must be multiple of rowPitch.  For 2D image arrary or a slice of a 3D image array - this pitch should be >= rowPitch * image_height . For 1D iamge array >= rowPitch.
+            [in] user programmed slice pitch , must be multiple of rowPitch.  For 2D image array or a slice of a 3D image array - this pitch should be >= rowPitch * image_height . For 1D image array >= rowPitch.

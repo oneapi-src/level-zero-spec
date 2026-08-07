@@ -1581,7 +1581,7 @@ Low power wait
 When ${X}_EVENT_SYNC_MODE_FLAG_LOW_POWER_WAIT flag is enabled, driver will optimize Event host synchronization calls like ${x}EventHostSynchronize to use CPU threads more efficiently. For example, instead of active polling on memory location, it may use OS methods to sleep CPU thread.
 Changing this mode may impact completion latency.
 
-Interrups
+Interrupts
 ^^^^^^^^^^
 
 When ${X}_EVENT_SYNC_MODE_FLAG_SIGNAL_INTERRUPT flag is enabled, driver may program additional GPU commands related to signaling Event on the Device. Those commands will generate system interrupt.
@@ -1744,7 +1744,7 @@ Requirements:
 - Using aggregated event as dependency, requires only one memory compare operation against final value: `*deviceAddress` >= `completionValue`
 - Device storage is under users control. It must be reset by the user if needed
 - Profiling is not possible if producers originate on different GPUs (different timestamp domains)
-- User can programatically obtain increment value that would work even if underlying append API would be distributed to multiple engines via ${x}DeviceGetAggregatedCopyOffloadIncrementValue query.
+- User can programmatically obtain increment value that would work even if underlying append API would be distributed to multiple engines via ${x}DeviceGetAggregatedCopyOffloadIncrementValue query.
 - `completionValue` provided in ${x}_event_counter_based_external_aggregate_storage_desc_t must not exceed the value returned by ${x}DeviceGetCounterBasedEventMaxValue. Otherwise ${x}EventCounterBasedCreate returns ${X}_RESULT_ERROR_INVALID_ARGUMENT.
 - User is responsible for ensuring that the value aggregated under `deviceAddress` (initial value plus any number of `incrementValue` additions performed by signaling append calls or by the user directly) does not exceed the value returned by ${x}DeviceGetCounterBasedEventMaxValue at any point in time. Exceeding this maximum results in undefined behavior.
 
@@ -1994,7 +1994,7 @@ The ${x}ModuleCreate function can optionally generate a build log object ${x}_mo
 Dynamically Linked Modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Modules may be interdependent, i.e., a module may contain functions and global variables that are used and defined by different modules. Such a module is said to have both import as well as export linkage requirements. Private variables are not transferrable between linked modules, i.e., their visibility is limited to the module in which they are defined. Only global variables or static values passed to linked functions are visible between linked modules. All the import linkage requirements of a module must be satisfied before a kernel can be created from that module. Modules that have no imports do not need to be linked. Dynamically linking modules together is performed using ${x}ModuleDynamicLink. Modules cannot have ambiguous import dependencies, i.e., imported functions and global variables must only be defined once in any given set of modules passed to ${x}ModuleDynamicLink. Imports are linked only once. Once all the import dependencies of a module have been linked, the use of that fully import-linked module in subsequent calls to ${x}ModuleDynamicLink will not cause the imports of the module to be re-linked.
+Modules may be interdependent, i.e., a module may contain functions and global variables that are used and defined by different modules. Such a module is said to have both import as well as export linkage requirements. Private variables are not transferable between linked modules, i.e., their visibility is limited to the module in which they are defined. Only global variables or static values passed to linked functions are visible between linked modules. All the import linkage requirements of a module must be satisfied before a kernel can be created from that module. Modules that have no imports do not need to be linked. Dynamically linking modules together is performed using ${x}ModuleDynamicLink. Modules cannot have ambiguous import dependencies, i.e., imported functions and global variables must only be defined once in any given set of modules passed to ${x}ModuleDynamicLink. Imports are linked only once. Once all the import dependencies of a module have been linked, the use of that fully import-linked module in subsequent calls to ${x}ModuleDynamicLink will not cause the imports of the module to be re-linked.
 
 The ${x}ModuleDynamicLink function can optionally generate a link log object ${x}_module_build_log_handle_t.
 

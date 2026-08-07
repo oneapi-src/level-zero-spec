@@ -1,0 +1,124 @@
+name: Codespell
+
+# Spell-checks pull requests with codespell, covering the spec sources: the .rst
+# prose, the .yml API definitions and the .mako templates under scripts/. Generated
+# artifacts are excluded via .codespellrc, which also holds the ignore list -- the
+# same config drives a bare `codespell` run from the repo root locally.
+#
+# Results are reported three ways: inline warning annotations on the changed files,
+# a single PR comment that is updated in place, and a failed check so the problem is
+# not easy to miss.
+#
+# Unlike the oneapi-src/level-zero copy of this workflow -- which has to split the
+# comment into a companion workflow_run job to get a writable token for fork PRs --
+# this repo is internal and takes no fork PRs, so the pull_request token can be
+# granted pull-requests: write and comment directly.
+#
+# This must run on the self-hosted runners like every other job in this repo: the
+# intel-innersource org has an IP allow list, so a GitHub-hosted runner cannot even
+# clone the repository (actions/checkout fails with a 403 from an Azure IP). codespell
+# is installed inside a throwaway container rather than on the runner, so the job
+# leaves no Python state behind; the proxy is required for both the image pull and pip.
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  http_proxy: http://proxy-dmz.intel.com:912
+  https_proxy: http://proxy-dmz.intel.com:912
+
+jobs:
+  codespell:
+    runs-on: [self-hosted, Linux]
+    if: github.repository_owner == 'intel-innersource'
+    steps:
+    - uses: actions/checkout@v5
+    - name: Run codespell
+      # Configuration (skip/ignore lists) is picked up from .codespellrc. A spelling
+      # finding must not fail this step: the report has to be published to the PR
+      # first, and the final step decides the outcome. A broken environment (failed
+      # image pull or pip install) must still fail, and must not be mistaken for a
+      # spelling finding -- hence the exit-code check.
+      #
+      # Only codespell's stdout is redirected into codespell.txt. pip's output is
+      # pushed to stderr so it stays in the job log: it is chatty (version-upgrade
+      # notices) and would otherwise be indistinguishable from findings, making the
+      # report non-empty and the check permanently red.
+      run: | #bash
+        set +e
+        docker run --rm \
+          -v $PWD:$PWD -w $PWD \
+          -e http_proxy=http://proxy-dmz.intel.com:912 \
+          -e https_proxy=http://proxy-dmz.intel.com:912 \
+          python:3-slim \
+          bash -c 'pip install -q --disable-pip-version-check --root-user-action=ignore codespell==2.4.3 1>&2 && codespell' \
+          > codespell.txt
+        rc=$?
+        cat codespell.txt
+        # 0 = clean, 65 = misspellings found; anything else is an environment failure.
+        if [ $rc -ne 0 ] && [ $rc -ne 65 ]; then
+          echo "::error::codespell could not run (exit $rc); see the log above."
+          exit 1
+        fi
+        # Emit an inline warning annotation for each finding.
+        awk -F: 'NF>=3 {
+          f=$1; sub(/^\.\//,"",f);
+          l=$2;
+          msg=$0; sub(/^[^:]*:[^:]*: /,"",msg);
+          printf "::warning file=%s,line=%s::codespell: %s\n", f, l, msg
+        }' codespell.txt
+    - name: Post or update PR comment
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v8
+      with:
+        script: |
+          const fs = require('fs');
+          const marker = '<!-- codespell-report -->';
+          const { owner, repo } = context.repo;
+          const issue_number = context.issue.number;
+
+          const findings = fs.existsSync('codespell.txt')
+            ? fs.readFileSync('codespell.txt', 'utf8').trim()
+            : '';
+
+          const comments = await github.paginate(github.rest.issues.listComments, {
+            owner, repo, issue_number, per_page: 100,
+          });
+          const existing = comments.find(c => c.body && c.body.includes(marker));
+
+          let body;
+          if (!findings) {
+            if (!existing) return; // nothing to report and nothing to update
+            body = `${marker}\n:white_check_mark: **codespell** found no spelling issues.`;
+          } else {
+            body = [
+              marker,
+              '### :abc: codespell found possible spelling issues',
+              '',
+              '```',
+              findings,
+              '```',
+              '',
+              'Fix these in the `scripts/` sources (`.rst`, `.yml`, `.mako`), not in '
+                + 'generated output. If any are false positives (for example a variable '
+                + 'name or acronym), add them to `ignore-words-list` in `.codespellrc`.',
+            ].join('\n');
+          }
+
+          if (existing) {
+            await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+          } else {
+            await github.rest.issues.createComment({ owner, repo, issue_number, body });
+          }
+    - name: Fail if spelling issues were found
+      run: | #bash
+        if [ -s codespell.txt ]; then
+          echo "codespell found spelling issues; see the annotations above and the PR comment."
+          exit 1
+        fi
