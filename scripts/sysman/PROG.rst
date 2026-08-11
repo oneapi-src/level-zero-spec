@@ -722,6 +722,9 @@ The following functions are provided to manage the power of the device:
 | ${s}PowerGetEnergyCounter()   | Read the energy consumption of                                                      |
 |                                      | the specific domain.                                                                |
 +--------------------------------------+-------------------------------------------------------------------------------------+
+| ${s}PowerGetUsage()           | Get the instant and/or average power usage                                          |
+|                                      | of the specific power domain.                                                       |
++--------------------------------------+-------------------------------------------------------------------------------------+
 | ${s}PowerGetLimitsExt()       | Get all the                                                                         |
 |                                      | power limits for the specific                                                       |
 |                                      | power domain.                                                                       |

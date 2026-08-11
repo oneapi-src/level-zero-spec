@@ -364,16 +364,24 @@ details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
     - "This function returns the different power usage values associated with the power domain."
+    - "Computing the average power usage may cause this API to wait and return only after the average power is computed over an interval. Applications that do not need it should pass `nullptr` for `pAveragePower` to reduce the time taken by this function."
 params:
     - type: $s_pwr_handle_t
       name: hPower
       desc: "[in] Handle of the power domain."
     - type: uint32_t*
       name: pInstantPower
-      desc: "[out] Returns the instant power usage in milliwatts."
+      desc: "[out][optional] Returns the instant power usage in milliwatts. If this is `nullptr`, the instant power usage will not be returned."
     - type: uint32_t*
       name: pAveragePower
-      desc: "[out] Returns the average power usage in milliwatts."
+      desc: "[out][optional] Returns the average power usage in milliwatts. If this is `nullptr`, the average power usage will not be returned."
+returns:
+    - $X_RESULT_ERROR_INVALID_NULL_POINTER:
+        - "`(nullptr == pInstantPower) && (nullptr == pAveragePower)`"
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "The requested power usage value is not supported on this power domain."
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to request this feature."
 --- #--------------------------------------------------------------------------
 type: class
 desc: "C++ wrapper for a Sysman device power domain"
