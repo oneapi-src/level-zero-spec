@@ -498,12 +498,15 @@ members:
       init: "0"
     - type: int
       name: fd
-      desc: "[out] the exported file descriptor handle representing the allocation."
+      desc: |
+            [out] the exported file descriptor handle representing the allocation.
+            Owned by the driver; must not be closed directly by the application.
 details:
     - "This structure may be passed to $xMemGetAllocProperties, via the `pNext` member of $x_memory_allocation_properties_t, to export a memory allocation as a file descriptor."
     - "This structure may be passed to $xImageGetAllocPropertiesExt, via the `pNext` member of $x_image_allocation_ext_properties_t, to export an image as a file descriptor."
     - "This structure may be passed to $xPhysicalMemGetProperties, via the `pNext` member of $x_physical_mem_properties_t, to export physical memory as a file descriptor."
     - "The requested memory export type must have been specified when the allocation was made."
+    - "The returned `fd` is owned by the driver. The application must not close it directly."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Additional allocation descriptor for importing external memory as a Win32 handle"

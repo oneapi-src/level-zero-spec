@@ -157,6 +157,24 @@ The following design philosophies are adopted in order to reduce Host-side overh
     + This enumeration contains error codes for the Level-Zero APIs and validation layers
     + This allows for a consistent pattern on the application side for catching errors; especially when validation layer(s) are enabled
 
+Handles and Ownership
+---------------------
+
+The API exposes two distinct kinds of handle, with different ownership rules: Level Zero object
+handles, which the application owns and releases explicitly, and OS-level handles reported by the
+driver, which the driver retains ownership of.
+
+  - APIs do not support reference counting of handles.
+
+    + the application must track ownership and explicitly free handles and memory
+    + the application must ensure that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault
+    + no implicit garbage collection is supported by the driver
+
+  - The rules above apply to Level Zero object handles. They do not apply to OS-level handles reported by the driver, such as the file descriptor in ${x}_external_memory_export_fd_t.
+
+    + an OS-level handle reported by the driver is owned by the driver and must not be closed or otherwise released directly by the application
+    + the lifetime of such a handle, and the means of releasing it if any, are defined by the structure or function that reports it
+
 Multithreading and Concurrency
 ------------------------------
 
@@ -173,12 +191,6 @@ The following design philosophies are adopted in order to maximize Host thread c
   - APIs are not thread-safe with other APIs that use the same driver's object handle
 
     + the application must ensure multiple threads do not enter these APIs when the handle is the same
-
-  - APIs do not support reference counting of handles.
-
-    + the application must track ownership and explicitly free handles and memory
-    + the application must ensure that all driver objects and memory are no longer in-use by the device before freeing; otherwise the Host or device may fault
-    + no implicit garbage collection is supported by the driver
 
 In general, the API is designed to be free-threaded rather than thread-safe.
 This provides multithreaded applications with complete control over both threading and locks.

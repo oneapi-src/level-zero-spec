@@ -62,7 +62,14 @@ base: $t_base_properties_t
 members:
     - type: int
       name: "fd"
-      desc: "[out] the file descriptor handle that could be used to import the memory by the host process."
+      desc: |
+            [out] the file descriptor handle provided for importing memory by the host process.
+            Owned by the implementation; must not be closed by the application.
     - type: size_t
       name: "size"
       desc: "[out] size in bytes of the dma_buf"
+details:
+    - "This structure must be passed via the `pNext` member of $t_metric_group_properties_t or $t_metric_properties_t"
+    - "The implementation retains ownership of `fd` for its entire lifetime. The application must not close `fd`; it is closed by the implementation when the metric or metric group that exported it is destroyed, or when metrics are disabled on the device."
+    - "The application must free any allocation it imported from `fd` before destroying the exporting metric or metric group, or disabling metrics on the device. Otherwise the imported allocation outlives `fd` and any subsequent use of it is undefined."
+    - "`fd` refers to a shared resource. The same `fd` may be reported by repeated queries and by queries on different metric or metric group handles. The implementation performs no synchronization on `fd` or on the memory it exports; if the application uses either from more than one thread it must serialize that access itself, for example with a mutex or by confining access to a single thread."
