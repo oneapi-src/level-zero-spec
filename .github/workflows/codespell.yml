@@ -9,16 +9,20 @@ name: Codespell
 # a single PR comment that is updated in place, and a failed check so the problem is
 # not easy to miss.
 #
-# Unlike the oneapi-src/level-zero copy of this workflow -- which has to split the
-# comment into a companion workflow_run job to get a writable token for fork PRs --
-# this repo is internal and takes no fork PRs, so the pull_request token can be
+# This repo is internal and takes no fork PRs, so the pull_request token can be
 # granted pull-requests: write and comment directly.
 #
-# This must run on the self-hosted runners like every other job in this repo: the
-# intel-innersource org has an IP allow list, so a GitHub-hosted runner cannot even
-# clone the repository (actions/checkout fails with a 403 from an Azure IP). codespell
-# is installed inside a throwaway container rather than on the runner, so the job
-# leaves no Python state behind; the proxy is required for both the image pull and pip.
+# Requirements of this environment:
+#   * Self-hosted runners. The intel-innersource org has an IP allow list, so a
+#     GitHub-hosted runner cannot clone the repository (checkout 403s).
+#   * The proxy, for the image pull and for pip to reach PyPI.
+#   * A container, because the runners' python3 has no ensurepip, so neither `python3
+#     -m venv` nor a bare `pip install` works there. Nothing is installed on the
+#     runner and no root-owned files are left in the workspace.
+#   * The image must not come from Docker Hub, which allows only 100 unauthenticated
+#     pulls per 6h per IP -- a quota shared by every job on these runners, and one
+#     this repo exhausts several times a day. amr-registry.caas.intel.com/cache is
+#     Intel's pull-through mirror of Docker Hub and has no such limit.
 
 on:
   pull_request:
@@ -42,9 +46,9 @@ jobs:
     - name: Run codespell
       # Configuration (skip/ignore lists) is picked up from .codespellrc. A spelling
       # finding must not fail this step: the report has to be published to the PR
-      # first, and the final step decides the outcome. A broken environment (failed
-      # image pull or pip install) must still fail, and must not be mistaken for a
-      # spelling finding -- hence the exit-code check.
+      # first, and the final step decides the outcome. A broken environment must
+      # still fail, and must not be mistaken for a spelling finding -- hence the
+      # exit-code check.
       #
       # Only codespell's stdout is redirected into codespell.txt. pip's output is
       # pushed to stderr so it stays in the job log: it is chatty (version-upgrade
@@ -56,7 +60,7 @@ jobs:
           -v $PWD:$PWD -w $PWD \
           -e http_proxy=http://proxy-dmz.intel.com:912 \
           -e https_proxy=http://proxy-dmz.intel.com:912 \
-          python:3-slim \
+          amr-registry.caas.intel.com/cache/library/python:3.13-slim \
           bash -c 'pip install -q --disable-pip-version-check --root-user-action=ignore codespell==2.4.3 1>&2 && codespell' \
           > codespell.txt
         rc=$?

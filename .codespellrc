@@ -3,16 +3,19 @@
 #
 # This repo is the source of truth for the spec: the prose lives in scripts/**/*.rst,
 # scripts/**/*.yml and scripts/templates/*.mako, and everything else is generated from
-# it by scripts/run.py. The skip list below is the set of generated artifacts (see
-# .gitignore) -- a typo there is not fixable in place, it has to be fixed in the
-# scripts/ source and regenerated, so reporting it is pure noise. CI runs on a clean
-# checkout where these do not exist; the entries matter for local runs after a build.
+# it by scripts/run.py.
+#
+# The skipped paths are the generated artifacts (see .gitignore). A typo in generated
+# output is not fixable in place -- it has to be fixed in the scripts/ source and
+# regenerated -- so reporting it is pure noise. CI runs on a clean checkout where these
+# do not exist; the entries matter for local runs after a build.
 [codespell]
 skip = ./.git,./build,./docs,./include,./source/*.cpp,./third_party,*.json,*.svg
 # codespell only flags words from its curated misspelling dictionary, but it is not
-# language-aware. Add identifiers/terms that collide with real words here (comma-separated).
-#   te       - shared with the loader repo's list
+# language-aware, so identifiers and acronyms that collide with real words go here
+# (comma-separated). Every entry below is load-bearing; removing one reintroduces
+# findings:
 #   pevents  - the pEvents parameter name (sysman/events.yml, zesDeviceEventListen)
 #   nce      - Neural Compute Engine (core/npuProperties.yml)
-#   deviceC  - device identifier used in the multi-device examples (core/PROG.rst)
-ignore-words-list = te,pevents,nce,deviceC
+#   deviceC  - device identifier in the multi-device examples (core/PROG.rst)
+ignore-words-list = pevents,nce,deviceC
