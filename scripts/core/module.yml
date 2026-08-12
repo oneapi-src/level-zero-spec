@@ -795,8 +795,8 @@ details:
     - "The application must ensure the command list, kernel and events were created on the same context."
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
-    - "This function allows to pass additional parameters in the form of `${x}_base_desc_t`"
-    - "This function can replace $xCommandListAppendLaunchCooperativeKernel with additional parameter `${x}_command_list_append_launch_kernel_param_cooperative_desc_t`"
+    - "This function allows to pass additional parameters in the form of $x_base_desc_t ."
+    - "This function can replace $xCommandListAppendLaunchCooperativeKernel with additional parameter $x_command_list_append_launch_kernel_param_cooperative_desc_t ."
     - "This function supports both immediate and regular command lists."
 params:
     - type: "$x_command_list_handle_t"
@@ -858,8 +858,8 @@ details:
     - "This function may **not** be called from simultaneous threads with the same command list handle."
     - "The implementation of this function should be lock-free."
     - "This function supports both immediate and regular command lists."
-    - "This function changes kernel state as if separate ${x}KernelSetGroupSize and ${x}KernelSetArgumentValue functions were called."
-    - "This function allows to pass additional extensions in the form of `${x}_base_desc_t`"
+    - "This function changes kernel state as if separate $xKernelSetGroupSize and $xKernelSetArgumentValue functions were called."
+    - "This function allows to pass additional extensions in the form of $x_base_desc_t ."
 params:
     - type: "$x_command_list_handle_t"
       name: hCommandList
@@ -895,9 +895,9 @@ returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "when passed additional extensions are invalid or incompatible with the device or command list"
     - $X_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION
-        - "as per ${x}KernelSetGroupSize"
+        - as per $xKernelSetGroupSize
     - $X_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT
-        - "as per ${x}KernelSetArgumentValue"
+        - as per $xKernelSetArgumentValue
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Launch kernel cooperatively over one or more work groups."

@@ -20,7 +20,7 @@ etors:
             command queue should be optimized for submission to a single device engine.
             driver **must** disable any implicit optimizations for distributing work across multiple engines.
             this flag should be used when applications want full control over multi-engine submission and scheduling.
-            This flag is **DEPRECATED** as flag ${X}_COMMAND_LIST_FLAG_EXPLICIT_ONLY is **DEPRECATED**.
+            This flag is **DEPRECATED** as flag $X_COMMAND_LIST_FLAG_EXPLICIT_ONLY is **DEPRECATED**.
     - name: IN_ORDER
       version: "1.7"
       desc: |
