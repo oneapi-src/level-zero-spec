@@ -145,6 +145,12 @@ etors:
       desc: |
             Counter-based event is used for synchronization between recorded graph commands and commands submitted outside the graph (see $xGraphInstantiateExt in $X_RECORD_REPLAY_GRAPH_EXT_NAME for details).
       version: "1.17"
+    - name: IPC_BIDIRECTIONAL
+      value: "$X_BIT(7)"
+      desc: |
+            Extends $X_EVENT_COUNTER_BASED_FLAG_IPC with bi-directional sharing. Event opened in another process observes the latest state and can also be used for signaling.
+            Must be combined with $X_EVENT_COUNTER_BASED_FLAG_IPC
+      version: "1.18"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported event sync mode flags"
@@ -319,6 +325,9 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
        - "`completionValue` provided in `pNext` $x_event_counter_based_external_sync_allocation_desc_t or $x_event_counter_based_external_aggregate_storage_desc_t exceeds the value returned by $xDeviceGetCounterBasedEventMaxValue"
+       - "$X_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL is set without $X_EVENT_COUNTER_BASED_FLAG_IPC"
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+       - "$X_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL is set and the implementation does not provide bi-directional IPC sharing"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Deletes an event object."
@@ -426,6 +435,9 @@ desc: "Gets an IPC counter based event handle that can be shared with another pr
 class: $xEvent
 name: CounterBasedGetIpcHandle
 version: "1.15"
+details:
+    - "When the event was created with $X_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL, it may be shared before it is enqueued for signaling for the first time, and the returned handle remains valid after the event state is replaced by a signal operation. It does not have to be obtained again."
+    - "Without that flag, a handle represents the state captured at the time of this call. A new handle must be obtained every time the state is replaced, and this function returns $X_RESULT_ERROR_INVALID_ARGUMENT for an event that has not been enqueued for signaling yet."
 params:
     - type: $x_event_handle_t
       name: hEvent
@@ -444,9 +456,12 @@ name: CounterBasedOpenIpcHandle
 decl: static
 version: "1.15"
 details:
+    - "IPC sharing is bi-directional when the exported event was created with $X_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL. The opened event then refers to the same synchronization point as the event in the exporting process and may be used for waiting, querying and signaling. Without that flag the opened event holds the state captured when its handle was obtained, may be used only for waiting and querying, and must be opened again every time the state is replaced in the exporting process."
+    - "With bi-directional sharing, the opened event remains valid after its state is replaced by a signal operation performed in either process. It does not have to be opened again, and both processes observe the latest state."
+    - "With bi-directional sharing, the application must keep both processes alive for as long as the opened event is used. Waiting on, querying or signaling the event after the process that produced the latest state has exited results in undefined behavior."
     - "The `hContext` parameter has no requirement to match the context that was used to create the event in the exporting process. Any context of the importing process may be used, including the driver's default context."
     - "Device association of the opened event depends on its current state at the time of the call: if the event has not yet been enqueued for signaling, no device is yet associated with it; if the event has been enqueued for signaling, it is associated with the device performing that signal operation."
-    - "Any device of the importing process may signal the opened event. Enqueuing a signal operation overwrites the previous tracking point."
+    - "With bi-directional sharing, any device of the importing process may signal the opened event. Enqueuing a signal operation overwrites the previous tracking point."
     - "A device may wait on the opened event only if it has P2P access to the device associated with the current tracking point. The set of devices that may wait therefore depends on the P2P capabilities relative to the signaling device."
 params:
     - type: $x_context_handle_t
@@ -460,6 +475,8 @@ params:
       desc: "[out] pointer handle of event object created"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+       - "the handle was exported by an event created with $X_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL and the implementation does not provide bi-directional IPC sharing"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Closes an IPC event handle in the current process."

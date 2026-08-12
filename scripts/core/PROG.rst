@@ -1613,7 +1613,7 @@ Key features
 - No need to wait for completion before reusing/destroying
 - CB Event doesn't own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver
 - A CB Event's device association is not fixed at creation. It re-associates with the signaling device on each signal operation. See `Device association`_.
-- IPC sharing is one-directional. IPC CB Event opened in different process can be used only for waiting. If original Event state is changed (for example by next append call) and second process needs to see that update, IPC handle must be opened again.
+- IPC sharing is one-directional by default. IPC CB Event opened in a different process can be used only for waiting, and the handle must be opened again to observe a new state. Bi-directional sharing, where the opened Event can also be signaled and both processes observe the latest state, is requested with ${X}_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL. See `IPC sharing`_.
 - Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section
 - When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion
 - Event can be destroyed without waiting for completion, even if profiling is enabled
@@ -1648,17 +1648,46 @@ Unlike Regular Events, a CB Event's device association is not fixed by the devic
        ${x}CommandListAppendSignalEvent(cmdListDeviceB, event);       // re-associates with deviceB (no P2P deviceA<->deviceB required)
        ${x}CommandListAppendWaitOnEvents(cmdListDeviceC, 1, &event);  // deviceC must have P2P access to deviceB
 
-This is also the basis for IPC sharing: an opened IPC CB Event tracks the signaling device and can be waited on from any device that has peer-to-peer access to it.
+This is also the basis for IPC sharing: an opened IPC CB Event tracks the device of the signaling point it resolves to (with bi-directional sharing, the latest one, regardless of the process that enqueued it) and can be waited on from any device that has peer-to-peer access to that device.
 
 IPC sharing
 ^^^^^^^^^^^
-As mentioned previously, signaling CB Event replaces its state. This is why IPC sharing is one-directional. Opened event can be used only for waiting/querying (on host and GPU).
+Counter Based Event has dedicated API calls to handle IPC operations: ${x}EventCounterBasedGetIpcHandle, ${x}EventCounterBasedOpenIpcHandle, ${x}EventCounterBasedCloseIpcHandle
 
-Both Event object (original and shared) are independent. There is no need to wait for completion before reusing.
-Second process points to the original state until ${x}EventCounterBasedCloseIpcHandle is called.
-Original Event state may be changed without waiting for completion. Second process is not affected.
+Two sharing modes are defined. The mode is selected when the Event is created and can't be changed later:
 
-Counter Based Event has dedicated API calls to handle IPC operations:${x}EventCounterBasedGetIpcHandle, ${x}EventCounterBasedOpenIpcHandle, ${x}EventCounterBasedCloseIpcHandle
+- ${X}_EVENT_COUNTER_BASED_FLAG_IPC alone selects one-directional sharing
+- ${X}_EVENT_COUNTER_BASED_FLAG_IPC combined with ${X}_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL selects bi-directional sharing. ${x}EventCounterBasedCreate returns ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE if the Driver doesn't provide it
+
+**One-directional sharing**
+
+As mentioned previously, signaling CB Event replaces its state. Opened Event can be used only for waiting/querying (on host and on Device).
+
+Both Event objects (original and shared) are independent. There is no need to wait for completion before reusing.
+Second process points to the state captured when the IPC handle was obtained, until ${x}EventCounterBasedCloseIpcHandle is called.
+Original Event state may be changed without waiting for completion. Second process is not affected. If it needs to observe that update, the IPC handle must be obtained and opened again.
+
+**Bi-directional sharing**
+
+The Event opened in the second process refers to the same synchronization point as the original Event. It can be used for:
+
+- waiting and querying completion, on host and on Device
+- signaling from an in-order command list created in that process
+
+As mentioned previously, signaling a CB Event replaces its state (counter value and memory location). For a shared Event, the new state is propagated to the other process. This means that:
+
+- Both processes observe the latest state, regardless of which process performed the signal operation
+- IPC handle obtained with ${x}EventCounterBasedGetIpcHandle remains valid after the state is replaced. It doesn't have to be obtained again
+- Event opened with ${x}EventCounterBasedOpenIpcHandle remains valid after the state is replaced. It doesn't have to be opened again and stays usable until ${x}EventCounterBasedCloseIpcHandle is called
+- There is still no need to wait for completion before replacing the state or destroying the Event object, in any of the processes
+- Observing a state change produced by the other process requires that process to still be running. The application must keep both processes alive for as long as the shared Event is used. Waiting for, querying or signaling a shared Event after the process that produced the latest state has exited results in undefined behavior
+
+Unlike a non-shared CB Event, replacing the state of a shared Event and resolving that new state in the other process both involve additional inter-process work in the Driver. If the resources required to resolve a state produced by the other process can't be acquired, the behavior of the call that resolves it is undefined.
+
+An Event may also be shared before it is signaled for the first time. In that case no state is assigned yet, and the first signal operation (performed by any of the processes) defines the synchronization point observed by both of them.
+
+Since the state is shared, ordering of cross-process operations is the user's responsibility. Waiting for such Event resolves the synchronization point that is known at the time of the wait/append call. If the other process replaces the state concurrently, the resolved point may be an older one that is already complete. The wait then returns immediately and the intended dependency is not enforced.
+The same applies to ${x}EventCounterBasedGetDeviceAddress: a previously returned memory location and value may be replaced by a signal operation performed in the other process, without any API call in this process, and must be obtained again.
 
 **Timestamps are not allowed for IPC sharing.**
 
