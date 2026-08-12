@@ -285,6 +285,9 @@ details:
     - "Recorded internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used only for synchronization within the graph. Their state is tied to the underlying execution queue and is not shared between executable graph instances."
     - "Recorded external counter-based events (i.e. with ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used to synchronize the graph with device commands submitted outside the graph (for example, before or after $xCommandListAppendGraphExt) and with the host. External counter-based events may incur additional overhead compared to internal counter-based events."
     - "Resources used in captured commands (e.g. buffers passed to kernels as arguments) are shared between instances; the application is responsible for avoiding data races during concurrent execution."
+    - "The function returns `ZE_RESULT_ERROR_INVALID_GRAPH` when the recorded graph is invalid, for example when it contains forks that were never joined back to the primary command list."
+    - "The function returns `ZE_RESULT_ERROR_INVALID_ARGUMENT` when graph capture has not been ended with ::zeCommandListEndGraphCaptureExt."
+
 params:
     - type: $x_graph_handle_t
       name: hGraph
@@ -295,6 +298,8 @@ params:
     - type: "$x_executable_graph_handle_t*"
       name: phExecutableGraph
       desc: "[out] pointer to handle of the executable graph"
+returns:
+    - $X_RESULT_ERROR_INVALID_GRAPH
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Appends execution of an executable graph to a command list."
