@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2022 Intel Corporation
+# Copyright (C) 2021-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -8,16 +8,57 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Extension for supporting power saving hint."
-version: "1.2"
+version: "1.18"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Power Saving Hint Extension Name"
+version: "1.18"
+name: $X_CONTEXT_POWER_SAVING_HINT_EXT_NAME
+value: '"$X_extension_power_saving_hint"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Power Saving Hint Extension Version(s)"
+version: "1.18"
+name: $x_power_saving_hint_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported device types"
+version: "1.18"
+class: $xContext
+name: $x_power_saving_hint_ext_type_t
+etors:
+    - name: MIN
+      value: "0"
+      desc: "Minimum power savings. The device will make no attempt to save power while executing work submitted to this context."
+    - name: MAX
+      desc: "Maximum power savings. The device will do everything to bring power to a minimum while executing work submitted to this context."
+      value: "100"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Extended context descriptor containing power saving hint."
+version: "1.18"
+class: $xContext
+name: $x_context_power_saving_hint_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: uint32_t
+      name: hint
+      desc: |
+            [in] power saving hint (default value = 0). This is value from [0,100] and can use pre-defined settings from $x_power_saving_hint_ext_type_t.
+      init: "0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Power Saving Hint Extension Name. @deprecated since 1.18: Use $X_CONTEXT_POWER_SAVING_HINT_EXT_NAME instead."
 version: "1.2"
 name: $X_CONTEXT_POWER_SAVING_HINT_EXP_NAME
 value: '"$X_experimental_power_saving_hint"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Power Saving Hint Extension Version(s)"
+desc: "Power Saving Hint Extension Version(s). @deprecated since 1.18: Use $x_context_power_saving_hint_ext_desc_t instead."
 version: "1.2"
 name: $x_power_saving_hint_exp_version_t
 etors:
@@ -26,7 +67,7 @@ etors:
       desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Supported device types"
+desc: "Supported device types. @deprecated since 1.18: Use $x_power_saving_hint_ext_type_t instead."
 version: "1.2"
 class: $xContext
 name: $x_power_saving_hint_type_t
@@ -39,7 +80,7 @@ etors:
       value: "100"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Extended context descriptor containing power saving hint."
+desc: "Extended context descriptor containing power saving hint. @deprecated since 1.18: Use $x_context_power_saving_hint_ext_desc_t instead."
 version: "1.2"
 class: $xContext
 name: $x_context_power_saving_hint_exp_desc_t

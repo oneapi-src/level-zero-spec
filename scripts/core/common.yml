@@ -498,6 +498,9 @@ etors:
     - name: RELAXED_ALLOCATION_LIMITS_EXT_DESC
       desc: $x_relaxed_allocation_limits_ext_desc_t
       version: "1.17"
+    - name: POWER_SAVING_HINT_EXT_DESC
+      desc: $x_context_power_saving_hint_ext_desc_t
+      version: "1.18"
     - name: RELAXED_ALLOCATION_LIMITS_EXP_DESC
       desc: $x_relaxed_allocation_limits_exp_desc_t
       value: "0x00020001"

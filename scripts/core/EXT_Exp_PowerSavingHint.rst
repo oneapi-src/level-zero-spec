@@ -10,6 +10,8 @@ from templates import helper as th
 
 .. _ZE_experimental_power_saving_hint:
 
+This experimental extension is deprecated since version 1.18 onwards and replaced by the :ref:`${th.subt(namespace, tags, X)}_extension_power_saving_hint <${th.subt(namespace, tags, X)}_extension_power_saving_hint>` standard extension.
+
 ============================
  Power Saving Hint Extension
 ============================
