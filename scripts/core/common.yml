@@ -770,6 +770,10 @@ etors:
       desc: $x_init_driver_app_version_ext_desc_t
       version: "1.18"
       value: "0x0002004A"
+    - name: IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESC
+      desc: $x_ipc_phys_mem_handle_range_ext_desc_t
+      version: "1.18"
+      value: "0x0002004B"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

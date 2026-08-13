@@ -2990,7 +2990,10 @@ IPC handle backed by physical memory:
 1. **Direct from a mapped virtual address**: After mapping a physical memory object to a virtual
    address using ${x}VirtualMemMap, the mapped virtual address pointer can be passed directly to
    ${x}MemGetIpcHandle or ${x}MemGetIpcHandleWithProperties. Only one physical memory object may
-   be associated with a single IPC handle at a time.
+   be associated with a single IPC handle at a time, unless a
+   ``${x}_ipc_phys_mem_handle_range_ext_desc_t`` is chained via ``pNext`` to capture a range
+   spanning multiple physical memory objects into a single IPC handle (see the
+   :ref:`IPC Physical Memory Range Extension <ZE_extension_ipc_phys_mem_handle_range>`).
 
 2. **From a physical memory handle allocated via** ``${x}PhysicalMemCreate``: The handle returned
    from ${x}PhysicalMemCreate can be used to obtain an IPC handle via ${x}MemGetIpcHandleWithProperties.

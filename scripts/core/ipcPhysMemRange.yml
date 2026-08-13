@@ -1,0 +1,59 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for exporting a virtual address range as a single IPC memory handle."
+version: "1.18"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "IPC Physical Memory Range Extension Name"
+version: "1.18"
+name: $X_IPC_PHYS_MEM_HANDLE_RANGE_EXT_NAME
+value: '"$X_extension_ipc_phys_mem_handle_range"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "IPC Physical Memory Range Extension Version(s)"
+version: "1.18"
+name: $x_ipc_phys_mem_handle_range_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Descriptor for capturing a VA range into an IPC memory handle."
+version: "1.18"
+class: $xMem
+name: $x_ipc_phys_mem_handle_range_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: size_t
+      name: size
+      desc: |
+            [in] size in bytes of the VA range starting at the `ptr` argument of
+            $xMemGetIpcHandleWithProperties; must be non-zero. The range
+            [ptr, ptr+size) must be fully mapped; see the details for error behavior.
+details:
+    - "Pass this structure via the `pNext` parameter of $xMemGetIpcHandleWithProperties. When present, the `ptr` argument specifies the base VA of the range rather than the base of a single allocation."
+    - "The `ptr` argument of $xMemGetIpcHandleWithProperties specifies the base VA of the range."
+    - "The range may span more than one reserved VA region created by $xVirtualMemReserve; the underlying reservations are not significant. What is captured is the ordered set of physical memory objects mapped along `[ptr, ptr+size)`."
+    - "The caller may start at an arbitrary offset within a mapped range and may capture a subset of a larger mapped range, provided the requested `[ptr, ptr+size)` is itself fully and contiguously mapped."
+    - "An individual physical memory object along the range need not be mapped at its own offset zero; $xVirtualMemMap may have mapped it at a non-zero offset into the physical object. The export captures the offset at which each physical object was mapped, and the importer reproduces each mapping at that same offset, so the importer views exactly the same memory as the exporter."
+    - "This extension is only supported for ranges backed by virtual reservations ($xVirtualMemReserve) mapped to physical memory objects ($xVirtualMemMap). Device, host, and shared USM pointers (from $xMemAllocDevice, $xMemAllocHost, and $xMemAllocShared) are not supported and will not be grouped into a range handle. If `[ptr, ptr+size)` includes any standard USM VA rather than a reserved VA, $xMemGetIpcHandleWithProperties returns $X_RESULT_ERROR_INVALID_ARGUMENT."
+    - "The driver enumerates all physical memory objects mapped to `[ptr, ptr+size)` and encodes them into the returned IPC handle in VA order."
+    - "On the importer side, $xMemOpenIpcHandle decodes the handle and maps all physical objects into a fresh contiguous VA reservation in the same order."
+    - "The total addressable size on the importer equals `size`. When `ptr` begins at an offset within a physical memory object, the returned importer pointer corresponds to `ptr`, not to the base of the first encoded object."
+    - "The importer does not need to be told `size` out of band: the range handle is self-describing. Calling $xMemGetAddressRange on the pointer returned by $xMemOpenIpcHandle reports the base and full `size` of the imported range."
+    - "The exported IPC handle is a static snapshot taken at the time of the call. Physical memory subsequently mapped into, unmapped from, or grown beyond the exporter's VA range is not reflected in a previously exported handle or in any already-open importer view; a new export is required to share the additional mappings."
+    - "There is no application-visible limit on the number of physical memory objects a range may encode; how the driver represents and stores them is opaque and is not bound by the size of $x_ipc_mem_handle_t. If the driver cannot accommodate the range, for example it cannot store the number of physical objects being represented, $xMemGetIpcHandleWithProperties fails with $X_RESULT_ERROR_UNSUPPORTED_SIZE."
+    - "Returns $X_RESULT_ERROR_ADDRESS_NOT_FOUND if any sub-region within `[ptr, ptr+size)` is not mapped to a physical memory object. The range must be fully mapped with no holes, because the importer is guaranteed a contiguous range and unmapped gaps cannot be represented."
+    - "Returns $X_RESULT_ERROR_INVALID_SIZE if `size` is 0."
+    - "Returns $X_RESULT_ERROR_UNSUPPORTED_SIZE if the driver cannot accommodate the range, for example the number of physical memory objects encoded exceeds what the implementation can store."
+    - "Returns $X_RESULT_ERROR_INVALID_NULL_POINTER if the `ptr` argument is NULL."
+    - "Returns $X_RESULT_ERROR_INVALID_ARGUMENT if `[ptr, ptr+size)` includes a device, host, or shared USM allocation rather than reserved VA mapped to physical memory."
+    - "Returns $X_RESULT_ERROR_UNSUPPORTED_FEATURE if the driver or device does not support the $X_IPC_PHYS_MEM_HANDLE_RANGE_EXT_NAME extension."
