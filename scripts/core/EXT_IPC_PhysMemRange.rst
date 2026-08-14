@@ -30,7 +30,8 @@ API
 Overview
 --------
 
-When a virtual address range is backed by multiple ``${x}PhysicalMem`` objects mapped via
+When a virtual address range is backed by multiple physical memory objects
+(${x}PhysicalMemCreate) mapped via
 ${x}VirtualMemMap, there is no single allocation base pointer that ${x}MemGetIpcHandle
 can accept to represent the whole range. This extension solves that by allowing the caller to
 specify a VA range using a new descriptor passed via the ``pNext`` argument of
