@@ -99,8 +99,13 @@ jobs:
           /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
     - name: Determine if there is a diff between header files
       id: include-diff
+      # Keep --no-index. Other workflows can leave a .git in the shared runner
+      # workspace. Without --no-index, git then compares against that repo and
+      # always reports "no diff", so the PR comment steps below are skipped.
+      # Exit codes: 0 same, 1 differ, 128 error. The else branch covers 1 and 128,
+      # so an error still posts a comment.
       run: | #bash
-        if git diff --quiet --exit-code -- spec-head/include spec-base/include; then
+        if git diff --no-index --quiet --exit-code spec-base/include spec-head/include; then
             echo "diff=0" >> $GITHUB_OUTPUT
         else
             echo "diff=1" >> $GITHUB_OUTPUT
@@ -148,7 +153,7 @@ jobs:
     - name: Determine if there is a diff between RST files
       id: rst-diff
       run: | #bash
-        if git diff --quiet --exit-code -- spec-head/docs/source spec-base/docs/source; then
+        if git diff --no-index --quiet --exit-code spec-base/docs/source spec-head/docs/source; then
             echo "diff=0" >> $GITHUB_OUTPUT
         else
             echo "diff=1" >> $GITHUB_OUTPUT
@@ -191,7 +196,7 @@ jobs:
     - name: Determine if there is a diff between HTML files
       id: html-diff
       run: | #bash
-        if git diff --quiet --exit-code -- spec-head/docs/html spec-base/docs/html; then
+        if git diff --no-index --quiet --exit-code spec-base/docs/html spec-head/docs/html; then
             echo "diff=0" >> $GITHUB_OUTPUT
         else
             echo "diff=1" >> $GITHUB_OUTPUT
@@ -345,7 +350,7 @@ jobs:
     - name: Determine if there is a diff between loader source files
       id: loader-source-diff
       run: | #bash
-        if git diff --quiet --exit-code -- loader-head/source loader-base/source; then
+        if git diff --no-index --quiet --exit-code loader-base/source loader-head/source; then
             echo "diff=0" >> $GITHUB_OUTPUT
         else
             echo "diff=1" >> $GITHUB_OUTPUT
