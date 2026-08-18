@@ -16,8 +16,20 @@ version: "1.5"
 class: $s
 name: $s_init_flags_t
 etors:
-    - name: PLACEHOLDER
-      desc: "placeholder for future use"
+    - name: GPU_ONLY
+      desc: "Initialize sysman for GPU devices only"
+      value: $X_BIT(0)
+      version: "1.18"
+    - name: VPU_ONLY
+      desc: "Initialize sysman for VPU devices only"
+      value: $X_BIT(1)
+      version: "1.18"
+    - name: NO_DEVICES
+      desc: "Allows $sInit() to succeed when no devices are discovered.
+             Device discovery is deferred until the first call to $sDeviceGet(),
+             in case no devices can be discovered when $sInit() is called."
+      value: $X_BIT(2)
+      version: "1.18"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Initialize $OneApi System Resource Management (sysman)"
@@ -40,8 +52,7 @@ params:
     - type: $s_init_flags_t
       name: flags
       desc: |
-            [in] initialization flags.
-            currently unused, must be 0 (default).
+            [in] initialization flags. This should be 0 or a combination of $s_init_flags_t values.
       init: "0"
 returns:
     - $X_RESULT_ERROR_OUT_OF_HOST_MEMORY
