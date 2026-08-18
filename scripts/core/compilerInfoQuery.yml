@@ -1,0 +1,73 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero APIs for Compiler-Info Query"
+version: "1.18"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Compiler-info list selected by $xDeviceGetCompilerInfo"
+version: "1.18"
+name: $x_device_compiler_info_t
+etors:
+    - name: SPIRV_CAPABILITIES
+      value: "1"
+      desc: "Supported SPIR-V capabilities, as an array of uint32_t numeric capability identifiers"
+    - name: SPIRV_EXTENSIONS
+      value: "2"
+      desc: "Supported SPIR-V extensions, as an array of null-terminated names, each $X_MAX_EXTENSION_NAME bytes"
+    - name: COMPILER_OPTIONS
+      value: "3"
+      desc: "Supported compiler options, as a single null-terminated string of space-separated tokens"
+    - name: DRIVER_OPTIONS
+      value: "4"
+      desc: "Supported driver options, as a single null-terminated string of space-separated tokens"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Name and version entry returned for the OpenCL C compiler-info lists"
+version: "1.18"
+class: $xDevice
+name: $x_compiler_name_version_t
+members:
+    - type: uint32_t
+      name: version
+      desc: "[out] packed version of the entry"
+    - type: char
+      name: "name[$X_MAX_EXTENSION_NAME]"
+      desc: "[out] null-terminated name"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves compiler-specific information for the device, selected by an enumerated type."
+version: "1.18"
+class: $xDevice
+name: GetCompilerInfo
+details:
+    - "This query is scoped to compiler-specific data."
+    - "The paramName parameter selects data to be queried. Data layout is documented along with respective paramName enum entry."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: $x_device_compiler_info_t
+      name: paramName
+      desc: "[in] compiler-info to return"
+    - type: "size_t*"
+      name: pSize
+      init: "nullptr"
+      desc: |
+            [in,out] pointer to the size in bytes of the result.
+            If size is zero, then the driver shall update the value with the total size in bytes needed.
+            If size is less than the total size needed, then the driver shall update the value with the required size and shall not write to pData.
+    - type: "void*"
+      name: pData
+      init: "nullptr"
+      desc: |
+            [in,out][optional][range(0, *pSize)] pointer to the result buffer.
+            If pData is nullptr, then only the required size is returned in pSize.
