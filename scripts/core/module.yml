@@ -318,6 +318,21 @@ params:
       name: pModuleProperties
       desc: "[in,out] query result for module properties."
 --- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve the handle of the device on which the module was created."
+class: $xModule
+name: GetDeviceHandle
+version: "1.18"
+details:
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $x_module_handle_t
+      name: hModule
+      desc: "[in] handle of the module"
+    - type: "$x_device_handle_t*"
+      name: phDevice
+      desc: "[out] handle of the device the module was created for"
+--- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported kernel creation flags"
 class: $xKernel
@@ -731,6 +746,21 @@ params:
     - type: "char*"
       name: pName
       desc: "[in,out][optional] char pointer to kernel name."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieve the handle of the module from which the kernel was created."
+class: $xKernel
+name: GetModuleHandle
+version: "1.18"
+details:
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $x_kernel_handle_t
+      name: hKernel
+      desc: "[in] handle of the kernel"
+    - type: "$x_module_handle_t*"
+      name: phModule
+      desc: "[out] handle of the module the kernel was created from"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Kernel dispatch group count."
