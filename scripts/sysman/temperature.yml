@@ -36,6 +36,9 @@ etors:
     - name: VOLTAGE_REGULATOR
       desc: "The maximum temperature across all sensors in the Voltage Regulator"
       version: "1.10"
+    - name: COMPOSITE
+      desc: "The normalized temperature across the SOC, Memory and Voltage Regulators at which shutdown will occur"
+      version: "1.18"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
