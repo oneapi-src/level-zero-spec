@@ -1,0 +1,91 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Sysman Extension APIs for Device Health Status"
+version: "1.18"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Device Health Extension Name"
+version: "1.18"
+name: $S_DEVICE_HEALTH_EXT_NAME
+value: '"$S_extension_device_health"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Device Health Extension Version(s)"
+version: "1.18"
+name: $s_device_health_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+      version: "1.18"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Device health status"
+version: "1.18"
+class: $sDevice
+name: $s_device_health_status_ext_t
+details:
+    - "Device health represents a comprehensive assessment of a device's reliability and expected performance in upcoming operations."
+    - "The health indicator is stored in non-volatile memory (NVM) and persists across resets and firmware updates."
+etors:
+    - name: OK
+      value: "0"
+      desc: "Device is healthy with no known issues"
+      version: "1.18"
+    - name: WARNING
+      desc: "Device may have issues, diagnostics recommended"
+      version: "1.18"
+    - name: CRITICAL
+      desc: "Device should not be used until maintenance is performed"
+      version: "1.18"
+    - name: FAILED
+      desc: "Permanent non-recoverable failure; FRU replacement required"
+      version: "1.18"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get device health status"
+version: "1.18"
+class: $sDevice
+name: GetHealthStatusExt
+details:
+    - "This function retrieves the current health status of the device."
+    - "The health status is stored in non-volatile memory and persists across resets and updates."
+    - "The health indicator serves purely as telemetry without downstream functional effects."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: $s_device_health_status_ext_t*
+      name: pHealth
+      desc: "[out] Current health status of the device."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Set device health status"
+version: "1.18"
+class: $sDevice
+name: SetHealthStatusExt
+details:
+    - "This function sets the health status of the device."
+    - "The health status is persisted to non-volatile memory."    
+    - "Setting health status requires appropriate permissions."        
+    - "The application should not call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_device_handle_t
+      name: hDevice
+      desc: "[in] Sysman handle of the device."
+    - type: $s_device_health_status_ext_t
+      name: health
+      desc: "[in] New health status to be set for the device."
+returns:
+    - $X_RESULT_ERROR_INSUFFICIENT_PERMISSIONS:
+        - "User does not have permissions to set health status."
