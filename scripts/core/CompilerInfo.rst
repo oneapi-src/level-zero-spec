@@ -40,6 +40,6 @@ Example usage:
 
 .. parsed-literal::
     size_t size = 0;
-    ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES, &size, nullptr);
+    ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES, nullptr, &size, nullptr);
     std::vector<uint32_t> caps(size / sizeof(uint32_t));
-    ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES, &size, caps.data());
+    ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES, nullptr, &size, caps.data());

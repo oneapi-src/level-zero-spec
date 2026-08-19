@@ -58,6 +58,10 @@ params:
     - type: $x_device_compiler_info_t
       name: paramName
       desc: "[in] compiler-info to return"
+    - type: "const void*"
+      name: pNext
+      init: "nullptr"
+      desc: "[in][optional] additional extensions passed to the function"
     - type: "size_t*"
       name: pSize
       init: "nullptr"
@@ -71,3 +75,6 @@ params:
       desc: |
             [in,out][optional][range(0, *pSize)] pointer to the result buffer.
             If pData is nullptr, then only the required size is returned in pSize.
+returns:
+    - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
+        - "an extension passed via pNext is not supported"
