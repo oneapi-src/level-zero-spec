@@ -1,0 +1,1345 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Module &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/apis/module';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Module Build Log" href="module_build_log.html" />
+    <link rel="prev" title="Mem" href="mem.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/apis/module.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Module</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-functions">Module Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulecreate">zeModuleCreate</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv414zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"><code class="docutils literal notranslate"><span class="pre">zeModuleCreate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemoduledestroy">zeModuleDestroy</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415zeModuleDestroy18ze_module_handle_t"><code class="docutils literal notranslate"><span class="pre">zeModuleDestroy()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemoduledynamiclink">zeModuleDynamicLink</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t"><code class="docutils literal notranslate"><span class="pre">zeModuleDynamicLink()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulegetnativebinary">zeModuleGetNativeBinary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t"><code class="docutils literal notranslate"><span class="pre">zeModuleGetNativeBinary()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulegetglobalpointer">zeModuleGetGlobalPointer</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv"><code class="docutils literal notranslate"><span class="pre">zeModuleGetGlobalPointer()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulegetkernelnames">zeModuleGetKernelNames</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc"><code class="docutils literal notranslate"><span class="pre">zeModuleGetKernelNames()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulegetproperties">zeModuleGetProperties</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t"><code class="docutils literal notranslate"><span class="pre">zeModuleGetProperties()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulegetfunctionpointer">zeModuleGetFunctionPointer</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv"><code class="docutils literal notranslate"><span class="pre">zeModuleGetFunctionPointer()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulegetdevicehandle">zeModuleGetDeviceHandle</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t"><code class="docutils literal notranslate"><span class="pre">zeModuleGetDeviceHandle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-enums">Module Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-format-t">ze_module_format_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418ze_module_format_t"><code class="docutils literal notranslate"><span class="pre">ze_module_format_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18ze_module_format_t25ZE_MODULE_FORMAT_IL_SPIRVE"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_FORMAT_IL_SPIRV</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18ze_module_format_t23ZE_MODULE_FORMAT_NATIVEE"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_FORMAT_NATIVE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18ze_module_format_t29ZE_MODULE_FORMAT_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_FORMAT_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-property-flags-t">ze_module_property_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425ze_module_property_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_module_property_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_module_property_flag_t31ZE_MODULE_PROPERTY_FLAG_IMPORTSE"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_PROPERTY_FLAG_IMPORTS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_module_property_flag_t36ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-structures">Module Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-constants-t">ze_module_constants_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421ze_module_constants_t"><code class="docutils literal notranslate"><span class="pre">ze_module_constants_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21ze_module_constants_t12numConstantsE"><code class="docutils literal notranslate"><span class="pre">numConstants</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21ze_module_constants_t12pConstantIdsE"><code class="docutils literal notranslate"><span class="pre">pConstantIds</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21ze_module_constants_t15pConstantValuesE"><code class="docutils literal notranslate"><span class="pre">pConstantValues</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-desc-t">ze_module_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416ze_module_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_module_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16ze_module_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16ze_module_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16ze_module_desc_t6formatE"><code class="docutils literal notranslate"><span class="pre">format</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16ze_module_desc_t9inputSizeE"><code class="docutils literal notranslate"><span class="pre">inputSize</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16ze_module_desc_t12pInputModuleE"><code class="docutils literal notranslate"><span class="pre">pInputModule</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16ze_module_desc_t11pBuildFlagsE"><code class="docutils literal notranslate"><span class="pre">pBuildFlags</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16ze_module_desc_t10pConstantsE"><code class="docutils literal notranslate"><span class="pre">pConstants</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-properties-t">ze_module_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422ze_module_properties_t"><code class="docutils literal notranslate"><span class="pre">ze_module_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_module_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_module_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_module_properties_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module">
+<h1>Module<a class="headerlink" href="#module" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="module-functions">
+<h2>Module Functions<a class="headerlink" href="#module-functions" title="Link to this heading">#</a></h2>
+<section id="zemodulecreate">
+<span id="id1"></span><h3>zeModuleCreate<a class="headerlink" href="#zemodulecreate" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t">
+<span id="_CPPv314zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="_CPPv214zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="zeModuleCreate__ze_context_handle_t.ze_device_handle_t.ze_module_desc_tCP.ze_module_handle_tP.ze_module_build_log_handle_tP"></span><span class="target" id="ze__api_8h_1a371b2babaa7f4fd5d0b4a98b8c28918c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416ze_module_desc_t" title="ze_module_desc_t"><span class="n"><span class="pre">ze_module_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModule</span></span>, <span class="n"><span class="pre">ze_module_build_log_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phBuildLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates a module on the context. </p>
+<p><ul class="simple">
+<li><p>Compiles the module for execution on the device.</p></li>
+<li><p>The application must only use the module for the device, or its sub-devices, which was provided during creation.</p></li>
+<li><p>The module can be copied to other devices and contexts within the same driver instance by using <a class="reference internal" href="#ze__api_8h_1ad2572c6c65b8298c70922249ab9c2bc4"><span class="std std-ref">zeModuleGetNativeBinary</span></a>.</p></li>
+<li><p>A build log can optionally be returned to the caller. The caller is responsible for destroying build log using <a class="reference internal" href="module_build_log.html#ze__api_8h_1a0d0a5fd06cd8c14e220958fb6d74ec4b"><span class="std std-ref">zeModuleBuildLogDestroy</span></a>.</p></li>
+<li><p>The module descriptor constants are only supported for SPIR-V specialization constants.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of the context object </p></li>
+<li><p><strong>hDevice</strong> – [in] handle of the device </p></li>
+<li><p><strong>desc</strong> – [in] pointer to module descriptor </p></li>
+<li><p><strong>phModule</strong> – [out] pointer to handle of module object created </p></li>
+<li><p><strong>phBuildLog</strong> – [out][optional] pointer to handle of module’s build log. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc-&gt;pInputModule</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#ze__api_8h_1ada45cd6433ed2ff26cb9b349fe6f5b3aa1026718e5e40480f40cbf6a3aa8885c5"><span class="std std-ref"><span class="pre">ZE_MODULE_FORMAT_NATIVE</span></span></a> <span class="pre">&lt;</span> <span class="pre">desc-&gt;format</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767abd44c7f0e529e6d4c761342c71d84b29"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NATIVE_BINARY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a743b17f38be52772c5f67c4101638193"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SIZE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">==</span> <span class="pre">desc-&gt;inputSize</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af30f06607805340fd0ba34bf379e06a1"><span class="std std-ref">ZE_RESULT_ERROR_MODULE_BUILD_FAILURE</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemoduledestroy">
+<span id="id2"></span><h3>zeModuleDestroy<a class="headerlink" href="#zemoduledestroy" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415zeModuleDestroy18ze_module_handle_t">
+<span id="_CPPv315zeModuleDestroy18ze_module_handle_t"></span><span id="_CPPv215zeModuleDestroy18ze_module_handle_t"></span><span id="zeModuleDestroy__ze_module_handle_t"></span><span class="target" id="ze__api_8h_1a67e7aa89f5ac4e6d3e4a344095057d09"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeModuleDestroy18ze_module_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Destroys module. </p>
+<p><ul class="simple">
+<li><p>The application must destroy all kernel handles created from the module before destroying the module itself.</p></li>
+<li><p>The application must ensure the device is not currently referencing the module before it is deleted.</p></li>
+<li><p>The implementation of this function may immediately free all Host and Device allocations associated with this module.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same module handle.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hModule</strong> – [in][release] handle of the module </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af964b27d146102948a48f0ebabe3aee3"><span class="std std-ref">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemoduledynamiclink">
+<span id="id3"></span><h3>zeModuleDynamicLink<a class="headerlink" href="#zemoduledynamiclink" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t">
+<span id="_CPPv319zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="_CPPv219zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="zeModuleDynamicLink__uint32_t.ze_module_handle_tP.ze_module_build_log_handle_tP"></span><span class="target" id="ze__api_8h_1a0d1f9dff8d8d28f49d6ecd154be75106"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleDynamicLink</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numModules</span></span>, <span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModules</span></span>, <span class="n"><span class="pre">ze_module_build_log_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phLinkLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Dynamically link modules together that share import/export linkage dependencies. </p>
+<p><ul class="simple">
+<li><p>Modules support SPIR-V import and export linkage types for functions and global variables. See the SPIR-V specification for linkage details.</p></li>
+<li><p>Modules can have both import and export linkage.</p></li>
+<li><p>Modules that do not have any imports or exports do not need to be linked.</p></li>
+<li><p>All module import requirements must be satisfied via linking before kernel objects can be created from them.</p></li>
+<li><p>Modules cannot be partially linked. Unsatisfiable import dependencies in the set of modules passed to <a class="reference internal" href="#ze__api_8h_1a0d1f9dff8d8d28f49d6ecd154be75106"><span class="std std-ref">zeModuleDynamicLink</span></a> will result in <a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767afe31380b5defee816c90bb55c98691d2"><span class="std std-ref">ZE_RESULT_ERROR_MODULE_LINK_FAILURE</span></a> being returned.</p></li>
+<li><p>Modules will only be linked once. A module can be used in multiple link calls if it has exports but its imports will not be re-linked.</p></li>
+<li><p>Ambiguous dependencies, where multiple modules satisfy the same import dependencies for a module, are not allowed.</p></li>
+<li><p>The application must ensure the modules being linked were created on the same context.</p></li>
+<li><p>The application may call this function from simultaneous threads as long as the import modules being linked are not the same.</p></li>
+<li><p>ModuleGetNativeBinary can be called on any module regardless of whether it is linked or not.</p></li>
+<li><p>A link log can optionally be returned to the caller. The caller is responsible for destroying the link log using <a class="reference internal" href="module_build_log.html#ze__api_8h_1a0d0a5fd06cd8c14e220958fb6d74ec4b"><span class="std std-ref">zeModuleBuildLogDestroy</span></a>.</p></li>
+<li><p>The link log may contain a list of the unresolved import dependencies if present.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numModules</strong> – [in] number of modules to be linked pointed to by phModules. </p></li>
+<li><p><strong>phModules</strong> – [in][range(0, numModules)] pointer to an array of modules to dynamically link together. </p></li>
+<li><p><strong>phLinkLog</strong> – [out][optional] pointer to handle of dynamic link log. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phModules</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767afe31380b5defee816c90bb55c98691d2"><span class="std std-ref">ZE_RESULT_ERROR_MODULE_LINK_FAILURE</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemodulegetnativebinary">
+<span id="id4"></span><h3>zeModuleGetNativeBinary<a class="headerlink" href="#zemodulegetnativebinary" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t">
+<span id="_CPPv323zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t"></span><span id="_CPPv223zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t"></span><span id="zeModuleGetNativeBinary__ze_module_handle_t.sP.uint8_tP"></span><span class="target" id="ze__api_8h_1ad2572c6c65b8298c70922249ab9c2bc4"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetNativeBinary</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pModuleNativeBinary</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieve native binary from Module. </p>
+<p><ul class="simple">
+<li><p>The native binary output can be cached to disk and new modules can be later constructed from the cached copy.</p></li>
+<li><p>The native binary will retain debugging information that is associated with a module.</p></li>
+<li><p>The caller can pass nullptr for pModuleNativeBinary when querying only for size.</p></li>
+<li><p>The implementation will copy the native binary into a buffer supplied by the caller.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hModule</strong> – [in] handle of the module </p></li>
+<li><p><strong>pSize</strong> – [in,out] size of native binary in bytes. </p></li>
+<li><p><strong>pModuleNativeBinary</strong> – [in,out][optional] byte pointer to native binary </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pSize</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemodulegetglobalpointer">
+<span id="id5"></span><h3>zeModuleGetGlobalPointer<a class="headerlink" href="#zemodulegetglobalpointer" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv">
+<span id="_CPPv324zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv"></span><span id="_CPPv224zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv"></span><span id="zeModuleGetGlobalPointer__ze_module_handle_t.cCP.sP.voidPP"></span><span class="target" id="ze__api_8h_1a04011354917ef36d5de8ebd3f0206743"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetGlobalPointer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pGlobalName</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieve global variable pointer from Module. </p>
+<p><ul class="simple">
+<li><p>For modules created from SPIR-V the interpretation of <code class="docutils literal notranslate"><span class="pre">pGlobalName</span></code> is described in the SPIR-V programming guide.</p></li>
+<li><p>For native modules not created from SPIR-V the interpretation of <code class="docutils literal notranslate"><span class="pre">pGlobalName</span></code> is implementation defined.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hModule</strong> – [in] handle of the module </p></li>
+<li><p><strong>pGlobalName</strong> – [in] name of global variable in module </p></li>
+<li><p><strong>pSize</strong> – [in,out][optional] size of global variable </p></li>
+<li><p><strong>pptr</strong> – [in,out][optional] device visible pointer </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pGlobalName</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a4652cc11937213249d632e90dc96ca8a"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_GLOBAL_NAME</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemodulegetkernelnames">
+<span id="id6"></span><h3>zeModuleGetKernelNames<a class="headerlink" href="#zemodulegetkernelnames" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc">
+<span id="_CPPv322zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc"></span><span id="_CPPv222zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc"></span><span id="zeModuleGetKernelNames__ze_module_handle_t.uint32_tP.cCPP"></span><span class="target" id="ze__api_8h_1a5f976c050abb6b6a8aefcd33f9b031f9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetKernelNames</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNames</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieve all kernel names in the module. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hModule</strong> – [in] handle of the module </p></li>
+<li><p><strong>pCount</strong> – [in,out] pointer to the number of names. if count is zero, then the driver shall update the value with the total number of names available. if count is greater than the number of names available, then the driver shall update the value with the correct number of names available. </p></li>
+<li><p><strong>pNames</strong> – [in,out][optional][range(0, *pCount)] array of names of functions. if count is less than the number of names available, then driver shall only retrieve that number of names. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemodulegetproperties">
+<span id="id7"></span><h3>zeModuleGetProperties<a class="headerlink" href="#zemodulegetproperties" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t">
+<span id="_CPPv321zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t"></span><span id="_CPPv221zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t"></span><span id="zeModuleGetProperties__ze_module_handle_t.ze_module_properties_tP"></span><span class="target" id="ze__api_8h_1ac6b2eaf29059f94ffb21e4ba36f6359a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <a class="reference internal" href="#_CPPv422ze_module_properties_t" title="ze_module_properties_t"><span class="n"><span class="pre">ze_module_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pModuleProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieve module properties. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hModule</strong> – [in] handle of the module </p></li>
+<li><p><strong>pModuleProperties</strong> – [in,out] query result for module properties. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pModuleProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemodulegetfunctionpointer">
+<span id="id8"></span><h3>zeModuleGetFunctionPointer<a class="headerlink" href="#zemodulegetfunctionpointer" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv">
+<span id="_CPPv326zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv"></span><span id="_CPPv226zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv"></span><span id="zeModuleGetFunctionPointer__ze_module_handle_t.cCP.voidPP"></span><span class="target" id="ze__api_8h_1a85c3ba7e9f0d0d58f57001ebc40019a5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetFunctionPointer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFunctionName</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pfnFunction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieve a function pointer from a module by name. </p>
+<p><ul class="simple">
+<li><p>The function pointer is unique for the device on which the module was created.</p></li>
+<li><p>The function pointer is no longer valid if module is destroyed.</p></li>
+<li><p>The function name should only refer to callable functions within the module.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hModule</strong> – [in] handle of the module </p></li>
+<li><p><strong>pFunctionName</strong> – [in] Name of function to retrieve function pointer for. </p></li>
+<li><p><strong>pfnFunction</strong> – [out] pointer to function. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pFunctionName</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pfnFunction</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a6754599861ab1ec4e93e174840e6ec44"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_FUNCTION_NAME</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zemodulegetdevicehandle">
+<span id="id9"></span><h3>zeModuleGetDeviceHandle<a class="headerlink" href="#zemodulegetdevicehandle" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.18</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t">
+<span id="_CPPv323zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t"></span><span id="_CPPv223zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t"></span><span id="zeModuleGetDeviceHandle__ze_module_handle_t.ze_device_handle_tP"></span><span class="target" id="ze__api_8h_1afdb5539c1dbe80143825e8a15bbde141"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetDeviceHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieve the handle of the device on which the module was created. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hModule</strong> – [in] handle of the module </p></li>
+<li><p><strong>phDevice</strong> – [out] handle of the device the module was created for </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hModule</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phDevice</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-enums">
+<h2>Module Enums<a class="headerlink" href="#module-enums" title="Link to this heading">#</a></h2>
+<section id="ze-module-format-t">
+<span id="id10"></span><h3>ze_module_format_t<a class="headerlink" href="#ze-module-format-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv418ze_module_format_t">
+<span id="_CPPv318ze_module_format_t"></span><span id="_CPPv218ze_module_format_t"></span><span class="target" id="ze__api_8h_1ada45cd6433ed2ff26cb9b349fe6f5b3a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_format_t</span></span></span><a class="headerlink" href="#_CPPv418ze_module_format_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported module creation input formats. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18ze_module_format_t25ZE_MODULE_FORMAT_IL_SPIRVE">
+<span id="_CPPv3N18ze_module_format_t25ZE_MODULE_FORMAT_IL_SPIRVE"></span><span id="_CPPv2N18ze_module_format_t25ZE_MODULE_FORMAT_IL_SPIRVE"></span><span class="target" id="ze__api_8h_1ada45cd6433ed2ff26cb9b349fe6f5b3aaab5a058deca061a4b9ae7c147fb07de8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_FORMAT_IL_SPIRV</span></span></span><a class="headerlink" href="#_CPPv4N18ze_module_format_t25ZE_MODULE_FORMAT_IL_SPIRVE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Format is SPIRV IL format. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18ze_module_format_t23ZE_MODULE_FORMAT_NATIVEE">
+<span id="_CPPv3N18ze_module_format_t23ZE_MODULE_FORMAT_NATIVEE"></span><span id="_CPPv2N18ze_module_format_t23ZE_MODULE_FORMAT_NATIVEE"></span><span class="target" id="ze__api_8h_1ada45cd6433ed2ff26cb9b349fe6f5b3aa1026718e5e40480f40cbf6a3aa8885c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_FORMAT_NATIVE</span></span></span><a class="headerlink" href="#_CPPv4N18ze_module_format_t23ZE_MODULE_FORMAT_NATIVEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Format is device native format. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18ze_module_format_t29ZE_MODULE_FORMAT_FORCE_UINT32E">
+<span id="_CPPv3N18ze_module_format_t29ZE_MODULE_FORMAT_FORCE_UINT32E"></span><span id="_CPPv2N18ze_module_format_t29ZE_MODULE_FORMAT_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1ada45cd6433ed2ff26cb9b349fe6f5b3aada48368aefa415acb93296286c3392f2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_FORMAT_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N18ze_module_format_t29ZE_MODULE_FORMAT_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_MODULE_FORMAT_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-module-property-flags-t">
+<span id="id11"></span><h3>ze_module_property_flags_t<a class="headerlink" href="#ze-module-property-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv425ze_module_property_flag_t">
+<span id="_CPPv325ze_module_property_flag_t"></span><span id="_CPPv225ze_module_property_flag_t"></span><span class="target" id="ze__api_8h_1a60e368622444eeb9aee94699daa51bd0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_property_flag_t</span></span></span><a class="headerlink" href="#_CPPv425ze_module_property_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_module_property_flag_t31ZE_MODULE_PROPERTY_FLAG_IMPORTSE">
+<span id="_CPPv3N25ze_module_property_flag_t31ZE_MODULE_PROPERTY_FLAG_IMPORTSE"></span><span id="_CPPv2N25ze_module_property_flag_t31ZE_MODULE_PROPERTY_FLAG_IMPORTSE"></span><span class="target" id="ze__api_8h_1a60e368622444eeb9aee94699daa51bd0a4679c202c8347a71aa5950cd1d623c46"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_PROPERTY_FLAG_IMPORTS</span></span></span><a class="headerlink" href="#_CPPv4N25ze_module_property_flag_t31ZE_MODULE_PROPERTY_FLAG_IMPORTSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Module has imports (i.e. imported global variables and/or kernels). See <a class="reference internal" href="#ze__api_8h_1a0d1f9dff8d8d28f49d6ecd154be75106"><span class="std std-ref">zeModuleDynamicLink</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_module_property_flag_t36ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N25ze_module_property_flag_t36ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N25ze_module_property_flag_t36ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a60e368622444eeb9aee94699daa51bd0acd36f197b9980a846ea0fe948559adb6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N25ze_module_property_flag_t36ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_MODULE_PROPERTY_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-structures">
+<h2>Module Structures<a class="headerlink" href="#module-structures" title="Link to this heading">#</a></h2>
+<section id="ze-module-constants-t">
+<span id="id12"></span><h3>ze_module_constants_t<a class="headerlink" href="#ze-module-constants-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421ze_module_constants_t">
+<span id="_CPPv321ze_module_constants_t"></span><span id="_CPPv221ze_module_constants_t"></span><span id="ze_module_constants_t"></span><span class="target" id="structze__module__constants__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_constants_t</span></span></span><a class="headerlink" href="#_CPPv421ze_module_constants_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Specialization constants - User defined constants. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21ze_module_constants_t12numConstantsE">
+<span id="_CPPv3N21ze_module_constants_t12numConstantsE"></span><span id="_CPPv2N21ze_module_constants_t12numConstantsE"></span><span id="ze_module_constants_t::numConstants__uint32_t"></span><span class="target" id="structze__module__constants__t_1a1c1003cc57975eab163c4031005657ad"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">numConstants</span></span></span><a class="headerlink" href="#_CPPv4N21ze_module_constants_t12numConstantsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] Number of specialization constants. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21ze_module_constants_t12pConstantIdsE">
+<span id="_CPPv3N21ze_module_constants_t12pConstantIdsE"></span><span id="_CPPv2N21ze_module_constants_t12pConstantIdsE"></span><span id="ze_module_constants_t::pConstantIds__uint32_tCP"></span><span class="target" id="structze__module__constants__t_1a42aa53ccfb6e2b39d940f9ee7ab35522"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pConstantIds</span></span></span><a class="headerlink" href="#_CPPv4N21ze_module_constants_t12pConstantIdsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][range(0, numConstants)] Array of IDs that is sized to numConstants. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21ze_module_constants_t15pConstantValuesE">
+<span id="_CPPv3N21ze_module_constants_t15pConstantValuesE"></span><span id="_CPPv2N21ze_module_constants_t15pConstantValuesE"></span><span id="ze_module_constants_t::pConstantValues__voidCPP"></span><span class="target" id="structze__module__constants__t_1a1e1e9c0439fa25d7e7ca704cf21bca2b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pConstantValues</span></span></span><a class="headerlink" href="#_CPPv4N21ze_module_constants_t15pConstantValuesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][range(0, numConstants)] Array of pointers to values that is sized to numConstants. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-module-desc-t">
+<span id="id13"></span><h3>ze_module_desc_t<a class="headerlink" href="#ze-module-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv416ze_module_desc_t">
+<span id="_CPPv316ze_module_desc_t"></span><span id="_CPPv216ze_module_desc_t"></span><span id="ze_module_desc_t"></span><span class="target" id="structze__module__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_desc_t</span></span></span><a class="headerlink" href="#_CPPv416ze_module_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Module descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16ze_module_desc_t5stypeE">
+<span id="_CPPv3N16ze_module_desc_t5stypeE"></span><span id="_CPPv2N16ze_module_desc_t5stypeE"></span><span id="ze_module_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__module__desc__t_1a75c43b71eaa1ec3c2939233d685a9567"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N16ze_module_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16ze_module_desc_t5pNextE">
+<span id="_CPPv3N16ze_module_desc_t5pNextE"></span><span id="_CPPv2N16ze_module_desc_t5pNextE"></span><span id="ze_module_desc_t::pNext__voidCP"></span><span class="target" id="structze__module__desc__t_1a25643d383a114090e233b76ed62dd297"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N16ze_module_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16ze_module_desc_t6formatE">
+<span id="_CPPv3N16ze_module_desc_t6formatE"></span><span id="_CPPv2N16ze_module_desc_t6formatE"></span><span id="ze_module_desc_t::format__ze_module_format_t"></span><span class="target" id="structze__module__desc__t_1aae30ab04a810d5d5cfab5f166f4aa6c4"></span><a class="reference internal" href="#_CPPv418ze_module_format_t" title="ze_module_format_t"><span class="n"><span class="pre">ze_module_format_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">format</span></span></span><a class="headerlink" href="#_CPPv4N16ze_module_desc_t6formatE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] Module format passed in with pInputModule </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16ze_module_desc_t9inputSizeE">
+<span id="_CPPv3N16ze_module_desc_t9inputSizeE"></span><span id="_CPPv2N16ze_module_desc_t9inputSizeE"></span><span id="ze_module_desc_t::inputSize__s"></span><span class="target" id="structze__module__desc__t_1a80a465a3b63fcb0724567d3620231dfa"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inputSize</span></span></span><a class="headerlink" href="#_CPPv4N16ze_module_desc_t9inputSizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] size of input IL or ISA from pInputModule. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16ze_module_desc_t12pInputModuleE">
+<span id="_CPPv3N16ze_module_desc_t12pInputModuleE"></span><span id="_CPPv2N16ze_module_desc_t12pInputModuleE"></span><span id="ze_module_desc_t::pInputModule__uint8_tCP"></span><span class="target" id="structze__module__desc__t_1ad3d355d46876e223a171e892661b3621"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pInputModule</span></span></span><a class="headerlink" href="#_CPPv4N16ze_module_desc_t12pInputModuleE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] pointer to IL or ISA </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16ze_module_desc_t11pBuildFlagsE">
+<span id="_CPPv3N16ze_module_desc_t11pBuildFlagsE"></span><span id="_CPPv2N16ze_module_desc_t11pBuildFlagsE"></span><span id="ze_module_desc_t::pBuildFlags__cCP"></span><span class="target" id="structze__module__desc__t_1a45175fc09dda2a36f23dbc2d9e45bb98"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pBuildFlags</span></span></span><a class="headerlink" href="#_CPPv4N16ze_module_desc_t11pBuildFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] string containing one or more (comma-separated) compiler flags. If unsupported, flag is ignored with a warning.<ul class="simple">
+<li><p>”-ze-opt-disable”<ul>
+<li><p>Disable optimizations</p></li>
+</ul>
+</p></li>
+<li><p>”-ze-opt-level”<ul>
+<li><p>Specifies optimization level for compiler. Levels are implementation specific.<ul>
+<li><p>0 is no optimizations (equivalent to -ze-opt-disable)</p></li>
+<li><p>1 is optimize minimally (may be the same as 2)</p></li>
+<li><p>2 is optimize more (default)</p></li>
+</ul>
+</p></li>
+</ul>
+</p></li>
+<li><p>”-ze-opt-greater-than-4GB-buffer-required”<ul>
+<li><p>Use 64-bit offset calculations for buffers.</p></li>
+</ul>
+</p></li>
+<li><p>”-ze-opt-large-register-file”<ul>
+<li><p>Increase number of registers available to threads.</p></li>
+</ul>
+</p></li>
+<li><p>”-ze-opt-has-buffer-offset-arg”<ul>
+<li><p>Extend stateless to stateful optimization to more cases with the use of additional offset (e.g. 64-bit pointer to binding table with 32-bit offset).</p></li>
+</ul>
+</p></li>
+<li><p>”-g”<ul>
+<li><p>Include debugging information. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16ze_module_desc_t10pConstantsE">
+<span id="_CPPv3N16ze_module_desc_t10pConstantsE"></span><span id="_CPPv2N16ze_module_desc_t10pConstantsE"></span><span id="ze_module_desc_t::pConstants__ze_module_constants_tCP"></span><span class="target" id="structze__module__desc__t_1a9c38db3bc25da916f51115e89de50e53"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv421ze_module_constants_t" title="ze_module_constants_t"><span class="n"><span class="pre">ze_module_constants_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pConstants</span></span></span><a class="headerlink" href="#_CPPv4N16ze_module_desc_t10pConstantsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] pointer to specialization constants. Valid only for SPIR-V input. This must be set to nullptr if no specialization constants are provided. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-module-properties-t">
+<span id="id14"></span><h3>ze_module_properties_t<a class="headerlink" href="#ze-module-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422ze_module_properties_t">
+<span id="_CPPv322ze_module_properties_t"></span><span id="_CPPv222ze_module_properties_t"></span><span id="ze_module_properties_t"></span><span class="target" id="structze__module__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_properties_t</span></span></span><a class="headerlink" href="#_CPPv422ze_module_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Module properties. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_module_properties_t5stypeE">
+<span id="_CPPv3N22ze_module_properties_t5stypeE"></span><span id="_CPPv2N22ze_module_properties_t5stypeE"></span><span id="ze_module_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__module__properties__t_1aa2185fb83fea6b9905332e0c0a5d873a"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N22ze_module_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_module_properties_t5pNextE">
+<span id="_CPPv3N22ze_module_properties_t5pNextE"></span><span id="_CPPv2N22ze_module_properties_t5pNextE"></span><span id="ze_module_properties_t::pNext__voidP"></span><span class="target" id="structze__module__properties__t_1a08cb8630d90fc362b2b6f3b8306a6137"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N22ze_module_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_module_properties_t5flagsE">
+<span id="_CPPv3N22ze_module_properties_t5flagsE"></span><span id="_CPPv2N22ze_module_properties_t5flagsE"></span><span id="ze_module_properties_t::flags__ze_module_property_flags_t"></span><span class="target" id="structze__module__properties__t_1a4e110d0f5e75876fb634f3514fc4e1ec"></span><span class="n"><span class="pre">ze_module_property_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N22ze_module_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 0 (none) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a60e368622444eeb9aee94699daa51bd0"><span class="std std-ref">ze_module_property_flag_t</span></a></p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mem.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Mem</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="module_build_log.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Module Build Log</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zeModule</div><ul class="ctoc-list"><li><a href="module.html#zemodulecreate">&hellip;Create</a></li><li><a href="module.html#zemoduledestroy">&hellip;Destroy</a></li><li><a href="module.html#zemoduledynamiclink">&hellip;DynamicLink</a></li><li><a href="module.html#zemodulegetnativebinary">&hellip;GetNativeBinary</a></li><li><a href="module.html#zemodulegetglobalpointer">&hellip;GetGlobalPointer</a></li><li><a href="module.html#zemodulegetkernelnames">&hellip;GetKernelNames</a></li><li><a href="module.html#zemodulegetproperties">&hellip;GetProperties</a></li><li><a href="module.html#zemodulegetfunctionpointer">&hellip;GetFunctionPointer</a></li><li><a href="module.html#zemodulegetdevicehandle">&hellip;GetDeviceHandle</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="module.html#ze-module-format-t">ze_module_format_t</a></li><li><a href="module.html#ze-module-property-flags-t">ze_module_property_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="module.html#ze-module-constants-t">ze_module_constants_t</a></li><li><a href="module.html#ze-module-desc-t">ze_module_desc_t</a></li><li><a href="module.html#ze-module-properties-t">ze_module_properties_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

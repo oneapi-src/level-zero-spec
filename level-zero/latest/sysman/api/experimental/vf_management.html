@@ -1,0 +1,1581 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>VF Management - Experimental &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/experimental/vf_management';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Data Types - Experimental" href="data_types.html" />
+    <link rel="prev" title="Firmware - Experimental" href="firmware.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Experimental</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/experimental/vf_management.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>VF Management - Experimental</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vf-management-experimental-functions">VF Management - Experimental Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementgetvfpropertiesexp">zesVFManagementGetVFPropertiesExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementGetVFPropertiesExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementgetvfmemoryutilizationexp">zesVFManagementGetVFMemoryUtilizationExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv440zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementGetVFMemoryUtilizationExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementgetvfengineutilizationexp">zesVFManagementGetVFEngineUtilizationExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv440zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementGetVFEngineUtilizationExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementsetvftelemetrymodeexp">zesVFManagementSetVFTelemetryModeExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementSetVFTelemetryModeExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementsetvftelemetrysamplingintervalexp">zesVFManagementSetVFTelemetrySamplingIntervalExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv448zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementSetVFTelemetrySamplingIntervalExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementgetvfcapabilitiesexp">zesVFManagementGetVFCapabilitiesExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementGetVFCapabilitiesExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementgetvfmemoryutilizationexp2">zesVFManagementGetVFMemoryUtilizationExp2</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv441zesVFManagementGetVFMemoryUtilizationExp215zes_vf_handle_tP8uint32_tP22zes_vf_util_mem_exp2_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementGetVFMemoryUtilizationExp2()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementgetvfengineutilizationexp2">zesVFManagementGetVFEngineUtilizationExp2</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv441zesVFManagementGetVFEngineUtilizationExp215zes_vf_handle_tP8uint32_tP25zes_vf_util_engine_exp2_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementGetVFEngineUtilizationExp2()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesvfmanagementgetvfcapabilitiesexp2">zesVFManagementGetVFCapabilitiesExp2</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436zesVFManagementGetVFCapabilitiesExp215zes_vf_handle_tP26zes_vf_exp2_capabilities_t"><code class="docutils literal notranslate"><span class="pre">zesVFManagementGetVFCapabilitiesExp2()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vf-management-experimental-enums">VF Management - Experimental Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-info-mem-type-exp-flags-t">zes_vf_info_mem_type_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zes_vf_info_mem_type_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_info_mem_type_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEME"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEM</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICEE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t42ZES_VF_INFO_MEM_TYPE_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-info-util-exp-flags-t">zes_vf_info_util_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zes_vf_info_util_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_info_util_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_vf_info_util_exp_flag_t35ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONEE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPUE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPU</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_GPUE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_GPU</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_vf_info_util_exp_flag_t37ZES_VF_INFO_UTIL_EXP_FLAG_INFO_ENGINEE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_ENGINE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vf-management-experimental-structures">VF Management - Experimental Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-exp-properties-t">zes_vf_exp_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zes_vf_exp_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_exp_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_vf_exp_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_vf_exp_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_vf_exp_properties_t7addressE"><code class="docutils literal notranslate"><span class="pre">address</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_vf_exp_properties_t4uuidE"><code class="docutils literal notranslate"><span class="pre">uuid</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_vf_exp_properties_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-util-mem-exp-t">zes_vf_util_mem_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zes_vf_util_mem_exp_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_util_mem_exp_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_vf_util_mem_exp_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_vf_util_mem_exp_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_vf_util_mem_exp_t12memTypeFlagsE"><code class="docutils literal notranslate"><span class="pre">memTypeFlags</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_vf_util_mem_exp_t4freeE"><code class="docutils literal notranslate"><span class="pre">free</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_vf_util_mem_exp_t4sizeE"><code class="docutils literal notranslate"><span class="pre">size</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_vf_util_mem_exp_t9timestampE"><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-util-engine-exp-t">zes_vf_util_engine_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zes_vf_util_engine_exp_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_util_engine_exp_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_vf_util_engine_exp_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_vf_util_engine_exp_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_vf_util_engine_exp_t4typeE"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_vf_util_engine_exp_t18activeCounterValueE"><code class="docutils literal notranslate"><span class="pre">activeCounterValue</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_vf_util_engine_exp_t20samplingCounterValueE"><code class="docutils literal notranslate"><span class="pre">samplingCounterValue</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_vf_util_engine_exp_t9timestampE"><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-exp-capabilities-t">zes_vf_exp_capabilities_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zes_vf_exp_capabilities_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_exp_capabilities_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_exp_capabilities_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_exp_capabilities_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_exp_capabilities_t7addressE"><code class="docutils literal notranslate"><span class="pre">address</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_exp_capabilities_t15vfDeviceMemSizeE"><code class="docutils literal notranslate"><span class="pre">vfDeviceMemSize</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_exp_capabilities_t4vfIDE"><code class="docutils literal notranslate"><span class="pre">vfID</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-exp2-capabilities-t">zes_vf_exp2_capabilities_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zes_vf_exp2_capabilities_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_exp2_capabilities_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zes_vf_exp2_capabilities_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zes_vf_exp2_capabilities_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zes_vf_exp2_capabilities_t7addressE"><code class="docutils literal notranslate"><span class="pre">address</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zes_vf_exp2_capabilities_t15vfDeviceMemSizeE"><code class="docutils literal notranslate"><span class="pre">vfDeviceMemSize</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zes_vf_exp2_capabilities_t4vfIDE"><code class="docutils literal notranslate"><span class="pre">vfID</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-util-mem-exp2-t">zes_vf_util_mem_exp2_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zes_vf_util_mem_exp2_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_util_mem_exp2_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_vf_util_mem_exp2_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_vf_util_mem_exp2_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_vf_util_mem_exp2_t13vfMemLocationE"><code class="docutils literal notranslate"><span class="pre">vfMemLocation</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_vf_util_mem_exp2_t13vfMemUtilizedE"><code class="docutils literal notranslate"><span class="pre">vfMemUtilized</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-util-engine-exp2-t">zes_vf_util_engine_exp2_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zes_vf_util_engine_exp2_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_util_engine_exp2_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_util_engine_exp2_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_util_engine_exp2_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_util_engine_exp2_t12vfEngineTypeE"><code class="docutils literal notranslate"><span class="pre">vfEngineType</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_util_engine_exp2_t18activeCounterValueE"><code class="docutils literal notranslate"><span class="pre">activeCounterValue</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_vf_util_engine_exp2_t20samplingCounterValueE"><code class="docutils literal notranslate"><span class="pre">samplingCounterValue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="vf-management-experimental">
+<h1>VF Management - Experimental<a class="headerlink" href="#vf-management-experimental" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="vf-management-experimental-functions">
+<h2>VF Management - Experimental Functions<a class="headerlink" href="#vf-management-experimental-functions" title="Link to this heading">#</a></h2>
+<section id="zesvfmanagementgetvfpropertiesexp">
+<span id="id1"></span><h3>zesVFManagementGetVFPropertiesExp<a class="headerlink" href="#zesvfmanagementgetvfpropertiesexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv433zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t">
+<span id="_CPPv333zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t"></span><span id="_CPPv233zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t"></span><span id="zesVFManagementGetVFPropertiesExp__zes_vf_handle_t.zes_vf_exp_properties_tP"></span><span class="target" id="zes__api_8h_1a945a8eef4b644ef13d9c3f89e3345cbb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#_CPPv423zes_vf_exp_properties_t" title="zes_vf_exp_properties_t"><span class="n"><span class="pre">zes_vf_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get virtual function management properties. </p>
+<p><ul class="simple">
+<li><p>[DEPRECATED] No longer supported. Use <a class="reference internal" href="#zes__api_8h_1ace866999b90430c8b1324c3ce8c6e0cb"><span class="std std-ref">zesVFManagementGetVFCapabilitiesExp</span></a>.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the VF component. </p></li>
+<li><p><strong>pProperties</strong> – [in,out] Will contain VF properties. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementgetvfmemoryutilizationexp">
+<span id="id2"></span><h3>zesVFManagementGetVFMemoryUtilizationExp<a class="headerlink" href="#zesvfmanagementgetvfmemoryutilizationexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv440zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t">
+<span id="_CPPv340zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t"></span><span id="_CPPv240zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t"></span><span id="zesVFManagementGetVFMemoryUtilizationExp__zes_vf_handle_t.uint32_tP.zes_vf_util_mem_exp_tP"></span><span class="target" id="zes__api_8h_1acb60a1937bc82ca2420152a6b10be134"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFMemoryUtilizationExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#_CPPv421zes_vf_util_mem_exp_t" title="zes_vf_util_mem_exp_t"><span class="n"><span class="pre">zes_vf_util_mem_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMemUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv440zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get memory activity stats for each available memory types associated with Virtual Function (VF) </p>
+<p><ul class="simple">
+<li><p>[DEPRECATED] No longer supported. Use <a class="reference internal" href="#zes__api_8h_1aa346563626194f0fbcb9811b6a1d00ad"><span class="std std-ref">zesVFManagementGetVFMemoryUtilizationExp2</span></a>.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
+<li><p><strong>pCount</strong> – [in,out] Pointer to the number of VF memory stats descriptors.<ul>
+<li><p>if count is zero, the driver shall update the value with the total number of memory stats available.</p></li>
+<li><p>if count is greater than the total number of memory stats available, the driver shall update the value with the correct number of memory stats available.</p></li>
+<li><p>The count returned is the sum of number of VF instances currently available and the PF instance. </p></li>
+</ul>
+</p></li>
+<li><p><strong>pMemUtil</strong> – [in,out][optional][range(0, *pCount)] array of memory group activity counters.<ul>
+<li><p>if count is less than the total number of memory stats available, then driver shall only retrieve that number of stats.</p></li>
+<li><p>the implementation shall populate the vector pCount-1 number of VF memory stats. </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementgetvfengineutilizationexp">
+<span id="id3"></span><h3>zesVFManagementGetVFEngineUtilizationExp<a class="headerlink" href="#zesvfmanagementgetvfengineutilizationexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv440zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t">
+<span id="_CPPv340zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t"></span><span id="_CPPv240zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t"></span><span id="zesVFManagementGetVFEngineUtilizationExp__zes_vf_handle_t.uint32_tP.zes_vf_util_engine_exp_tP"></span><span class="target" id="zes__api_8h_1aeb19589991ba8917632e77f3599fdf85"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFEngineUtilizationExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#_CPPv424zes_vf_util_engine_exp_t" title="zes_vf_util_engine_exp_t"><span class="n"><span class="pre">zes_vf_util_engine_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pEngineUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv440zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get engine activity stats for each available engine group associated with Virtual Function (VF) </p>
+<p><ul class="simple">
+<li><p>[DEPRECATED] No longer supported. Use <a class="reference internal" href="#zes__api_8h_1a73e75b21007403f0b4900029f784101a"><span class="std std-ref">zesVFManagementGetVFEngineUtilizationExp2</span></a>.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
+<li><p><strong>pCount</strong> – [in,out] Pointer to the number of VF engine stats descriptors.<ul>
+<li><p>if count is zero, the driver shall update the value with the total number of engine stats available.</p></li>
+<li><p>if count is greater than the total number of engine stats available, the driver shall update the value with the correct number of engine stats available.</p></li>
+<li><p>The count returned is the sum of number of VF instances currently available and the PF instance. </p></li>
+</ul>
+</p></li>
+<li><p><strong>pEngineUtil</strong> – [in,out][optional][range(0, *pCount)] array of engine group activity counters.<ul>
+<li><p>if count is less than the total number of engine stats available, then driver shall only retrieve that number of stats.</p></li>
+<li><p>the implementation shall populate the vector pCount-1 number of VF engine stats. </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementsetvftelemetrymodeexp">
+<span id="id4"></span><h3>zesVFManagementSetVFTelemetryModeExp<a class="headerlink" href="#zesvfmanagementsetvftelemetrymodeexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv436zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t">
+<span id="_CPPv336zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t"></span><span id="_CPPv236zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t"></span><span id="zesVFManagementSetVFTelemetryModeExp__zes_vf_handle_t.zes_vf_info_util_exp_flags_t.ze_bool_t"></span><span class="target" id="zes__api_8h_1aaac3fc6bba3446c1d0c809b8ca840c97"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementSetVFTelemetryModeExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Configure utilization telemetry enabled or disabled associated with Virtual Function (VF) </p>
+<p><ul class="simple">
+<li><p>[DEPRECATED] No longer supported.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
+<li><p><strong>flags</strong> – [in] utilization flags to enable or disable. May be 0 or a valid combination of <a class="reference internal" href="#zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p></li>
+<li><p><strong>enable</strong> – [in] Enable utilization telemetry. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0xf</span> <span class="pre">&lt;</span> <span class="pre">flags</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementsetvftelemetrysamplingintervalexp">
+<span id="id5"></span><h3>zesVFManagementSetVFTelemetrySamplingIntervalExp<a class="headerlink" href="#zesvfmanagementsetvftelemetrysamplingintervalexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv448zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t">
+<span id="_CPPv348zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t"></span><span id="_CPPv248zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t"></span><span id="zesVFManagementSetVFTelemetrySamplingIntervalExp__zes_vf_handle_t.zes_vf_info_util_exp_flags_t.uint64_t"></span><span class="target" id="zes__api_8h_1ab12f59049a6f940cef12ec0985093956"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementSetVFTelemetrySamplingIntervalExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flag</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">samplingInterval</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv448zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Set sampling interval to monitor for a particular utilization telemetry associated with Virtual Function (VF) </p>
+<p><ul class="simple">
+<li><p>[DEPRECATED] No longer supported.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
+<li><p><strong>flag</strong> – [in] utilization flags to set sampling interval. May be 0 or a valid combination of <a class="reference internal" href="#zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p></li>
+<li><p><strong>samplingInterval</strong> – [in] Sampling interval value. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0xf</span> <span class="pre">&lt;</span> <span class="pre">flag</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementgetvfcapabilitiesexp">
+<span id="id6"></span><h3>zesVFManagementGetVFCapabilitiesExp<a class="headerlink" href="#zesvfmanagementgetvfcapabilitiesexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv435zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t">
+<span id="_CPPv335zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t"></span><span id="_CPPv235zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t"></span><span id="zesVFManagementGetVFCapabilitiesExp__zes_vf_handle_t.zes_vf_exp_capabilities_tP"></span><span class="target" id="zes__api_8h_1ace866999b90430c8b1324c3ce8c6e0cb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFCapabilitiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#_CPPv425zes_vf_exp_capabilities_t" title="zes_vf_exp_capabilities_t"><span class="n"><span class="pre">zes_vf_exp_capabilities_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCapability</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get virtual function management capabilities. </p>
+<p><ul class="simple">
+<li><p>[DEPRECATED] No longer supported. Use <a class="reference internal" href="#zes__api_8h_1ac97473b4f7ea409381ac26ea2134d7b3"><span class="std std-ref">zesVFManagementGetVFCapabilitiesExp2</span></a>.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the VF component. </p></li>
+<li><p><strong>pCapability</strong> – [in,out] Will contain VF capability. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCapability</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementgetvfmemoryutilizationexp2">
+<span id="id7"></span><h3>zesVFManagementGetVFMemoryUtilizationExp2<a class="headerlink" href="#zesvfmanagementgetvfmemoryutilizationexp2" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv441zesVFManagementGetVFMemoryUtilizationExp215zes_vf_handle_tP8uint32_tP22zes_vf_util_mem_exp2_t">
+<span id="_CPPv341zesVFManagementGetVFMemoryUtilizationExp215zes_vf_handle_tP8uint32_tP22zes_vf_util_mem_exp2_t"></span><span id="_CPPv241zesVFManagementGetVFMemoryUtilizationExp215zes_vf_handle_tP8uint32_tP22zes_vf_util_mem_exp2_t"></span><span id="zesVFManagementGetVFMemoryUtilizationExp2__zes_vf_handle_t.uint32_tP.zes_vf_util_mem_exp2_tP"></span><span class="target" id="zes__api_8h_1aa346563626194f0fbcb9811b6a1d00ad"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFMemoryUtilizationExp2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#_CPPv422zes_vf_util_mem_exp2_t" title="zes_vf_util_mem_exp2_t"><span class="n"><span class="pre">zes_vf_util_mem_exp2_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMemUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv441zesVFManagementGetVFMemoryUtilizationExp215zes_vf_handle_tP8uint32_tP22zes_vf_util_mem_exp2_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get memory activity stats for each available memory types associated with Virtual Function (VF) </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>If VF is disable/pause/not active, utilization will give zero value.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
+<li><p><strong>pCount</strong> – [in,out] Pointer to the number of VF memory stats descriptors.<ul>
+<li><p>if count is zero, the driver shall update the value with the total number of memory stats available.</p></li>
+<li><p>if count is greater than the total number of memory stats available, the driver shall update the value with the correct number of memory stats available. </p></li>
+</ul>
+</p></li>
+<li><p><strong>pMemUtil</strong> – [in,out][optional][range(0, *pCount)] array of memory group activity counters.<ul>
+<li><p>if count is less than the total number of memory stats available, then driver shall only retrieve that number of stats.</p></li>
+<li><p>the implementation shall populate the vector pCount-1 number of VF memory stats. </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementgetvfengineutilizationexp2">
+<span id="id8"></span><h3>zesVFManagementGetVFEngineUtilizationExp2<a class="headerlink" href="#zesvfmanagementgetvfengineutilizationexp2" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv441zesVFManagementGetVFEngineUtilizationExp215zes_vf_handle_tP8uint32_tP25zes_vf_util_engine_exp2_t">
+<span id="_CPPv341zesVFManagementGetVFEngineUtilizationExp215zes_vf_handle_tP8uint32_tP25zes_vf_util_engine_exp2_t"></span><span id="_CPPv241zesVFManagementGetVFEngineUtilizationExp215zes_vf_handle_tP8uint32_tP25zes_vf_util_engine_exp2_t"></span><span id="zesVFManagementGetVFEngineUtilizationExp2__zes_vf_handle_t.uint32_tP.zes_vf_util_engine_exp2_tP"></span><span class="target" id="zes__api_8h_1a73e75b21007403f0b4900029f784101a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFEngineUtilizationExp2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#_CPPv425zes_vf_util_engine_exp2_t" title="zes_vf_util_engine_exp2_t"><span class="n"><span class="pre">zes_vf_util_engine_exp2_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pEngineUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv441zesVFManagementGetVFEngineUtilizationExp215zes_vf_handle_tP8uint32_tP25zes_vf_util_engine_exp2_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get engine activity stats for each available engine group associated with Virtual Function (VF) </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>If VF is disable/pause/not active, utilization will give zero value.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
+<li><p><strong>pCount</strong> – [in,out] Pointer to the number of VF engine stats descriptors.<ul>
+<li><p>if count is zero, the driver shall update the value with the total number of engine stats available.</p></li>
+<li><p>if count is greater than the total number of engine stats available, the driver shall update the value with the correct number of engine stats available. </p></li>
+</ul>
+</p></li>
+<li><p><strong>pEngineUtil</strong> – [in,out][optional][range(0, *pCount)] array of engine group activity counters.<ul>
+<li><p>if count is less than the total number of engine stats available, then driver shall only retrieve that number of stats.</p></li>
+<li><p>the implementation shall populate the vector pCount-1 number of VF engine stats. </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesvfmanagementgetvfcapabilitiesexp2">
+<span id="id9"></span><h3>zesVFManagementGetVFCapabilitiesExp2<a class="headerlink" href="#zesvfmanagementgetvfcapabilitiesexp2" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv436zesVFManagementGetVFCapabilitiesExp215zes_vf_handle_tP26zes_vf_exp2_capabilities_t">
+<span id="_CPPv336zesVFManagementGetVFCapabilitiesExp215zes_vf_handle_tP26zes_vf_exp2_capabilities_t"></span><span id="_CPPv236zesVFManagementGetVFCapabilitiesExp215zes_vf_handle_tP26zes_vf_exp2_capabilities_t"></span><span id="zesVFManagementGetVFCapabilitiesExp2__zes_vf_handle_t.zes_vf_exp2_capabilities_tP"></span><span class="target" id="zes__api_8h_1ac97473b4f7ea409381ac26ea2134d7b3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFCapabilitiesExp2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#_CPPv426zes_vf_exp2_capabilities_t" title="zes_vf_exp2_capabilities_t"><span class="n"><span class="pre">zes_vf_exp2_capabilities_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCapability</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zesVFManagementGetVFCapabilitiesExp215zes_vf_handle_tP26zes_vf_exp2_capabilities_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get virtual function management capabilities. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVFhandle</strong> – [in] Sysman handle for the VF component. </p></li>
+<li><p><strong>pCapability</strong> – [in,out] Will contain VF capability. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVFhandle</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCapability</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="vf-management-experimental-enums">
+<h2>VF Management - Experimental Enums<a class="headerlink" href="#vf-management-experimental-enums" title="Link to this heading">#</a></h2>
+<section id="zes-vf-info-mem-type-exp-flags-t">
+<span id="id10"></span><h3>zes_vf_info_mem_type_exp_flags_t<a class="headerlink" href="#zes-vf-info-mem-type-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431zes_vf_info_mem_type_exp_flag_t">
+<span id="_CPPv331zes_vf_info_mem_type_exp_flag_t"></span><span id="_CPPv231zes_vf_info_mem_type_exp_flag_t"></span><span class="target" id="zes__api_8h_1af0da0a2013464faf38302cd084f143f3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_info_mem_type_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv431zes_vf_info_mem_type_exp_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEME">
+<span id="_CPPv3N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEME"></span><span id="_CPPv2N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEME"></span><span class="target" id="zes__api_8h_1af0da0a2013464faf38302cd084f143f3ad991344ea99d16badb5a97de855ef4a1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEM</span></span></span><a class="headerlink" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEME" title="Link to this definition">#</a><br /></dt>
+<dd><p>System memory. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICEE">
+<span id="_CPPv3N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICEE"></span><span id="_CPPv2N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICEE"></span><span class="target" id="zes__api_8h_1af0da0a2013464faf38302cd084f143f3a8fe64bcba15c7d296a8964b49df18443"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICE</span></span></span><a class="headerlink" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device local memory. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_vf_info_mem_type_exp_flag_t42ZES_VF_INFO_MEM_TYPE_EXP_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N31zes_vf_info_mem_type_exp_flag_t42ZES_VF_INFO_MEM_TYPE_EXP_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N31zes_vf_info_mem_type_exp_flag_t42ZES_VF_INFO_MEM_TYPE_EXP_FLAG_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1af0da0a2013464faf38302cd084f143f3aa5d249e7d9152b1e86aa1da5ed66251d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t42ZES_VF_INFO_MEM_TYPE_EXP_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_VF_INFO_MEM_TYPE_EXP_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-vf-info-util-exp-flags-t">
+<span id="id11"></span><h3>zes_vf_info_util_exp_flags_t<a class="headerlink" href="#zes-vf-info-util-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv427zes_vf_info_util_exp_flag_t">
+<span id="_CPPv327zes_vf_info_util_exp_flag_t"></span><span id="_CPPv227zes_vf_info_util_exp_flag_t"></span><span class="target" id="zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_info_util_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv427zes_vf_info_util_exp_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_vf_info_util_exp_flag_t35ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONEE">
+<span id="_CPPv3N27zes_vf_info_util_exp_flag_t35ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONEE"></span><span id="_CPPv2N27zes_vf_info_util_exp_flag_t35ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONEE"></span><span class="target" id="zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8a58877cfbe664bb053333a14c5c4471ea"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONE</span></span></span><a class="headerlink" href="#_CPPv4N27zes_vf_info_util_exp_flag_t35ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>No info associated with virtual function. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPUE">
+<span id="_CPPv3N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPUE"></span><span id="_CPPv2N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPUE"></span><span class="target" id="zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8a4a76e57d19974a276ea76a5c689f6056"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPU</span></span></span><a class="headerlink" href="#_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPUE" title="Link to this definition">#</a><br /></dt>
+<dd><p>System memory utilization associated with virtual function. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_GPUE">
+<span id="_CPPv3N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_GPUE"></span><span id="_CPPv2N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_GPUE"></span><span class="target" id="zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8a3fe4f9988ef7e2ab07e5c6de77e0a5a3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_GPU</span></span></span><a class="headerlink" href="#_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_GPUE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device memory utilization associated with virtual function. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_vf_info_util_exp_flag_t37ZES_VF_INFO_UTIL_EXP_FLAG_INFO_ENGINEE">
+<span id="_CPPv3N27zes_vf_info_util_exp_flag_t37ZES_VF_INFO_UTIL_EXP_FLAG_INFO_ENGINEE"></span><span id="_CPPv2N27zes_vf_info_util_exp_flag_t37ZES_VF_INFO_UTIL_EXP_FLAG_INFO_ENGINEE"></span><span class="target" id="zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8ac2be7a8f0ef57b4a68c1f91334a66eef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_ENGINE</span></span></span><a class="headerlink" href="#_CPPv4N27zes_vf_info_util_exp_flag_t37ZES_VF_INFO_UTIL_EXP_FLAG_INFO_ENGINEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Engine utilization associated with virtual function. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8a151d217efdef792f52e57a53fd5ba5d2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_VF_INFO_UTIL_EXP_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="vf-management-experimental-structures">
+<h2>VF Management - Experimental Structures<a class="headerlink" href="#vf-management-experimental-structures" title="Link to this heading">#</a></h2>
+<section id="zes-vf-exp-properties-t">
+<span id="id12"></span><h3>zes_vf_exp_properties_t<a class="headerlink" href="#zes-vf-exp-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423zes_vf_exp_properties_t">
+<span id="_CPPv323zes_vf_exp_properties_t"></span><span id="_CPPv223zes_vf_exp_properties_t"></span><span id="zes_vf_exp_properties_t"></span><span class="target" id="structzes__vf__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv423zes_vf_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Virtual function management properties (deprecated) </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_vf_exp_properties_t5stypeE">
+<span id="_CPPv3N23zes_vf_exp_properties_t5stypeE"></span><span id="_CPPv2N23zes_vf_exp_properties_t5stypeE"></span><span id="zes_vf_exp_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__vf__exp__properties__t_1ab3ccd9b084d625bd554b2be57f88425d"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N23zes_vf_exp_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_vf_exp_properties_t5pNextE">
+<span id="_CPPv3N23zes_vf_exp_properties_t5pNextE"></span><span id="_CPPv2N23zes_vf_exp_properties_t5pNextE"></span><span id="zes_vf_exp_properties_t::pNext__voidP"></span><span class="target" id="structzes__vf__exp__properties__t_1a40c65fbfe87580d252305d81bc7ced45"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N23zes_vf_exp_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_vf_exp_properties_t7addressE">
+<span id="_CPPv3N23zes_vf_exp_properties_t7addressE"></span><span id="_CPPv2N23zes_vf_exp_properties_t7addressE"></span><span id="zes_vf_exp_properties_t::address__zes_pci_address_t"></span><span class="target" id="structzes__vf__exp__properties__t_1ab7d0ad72dedd3338e4c06a0e3ee0e446"></span><a class="reference internal" href="../apis/device-2.html#_CPPv417zes_pci_address_t" title="zes_pci_address_t"><span class="n"><span class="pre">zes_pci_address_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#_CPPv4N23zes_vf_exp_properties_t7addressE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Virtual function BDF address </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_vf_exp_properties_t4uuidE">
+<span id="_CPPv3N23zes_vf_exp_properties_t4uuidE"></span><span id="_CPPv2N23zes_vf_exp_properties_t4uuidE"></span><span id="zes_vf_exp_properties_t::uuid__zes_uuid_t"></span><span class="target" id="structzes__vf__exp__properties__t_1aaca1141807b0a649659ce86854a3ed05"></span><a class="reference internal" href="../apis/device-2.html#_CPPv410zes_uuid_t" title="zes_uuid_t"><span class="n"><span class="pre">zes_uuid_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uuid</span></span></span><a class="headerlink" href="#_CPPv4N23zes_vf_exp_properties_t4uuidE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] universal unique identifier of the device </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_vf_exp_properties_t5flagsE">
+<span id="_CPPv3N23zes_vf_exp_properties_t5flagsE"></span><span id="_CPPv2N23zes_vf_exp_properties_t5flagsE"></span><span id="zes_vf_exp_properties_t::flags__zes_vf_info_util_exp_flags_t"></span><span class="target" id="structzes__vf__exp__properties__t_1a044d9d83148246357d6f09141e914555"></span><span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N23zes_vf_exp_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] utilization flags available. May be 0 or a valid combination of <a class="reference internal" href="#zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-vf-util-mem-exp-t">
+<span id="id13"></span><h3>zes_vf_util_mem_exp_t<a class="headerlink" href="#zes-vf-util-mem-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421zes_vf_util_mem_exp_t">
+<span id="_CPPv321zes_vf_util_mem_exp_t"></span><span id="_CPPv221zes_vf_util_mem_exp_t"></span><span id="zes_vf_util_mem_exp_t"></span><span class="target" id="structzes__vf__util__mem__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_util_mem_exp_t</span></span></span><a class="headerlink" href="#_CPPv421zes_vf_util_mem_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Provides memory utilization values for a virtual function (deprecated) </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_vf_util_mem_exp_t5stypeE">
+<span id="_CPPv3N21zes_vf_util_mem_exp_t5stypeE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t5stypeE"></span><span id="zes_vf_util_mem_exp_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__vf__util__mem__exp__t_1a29114377ed12beb1601027291b9e9aeb"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_vf_util_mem_exp_t5pNextE">
+<span id="_CPPv3N21zes_vf_util_mem_exp_t5pNextE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t5pNextE"></span><span id="zes_vf_util_mem_exp_t::pNext__voidCP"></span><span class="target" id="structzes__vf__util__mem__exp__t_1a54b51e4b2a4a24fc79a85ebb67b98830"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_vf_util_mem_exp_t12memTypeFlagsE">
+<span id="_CPPv3N21zes_vf_util_mem_exp_t12memTypeFlagsE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t12memTypeFlagsE"></span><span id="zes_vf_util_mem_exp_t::memTypeFlags__zes_vf_info_mem_type_exp_flags_t"></span><span class="target" id="structzes__vf__util__mem__exp__t_1ad41afe52270f215b16ef7fc6eb251bc5"></span><span class="n"><span class="pre">zes_vf_info_mem_type_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memTypeFlags</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t12memTypeFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Memory type flags. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_vf_util_mem_exp_t4freeE">
+<span id="_CPPv3N21zes_vf_util_mem_exp_t4freeE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t4freeE"></span><span id="zes_vf_util_mem_exp_t::free__uint64_t"></span><span class="target" id="structzes__vf__util__mem__exp__t_1a630677e64c083561497e27d51c5dad0b"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">free</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t4freeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Free memory size in bytes. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_vf_util_mem_exp_t4sizeE">
+<span id="_CPPv3N21zes_vf_util_mem_exp_t4sizeE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t4sizeE"></span><span id="zes_vf_util_mem_exp_t::size__uint64_t"></span><span class="target" id="structzes__vf__util__mem__exp__t_1a94760051ef06a0254b0c1f0ff046f70b"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t4sizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Total allocatable memory in bytes. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_vf_util_mem_exp_t9timestampE">
+<span id="_CPPv3N21zes_vf_util_mem_exp_t9timestampE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t9timestampE"></span><span id="zes_vf_util_mem_exp_t::timestamp__uint64_t"></span><span class="target" id="structzes__vf__util__mem__exp__t_1a3f048f2afa3ee1eb3a861e4d3df305e7"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timestamp</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t9timestampE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Wall clock time from VF when value was sampled. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-vf-util-engine-exp-t">
+<span id="id14"></span><h3>zes_vf_util_engine_exp_t<a class="headerlink" href="#zes-vf-util-engine-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv424zes_vf_util_engine_exp_t">
+<span id="_CPPv324zes_vf_util_engine_exp_t"></span><span id="_CPPv224zes_vf_util_engine_exp_t"></span><span id="zes_vf_util_engine_exp_t"></span><span class="target" id="structzes__vf__util__engine__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_util_engine_exp_t</span></span></span><a class="headerlink" href="#_CPPv424zes_vf_util_engine_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Provides engine utilization values for a virtual function (deprecated) </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_vf_util_engine_exp_t5stypeE">
+<span id="_CPPv3N24zes_vf_util_engine_exp_t5stypeE"></span><span id="_CPPv2N24zes_vf_util_engine_exp_t5stypeE"></span><span id="zes_vf_util_engine_exp_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__vf__util__engine__exp__t_1ae5a40c26d29eb5600f61c21818244ab3"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N24zes_vf_util_engine_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_vf_util_engine_exp_t5pNextE">
+<span id="_CPPv3N24zes_vf_util_engine_exp_t5pNextE"></span><span id="_CPPv2N24zes_vf_util_engine_exp_t5pNextE"></span><span id="zes_vf_util_engine_exp_t::pNext__voidCP"></span><span class="target" id="structzes__vf__util__engine__exp__t_1a0264afd2feebcd2905b6ef5db7a60c5a"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N24zes_vf_util_engine_exp_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_vf_util_engine_exp_t4typeE">
+<span id="_CPPv3N24zes_vf_util_engine_exp_t4typeE"></span><span id="_CPPv2N24zes_vf_util_engine_exp_t4typeE"></span><span id="zes_vf_util_engine_exp_t::type__zes_engine_group_t"></span><span class="target" id="structzes__vf__util__engine__exp__t_1a60ab435759536aaf08c4203da7e724e3"></span><a class="reference internal" href="../apis/engine.html#_CPPv418zes_engine_group_t" title="zes_engine_group_t"><span class="n"><span class="pre">zes_engine_group_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N24zes_vf_util_engine_exp_t4typeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The engine group. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_vf_util_engine_exp_t18activeCounterValueE">
+<span id="_CPPv3N24zes_vf_util_engine_exp_t18activeCounterValueE"></span><span id="_CPPv2N24zes_vf_util_engine_exp_t18activeCounterValueE"></span><span id="zes_vf_util_engine_exp_t::activeCounterValue__uint64_t"></span><span class="target" id="structzes__vf__util__engine__exp__t_1a27484666d217b654c0b9878424fb5dde"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">activeCounterValue</span></span></span><a class="headerlink" href="#_CPPv4N24zes_vf_util_engine_exp_t18activeCounterValueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Represents active counter. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_vf_util_engine_exp_t20samplingCounterValueE">
+<span id="_CPPv3N24zes_vf_util_engine_exp_t20samplingCounterValueE"></span><span id="_CPPv2N24zes_vf_util_engine_exp_t20samplingCounterValueE"></span><span id="zes_vf_util_engine_exp_t::samplingCounterValue__uint64_t"></span><span class="target" id="structzes__vf__util__engine__exp__t_1aeba7621f89ec1fc2234be5beeffd1351"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingCounterValue</span></span></span><a class="headerlink" href="#_CPPv4N24zes_vf_util_engine_exp_t20samplingCounterValueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Represents counter value when activeCounterValue was sampled. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_vf_util_engine_exp_t9timestampE">
+<span id="_CPPv3N24zes_vf_util_engine_exp_t9timestampE"></span><span id="_CPPv2N24zes_vf_util_engine_exp_t9timestampE"></span><span id="zes_vf_util_engine_exp_t::timestamp__uint64_t"></span><span class="target" id="structzes__vf__util__engine__exp__t_1a5cc115bd217e38c940075dbb28695468"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timestamp</span></span></span><a class="headerlink" href="#_CPPv4N24zes_vf_util_engine_exp_t9timestampE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Wall clock time when the activeCounterValue was sampled. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-vf-exp-capabilities-t">
+<span id="id15"></span><h3>zes_vf_exp_capabilities_t<a class="headerlink" href="#zes-vf-exp-capabilities-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv425zes_vf_exp_capabilities_t">
+<span id="_CPPv325zes_vf_exp_capabilities_t"></span><span id="_CPPv225zes_vf_exp_capabilities_t"></span><span id="zes_vf_exp_capabilities_t"></span><span class="target" id="structzes__vf__exp__capabilities__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_exp_capabilities_t</span></span></span><a class="headerlink" href="#_CPPv425zes_vf_exp_capabilities_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Virtual function management capabilities (deprecated) </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_exp_capabilities_t5stypeE">
+<span id="_CPPv3N25zes_vf_exp_capabilities_t5stypeE"></span><span id="_CPPv2N25zes_vf_exp_capabilities_t5stypeE"></span><span id="zes_vf_exp_capabilities_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__vf__exp__capabilities__t_1a1605fab8dd7ade5218391c01422e5bf3"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_exp_capabilities_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_exp_capabilities_t5pNextE">
+<span id="_CPPv3N25zes_vf_exp_capabilities_t5pNextE"></span><span id="_CPPv2N25zes_vf_exp_capabilities_t5pNextE"></span><span id="zes_vf_exp_capabilities_t::pNext__voidP"></span><span class="target" id="structzes__vf__exp__capabilities__t_1a80886292d77c9b78872b6783fe894e20"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_exp_capabilities_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_exp_capabilities_t7addressE">
+<span id="_CPPv3N25zes_vf_exp_capabilities_t7addressE"></span><span id="_CPPv2N25zes_vf_exp_capabilities_t7addressE"></span><span id="zes_vf_exp_capabilities_t::address__zes_pci_address_t"></span><span class="target" id="structzes__vf__exp__capabilities__t_1a8c6583aa969d7c7534d15d6a9aaf4901"></span><a class="reference internal" href="../apis/device-2.html#_CPPv417zes_pci_address_t" title="zes_pci_address_t"><span class="n"><span class="pre">zes_pci_address_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_exp_capabilities_t7addressE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Virtual function BDF address </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_exp_capabilities_t15vfDeviceMemSizeE">
+<span id="_CPPv3N25zes_vf_exp_capabilities_t15vfDeviceMemSizeE"></span><span id="_CPPv2N25zes_vf_exp_capabilities_t15vfDeviceMemSizeE"></span><span id="zes_vf_exp_capabilities_t::vfDeviceMemSize__uint32_t"></span><span class="target" id="structzes__vf__exp__capabilities__t_1a5006de545717160f273a81868e982c14"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vfDeviceMemSize</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_exp_capabilities_t15vfDeviceMemSizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Virtual function memory size in kilo bytes </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_exp_capabilities_t4vfIDE">
+<span id="_CPPv3N25zes_vf_exp_capabilities_t4vfIDE"></span><span id="_CPPv2N25zes_vf_exp_capabilities_t4vfIDE"></span><span id="zes_vf_exp_capabilities_t::vfID__uint32_t"></span><span class="target" id="structzes__vf__exp__capabilities__t_1a6d6c4808f4f2ea47922e785d7da13e62"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vfID</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_exp_capabilities_t4vfIDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Virtual Function ID </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-vf-exp2-capabilities-t">
+<span id="id16"></span><h3>zes_vf_exp2_capabilities_t<a class="headerlink" href="#zes-vf-exp2-capabilities-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv426zes_vf_exp2_capabilities_t">
+<span id="_CPPv326zes_vf_exp2_capabilities_t"></span><span id="_CPPv226zes_vf_exp2_capabilities_t"></span><span id="zes_vf_exp2_capabilities_t"></span><span class="target" id="structzes__vf__exp2__capabilities__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_exp2_capabilities_t</span></span></span><a class="headerlink" href="#_CPPv426zes_vf_exp2_capabilities_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Virtual function management capabilities. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zes_vf_exp2_capabilities_t5stypeE">
+<span id="_CPPv3N26zes_vf_exp2_capabilities_t5stypeE"></span><span id="_CPPv2N26zes_vf_exp2_capabilities_t5stypeE"></span><span id="zes_vf_exp2_capabilities_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__vf__exp2__capabilities__t_1a7d6eb09b91ad4ef030d561e9500b65ba"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N26zes_vf_exp2_capabilities_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zes_vf_exp2_capabilities_t5pNextE">
+<span id="_CPPv3N26zes_vf_exp2_capabilities_t5pNextE"></span><span id="_CPPv2N26zes_vf_exp2_capabilities_t5pNextE"></span><span id="zes_vf_exp2_capabilities_t::pNext__voidP"></span><span class="target" id="structzes__vf__exp2__capabilities__t_1a7cd2263521dbce7fce3be36537dbb9f5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N26zes_vf_exp2_capabilities_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zes_vf_exp2_capabilities_t7addressE">
+<span id="_CPPv3N26zes_vf_exp2_capabilities_t7addressE"></span><span id="_CPPv2N26zes_vf_exp2_capabilities_t7addressE"></span><span id="zes_vf_exp2_capabilities_t::address__zes_pci_address_t"></span><span class="target" id="structzes__vf__exp2__capabilities__t_1a40fc238d3ce8d147e5910909ca0dbd68"></span><a class="reference internal" href="../apis/device-2.html#_CPPv417zes_pci_address_t" title="zes_pci_address_t"><span class="n"><span class="pre">zes_pci_address_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#_CPPv4N26zes_vf_exp2_capabilities_t7addressE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Virtual function BDF address </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zes_vf_exp2_capabilities_t15vfDeviceMemSizeE">
+<span id="_CPPv3N26zes_vf_exp2_capabilities_t15vfDeviceMemSizeE"></span><span id="_CPPv2N26zes_vf_exp2_capabilities_t15vfDeviceMemSizeE"></span><span id="zes_vf_exp2_capabilities_t::vfDeviceMemSize__uint64_t"></span><span class="target" id="structzes__vf__exp2__capabilities__t_1a488dfbc8e05ad99a8a17bc8ba1e9cb1f"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vfDeviceMemSize</span></span></span><a class="headerlink" href="#_CPPv4N26zes_vf_exp2_capabilities_t15vfDeviceMemSizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Virtual function memory size in bytes </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zes_vf_exp2_capabilities_t4vfIDE">
+<span id="_CPPv3N26zes_vf_exp2_capabilities_t4vfIDE"></span><span id="_CPPv2N26zes_vf_exp2_capabilities_t4vfIDE"></span><span id="zes_vf_exp2_capabilities_t::vfID__uint32_t"></span><span class="target" id="structzes__vf__exp2__capabilities__t_1a058a18d2b0695ce2cf39faa39c80a53a"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vfID</span></span></span><a class="headerlink" href="#_CPPv4N26zes_vf_exp2_capabilities_t4vfIDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Virtual Function ID </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-vf-util-mem-exp2-t">
+<span id="id17"></span><h3>zes_vf_util_mem_exp2_t<a class="headerlink" href="#zes-vf-util-mem-exp2-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422zes_vf_util_mem_exp2_t">
+<span id="_CPPv322zes_vf_util_mem_exp2_t"></span><span id="_CPPv222zes_vf_util_mem_exp2_t"></span><span id="zes_vf_util_mem_exp2_t"></span><span class="target" id="structzes__vf__util__mem__exp2__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_util_mem_exp2_t</span></span></span><a class="headerlink" href="#_CPPv422zes_vf_util_mem_exp2_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Provides memory utilization values for a virtual function. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_vf_util_mem_exp2_t5stypeE">
+<span id="_CPPv3N22zes_vf_util_mem_exp2_t5stypeE"></span><span id="_CPPv2N22zes_vf_util_mem_exp2_t5stypeE"></span><span id="zes_vf_util_mem_exp2_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__vf__util__mem__exp2__t_1a4fe6e1170fe529a110824b12b9fdaaa8"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N22zes_vf_util_mem_exp2_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_vf_util_mem_exp2_t5pNextE">
+<span id="_CPPv3N22zes_vf_util_mem_exp2_t5pNextE"></span><span id="_CPPv2N22zes_vf_util_mem_exp2_t5pNextE"></span><span id="zes_vf_util_mem_exp2_t::pNext__voidCP"></span><span class="target" id="structzes__vf__util__mem__exp2__t_1ac19e715c70ebcbb6b35980676b39b408"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N22zes_vf_util_mem_exp2_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_vf_util_mem_exp2_t13vfMemLocationE">
+<span id="_CPPv3N22zes_vf_util_mem_exp2_t13vfMemLocationE"></span><span id="_CPPv2N22zes_vf_util_mem_exp2_t13vfMemLocationE"></span><span id="zes_vf_util_mem_exp2_t::vfMemLocation__zes_mem_loc_t"></span><span class="target" id="structzes__vf__util__mem__exp2__t_1a1ef982303c057387faa9cd922ce7b896"></span><a class="reference internal" href="../apis/memory.html#_CPPv413zes_mem_loc_t" title="zes_mem_loc_t"><span class="n"><span class="pre">zes_mem_loc_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vfMemLocation</span></span></span><a class="headerlink" href="#_CPPv4N22zes_vf_util_mem_exp2_t13vfMemLocationE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Location of this memory (system, device) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_vf_util_mem_exp2_t13vfMemUtilizedE">
+<span id="_CPPv3N22zes_vf_util_mem_exp2_t13vfMemUtilizedE"></span><span id="_CPPv2N22zes_vf_util_mem_exp2_t13vfMemUtilizedE"></span><span id="zes_vf_util_mem_exp2_t::vfMemUtilized__uint64_t"></span><span class="target" id="structzes__vf__util__mem__exp2__t_1a8cdd2f4ed1df543ba2f4b79ed89bab20"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vfMemUtilized</span></span></span><a class="headerlink" href="#_CPPv4N22zes_vf_util_mem_exp2_t13vfMemUtilizedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Utilized memory size in bytes. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-vf-util-engine-exp2-t">
+<span id="id18"></span><h3>zes_vf_util_engine_exp2_t<a class="headerlink" href="#zes-vf-util-engine-exp2-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv425zes_vf_util_engine_exp2_t">
+<span id="_CPPv325zes_vf_util_engine_exp2_t"></span><span id="_CPPv225zes_vf_util_engine_exp2_t"></span><span id="zes_vf_util_engine_exp2_t"></span><span class="target" id="structzes__vf__util__engine__exp2__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_util_engine_exp2_t</span></span></span><a class="headerlink" href="#_CPPv425zes_vf_util_engine_exp2_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Provides engine utilization values for a virtual function. </p>
+<p><ul class="simple">
+<li><p>Percent utilization is calculated by taking two snapshots (s1, s2) and using the equation: util = (s2.activeCounterValue - s1.activeCounterValue) / (s2.samplingCounterValue - s1.samplingCounterValue) </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_util_engine_exp2_t5stypeE">
+<span id="_CPPv3N25zes_vf_util_engine_exp2_t5stypeE"></span><span id="_CPPv2N25zes_vf_util_engine_exp2_t5stypeE"></span><span id="zes_vf_util_engine_exp2_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__vf__util__engine__exp2__t_1ab66c939f08573cbef6e69e017492b8df"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_util_engine_exp2_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_util_engine_exp2_t5pNextE">
+<span id="_CPPv3N25zes_vf_util_engine_exp2_t5pNextE"></span><span id="_CPPv2N25zes_vf_util_engine_exp2_t5pNextE"></span><span id="zes_vf_util_engine_exp2_t::pNext__voidCP"></span><span class="target" id="structzes__vf__util__engine__exp2__t_1a3c4b8e0aa8b921a4654434b2f410cfdd"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_util_engine_exp2_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_util_engine_exp2_t12vfEngineTypeE">
+<span id="_CPPv3N25zes_vf_util_engine_exp2_t12vfEngineTypeE"></span><span id="_CPPv2N25zes_vf_util_engine_exp2_t12vfEngineTypeE"></span><span id="zes_vf_util_engine_exp2_t::vfEngineType__zes_engine_group_t"></span><span class="target" id="structzes__vf__util__engine__exp2__t_1ae9216b893fb9111f5a9321856c33404c"></span><a class="reference internal" href="../apis/engine.html#_CPPv418zes_engine_group_t" title="zes_engine_group_t"><span class="n"><span class="pre">zes_engine_group_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vfEngineType</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_util_engine_exp2_t12vfEngineTypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The engine group. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_util_engine_exp2_t18activeCounterValueE">
+<span id="_CPPv3N25zes_vf_util_engine_exp2_t18activeCounterValueE"></span><span id="_CPPv2N25zes_vf_util_engine_exp2_t18activeCounterValueE"></span><span id="zes_vf_util_engine_exp2_t::activeCounterValue__uint64_t"></span><span class="target" id="structzes__vf__util__engine__exp2__t_1a70ec9943b8a70e61342354c8c8befb3e"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">activeCounterValue</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_util_engine_exp2_t18activeCounterValueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Represents active counter. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_vf_util_engine_exp2_t20samplingCounterValueE">
+<span id="_CPPv3N25zes_vf_util_engine_exp2_t20samplingCounterValueE"></span><span id="_CPPv2N25zes_vf_util_engine_exp2_t20samplingCounterValueE"></span><span id="zes_vf_util_engine_exp2_t::samplingCounterValue__uint64_t"></span><span class="target" id="structzes__vf__util__engine__exp2__t_1a9629ec2688333e47cd9a5903f2dc4c26"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingCounterValue</span></span></span><a class="headerlink" href="#_CPPv4N25zes_vf_util_engine_exp2_t20samplingCounterValueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Represents counter value when activeCounterValue was sampled. Refer to the formulae above for calculating the utilization percent </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="firmware.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Firmware - Experimental</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="data_types.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data Types - Experimental</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zesVFManagement</div><ul class="ctoc-list"><li><a href="vf_management.html#zesvfmanagementgetvfpropertiesexp">&hellip;GetVFPropertiesExp</a></li><li><a href="vf_management.html#zesvfmanagementgetvfmemoryutilizationexp">&hellip;GetVFMemoryUtilizationExp</a></li><li><a href="vf_management.html#zesvfmanagementgetvfengineutilizationexp">&hellip;GetVFEngineUtilizationExp</a></li><li><a href="vf_management.html#zesvfmanagementsetvftelemetrymodeexp">&hellip;SetVFTelemetryModeExp</a></li><li><a href="vf_management.html#zesvfmanagementsetvftelemetrysamplingintervalexp">&hellip;SetVFTelemetrySamplingIntervalExp</a></li><li><a href="vf_management.html#zesvfmanagementgetvfcapabilitiesexp">&hellip;GetVFCapabilitiesExp</a></li><li><a href="vf_management.html#zesvfmanagementgetvfmemoryutilizationexp2">&hellip;GetVFMemoryUtilizationExp2</a></li><li><a href="vf_management.html#zesvfmanagementgetvfengineutilizationexp2">&hellip;GetVFEngineUtilizationExp2</a></li><li><a href="vf_management.html#zesvfmanagementgetvfcapabilitiesexp2">&hellip;GetVFCapabilitiesExp2</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="vf_management.html#zes-vf-info-mem-type-exp-flags-t">zes_vf_info_mem_type_exp_flags_t</a></li><li><a href="vf_management.html#zes-vf-info-util-exp-flags-t">zes_vf_info_util_exp_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">7</span></summary><ul class="ctoc-list"><li><a href="vf_management.html#zes-vf-exp-properties-t">zes_vf_exp_properties_t</a></li><li><a href="vf_management.html#zes-vf-util-mem-exp-t">zes_vf_util_mem_exp_t</a></li><li><a href="vf_management.html#zes-vf-util-engine-exp-t">zes_vf_util_engine_exp_t</a></li><li><a href="vf_management.html#zes-vf-exp-capabilities-t">zes_vf_exp_capabilities_t</a></li><li><a href="vf_management.html#zes-vf-exp2-capabilities-t">zes_vf_exp2_capabilities_t</a></li><li><a href="vf_management.html#zes-vf-util-mem-exp2-t">zes_vf_util_mem_exp2_t</a></li><li><a href="vf_management.html#zes-vf-util-engine-exp2-t">zes_vf_util_engine_exp2_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

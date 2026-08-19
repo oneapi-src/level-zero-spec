@@ -1,0 +1,1689 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Command List - Experimental &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/experimental/command_list';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Mem - Experimental" href="mem.html" />
+    <link rel="prev" title="Command Queue - Experimental" href="command_queue.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Experimental</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/experimental/command_list.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Command List - Experimental</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-list-experimental-functions">Command List - Experimental Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistcreatecloneexp">zeCommandListCreateCloneExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zeCommandListCreateCloneExp24ze_command_list_handle_tP24ze_command_list_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListCreateCloneExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistimmediateappendcommandlistsexp">zeCommandListImmediateAppendCommandListsExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv443zeCommandListImmediateAppendCommandListsExp24ze_command_list_handle_t8uint32_tP24ze_command_list_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListImmediateAppendCommandListsExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistgetnextcommandidexp">zeCommandListGetNextCommandIdExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432zeCommandListGetNextCommandIdExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_tP8uint64_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListGetNextCommandIdExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistupdatemutablecommandsexp">zeCommandListUpdateMutableCommandsExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437zeCommandListUpdateMutableCommandsExp24ze_command_list_handle_tPK30ze_mutable_commands_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListUpdateMutableCommandsExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistupdatemutablecommandsignaleventexp">zeCommandListUpdateMutableCommandSignalEventExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv447zeCommandListUpdateMutableCommandSignalEventExp24ze_command_list_handle_t8uint64_t17ze_event_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListUpdateMutableCommandSignalEventExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistupdatemutablecommandwaiteventsexp">zeCommandListUpdateMutableCommandWaitEventsExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv446zeCommandListUpdateMutableCommandWaitEventsExp24ze_command_list_handle_t8uint64_t8uint32_tP17ze_event_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListUpdateMutableCommandWaitEventsExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistgetnextcommandidwithkernelsexp">zeCommandListGetNextCommandIdWithKernelsExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv443zeCommandListGetNextCommandIdWithKernelsExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_t8uint32_tP18ze_kernel_handle_tP8uint64_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListGetNextCommandIdWithKernelsExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistupdatemutablecommandkernelsexp">zeCommandListUpdateMutableCommandKernelsExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv443zeCommandListUpdateMutableCommandKernelsExp24ze_command_list_handle_t8uint32_tP8uint64_tP18ze_kernel_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListUpdateMutableCommandKernelsExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandlistismutableexp">zeCommandListIsMutableExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zeCommandListIsMutableExp24ze_command_list_handle_tP9ze_bool_t"><code class="docutils literal notranslate"><span class="pre">zeCommandListIsMutableExp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-list-experimental-enums">Command List - Experimental Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-command-exp-flags-t">ze_mutable_command_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv429ze_mutable_command_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_command_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t44ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTSE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNTE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t38ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZEE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t41ZE_MUTABLE_COMMAND_EXP_FLAG_GLOBAL_OFFSETE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GLOBAL_OFFSET</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_SIGNAL_EVENTE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_SIGNAL_EVENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_WAIT_EVENTSE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_WAIT_EVENTS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t46ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTIONE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t43ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENTSE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENTS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-command-list-exp-flags-t">ze_mutable_command_list_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv434ze_mutable_command_list_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_command_list_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_mutable_command_list_exp_flag_t41ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_RESERVEDE"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_RESERVED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_mutable_command_list_exp_flag_t45ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-list-experimental-structures">Command List - Experimental Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-command-id-exp-desc-t">ze_mutable_command_id_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432ze_mutable_command_id_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_command_id_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_command_id_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_command_id_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_command_id_exp_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-command-list-exp-properties-t">ze_mutable_command_list_exp_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv440ze_mutable_command_list_exp_properties_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_command_list_exp_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t23mutableCommandListFlagsE"><code class="docutils literal notranslate"><span class="pre">mutableCommandListFlags</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t19mutableCommandFlagsE"><code class="docutils literal notranslate"><span class="pre">mutableCommandFlags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-command-list-exp-desc-t">ze_mutable_command_list_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv434ze_mutable_command_list_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_command_list_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_mutable_command_list_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_mutable_command_list_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_mutable_command_list_exp_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-commands-exp-desc-t">ze_mutable_commands_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430ze_mutable_commands_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_commands_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_mutable_commands_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_mutable_commands_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_mutable_commands_exp_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-kernel-argument-exp-desc-t">ze_mutable_kernel_argument_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437ze_mutable_kernel_argument_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_kernel_argument_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t9commandIdE"><code class="docutils literal notranslate"><span class="pre">commandId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t8argIndexE"><code class="docutils literal notranslate"><span class="pre">argIndex</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t7argSizeE"><code class="docutils literal notranslate"><span class="pre">argSize</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t9pArgValueE"><code class="docutils literal notranslate"><span class="pre">pArgValue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-group-count-exp-desc-t">ze_mutable_group_count_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433ze_mutable_group_count_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_group_count_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t9commandIdE"><code class="docutils literal notranslate"><span class="pre">commandId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t11pGroupCountE"><code class="docutils literal notranslate"><span class="pre">pGroupCount</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-group-size-exp-desc-t">ze_mutable_group_size_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432ze_mutable_group_size_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_group_size_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t9commandIdE"><code class="docutils literal notranslate"><span class="pre">commandId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeXE"><code class="docutils literal notranslate"><span class="pre">groupSizeX</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeYE"><code class="docutils literal notranslate"><span class="pre">groupSizeY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeZE"><code class="docutils literal notranslate"><span class="pre">groupSizeZ</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-global-offset-exp-desc-t">ze_mutable_global_offset_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435ze_mutable_global_offset_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_global_offset_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t9commandIdE"><code class="docutils literal notranslate"><span class="pre">commandId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetXE"><code class="docutils literal notranslate"><span class="pre">offsetX</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetYE"><code class="docutils literal notranslate"><span class="pre">offsetY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetZE"><code class="docutils literal notranslate"><span class="pre">offsetZ</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-mutable-graph-argument-exp-desc-t">ze_mutable_graph_argument_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436ze_mutable_graph_argument_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_mutable_graph_argument_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t9commandIdE"><code class="docutils literal notranslate"><span class="pre">commandId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t8argIndexE"><code class="docutils literal notranslate"><span class="pre">argIndex</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t9pArgValueE"><code class="docutils literal notranslate"><span class="pre">pArgValue</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="command-list-experimental">
+<h1>Command List - Experimental<a class="headerlink" href="#command-list-experimental" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="command-list-experimental-functions">
+<h2>Command List - Experimental Functions<a class="headerlink" href="#command-list-experimental-functions" title="Link to this heading">#</a></h2>
+<section id="zecommandlistcreatecloneexp">
+<span id="id1"></span><h3>zeCommandListCreateCloneExp<a class="headerlink" href="#zecommandlistcreatecloneexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427zeCommandListCreateCloneExp24ze_command_list_handle_tP24ze_command_list_handle_t">
+<span id="_CPPv327zeCommandListCreateCloneExp24ze_command_list_handle_tP24ze_command_list_handle_t"></span><span id="_CPPv227zeCommandListCreateCloneExp24ze_command_list_handle_tP24ze_command_list_handle_t"></span><span id="zeCommandListCreateCloneExp__ze_command_list_handle_t.ze_command_list_handle_tP"></span><span class="target" id="ze__api_8h_1acddb29c0025c35c5c22f6586f3a84e07"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListCreateCloneExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phClonedCommandList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeCommandListCreateCloneExp24ze_command_list_handle_tP24ze_command_list_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates a command list as the clone of another command list. </p>
+<p><ul class="simple">
+<li><p><dl>
+<dt class="sig sig-object cpp">
+<em><span class="pre">Deprecated:</span></em></dt>
+<dd><p>since 1.17</p>
+</dd></dl>
+
+</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle to source command list (the command list to clone) </p></li>
+<li><p><strong>phClonedCommandList</strong> – [out] pointer to handle of the cloned command list </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phClonedCommandList</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistimmediateappendcommandlistsexp">
+<span id="id2"></span><h3>zeCommandListImmediateAppendCommandListsExp<a class="headerlink" href="#zecommandlistimmediateappendcommandlistsexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv443zeCommandListImmediateAppendCommandListsExp24ze_command_list_handle_t8uint32_tP24ze_command_list_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t">
+<span id="_CPPv343zeCommandListImmediateAppendCommandListsExp24ze_command_list_handle_t8uint32_tP24ze_command_list_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t"></span><span id="_CPPv243zeCommandListImmediateAppendCommandListsExp24ze_command_list_handle_t8uint32_tP24ze_command_list_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t"></span><span id="zeCommandListImmediateAppendCommandListsExp__ze_command_list_handle_t.uint32_t.ze_command_list_handle_tP.ze_event_handle_t.uint32_t.ze_event_handle_tP"></span><span class="target" id="ze__api_8h_1a3ca653d646c861131f9c03b65c69f096"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListImmediateAppendCommandListsExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandListImmediate</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numCommandLists</span></span>, <span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phCommandLists</span></span>, <span class="n"><span class="pre">ze_event_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hSignalEvent</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numWaitEvents</span></span>, <span class="n"><span class="pre">ze_event_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phWaitEvents</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv443zeCommandListImmediateAppendCommandListsExp24ze_command_list_handle_t8uint32_tP24ze_command_list_handle_t17ze_event_handle_t8uint32_tP17ze_event_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Appends command lists to dispatch from an immediate command list. </p>
+<p><ul class="simple">
+<li><p><dl>
+<dt class="sig sig-object cpp">
+<em><span class="pre">Deprecated:</span></em></dt>
+<dd><p>since 1.16. Please use <a class="reference internal" href="../apis/command_list-2.html#ze__api_8h_1a31284679f4d7ff4477200877c16af5ff"><span class="std std-ref">zeCommandListImmediateAppendCommandListsWithParameters</span></a>.</p>
+</dd></dl>
+
+</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandListImmediate</strong> – [in] handle of the immediate command list </p></li>
+<li><p><strong>numCommandLists</strong> – [in] number of command lists </p></li>
+<li><p><strong>phCommandLists</strong> – [in][range(0, numCommandLists)] handles of command lists </p></li>
+<li><p><strong>hSignalEvent</strong> – [in][optional] handle of the event to signal on completion<ul>
+<li><p>if not null, this event is signaled after the completion of all appended command lists </p></li>
+</ul>
+</p></li>
+<li><p><strong>numWaitEvents</strong> – [in][optional] number of events to wait on before executing appended command lists; must be 0 if nullptr == phWaitEvents </p></li>
+<li><p><strong>phWaitEvents</strong> – [in][optional][range(0, numWaitEvents)] handle of the events to wait on before executing appended command lists.<ul>
+<li><p>if not null, all wait events must be satisfied prior to the start of any appended command list(s) </p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandListImmediate</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phCommandLists</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistgetnextcommandidexp">
+<span id="id3"></span><h3>zeCommandListGetNextCommandIdExp<a class="headerlink" href="#zecommandlistgetnextcommandidexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv432zeCommandListGetNextCommandIdExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_tP8uint64_t">
+<span id="_CPPv332zeCommandListGetNextCommandIdExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_tP8uint64_t"></span><span id="_CPPv232zeCommandListGetNextCommandIdExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_tP8uint64_t"></span><span id="zeCommandListGetNextCommandIdExp__ze_command_list_handle_t.ze_mutable_command_id_exp_desc_tCP.uint64_tP"></span><span class="target" id="ze__api_8h_1aa3e7f411c52a02ef44ef4609392ce08b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListGetNextCommandIdExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv432ze_mutable_command_id_exp_desc_t" title="ze_mutable_command_id_exp_desc_t"><span class="n"><span class="pre">ze_mutable_command_id_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCommandId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zeCommandListGetNextCommandIdExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_tP8uint64_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns a unique command identifier for the next command to be appended to a command list. </p>
+<p><ul class="simple">
+<li><p>This function may only be called for a mutable command list.</p></li>
+<li><p>This function may not be called on a closed command list.</p></li>
+<li><p>This function may be called from simultaneous threads with the same command list handle.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle of the command list </p></li>
+<li><p><strong>desc</strong> – [in] pointer to mutable command identifier descriptor </p></li>
+<li><p><strong>pCommandId</strong> – [out] pointer to mutable command identifier to be written </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCommandId</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0xff</span> <span class="pre">&lt;</span> <span class="pre">desc-&gt;flags</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistupdatemutablecommandsexp">
+<span id="id4"></span><h3>zeCommandListUpdateMutableCommandsExp<a class="headerlink" href="#zecommandlistupdatemutablecommandsexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv437zeCommandListUpdateMutableCommandsExp24ze_command_list_handle_tPK30ze_mutable_commands_exp_desc_t">
+<span id="_CPPv337zeCommandListUpdateMutableCommandsExp24ze_command_list_handle_tPK30ze_mutable_commands_exp_desc_t"></span><span id="_CPPv237zeCommandListUpdateMutableCommandsExp24ze_command_list_handle_tPK30ze_mutable_commands_exp_desc_t"></span><span id="zeCommandListUpdateMutableCommandsExp__ze_command_list_handle_t.ze_mutable_commands_exp_desc_tCP"></span><span class="target" id="ze__api_8h_1ae11e3ac011124c9f61e721482df1e296"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListUpdateMutableCommandsExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv430ze_mutable_commands_exp_desc_t" title="ze_mutable_commands_exp_desc_t"><span class="n"><span class="pre">ze_mutable_commands_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zeCommandListUpdateMutableCommandsExp24ze_command_list_handle_tPK30ze_mutable_commands_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Updates mutable commands. </p>
+<p><ul class="simple">
+<li><p>This function may only be called for a mutable command list.</p></li>
+<li><p>The application must synchronize mutable command list execution before calling this function.</p></li>
+<li><p>The application must close a mutable command list after completing all updates.</p></li>
+<li><p>This function must not be called from simultaneous threads with the same command list handle.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle of the command list </p></li>
+<li><p><strong>desc</strong> – [in] pointer to mutable commands descriptor; multiple descriptors may be chained via <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a><ul>
+<li><p>Invalid kernel argument or not matching update descriptor provided </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistupdatemutablecommandsignaleventexp">
+<span id="id5"></span><h3>zeCommandListUpdateMutableCommandSignalEventExp<a class="headerlink" href="#zecommandlistupdatemutablecommandsignaleventexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv447zeCommandListUpdateMutableCommandSignalEventExp24ze_command_list_handle_t8uint64_t17ze_event_handle_t">
+<span id="_CPPv347zeCommandListUpdateMutableCommandSignalEventExp24ze_command_list_handle_t8uint64_t17ze_event_handle_t"></span><span id="_CPPv247zeCommandListUpdateMutableCommandSignalEventExp24ze_command_list_handle_t8uint64_t17ze_event_handle_t"></span><span id="zeCommandListUpdateMutableCommandSignalEventExp__ze_command_list_handle_t.uint64_t.ze_event_handle_t"></span><span class="target" id="ze__api_8h_1a542db5b0306fac080e28528d8c9f6ac8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListUpdateMutableCommandSignalEventExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">commandId</span></span>, <span class="n"><span class="pre">ze_event_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hSignalEvent</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv447zeCommandListUpdateMutableCommandSignalEventExp24ze_command_list_handle_t8uint64_t17ze_event_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Updates the signal event for a mutable command in a mutable command list. </p>
+<p><ul class="simple">
+<li><p>This function may only be called for a mutable command list.</p></li>
+<li><p>The type, scope and flags of the signal event must match those of the source command.</p></li>
+<li><p>The application must synchronize mutable command list execution before calling this function.</p></li>
+<li><p>The application must close a mutable command list after completing all updates.</p></li>
+<li><p>This function must not be called from simultaneous threads with the same command list handle.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle of the command list </p></li>
+<li><p><strong>commandId</strong> – [in] command identifier </p></li>
+<li><p><strong>hSignalEvent</strong> – [in][optional] handle of the event to signal on completion </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistupdatemutablecommandwaiteventsexp">
+<span id="id6"></span><h3>zeCommandListUpdateMutableCommandWaitEventsExp<a class="headerlink" href="#zecommandlistupdatemutablecommandwaiteventsexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv446zeCommandListUpdateMutableCommandWaitEventsExp24ze_command_list_handle_t8uint64_t8uint32_tP17ze_event_handle_t">
+<span id="_CPPv346zeCommandListUpdateMutableCommandWaitEventsExp24ze_command_list_handle_t8uint64_t8uint32_tP17ze_event_handle_t"></span><span id="_CPPv246zeCommandListUpdateMutableCommandWaitEventsExp24ze_command_list_handle_t8uint64_t8uint32_tP17ze_event_handle_t"></span><span id="zeCommandListUpdateMutableCommandWaitEventsExp__ze_command_list_handle_t.uint64_t.uint32_t.ze_event_handle_tP"></span><span class="target" id="ze__api_8h_1a0ac3e0cf3dd183cf444c9c4b1f145a61"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListUpdateMutableCommandWaitEventsExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">commandId</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numWaitEvents</span></span>, <span class="n"><span class="pre">ze_event_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phWaitEvents</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv446zeCommandListUpdateMutableCommandWaitEventsExp24ze_command_list_handle_t8uint64_t8uint32_tP17ze_event_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Updates the wait events for a mutable command in a mutable command list. </p>
+<p><ul class="simple">
+<li><p>This function may only be called for a mutable command list.</p></li>
+<li><p>The number of wait events must match that of the source command.</p></li>
+<li><p>The type, scope and flags of the wait events must match those of the source command.</p></li>
+<li><p>Passing <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> as the wait events will update the command to not wait on any events prior to dispatch.</p></li>
+<li><p>Passing <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> as an event on event wait list will remove event dependency from this wait list slot.</p></li>
+<li><p>The application must synchronize mutable command list execution before calling this function.</p></li>
+<li><p>The application must close a mutable command list after completing all updates.</p></li>
+<li><p>This function must not be called from simultaneous threads with the same command list handle.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle of the command list </p></li>
+<li><p><strong>commandId</strong> – [in] command identifier </p></li>
+<li><p><strong>numWaitEvents</strong> – [in][optional] the number of wait events </p></li>
+<li><p><strong>phWaitEvents</strong> – [in][optional][range(0, numWaitEvents)] handle of the events to wait on before launching </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a743b17f38be52772c5f67c4101638193"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SIZE</span></a><ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">numWaitEvents</span></code> parameter does not match that of the original command. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistgetnextcommandidwithkernelsexp">
+<span id="id7"></span><h3>zeCommandListGetNextCommandIdWithKernelsExp<a class="headerlink" href="#zecommandlistgetnextcommandidwithkernelsexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv443zeCommandListGetNextCommandIdWithKernelsExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_t8uint32_tP18ze_kernel_handle_tP8uint64_t">
+<span id="_CPPv343zeCommandListGetNextCommandIdWithKernelsExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_t8uint32_tP18ze_kernel_handle_tP8uint64_t"></span><span id="_CPPv243zeCommandListGetNextCommandIdWithKernelsExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_t8uint32_tP18ze_kernel_handle_tP8uint64_t"></span><span id="zeCommandListGetNextCommandIdWithKernelsExp__ze_command_list_handle_t.ze_mutable_command_id_exp_desc_tCP.uint32_t.ze_kernel_handle_tP.uint64_tP"></span><span class="target" id="ze__api_8h_1a016c70eb830830ffed3d46d002e5b6ad"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListGetNextCommandIdWithKernelsExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv432ze_mutable_command_id_exp_desc_t" title="ze_mutable_command_id_exp_desc_t"><span class="n"><span class="pre">ze_mutable_command_id_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numKernels</span></span>, <span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phKernels</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCommandId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv443zeCommandListGetNextCommandIdWithKernelsExp24ze_command_list_handle_tPK32ze_mutable_command_id_exp_desc_t8uint32_tP18ze_kernel_handle_tP8uint64_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns a unique command identifier for the next command to be appended to a command list. Provides possible kernel handles for kernel mutation when <a class="reference internal" href="#ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a5747592776654b5843b9088f9211c425"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION</span></a> flag is present. </p>
+<p><ul class="simple">
+<li><p>This function may only be called for a mutable command list.</p></li>
+<li><p>This function may not be called on a closed command list.</p></li>
+<li><p>This function may be called from simultaneous threads with the same command list handle.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle of the command list </p></li>
+<li><p><strong>desc</strong> – [in][out] pointer to mutable command identifier descriptor </p></li>
+<li><p><strong>numKernels</strong> – [in][optional] number of entries on phKernels list </p></li>
+<li><p><strong>phKernels</strong> – [in][optional][range(0, numKernels)] list of kernels that user can switch between using <a class="reference internal" href="#ze__api_8h_1aeac2b4a4a5f56f2c68dbdb0d69f0538d"><span class="std std-ref">zeCommandListUpdateMutableCommandKernelsExp</span></a> call </p></li>
+<li><p><strong>pCommandId</strong> – [out] pointer to mutable command identifier to be written </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCommandId</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0xff</span> <span class="pre">&lt;</span> <span class="pre">desc-&gt;flags</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistupdatemutablecommandkernelsexp">
+<span id="id8"></span><h3>zeCommandListUpdateMutableCommandKernelsExp<a class="headerlink" href="#zecommandlistupdatemutablecommandkernelsexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv443zeCommandListUpdateMutableCommandKernelsExp24ze_command_list_handle_t8uint32_tP8uint64_tP18ze_kernel_handle_t">
+<span id="_CPPv343zeCommandListUpdateMutableCommandKernelsExp24ze_command_list_handle_t8uint32_tP8uint64_tP18ze_kernel_handle_t"></span><span id="_CPPv243zeCommandListUpdateMutableCommandKernelsExp24ze_command_list_handle_t8uint32_tP8uint64_tP18ze_kernel_handle_t"></span><span id="zeCommandListUpdateMutableCommandKernelsExp__ze_command_list_handle_t.uint32_t.uint64_tP.ze_kernel_handle_tP"></span><span class="target" id="ze__api_8h_1aeac2b4a4a5f56f2c68dbdb0d69f0538d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListUpdateMutableCommandKernelsExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numKernels</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCommandId</span></span>, <span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phKernels</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv443zeCommandListUpdateMutableCommandKernelsExp24ze_command_list_handle_t8uint32_tP8uint64_tP18ze_kernel_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Updates the kernel for a mutable command in a mutable command list. </p>
+<p><ul class="simple">
+<li><p>This function may only be called for a mutable command list.</p></li>
+<li><p>The kernel handle must be from the provided list for given command id.</p></li>
+<li><p>The application must synchronize mutable command list execution before calling this function.</p></li>
+<li><p>The application must close a mutable command list after completing all updates.</p></li>
+<li><p>This function must not be called from simultaneous threads with the same command list handle.</p></li>
+<li><p>This function must be called before updating kernel arguments and dispatch parameters, when kernel is mutated.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle of the command list </p></li>
+<li><p><strong>numKernels</strong> – [in] the number of kernels to update </p></li>
+<li><p><strong>pCommandId</strong> – [in][range(0, numKernels)] command identifier </p></li>
+<li><p><strong>phKernels</strong> – [in][range(0, numKernels)] handle of the kernel for a command identifier to switch to </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCommandId</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phKernels</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ad798d9e477bd21c4e672bfb88fa31e46"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_KERNEL_HANDLE</span></a><ul>
+<li><p>Invalid kernel handle provided for the mutation kernel instruction operation. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandlistismutableexp">
+<span id="id9"></span><h3>zeCommandListIsMutableExp<a class="headerlink" href="#zecommandlistismutableexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425zeCommandListIsMutableExp24ze_command_list_handle_tP9ze_bool_t">
+<span id="_CPPv325zeCommandListIsMutableExp24ze_command_list_handle_tP9ze_bool_t"></span><span id="_CPPv225zeCommandListIsMutableExp24ze_command_list_handle_tP9ze_bool_t"></span><span id="zeCommandListIsMutableExp__ze_command_list_handle_t.ze_bool_tP"></span><span class="target" id="ze__api_8h_1a3584ecf72443940b184d4c44cb4dcab9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandListIsMutableExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandList</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pIsMutable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeCommandListIsMutableExp24ze_command_list_handle_tP9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Query whether a command list was created with the mutable command list extension. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandList</strong> – [in] handle of the command list </p></li>
+<li><p><strong>pIsMutable</strong> – [out] pointer bool determining whether command list was created with mutable extension </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandList</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pIsMutable</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="command-list-experimental-enums">
+<h2>Command List - Experimental Enums<a class="headerlink" href="#command-list-experimental-enums" title="Link to this heading">#</a></h2>
+<section id="ze-mutable-command-exp-flags-t">
+<span id="id10"></span><h3>ze_mutable_command_exp_flags_t<a class="headerlink" href="#ze-mutable-command-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv429ze_mutable_command_exp_flag_t">
+<span id="_CPPv329ze_mutable_command_exp_flag_t"></span><span id="_CPPv229ze_mutable_command_exp_flag_t"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_command_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv429ze_mutable_command_exp_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t44ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTSE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t44ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTSE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t44ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTSE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a2e176172c1eaa48b363975b255a8f713"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTS</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t44ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>kernel arguments </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNTE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNTE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNTE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0aedcf3e0809f8dd988d62c55ffd2b6d31"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNT</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>kernel group count </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t38ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZEE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t38ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZEE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t38ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZEE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a09cc76e55c7e87bfa5653a015667eabb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZE</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t38ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>kernel group size </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t41ZE_MUTABLE_COMMAND_EXP_FLAG_GLOBAL_OFFSETE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t41ZE_MUTABLE_COMMAND_EXP_FLAG_GLOBAL_OFFSETE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t41ZE_MUTABLE_COMMAND_EXP_FLAG_GLOBAL_OFFSETE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a12d51ea28ddbe39da3c6ae2e2cad6b6d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GLOBAL_OFFSET</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t41ZE_MUTABLE_COMMAND_EXP_FLAG_GLOBAL_OFFSETE" title="Link to this definition">#</a><br /></dt>
+<dd><p>kernel global offset </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_SIGNAL_EVENTE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_SIGNAL_EVENTE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_SIGNAL_EVENTE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0aceebb49336ec4ca207ead5c9c59e0a81"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_SIGNAL_EVENT</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_SIGNAL_EVENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>command signal event </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_WAIT_EVENTSE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_WAIT_EVENTSE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_WAIT_EVENTSE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a97ed18c6f2e2018b203f3c697e8117e2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_WAIT_EVENTS</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t39ZE_MUTABLE_COMMAND_EXP_FLAG_WAIT_EVENTSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>command wait events </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t46ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTIONE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t46ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTIONE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t46ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTIONE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a5747592776654b5843b9088f9211c425"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t46ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTIONE" title="Link to this definition">#</a><br /></dt>
+<dd><p>command kernel <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t43ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENTSE">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t43ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENTSE"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t43ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENTSE"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a5089ff6dced543b62abcead50b1de248"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENTS</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t43ZE_MUTABLE_COMMAND_EXP_FLAG_GRAPH_ARGUMENTSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>graph arguments <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a3c428f81f7aee905ec5f99ae23fa3c38"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_EXP_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N29ze_mutable_command_exp_flag_t40ZE_MUTABLE_COMMAND_EXP_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_MUTABLE_COMMAND_EXP_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-mutable-command-list-exp-flags-t">
+<span id="id11"></span><h3>ze_mutable_command_list_exp_flags_t<a class="headerlink" href="#ze-mutable-command-list-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv434ze_mutable_command_list_exp_flag_t">
+<span id="_CPPv334ze_mutable_command_list_exp_flag_t"></span><span id="_CPPv234ze_mutable_command_list_exp_flag_t"></span><span class="target" id="ze__api_8h_1a678c052947bd74e298f740dee013d830"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_command_list_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv434ze_mutable_command_list_exp_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_mutable_command_list_exp_flag_t41ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_RESERVEDE">
+<span id="_CPPv3N34ze_mutable_command_list_exp_flag_t41ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_RESERVEDE"></span><span id="_CPPv2N34ze_mutable_command_list_exp_flag_t41ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_RESERVEDE"></span><span class="target" id="ze__api_8h_1a678c052947bd74e298f740dee013d830afbfc4af7e5f211010404e7ae36103ae5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_RESERVED</span></span></span><a class="headerlink" href="#_CPPv4N34ze_mutable_command_list_exp_flag_t41ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_RESERVEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>reserved </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_mutable_command_list_exp_flag_t45ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N34ze_mutable_command_list_exp_flag_t45ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N34ze_mutable_command_list_exp_flag_t45ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a678c052947bd74e298f740dee013d830a83ee2c0e45ae11d6545be4f852a5fa67"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N34ze_mutable_command_list_exp_flag_t45ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_MUTABLE_COMMAND_LIST_EXP_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="command-list-experimental-structures">
+<h2>Command List - Experimental Structures<a class="headerlink" href="#command-list-experimental-structures" title="Link to this heading">#</a></h2>
+<section id="ze-mutable-command-id-exp-desc-t">
+<span id="id12"></span><h3>ze_mutable_command_id_exp_desc_t<a class="headerlink" href="#ze-mutable-command-id-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv432ze_mutable_command_id_exp_desc_t">
+<span id="_CPPv332ze_mutable_command_id_exp_desc_t"></span><span id="_CPPv232ze_mutable_command_id_exp_desc_t"></span><span id="ze_mutable_command_id_exp_desc_t"></span><span class="target" id="structze__mutable__command__id__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_command_id_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv432ze_mutable_command_id_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable command identifier descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_command_id_exp_desc_t5stypeE">
+<span id="_CPPv3N32ze_mutable_command_id_exp_desc_t5stypeE"></span><span id="_CPPv2N32ze_mutable_command_id_exp_desc_t5stypeE"></span><span id="ze_mutable_command_id_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__command__id__exp__desc__t_1a1fe7e517935c6811463ff8b8a49acf02"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_command_id_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_command_id_exp_desc_t5pNextE">
+<span id="_CPPv3N32ze_mutable_command_id_exp_desc_t5pNextE"></span><span id="_CPPv2N32ze_mutable_command_id_exp_desc_t5pNextE"></span><span id="ze_mutable_command_id_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__command__id__exp__desc__t_1a9e521f85e787dc40a96727609831efa4"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_command_id_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_command_id_exp_desc_t5flagsE">
+<span id="_CPPv3N32ze_mutable_command_id_exp_desc_t5flagsE"></span><span id="_CPPv2N32ze_mutable_command_id_exp_desc_t5flagsE"></span><span id="ze_mutable_command_id_exp_desc_t::flags__ze_mutable_command_exp_flags_t"></span><span class="target" id="structze__mutable__command__id__exp__desc__t_1a160b82a930769e2dbb25cf2e1f63cb85"></span><span class="n"><span class="pre">ze_mutable_command_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_command_id_exp_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] mutable command flags.<ul class="simple">
+<li><p>must be 0 (default, equivalent to setting all flags bar kernel instruction), or a valid combination of <a class="reference internal" href="#ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0"><span class="std std-ref">ze_mutable_command_exp_flag_t</span></a></p></li>
+<li><p>in order to include kernel instruction mutation, <a class="reference internal" href="#ze__api_8h_1ac335d305bdbf0a105e441cd67905dfc0a5747592776654b5843b9088f9211c425"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION</span></a> must be explicitly included </p></li>
+</ul>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-command-list-exp-properties-t">
+<span id="id13"></span><h3>ze_mutable_command_list_exp_properties_t<a class="headerlink" href="#ze-mutable-command-list-exp-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv440ze_mutable_command_list_exp_properties_t">
+<span id="_CPPv340ze_mutable_command_list_exp_properties_t"></span><span id="_CPPv240ze_mutable_command_list_exp_properties_t"></span><span id="ze_mutable_command_list_exp_properties_t"></span><span class="target" id="structze__mutable__command__list__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_command_list_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv440ze_mutable_command_list_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable command list properties. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N40ze_mutable_command_list_exp_properties_t5stypeE">
+<span id="_CPPv3N40ze_mutable_command_list_exp_properties_t5stypeE"></span><span id="_CPPv2N40ze_mutable_command_list_exp_properties_t5stypeE"></span><span id="ze_mutable_command_list_exp_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__command__list__exp__properties__t_1ab75da40d69e99ebde913df705ab83bd4"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N40ze_mutable_command_list_exp_properties_t5pNextE">
+<span id="_CPPv3N40ze_mutable_command_list_exp_properties_t5pNextE"></span><span id="_CPPv2N40ze_mutable_command_list_exp_properties_t5pNextE"></span><span id="ze_mutable_command_list_exp_properties_t::pNext__voidP"></span><span class="target" id="structze__mutable__command__list__exp__properties__t_1a3cd907494f16be9cc6740efd2bbfe715"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N40ze_mutable_command_list_exp_properties_t23mutableCommandListFlagsE">
+<span id="_CPPv3N40ze_mutable_command_list_exp_properties_t23mutableCommandListFlagsE"></span><span id="_CPPv2N40ze_mutable_command_list_exp_properties_t23mutableCommandListFlagsE"></span><span id="ze_mutable_command_list_exp_properties_t::mutableCommandListFlags__ze_mutable_command_list_exp_flags_t"></span><span class="target" id="structze__mutable__command__list__exp__properties__t_1a723bd0df5071e7c2147586aaa4b24dba"></span><span class="n"><span class="pre">ze_mutable_command_list_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mutableCommandListFlags</span></span></span><a class="headerlink" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t23mutableCommandListFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] mutable command list flags </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N40ze_mutable_command_list_exp_properties_t19mutableCommandFlagsE">
+<span id="_CPPv3N40ze_mutable_command_list_exp_properties_t19mutableCommandFlagsE"></span><span id="_CPPv2N40ze_mutable_command_list_exp_properties_t19mutableCommandFlagsE"></span><span id="ze_mutable_command_list_exp_properties_t::mutableCommandFlags__ze_mutable_command_exp_flags_t"></span><span class="target" id="structze__mutable__command__list__exp__properties__t_1a3978a1ae3944d5328cc3073166762970"></span><span class="n"><span class="pre">ze_mutable_command_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mutableCommandFlags</span></span></span><a class="headerlink" href="#_CPPv4N40ze_mutable_command_list_exp_properties_t19mutableCommandFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] mutable command flags </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-command-list-exp-desc-t">
+<span id="id14"></span><h3>ze_mutable_command_list_exp_desc_t<a class="headerlink" href="#ze-mutable-command-list-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv434ze_mutable_command_list_exp_desc_t">
+<span id="_CPPv334ze_mutable_command_list_exp_desc_t"></span><span id="_CPPv234ze_mutable_command_list_exp_desc_t"></span><span id="ze_mutable_command_list_exp_desc_t"></span><span class="target" id="structze__mutable__command__list__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_command_list_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv434ze_mutable_command_list_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable command list descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_mutable_command_list_exp_desc_t5stypeE">
+<span id="_CPPv3N34ze_mutable_command_list_exp_desc_t5stypeE"></span><span id="_CPPv2N34ze_mutable_command_list_exp_desc_t5stypeE"></span><span id="ze_mutable_command_list_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__command__list__exp__desc__t_1a0be259653292071777ed200893f8adb8"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N34ze_mutable_command_list_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_mutable_command_list_exp_desc_t5pNextE">
+<span id="_CPPv3N34ze_mutable_command_list_exp_desc_t5pNextE"></span><span id="_CPPv2N34ze_mutable_command_list_exp_desc_t5pNextE"></span><span id="ze_mutable_command_list_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__command__list__exp__desc__t_1af8900473b166bbd4ad6ec3543c174375"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N34ze_mutable_command_list_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_mutable_command_list_exp_desc_t5flagsE">
+<span id="_CPPv3N34ze_mutable_command_list_exp_desc_t5flagsE"></span><span id="_CPPv2N34ze_mutable_command_list_exp_desc_t5flagsE"></span><span id="ze_mutable_command_list_exp_desc_t::flags__ze_mutable_command_list_exp_flags_t"></span><span class="target" id="structze__mutable__command__list__exp__desc__t_1a276ed5ef7f53bd6883a192c6fea838e5"></span><span class="n"><span class="pre">ze_mutable_command_list_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N34ze_mutable_command_list_exp_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] mutable command list flags.<ul class="simple">
+<li><p>must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a678c052947bd74e298f740dee013d830"><span class="std std-ref">ze_mutable_command_list_exp_flag_t</span></a></p></li>
+</ul>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-commands-exp-desc-t">
+<span id="id15"></span><h3>ze_mutable_commands_exp_desc_t<a class="headerlink" href="#ze-mutable-commands-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv430ze_mutable_commands_exp_desc_t">
+<span id="_CPPv330ze_mutable_commands_exp_desc_t"></span><span id="_CPPv230ze_mutable_commands_exp_desc_t"></span><span id="ze_mutable_commands_exp_desc_t"></span><span class="target" id="structze__mutable__commands__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_commands_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv430ze_mutable_commands_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable commands descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_mutable_commands_exp_desc_t5stypeE">
+<span id="_CPPv3N30ze_mutable_commands_exp_desc_t5stypeE"></span><span id="_CPPv2N30ze_mutable_commands_exp_desc_t5stypeE"></span><span id="ze_mutable_commands_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__commands__exp__desc__t_1acfbf003e139512a9af0aa4d774931f32"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N30ze_mutable_commands_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_mutable_commands_exp_desc_t5pNextE">
+<span id="_CPPv3N30ze_mutable_commands_exp_desc_t5pNextE"></span><span id="_CPPv2N30ze_mutable_commands_exp_desc_t5pNextE"></span><span id="ze_mutable_commands_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__commands__exp__desc__t_1a30c1a1ff6345ec2a98d96ae1c4f14c19"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N30ze_mutable_commands_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_mutable_commands_exp_desc_t5flagsE">
+<span id="_CPPv3N30ze_mutable_commands_exp_desc_t5flagsE"></span><span id="_CPPv2N30ze_mutable_commands_exp_desc_t5flagsE"></span><span id="ze_mutable_commands_exp_desc_t::flags__uint32_t"></span><span class="target" id="structze__mutable__commands__exp__desc__t_1a245587ef40883a3b1fcdd0ad4aca89f1"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N30ze_mutable_commands_exp_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] must be 0, this field is reserved for future use </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-kernel-argument-exp-desc-t">
+<span id="id16"></span><h3>ze_mutable_kernel_argument_exp_desc_t<a class="headerlink" href="#ze-mutable-kernel-argument-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv437ze_mutable_kernel_argument_exp_desc_t">
+<span id="_CPPv337ze_mutable_kernel_argument_exp_desc_t"></span><span id="_CPPv237ze_mutable_kernel_argument_exp_desc_t"></span><span id="ze_mutable_kernel_argument_exp_desc_t"></span><span class="target" id="structze__mutable__kernel__argument__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_kernel_argument_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv437ze_mutable_kernel_argument_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable kernel argument descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_mutable_kernel_argument_exp_desc_t5stypeE">
+<span id="_CPPv3N37ze_mutable_kernel_argument_exp_desc_t5stypeE"></span><span id="_CPPv2N37ze_mutable_kernel_argument_exp_desc_t5stypeE"></span><span id="ze_mutable_kernel_argument_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__kernel__argument__exp__desc__t_1aa34105f43fc83de59d16edc61dffb9fe"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_mutable_kernel_argument_exp_desc_t5pNextE">
+<span id="_CPPv3N37ze_mutable_kernel_argument_exp_desc_t5pNextE"></span><span id="_CPPv2N37ze_mutable_kernel_argument_exp_desc_t5pNextE"></span><span id="ze_mutable_kernel_argument_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__kernel__argument__exp__desc__t_1a75944232698ef858fc2dac3cbd62ef31"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_mutable_kernel_argument_exp_desc_t9commandIdE">
+<span id="_CPPv3N37ze_mutable_kernel_argument_exp_desc_t9commandIdE"></span><span id="_CPPv2N37ze_mutable_kernel_argument_exp_desc_t9commandIdE"></span><span id="ze_mutable_kernel_argument_exp_desc_t::commandId__uint64_t"></span><span class="target" id="structze__mutable__kernel__argument__exp__desc__t_1a8983e672141747cda9bcf2f2bfb4524e"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">commandId</span></span></span><a class="headerlink" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t9commandIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] command identifier </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_mutable_kernel_argument_exp_desc_t8argIndexE">
+<span id="_CPPv3N37ze_mutable_kernel_argument_exp_desc_t8argIndexE"></span><span id="_CPPv2N37ze_mutable_kernel_argument_exp_desc_t8argIndexE"></span><span id="ze_mutable_kernel_argument_exp_desc_t::argIndex__uint32_t"></span><span class="target" id="structze__mutable__kernel__argument__exp__desc__t_1af4ddac4d164e0e3e7f10de8e02381d03"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">argIndex</span></span></span><a class="headerlink" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t8argIndexE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] kernel argument index </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_mutable_kernel_argument_exp_desc_t7argSizeE">
+<span id="_CPPv3N37ze_mutable_kernel_argument_exp_desc_t7argSizeE"></span><span id="_CPPv2N37ze_mutable_kernel_argument_exp_desc_t7argSizeE"></span><span id="ze_mutable_kernel_argument_exp_desc_t::argSize__s"></span><span class="target" id="structze__mutable__kernel__argument__exp__desc__t_1acca3feee28f44b14594b68feb18bd9a3"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">argSize</span></span></span><a class="headerlink" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t7argSizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] kernel argument size </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_mutable_kernel_argument_exp_desc_t9pArgValueE">
+<span id="_CPPv3N37ze_mutable_kernel_argument_exp_desc_t9pArgValueE"></span><span id="_CPPv2N37ze_mutable_kernel_argument_exp_desc_t9pArgValueE"></span><span id="ze_mutable_kernel_argument_exp_desc_t::pArgValue__voidCP"></span><span class="target" id="structze__mutable__kernel__argument__exp__desc__t_1a8c89223abee0e11a5d834b4e910e3c3c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pArgValue</span></span></span><a class="headerlink" href="#_CPPv4N37ze_mutable_kernel_argument_exp_desc_t9pArgValueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] pointer to kernel argument value </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-group-count-exp-desc-t">
+<span id="id17"></span><h3>ze_mutable_group_count_exp_desc_t<a class="headerlink" href="#ze-mutable-group-count-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv433ze_mutable_group_count_exp_desc_t">
+<span id="_CPPv333ze_mutable_group_count_exp_desc_t"></span><span id="_CPPv233ze_mutable_group_count_exp_desc_t"></span><span id="ze_mutable_group_count_exp_desc_t"></span><span class="target" id="structze__mutable__group__count__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_group_count_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv433ze_mutable_group_count_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable kernel group count descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_mutable_group_count_exp_desc_t5stypeE">
+<span id="_CPPv3N33ze_mutable_group_count_exp_desc_t5stypeE"></span><span id="_CPPv2N33ze_mutable_group_count_exp_desc_t5stypeE"></span><span id="ze_mutable_group_count_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__group__count__exp__desc__t_1a1e174a435a937cd747c872205bdbfdf0"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_mutable_group_count_exp_desc_t5pNextE">
+<span id="_CPPv3N33ze_mutable_group_count_exp_desc_t5pNextE"></span><span id="_CPPv2N33ze_mutable_group_count_exp_desc_t5pNextE"></span><span id="ze_mutable_group_count_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__group__count__exp__desc__t_1ac307d905cb12b3f979e082b5ab83b955"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_mutable_group_count_exp_desc_t9commandIdE">
+<span id="_CPPv3N33ze_mutable_group_count_exp_desc_t9commandIdE"></span><span id="_CPPv2N33ze_mutable_group_count_exp_desc_t9commandIdE"></span><span id="ze_mutable_group_count_exp_desc_t::commandId__uint64_t"></span><span class="target" id="structze__mutable__group__count__exp__desc__t_1ab467fe3132a24a30cd2f4a0315d4a7de"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">commandId</span></span></span><a class="headerlink" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t9commandIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] command identifier </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_mutable_group_count_exp_desc_t11pGroupCountE">
+<span id="_CPPv3N33ze_mutable_group_count_exp_desc_t11pGroupCountE"></span><span id="_CPPv2N33ze_mutable_group_count_exp_desc_t11pGroupCountE"></span><span id="ze_mutable_group_count_exp_desc_t::pGroupCount__ze_group_count_tCP"></span><span class="target" id="structze__mutable__group__count__exp__desc__t_1a5aea47d0e721e11854708f40258669cf"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../apis/command_list-2.html#_CPPv416ze_group_count_t" title="ze_group_count_t"><span class="n"><span class="pre">ze_group_count_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pGroupCount</span></span></span><a class="headerlink" href="#_CPPv4N33ze_mutable_group_count_exp_desc_t11pGroupCountE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] pointer to group count </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-group-size-exp-desc-t">
+<span id="id18"></span><h3>ze_mutable_group_size_exp_desc_t<a class="headerlink" href="#ze-mutable-group-size-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv432ze_mutable_group_size_exp_desc_t">
+<span id="_CPPv332ze_mutable_group_size_exp_desc_t"></span><span id="_CPPv232ze_mutable_group_size_exp_desc_t"></span><span id="ze_mutable_group_size_exp_desc_t"></span><span class="target" id="structze__mutable__group__size__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_group_size_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv432ze_mutable_group_size_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable kernel group size descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_group_size_exp_desc_t5stypeE">
+<span id="_CPPv3N32ze_mutable_group_size_exp_desc_t5stypeE"></span><span id="_CPPv2N32ze_mutable_group_size_exp_desc_t5stypeE"></span><span id="ze_mutable_group_size_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__group__size__exp__desc__t_1ad36552df13e8578219dd6d588547af1e"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_group_size_exp_desc_t5pNextE">
+<span id="_CPPv3N32ze_mutable_group_size_exp_desc_t5pNextE"></span><span id="_CPPv2N32ze_mutable_group_size_exp_desc_t5pNextE"></span><span id="ze_mutable_group_size_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__group__size__exp__desc__t_1af1a71586a8549484c100cd9240c7af80"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_group_size_exp_desc_t9commandIdE">
+<span id="_CPPv3N32ze_mutable_group_size_exp_desc_t9commandIdE"></span><span id="_CPPv2N32ze_mutable_group_size_exp_desc_t9commandIdE"></span><span id="ze_mutable_group_size_exp_desc_t::commandId__uint64_t"></span><span class="target" id="structze__mutable__group__size__exp__desc__t_1a6e0c9f98f36f52efab16f9597b31fde1"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">commandId</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t9commandIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] command identifier </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeXE">
+<span id="_CPPv3N32ze_mutable_group_size_exp_desc_t10groupSizeXE"></span><span id="_CPPv2N32ze_mutable_group_size_exp_desc_t10groupSizeXE"></span><span id="ze_mutable_group_size_exp_desc_t::groupSizeX__uint32_t"></span><span class="target" id="structze__mutable__group__size__exp__desc__t_1a5f035cc2636e0f3ac532927b05d712ac"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">groupSizeX</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeXE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] group size for X dimension to use for the kernel </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeYE">
+<span id="_CPPv3N32ze_mutable_group_size_exp_desc_t10groupSizeYE"></span><span id="_CPPv2N32ze_mutable_group_size_exp_desc_t10groupSizeYE"></span><span id="ze_mutable_group_size_exp_desc_t::groupSizeY__uint32_t"></span><span class="target" id="structze__mutable__group__size__exp__desc__t_1a9ee611654321bedcfe512a1a2e39cf7a"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">groupSizeY</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] group size for Y dimension to use for the kernel </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeZE">
+<span id="_CPPv3N32ze_mutable_group_size_exp_desc_t10groupSizeZE"></span><span id="_CPPv2N32ze_mutable_group_size_exp_desc_t10groupSizeZE"></span><span id="ze_mutable_group_size_exp_desc_t::groupSizeZ__uint32_t"></span><span class="target" id="structze__mutable__group__size__exp__desc__t_1ac361804767683b6f36ac64bda6ed5344"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">groupSizeZ</span></span></span><a class="headerlink" href="#_CPPv4N32ze_mutable_group_size_exp_desc_t10groupSizeZE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] group size for Z dimension to use for the kernel </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-global-offset-exp-desc-t">
+<span id="id19"></span><h3>ze_mutable_global_offset_exp_desc_t<a class="headerlink" href="#ze-mutable-global-offset-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv435ze_mutable_global_offset_exp_desc_t">
+<span id="_CPPv335ze_mutable_global_offset_exp_desc_t"></span><span id="_CPPv235ze_mutable_global_offset_exp_desc_t"></span><span id="ze_mutable_global_offset_exp_desc_t"></span><span class="target" id="structze__mutable__global__offset__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_global_offset_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv435ze_mutable_global_offset_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable kernel global offset descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_mutable_global_offset_exp_desc_t5stypeE">
+<span id="_CPPv3N35ze_mutable_global_offset_exp_desc_t5stypeE"></span><span id="_CPPv2N35ze_mutable_global_offset_exp_desc_t5stypeE"></span><span id="ze_mutable_global_offset_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__global__offset__exp__desc__t_1a85dcc0717a52ece2cd0270d00cc28eab"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_mutable_global_offset_exp_desc_t5pNextE">
+<span id="_CPPv3N35ze_mutable_global_offset_exp_desc_t5pNextE"></span><span id="_CPPv2N35ze_mutable_global_offset_exp_desc_t5pNextE"></span><span id="ze_mutable_global_offset_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__global__offset__exp__desc__t_1a4deed1bbd3917144a7587ae72ab3a509"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_mutable_global_offset_exp_desc_t9commandIdE">
+<span id="_CPPv3N35ze_mutable_global_offset_exp_desc_t9commandIdE"></span><span id="_CPPv2N35ze_mutable_global_offset_exp_desc_t9commandIdE"></span><span id="ze_mutable_global_offset_exp_desc_t::commandId__uint64_t"></span><span class="target" id="structze__mutable__global__offset__exp__desc__t_1ae33610c7ace7bc67187df7630116d9f3"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">commandId</span></span></span><a class="headerlink" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t9commandIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] command identifier </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetXE">
+<span id="_CPPv3N35ze_mutable_global_offset_exp_desc_t7offsetXE"></span><span id="_CPPv2N35ze_mutable_global_offset_exp_desc_t7offsetXE"></span><span id="ze_mutable_global_offset_exp_desc_t::offsetX__uint32_t"></span><span class="target" id="structze__mutable__global__offset__exp__desc__t_1a6700edceb0bc3758ef1233347eeabc26"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">offsetX</span></span></span><a class="headerlink" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetXE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] global offset for X dimension to use for this kernel </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetYE">
+<span id="_CPPv3N35ze_mutable_global_offset_exp_desc_t7offsetYE"></span><span id="_CPPv2N35ze_mutable_global_offset_exp_desc_t7offsetYE"></span><span id="ze_mutable_global_offset_exp_desc_t::offsetY__uint32_t"></span><span class="target" id="structze__mutable__global__offset__exp__desc__t_1a17d57dc29419ce0a981164a26d8825ad"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">offsetY</span></span></span><a class="headerlink" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] global offset for Y dimension to use for this kernel </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetZE">
+<span id="_CPPv3N35ze_mutable_global_offset_exp_desc_t7offsetZE"></span><span id="_CPPv2N35ze_mutable_global_offset_exp_desc_t7offsetZE"></span><span id="ze_mutable_global_offset_exp_desc_t::offsetZ__uint32_t"></span><span class="target" id="structze__mutable__global__offset__exp__desc__t_1a48a37edefb934e02c8c684510b4c9a19"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">offsetZ</span></span></span><a class="headerlink" href="#_CPPv4N35ze_mutable_global_offset_exp_desc_t7offsetZE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] global offset for Z dimension to use for this kernel </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-mutable-graph-argument-exp-desc-t">
+<span id="id20"></span><h3>ze_mutable_graph_argument_exp_desc_t<a class="headerlink" href="#ze-mutable-graph-argument-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv436ze_mutable_graph_argument_exp_desc_t">
+<span id="_CPPv336ze_mutable_graph_argument_exp_desc_t"></span><span id="_CPPv236ze_mutable_graph_argument_exp_desc_t"></span><span id="ze_mutable_graph_argument_exp_desc_t"></span><span class="target" id="structze__mutable__graph__argument__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_graph_argument_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv436ze_mutable_graph_argument_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Mutable graph argument descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_mutable_graph_argument_exp_desc_t5stypeE">
+<span id="_CPPv3N36ze_mutable_graph_argument_exp_desc_t5stypeE"></span><span id="_CPPv2N36ze_mutable_graph_argument_exp_desc_t5stypeE"></span><span id="ze_mutable_graph_argument_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__mutable__graph__argument__exp__desc__t_1a13706c421767e30e26e5f563e788d9df"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_mutable_graph_argument_exp_desc_t5pNextE">
+<span id="_CPPv3N36ze_mutable_graph_argument_exp_desc_t5pNextE"></span><span id="_CPPv2N36ze_mutable_graph_argument_exp_desc_t5pNextE"></span><span id="ze_mutable_graph_argument_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__mutable__graph__argument__exp__desc__t_1ac48923723b0dcf9284bb3d2c0a03dc66"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_mutable_graph_argument_exp_desc_t9commandIdE">
+<span id="_CPPv3N36ze_mutable_graph_argument_exp_desc_t9commandIdE"></span><span id="_CPPv2N36ze_mutable_graph_argument_exp_desc_t9commandIdE"></span><span id="ze_mutable_graph_argument_exp_desc_t::commandId__uint64_t"></span><span class="target" id="structze__mutable__graph__argument__exp__desc__t_1ad06c9ca9d064d8160414c7ed9011c841"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">commandId</span></span></span><a class="headerlink" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t9commandIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] command identifier </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_mutable_graph_argument_exp_desc_t8argIndexE">
+<span id="_CPPv3N36ze_mutable_graph_argument_exp_desc_t8argIndexE"></span><span id="_CPPv2N36ze_mutable_graph_argument_exp_desc_t8argIndexE"></span><span id="ze_mutable_graph_argument_exp_desc_t::argIndex__uint32_t"></span><span class="target" id="structze__mutable__graph__argument__exp__desc__t_1ae88f6362cbaba409cf88434a90ef3252"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">argIndex</span></span></span><a class="headerlink" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t8argIndexE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] graph argument index </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_mutable_graph_argument_exp_desc_t9pArgValueE">
+<span id="_CPPv3N36ze_mutable_graph_argument_exp_desc_t9pArgValueE"></span><span id="_CPPv2N36ze_mutable_graph_argument_exp_desc_t9pArgValueE"></span><span id="ze_mutable_graph_argument_exp_desc_t::pArgValue__voidCP"></span><span class="target" id="structze__mutable__graph__argument__exp__desc__t_1a90214ba61ae5c3f00f8586cae53f928d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pArgValue</span></span></span><a class="headerlink" href="#_CPPv4N36ze_mutable_graph_argument_exp_desc_t9pArgValueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] pointer to graph argument value </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="command_queue.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Command Queue - Experimental</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="mem.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Mem - Experimental</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zeCommandList</div><ul class="ctoc-list"><li><a href="command_list.html#zecommandlistcreatecloneexp">&hellip;CreateCloneExp</a></li><li><a href="command_list.html#zecommandlistimmediateappendcommandlistsexp">&hellip;ImmediateAppendCommandListsExp</a></li><li><a href="command_list.html#zecommandlistgetnextcommandidexp">&hellip;GetNextCommandIdExp</a></li><li><a href="command_list.html#zecommandlistupdatemutablecommandsexp">&hellip;UpdateMutableCommandsExp</a></li><li><a href="command_list.html#zecommandlistupdatemutablecommandsignaleventexp">&hellip;UpdateMutableCommandSignalEventExp</a></li><li><a href="command_list.html#zecommandlistupdatemutablecommandwaiteventsexp">&hellip;UpdateMutableCommandWaitEventsExp</a></li><li><a href="command_list.html#zecommandlistgetnextcommandidwithkernelsexp">&hellip;GetNextCommandIdWithKernelsExp</a></li><li><a href="command_list.html#zecommandlistupdatemutablecommandkernelsexp">&hellip;UpdateMutableCommandKernelsExp</a></li><li><a href="command_list.html#zecommandlistismutableexp">&hellip;IsMutableExp</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="command_list.html#ze-mutable-command-exp-flags-t">ze_mutable_command_exp_flags_t</a></li><li><a href="command_list.html#ze-mutable-command-list-exp-flags-t">ze_mutable_command_list_exp_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">9</span></summary><ul class="ctoc-list"><li><a href="command_list.html#ze-mutable-command-id-exp-desc-t">ze_mutable_command_id_exp_desc_t</a></li><li><a href="command_list.html#ze-mutable-command-list-exp-properties-t">ze_mutable_command_list_exp_properties_t</a></li><li><a href="command_list.html#ze-mutable-command-list-exp-desc-t">ze_mutable_command_list_exp_desc_t</a></li><li><a href="command_list.html#ze-mutable-commands-exp-desc-t">ze_mutable_commands_exp_desc_t</a></li><li><a href="command_list.html#ze-mutable-kernel-argument-exp-desc-t">ze_mutable_kernel_argument_exp_desc_t</a></li><li><a href="command_list.html#ze-mutable-group-count-exp-desc-t">ze_mutable_group_count_exp_desc_t</a></li><li><a href="command_list.html#ze-mutable-group-size-exp-desc-t">ze_mutable_group_size_exp_desc_t</a></li><li><a href="command_list.html#ze-mutable-global-offset-exp-desc-t">ze_mutable_global_offset_exp_desc_t</a></li><li><a href="command_list.html#ze-mutable-graph-argument-exp-desc-t">ze_mutable_graph_argument_exp_desc_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

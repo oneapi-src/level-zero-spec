@@ -1,0 +1,741 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>IPC Physical Memory Range Extension &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/EXT_IPC_PhysMemRange';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EXT.html">Extensions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/core/EXT_IPC_PhysMemRange.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>IPC Physical Memory Range Extension</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-extension-support">Checking Extension Support</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-side-usage">Export-Side Usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#range-requirements-and-error-behavior">Range Requirements and Error Behavior</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-side-usage">Import-Side Usage</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ipc-physical-memory-range-extension">
+<span id="ze-extension-ipc-phys-mem-handle-range"></span><h1>IPC Physical Memory Range Extension<a class="headerlink" href="#ipc-physical-memory-range-extension" title="Link to this heading">#</a></h1>
+<p class="ext-version"><em>Introduced in Level Zero version 1.18</em></p>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api/extensions/data_types.html#ze-ipc-phys-mem-handle-range-ext-version-t"><span class="std std-ref">ze_ipc_phys_mem_handle_range_ext_version_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api/extensions/mem.html#ze-ipc-phys-mem-handle-range-ext-desc-t"><span class="std std-ref">ze_ipc_phys_mem_handle_range_ext_desc_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions <em>(no new functions — extends existing</em> <a class="reference internal" href="api/apis/mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a> <em>)</em></p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>When a virtual address range is backed by multiple physical memory objects
+(<a class="reference internal" href="api/apis/physical_mem.html#zephysicalmemcreate"><span class="std std-ref">zePhysicalMemCreate</span></a>) mapped via
+<a class="reference internal" href="api/apis/virtual_mem.html#zevirtualmemmap"><span class="std std-ref">zeVirtualMemMap</span></a>, there is no single allocation base pointer that <a class="reference internal" href="api/apis/mem.html#zememgetipchandle"><span class="std std-ref">zeMemGetIpcHandle</span></a>
+can accept to represent the whole range. This extension solves that by allowing the caller to
+specify a VA range using a new descriptor passed via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> argument of
+<a class="reference internal" href="api/apis/mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>. The driver enumerates all physical handles mapped to the
+range and encodes them into a single IPC handle. On the importer side, the unchanged
+<a class="reference internal" href="api/apis/mem.html#zememopenipchandle"><span class="std std-ref">zeMemOpenIpcHandle</span></a> detects the range-encoded handle and maps all physical objects into a
+fresh contiguous VA reservation.</p>
+<section id="checking-extension-support">
+<h3>Checking Extension Support<a class="headerlink" href="#checking-extension-support" title="Link to this heading">#</a></h3>
+<p>Query extension support via <a class="reference internal" href="api/apis/driver.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a> before use:</p>
+<pre class="literal-block">uint32_t count = 0;
+<a class="reference internal" href="api/apis/driver.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a>(hDriver, &amp;count, NULL);
+
+<a class="reference internal" href="api/apis/driver.html#ze-driver-extension-properties-t"><span class="std std-ref">ze_driver_extension_properties_t</span></a>* props =
+    malloc(count * sizeof(<a class="reference internal" href="api/apis/driver.html#ze-driver-extension-properties-t"><span class="std std-ref">ze_driver_extension_properties_t</span></a>));
+<a class="reference internal" href="api/apis/driver.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a>(hDriver, &amp;count, props);
+
+bool supported = false;
+for (uint32_t i = 0; i &lt; count; i++) {
+    if (strcmp(props[i].name, ZE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_NAME) == 0) {
+        supported = true;
+        break;
+    }
+}
+free(props);</pre>
+</section>
+<section id="export-side-usage">
+<h3>Export-Side Usage<a class="headerlink" href="#export-side-usage" title="Link to this heading">#</a></h3>
+<p>Pass a <a class="reference internal" href="api/extensions/mem.html#ze-ipc-phys-mem-handle-range-ext-desc-t"><span class="std std-ref">ze_ipc_phys_mem_handle_range_ext_desc_t</span></a> as the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> argument of
+<a class="reference internal" href="api/apis/mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>. The <code class="docutils literal notranslate"><span class="pre">ptr</span></code> argument is the base VA of the range.</p>
+<pre class="literal-block"><a class="reference internal" href="api/extensions/mem.html#ze-ipc-phys-mem-handle-range-ext-desc-t"><span class="std std-ref">ze_ipc_phys_mem_handle_range_ext_desc_t</span></a> rangeDesc = {
+    .stype = <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESC</span></a>,
+    .pNext = NULL,
+    .size  = totalSize
+};
+
+<a class="reference internal" href="api/apis/data_types.html#ze-ipc-mem-handle-t"><span class="std std-ref">ze_ipc_mem_handle_t</span></a> ipcHandle;
+<a class="reference internal" href="api/apis/mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>(hContext, baseVA, &amp;rangeDesc, &amp;ipcHandle);
+
+// Transmit ipcHandle to the importer process via any IPC channel.</pre>
+</section>
+<section id="range-requirements-and-error-behavior">
+<h3>Range Requirements and Error Behavior<a class="headerlink" href="#range-requirements-and-error-behavior" title="Link to this heading">#</a></h3>
+<p>The exported range is a <strong>static snapshot</strong> of the physical objects mapped along
+<code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> at the time of the call. The following requirements apply on the
+export path:</p>
+<ul class="simple">
+<li><p><strong>Fully mapped range.</strong> Every page in <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> must be mapped to a physical
+memory object. Because the importer is guaranteed a single contiguous range, unmapped
+holes cannot be represented. If the driver encounters an unmapped sub-region while
+walking the range, <a class="reference internal" href="api/apis/mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a> fails with
+<code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_ADDRESS_NOT_FOUND</span></code>. For example, reserving 100 MB but mapping only the
+first 50 MB and then requesting an export of the full 100 MB fails; only the mapped
+<code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+50</span> <span class="pre">MB)</span></code> sub-range may be exported.</p></li>
+<li><p><strong>Contiguous VA, any number of reservations.</strong> The range may span more than one region
+created by <a class="reference internal" href="api/apis/virtual_mem.html#zevirtualmemreserve"><span class="std std-ref">zeVirtualMemReserve</span></a>. The underlying reservations are not significant — what
+is captured is the ordered set of physical objects encountered along the contiguous VA
+range.</p></li>
+<li><p><strong>Reserved VA + physical memory only.</strong> This extension is supported only for ranges
+backed by virtual reservations (<a class="reference internal" href="api/apis/virtual_mem.html#zevirtualmemreserve"><span class="std std-ref">zeVirtualMemReserve</span></a>) mapped to physical memory objects
+(<a class="reference internal" href="api/apis/virtual_mem.html#zevirtualmemmap"><span class="std std-ref">zeVirtualMemMap</span></a>). Device, host, and shared USM pointers (from <a class="reference internal" href="api/apis/mem.html#zememallocdevice"><span class="std std-ref">zeMemAllocDevice</span></a>,
+<a class="reference internal" href="api/apis/mem.html#zememallochost"><span class="std std-ref">zeMemAllocHost</span></a>, and <a class="reference internal" href="api/apis/mem.html#zememallocshared"><span class="std std-ref">zeMemAllocShared</span></a>) are not supported and will not be grouped into a
+range handle. If <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> includes any standard VA rather than a reserved
+VA, <a class="reference internal" href="api/apis/mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a> fails with <code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></code>.</p></li>
+<li><p><strong>Partial / offset ranges.</strong> <code class="docutils literal notranslate"><span class="pre">ptr</span></code> may begin at an arbitrary offset within a larger
+mapped range, and <code class="docutils literal notranslate"><span class="pre">size</span></code> may select a subset of it, provided the requested window is
+itself fully and contiguously mapped.</p></li>
+<li><p><strong>Per-object mapping offsets are preserved.</strong> An individual physical object along the
+range need not be mapped starting at its own offset zero — <a class="reference internal" href="api/apis/virtual_mem.html#zevirtualmemmap"><span class="std std-ref">zeVirtualMemMap</span></a> may have
+mapped it at a non-zero offset into the physical object. The export captures the offset
+at which each physical object was mapped, and the importer reproduces each mapping at
+that same offset in the new allocation, so the importer views exactly the same memory
+as the exporter.</p></li>
+</ul>
+<p>The export call returns:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 45.0%" />
+<col style="width: 55.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Result</p></th>
+<th class="head"><p>Condition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_ADDRESS_NOT_FOUND</span></code></p></td>
+<td><p>Any sub-region within <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> is not mapped to a physical object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_INVALID_SIZE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rangeDesc.size</span></code> is 0.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_UNSUPPORTED_SIZE</span></code></p></td>
+<td><p>The driver cannot accommodate the range; e.g. the number of physical objects encoded exceeds what the implementation can store.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ptr</span></code> is <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> includes a device, host, or shared USM allocation rather than reserved VA mapped to physical memory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></code></p></td>
+<td><p>The driver or device does not support <code class="docutils literal notranslate"><span class="pre">ZE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_NAME</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There is no application-visible limit on the number of physical objects a range may
+encode. The IPC handle is opaque: applications must not assume the encoded objects are
+stored inline within the <code class="docutils literal notranslate"><span class="pre">:ref:`ze-ipc-mem-handle-t`\</span></code> structure, and the driver’s
+representation is not bound by that structure’s size. If the driver cannot accommodate a
+given range, the export fails with <code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_UNSUPPORTED_SIZE</span></code> rather than
+silently truncating.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Exports do not track subsequent growth. Physical memory mapped into, unmapped from, or
+grown beyond the exporter’s VA range after the export call is <strong>not</strong> reflected in a
+previously exported handle or in any already-open importer view. Sharing additional
+mappings requires a new export. This is intentional so that the imported layout
+remains stable.</p>
+</div>
+</section>
+<section id="import-side-usage">
+<h3>Import-Side Usage<a class="headerlink" href="#import-side-usage" title="Link to this heading">#</a></h3>
+<p>Call the unchanged <a class="reference internal" href="api/apis/mem.html#zememopenipchandle"><span class="std std-ref">zeMemOpenIpcHandle</span></a>. The driver maps all encoded physical objects into
+a contiguous VA and returns its base.</p>
+<pre class="literal-block">void* importedBase = NULL;
+<a class="reference internal" href="api/apis/mem.html#zememopenipchandle"><span class="std std-ref">zeMemOpenIpcHandle</span></a>(hContext, hDevice, ipcHandle, 0, &amp;importedBase);
+
+// importedBase covers totalSize bytes, backed by the same physical objects
+// in the same order as the exporter's VA range.
+
+<a class="reference internal" href="api/apis/mem.html#zememcloseipchandle"><span class="std std-ref">zeMemCloseIpcHandle</span></a>(hContext, importedBase);</pre>
+<p>The import path requires no source changes to detect a range-encoded handle: the driver
+recognizes the range representation, reserves a fresh contiguous VA of <code class="docutils literal notranslate"><span class="pre">totalSize</span></code> bytes,
+and maps every encoded physical object into it in exporter VA order. On success
+<code class="docutils literal notranslate"><span class="pre">importedBase</span></code> addresses <code class="docutils literal notranslate"><span class="pre">size</span></code> bytes with no holes. When the export began at an offset
+within a physical memory object, <code class="docutils literal notranslate"><span class="pre">importedBase</span></code> corresponds to the exporter’s <code class="docutils literal notranslate"><span class="pre">ptr</span></code>, not
+to the base of the first encoded object. The importer does not need to be told <code class="docutils literal notranslate"><span class="pre">size</span></code> out
+of band — the range handle is self-describing: <a class="reference internal" href="api/apis/mem.html#zememgetaddressrange"><span class="std std-ref">zeMemGetAddressRange</span></a> called on
+<code class="docutils literal notranslate"><span class="pre">importedBase</span></code> returns its base and full <code class="docutils literal notranslate"><span class="pre">size</span></code>. Import fails with
+<code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></code> or <code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></code> if a
+contiguous VA reservation of the required size cannot be created.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the driver does not support <code class="docutils literal notranslate"><span class="pre">ZE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_NAME</span></code>, the function returns
+<code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This extension interoperates with <code class="docutils literal notranslate"><span class="pre">ZE_extension_ipc_mem_handle_type</span></code>.
+Both descriptors may be chained through <code class="docutils literal notranslate"><span class="pre">pNext</span></code> to control both the range and handle type.</p>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-extension-support">Checking Extension Support</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#export-side-usage">Export-Side Usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#range-requirements-and-error-behavior">Range Requirements and Error Behavior</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#import-side-usage">Import-Side Usage</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

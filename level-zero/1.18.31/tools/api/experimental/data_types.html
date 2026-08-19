@@ -1,0 +1,1242 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data Types - Experimental &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tools/api/experimental/data_types';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Sysman" href="../../../sysman/api.html" />
+    <link rel="prev" title="Metric - Experimental" href="metric.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Experimental</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric.html">Metric</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/tools/api/experimental/data_types.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Data Types - Experimental</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types-experimental-enums">Data Types - Experimental Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-api-tracing-exp-version-t">zet_api_tracing_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv429zet_api_tracing_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_api_tracing_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zet_api_tracing_exp_version_t31ZET_API_TRACING_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZET_API_TRACING_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zet_api_tracing_exp_version_t35ZET_API_TRACING_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_API_TRACING_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zet_api_tracing_exp_version_t40ZET_API_TRACING_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_API_TRACING_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-calculate-multiple-metrics-exp-version-t">ze_calculate_multiple_metrics_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv443ze_calculate_multiple_metrics_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_calculate_multiple_metrics_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N43ze_calculate_multiple_metrics_exp_version_t45ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N43ze_calculate_multiple_metrics_exp_version_t49ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N43ze_calculate_multiple_metrics_exp_version_t54ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-metric-global-timestamps-exp-version-t">ze_metric_global_timestamps_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv441ze_metric_global_timestamps_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_metric_global_timestamps_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N41ze_metric_global_timestamps_exp_version_t43ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N41ze_metric_global_timestamps_exp_version_t47ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N41ze_metric_global_timestamps_exp_version_t52ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-export-metric-data-exp-version-t">zet_export_metric_data_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436zet_export_metric_data_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_export_metric_data_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36zet_export_metric_data_exp_version_t38ZET_EXPORT_METRIC_DATA_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZET_EXPORT_METRIC_DATA_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36zet_export_metric_data_exp_version_t42ZET_EXPORT_METRIC_DATA_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_EXPORT_METRIC_DATA_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36zet_export_metric_data_exp_version_t47ZET_EXPORT_METRIC_DATA_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_EXPORT_METRIC_DATA_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-programmable-exp-version-t">zet_metric_programmable_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437zet_metric_programmable_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_programmable_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_programmable_exp_version_t39ZET_METRIC_PROGRAMMABLE_EXP_VERSION_1_1E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_PROGRAMMABLE_EXP_VERSION_1_1</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_programmable_exp_version_t43ZET_METRIC_PROGRAMMABLE_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_PROGRAMMABLE_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_programmable_exp_version_t48ZET_METRIC_PROGRAMMABLE_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_PROGRAMMABLE_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-value-info-type-exp-t">zet_value_info_type_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zet_value_info_type_exp_t"><code class="docutils literal notranslate"><span class="pre">zet_value_info_type_exp_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT64E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT64</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT32E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FLOAT32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT64E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FLOAT64</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_BOOL8E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_BOOL8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_UINT8E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT16E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT16</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_UINT64_RANGEE"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT64_RANGE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t37ZET_VALUE_INFO_TYPE_EXP_FLOAT64_RANGEE"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FLOAT64_RANGE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-concurrent-metric-groups-exp-version-t">zet_concurrent_metric_groups_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv442zet_concurrent_metric_groups_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_concurrent_metric_groups_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42zet_concurrent_metric_groups_exp_version_t44ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42zet_concurrent_metric_groups_exp_version_t48ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42zet_concurrent_metric_groups_exp_version_t53ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-tracer-exp-version-t">zet_metric_tracer_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zet_metric_tracer_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_tracer_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zet_metric_tracer_exp_version_t33ZET_METRIC_TRACER_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TRACER_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zet_metric_tracer_exp_version_t37ZET_METRIC_TRACER_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TRACER_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zet_metric_tracer_exp_version_t42ZET_METRIC_TRACER_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TRACER_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-export-memory-exp-version-t">zet_metric_export_memory_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438zet_metric_export_memory_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_export_memory_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38zet_metric_export_memory_exp_version_t40ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38zet_metric_export_memory_exp_version_t44ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38zet_metric_export_memory_exp_version_t49ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-group-marker-exp-version-t">zet_metric_group_marker_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437zet_metric_group_marker_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_group_marker_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_group_marker_exp_version_t39ZET_METRIC_GROUP_MARKER_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_GROUP_MARKER_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_group_marker_exp_version_t43ZET_METRIC_GROUP_MARKER_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_GROUP_MARKER_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_group_marker_exp_version_t48ZET_METRIC_GROUP_MARKER_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_GROUP_MARKER_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metrics-runtime-enable-disable-exp-version-t">zet_metrics_runtime_enable_disable_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv448zet_metrics_runtime_enable_disable_exp_version_t"><code class="docutils literal notranslate"><span class="pre">zet_metrics_runtime_enable_disable_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t50ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t54ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t59ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types-experimental-structures">Data Types - Experimental Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-value-uint64-range-exp-t">zet_value_uint64_range_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv428zet_value_uint64_range_exp_t"><code class="docutils literal notranslate"><span class="pre">zet_value_uint64_range_exp_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zet_value_uint64_range_exp_t7ui64MinE"><code class="docutils literal notranslate"><span class="pre">ui64Min</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zet_value_uint64_range_exp_t7ui64MaxE"><code class="docutils literal notranslate"><span class="pre">ui64Max</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-value-fp64-range-exp-t">zet_value_fp64_range_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zet_value_fp64_range_exp_t"><code class="docutils literal notranslate"><span class="pre">zet_value_fp64_range_exp_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zet_value_fp64_range_exp_t7fp64MinE"><code class="docutils literal notranslate"><span class="pre">fp64Min</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zet_value_fp64_range_exp_t7fp64MaxE"><code class="docutils literal notranslate"><span class="pre">fp64Max</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-value-info-exp-t">zet_value_info_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zet_value_info_exp_t"><code class="docutils literal notranslate"><span class="pre">zet_value_info_exp_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t4ui32E"><code class="docutils literal notranslate"><span class="pre">ui32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t4ui64E"><code class="docutils literal notranslate"><span class="pre">ui64</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t4fp32E"><code class="docutils literal notranslate"><span class="pre">fp32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t4fp64E"><code class="docutils literal notranslate"><span class="pre">fp64</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t2b8E"><code class="docutils literal notranslate"><span class="pre">b8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t3ui8E"><code class="docutils literal notranslate"><span class="pre">ui8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t4ui16E"><code class="docutils literal notranslate"><span class="pre">ui16</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t9ui64RangeE"><code class="docutils literal notranslate"><span class="pre">ui64Range</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zet_value_info_exp_t9fp64RangeE"><code class="docutils literal notranslate"><span class="pre">fp64Range</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-entry-exp-t">zet_metric_entry_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zet_metric_entry_exp_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_entry_exp_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zet_metric_entry_exp_t5valueE"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zet_metric_entry_exp_t9timeStampE"><code class="docutils literal notranslate"><span class="pre">timeStamp</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zet_metric_entry_exp_t11metricIndexE"><code class="docutils literal notranslate"><span class="pre">metricIndex</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zet_metric_entry_exp_t11onSubdeviceE"><code class="docutils literal notranslate"><span class="pre">onSubdevice</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zet_metric_entry_exp_t11subdeviceIdE"><code class="docutils literal notranslate"><span class="pre">subdeviceId</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="data-types-experimental">
+<h1>Data Types - Experimental<a class="headerlink" href="#data-types-experimental" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="data-types-experimental-enums">
+<h2>Data Types - Experimental Enums<a class="headerlink" href="#data-types-experimental-enums" title="Link to this heading">#</a></h2>
+<section id="zet-api-tracing-exp-version-t">
+<span id="id1"></span><h3>zet_api_tracing_exp_version_t<a class="headerlink" href="#zet-api-tracing-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv429zet_api_tracing_exp_version_t">
+<span id="_CPPv329zet_api_tracing_exp_version_t"></span><span id="_CPPv229zet_api_tracing_exp_version_t"></span><span class="target" id="zet__api_8h_1aab80fcd63604e5f18ad19494e6a4e82a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_api_tracing_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv429zet_api_tracing_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>API Tracing Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29zet_api_tracing_exp_version_t31ZET_API_TRACING_EXP_VERSION_1_0E">
+<span id="_CPPv3N29zet_api_tracing_exp_version_t31ZET_API_TRACING_EXP_VERSION_1_0E"></span><span id="_CPPv2N29zet_api_tracing_exp_version_t31ZET_API_TRACING_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1aab80fcd63604e5f18ad19494e6a4e82aaffa1056f36d059d9d99cd8a77ad2a3e0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_API_TRACING_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N29zet_api_tracing_exp_version_t31ZET_API_TRACING_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29zet_api_tracing_exp_version_t35ZET_API_TRACING_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N29zet_api_tracing_exp_version_t35ZET_API_TRACING_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N29zet_api_tracing_exp_version_t35ZET_API_TRACING_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1aab80fcd63604e5f18ad19494e6a4e82aa94a0222767a20184ae600edc5d8e2b88"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_API_TRACING_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N29zet_api_tracing_exp_version_t35ZET_API_TRACING_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N29zet_api_tracing_exp_version_t40ZET_API_TRACING_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N29zet_api_tracing_exp_version_t40ZET_API_TRACING_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N29zet_api_tracing_exp_version_t40ZET_API_TRACING_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1aab80fcd63604e5f18ad19494e6a4e82aa491934321b4a39bde17c2a72e239318d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_API_TRACING_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N29zet_api_tracing_exp_version_t40ZET_API_TRACING_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_API_TRACING_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-calculate-multiple-metrics-exp-version-t">
+<span id="id2"></span><h3>ze_calculate_multiple_metrics_exp_version_t<a class="headerlink" href="#ze-calculate-multiple-metrics-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.2</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv443ze_calculate_multiple_metrics_exp_version_t">
+<span id="_CPPv343ze_calculate_multiple_metrics_exp_version_t"></span><span id="_CPPv243ze_calculate_multiple_metrics_exp_version_t"></span><span class="target" id="zet__api_8h_1a5163fc1d334b00243b080aea05de2a65"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_calculate_multiple_metrics_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv443ze_calculate_multiple_metrics_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Calculating Multiple Metrics Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N43ze_calculate_multiple_metrics_exp_version_t45ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_1_0E">
+<span id="_CPPv3N43ze_calculate_multiple_metrics_exp_version_t45ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_1_0E"></span><span id="_CPPv2N43ze_calculate_multiple_metrics_exp_version_t45ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1a5163fc1d334b00243b080aea05de2a65a57a76a883382e31c03af0616fbc3d6f9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N43ze_calculate_multiple_metrics_exp_version_t45ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N43ze_calculate_multiple_metrics_exp_version_t49ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N43ze_calculate_multiple_metrics_exp_version_t49ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N43ze_calculate_multiple_metrics_exp_version_t49ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1a5163fc1d334b00243b080aea05de2a65a2a399e0fa49206dbf8825c6e1b08286e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N43ze_calculate_multiple_metrics_exp_version_t49ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N43ze_calculate_multiple_metrics_exp_version_t54ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N43ze_calculate_multiple_metrics_exp_version_t54ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N43ze_calculate_multiple_metrics_exp_version_t54ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1a5163fc1d334b00243b080aea05de2a65ae7a2cf0880919ab6653d69e36b2c10f7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N43ze_calculate_multiple_metrics_exp_version_t54ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_CALCULATE_MULTIPLE_METRICS_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-metric-global-timestamps-exp-version-t">
+<span id="id3"></span><h3>ze_metric_global_timestamps_exp_version_t<a class="headerlink" href="#ze-metric-global-timestamps-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.5</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv441ze_metric_global_timestamps_exp_version_t">
+<span id="_CPPv341ze_metric_global_timestamps_exp_version_t"></span><span id="_CPPv241ze_metric_global_timestamps_exp_version_t"></span><span class="target" id="zet__api_8h_1a163c45f1b429feee42382acbd9912df2"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_metric_global_timestamps_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv441ze_metric_global_timestamps_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Global Metric Timestamps Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N41ze_metric_global_timestamps_exp_version_t43ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_1_0E">
+<span id="_CPPv3N41ze_metric_global_timestamps_exp_version_t43ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_1_0E"></span><span id="_CPPv2N41ze_metric_global_timestamps_exp_version_t43ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1a163c45f1b429feee42382acbd9912df2a030a7f4979846e658d1381769cc211cd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N41ze_metric_global_timestamps_exp_version_t43ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N41ze_metric_global_timestamps_exp_version_t47ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N41ze_metric_global_timestamps_exp_version_t47ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N41ze_metric_global_timestamps_exp_version_t47ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1a163c45f1b429feee42382acbd9912df2a0785e7bfdbbda147a1b124383e48c8a0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N41ze_metric_global_timestamps_exp_version_t47ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N41ze_metric_global_timestamps_exp_version_t52ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N41ze_metric_global_timestamps_exp_version_t52ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N41ze_metric_global_timestamps_exp_version_t52ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1a163c45f1b429feee42382acbd9912df2a803e5d964b323477e24a2c669133c4b9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N41ze_metric_global_timestamps_exp_version_t52ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_METRIC_GLOBAL_TIMESTAMPS_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-export-metric-data-exp-version-t">
+<span id="id4"></span><h3>zet_export_metric_data_exp_version_t<a class="headerlink" href="#zet-export-metric-data-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.6</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv436zet_export_metric_data_exp_version_t">
+<span id="_CPPv336zet_export_metric_data_exp_version_t"></span><span id="_CPPv236zet_export_metric_data_exp_version_t"></span><span class="target" id="zet__api_8h_1a40ce0636de79f7b2977a2e666d60be6b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_export_metric_data_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv436zet_export_metric_data_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Exporting Metrics Data Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N36zet_export_metric_data_exp_version_t38ZET_EXPORT_METRIC_DATA_EXP_VERSION_1_0E">
+<span id="_CPPv3N36zet_export_metric_data_exp_version_t38ZET_EXPORT_METRIC_DATA_EXP_VERSION_1_0E"></span><span id="_CPPv2N36zet_export_metric_data_exp_version_t38ZET_EXPORT_METRIC_DATA_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1a40ce0636de79f7b2977a2e666d60be6bae50dd7acf6580ccb962215a4686bd565"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_EXPORT_METRIC_DATA_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N36zet_export_metric_data_exp_version_t38ZET_EXPORT_METRIC_DATA_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N36zet_export_metric_data_exp_version_t42ZET_EXPORT_METRIC_DATA_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N36zet_export_metric_data_exp_version_t42ZET_EXPORT_METRIC_DATA_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N36zet_export_metric_data_exp_version_t42ZET_EXPORT_METRIC_DATA_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1a40ce0636de79f7b2977a2e666d60be6ba303afb0f5118cddd5c0cd0832b1e39c2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_EXPORT_METRIC_DATA_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N36zet_export_metric_data_exp_version_t42ZET_EXPORT_METRIC_DATA_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N36zet_export_metric_data_exp_version_t47ZET_EXPORT_METRIC_DATA_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N36zet_export_metric_data_exp_version_t47ZET_EXPORT_METRIC_DATA_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N36zet_export_metric_data_exp_version_t47ZET_EXPORT_METRIC_DATA_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1a40ce0636de79f7b2977a2e666d60be6ba1daea3d40ddd7d78e4c477e39e983202"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_EXPORT_METRIC_DATA_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N36zet_export_metric_data_exp_version_t47ZET_EXPORT_METRIC_DATA_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_EXPORT_METRIC_DATA_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-metric-programmable-exp-version-t">
+<span id="id5"></span><h3>zet_metric_programmable_exp_version_t<a class="headerlink" href="#zet-metric-programmable-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv437zet_metric_programmable_exp_version_t">
+<span id="_CPPv337zet_metric_programmable_exp_version_t"></span><span id="_CPPv237zet_metric_programmable_exp_version_t"></span><span class="target" id="zet__api_8h_1ac8b69f82702e0dc3c01b07dac6fc0d04"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_programmable_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv437zet_metric_programmable_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Programmable Metrics Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37zet_metric_programmable_exp_version_t39ZET_METRIC_PROGRAMMABLE_EXP_VERSION_1_1E">
+<span id="_CPPv3N37zet_metric_programmable_exp_version_t39ZET_METRIC_PROGRAMMABLE_EXP_VERSION_1_1E"></span><span id="_CPPv2N37zet_metric_programmable_exp_version_t39ZET_METRIC_PROGRAMMABLE_EXP_VERSION_1_1E"></span><span class="target" id="zet__api_8h_1ac8b69f82702e0dc3c01b07dac6fc0d04adbc8fa0dd9f38dcf8dc1b5ae16304430"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_PROGRAMMABLE_EXP_VERSION_1_1</span></span></span><a class="headerlink" href="#_CPPv4N37zet_metric_programmable_exp_version_t39ZET_METRIC_PROGRAMMABLE_EXP_VERSION_1_1E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.1 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37zet_metric_programmable_exp_version_t43ZET_METRIC_PROGRAMMABLE_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N37zet_metric_programmable_exp_version_t43ZET_METRIC_PROGRAMMABLE_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N37zet_metric_programmable_exp_version_t43ZET_METRIC_PROGRAMMABLE_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1ac8b69f82702e0dc3c01b07dac6fc0d04a8509e512005c2f0946552d0498bf6b68"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_PROGRAMMABLE_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N37zet_metric_programmable_exp_version_t43ZET_METRIC_PROGRAMMABLE_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37zet_metric_programmable_exp_version_t48ZET_METRIC_PROGRAMMABLE_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N37zet_metric_programmable_exp_version_t48ZET_METRIC_PROGRAMMABLE_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N37zet_metric_programmable_exp_version_t48ZET_METRIC_PROGRAMMABLE_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1ac8b69f82702e0dc3c01b07dac6fc0d04a1610b26331944245e5220410f807d61e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_PROGRAMMABLE_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N37zet_metric_programmable_exp_version_t48ZET_METRIC_PROGRAMMABLE_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_METRIC_PROGRAMMABLE_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-value-info-type-exp-t">
+<span id="id6"></span><h3>zet_value_info_type_exp_t<a class="headerlink" href="#zet-value-info-type-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv425zet_value_info_type_exp_t">
+<span id="_CPPv325zet_value_info_type_exp_t"></span><span id="_CPPv225zet_value_info_type_exp_t"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_info_type_exp_t</span></span></span><a class="headerlink" href="#_CPPv425zet_value_info_type_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported value info types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT32E">
+<span id="_CPPv3N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT32E"></span><span id="_CPPv2N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT32E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598ae92865ebb1e349f41f53c0223b1a1aa6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>32-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT64E">
+<span id="_CPPv3N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT64E"></span><span id="_CPPv2N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT64E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598a7aab3ffb854678c1146de02abc7233c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT64</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT64E" title="Link to this definition">#</a><br /></dt>
+<dd><p>64-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT32E">
+<span id="_CPPv3N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT32E"></span><span id="_CPPv2N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT32E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598a67edd765555f837e37872530c3e5ffa8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FLOAT32</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>32-bit floating-point </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT64E">
+<span id="_CPPv3N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT64E"></span><span id="_CPPv2N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT64E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598ab1d8b4b8329e5d99c0f4f04a422ff695"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FLOAT64</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t31ZET_VALUE_INFO_TYPE_EXP_FLOAT64E" title="Link to this definition">#</a><br /></dt>
+<dd><p>64-bit floating-point </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_BOOL8E">
+<span id="_CPPv3N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_BOOL8E"></span><span id="_CPPv2N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_BOOL8E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598a0def62d37bed5e3d1284b5d1afdca882"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_BOOL8</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_BOOL8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>8-bit boolean </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_UINT8E">
+<span id="_CPPv3N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_UINT8E"></span><span id="_CPPv2N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_UINT8E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598a50438ae531f23ad45b63ac5df62893be"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT8</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t29ZET_VALUE_INFO_TYPE_EXP_UINT8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>8-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT16E">
+<span id="_CPPv3N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT16E"></span><span id="_CPPv2N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT16E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598a4d3257674a637cc109bb10eb9333da29"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT16</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t30ZET_VALUE_INFO_TYPE_EXP_UINT16E" title="Link to this definition">#</a><br /></dt>
+<dd><p>16-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_UINT64_RANGEE">
+<span id="_CPPv3N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_UINT64_RANGEE"></span><span id="_CPPv2N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_UINT64_RANGEE"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598a5558de2053c530381b1a1240c5b7f7f5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_UINT64_RANGE</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_UINT64_RANGEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>64-bit unsigned-integer range (minimum and maximum) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t37ZET_VALUE_INFO_TYPE_EXP_FLOAT64_RANGEE">
+<span id="_CPPv3N25zet_value_info_type_exp_t37ZET_VALUE_INFO_TYPE_EXP_FLOAT64_RANGEE"></span><span id="_CPPv2N25zet_value_info_type_exp_t37ZET_VALUE_INFO_TYPE_EXP_FLOAT64_RANGEE"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598a3abc00d24f3db4274f011a86c9012222"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FLOAT64_RANGE</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t37ZET_VALUE_INFO_TYPE_EXP_FLOAT64_RANGEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>64-bit floating point range (minimum and maximum) <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_FORCE_UINT32E">
+<span id="_CPPv3N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_FORCE_UINT32E"></span><span id="_CPPv2N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598ab102cae96ab49f6163b5c66f4fa73499"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_VALUE_INFO_TYPE_EXP_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N25zet_value_info_type_exp_t36ZET_VALUE_INFO_TYPE_EXP_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_VALUE_INFO_TYPE_EXP_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-concurrent-metric-groups-exp-version-t">
+<span id="id7"></span><h3>zet_concurrent_metric_groups_exp_version_t<a class="headerlink" href="#zet-concurrent-metric-groups-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv442zet_concurrent_metric_groups_exp_version_t">
+<span id="_CPPv342zet_concurrent_metric_groups_exp_version_t"></span><span id="_CPPv242zet_concurrent_metric_groups_exp_version_t"></span><span class="target" id="zet__api_8h_1ab3bf0f254b26f590058eea63aafadb4a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_concurrent_metric_groups_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv442zet_concurrent_metric_groups_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Concurrent Metric Groups Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N42zet_concurrent_metric_groups_exp_version_t44ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_1_0E">
+<span id="_CPPv3N42zet_concurrent_metric_groups_exp_version_t44ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_1_0E"></span><span id="_CPPv2N42zet_concurrent_metric_groups_exp_version_t44ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1ab3bf0f254b26f590058eea63aafadb4aa519f2ddf09eb45ffe5147dea36dfe995"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N42zet_concurrent_metric_groups_exp_version_t44ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N42zet_concurrent_metric_groups_exp_version_t48ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N42zet_concurrent_metric_groups_exp_version_t48ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N42zet_concurrent_metric_groups_exp_version_t48ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1ab3bf0f254b26f590058eea63aafadb4aa0b6dc0de04c1b6067d9549843636f7d3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N42zet_concurrent_metric_groups_exp_version_t48ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N42zet_concurrent_metric_groups_exp_version_t53ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N42zet_concurrent_metric_groups_exp_version_t53ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N42zet_concurrent_metric_groups_exp_version_t53ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1ab3bf0f254b26f590058eea63aafadb4aa77defbe4aec424976cc6f1411f27d9ba"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N42zet_concurrent_metric_groups_exp_version_t53ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_CONCURRENT_METRIC_GROUPS_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-metric-tracer-exp-version-t">
+<span id="id8"></span><h3>zet_metric_tracer_exp_version_t<a class="headerlink" href="#zet-metric-tracer-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431zet_metric_tracer_exp_version_t">
+<span id="_CPPv331zet_metric_tracer_exp_version_t"></span><span id="_CPPv231zet_metric_tracer_exp_version_t"></span><span class="target" id="zet__api_8h_1ae206f4ac34a7470c41d68affb7c10bd8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_tracer_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv431zet_metric_tracer_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric Tracer Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zet_metric_tracer_exp_version_t33ZET_METRIC_TRACER_EXP_VERSION_1_0E">
+<span id="_CPPv3N31zet_metric_tracer_exp_version_t33ZET_METRIC_TRACER_EXP_VERSION_1_0E"></span><span id="_CPPv2N31zet_metric_tracer_exp_version_t33ZET_METRIC_TRACER_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1ae206f4ac34a7470c41d68affb7c10bd8a2859bd98b4b331ca5facd1fe91e7d1fc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TRACER_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N31zet_metric_tracer_exp_version_t33ZET_METRIC_TRACER_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zet_metric_tracer_exp_version_t37ZET_METRIC_TRACER_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N31zet_metric_tracer_exp_version_t37ZET_METRIC_TRACER_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N31zet_metric_tracer_exp_version_t37ZET_METRIC_TRACER_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1ae206f4ac34a7470c41d68affb7c10bd8a5f6cd817d2e7b70aa7dd333790c2778a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TRACER_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N31zet_metric_tracer_exp_version_t37ZET_METRIC_TRACER_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zet_metric_tracer_exp_version_t42ZET_METRIC_TRACER_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N31zet_metric_tracer_exp_version_t42ZET_METRIC_TRACER_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N31zet_metric_tracer_exp_version_t42ZET_METRIC_TRACER_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1ae206f4ac34a7470c41d68affb7c10bd8a69868b99e814717fb0ea4823c8ba9538"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TRACER_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N31zet_metric_tracer_exp_version_t42ZET_METRIC_TRACER_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_METRIC_TRACER_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-metric-export-memory-exp-version-t">
+<span id="id9"></span><h3>zet_metric_export_memory_exp_version_t<a class="headerlink" href="#zet-metric-export-memory-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.11</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv438zet_metric_export_memory_exp_version_t">
+<span id="_CPPv338zet_metric_export_memory_exp_version_t"></span><span id="_CPPv238zet_metric_export_memory_exp_version_t"></span><span class="target" id="zet__api_8h_1a996ad2136ea0c58643525523104ce5d4"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_export_memory_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv438zet_metric_export_memory_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric Export Memory Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N38zet_metric_export_memory_exp_version_t40ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_1_0E">
+<span id="_CPPv3N38zet_metric_export_memory_exp_version_t40ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_1_0E"></span><span id="_CPPv2N38zet_metric_export_memory_exp_version_t40ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1a996ad2136ea0c58643525523104ce5d4ac7fe65cdc6ecc94c74515eeea615bd92"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N38zet_metric_export_memory_exp_version_t40ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N38zet_metric_export_memory_exp_version_t44ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N38zet_metric_export_memory_exp_version_t44ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N38zet_metric_export_memory_exp_version_t44ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1a996ad2136ea0c58643525523104ce5d4aca4f2613a61562d6b8dddbfb3ee7060c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N38zet_metric_export_memory_exp_version_t44ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N38zet_metric_export_memory_exp_version_t49ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N38zet_metric_export_memory_exp_version_t49ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N38zet_metric_export_memory_exp_version_t49ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1a996ad2136ea0c58643525523104ce5d4a7bf6509686d7e83ac1e7028bb58993db"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N38zet_metric_export_memory_exp_version_t49ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_METRIC_EXPORT_MEMORY_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-metric-group-marker-exp-version-t">
+<span id="id10"></span><h3>zet_metric_group_marker_exp_version_t<a class="headerlink" href="#zet-metric-group-marker-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.13</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv437zet_metric_group_marker_exp_version_t">
+<span id="_CPPv337zet_metric_group_marker_exp_version_t"></span><span id="_CPPv237zet_metric_group_marker_exp_version_t"></span><span class="target" id="zet__api_8h_1a7cc3fc713eade5e1cb599fb8cdbbd1da"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_group_marker_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv437zet_metric_group_marker_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Marker Support Using MetricGroup Experimental Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37zet_metric_group_marker_exp_version_t39ZET_METRIC_GROUP_MARKER_EXP_VERSION_1_0E">
+<span id="_CPPv3N37zet_metric_group_marker_exp_version_t39ZET_METRIC_GROUP_MARKER_EXP_VERSION_1_0E"></span><span id="_CPPv2N37zet_metric_group_marker_exp_version_t39ZET_METRIC_GROUP_MARKER_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1a7cc3fc713eade5e1cb599fb8cdbbd1daace83208c3c8f029a90d8d0e8b1173e17"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_GROUP_MARKER_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N37zet_metric_group_marker_exp_version_t39ZET_METRIC_GROUP_MARKER_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37zet_metric_group_marker_exp_version_t43ZET_METRIC_GROUP_MARKER_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N37zet_metric_group_marker_exp_version_t43ZET_METRIC_GROUP_MARKER_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N37zet_metric_group_marker_exp_version_t43ZET_METRIC_GROUP_MARKER_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1a7cc3fc713eade5e1cb599fb8cdbbd1daab33226eca269b119a5e65459fcf15015"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_GROUP_MARKER_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N37zet_metric_group_marker_exp_version_t43ZET_METRIC_GROUP_MARKER_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37zet_metric_group_marker_exp_version_t48ZET_METRIC_GROUP_MARKER_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N37zet_metric_group_marker_exp_version_t48ZET_METRIC_GROUP_MARKER_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N37zet_metric_group_marker_exp_version_t48ZET_METRIC_GROUP_MARKER_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1a7cc3fc713eade5e1cb599fb8cdbbd1daa8d675189e35464175277e561f0eabba0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_GROUP_MARKER_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N37zet_metric_group_marker_exp_version_t48ZET_METRIC_GROUP_MARKER_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_METRIC_GROUP_MARKER_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zet-metrics-runtime-enable-disable-exp-version-t">
+<span id="id11"></span><h3>zet_metrics_runtime_enable_disable_exp_version_t<a class="headerlink" href="#zet-metrics-runtime-enable-disable-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.13</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv448zet_metrics_runtime_enable_disable_exp_version_t">
+<span id="_CPPv348zet_metrics_runtime_enable_disable_exp_version_t"></span><span id="_CPPv248zet_metrics_runtime_enable_disable_exp_version_t"></span><span class="target" id="zet__api_8h_1ad413cda478a44de5a1702ec902fae8a8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metrics_runtime_enable_disable_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv448zet_metrics_runtime_enable_disable_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Runtime Enabling and Disabling Metrics Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t50ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_1_0E">
+<span id="_CPPv3N48zet_metrics_runtime_enable_disable_exp_version_t50ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_1_0E"></span><span id="_CPPv2N48zet_metrics_runtime_enable_disable_exp_version_t50ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_1_0E"></span><span class="target" id="zet__api_8h_1ad413cda478a44de5a1702ec902fae8a8ad524e32faea665da03a781eb47dff9b6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t50ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t54ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N48zet_metrics_runtime_enable_disable_exp_version_t54ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N48zet_metrics_runtime_enable_disable_exp_version_t54ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_CURRENTE"></span><span class="target" id="zet__api_8h_1ad413cda478a44de5a1702ec902fae8a8ac3d6dcaf4763e149b2be0e0163a8624a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t54ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t59ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N48zet_metrics_runtime_enable_disable_exp_version_t59ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N48zet_metrics_runtime_enable_disable_exp_version_t59ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1ad413cda478a44de5a1702ec902fae8a8a7b68f742b30e41206432767db14c1c06"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N48zet_metrics_runtime_enable_disable_exp_version_t59ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_METRICS_RUNTIME_ENABLE_DISABLE_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="data-types-experimental-structures">
+<h2>Data Types - Experimental Structures<a class="headerlink" href="#data-types-experimental-structures" title="Link to this heading">#</a></h2>
+<section id="zet-value-uint64-range-exp-t">
+<span id="id12"></span><h3>zet_value_uint64_range_exp_t<a class="headerlink" href="#zet-value-uint64-range-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv428zet_value_uint64_range_exp_t">
+<span id="_CPPv328zet_value_uint64_range_exp_t"></span><span id="_CPPv228zet_value_uint64_range_exp_t"></span><span id="zet_value_uint64_range_exp_t"></span><span class="target" id="structzet__value__uint64__range__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_uint64_range_exp_t</span></span></span><a class="headerlink" href="#_CPPv428zet_value_uint64_range_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value info of type uint64_t range. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zet_value_uint64_range_exp_t7ui64MinE">
+<span id="_CPPv3N28zet_value_uint64_range_exp_t7ui64MinE"></span><span id="_CPPv2N28zet_value_uint64_range_exp_t7ui64MinE"></span><span id="zet_value_uint64_range_exp_t::ui64Min__uint64_t"></span><span class="target" id="structzet__value__uint64__range__exp__t_1aa07fe1df140e04640c066fbd43947730"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ui64Min</span></span></span><a class="headerlink" href="#_CPPv4N28zet_value_uint64_range_exp_t7ui64MinE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] minimum value of the range </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zet_value_uint64_range_exp_t7ui64MaxE">
+<span id="_CPPv3N28zet_value_uint64_range_exp_t7ui64MaxE"></span><span id="_CPPv2N28zet_value_uint64_range_exp_t7ui64MaxE"></span><span id="zet_value_uint64_range_exp_t::ui64Max__uint64_t"></span><span class="target" id="structzet__value__uint64__range__exp__t_1acb1e75785d47bfcacca57da6f52d556f"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ui64Max</span></span></span><a class="headerlink" href="#_CPPv4N28zet_value_uint64_range_exp_t7ui64MaxE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] maximum value of the range </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zet-value-fp64-range-exp-t">
+<span id="id13"></span><h3>zet_value_fp64_range_exp_t<a class="headerlink" href="#zet-value-fp64-range-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv426zet_value_fp64_range_exp_t">
+<span id="_CPPv326zet_value_fp64_range_exp_t"></span><span id="_CPPv226zet_value_fp64_range_exp_t"></span><span id="zet_value_fp64_range_exp_t"></span><span class="target" id="structzet__value__fp64__range__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_fp64_range_exp_t</span></span></span><a class="headerlink" href="#_CPPv426zet_value_fp64_range_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value info of type float64 range. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zet_value_fp64_range_exp_t7fp64MinE">
+<span id="_CPPv3N26zet_value_fp64_range_exp_t7fp64MinE"></span><span id="_CPPv2N26zet_value_fp64_range_exp_t7fp64MinE"></span><span id="zet_value_fp64_range_exp_t::fp64Min__double"></span><span class="target" id="structzet__value__fp64__range__exp__t_1a558a83f0def331510b37ab8233536e5d"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp64Min</span></span></span><a class="headerlink" href="#_CPPv4N26zet_value_fp64_range_exp_t7fp64MinE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] minimum value of the range </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zet_value_fp64_range_exp_t7fp64MaxE">
+<span id="_CPPv3N26zet_value_fp64_range_exp_t7fp64MaxE"></span><span id="_CPPv2N26zet_value_fp64_range_exp_t7fp64MaxE"></span><span id="zet_value_fp64_range_exp_t::fp64Max__double"></span><span class="target" id="structzet__value__fp64__range__exp__t_1a45445b53e8ebf5d8026b90cb4cbb06f0"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp64Max</span></span></span><a class="headerlink" href="#_CPPv4N26zet_value_fp64_range_exp_t7fp64MaxE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] maximum value of the range </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zet-value-info-exp-t">
+<span id="id14"></span><h3>zet_value_info_exp_t<a class="headerlink" href="#zet-value-info-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp union">
+<dt class="sig sig-object cpp" id="_CPPv420zet_value_info_exp_t">
+<span id="_CPPv320zet_value_info_exp_t"></span><span id="_CPPv220zet_value_info_exp_t"></span><span class="target" id="unionzet__value__info__exp__t"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_info_exp_t</span></span></span><a class="headerlink" href="#_CPPv420zet_value_info_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;zet_api.h&gt;</em></div>
+<p>Union of value information. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t4ui32E">
+<span id="_CPPv3N20zet_value_info_exp_t4ui32E"></span><span id="_CPPv2N20zet_value_info_exp_t4ui32E"></span><span id="zet_value_info_exp_t::ui32__uint32_t"></span><span class="target" id="unionzet__value__info__exp__t_1ada315fb0706b0a2924d0c27b181c21ab"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ui32</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t4ui32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 32-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t4ui64E">
+<span id="_CPPv3N20zet_value_info_exp_t4ui64E"></span><span id="_CPPv2N20zet_value_info_exp_t4ui64E"></span><span id="zet_value_info_exp_t::ui64__uint64_t"></span><span class="target" id="unionzet__value__info__exp__t_1a3eb77cd1acc665de52ca9ce0a63a009b"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ui64</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t4ui64E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 64-bit unsigned-integer </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t4fp32E">
+<span id="_CPPv3N20zet_value_info_exp_t4fp32E"></span><span id="_CPPv2N20zet_value_info_exp_t4fp32E"></span><span id="zet_value_info_exp_t::fp32__float"></span><span class="target" id="unionzet__value__info__exp__t_1a6870ed17233f43e2a4b87bd6c81d08c3"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp32</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t4fp32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 32-bit floating-point </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t4fp64E">
+<span id="_CPPv3N20zet_value_info_exp_t4fp64E"></span><span id="_CPPv2N20zet_value_info_exp_t4fp64E"></span><span id="zet_value_info_exp_t::fp64__double"></span><span class="target" id="unionzet__value__info__exp__t_1a595c5f0f2081f607529c6a97f014f853"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp64</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t4fp64E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 64-bit floating-point </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t2b8E">
+<span id="_CPPv3N20zet_value_info_exp_t2b8E"></span><span id="_CPPv2N20zet_value_info_exp_t2b8E"></span><span id="zet_value_info_exp_t::b8__ze_bool_t"></span><span class="target" id="unionzet__value__info__exp__t_1a29c82f35d85ff81c70ce5f6da6e0e8d9"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b8</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t2b8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 8-bit boolean </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t3ui8E">
+<span id="_CPPv3N20zet_value_info_exp_t3ui8E"></span><span id="_CPPv2N20zet_value_info_exp_t3ui8E"></span><span id="zet_value_info_exp_t::ui8__uint8_t"></span><span class="target" id="unionzet__value__info__exp__t_1abeae8d248ba1e1a92e9921f68fdc3b77"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ui8</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t3ui8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 8-bit unsigned integer </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t4ui16E">
+<span id="_CPPv3N20zet_value_info_exp_t4ui16E"></span><span id="_CPPv2N20zet_value_info_exp_t4ui16E"></span><span id="zet_value_info_exp_t::ui16__uint16_t"></span><span class="target" id="unionzet__value__info__exp__t_1a43a3929c01e7711cc6bc16c01986973b"></span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ui16</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t4ui16E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 16-bit unsigned integer </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t9ui64RangeE">
+<span id="_CPPv3N20zet_value_info_exp_t9ui64RangeE"></span><span id="_CPPv2N20zet_value_info_exp_t9ui64RangeE"></span><span id="zet_value_info_exp_t::ui64Range__zet_value_uint64_range_exp_t"></span><span class="target" id="unionzet__value__info__exp__t_1acad8a3f6dfe39a358f47ac7781178a70"></span><a class="reference internal" href="#_CPPv428zet_value_uint64_range_exp_t" title="zet_value_uint64_range_exp_t"><span class="n"><span class="pre">zet_value_uint64_range_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ui64Range</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t9ui64RangeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] minimum and maximum value of the range </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t9fp64RangeE">
+<span id="_CPPv3N20zet_value_info_exp_t9fp64RangeE"></span><span id="_CPPv2N20zet_value_info_exp_t9fp64RangeE"></span><span id="zet_value_info_exp_t::fp64Range__zet_value_fp64_range_exp_t"></span><span class="target" id="unionzet__value__info__exp__t_1a93c8c73c3ac8dd23991b5546bd5d0835"></span><a class="reference internal" href="#_CPPv426zet_value_fp64_range_exp_t" title="zet_value_fp64_range_exp_t"><span class="n"><span class="pre">zet_value_fp64_range_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp64Range</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t9fp64RangeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] minimum and maximum value of the range </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zet-metric-entry-exp-t">
+<span id="id15"></span><h3>zet_metric_entry_exp_t<a class="headerlink" href="#zet-metric-entry-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422zet_metric_entry_exp_t">
+<span id="_CPPv322zet_metric_entry_exp_t"></span><span id="_CPPv222zet_metric_entry_exp_t"></span><span id="zet_metric_entry_exp_t"></span><span class="target" id="structzet__metric__entry__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_entry_exp_t</span></span></span><a class="headerlink" href="#_CPPv422zet_metric_entry_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Decoded metric entry. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zet_metric_entry_exp_t5valueE">
+<span id="_CPPv3N22zet_metric_entry_exp_t5valueE"></span><span id="_CPPv2N22zet_metric_entry_exp_t5valueE"></span><span id="zet_metric_entry_exp_t::value__zet_value_t"></span><span class="target" id="structzet__metric__entry__exp__t_1ab587433a841197a632bd96da95c59303"></span><a class="reference internal" href="../apis/data_types.html#_CPPv411zet_value_t" title="zet_value_t"><span class="n"><span class="pre">zet_value_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N22zet_metric_entry_exp_t5valueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] value of the decodable metric entry or event. Number is meaningful based on the metric type. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zet_metric_entry_exp_t9timeStampE">
+<span id="_CPPv3N22zet_metric_entry_exp_t9timeStampE"></span><span id="_CPPv2N22zet_metric_entry_exp_t9timeStampE"></span><span id="zet_metric_entry_exp_t::timeStamp__uint64_t"></span><span class="target" id="structzet__metric__entry__exp__t_1a08c95510c9578090c76f1939dc9111a5"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timeStamp</span></span></span><a class="headerlink" href="#_CPPv4N22zet_metric_entry_exp_t9timeStampE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] timestamp at which the event happened. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zet_metric_entry_exp_t11metricIndexE">
+<span id="_CPPv3N22zet_metric_entry_exp_t11metricIndexE"></span><span id="_CPPv2N22zet_metric_entry_exp_t11metricIndexE"></span><span id="zet_metric_entry_exp_t::metricIndex__uint32_t"></span><span class="target" id="structzet__metric__entry__exp__t_1ad88fba989f0339f05a4b3de8181a1007"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">metricIndex</span></span></span><a class="headerlink" href="#_CPPv4N22zet_metric_entry_exp_t11metricIndexE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] index to the decodable metric handle in the input array (phMetric) in <a class="reference internal" href="metric_tracer.html#zet__api_8h_1ac43750bcd04ed17d12c5e80d9d7dd94f"><span class="std std-ref">zetMetricTracerDecodeExp()</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zet_metric_entry_exp_t11onSubdeviceE">
+<span id="_CPPv3N22zet_metric_entry_exp_t11onSubdeviceE"></span><span id="_CPPv2N22zet_metric_entry_exp_t11onSubdeviceE"></span><span id="zet_metric_entry_exp_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzet__metric__entry__exp__t_1a6c746f729641938edd0493edf2115b71"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N22zet_metric_entry_exp_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] True if the event occurred on a sub-device; false means the device on which the metric tracer was opened does not have sub-devices. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zet_metric_entry_exp_t11subdeviceIdE">
+<span id="_CPPv3N22zet_metric_entry_exp_t11subdeviceIdE"></span><span id="_CPPv2N22zet_metric_entry_exp_t11subdeviceIdE"></span><span id="zet_metric_entry_exp_t::subdeviceId__uint32_t"></span><span class="target" id="structzet__metric__entry__exp__t_1ad5719770f15a69bf7d766bf9f35fdd4e"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subdeviceId</span></span></span><a class="headerlink" href="#_CPPv4N22zet_metric_entry_exp_t11subdeviceIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] If onSubdevice is true, this gives the ID of the sub-device. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="metric.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Metric - Experimental</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../../sysman/api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sysman</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">11</span></summary><ul class="ctoc-list"><li><a href="data_types.html#zet-api-tracing-exp-version-t">zet_api_tracing_exp_version_t</a></li><li><a href="data_types.html#ze-calculate-multiple-metrics-exp-version-t">ze_calculate_multiple_metrics_exp_version_t</a></li><li><a href="data_types.html#ze-metric-global-timestamps-exp-version-t">ze_metric_global_timestamps_exp_version_t</a></li><li><a href="data_types.html#zet-export-metric-data-exp-version-t">zet_export_metric_data_exp_version_t</a></li><li><a href="data_types.html#zet-metric-programmable-exp-version-t">zet_metric_programmable_exp_version_t</a></li><li><a href="data_types.html#zet-value-info-type-exp-t">zet_value_info_type_exp_t</a></li><li><a href="data_types.html#zet-concurrent-metric-groups-exp-version-t">zet_concurrent_metric_groups_exp_version_t</a></li><li><a href="data_types.html#zet-metric-tracer-exp-version-t">zet_metric_tracer_exp_version_t</a></li><li><a href="data_types.html#zet-metric-export-memory-exp-version-t">zet_metric_export_memory_exp_version_t</a></li><li><a href="data_types.html#zet-metric-group-marker-exp-version-t">zet_metric_group_marker_exp_version_t</a></li><li><a href="data_types.html#zet-metrics-runtime-enable-disable-exp-version-t">zet_metrics_runtime_enable_disable_exp_version_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">4</span></summary><ul class="ctoc-list"><li><a href="data_types.html#zet-value-uint64-range-exp-t">zet_value_uint64_range_exp_t</a></li><li><a href="data_types.html#zet-value-fp64-range-exp-t">zet_value_fp64_range_exp_t</a></li><li><a href="data_types.html#zet-value-info-exp-t">zet_value_info_exp_t</a></li><li><a href="data_types.html#zet-metric-entry-exp-t">zet_metric_entry_exp_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

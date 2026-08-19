@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>External Semaphore - Extensions &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/extensions/external_semaphore';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="RTAS Builder - Extensions" href="rtas_builder.html" />
+    <link rel="prev" title="Extensions" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/extensions/external_semaphore.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>External Semaphore - Extensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#external-semaphore-extension-structures">External Semaphore - Extension Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-external-semaphore-ext-desc-t">ze_external_semaphore_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432ze_external_semaphore_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_external_semaphore_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_external_semaphore_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_external_semaphore_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_external_semaphore_ext_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-external-semaphore-win32-ext-desc-t">ze_external_semaphore_win32_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438ze_external_semaphore_win32_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_external_semaphore_win32_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t6handleE"><code class="docutils literal notranslate"><span class="pre">handle</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t4nameE"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-external-semaphore-fd-ext-desc-t">ze_external_semaphore_fd_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435ze_external_semaphore_fd_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_external_semaphore_fd_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_external_semaphore_fd_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_external_semaphore_fd_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_external_semaphore_fd_ext_desc_t2fdE"><code class="docutils literal notranslate"><span class="pre">fd</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-external-semaphore-signal-params-ext-t">ze_external_semaphore_signal_params_ext_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv441ze_external_semaphore_signal_params_ext_t"><code class="docutils literal notranslate"><span class="pre">ze_external_semaphore_signal_params_ext_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N41ze_external_semaphore_signal_params_ext_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N41ze_external_semaphore_signal_params_ext_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N41ze_external_semaphore_signal_params_ext_t5valueE"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-external-semaphore-wait-params-ext-t">ze_external_semaphore_wait_params_ext_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_external_semaphore_wait_params_ext_t"><code class="docutils literal notranslate"><span class="pre">ze_external_semaphore_wait_params_ext_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_external_semaphore_wait_params_ext_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_external_semaphore_wait_params_ext_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_external_semaphore_wait_params_ext_t5valueE"><code class="docutils literal notranslate"><span class="pre">value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="external-semaphore-extensions">
+<h1>External Semaphore - Extensions<a class="headerlink" href="#external-semaphore-extensions" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="external-semaphore-extension-structures">
+<h2>External Semaphore - Extension Structures<a class="headerlink" href="#external-semaphore-extension-structures" title="Link to this heading">#</a></h2>
+<section id="ze-external-semaphore-ext-desc-t">
+<span id="id1"></span><h3>ze_external_semaphore_ext_desc_t<a class="headerlink" href="#ze-external-semaphore-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv432ze_external_semaphore_ext_desc_t">
+<span id="_CPPv332ze_external_semaphore_ext_desc_t"></span><span id="_CPPv232ze_external_semaphore_ext_desc_t"></span><span id="ze_external_semaphore_ext_desc_t"></span><span class="target" id="structze__external__semaphore__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_external_semaphore_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv432ze_external_semaphore_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>External Semaphore Descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_external_semaphore_ext_desc_t5stypeE">
+<span id="_CPPv3N32ze_external_semaphore_ext_desc_t5stypeE"></span><span id="_CPPv2N32ze_external_semaphore_ext_desc_t5stypeE"></span><span id="ze_external_semaphore_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__external__semaphore__ext__desc__t_1ac8a7738053ce7a74bef8188ccb273863"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N32ze_external_semaphore_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_external_semaphore_ext_desc_t5pNextE">
+<span id="_CPPv3N32ze_external_semaphore_ext_desc_t5pNextE"></span><span id="_CPPv2N32ze_external_semaphore_ext_desc_t5pNextE"></span><span id="ze_external_semaphore_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__external__semaphore__ext__desc__t_1ada0bf98398cae34c4378ca01938c0bbb"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N32ze_external_semaphore_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_external_semaphore_ext_desc_t5flagsE">
+<span id="_CPPv3N32ze_external_semaphore_ext_desc_t5flagsE"></span><span id="_CPPv2N32ze_external_semaphore_ext_desc_t5flagsE"></span><span id="ze_external_semaphore_ext_desc_t::flags__ze_external_semaphore_ext_flags_t"></span><span class="target" id="structze__external__semaphore__ext__desc__t_1af4dd101919f69388f8c18f137cd039fc"></span><span class="n"><span class="pre">ze_external_semaphore_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_external_semaphore_ext_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] The flags describing the type of the semaphore. must be 0 (default) or a valid combination of <a class="reference internal" href="data_types.html#ze__api_8h_1a61f2e863e93b7affc809ddbb75eba76e"><span class="std std-ref">ze_external_semaphore_ext_flag_t</span></a>. When importing a semaphore, pNext should be pointing to one of the following structures: <a class="reference internal" href="#structze__external__semaphore__win32__ext__desc__t"><span class="std std-ref">ze_external_semaphore_win32_ext_desc_t</span></a> or <a class="reference internal" href="#structze__external__semaphore__fd__ext__desc__t"><span class="std std-ref">ze_external_semaphore_fd_ext_desc_t</span></a>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-external-semaphore-win32-ext-desc-t">
+<span id="id2"></span><h3>ze_external_semaphore_win32_ext_desc_t<a class="headerlink" href="#ze-external-semaphore-win32-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv438ze_external_semaphore_win32_ext_desc_t">
+<span id="_CPPv338ze_external_semaphore_win32_ext_desc_t"></span><span id="_CPPv238ze_external_semaphore_win32_ext_desc_t"></span><span id="ze_external_semaphore_win32_ext_desc_t"></span><span class="target" id="structze__external__semaphore__win32__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_external_semaphore_win32_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv438ze_external_semaphore_win32_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>External Semaphore Win32 Descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_external_semaphore_win32_ext_desc_t5stypeE">
+<span id="_CPPv3N38ze_external_semaphore_win32_ext_desc_t5stypeE"></span><span id="_CPPv2N38ze_external_semaphore_win32_ext_desc_t5stypeE"></span><span id="ze_external_semaphore_win32_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__external__semaphore__win32__ext__desc__t_1a3dd85a30849b02ade5cc12ab1c7c5fc3"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_external_semaphore_win32_ext_desc_t5pNextE">
+<span id="_CPPv3N38ze_external_semaphore_win32_ext_desc_t5pNextE"></span><span id="_CPPv2N38ze_external_semaphore_win32_ext_desc_t5pNextE"></span><span id="ze_external_semaphore_win32_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__external__semaphore__win32__ext__desc__t_1aab5383916338725b813c2b7d2f4297ab"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_external_semaphore_win32_ext_desc_t6handleE">
+<span id="_CPPv3N38ze_external_semaphore_win32_ext_desc_t6handleE"></span><span id="_CPPv2N38ze_external_semaphore_win32_ext_desc_t6handleE"></span><span id="ze_external_semaphore_win32_ext_desc_t::handle__voidP"></span><span class="target" id="structze__external__semaphore__win32__ext__desc__t_1a687159e5ddce61d7b4e8e20147d3e4c1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">handle</span></span></span><a class="headerlink" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t6handleE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] Win32 handle of the semaphore. Must be a valid Win32 handle. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_external_semaphore_win32_ext_desc_t4nameE">
+<span id="_CPPv3N38ze_external_semaphore_win32_ext_desc_t4nameE"></span><span id="_CPPv2N38ze_external_semaphore_win32_ext_desc_t4nameE"></span><span id="ze_external_semaphore_win32_ext_desc_t::name__cCP"></span><span class="target" id="structze__external__semaphore__win32__ext__desc__t_1a5f0ea8ed3f0bb0b8b9544c104bb119b7"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N38ze_external_semaphore_win32_ext_desc_t4nameE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] Name of the semaphore. Must be a valid null-terminated string. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-external-semaphore-fd-ext-desc-t">
+<span id="id3"></span><h3>ze_external_semaphore_fd_ext_desc_t<a class="headerlink" href="#ze-external-semaphore-fd-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv435ze_external_semaphore_fd_ext_desc_t">
+<span id="_CPPv335ze_external_semaphore_fd_ext_desc_t"></span><span id="_CPPv235ze_external_semaphore_fd_ext_desc_t"></span><span id="ze_external_semaphore_fd_ext_desc_t"></span><span class="target" id="structze__external__semaphore__fd__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_external_semaphore_fd_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv435ze_external_semaphore_fd_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>External Semaphore FD Descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_external_semaphore_fd_ext_desc_t5stypeE">
+<span id="_CPPv3N35ze_external_semaphore_fd_ext_desc_t5stypeE"></span><span id="_CPPv2N35ze_external_semaphore_fd_ext_desc_t5stypeE"></span><span id="ze_external_semaphore_fd_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__external__semaphore__fd__ext__desc__t_1a4483c6c84802122f4aac3f83b0714b64"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N35ze_external_semaphore_fd_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_external_semaphore_fd_ext_desc_t5pNextE">
+<span id="_CPPv3N35ze_external_semaphore_fd_ext_desc_t5pNextE"></span><span id="_CPPv2N35ze_external_semaphore_fd_ext_desc_t5pNextE"></span><span id="ze_external_semaphore_fd_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__external__semaphore__fd__ext__desc__t_1a05c532f9afaf702935d2a3f66ef09e82"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N35ze_external_semaphore_fd_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35ze_external_semaphore_fd_ext_desc_t2fdE">
+<span id="_CPPv3N35ze_external_semaphore_fd_ext_desc_t2fdE"></span><span id="_CPPv2N35ze_external_semaphore_fd_ext_desc_t2fdE"></span><span id="ze_external_semaphore_fd_ext_desc_t::fd__i"></span><span class="target" id="structze__external__semaphore__fd__ext__desc__t_1afe20397b2e8e239b152e5baf1e51d125"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fd</span></span></span><a class="headerlink" href="#_CPPv4N35ze_external_semaphore_fd_ext_desc_t2fdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] File descriptor of the semaphore. Must be a valid file descriptor. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-external-semaphore-signal-params-ext-t">
+<span id="id4"></span><h3>ze_external_semaphore_signal_params_ext_t<a class="headerlink" href="#ze-external-semaphore-signal-params-ext-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv441ze_external_semaphore_signal_params_ext_t">
+<span id="_CPPv341ze_external_semaphore_signal_params_ext_t"></span><span id="_CPPv241ze_external_semaphore_signal_params_ext_t"></span><span id="ze_external_semaphore_signal_params_ext_t"></span><span class="target" id="structze__external__semaphore__signal__params__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_external_semaphore_signal_params_ext_t</span></span></span><a class="headerlink" href="#_CPPv441ze_external_semaphore_signal_params_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>External Semaphore Signal parameters. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N41ze_external_semaphore_signal_params_ext_t5stypeE">
+<span id="_CPPv3N41ze_external_semaphore_signal_params_ext_t5stypeE"></span><span id="_CPPv2N41ze_external_semaphore_signal_params_ext_t5stypeE"></span><span id="ze_external_semaphore_signal_params_ext_t::stype__ze_structure_type_t"></span><span class="target" id="structze__external__semaphore__signal__params__ext__t_1a07ce927b12db8583970829346d63ea1b"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N41ze_external_semaphore_signal_params_ext_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N41ze_external_semaphore_signal_params_ext_t5pNextE">
+<span id="_CPPv3N41ze_external_semaphore_signal_params_ext_t5pNextE"></span><span id="_CPPv2N41ze_external_semaphore_signal_params_ext_t5pNextE"></span><span id="ze_external_semaphore_signal_params_ext_t::pNext__voidCP"></span><span class="target" id="structze__external__semaphore__signal__params__ext__t_1aa4fbb4522d3acef6156cf49f9f6ebd18"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N41ze_external_semaphore_signal_params_ext_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N41ze_external_semaphore_signal_params_ext_t5valueE">
+<span id="_CPPv3N41ze_external_semaphore_signal_params_ext_t5valueE"></span><span id="_CPPv2N41ze_external_semaphore_signal_params_ext_t5valueE"></span><span id="ze_external_semaphore_signal_params_ext_t::value__uint64_t"></span><span class="target" id="structze__external__semaphore__signal__params__ext__t_1accbaa8b228a23797be226c57445b73d5"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N41ze_external_semaphore_signal_params_ext_t5valueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] [optional] Value to signal. Specified by user as an expected value with some of semaphore types, such as <a class="reference internal" href="data_types.html#ze__api_8h_1a61f2e863e93b7affc809ddbb75eba76eaeb4bfbe21a45fe80117849fe6e96200f"><span class="std std-ref">ZE_EXTERNAL_SEMAPHORE_EXT_FLAG_D3D12_FENCE</span></a>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-external-semaphore-wait-params-ext-t">
+<span id="id5"></span><h3>ze_external_semaphore_wait_params_ext_t<a class="headerlink" href="#ze-external-semaphore-wait-params-ext-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv439ze_external_semaphore_wait_params_ext_t">
+<span id="_CPPv339ze_external_semaphore_wait_params_ext_t"></span><span id="_CPPv239ze_external_semaphore_wait_params_ext_t"></span><span id="ze_external_semaphore_wait_params_ext_t"></span><span class="target" id="structze__external__semaphore__wait__params__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_external_semaphore_wait_params_ext_t</span></span></span><a class="headerlink" href="#_CPPv439ze_external_semaphore_wait_params_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>External Semaphore Wait parameters. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_external_semaphore_wait_params_ext_t5stypeE">
+<span id="_CPPv3N39ze_external_semaphore_wait_params_ext_t5stypeE"></span><span id="_CPPv2N39ze_external_semaphore_wait_params_ext_t5stypeE"></span><span id="ze_external_semaphore_wait_params_ext_t::stype__ze_structure_type_t"></span><span class="target" id="structze__external__semaphore__wait__params__ext__t_1ae41bb657a2b279f2b9d57c00f47eb3ff"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N39ze_external_semaphore_wait_params_ext_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_external_semaphore_wait_params_ext_t5pNextE">
+<span id="_CPPv3N39ze_external_semaphore_wait_params_ext_t5pNextE"></span><span id="_CPPv2N39ze_external_semaphore_wait_params_ext_t5pNextE"></span><span id="ze_external_semaphore_wait_params_ext_t::pNext__voidCP"></span><span class="target" id="structze__external__semaphore__wait__params__ext__t_1a5e9a35f2bafabe8dc6017ae8d4b8f05b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N39ze_external_semaphore_wait_params_ext_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_external_semaphore_wait_params_ext_t5valueE">
+<span id="_CPPv3N39ze_external_semaphore_wait_params_ext_t5valueE"></span><span id="_CPPv2N39ze_external_semaphore_wait_params_ext_t5valueE"></span><span id="ze_external_semaphore_wait_params_ext_t::value__uint64_t"></span><span class="target" id="structze__external__semaphore__wait__params__ext__t_1a886356f62006eefd59ed47e240798504"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N39ze_external_semaphore_wait_params_ext_t5valueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] [optional] Value to wait for. Specified by user as an expected value with some of semaphore types, such as <a class="reference internal" href="data_types.html#ze__api_8h_1a61f2e863e93b7affc809ddbb75eba76eaeb4bfbe21a45fe80117849fe6e96200f"><span class="std std-ref">ZE_EXTERNAL_SEMAPHORE_EXT_FLAG_D3D12_FENCE</span></a>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Extensions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="rtas_builder.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">RTAS Builder - Extensions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Structures <span class="ctoc-count">5</span></summary><ul class="ctoc-list"><li><a href="external_semaphore.html#ze-external-semaphore-ext-desc-t">ze_external_semaphore_ext_desc_t</a></li><li><a href="external_semaphore.html#ze-external-semaphore-win32-ext-desc-t">ze_external_semaphore_win32_ext_desc_t</a></li><li><a href="external_semaphore.html#ze-external-semaphore-fd-ext-desc-t">ze_external_semaphore_fd_ext_desc_t</a></li><li><a href="external_semaphore.html#ze-external-semaphore-signal-params-ext-t">ze_external_semaphore_signal_params_ext_t</a></li><li><a href="external_semaphore.html#ze-external-semaphore-wait-params-ext-t">ze_external_semaphore_wait_params_ext_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

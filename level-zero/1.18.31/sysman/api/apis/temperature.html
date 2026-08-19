@@ -1,0 +1,1083 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Temperature &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/temperature';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Data Types" href="data_types.html" />
+    <link rel="prev" title="Standby" href="standby.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/apis/temperature.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Temperature</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-functions">Temperature Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zestemperaturegetproperties">zesTemperatureGetProperties</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zesTemperatureGetProperties17zes_temp_handle_tP21zes_temp_properties_t"><code class="docutils literal notranslate"><span class="pre">zesTemperatureGetProperties()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zestemperaturegetconfig">zesTemperatureGetConfig</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zesTemperatureGetConfig17zes_temp_handle_tP17zes_temp_config_t"><code class="docutils literal notranslate"><span class="pre">zesTemperatureGetConfig()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zestemperaturesetconfig">zesTemperatureSetConfig</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zesTemperatureSetConfig17zes_temp_handle_tPK17zes_temp_config_t"><code class="docutils literal notranslate"><span class="pre">zesTemperatureSetConfig()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zestemperaturegetstate">zesTemperatureGetState</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zesTemperatureGetState17zes_temp_handle_tPd"><code class="docutils literal notranslate"><span class="pre">zesTemperatureGetState()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-enums">Temperature Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-temp-sensors-t">zes_temp_sensors_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418zes_temp_sensors_t"><code class="docutils literal notranslate"><span class="pre">zes_temp_sensors_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t23ZES_TEMP_SENSORS_GLOBALE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_GLOBAL</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t20ZES_TEMP_SENSORS_GPUE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_GPU</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t23ZES_TEMP_SENSORS_MEMORYE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_MEMORY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t27ZES_TEMP_SENSORS_GLOBAL_MINE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_GLOBAL_MIN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t24ZES_TEMP_SENSORS_GPU_MINE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_GPU_MIN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t27ZES_TEMP_SENSORS_MEMORY_MINE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_MEMORY_MIN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t26ZES_TEMP_SENSORS_GPU_BOARDE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_GPU_BOARD</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t30ZES_TEMP_SENSORS_GPU_BOARD_MINE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_GPU_BOARD_MIN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t34ZES_TEMP_SENSORS_VOLTAGE_REGULATORE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_VOLTAGE_REGULATOR</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t26ZES_TEMP_SENSORS_COMPOSITEE"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_COMPOSITE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_temp_sensors_t29ZES_TEMP_SENSORS_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_TEMP_SENSORS_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#temperature-structures">Temperature Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-temp-properties-t">zes_temp_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zes_temp_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_temp_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t4typeE"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t11onSubdeviceE"><code class="docutils literal notranslate"><span class="pre">onSubdevice</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t11subdeviceIdE"><code class="docutils literal notranslate"><span class="pre">subdeviceId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t14maxTemperatureE"><code class="docutils literal notranslate"><span class="pre">maxTemperature</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t23isCriticalTempSupportedE"><code class="docutils literal notranslate"><span class="pre">isCriticalTempSupported</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t21isThreshold1SupportedE"><code class="docutils literal notranslate"><span class="pre">isThreshold1Supported</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_temp_properties_t21isThreshold2SupportedE"><code class="docutils literal notranslate"><span class="pre">isThreshold2Supported</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-temp-threshold-t">zes_temp_threshold_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zes_temp_threshold_t"><code class="docutils literal notranslate"><span class="pre">zes_temp_threshold_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_temp_threshold_t15enableLowToHighE"><code class="docutils literal notranslate"><span class="pre">enableLowToHigh</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_temp_threshold_t15enableHighToLowE"><code class="docutils literal notranslate"><span class="pre">enableHighToLow</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_temp_threshold_t9thresholdE"><code class="docutils literal notranslate"><span class="pre">threshold</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-temp-config-t">zes_temp_config_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zes_temp_config_t"><code class="docutils literal notranslate"><span class="pre">zes_temp_config_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_temp_config_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_temp_config_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_temp_config_t14enableCriticalE"><code class="docutils literal notranslate"><span class="pre">enableCritical</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_temp_config_t10threshold1E"><code class="docutils literal notranslate"><span class="pre">threshold1</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_temp_config_t10threshold2E"><code class="docutils literal notranslate"><span class="pre">threshold2</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="temperature">
+<h1>Temperature<a class="headerlink" href="#temperature" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="temperature-functions">
+<h2>Temperature Functions<a class="headerlink" href="#temperature-functions" title="Link to this heading">#</a></h2>
+<section id="zestemperaturegetproperties">
+<span id="id1"></span><h3>zesTemperatureGetProperties<a class="headerlink" href="#zestemperaturegetproperties" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427zesTemperatureGetProperties17zes_temp_handle_tP21zes_temp_properties_t">
+<span id="_CPPv327zesTemperatureGetProperties17zes_temp_handle_tP21zes_temp_properties_t"></span><span id="_CPPv227zesTemperatureGetProperties17zes_temp_handle_tP21zes_temp_properties_t"></span><span id="zesTemperatureGetProperties__zes_temp_handle_t.zes_temp_properties_tP"></span><span class="target" id="zes__api_8h_1afeb9f7a77321d74103ed896700c2d4f9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesTemperatureGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_temp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTemperature</span></span>, <a class="reference internal" href="#_CPPv421zes_temp_properties_t" title="zes_temp_properties_t"><span class="n"><span class="pre">zes_temp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesTemperatureGetProperties17zes_temp_handle_tP21zes_temp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get temperature sensor properties. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hTemperature</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pProperties</strong> – [in,out] Will contain the temperature sensor properties. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTemperature</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zestemperaturegetconfig">
+<span id="id2"></span><h3>zesTemperatureGetConfig<a class="headerlink" href="#zestemperaturegetconfig" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423zesTemperatureGetConfig17zes_temp_handle_tP17zes_temp_config_t">
+<span id="_CPPv323zesTemperatureGetConfig17zes_temp_handle_tP17zes_temp_config_t"></span><span id="_CPPv223zesTemperatureGetConfig17zes_temp_handle_tP17zes_temp_config_t"></span><span id="zesTemperatureGetConfig__zes_temp_handle_t.zes_temp_config_tP"></span><span class="target" id="zes__api_8h_1af655cece881a804d4132e145f6b1189c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesTemperatureGetConfig</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_temp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTemperature</span></span>, <a class="reference internal" href="#_CPPv417zes_temp_config_t" title="zes_temp_config_t"><span class="n"><span class="pre">zes_temp_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesTemperatureGetConfig17zes_temp_handle_tP17zes_temp_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get temperature configuration for this sensor - which events are triggered and the trigger conditions. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hTemperature</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pConfig</strong> – [in,out] Returns current configuration. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTemperature</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pConfig</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
+<li><p>Temperature thresholds are not supported on this temperature sensor. Generally this is only supported for temperature sensor <a class="reference internal" href="#zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7a26c24b7d5e5a188a13f91db14ad9e7df"><span class="std std-ref">ZES_TEMP_SENSORS_GLOBAL</span></a>.</p></li>
+<li><p>One or both of the thresholds is not supported. Check the <code class="docutils literal notranslate"><span class="pre">isThreshold1Supported</span></code> and <code class="docutils literal notranslate"><span class="pre">isThreshold2Supported</span></code> members of <a class="reference internal" href="#structzes__temp__properties__t"><span class="std std-ref">zes_temp_properties_t</span></a>.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to request this feature. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zestemperaturesetconfig">
+<span id="id3"></span><h3>zesTemperatureSetConfig<a class="headerlink" href="#zestemperaturesetconfig" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv423zesTemperatureSetConfig17zes_temp_handle_tPK17zes_temp_config_t">
+<span id="_CPPv323zesTemperatureSetConfig17zes_temp_handle_tPK17zes_temp_config_t"></span><span id="_CPPv223zesTemperatureSetConfig17zes_temp_handle_tPK17zes_temp_config_t"></span><span id="zesTemperatureSetConfig__zes_temp_handle_t.zes_temp_config_tCP"></span><span class="target" id="zes__api_8h_1a71d43bcd12f50a2ab97f6f0cb07a7390"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesTemperatureSetConfig</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_temp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTemperature</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv417zes_temp_config_t" title="zes_temp_config_t"><span class="n"><span class="pre">zes_temp_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesTemperatureSetConfig17zes_temp_handle_tPK17zes_temp_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Set temperature configuration for this sensor - indicates which events are triggered and the trigger conditions. </p>
+<p><ul class="simple">
+<li><p>Events <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a6c0cef75f5ac146baf2b0272827accc4"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL</span></a> will be triggered when temperature reaches the critical range. Use the function <a class="reference internal" href="device.html#zes__api_8h_1a89a63935b45a8354bbc07add8803c03d"><span class="std std-ref">zesDeviceEventRegister()</span></a> to start receiving this event.</p></li>
+<li><p>Events <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a5f3c017d6bb0243b5da008bc35212ef9"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1</span></a> and <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a1603ce96f22a82e4791292aa9d4b0cda"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD2</span></a> will be generated when temperature cross the thresholds set using this function. Use the function <a class="reference internal" href="device.html#zes__api_8h_1a89a63935b45a8354bbc07add8803c03d"><span class="std std-ref">zesDeviceEventRegister()</span></a> to start receiving these events.</p></li>
+<li><p>Only one running process can set the temperature configuration at a time. If another process attempts to change the configuration, the error <a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a> will be returned. The function <a class="reference internal" href="#zes__api_8h_1af655cece881a804d4132e145f6b1189c"><span class="std std-ref">zesTemperatureGetConfig()</span></a> will return the process ID currently controlling these settings.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hTemperature</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pConfig</strong> – [in] New configuration. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTemperature</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pConfig</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
+<li><p>Temperature thresholds are not supported on this temperature sensor. Generally they are only supported for temperature sensor <a class="reference internal" href="#zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7a26c24b7d5e5a188a13f91db14ad9e7df"><span class="std std-ref">ZES_TEMP_SENSORS_GLOBAL</span></a>.</p></li>
+<li><p>Enabling the critical temperature event is not supported. Check the <code class="docutils literal notranslate"><span class="pre">isCriticalTempSupported</span></code> member of <a class="reference internal" href="#structzes__temp__properties__t"><span class="std std-ref">zes_temp_properties_t</span></a>.</p></li>
+<li><p>One or both of the thresholds is not supported. Check the <code class="docutils literal notranslate"><span class="pre">isThreshold1Supported</span></code> and <code class="docutils literal notranslate"><span class="pre">isThreshold2Supported</span></code> members of <a class="reference internal" href="#structzes__temp__properties__t"><span class="std std-ref">zes_temp_properties_t</span></a>.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to request this feature.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a><ul>
+<li><p>Another running process is controlling these settings.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a><ul>
+<li><p>One or both the thresholds is above TjMax (see <a class="reference internal" href="frequency.html#zes__api_8h_1a90068cf4edd8fb8a3dc1fba7f412edd1"><span class="std std-ref">zesFrequencyOcGetTjMax()</span></a>). Temperature thresholds must be below this value. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zestemperaturegetstate">
+<span id="id4"></span><h3>zesTemperatureGetState<a class="headerlink" href="#zestemperaturegetstate" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422zesTemperatureGetState17zes_temp_handle_tPd">
+<span id="_CPPv322zesTemperatureGetState17zes_temp_handle_tPd"></span><span id="_CPPv222zesTemperatureGetState17zes_temp_handle_tPd"></span><span id="zesTemperatureGetState__zes_temp_handle_t.doubleP"></span><span class="target" id="zes__api_8h_1a3d807d9d997e6eefc0098b3a2c539470"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesTemperatureGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_temp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTemperature</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pTemperature</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesTemperatureGetState17zes_temp_handle_tPd" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get the temperature from a specified sensor. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hTemperature</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pTemperature</strong> – [in,out] Will contain the temperature read from the specified sensor in degrees Celsius. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hTemperature</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pTemperature</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="temperature-enums">
+<h2>Temperature Enums<a class="headerlink" href="#temperature-enums" title="Link to this heading">#</a></h2>
+<section id="zes-temp-sensors-t">
+<span id="id5"></span><h3>zes_temp_sensors_t<a class="headerlink" href="#zes-temp-sensors-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv418zes_temp_sensors_t">
+<span id="_CPPv318zes_temp_sensors_t"></span><span id="_CPPv218zes_temp_sensors_t"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_temp_sensors_t</span></span></span><a class="headerlink" href="#_CPPv418zes_temp_sensors_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Temperature sensors. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t23ZES_TEMP_SENSORS_GLOBALE">
+<span id="_CPPv3N18zes_temp_sensors_t23ZES_TEMP_SENSORS_GLOBALE"></span><span id="_CPPv2N18zes_temp_sensors_t23ZES_TEMP_SENSORS_GLOBALE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7a26c24b7d5e5a188a13f91db14ad9e7df"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_GLOBAL</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t23ZES_TEMP_SENSORS_GLOBALE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum temperature across all device sensors. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t20ZES_TEMP_SENSORS_GPUE">
+<span id="_CPPv3N18zes_temp_sensors_t20ZES_TEMP_SENSORS_GPUE"></span><span id="_CPPv2N18zes_temp_sensors_t20ZES_TEMP_SENSORS_GPUE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7aeb947a17b72ed6dc8d74cf2bbd85ac21"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_GPU</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t20ZES_TEMP_SENSORS_GPUE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum temperature across all sensors in the GPU. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t23ZES_TEMP_SENSORS_MEMORYE">
+<span id="_CPPv3N18zes_temp_sensors_t23ZES_TEMP_SENSORS_MEMORYE"></span><span id="_CPPv2N18zes_temp_sensors_t23ZES_TEMP_SENSORS_MEMORYE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7a4b82a3b4f1c79fb69b3a30de0bda3515"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_MEMORY</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t23ZES_TEMP_SENSORS_MEMORYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum temperature across all sensors in the local memory. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t27ZES_TEMP_SENSORS_GLOBAL_MINE">
+<span id="_CPPv3N18zes_temp_sensors_t27ZES_TEMP_SENSORS_GLOBAL_MINE"></span><span id="_CPPv2N18zes_temp_sensors_t27ZES_TEMP_SENSORS_GLOBAL_MINE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7a932864aae5ff7941186baea0e9898fe3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_GLOBAL_MIN</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t27ZES_TEMP_SENSORS_GLOBAL_MINE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum temperature across all device sensors. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t24ZES_TEMP_SENSORS_GPU_MINE">
+<span id="_CPPv3N18zes_temp_sensors_t24ZES_TEMP_SENSORS_GPU_MINE"></span><span id="_CPPv2N18zes_temp_sensors_t24ZES_TEMP_SENSORS_GPU_MINE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7acb74fd2913e1d32ea3a4710ccc62afc8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_GPU_MIN</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t24ZES_TEMP_SENSORS_GPU_MINE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum temperature across all sensors in the GPU. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t27ZES_TEMP_SENSORS_MEMORY_MINE">
+<span id="_CPPv3N18zes_temp_sensors_t27ZES_TEMP_SENSORS_MEMORY_MINE"></span><span id="_CPPv2N18zes_temp_sensors_t27ZES_TEMP_SENSORS_MEMORY_MINE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7aabf4c6fc8f4b32803182d5dbfc649bd7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_MEMORY_MIN</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t27ZES_TEMP_SENSORS_MEMORY_MINE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum temperature across all sensors in the local device memory. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t26ZES_TEMP_SENSORS_GPU_BOARDE">
+<span id="_CPPv3N18zes_temp_sensors_t26ZES_TEMP_SENSORS_GPU_BOARDE"></span><span id="_CPPv2N18zes_temp_sensors_t26ZES_TEMP_SENSORS_GPU_BOARDE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7ac4072634198a92100465f4cbef54b37a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_GPU_BOARD</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t26ZES_TEMP_SENSORS_GPU_BOARDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum temperature across all sensors in the GPU Board. <em class="since-note"> (since v1.8)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t30ZES_TEMP_SENSORS_GPU_BOARD_MINE">
+<span id="_CPPv3N18zes_temp_sensors_t30ZES_TEMP_SENSORS_GPU_BOARD_MINE"></span><span id="_CPPv2N18zes_temp_sensors_t30ZES_TEMP_SENSORS_GPU_BOARD_MINE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7aea8129d658520c598bc2f4f63a0df71c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_GPU_BOARD_MIN</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t30ZES_TEMP_SENSORS_GPU_BOARD_MINE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum temperature across all sensors in the GPU Board. <em class="since-note"> (since v1.8)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t34ZES_TEMP_SENSORS_VOLTAGE_REGULATORE">
+<span id="_CPPv3N18zes_temp_sensors_t34ZES_TEMP_SENSORS_VOLTAGE_REGULATORE"></span><span id="_CPPv2N18zes_temp_sensors_t34ZES_TEMP_SENSORS_VOLTAGE_REGULATORE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7a2c42663d7557c9e5540c04c01905b2b2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_VOLTAGE_REGULATOR</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t34ZES_TEMP_SENSORS_VOLTAGE_REGULATORE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum temperature across all sensors in the Voltage Regulator. <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t26ZES_TEMP_SENSORS_COMPOSITEE">
+<span id="_CPPv3N18zes_temp_sensors_t26ZES_TEMP_SENSORS_COMPOSITEE"></span><span id="_CPPv2N18zes_temp_sensors_t26ZES_TEMP_SENSORS_COMPOSITEE"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7ae2e8c55b7b9c71c863af24de2a8b6199"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_COMPOSITE</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t26ZES_TEMP_SENSORS_COMPOSITEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normalized temperature across the SOC, Memory and Voltage Regulators at which shutdown will occur <em class="since-note"> (since v1.18)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_temp_sensors_t29ZES_TEMP_SENSORS_FORCE_UINT32E">
+<span id="_CPPv3N18zes_temp_sensors_t29ZES_TEMP_SENSORS_FORCE_UINT32E"></span><span id="_CPPv2N18zes_temp_sensors_t29ZES_TEMP_SENSORS_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1aa04b96cd5462ea791cdcb30ad40802c7a37ab1bd7a0a4558d477cc4e17cc9c417"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_TEMP_SENSORS_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N18zes_temp_sensors_t29ZES_TEMP_SENSORS_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_TEMP_SENSORS_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="temperature-structures">
+<h2>Temperature Structures<a class="headerlink" href="#temperature-structures" title="Link to this heading">#</a></h2>
+<section id="zes-temp-properties-t">
+<span id="id6"></span><h3>zes_temp_properties_t<a class="headerlink" href="#zes-temp-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421zes_temp_properties_t">
+<span id="_CPPv321zes_temp_properties_t"></span><span id="_CPPv221zes_temp_properties_t"></span><span id="zes_temp_properties_t"></span><span class="target" id="structzes__temp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_temp_properties_t</span></span></span><a class="headerlink" href="#_CPPv421zes_temp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Temperature sensor properties. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t5stypeE">
+<span id="_CPPv3N21zes_temp_properties_t5stypeE"></span><span id="_CPPv2N21zes_temp_properties_t5stypeE"></span><span id="zes_temp_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__temp__properties__t_1ad554c3796d166fcf41779908e55bee26"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t5pNextE">
+<span id="_CPPv3N21zes_temp_properties_t5pNextE"></span><span id="_CPPv2N21zes_temp_properties_t5pNextE"></span><span id="zes_temp_properties_t::pNext__voidP"></span><span class="target" id="structzes__temp__properties__t_1ae6576071e0346bd801602307fb7a0d2a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t4typeE">
+<span id="_CPPv3N21zes_temp_properties_t4typeE"></span><span id="_CPPv2N21zes_temp_properties_t4typeE"></span><span id="zes_temp_properties_t::type__zes_temp_sensors_t"></span><span class="target" id="structzes__temp__properties__t_1a3d5d45ae4ec7ea41157fe4621479814d"></span><a class="reference internal" href="#_CPPv418zes_temp_sensors_t" title="zes_temp_sensors_t"><span class="n"><span class="pre">zes_temp_sensors_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t4typeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Which part of the device the temperature sensor measures </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t11onSubdeviceE">
+<span id="_CPPv3N21zes_temp_properties_t11onSubdeviceE"></span><span id="_CPPv2N21zes_temp_properties_t11onSubdeviceE"></span><span id="zes_temp_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__temp__properties__t_1a14888edb0c17dd2c88ef1ca70d6354f5"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t11subdeviceIdE">
+<span id="_CPPv3N21zes_temp_properties_t11subdeviceIdE"></span><span id="_CPPv2N21zes_temp_properties_t11subdeviceIdE"></span><span id="zes_temp_properties_t::subdeviceId__uint32_t"></span><span class="target" id="structzes__temp__properties__t_1ad0379e7d0fbac48a8d6c14a2ac868dff"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subdeviceId</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t11subdeviceIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] If onSubdevice is true, this gives the ID of the sub-device </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t14maxTemperatureE">
+<span id="_CPPv3N21zes_temp_properties_t14maxTemperatureE"></span><span id="_CPPv2N21zes_temp_properties_t14maxTemperatureE"></span><span id="zes_temp_properties_t::maxTemperature__double"></span><span class="target" id="structzes__temp__properties__t_1a3b5cf59522000a665ff39c86a884956e"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxTemperature</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t14maxTemperatureE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Will contain the maximum temperature for the specific device in degrees Celsius. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t23isCriticalTempSupportedE">
+<span id="_CPPv3N21zes_temp_properties_t23isCriticalTempSupportedE"></span><span id="_CPPv2N21zes_temp_properties_t23isCriticalTempSupportedE"></span><span id="zes_temp_properties_t::isCriticalTempSupported__ze_bool_t"></span><span class="target" id="structzes__temp__properties__t_1adf3367a9c1dc6d142a4492f5144b1c92"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isCriticalTempSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t23isCriticalTempSupportedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Indicates if the critical temperature event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a6c0cef75f5ac146baf2b0272827accc4"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL</span></a> is supported </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t21isThreshold1SupportedE">
+<span id="_CPPv3N21zes_temp_properties_t21isThreshold1SupportedE"></span><span id="_CPPv2N21zes_temp_properties_t21isThreshold1SupportedE"></span><span id="zes_temp_properties_t::isThreshold1Supported__ze_bool_t"></span><span class="target" id="structzes__temp__properties__t_1a0ab438b6b42d6799ba8ab2b1fe26ed4e"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isThreshold1Supported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t21isThreshold1SupportedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Indicates if the temperature threshold 1 event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a5f3c017d6bb0243b5da008bc35212ef9"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1</span></a> is supported </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_temp_properties_t21isThreshold2SupportedE">
+<span id="_CPPv3N21zes_temp_properties_t21isThreshold2SupportedE"></span><span id="_CPPv2N21zes_temp_properties_t21isThreshold2SupportedE"></span><span id="zes_temp_properties_t::isThreshold2Supported__ze_bool_t"></span><span class="target" id="structzes__temp__properties__t_1a00ae9a513138f2a1f3b7f54452985ce1"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isThreshold2Supported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_temp_properties_t21isThreshold2SupportedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Indicates if the temperature threshold 2 event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a1603ce96f22a82e4791292aa9d4b0cda"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD2</span></a> is supported </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-temp-threshold-t">
+<span id="id7"></span><h3>zes_temp_threshold_t<a class="headerlink" href="#zes-temp-threshold-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv420zes_temp_threshold_t">
+<span id="_CPPv320zes_temp_threshold_t"></span><span id="_CPPv220zes_temp_threshold_t"></span><span id="zes_temp_threshold_t"></span><span class="target" id="structzes__temp__threshold__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_temp_threshold_t</span></span></span><a class="headerlink" href="#_CPPv420zes_temp_threshold_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Temperature sensor threshold. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_temp_threshold_t15enableLowToHighE">
+<span id="_CPPv3N20zes_temp_threshold_t15enableLowToHighE"></span><span id="_CPPv2N20zes_temp_threshold_t15enableLowToHighE"></span><span id="zes_temp_threshold_t::enableLowToHigh__ze_bool_t"></span><span class="target" id="structzes__temp__threshold__t_1af00f6c1795cda2345d4d60dcb5753ae0"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enableLowToHigh</span></span></span><a class="headerlink" href="#_CPPv4N20zes_temp_threshold_t15enableLowToHighE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Trigger an event when the temperature crosses from below the threshold to above. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_temp_threshold_t15enableHighToLowE">
+<span id="_CPPv3N20zes_temp_threshold_t15enableHighToLowE"></span><span id="_CPPv2N20zes_temp_threshold_t15enableHighToLowE"></span><span id="zes_temp_threshold_t::enableHighToLow__ze_bool_t"></span><span class="target" id="structzes__temp__threshold__t_1afe5d4d0099badb6cfc685e7fe5ea35df"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enableHighToLow</span></span></span><a class="headerlink" href="#_CPPv4N20zes_temp_threshold_t15enableHighToLowE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Trigger an event when the temperature crosses from above the threshold to below. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_temp_threshold_t9thresholdE">
+<span id="_CPPv3N20zes_temp_threshold_t9thresholdE"></span><span id="_CPPv2N20zes_temp_threshold_t9thresholdE"></span><span id="zes_temp_threshold_t::threshold__double"></span><span class="target" id="structzes__temp__threshold__t_1a38c2047075b04fc85e23d19c0210f45e"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">threshold</span></span></span><a class="headerlink" href="#_CPPv4N20zes_temp_threshold_t9thresholdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] The threshold in degrees Celsius. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-temp-config-t">
+<span id="id8"></span><h3>zes_temp_config_t<a class="headerlink" href="#zes-temp-config-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv417zes_temp_config_t">
+<span id="_CPPv317zes_temp_config_t"></span><span id="_CPPv217zes_temp_config_t"></span><span id="zes_temp_config_t"></span><span class="target" id="structzes__temp__config__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_temp_config_t</span></span></span><a class="headerlink" href="#_CPPv417zes_temp_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Temperature configuration - which events should be triggered and the trigger conditions. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_temp_config_t5stypeE">
+<span id="_CPPv3N17zes_temp_config_t5stypeE"></span><span id="_CPPv2N17zes_temp_config_t5stypeE"></span><span id="zes_temp_config_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__temp__config__t_1a41db8e8ea16787313cb324ae97240527"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N17zes_temp_config_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_temp_config_t5pNextE">
+<span id="_CPPv3N17zes_temp_config_t5pNextE"></span><span id="_CPPv2N17zes_temp_config_t5pNextE"></span><span id="zes_temp_config_t::pNext__voidCP"></span><span class="target" id="structzes__temp__config__t_1ad8f39264444d6ff58c3f6af42f432a16"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N17zes_temp_config_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_temp_config_t14enableCriticalE">
+<span id="_CPPv3N17zes_temp_config_t14enableCriticalE"></span><span id="_CPPv2N17zes_temp_config_t14enableCriticalE"></span><span id="zes_temp_config_t::enableCritical__ze_bool_t"></span><span class="target" id="structzes__temp__config__t_1aff16277033addfa1610618214c1bae7c"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enableCritical</span></span></span><a class="headerlink" href="#_CPPv4N17zes_temp_config_t14enableCriticalE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Indicates if event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a6c0cef75f5ac146baf2b0272827accc4"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_CRITICAL</span></a> should be triggered by the driver. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_temp_config_t10threshold1E">
+<span id="_CPPv3N17zes_temp_config_t10threshold1E"></span><span id="_CPPv2N17zes_temp_config_t10threshold1E"></span><span id="zes_temp_config_t::threshold1__zes_temp_threshold_t"></span><span class="target" id="structzes__temp__config__t_1acf7ea76d912396221f0bd0ebc146db11"></span><a class="reference internal" href="#_CPPv420zes_temp_threshold_t" title="zes_temp_threshold_t"><span class="n"><span class="pre">zes_temp_threshold_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">threshold1</span></span></span><a class="headerlink" href="#_CPPv4N17zes_temp_config_t10threshold1E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Configuration controlling if and when event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a5f3c017d6bb0243b5da008bc35212ef9"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD1</span></a> should be triggered by the driver. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_temp_config_t10threshold2E">
+<span id="_CPPv3N17zes_temp_config_t10threshold2E"></span><span id="_CPPv2N17zes_temp_config_t10threshold2E"></span><span id="zes_temp_config_t::threshold2__zes_temp_threshold_t"></span><span class="target" id="structzes__temp__config__t_1aebb17b19f7260df2955b4e8566e6c5f0"></span><a class="reference internal" href="#_CPPv420zes_temp_threshold_t" title="zes_temp_threshold_t"><span class="n"><span class="pre">zes_temp_threshold_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">threshold2</span></span></span><a class="headerlink" href="#_CPPv4N17zes_temp_config_t10threshold2E" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Configuration controlling if and when event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a1603ce96f22a82e4791292aa9d4b0cda"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_TEMP_THRESHOLD2</span></a> should be triggered by the driver. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="standby.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Standby</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="data_types.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data Types</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zesTemperature</div><ul class="ctoc-list"><li><a href="temperature.html#zestemperaturegetproperties">&hellip;GetProperties</a></li><li><a href="temperature.html#zestemperaturegetconfig">&hellip;GetConfig</a></li><li><a href="temperature.html#zestemperaturesetconfig">&hellip;SetConfig</a></li><li><a href="temperature.html#zestemperaturegetstate">&hellip;GetState</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="temperature.html#zes-temp-sensors-t">zes_temp_sensors_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="temperature.html#zes-temp-properties-t">zes_temp_properties_t</a></li><li><a href="temperature.html#zes-temp-threshold-t">zes_temp_threshold_t</a></li><li><a href="temperature.html#zes-temp-config-t">zes_temp_config_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

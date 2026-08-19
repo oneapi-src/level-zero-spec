@@ -1,0 +1,966 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fabric Vertex - Experimental &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/experimental/fabric_vertex';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Fabric Edge - Experimental" href="fabric_edge.html" />
+    <link rel="prev" title="Event Pool - Experimental" href="event_pool.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Experimental</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/experimental/fabric_vertex.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Fabric Vertex - Experimental</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-vertex-experimental-functions">Fabric Vertex - Experimental Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zefabricvertexgetexp">zeFabricVertexGetExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zeFabricVertexGetExp18ze_driver_handle_tP8uint32_tP25ze_fabric_vertex_handle_t"><code class="docutils literal notranslate"><span class="pre">zeFabricVertexGetExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zefabricvertexgetsubverticesexp">zeFabricVertexGetSubVerticesExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zeFabricVertexGetSubVerticesExp25ze_fabric_vertex_handle_tP8uint32_tP25ze_fabric_vertex_handle_t"><code class="docutils literal notranslate"><span class="pre">zeFabricVertexGetSubVerticesExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zefabricvertexgetpropertiesexp">zeFabricVertexGetPropertiesExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zeFabricVertexGetPropertiesExp25ze_fabric_vertex_handle_tP33ze_fabric_vertex_exp_properties_t"><code class="docutils literal notranslate"><span class="pre">zeFabricVertexGetPropertiesExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zefabricvertexgetdeviceexp">zeFabricVertexGetDeviceExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zeFabricVertexGetDeviceExp25ze_fabric_vertex_handle_tP18ze_device_handle_t"><code class="docutils literal notranslate"><span class="pre">zeFabricVertexGetDeviceExp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-vertex-experimental-enums">Fabric Vertex - Experimental Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-fabric-vertex-exp-type-t">ze_fabric_vertex_exp_type_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427ze_fabric_vertex_exp_type_t"><code class="docutils literal notranslate"><span class="pre">ze_fabric_vertex_exp_type_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_fabric_vertex_exp_type_t33ZE_FABRIC_VERTEX_EXP_TYPE_UNKNOWNE"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_UNKNOWN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_DEVICEE"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_DEVICE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_fabric_vertex_exp_type_t35ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICEE"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_SWITCHE"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_SWITCH</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_fabric_vertex_exp_type_t38ZE_FABRIC_VERTEX_EXP_TYPE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-vertex-experimental-structures">Fabric Vertex - Experimental Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-fabric-vertex-pci-exp-address-t">ze_fabric_vertex_pci_exp_address_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv434ze_fabric_vertex_pci_exp_address_t"><code class="docutils literal notranslate"><span class="pre">ze_fabric_vertex_pci_exp_address_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t6domainE"><code class="docutils literal notranslate"><span class="pre">domain</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t3busE"><code class="docutils literal notranslate"><span class="pre">bus</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t6deviceE"><code class="docutils literal notranslate"><span class="pre">device</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t8functionE"><code class="docutils literal notranslate"><span class="pre">function</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-fabric-vertex-exp-properties-t">ze_fabric_vertex_exp_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433ze_fabric_vertex_exp_properties_t"><code class="docutils literal notranslate"><span class="pre">ze_fabric_vertex_exp_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t4uuidE"><code class="docutils literal notranslate"><span class="pre">uuid</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t4typeE"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t6remoteE"><code class="docutils literal notranslate"><span class="pre">remote</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t7addressE"><code class="docutils literal notranslate"><span class="pre">address</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="fabric-vertex-experimental">
+<h1>Fabric Vertex - Experimental<a class="headerlink" href="#fabric-vertex-experimental" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="fabric-vertex-experimental-functions">
+<h2>Fabric Vertex - Experimental Functions<a class="headerlink" href="#fabric-vertex-experimental-functions" title="Link to this heading">#</a></h2>
+<section id="zefabricvertexgetexp">
+<span id="id1"></span><h3>zeFabricVertexGetExp<a class="headerlink" href="#zefabricvertexgetexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420zeFabricVertexGetExp18ze_driver_handle_tP8uint32_tP25ze_fabric_vertex_handle_t">
+<span id="_CPPv320zeFabricVertexGetExp18ze_driver_handle_tP8uint32_tP25ze_fabric_vertex_handle_t"></span><span id="_CPPv220zeFabricVertexGetExp18ze_driver_handle_tP8uint32_tP25ze_fabric_vertex_handle_t"></span><span id="zeFabricVertexGetExp__ze_driver_handle_t.uint32_tP.ze_fabric_vertex_handle_tP"></span><span class="target" id="ze__api_8h_1a675a5fb3683881b52db623db62fe73f5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFabricVertexGetExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="n"><span class="pre">ze_fabric_vertex_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phVertices</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeFabricVertexGetExp18ze_driver_handle_tP8uint32_tP25ze_fabric_vertex_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieves fabric vertices within a driver. </p>
+<p><ul class="simple">
+<li><p>A fabric vertex represents either a device or a switch connected to other fabric vertices.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hDriver</strong> – [in] handle of the driver instance </p></li>
+<li><p><strong>pCount</strong> – [in,out] pointer to the number of fabric vertices. if count is zero, then the driver shall update the value with the total number of fabric vertices available. if count is greater than the number of fabric vertices available, then the driver shall update the value with the correct number of fabric vertices available. </p></li>
+<li><p><strong>phVertices</strong> – [in,out][optional][range(0, *pCount)] array of handle of fabric vertices. if count is less than the number of fabric vertices available, then driver shall only retrieve that number of fabric vertices. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDriver</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zefabricvertexgetsubverticesexp">
+<span id="id2"></span><h3>zeFabricVertexGetSubVerticesExp<a class="headerlink" href="#zefabricvertexgetsubverticesexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv431zeFabricVertexGetSubVerticesExp25ze_fabric_vertex_handle_tP8uint32_tP25ze_fabric_vertex_handle_t">
+<span id="_CPPv331zeFabricVertexGetSubVerticesExp25ze_fabric_vertex_handle_tP8uint32_tP25ze_fabric_vertex_handle_t"></span><span id="_CPPv231zeFabricVertexGetSubVerticesExp25ze_fabric_vertex_handle_tP8uint32_tP25ze_fabric_vertex_handle_t"></span><span id="zeFabricVertexGetSubVerticesExp__ze_fabric_vertex_handle_t.uint32_tP.ze_fabric_vertex_handle_tP"></span><span class="target" id="ze__api_8h_1a8d2d5e00665162e5765b816dcb38776c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFabricVertexGetSubVerticesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_fabric_vertex_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVertex</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="n"><span class="pre">ze_fabric_vertex_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phSubvertices</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zeFabricVertexGetSubVerticesExp25ze_fabric_vertex_handle_tP8uint32_tP25ze_fabric_vertex_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieves a fabric sub-vertex from a fabric vertex. </p>
+<p><ul class="simple">
+<li><p>Multiple calls to this function will return identical fabric vertex handles, in the same order.</p></li>
+<li><p>The number of handles returned from this function is affected by the <code class="docutils literal notranslate"><span class="pre">ZE_AFFINITY_MASK</span></code> environment variable.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVertex</strong> – [in] handle of the fabric vertex object </p></li>
+<li><p><strong>pCount</strong> – [in,out] pointer to the number of sub-vertices. if count is zero, then the driver shall update the value with the total number of sub-vertices available. if count is greater than the number of sub-vertices available, then the driver shall update the value with the correct number of sub-vertices available. </p></li>
+<li><p><strong>phSubvertices</strong> – [in,out][optional][range(0, *pCount)] array of handle of sub-vertices. if count is less than the number of sub-vertices available, then driver shall only retrieve that number of sub-vertices. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVertex</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zefabricvertexgetpropertiesexp">
+<span id="id3"></span><h3>zeFabricVertexGetPropertiesExp<a class="headerlink" href="#zefabricvertexgetpropertiesexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv430zeFabricVertexGetPropertiesExp25ze_fabric_vertex_handle_tP33ze_fabric_vertex_exp_properties_t">
+<span id="_CPPv330zeFabricVertexGetPropertiesExp25ze_fabric_vertex_handle_tP33ze_fabric_vertex_exp_properties_t"></span><span id="_CPPv230zeFabricVertexGetPropertiesExp25ze_fabric_vertex_handle_tP33ze_fabric_vertex_exp_properties_t"></span><span id="zeFabricVertexGetPropertiesExp__ze_fabric_vertex_handle_t.ze_fabric_vertex_exp_properties_tP"></span><span class="target" id="ze__api_8h_1a7f41cddfc57a1c8b8e1f5495aa3eedd8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFabricVertexGetPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_fabric_vertex_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVertex</span></span>, <a class="reference internal" href="#_CPPv433ze_fabric_vertex_exp_properties_t" title="ze_fabric_vertex_exp_properties_t"><span class="n"><span class="pre">ze_fabric_vertex_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pVertexProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zeFabricVertexGetPropertiesExp25ze_fabric_vertex_handle_tP33ze_fabric_vertex_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieves properties of the fabric vertex. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVertex</strong> – [in] handle of the fabric vertex </p></li>
+<li><p><strong>pVertexProperties</strong> – [in,out] query result for fabric vertex properties </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVertex</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pVertexProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zefabricvertexgetdeviceexp">
+<span id="id4"></span><h3>zeFabricVertexGetDeviceExp<a class="headerlink" href="#zefabricvertexgetdeviceexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426zeFabricVertexGetDeviceExp25ze_fabric_vertex_handle_tP18ze_device_handle_t">
+<span id="_CPPv326zeFabricVertexGetDeviceExp25ze_fabric_vertex_handle_tP18ze_device_handle_t"></span><span id="_CPPv226zeFabricVertexGetDeviceExp25ze_fabric_vertex_handle_tP18ze_device_handle_t"></span><span id="zeFabricVertexGetDeviceExp__ze_fabric_vertex_handle_t.ze_device_handle_tP"></span><span class="target" id="ze__api_8h_1a943ad56a01d75ec6062346cf608d69e7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFabricVertexGetDeviceExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_fabric_vertex_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVertex</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zeFabricVertexGetDeviceExp25ze_fabric_vertex_handle_tP18ze_device_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns device handle from fabric vertex handle. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hVertex</strong> – [in] handle of the fabric vertex </p></li>
+<li><p><strong>phDevice</strong> – [out] device handle corresponding to fabric vertex </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hVertex</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ac5b6ff0ddeff895bf75b10f0059d9382"><span class="std std-ref">ZE_RESULT_EXP_ERROR_VERTEX_IS_NOT_DEVICE</span></a><ul>
+<li><p>Provided fabric vertex handle does not correspond to a device or subdevice.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ad2a786e15cbc32aba5ac8262d00607f8"><span class="std std-ref">ZE_RESULT_EXP_ERROR_REMOTE_DEVICE</span></a><ul>
+<li><p>Provided fabric vertex handle corresponds to remote device or subdevice. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="fabric-vertex-experimental-enums">
+<h2>Fabric Vertex - Experimental Enums<a class="headerlink" href="#fabric-vertex-experimental-enums" title="Link to this heading">#</a></h2>
+<section id="ze-fabric-vertex-exp-type-t">
+<span id="id5"></span><h3>ze_fabric_vertex_exp_type_t<a class="headerlink" href="#ze-fabric-vertex-exp-type-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv427ze_fabric_vertex_exp_type_t">
+<span id="_CPPv327ze_fabric_vertex_exp_type_t"></span><span id="_CPPv227ze_fabric_vertex_exp_type_t"></span><span class="target" id="ze__api_8h_1a99ed77b84ec626de581ff3d175fa5497"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fabric_vertex_exp_type_t</span></span></span><a class="headerlink" href="#_CPPv427ze_fabric_vertex_exp_type_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric Vertex types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_fabric_vertex_exp_type_t33ZE_FABRIC_VERTEX_EXP_TYPE_UNKNOWNE">
+<span id="_CPPv3N27ze_fabric_vertex_exp_type_t33ZE_FABRIC_VERTEX_EXP_TYPE_UNKNOWNE"></span><span id="_CPPv2N27ze_fabric_vertex_exp_type_t33ZE_FABRIC_VERTEX_EXP_TYPE_UNKNOWNE"></span><span class="target" id="ze__api_8h_1a99ed77b84ec626de581ff3d175fa5497aaebb99d9c1d46874d9102ce1c174d30b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_UNKNOWN</span></span></span><a class="headerlink" href="#_CPPv4N27ze_fabric_vertex_exp_type_t33ZE_FABRIC_VERTEX_EXP_TYPE_UNKNOWNE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric vertex type is unknown. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_DEVICEE">
+<span id="_CPPv3N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_DEVICEE"></span><span id="_CPPv2N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_DEVICEE"></span><span class="target" id="ze__api_8h_1a99ed77b84ec626de581ff3d175fa5497ab4c5e7d7724f68ece4c7decd514de5c6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_DEVICE</span></span></span><a class="headerlink" href="#_CPPv4N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_DEVICEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric vertex represents a device. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_fabric_vertex_exp_type_t35ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICEE">
+<span id="_CPPv3N27ze_fabric_vertex_exp_type_t35ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICEE"></span><span id="_CPPv2N27ze_fabric_vertex_exp_type_t35ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICEE"></span><span class="target" id="ze__api_8h_1a99ed77b84ec626de581ff3d175fa5497a1a5b7ab7fc83e1d8b4b682215c51ac3a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICE</span></span></span><a class="headerlink" href="#_CPPv4N27ze_fabric_vertex_exp_type_t35ZE_FABRIC_VERTEX_EXP_TYPE_SUBDEVICEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric vertex represents a subdevice. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_SWITCHE">
+<span id="_CPPv3N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_SWITCHE"></span><span id="_CPPv2N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_SWITCHE"></span><span class="target" id="ze__api_8h_1a99ed77b84ec626de581ff3d175fa5497af82a81d623dc3b714d570703b5754b05"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_SWITCH</span></span></span><a class="headerlink" href="#_CPPv4N27ze_fabric_vertex_exp_type_t32ZE_FABRIC_VERTEX_EXP_TYPE_SWITCHE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric vertex represents a switch. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_fabric_vertex_exp_type_t38ZE_FABRIC_VERTEX_EXP_TYPE_FORCE_UINT32E">
+<span id="_CPPv3N27ze_fabric_vertex_exp_type_t38ZE_FABRIC_VERTEX_EXP_TYPE_FORCE_UINT32E"></span><span id="_CPPv2N27ze_fabric_vertex_exp_type_t38ZE_FABRIC_VERTEX_EXP_TYPE_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a99ed77b84ec626de581ff3d175fa5497a13303e59c2ebd3389893e83aac31611e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_VERTEX_EXP_TYPE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N27ze_fabric_vertex_exp_type_t38ZE_FABRIC_VERTEX_EXP_TYPE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_FABRIC_VERTEX_EXP_TYPE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="fabric-vertex-experimental-structures">
+<h2>Fabric Vertex - Experimental Structures<a class="headerlink" href="#fabric-vertex-experimental-structures" title="Link to this heading">#</a></h2>
+<section id="ze-fabric-vertex-pci-exp-address-t">
+<span id="id6"></span><h3>ze_fabric_vertex_pci_exp_address_t<a class="headerlink" href="#ze-fabric-vertex-pci-exp-address-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv434ze_fabric_vertex_pci_exp_address_t">
+<span id="_CPPv334ze_fabric_vertex_pci_exp_address_t"></span><span id="_CPPv234ze_fabric_vertex_pci_exp_address_t"></span><span id="ze_fabric_vertex_pci_exp_address_t"></span><span class="target" id="structze__fabric__vertex__pci__exp__address__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fabric_vertex_pci_exp_address_t</span></span></span><a class="headerlink" href="#_CPPv434ze_fabric_vertex_pci_exp_address_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>PCI address. </p>
+<p><ul class="simple">
+<li><p>A PCI BDF address is the bus:device:function address of the device and is useful for locating the device in the PCI switch fabric. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_fabric_vertex_pci_exp_address_t6domainE">
+<span id="_CPPv3N34ze_fabric_vertex_pci_exp_address_t6domainE"></span><span id="_CPPv2N34ze_fabric_vertex_pci_exp_address_t6domainE"></span><span id="ze_fabric_vertex_pci_exp_address_t::domain__uint32_t"></span><span class="target" id="structze__fabric__vertex__pci__exp__address__t_1a4d39316b30bf15389ae3bceab72cf64d"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">domain</span></span></span><a class="headerlink" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t6domainE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] PCI domain number </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_fabric_vertex_pci_exp_address_t3busE">
+<span id="_CPPv3N34ze_fabric_vertex_pci_exp_address_t3busE"></span><span id="_CPPv2N34ze_fabric_vertex_pci_exp_address_t3busE"></span><span id="ze_fabric_vertex_pci_exp_address_t::bus__uint32_t"></span><span class="target" id="structze__fabric__vertex__pci__exp__address__t_1ae846610db4838c819074f4f079798a50"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bus</span></span></span><a class="headerlink" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t3busE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] PCI BDF bus number </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_fabric_vertex_pci_exp_address_t6deviceE">
+<span id="_CPPv3N34ze_fabric_vertex_pci_exp_address_t6deviceE"></span><span id="_CPPv2N34ze_fabric_vertex_pci_exp_address_t6deviceE"></span><span id="ze_fabric_vertex_pci_exp_address_t::device__uint32_t"></span><span class="target" id="structze__fabric__vertex__pci__exp__address__t_1a5c7fe8a604a475539083c94dbdb5297a"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">device</span></span></span><a class="headerlink" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t6deviceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] PCI BDF device number </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_fabric_vertex_pci_exp_address_t8functionE">
+<span id="_CPPv3N34ze_fabric_vertex_pci_exp_address_t8functionE"></span><span id="_CPPv2N34ze_fabric_vertex_pci_exp_address_t8functionE"></span><span id="ze_fabric_vertex_pci_exp_address_t::function__uint32_t"></span><span class="target" id="structze__fabric__vertex__pci__exp__address__t_1a6a9a08e7942db174a323c8ed70d84051"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">function</span></span></span><a class="headerlink" href="#_CPPv4N34ze_fabric_vertex_pci_exp_address_t8functionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] PCI BDF function number </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-fabric-vertex-exp-properties-t">
+<span id="id7"></span><h3>ze_fabric_vertex_exp_properties_t<a class="headerlink" href="#ze-fabric-vertex-exp-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv433ze_fabric_vertex_exp_properties_t">
+<span id="_CPPv333ze_fabric_vertex_exp_properties_t"></span><span id="_CPPv233ze_fabric_vertex_exp_properties_t"></span><span id="ze_fabric_vertex_exp_properties_t"></span><span class="target" id="structze__fabric__vertex__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fabric_vertex_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv433ze_fabric_vertex_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric Vertex properties. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_fabric_vertex_exp_properties_t5stypeE">
+<span id="_CPPv3N33ze_fabric_vertex_exp_properties_t5stypeE"></span><span id="_CPPv2N33ze_fabric_vertex_exp_properties_t5stypeE"></span><span id="ze_fabric_vertex_exp_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__fabric__vertex__exp__properties__t_1aeef62129ba1323f4de8a3a5d5bb767e4"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_fabric_vertex_exp_properties_t5pNextE">
+<span id="_CPPv3N33ze_fabric_vertex_exp_properties_t5pNextE"></span><span id="_CPPv2N33ze_fabric_vertex_exp_properties_t5pNextE"></span><span id="ze_fabric_vertex_exp_properties_t::pNext__voidP"></span><span class="target" id="structze__fabric__vertex__exp__properties__t_1a0be201116601c09df584e3b4e35feedd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_fabric_vertex_exp_properties_t4uuidE">
+<span id="_CPPv3N33ze_fabric_vertex_exp_properties_t4uuidE"></span><span id="_CPPv2N33ze_fabric_vertex_exp_properties_t4uuidE"></span><span id="ze_fabric_vertex_exp_properties_t::uuid__ze_uuid_t"></span><span class="target" id="structze__fabric__vertex__exp__properties__t_1ac2178ad3f90323dc6cdaf269140fb2fd"></span><a class="reference internal" href="../apis/data_types.html#_CPPv49ze_uuid_t" title="ze_uuid_t"><span class="n"><span class="pre">ze_uuid_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uuid</span></span></span><a class="headerlink" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t4uuidE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] universal unique identifier. If the vertex is co-located with a device/subdevice, then this uuid will match that of the corresponding device/subdevice </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_fabric_vertex_exp_properties_t4typeE">
+<span id="_CPPv3N33ze_fabric_vertex_exp_properties_t4typeE"></span><span id="_CPPv2N33ze_fabric_vertex_exp_properties_t4typeE"></span><span id="ze_fabric_vertex_exp_properties_t::type__ze_fabric_vertex_exp_type_t"></span><span class="target" id="structze__fabric__vertex__exp__properties__t_1a2a72736c1c79b0a8ace0d2f77fd6d4c0"></span><a class="reference internal" href="#_CPPv427ze_fabric_vertex_exp_type_t" title="ze_fabric_vertex_exp_type_t"><span class="n"><span class="pre">ze_fabric_vertex_exp_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t4typeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] does the fabric vertex represent a device, subdevice, or switch? </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_fabric_vertex_exp_properties_t6remoteE">
+<span id="_CPPv3N33ze_fabric_vertex_exp_properties_t6remoteE"></span><span id="_CPPv2N33ze_fabric_vertex_exp_properties_t6remoteE"></span><span id="ze_fabric_vertex_exp_properties_t::remote__ze_bool_t"></span><span class="target" id="structze__fabric__vertex__exp__properties__t_1a31fcdede353529389d89545e0dfc1ad3"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remote</span></span></span><a class="headerlink" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t6remoteE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] does the fabric vertex live on the local node or on a remote node? </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_fabric_vertex_exp_properties_t7addressE">
+<span id="_CPPv3N33ze_fabric_vertex_exp_properties_t7addressE"></span><span id="_CPPv2N33ze_fabric_vertex_exp_properties_t7addressE"></span><span id="ze_fabric_vertex_exp_properties_t::address__ze_fabric_vertex_pci_exp_address_t"></span><span class="target" id="structze__fabric__vertex__exp__properties__t_1aa697aa8eaefc602e83f8fbcb480aa6f3"></span><a class="reference internal" href="#_CPPv434ze_fabric_vertex_pci_exp_address_t" title="ze_fabric_vertex_pci_exp_address_t"><span class="n"><span class="pre">ze_fabric_vertex_pci_exp_address_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#_CPPv4N33ze_fabric_vertex_exp_properties_t7addressE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] B/D/F address of fabric vertex &amp; associated device/subdevice if available </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="event_pool.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Event Pool - Experimental</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="fabric_edge.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Fabric Edge - Experimental</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zeFabricVertexGet</div><ul class="ctoc-list"><li><a href="fabric_vertex.html#zefabricvertexgetexp">&hellip;Exp</a></li><li><a href="fabric_vertex.html#zefabricvertexgetsubverticesexp">&hellip;SubVerticesExp</a></li><li><a href="fabric_vertex.html#zefabricvertexgetpropertiesexp">&hellip;PropertiesExp</a></li><li><a href="fabric_vertex.html#zefabricvertexgetdeviceexp">&hellip;DeviceExp</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="fabric_vertex.html#ze-fabric-vertex-exp-type-t">ze_fabric_vertex_exp_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="fabric_vertex.html#ze-fabric-vertex-pci-exp-address-t">ze_fabric_vertex_pci_exp_address_t</a></li><li><a href="fabric_vertex.html#ze-fabric-vertex-exp-properties-t">ze_fabric_vertex_exp_properties_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

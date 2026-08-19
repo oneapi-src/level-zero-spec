@@ -1,0 +1,997 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mem - Extensions &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/extensions/mem';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Image - Extensions" href="image.html" />
+    <link rel="prev" title="Command List - Extensions" href="command_list.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/extensions/mem.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Mem - Extensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mem-extension-functions">Mem - Extension Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zememfreeext">zeMemFreeExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv412zeMemFreeExt19ze_context_handle_tPK25ze_memory_free_ext_desc_tPv"><code class="docutils literal notranslate"><span class="pre">zeMemFreeExt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mem-extension-enums">Mem - Extension Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-relaxed-allocation-limits-ext-flags-t">ze_relaxed_allocation_limits_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_relaxed_allocation_limits_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_relaxed_allocation_limits_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_MAX_SIZEE"><code class="docutils literal notranslate"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_MAX_SIZE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-memory-compression-hints-ext-flags-t">ze_memory_compression_hints_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438ze_memory_compression_hints_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_memory_compression_hints_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_memory_compression_hints_ext_flag_t47ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_COMPRESSEDE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_COMPRESSED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_UNCOMPRESSEDE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_UNCOMPRESSED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mem-extension-structures">Mem - Extension Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-relaxed-allocation-limits-ext-desc-t">ze_relaxed_allocation_limits_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_relaxed_allocation_limits_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_relaxed_allocation_limits_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-memory-compression-hints-ext-desc-t">ze_memory_compression_hints_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438ze_memory_compression_hints_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_memory_compression_hints_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_memory_compression_hints_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_memory_compression_hints_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_memory_compression_hints_ext_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-memory-free-ext-desc-t">ze_memory_free_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425ze_memory_free_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_memory_free_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_memory_free_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_memory_free_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_memory_free_ext_desc_t10freePolicyE"><code class="docutils literal notranslate"><span class="pre">freePolicy</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-external-memmap-sysmem-ext-desc-t">ze_external_memmap_sysmem_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436ze_external_memmap_sysmem_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_external_memmap_sysmem_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t13pSystemMemoryE"><code class="docutils literal notranslate"><span class="pre">pSystemMemory</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t4sizeE"><code class="docutils literal notranslate"><span class="pre">size</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-ipc-mem-handle-type-ext-desc-t">ze_ipc_mem_handle_type_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433ze_ipc_mem_handle_type_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_ipc_mem_handle_type_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t9typeFlagsE"><code class="docutils literal notranslate"><span class="pre">typeFlags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-ipc-phys-mem-handle-range-ext-desc-t">ze_ipc_phys_mem_handle_range_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_ipc_phys_mem_handle_range_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_ipc_phys_mem_handle_range_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t4sizeE"><code class="docutils literal notranslate"><span class="pre">size</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mem-extensions">
+<h1>Mem - Extensions<a class="headerlink" href="#mem-extensions" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="mem-extension-functions">
+<h2>Mem - Extension Functions<a class="headerlink" href="#mem-extension-functions" title="Link to this heading">#</a></h2>
+<section id="zememfreeext">
+<span id="id1"></span><h3>zeMemFreeExt<a class="headerlink" href="#zememfreeext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.3</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412zeMemFreeExt19ze_context_handle_tPK25ze_memory_free_ext_desc_tPv">
+<span id="_CPPv312zeMemFreeExt19ze_context_handle_tPK25ze_memory_free_ext_desc_tPv"></span><span id="_CPPv212zeMemFreeExt19ze_context_handle_tPK25ze_memory_free_ext_desc_tPv"></span><span id="zeMemFreeExt__ze_context_handle_t.ze_memory_free_ext_desc_tCP.voidP"></span><span class="target" id="ze__api_8h_1adbdf202df0d25395ce320343271dc017"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeMemFreeExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv425ze_memory_free_ext_desc_t" title="ze_memory_free_ext_desc_t"><span class="n"><span class="pre">ze_memory_free_ext_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMemFreeDesc</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412zeMemFreeExt19ze_context_handle_tPK25ze_memory_free_ext_desc_tPv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Frees allocated host memory, device memory, or shared memory on the context using the specified free policy. </p>
+<p><ul class="simple">
+<li><p>Similar to zeMemFree, with added parameter to choose the free policy.</p></li>
+<li><p>Does not guarantee memory is freed upon return. See free policy descriptions for details.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same pointer.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of the context object </p></li>
+<li><p><strong>pMemFreeDesc</strong> – [in] pointer to memory free descriptor </p></li>
+<li><p><strong>ptr</strong> – [in][release] pointer to memory to free </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pMemFreeDesc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">ptr</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x3</span> <span class="pre">&lt;</span> <span class="pre">pMemFreeDesc-&gt;freePolicy</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="mem-extension-enums">
+<h2>Mem - Extension Enums<a class="headerlink" href="#mem-extension-enums" title="Link to this heading">#</a></h2>
+<section id="ze-relaxed-allocation-limits-ext-flags-t">
+<span id="id2"></span><h3>ze_relaxed_allocation_limits_ext_flags_t<a class="headerlink" href="#ze-relaxed-allocation-limits-ext-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv439ze_relaxed_allocation_limits_ext_flag_t">
+<span id="_CPPv339ze_relaxed_allocation_limits_ext_flag_t"></span><span id="_CPPv239ze_relaxed_allocation_limits_ext_flag_t"></span><span class="target" id="ze__api_8h_1ad15572b5fca8f0647ad0c836553b0919"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_relaxed_allocation_limits_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv439ze_relaxed_allocation_limits_ext_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_ext_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_MAX_SIZEE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_ext_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_MAX_SIZEE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_ext_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_MAX_SIZEE"></span><span class="target" id="ze__api_8h_1ad15572b5fca8f0647ad0c836553b0919a8bf12b2436d6ec9febe561f698a063ad"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_MAX_SIZE</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_MAX_SIZEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Allocation size may exceed the <code class="docutils literal notranslate"><span class="pre">maxMemAllocSize</span></code> member of <a class="reference internal" href="../apis/device.html#structze__device__properties__t"><span class="std std-ref">ze_device_properties_t</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_ext_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_ext_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_ext_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1ad15572b5fca8f0647ad0c836553b0919af126518871cfb4e0fb5afa8b7e662cc2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_RELAXED_ALLOCATION_LIMITS_EXT_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-memory-compression-hints-ext-flags-t">
+<span id="id3"></span><h3>ze_memory_compression_hints_ext_flags_t<a class="headerlink" href="#ze-memory-compression-hints-ext-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.3</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv438ze_memory_compression_hints_ext_flag_t">
+<span id="_CPPv338ze_memory_compression_hints_ext_flag_t"></span><span id="_CPPv238ze_memory_compression_hints_ext_flag_t"></span><span class="target" id="ze__api_8h_1a80656ef0503454b251eb9eb1554ccd95"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_memory_compression_hints_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv438ze_memory_compression_hints_ext_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_memory_compression_hints_ext_flag_t47ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_COMPRESSEDE">
+<span id="_CPPv3N38ze_memory_compression_hints_ext_flag_t47ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_COMPRESSEDE"></span><span id="_CPPv2N38ze_memory_compression_hints_ext_flag_t47ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_COMPRESSEDE"></span><span class="target" id="ze__api_8h_1a80656ef0503454b251eb9eb1554ccd95a659a91c66a07a8eb137a675a6128cb00"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_COMPRESSED</span></span></span><a class="headerlink" href="#_CPPv4N38ze_memory_compression_hints_ext_flag_t47ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_COMPRESSEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Hint Driver implementation to make allocation compressible. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_UNCOMPRESSEDE">
+<span id="_CPPv3N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_UNCOMPRESSEDE"></span><span id="_CPPv2N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_UNCOMPRESSEDE"></span><span class="target" id="ze__api_8h_1a80656ef0503454b251eb9eb1554ccd95a9a54229189f84aac8bbe950620a547bb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_UNCOMPRESSED</span></span></span><a class="headerlink" href="#_CPPv4N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_UNCOMPRESSEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Hint Driver implementation to make allocation not compressible. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a80656ef0503454b251eb9eb1554ccd95a20abf058cc4ea3b49272daa15b65dba7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N38ze_memory_compression_hints_ext_flag_t49ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_MEMORY_COMPRESSION_HINTS_EXT_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="mem-extension-structures">
+<h2>Mem - Extension Structures<a class="headerlink" href="#mem-extension-structures" title="Link to this heading">#</a></h2>
+<section id="ze-relaxed-allocation-limits-ext-desc-t">
+<span id="id4"></span><h3>ze_relaxed_allocation_limits_ext_desc_t<a class="headerlink" href="#ze-relaxed-allocation-limits-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv439ze_relaxed_allocation_limits_ext_desc_t">
+<span id="_CPPv339ze_relaxed_allocation_limits_ext_desc_t"></span><span id="_CPPv239ze_relaxed_allocation_limits_ext_desc_t"></span><span id="ze_relaxed_allocation_limits_ext_desc_t"></span><span class="target" id="structze__relaxed__allocation__limits__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_relaxed_allocation_limits_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv439ze_relaxed_allocation_limits_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Relaxed limits memory allocation descriptor. </p>
+<p><ul class="simple">
+<li><p>This structure may be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1aa487327d7e6a961daa87dd6ec04f570b"><span class="std std-ref">zeMemAllocShared</span></a> or <a class="reference internal" href="../apis/mem.html#ze__api_8h_1ad47b7ece6b6c412dbb96fbe0afd89147"><span class="std std-ref">zeMemAllocDevice</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__device__mem__alloc__desc__t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a>.</p></li>
+<li><p>This structure may also be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__host__mem__alloc__desc__t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a>. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5stypeE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_ext_desc_t5stypeE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_ext_desc_t5stypeE"></span><span id="ze_relaxed_allocation_limits_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__relaxed__allocation__limits__ext__desc__t_1a39463840d4fd64e2519275cc4b6c1313"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5pNextE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_ext_desc_t5pNextE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_ext_desc_t5pNextE"></span><span id="ze_relaxed_allocation_limits_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__relaxed__allocation__limits__ext__desc__t_1aed6217b129add9bf011e28c06c2940af"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5flagsE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_ext_desc_t5flagsE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_ext_desc_t5flagsE"></span><span id="ze_relaxed_allocation_limits_ext_desc_t::flags__ze_relaxed_allocation_limits_ext_flags_t"></span><span class="target" id="structze__relaxed__allocation__limits__ext__desc__t_1a63545615a669ab00f61965c78e15814a"></span><span class="n"><span class="pre">ze_relaxed_allocation_limits_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_ext_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] flags specifying allocation limits to relax. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1ad15572b5fca8f0647ad0c836553b0919"><span class="std std-ref">ze_relaxed_allocation_limits_ext_flag_t</span></a>; </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-memory-compression-hints-ext-desc-t">
+<span id="id5"></span><h3>ze_memory_compression_hints_ext_desc_t<a class="headerlink" href="#ze-memory-compression-hints-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.3</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv438ze_memory_compression_hints_ext_desc_t">
+<span id="_CPPv338ze_memory_compression_hints_ext_desc_t"></span><span id="_CPPv238ze_memory_compression_hints_ext_desc_t"></span><span id="ze_memory_compression_hints_ext_desc_t"></span><span class="target" id="structze__memory__compression__hints__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_memory_compression_hints_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv438ze_memory_compression_hints_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Compression hints memory allocation descriptor. </p>
+<p><ul class="simple">
+<li><p>This structure may be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1aa487327d7e6a961daa87dd6ec04f570b"><span class="std std-ref">zeMemAllocShared</span></a> or <a class="reference internal" href="../apis/mem.html#ze__api_8h_1ad47b7ece6b6c412dbb96fbe0afd89147"><span class="std std-ref">zeMemAllocDevice</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__device__mem__alloc__desc__t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a>.</p></li>
+<li><p>This structure may be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__host__mem__alloc__desc__t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a>.</p></li>
+<li><p>This structure may be passed to <a class="reference internal" href="../apis/image.html#ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"><span class="std std-ref">zeImageCreate</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/image.html#structze__image__desc__t"><span class="std std-ref">ze_image_desc_t</span></a>. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_memory_compression_hints_ext_desc_t5stypeE">
+<span id="_CPPv3N38ze_memory_compression_hints_ext_desc_t5stypeE"></span><span id="_CPPv2N38ze_memory_compression_hints_ext_desc_t5stypeE"></span><span id="ze_memory_compression_hints_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__memory__compression__hints__ext__desc__t_1aa007fce02709f5b001f37770db2331db"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N38ze_memory_compression_hints_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_memory_compression_hints_ext_desc_t5pNextE">
+<span id="_CPPv3N38ze_memory_compression_hints_ext_desc_t5pNextE"></span><span id="_CPPv2N38ze_memory_compression_hints_ext_desc_t5pNextE"></span><span id="ze_memory_compression_hints_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__memory__compression__hints__ext__desc__t_1a3442e96ddb23af28f9cf0ebd6a620d32"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N38ze_memory_compression_hints_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_memory_compression_hints_ext_desc_t5flagsE">
+<span id="_CPPv3N38ze_memory_compression_hints_ext_desc_t5flagsE"></span><span id="_CPPv2N38ze_memory_compression_hints_ext_desc_t5flagsE"></span><span id="ze_memory_compression_hints_ext_desc_t::flags__ze_memory_compression_hints_ext_flags_t"></span><span class="target" id="structze__memory__compression__hints__ext__desc__t_1a741fd6bcfbd54af5cbab4676cc0fdf09"></span><span class="n"><span class="pre">ze_memory_compression_hints_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N38ze_memory_compression_hints_ext_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] flags specifying if allocation should be compressible or not. Must be set to one of the <a class="reference internal" href="#ze__api_8h_1a80656ef0503454b251eb9eb1554ccd95"><span class="std std-ref">ze_memory_compression_hints_ext_flag_t</span></a>; </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-memory-free-ext-desc-t">
+<span id="id6"></span><h3>ze_memory_free_ext_desc_t<a class="headerlink" href="#ze-memory-free-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.3</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv425ze_memory_free_ext_desc_t">
+<span id="_CPPv325ze_memory_free_ext_desc_t"></span><span id="_CPPv225ze_memory_free_ext_desc_t"></span><span id="ze_memory_free_ext_desc_t"></span><span class="target" id="structze__memory__free__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_memory_free_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv425ze_memory_free_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Memory free descriptor with free policy. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_memory_free_ext_desc_t5stypeE">
+<span id="_CPPv3N25ze_memory_free_ext_desc_t5stypeE"></span><span id="_CPPv2N25ze_memory_free_ext_desc_t5stypeE"></span><span id="ze_memory_free_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__memory__free__ext__desc__t_1a5cd40ad134d421fefac122edde2f432b"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N25ze_memory_free_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_memory_free_ext_desc_t5pNextE">
+<span id="_CPPv3N25ze_memory_free_ext_desc_t5pNextE"></span><span id="_CPPv2N25ze_memory_free_ext_desc_t5pNextE"></span><span id="ze_memory_free_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__memory__free__ext__desc__t_1ac561836757f94ea83cf8cc7dfc7019f8"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N25ze_memory_free_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_memory_free_ext_desc_t10freePolicyE">
+<span id="_CPPv3N25ze_memory_free_ext_desc_t10freePolicyE"></span><span id="_CPPv2N25ze_memory_free_ext_desc_t10freePolicyE"></span><span id="ze_memory_free_ext_desc_t::freePolicy__ze_driver_memory_free_policy_ext_flags_t"></span><span class="target" id="structze__memory__free__ext__desc__t_1a5c84853dcd9c633d1f62d3776c6bb5cf"></span><span class="n"><span class="pre">ze_driver_memory_free_policy_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">freePolicy</span></span></span><a class="headerlink" href="#_CPPv4N25ze_memory_free_ext_desc_t10freePolicyE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] flags specifying the memory free policy. must be 0 (default) or a supported <a class="reference internal" href="driver.html#ze__api_8h_1a3a6b2605a9841709c9dc2dcd2aa759d9"><span class="std std-ref">ze_driver_memory_free_policy_ext_flag_t</span></a>; default behavior is to free immediately. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-external-memmap-sysmem-ext-desc-t">
+<span id="id7"></span><h3>ze_external_memmap_sysmem_ext_desc_t<a class="headerlink" href="#ze-external-memmap-sysmem-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.14</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv436ze_external_memmap_sysmem_ext_desc_t">
+<span id="_CPPv336ze_external_memmap_sysmem_ext_desc_t"></span><span id="_CPPv236ze_external_memmap_sysmem_ext_desc_t"></span><span id="ze_external_memmap_sysmem_ext_desc_t"></span><span class="target" id="structze__external__memmap__sysmem__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_external_memmap_sysmem_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv436ze_external_memmap_sysmem_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Maps external system memory for an allocation. </p>
+<p><ul class="simple">
+<li><p>This structure may be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__host__mem__alloc__desc__t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a> to map system memory for a host allocation.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">pSystemMemory</span></code> pointer and <code class="docutils literal notranslate"><span class="pre">size</span></code> being mapped must be aligned to the host page size. The host page size must be queried using operating-system-specific calls, as the mapped memory originates from the system allocator rather than from Level-Zero; there is no Level-Zero query for this value.</p></li>
+<li><p>On success, the pointer returned from <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a> is identical to <code class="docutils literal notranslate"><span class="pre">pSystemMemory</span></code>; the mapping preserves the virtual address, so the same address is valid on both the host and the device.</p></li>
+<li><p>Memory from the application’s heap, stack, or statically-allocated (global) storage is supported. Support for memory obtained by other means is platform- and driver-dependent and is not guaranteed. If <code class="docutils literal notranslate"><span class="pre">pSystemMemory</span></code> points to a memory type that cannot be mapped, <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a> returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a>.</p></li>
+<li><p>Host memory that is read-only can only be mapped successfully when the <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a1203a749a1c2c4c61732e21dc49e8c9ea64e452afcfa86f29a0647e8df15d8b85"><span class="std std-ref">ZE_HOST_MEM_ALLOC_FLAG_MEM_READ_ONLY</span></a> flag is set in <a class="reference internal" href="../apis/mem.html#structze__host__mem__alloc__desc__t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a>; in that case device access to the mapped memory is read-only.</p></li>
+<li><p>The system memory referenced by <code class="docutils literal notranslate"><span class="pre">pSystemMemory</span></code> must remain valid for the entire lifetime of the resulting allocation. Freeing or unmapping the underlying system memory before the allocation is released results in undefined behavior.</p></li>
+<li><p>Mapped memory ranges must not overlap. Releasing a mapping with <a class="reference internal" href="../apis/mem.html#ze__api_8h_1abe0ba4fd442c9b35a50888b254fbd4b6"><span class="std std-ref">zeMemFree</span></a> tears down the device page-table entries for its virtual address range. Because these page tables are shared across imports, releasing a mapping that overlaps another import also tears down the overlapping device page-table entries, leaving the other allocation invalid for device access. The host system memory itself is unaffected.</p></li>
+<li><p>After mapping, <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a5a80cf4245a474db86cc727ea1345ff1"><span class="std std-ref">zeMemGetAllocProperties</span></a> reports the allocation type as <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a6808370b64ade7fdd4a74093224e1d9ba0347b201fe410ed5ec5d77ee1e5679bb"><span class="std std-ref">ZE_MEMORY_TYPE_HOST_IMPORTED</span></a>.</p></li>
+<li><p>The mapping is released by passing the pointer to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1abe0ba4fd442c9b35a50888b254fbd4b6"><span class="std std-ref">zeMemFree</span></a>, like any other host allocation. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_external_memmap_sysmem_ext_desc_t5stypeE">
+<span id="_CPPv3N36ze_external_memmap_sysmem_ext_desc_t5stypeE"></span><span id="_CPPv2N36ze_external_memmap_sysmem_ext_desc_t5stypeE"></span><span id="ze_external_memmap_sysmem_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__external__memmap__sysmem__ext__desc__t_1ab85c74c3a30dd1f54f082b8078e1b355"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_external_memmap_sysmem_ext_desc_t5pNextE">
+<span id="_CPPv3N36ze_external_memmap_sysmem_ext_desc_t5pNextE"></span><span id="_CPPv2N36ze_external_memmap_sysmem_ext_desc_t5pNextE"></span><span id="ze_external_memmap_sysmem_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__external__memmap__sysmem__ext__desc__t_1a677ea4fc57b07242f95b811ed12bb36c"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_external_memmap_sysmem_ext_desc_t13pSystemMemoryE">
+<span id="_CPPv3N36ze_external_memmap_sysmem_ext_desc_t13pSystemMemoryE"></span><span id="_CPPv2N36ze_external_memmap_sysmem_ext_desc_t13pSystemMemoryE"></span><span id="ze_external_memmap_sysmem_ext_desc_t::pSystemMemory__voidP"></span><span class="target" id="structze__external__memmap__sysmem__ext__desc__t_1a03ef873845cc3b19dcb67f57245f9c7c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pSystemMemory</span></span></span><a class="headerlink" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t13pSystemMemoryE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] system memory pointer to map; must be page-aligned. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N36ze_external_memmap_sysmem_ext_desc_t4sizeE">
+<span id="_CPPv3N36ze_external_memmap_sysmem_ext_desc_t4sizeE"></span><span id="_CPPv2N36ze_external_memmap_sysmem_ext_desc_t4sizeE"></span><span id="ze_external_memmap_sysmem_ext_desc_t::size__uint64_t"></span><span class="target" id="structze__external__memmap__sysmem__ext__desc__t_1a81a6bbaee917510df4352817c5229d58"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N36ze_external_memmap_sysmem_ext_desc_t4sizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] size of the system memory to map; must be a multiple of the page size. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-ipc-mem-handle-type-ext-desc-t">
+<span id="id8"></span><h3>ze_ipc_mem_handle_type_ext_desc_t<a class="headerlink" href="#ze-ipc-mem-handle-type-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.15</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv433ze_ipc_mem_handle_type_ext_desc_t">
+<span id="_CPPv333ze_ipc_mem_handle_type_ext_desc_t"></span><span id="_CPPv233ze_ipc_mem_handle_type_ext_desc_t"></span><span id="ze_ipc_mem_handle_type_ext_desc_t"></span><span class="target" id="structze__ipc__mem__handle__type__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_ipc_mem_handle_type_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv433ze_ipc_mem_handle_type_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>[‘IPC Memory Handle Type Extension Descriptor’, ‘Used in <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a842c7dbcfe30cda32d76f6d93cf9d09a"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>, <a class="reference internal" href="../apis/mem.html#ze__api_8h_1ad47b7ece6b6c412dbb96fbe0afd89147"><span class="std std-ref">zeMemAllocDevice</span></a>, and <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a>, <a class="reference internal" href="../apis/physical_mem.html#ze__api_8h_1abdea0f9a4937b065d855c3e39fe0f75d"><span class="std std-ref">zePhysicalMemCreate</span></a> to specify the IPC memory handle type to create for this allocation.’] </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5stypeE">
+<span id="_CPPv3N33ze_ipc_mem_handle_type_ext_desc_t5stypeE"></span><span id="_CPPv2N33ze_ipc_mem_handle_type_ext_desc_t5stypeE"></span><span id="ze_ipc_mem_handle_type_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__ipc__mem__handle__type__ext__desc__t_1a2bb61e87d27ef6d2b4e39ed81b814f02"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5pNextE">
+<span id="_CPPv3N33ze_ipc_mem_handle_type_ext_desc_t5pNextE"></span><span id="_CPPv2N33ze_ipc_mem_handle_type_ext_desc_t5pNextE"></span><span id="ze_ipc_mem_handle_type_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__ipc__mem__handle__type__ext__desc__t_1a63272d23652c70c940bfbd8c56f8fa55"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t9typeFlagsE">
+<span id="_CPPv3N33ze_ipc_mem_handle_type_ext_desc_t9typeFlagsE"></span><span id="_CPPv2N33ze_ipc_mem_handle_type_ext_desc_t9typeFlagsE"></span><span id="ze_ipc_mem_handle_type_ext_desc_t::typeFlags__ze_ipc_mem_handle_type_flags_t"></span><span class="target" id="structze__ipc__mem__handle__type__ext__desc__t_1ae69dcd6fcdc24087fd522bf1e45e3fca"></span><span class="n"><span class="pre">ze_ipc_mem_handle_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">typeFlags</span></span></span><a class="headerlink" href="#_CPPv4N33ze_ipc_mem_handle_type_ext_desc_t9typeFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] valid combination of <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a6dce35546f8ee21e1f01a70050286534"><span class="std std-ref">ze_ipc_mem_handle_type_flag_t</span></a></p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-ipc-phys-mem-handle-range-ext-desc-t">
+<span id="id9"></span><h3>ze_ipc_phys_mem_handle_range_ext_desc_t<a class="headerlink" href="#ze-ipc-phys-mem-handle-range-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.18</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv439ze_ipc_phys_mem_handle_range_ext_desc_t">
+<span id="_CPPv339ze_ipc_phys_mem_handle_range_ext_desc_t"></span><span id="_CPPv239ze_ipc_phys_mem_handle_range_ext_desc_t"></span><span id="ze_ipc_phys_mem_handle_range_ext_desc_t"></span><span class="target" id="structze__ipc__phys__mem__handle__range__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_ipc_phys_mem_handle_range_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv439ze_ipc_phys_mem_handle_range_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Descriptor for capturing a VA range into an IPC memory handle. </p>
+<p><ul class="simple">
+<li><p>Pass this structure via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> parameter of <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a842c7dbcfe30cda32d76f6d93cf9d09a"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>. When present, the <code class="docutils literal notranslate"><span class="pre">ptr</span></code> argument specifies the base VA of the range rather than the base of a single allocation.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ptr</span></code> argument of <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a842c7dbcfe30cda32d76f6d93cf9d09a"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a> specifies the base VA of the range.</p></li>
+<li><p>The range may span more than one reserved VA region created by <a class="reference internal" href="../apis/virtual_mem.html#ze__api_8h_1abd0939f7343afc0f34d59914e01ee08e"><span class="std std-ref">zeVirtualMemReserve</span></a>; the underlying reservations are not significant. What is captured is the ordered set of physical memory objects mapped along <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code>.</p></li>
+<li><p>The caller may start at an arbitrary offset within a mapped range and may capture a subset of a larger mapped range, provided the requested <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> is itself fully and contiguously mapped.</p></li>
+<li><p>An individual physical memory object along the range need not be mapped at its own offset zero; <a class="reference internal" href="../apis/virtual_mem.html#ze__api_8h_1a343f08ac7eab101fcb6f7303ded09370"><span class="std std-ref">zeVirtualMemMap</span></a> may have mapped it at a non-zero offset into the physical object. The export captures the offset at which each physical object was mapped, and the importer reproduces each mapping at that same offset, so the importer views exactly the same memory as the exporter.</p></li>
+<li><p>This extension is only supported for ranges backed by virtual reservations (<a class="reference internal" href="../apis/virtual_mem.html#ze__api_8h_1abd0939f7343afc0f34d59914e01ee08e"><span class="std std-ref">zeVirtualMemReserve</span></a>) mapped to physical memory objects (<a class="reference internal" href="../apis/virtual_mem.html#ze__api_8h_1a343f08ac7eab101fcb6f7303ded09370"><span class="std std-ref">zeVirtualMemMap</span></a>). Device, host, and shared USM pointers (from <a class="reference internal" href="../apis/mem.html#ze__api_8h_1ad47b7ece6b6c412dbb96fbe0afd89147"><span class="std std-ref">zeMemAllocDevice</span></a>, <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a>, and <a class="reference internal" href="../apis/mem.html#ze__api_8h_1aa487327d7e6a961daa87dd6ec04f570b"><span class="std std-ref">zeMemAllocShared</span></a>) are not supported and will not be grouped into a range handle. If <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> includes any standard USM VA rather than a reserved VA, <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a842c7dbcfe30cda32d76f6d93cf9d09a"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a> returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a>.</p></li>
+<li><p>The driver enumerates all physical memory objects mapped to <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> and encodes them into the returned IPC handle in VA order.</p></li>
+<li><p>On the importer side, <a class="reference internal" href="../apis/mem.html#ze__api_8h_1adf317a1fd6e7fe7bf6f1d6b0ca2ab039"><span class="std std-ref">zeMemOpenIpcHandle</span></a> decodes the handle and maps all physical objects into a fresh contiguous VA reservation in the same order.</p></li>
+<li><p>The total addressable size on the importer equals <code class="docutils literal notranslate"><span class="pre">size</span></code>. When <code class="docutils literal notranslate"><span class="pre">ptr</span></code> begins at an offset within a physical memory object, the returned importer pointer corresponds to <code class="docutils literal notranslate"><span class="pre">ptr</span></code>, not to the base of the first encoded object.</p></li>
+<li><p>The importer does not need to be told <code class="docutils literal notranslate"><span class="pre">size</span></code> out of band: the range handle is self-describing. Calling <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a18d592f03a0a9fec4a2210b40d8214f8"><span class="std std-ref">zeMemGetAddressRange</span></a> on the pointer returned by <a class="reference internal" href="../apis/mem.html#ze__api_8h_1adf317a1fd6e7fe7bf6f1d6b0ca2ab039"><span class="std std-ref">zeMemOpenIpcHandle</span></a> reports the base and full <code class="docutils literal notranslate"><span class="pre">size</span></code> of the imported range.</p></li>
+<li><p>The exported IPC handle is a static snapshot taken at the time of the call. Physical memory subsequently mapped into, unmapped from, or grown beyond the exporter’s VA range is not reflected in a previously exported handle or in any already-open importer view; a new export is required to share the additional mappings.</p></li>
+<li><p>There is no application-visible limit on the number of physical memory objects a range may encode; how the driver represents and stores them is opaque and is not bound by the size of <a class="reference internal" href="../apis/data_types.html#structze__ipc__mem__handle__t"><span class="std std-ref">ze_ipc_mem_handle_t</span></a>. If the driver cannot accommodate the range, for example it cannot store the number of physical objects being represented, <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a842c7dbcfe30cda32d76f6d93cf9d09a"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a> fails with <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ad29d02df3cdefd6821c735f8a5812197"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_SIZE</span></a>.</p></li>
+<li><p>Returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a9c906cb925f554f964bad59cd0d91113"><span class="std std-ref">ZE_RESULT_ERROR_ADDRESS_NOT_FOUND</span></a> if any sub-region within <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> is not mapped to a physical memory object. The range must be fully mapped with no holes, because the importer is guaranteed a contiguous range and unmapped gaps cannot be represented.</p></li>
+<li><p>Returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a743b17f38be52772c5f67c4101638193"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SIZE</span></a> if <code class="docutils literal notranslate"><span class="pre">size</span></code> is 0.</p></li>
+<li><p>Returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ad29d02df3cdefd6821c735f8a5812197"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_SIZE</span></a> if the driver cannot accommodate the range, for example the number of physical memory objects encoded exceeds what the implementation can store.</p></li>
+<li><p>Returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a> if the <code class="docutils literal notranslate"><span class="pre">ptr</span></code> argument is NULL.</p></li>
+<li><p>Returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a> if <code class="docutils literal notranslate"><span class="pre">[ptr,</span> <span class="pre">ptr+size)</span></code> includes a device, host, or shared USM allocation rather than reserved VA mapped to physical memory.</p></li>
+<li><p>Returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a> if the driver or device does not support the ZE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_NAME extension. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t5stypeE">
+<span id="_CPPv3N39ze_ipc_phys_mem_handle_range_ext_desc_t5stypeE"></span><span id="_CPPv2N39ze_ipc_phys_mem_handle_range_ext_desc_t5stypeE"></span><span id="ze_ipc_phys_mem_handle_range_ext_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__ipc__phys__mem__handle__range__ext__desc__t_1ae62dc2556e8c1ee8ecb2ea7d7e819c4d"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t5pNextE">
+<span id="_CPPv3N39ze_ipc_phys_mem_handle_range_ext_desc_t5pNextE"></span><span id="_CPPv2N39ze_ipc_phys_mem_handle_range_ext_desc_t5pNextE"></span><span id="ze_ipc_phys_mem_handle_range_ext_desc_t::pNext__voidCP"></span><span class="target" id="structze__ipc__phys__mem__handle__range__ext__desc__t_1aaada3ae2aaadde116d82a604c91c406f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t4sizeE">
+<span id="_CPPv3N39ze_ipc_phys_mem_handle_range_ext_desc_t4sizeE"></span><span id="_CPPv2N39ze_ipc_phys_mem_handle_range_ext_desc_t4sizeE"></span><span id="ze_ipc_phys_mem_handle_range_ext_desc_t::size__s"></span><span class="target" id="structze__ipc__phys__mem__handle__range__ext__desc__t_1a9ef9c14b2f87a44036b0c15c4927e777"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N39ze_ipc_phys_mem_handle_range_ext_desc_t4sizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] size in bytes of the VA range starting at the <code class="docutils literal notranslate"><span class="pre">ptr</span></code> argument of <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a842c7dbcfe30cda32d76f6d93cf9d09a"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>; must be non-zero. The range [ptr, ptr+size) must be fully mapped; see the details for error behavior. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="command_list.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Command List - Extensions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="image.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Image - Extensions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="mem.html#zememfreeext">zeMemFreeExt</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="mem.html#ze-relaxed-allocation-limits-ext-flags-t">ze_relaxed_allocation_limits_ext_flags_t</a></li><li><a href="mem.html#ze-memory-compression-hints-ext-flags-t">ze_memory_compression_hints_ext_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">6</span></summary><ul class="ctoc-list"><li><a href="mem.html#ze-relaxed-allocation-limits-ext-desc-t">ze_relaxed_allocation_limits_ext_desc_t</a></li><li><a href="mem.html#ze-memory-compression-hints-ext-desc-t">ze_memory_compression_hints_ext_desc_t</a></li><li><a href="mem.html#ze-memory-free-ext-desc-t">ze_memory_free_ext_desc_t</a></li><li><a href="mem.html#ze-external-memmap-sysmem-ext-desc-t">ze_external_memmap_sysmem_ext_desc_t</a></li><li><a href="mem.html#ze-ipc-mem-handle-type-ext-desc-t">ze_ipc_mem_handle_type_ext_desc_t</a></li><li><a href="mem.html#ze-ipc-phys-mem-handle-range-ext-desc-t">ze_ipc_phys_mem_handle_range_ext_desc_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

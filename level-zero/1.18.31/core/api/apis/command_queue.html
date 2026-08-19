@@ -1,0 +1,1305 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Command Queue &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/apis/command_queue';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Command List" href="command_list.html" />
+    <link rel="prev" title="Context" href="context.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/apis/command_queue.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Command Queue</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-queue-functions">Command Queue Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuecreate">zeCommandQueueCreate</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zeCommandQueueCreate19ze_context_handle_t18ze_device_handle_tPK23ze_command_queue_desc_tP25ze_command_queue_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueCreate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuedestroy">zeCommandQueueDestroy</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zeCommandQueueDestroy25ze_command_queue_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueDestroy()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueueexecutecommandlists">zeCommandQueueExecuteCommandLists</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433zeCommandQueueExecuteCommandLists25ze_command_queue_handle_t8uint32_tP24ze_command_list_handle_t17ze_fence_handle_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueExecuteCommandLists()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuesynchronize">zeCommandQueueSynchronize</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zeCommandQueueSynchronize25ze_command_queue_handle_t8uint64_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueSynchronize()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuegetordinal">zeCommandQueueGetOrdinal</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zeCommandQueueGetOrdinal25ze_command_queue_handle_tP8uint32_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueGetOrdinal()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuegetindex">zeCommandQueueGetIndex</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zeCommandQueueGetIndex25ze_command_queue_handle_tP8uint32_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueGetIndex()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuegetflags">zeCommandQueueGetFlags</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zeCommandQueueGetFlags25ze_command_queue_handle_tP24ze_command_queue_flags_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueGetFlags()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuegetmode">zeCommandQueueGetMode</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zeCommandQueueGetMode25ze_command_queue_handle_tP23ze_command_queue_mode_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueGetMode()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecommandqueuegetpriority">zeCommandQueueGetPriority</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zeCommandQueueGetPriority25ze_command_queue_handle_tP27ze_command_queue_priority_t"><code class="docutils literal notranslate"><span class="pre">zeCommandQueueGetPriority()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-queue-enums">Command Queue Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-command-queue-flags-t">ze_command_queue_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423ze_command_queue_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_command_queue_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_flag_t35ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLYE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_flag_t30ZE_COMMAND_QUEUE_FLAG_IN_ORDERE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_FLAG_IN_ORDER</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_flag_t39ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINTE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_flag_t34ZE_COMMAND_QUEUE_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-command-queue-mode-t">ze_command_queue_mode_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423ze_command_queue_mode_t"><code class="docutils literal notranslate"><span class="pre">ze_command_queue_mode_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_mode_t29ZE_COMMAND_QUEUE_MODE_DEFAULTE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_MODE_DEFAULT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_mode_t33ZE_COMMAND_QUEUE_MODE_SYNCHRONOUSE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_MODE_SYNCHRONOUS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUSE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_MODE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-command-queue-priority-t">ze_command_queue_priority_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427ze_command_queue_priority_t"><code class="docutils literal notranslate"><span class="pre">ze_command_queue_priority_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_command_queue_priority_t32ZE_COMMAND_QUEUE_PRIORITY_NORMALE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_NORMAL</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOWE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOW</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_command_queue_priority_t39ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGHE"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGH</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#command-queue-structures">Command Queue Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-command-queue-desc-t">ze_command_queue_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423ze_command_queue_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_command_queue_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_desc_t7ordinalE"><code class="docutils literal notranslate"><span class="pre">ordinal</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_desc_t5indexE"><code class="docutils literal notranslate"><span class="pre">index</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_desc_t4modeE"><code class="docutils literal notranslate"><span class="pre">mode</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_command_queue_desc_t8priorityE"><code class="docutils literal notranslate"><span class="pre">priority</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="command-queue">
+<h1>Command Queue<a class="headerlink" href="#command-queue" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="command-queue-functions">
+<h2>Command Queue Functions<a class="headerlink" href="#command-queue-functions" title="Link to this heading">#</a></h2>
+<section id="zecommandqueuecreate">
+<span id="id1"></span><h3>zeCommandQueueCreate<a class="headerlink" href="#zecommandqueuecreate" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420zeCommandQueueCreate19ze_context_handle_t18ze_device_handle_tPK23ze_command_queue_desc_tP25ze_command_queue_handle_t">
+<span id="_CPPv320zeCommandQueueCreate19ze_context_handle_t18ze_device_handle_tPK23ze_command_queue_desc_tP25ze_command_queue_handle_t"></span><span id="_CPPv220zeCommandQueueCreate19ze_context_handle_t18ze_device_handle_tPK23ze_command_queue_desc_tP25ze_command_queue_handle_t"></span><span id="zeCommandQueueCreate__ze_context_handle_t.ze_device_handle_t.ze_command_queue_desc_tCP.ze_command_queue_handle_tP"></span><span class="target" id="ze__api_8h_1a5cff54dfaaa01e841a53b0b1d21a70e3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv423ze_command_queue_desc_t" title="ze_command_queue_desc_t"><span class="n"><span class="pre">ze_command_queue_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phCommandQueue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeCommandQueueCreate19ze_context_handle_t18ze_device_handle_tPK23ze_command_queue_desc_tP25ze_command_queue_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates a command queue on the context. </p>
+<p><ul class="simple">
+<li><p>A command queue represents a logical input stream to the device, tied to a physical input stream.</p></li>
+<li><p>The application must only use the command queue for the device, or its sub-devices, which was provided during creation.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<p><div class="remark admonition">
+<p class="admonition-title">Remark</p>
+<p><em>Analogues</em><ul class="simple">
+<li><p><strong>clCreateCommandQueue</strong></p></li>
+</ul>
+</p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of the context object </p></li>
+<li><p><strong>hDevice</strong> – [in] handle of the device object </p></li>
+<li><p><strong>desc</strong> – [in] pointer to command queue descriptor </p></li>
+<li><p><strong>phCommandQueue</strong> – [out] pointer to handle of command queue object created </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phCommandQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x7</span> <span class="pre">&lt;</span> <span class="pre">desc-&gt;flags</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#ze__api_8h_1a7f69e616e7ee2fc24ff52fd09dd3333aad1cadb5264a7ef1fe9388956ab760435"><span class="std std-ref"><span class="pre">ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUS</span></span></a> <span class="pre">&lt;</span> <span class="pre">desc-&gt;mode</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#ze__api_8h_1a381cfb10c0e4b6d60643ff8bcc4b372fa58e87aa319956dd1996f9959b4c2ac8f"><span class="std std-ref"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGH</span></span></a> <span class="pre">&lt;</span> <span class="pre">desc-&gt;priority</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueuedestroy">
+<span id="id2"></span><h3>zeCommandQueueDestroy<a class="headerlink" href="#zecommandqueuedestroy" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421zeCommandQueueDestroy25ze_command_queue_handle_t">
+<span id="_CPPv321zeCommandQueueDestroy25ze_command_queue_handle_t"></span><span id="_CPPv221zeCommandQueueDestroy25ze_command_queue_handle_t"></span><span id="zeCommandQueueDestroy__ze_command_queue_handle_t"></span><span class="target" id="ze__api_8h_1ae73fc0c2f44bbd2a7c88670b27981498"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandQueue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeCommandQueueDestroy25ze_command_queue_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Destroys a command queue. </p>
+<p><ul class="simple">
+<li><p>The application must destroy all fence handles created from the command queue before destroying the command queue itself</p></li>
+<li><p>The application must ensure the device is not currently referencing the command queue before it is deleted</p></li>
+<li><p>The implementation of this function may immediately free all Host and Device allocations associated with this command queue</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same command queue handle.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<p><div class="remark admonition">
+<p class="admonition-title">Remark</p>
+<p><em>Analogues</em><ul class="simple">
+<li><p><strong>clReleaseCommandQueue</strong></p></li>
+</ul>
+</p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hCommandQueue</strong> – [in][release] handle of command queue object to destroy </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af964b27d146102948a48f0ebabe3aee3"><span class="std std-ref">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueueexecutecommandlists">
+<span id="id3"></span><h3>zeCommandQueueExecuteCommandLists<a class="headerlink" href="#zecommandqueueexecutecommandlists" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv433zeCommandQueueExecuteCommandLists25ze_command_queue_handle_t8uint32_tP24ze_command_list_handle_t17ze_fence_handle_t">
+<span id="_CPPv333zeCommandQueueExecuteCommandLists25ze_command_queue_handle_t8uint32_tP24ze_command_list_handle_t17ze_fence_handle_t"></span><span id="_CPPv233zeCommandQueueExecuteCommandLists25ze_command_queue_handle_t8uint32_tP24ze_command_list_handle_t17ze_fence_handle_t"></span><span id="zeCommandQueueExecuteCommandLists__ze_command_queue_handle_t.uint32_t.ze_command_list_handle_tP.ze_fence_handle_t"></span><span class="target" id="ze__api_8h_1a8b65f36e5a0c94c3a0d521f15d8112ed"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueExecuteCommandLists</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandQueue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numCommandLists</span></span>, <span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phCommandLists</span></span>, <span class="n"><span class="pre">ze_fence_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433zeCommandQueueExecuteCommandLists25ze_command_queue_handle_t8uint32_tP24ze_command_list_handle_t17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Executes a command list in a command queue. </p>
+<p><ul class="simple">
+<li><p>The command lists are submitted to the device in the order they are received, whether from multiple calls (on the same or different threads) or a single call with multiple command lists.</p></li>
+<li><p>The application must ensure the command lists are accessible by the device on which the command queue was created.</p></li>
+<li><p>The application must ensure the device is not currently referencing the command list since the implementation is allowed to modify the contents of the command list for submission.</p></li>
+<li><p>The application must only execute command lists created with an identical command queue group ordinal to the command queue.</p></li>
+<li><p>The application must use a fence created using the same command queue.</p></li>
+<li><p>The application must ensure the command queue, command list and fence were created on the same context.</p></li>
+<li><p>The application must ensure the command lists being executed are not immediate command lists.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<p><div class="remark admonition">
+<p class="admonition-title">Remark</p>
+<p><em>Analogues</em><ul class="simple">
+<li><p>vkQueueSubmit</p></li>
+</ul>
+</p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandQueue</strong> – [in] handle of the command queue </p></li>
+<li><p><strong>numCommandLists</strong> – [in] number of command lists to execute </p></li>
+<li><p><strong>phCommandLists</strong> – [in][range(0, numCommandLists)] list of handles of the command lists to execute </p></li>
+<li><p><strong>hFence</strong> – [in][optional] handle of the fence to signal on completion </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phCommandLists</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a743b17f38be52772c5f67c4101638193"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SIZE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">==</span> <span class="pre">numCommandLists</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a9f9b56b839d2c44f5ac80bf9f4041529"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_COMMAND_LIST_TYPE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767acba6edd6c7fa7caca26f6f74d0221152"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueuesynchronize">
+<span id="id4"></span><h3>zeCommandQueueSynchronize<a class="headerlink" href="#zecommandqueuesynchronize" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425zeCommandQueueSynchronize25ze_command_queue_handle_t8uint64_t">
+<span id="_CPPv325zeCommandQueueSynchronize25ze_command_queue_handle_t8uint64_t"></span><span id="_CPPv225zeCommandQueueSynchronize25ze_command_queue_handle_t8uint64_t"></span><span id="zeCommandQueueSynchronize__ze_command_queue_handle_t.uint64_t"></span><span class="target" id="ze__api_8h_1af201c34c54670b89814f8129e01b4014"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueSynchronize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandQueue</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeCommandQueueSynchronize25ze_command_queue_handle_t8uint64_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Synchronizes a command queue by waiting on the host. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandQueue</strong> – [in] handle of the command queue </p></li>
+<li><p><strong>timeout</strong> – [in] if non-zero, then indicates the maximum time (in nanoseconds) to yield before returning <a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a> or <a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a10bf3dc545c8aa0b8602f0e1ffad0b00"><span class="std std-ref">ZE_RESULT_NOT_READY</span></a>; if zero, then immediately returns the status of the command queue; if <code class="docutils literal notranslate"><span class="pre">UINT64_MAX</span></code>, then function will not return until complete or device is lost. Due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a10bf3dc545c8aa0b8602f0e1ffad0b00"><span class="std std-ref">ZE_RESULT_NOT_READY</span></a><ul>
+<li><p>timeout expired </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueuegetordinal">
+<span id="id5"></span><h3>zeCommandQueueGetOrdinal<a class="headerlink" href="#zecommandqueuegetordinal" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424zeCommandQueueGetOrdinal25ze_command_queue_handle_tP8uint32_t">
+<span id="_CPPv324zeCommandQueueGetOrdinal25ze_command_queue_handle_tP8uint32_t"></span><span id="_CPPv224zeCommandQueueGetOrdinal25ze_command_queue_handle_tP8uint32_t"></span><span id="zeCommandQueueGetOrdinal__ze_command_queue_handle_t.uint32_tP"></span><span class="target" id="ze__api_8h_1a452a76140515925979697ab3c5b75f19"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueGetOrdinal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandQueue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pOrdinal</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeCommandQueueGetOrdinal25ze_command_queue_handle_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gets the command queue group ordinal. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandQueue</strong> – [in] handle of the command queue </p></li>
+<li><p><strong>pOrdinal</strong> – [out] command queue group ordinal </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pOrdinal</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueuegetindex">
+<span id="id6"></span><h3>zeCommandQueueGetIndex<a class="headerlink" href="#zecommandqueuegetindex" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422zeCommandQueueGetIndex25ze_command_queue_handle_tP8uint32_t">
+<span id="_CPPv322zeCommandQueueGetIndex25ze_command_queue_handle_tP8uint32_t"></span><span id="_CPPv222zeCommandQueueGetIndex25ze_command_queue_handle_tP8uint32_t"></span><span id="zeCommandQueueGetIndex__ze_command_queue_handle_t.uint32_tP"></span><span class="target" id="ze__api_8h_1ab65f821b6c1e347c20b2193bda94557b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueGetIndex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandQueue</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pIndex</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeCommandQueueGetIndex25ze_command_queue_handle_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gets the command queue index within the group. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCommandQueue</strong> – [in] handle of the command queue </p></li>
+<li><p><strong>pIndex</strong> – [out] command queue index within the group </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCommandQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pIndex</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueuegetflags">
+<span id="id7"></span><h3>zeCommandQueueGetFlags<a class="headerlink" href="#zecommandqueuegetflags" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422zeCommandQueueGetFlags25ze_command_queue_handle_tP24ze_command_queue_flags_t">
+<span id="_CPPv322zeCommandQueueGetFlags25ze_command_queue_handle_tP24ze_command_queue_flags_t"></span><span id="_CPPv222zeCommandQueueGetFlags25ze_command_queue_handle_tP24ze_command_queue_flags_t"></span><span id="zeCommandQueueGetFlags__ze_command_queue_handle_t.ze_command_queue_flags_tP"></span><span class="target" id="ze__api_8h_1aab7bc88931d3124687c23a5509a68062"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueGetFlags</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCmdQueue</span></span>, <span class="n"><span class="pre">ze_command_queue_flags_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFlags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeCommandQueueGetFlags25ze_command_queue_handle_tP24ze_command_queue_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gets command queue creation flags. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCmdQueue</strong> – [in] handle of the command queue </p></li>
+<li><p><strong>pFlags</strong> – [out] pointer to flags used during command queue creation </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCmdQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pFlags</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueuegetmode">
+<span id="id8"></span><h3>zeCommandQueueGetMode<a class="headerlink" href="#zecommandqueuegetmode" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421zeCommandQueueGetMode25ze_command_queue_handle_tP23ze_command_queue_mode_t">
+<span id="_CPPv321zeCommandQueueGetMode25ze_command_queue_handle_tP23ze_command_queue_mode_t"></span><span id="_CPPv221zeCommandQueueGetMode25ze_command_queue_handle_tP23ze_command_queue_mode_t"></span><span id="zeCommandQueueGetMode__ze_command_queue_handle_t.ze_command_queue_mode_tP"></span><span class="target" id="ze__api_8h_1a3f2d6ac4cd3133d02c907e256aac4b5f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueGetMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCmdQueue</span></span>, <a class="reference internal" href="#_CPPv423ze_command_queue_mode_t" title="ze_command_queue_mode_t"><span class="n"><span class="pre">ze_command_queue_mode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeCommandQueueGetMode25ze_command_queue_handle_tP23ze_command_queue_mode_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gets command queue operation mode. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCmdQueue</strong> – [in] handle of the command queue </p></li>
+<li><p><strong>pMode</strong> – [out] pointer to mode used during command queue creation </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCmdQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pMode</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zecommandqueuegetpriority">
+<span id="id9"></span><h3>zeCommandQueueGetPriority<a class="headerlink" href="#zecommandqueuegetpriority" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv425zeCommandQueueGetPriority25ze_command_queue_handle_tP27ze_command_queue_priority_t">
+<span id="_CPPv325zeCommandQueueGetPriority25ze_command_queue_handle_tP27ze_command_queue_priority_t"></span><span id="_CPPv225zeCommandQueueGetPriority25ze_command_queue_handle_tP27ze_command_queue_priority_t"></span><span id="zeCommandQueueGetPriority__ze_command_queue_handle_t.ze_command_queue_priority_tP"></span><span class="target" id="ze__api_8h_1aef902a4042a7790a8264b57a5d1d0d23"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeCommandQueueGetPriority</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCmdQueue</span></span>, <a class="reference internal" href="#_CPPv427ze_command_queue_priority_t" title="ze_command_queue_priority_t"><span class="n"><span class="pre">ze_command_queue_priority_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPriority</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeCommandQueueGetPriority25ze_command_queue_handle_tP27ze_command_queue_priority_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gets command queue priority. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hCmdQueue</strong> – [in] handle of the command queue </p></li>
+<li><p><strong>pPriority</strong> – [out] pointer to priority used during command queue creation </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hCmdQueue</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pPriority</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="command-queue-enums">
+<h2>Command Queue Enums<a class="headerlink" href="#command-queue-enums" title="Link to this heading">#</a></h2>
+<section id="ze-command-queue-flags-t">
+<span id="id10"></span><h3>ze_command_queue_flags_t<a class="headerlink" href="#ze-command-queue-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv423ze_command_queue_flag_t">
+<span id="_CPPv323ze_command_queue_flag_t"></span><span id="_CPPv223ze_command_queue_flag_t"></span><span class="target" id="ze__api_8h_1a7aee0215b105bb43b17167af9611c761"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_command_queue_flag_t</span></span></span><a class="headerlink" href="#_CPPv423ze_command_queue_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_flag_t35ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLYE">
+<span id="_CPPv3N23ze_command_queue_flag_t35ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLYE"></span><span id="_CPPv2N23ze_command_queue_flag_t35ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLYE"></span><span class="target" id="ze__api_8h_1a7aee0215b105bb43b17167af9611c761a0155ce5b7f6c8ee85ee7dfe6c4dd017a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLY</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_flag_t35ZE_COMMAND_QUEUE_FLAG_EXPLICIT_ONLYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>command queue should be optimized for submission to a single device engine. driver <strong>must</strong> disable any implicit optimizations for distributing work across multiple engines. this flag should be used when applications want full control over multi-engine submission and scheduling. This flag is <strong>DEPRECATED</strong> as flag <a class="reference internal" href="command_list-2.html#ze__api_8h_1a97b60746386462bc25032c8cd4957bc8a7531d3f4ce815d94a39701d0766eb29e"><span class="std std-ref">ZE_COMMAND_LIST_FLAG_EXPLICIT_ONLY</span></a> is <strong>DEPRECATED</strong>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_flag_t30ZE_COMMAND_QUEUE_FLAG_IN_ORDERE">
+<span id="_CPPv3N23ze_command_queue_flag_t30ZE_COMMAND_QUEUE_FLAG_IN_ORDERE"></span><span id="_CPPv2N23ze_command_queue_flag_t30ZE_COMMAND_QUEUE_FLAG_IN_ORDERE"></span><span class="target" id="ze__api_8h_1a7aee0215b105bb43b17167af9611c761a6fa604a44e781132c44e8952eb3ddf89"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_FLAG_IN_ORDER</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_flag_t30ZE_COMMAND_QUEUE_FLAG_IN_ORDERE" title="Link to this definition">#</a><br /></dt>
+<dd><p>To be used only when creating immediate command lists. Commands appended to the immediate command list are executed in-order, with driver implementation enforcing dependencies between them. Application is not required to have the signal event of a given command being the wait event of the next to define an in-order list, and application is allowed to pass signal and wait events to each appended command to implement more complex dependency graphs. <em class="since-note"> (since v1.7)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_flag_t39ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINTE">
+<span id="_CPPv3N23ze_command_queue_flag_t39ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINTE"></span><span id="_CPPv2N23ze_command_queue_flag_t39ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINTE"></span><span class="target" id="ze__api_8h_1a7aee0215b105bb43b17167af9611c761a9025bbd1134cfdaeabf46f2124b6251d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINT</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_flag_t39ZE_COMMAND_QUEUE_FLAG_COPY_OFFLOAD_HINTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>To be used only when creating immediate command lists and only for compute queues. Try to offload copy operations to different engines. This is only a hint. Driver may ignore it per append call, based on platform capabilities or internal heuristics. <em class="since-note"> (since v1.14)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_flag_t34ZE_COMMAND_QUEUE_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N23ze_command_queue_flag_t34ZE_COMMAND_QUEUE_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N23ze_command_queue_flag_t34ZE_COMMAND_QUEUE_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a7aee0215b105bb43b17167af9611c761a7eb4039be5e7a91154b943e3b3e369e7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_flag_t34ZE_COMMAND_QUEUE_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_COMMAND_QUEUE_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-command-queue-mode-t">
+<span id="id11"></span><h3>ze_command_queue_mode_t<a class="headerlink" href="#ze-command-queue-mode-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv423ze_command_queue_mode_t">
+<span id="_CPPv323ze_command_queue_mode_t"></span><span id="_CPPv223ze_command_queue_mode_t"></span><span class="target" id="ze__api_8h_1a7f69e616e7ee2fc24ff52fd09dd3333a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_command_queue_mode_t</span></span></span><a class="headerlink" href="#_CPPv423ze_command_queue_mode_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported command queue modes. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_mode_t29ZE_COMMAND_QUEUE_MODE_DEFAULTE">
+<span id="_CPPv3N23ze_command_queue_mode_t29ZE_COMMAND_QUEUE_MODE_DEFAULTE"></span><span id="_CPPv2N23ze_command_queue_mode_t29ZE_COMMAND_QUEUE_MODE_DEFAULTE"></span><span class="target" id="ze__api_8h_1a7f69e616e7ee2fc24ff52fd09dd3333aa5f738c32a8a0fa9599c688e51a309488"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_MODE_DEFAULT</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_mode_t29ZE_COMMAND_QUEUE_MODE_DEFAULTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>implicit default behavior; uses driver-based heuristics </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_mode_t33ZE_COMMAND_QUEUE_MODE_SYNCHRONOUSE">
+<span id="_CPPv3N23ze_command_queue_mode_t33ZE_COMMAND_QUEUE_MODE_SYNCHRONOUSE"></span><span id="_CPPv2N23ze_command_queue_mode_t33ZE_COMMAND_QUEUE_MODE_SYNCHRONOUSE"></span><span class="target" id="ze__api_8h_1a7f69e616e7ee2fc24ff52fd09dd3333aa9154a875f6e2e263ab27bb6468ba7001"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_MODE_SYNCHRONOUS</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_mode_t33ZE_COMMAND_QUEUE_MODE_SYNCHRONOUSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device execution always completes immediately on execute; Host thread is blocked using wait on implicit synchronization object </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUSE">
+<span id="_CPPv3N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUSE"></span><span id="_CPPv2N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUSE"></span><span class="target" id="ze__api_8h_1a7f69e616e7ee2fc24ff52fd09dd3333aad1cadb5264a7ef1fe9388956ab760435"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUS</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_ASYNCHRONOUSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device execution is scheduled and will complete in future; explicit synchronization object must be used to determine completeness </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_FORCE_UINT32E">
+<span id="_CPPv3N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_FORCE_UINT32E"></span><span id="_CPPv2N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a7f69e616e7ee2fc24ff52fd09dd3333aa9b18f2914d287014ef1d1e85e52b33ce"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_MODE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_mode_t34ZE_COMMAND_QUEUE_MODE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_COMMAND_QUEUE_MODE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-command-queue-priority-t">
+<span id="id12"></span><h3>ze_command_queue_priority_t<a class="headerlink" href="#ze-command-queue-priority-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv427ze_command_queue_priority_t">
+<span id="_CPPv327ze_command_queue_priority_t"></span><span id="_CPPv227ze_command_queue_priority_t"></span><span class="target" id="ze__api_8h_1a381cfb10c0e4b6d60643ff8bcc4b372f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_command_queue_priority_t</span></span></span><a class="headerlink" href="#_CPPv427ze_command_queue_priority_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported command queue priorities. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_command_queue_priority_t32ZE_COMMAND_QUEUE_PRIORITY_NORMALE">
+<span id="_CPPv3N27ze_command_queue_priority_t32ZE_COMMAND_QUEUE_PRIORITY_NORMALE"></span><span id="_CPPv2N27ze_command_queue_priority_t32ZE_COMMAND_QUEUE_PRIORITY_NORMALE"></span><span class="target" id="ze__api_8h_1a381cfb10c0e4b6d60643ff8bcc4b372fac9adc01556cbf850091196cbaa22067b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_NORMAL</span></span></span><a class="headerlink" href="#_CPPv4N27ze_command_queue_priority_t32ZE_COMMAND_QUEUE_PRIORITY_NORMALE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[default] normal priority </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOWE">
+<span id="_CPPv3N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOWE"></span><span id="_CPPv2N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOWE"></span><span class="target" id="ze__api_8h_1a381cfb10c0e4b6d60643ff8bcc4b372faf2c67a9df64ee1eb4e8f726128e581c2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOW</span></span></span><a class="headerlink" href="#_CPPv4N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOWE" title="Link to this definition">#</a><br /></dt>
+<dd><p>lower priority than normal </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_command_queue_priority_t39ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGHE">
+<span id="_CPPv3N27ze_command_queue_priority_t39ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGHE"></span><span id="_CPPv2N27ze_command_queue_priority_t39ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGHE"></span><span class="target" id="ze__api_8h_1a381cfb10c0e4b6d60643ff8bcc4b372fa58e87aa319956dd1996f9959b4c2ac8f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGH</span></span></span><a class="headerlink" href="#_CPPv4N27ze_command_queue_priority_t39ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGHE" title="Link to this definition">#</a><br /></dt>
+<dd><p>higher priority than normal </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_FORCE_UINT32E">
+<span id="_CPPv3N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_FORCE_UINT32E"></span><span id="_CPPv2N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a381cfb10c0e4b6d60643ff8bcc4b372fa72536fde7b379dad5c64f9c2da8b27f2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_COMMAND_QUEUE_PRIORITY_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N27ze_command_queue_priority_t38ZE_COMMAND_QUEUE_PRIORITY_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_COMMAND_QUEUE_PRIORITY_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="command-queue-structures">
+<h2>Command Queue Structures<a class="headerlink" href="#command-queue-structures" title="Link to this heading">#</a></h2>
+<section id="ze-command-queue-desc-t">
+<span id="id13"></span><h3>ze_command_queue_desc_t<a class="headerlink" href="#ze-command-queue-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423ze_command_queue_desc_t">
+<span id="_CPPv323ze_command_queue_desc_t"></span><span id="_CPPv223ze_command_queue_desc_t"></span><span id="ze_command_queue_desc_t"></span><span class="target" id="structze__command__queue__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_command_queue_desc_t</span></span></span><a class="headerlink" href="#_CPPv423ze_command_queue_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Command Queue descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_desc_t5stypeE">
+<span id="_CPPv3N23ze_command_queue_desc_t5stypeE"></span><span id="_CPPv2N23ze_command_queue_desc_t5stypeE"></span><span id="ze_command_queue_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__command__queue__desc__t_1a7c4105dd2db691421c6a42e9e58c5bf6"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_desc_t5pNextE">
+<span id="_CPPv3N23ze_command_queue_desc_t5pNextE"></span><span id="_CPPv2N23ze_command_queue_desc_t5pNextE"></span><span id="ze_command_queue_desc_t::pNext__voidCP"></span><span class="target" id="structze__command__queue__desc__t_1ac5f6bef6cdad9221bd8fc839ff11905b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_desc_t7ordinalE">
+<span id="_CPPv3N23ze_command_queue_desc_t7ordinalE"></span><span id="_CPPv2N23ze_command_queue_desc_t7ordinalE"></span><span id="ze_command_queue_desc_t::ordinal__uint32_t"></span><span class="target" id="structze__command__queue__desc__t_1a8a7ce9132184836c22c4fe3005fe6786"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ordinal</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_desc_t7ordinalE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] command queue group ordinal </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_desc_t5indexE">
+<span id="_CPPv3N23ze_command_queue_desc_t5indexE"></span><span id="_CPPv2N23ze_command_queue_desc_t5indexE"></span><span id="ze_command_queue_desc_t::index__uint32_t"></span><span class="target" id="structze__command__queue__desc__t_1ad91747909a6c627f7bf34b5878f25bdd"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">index</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_desc_t5indexE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] command queue index within the group; must be zero. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_desc_t5flagsE">
+<span id="_CPPv3N23ze_command_queue_desc_t5flagsE"></span><span id="_CPPv2N23ze_command_queue_desc_t5flagsE"></span><span id="ze_command_queue_desc_t::flags__ze_command_queue_flags_t"></span><span class="target" id="structze__command__queue__desc__t_1a7aef38a360e490a96ae0571f0ab72f52"></span><span class="n"><span class="pre">ze_command_queue_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] usage flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a7aee0215b105bb43b17167af9611c761"><span class="std std-ref">ze_command_queue_flag_t</span></a>; default behavior may use implicit driver-based heuristics to balance latency and throughput. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_desc_t4modeE">
+<span id="_CPPv3N23ze_command_queue_desc_t4modeE"></span><span id="_CPPv2N23ze_command_queue_desc_t4modeE"></span><span id="ze_command_queue_desc_t::mode__ze_command_queue_mode_t"></span><span class="target" id="structze__command__queue__desc__t_1abf7852bad25fe206ff11ffe5cd9c1fd4"></span><a class="reference internal" href="#_CPPv423ze_command_queue_mode_t" title="ze_command_queue_mode_t"><span class="n"><span class="pre">ze_command_queue_mode_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mode</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_desc_t4modeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] operation mode </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_command_queue_desc_t8priorityE">
+<span id="_CPPv3N23ze_command_queue_desc_t8priorityE"></span><span id="_CPPv2N23ze_command_queue_desc_t8priorityE"></span><span id="ze_command_queue_desc_t::priority__ze_command_queue_priority_t"></span><span class="target" id="structze__command__queue__desc__t_1af55b81f2b81f9e95162b416d124b5098"></span><a class="reference internal" href="#_CPPv427ze_command_queue_priority_t" title="ze_command_queue_priority_t"><span class="n"><span class="pre">ze_command_queue_priority_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">priority</span></span></span><a class="headerlink" href="#_CPPv4N23ze_command_queue_desc_t8priorityE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] priority </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="context.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Context</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="command_list.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Command List</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zeCommandQueue</div><ul class="ctoc-list"><li><a href="command_queue.html#zecommandqueuecreate">&hellip;Create</a></li><li><a href="command_queue.html#zecommandqueuedestroy">&hellip;Destroy</a></li><li><a href="command_queue.html#zecommandqueueexecutecommandlists">&hellip;ExecuteCommandLists</a></li><li><a href="command_queue.html#zecommandqueuesynchronize">&hellip;Synchronize</a></li><li><a href="command_queue.html#zecommandqueuegetordinal">&hellip;GetOrdinal</a></li><li><a href="command_queue.html#zecommandqueuegetindex">&hellip;GetIndex</a></li><li><a href="command_queue.html#zecommandqueuegetflags">&hellip;GetFlags</a></li><li><a href="command_queue.html#zecommandqueuegetmode">&hellip;GetMode</a></li><li><a href="command_queue.html#zecommandqueuegetpriority">&hellip;GetPriority</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="command_queue.html#ze-command-queue-flags-t">ze_command_queue_flags_t</a></li><li><a href="command_queue.html#ze-command-queue-mode-t">ze_command_queue_mode_t</a></li><li><a href="command_queue.html#ze-command-queue-priority-t">ze_command_queue_priority_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="command_queue.html#ze-command-queue-desc-t">ze_command_queue_desc_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

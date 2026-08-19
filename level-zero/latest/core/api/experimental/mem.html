@@ -1,0 +1,1011 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mem - Experimental &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/experimental/mem';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Module - Experimental" href="module.html" />
+    <link rel="prev" title="Command List - Experimental" href="command_list.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Experimental</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/experimental/mem.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Mem - Experimental</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mem-experimental-functions">Mem - Experimental Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zememgetipchandlefromfiledescriptorexp">zeMemGetIpcHandleFromFileDescriptorExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438zeMemGetIpcHandleFromFileDescriptorExp19ze_context_handle_t8uint64_tP19ze_ipc_mem_handle_t"><code class="docutils literal notranslate"><span class="pre">zeMemGetIpcHandleFromFileDescriptorExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zememgetfiledescriptorfromipchandleexp">zeMemGetFileDescriptorFromIpcHandleExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438zeMemGetFileDescriptorFromIpcHandleExp19ze_context_handle_t19ze_ipc_mem_handle_tP8uint64_t"><code class="docutils literal notranslate"><span class="pre">zeMemGetFileDescriptorFromIpcHandleExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zememsetatomicaccessattributeexp">zeMemSetAtomicAccessAttributeExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432zeMemSetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_t33ze_memory_atomic_attr_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">zeMemSetAtomicAccessAttributeExp()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zememgetatomicaccessattributeexp">zeMemGetAtomicAccessAttributeExp</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432zeMemGetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_tP33ze_memory_atomic_attr_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">zeMemGetAtomicAccessAttributeExp()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mem-experimental-enums">Mem - Experimental Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-memory-atomic-attr-exp-flags-t">ze_memory_atomic_attr_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432ze_memory_atomic_attr_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_memory_atomic_attr_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t41ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_ATOMICSE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_ATOMICS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t46ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_HOST_ATOMICSE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_HOST_ATOMICS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_HOST_ATOMICSE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_HOST_ATOMICS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_DEVICE_ATOMICSE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_DEVICE_ATOMICS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_DEVICE_ATOMICSE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_DEVICE_ATOMICS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_SYSTEM_ATOMICSE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_SYSTEM_ATOMICS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_SYSTEM_ATOMICSE"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_SYSTEM_ATOMICS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-relaxed-allocation-limits-exp-flags-t">ze_relaxed_allocation_limits_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_relaxed_allocation_limits_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_relaxed_allocation_limits_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_MAX_SIZEE"><code class="docutils literal notranslate"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_MAX_SIZE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mem-experimental-structures">Mem - Experimental Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-relaxed-allocation-limits-exp-desc-t">ze_relaxed_allocation_limits_exp_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_relaxed_allocation_limits_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_relaxed_allocation_limits_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-memory-sub-allocations-exp-properties-t">ze_memory_sub_allocations_exp_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv442ze_memory_sub_allocations_exp_properties_t"><code class="docutils literal notranslate"><span class="pre">ze_memory_sub_allocations_exp_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t6pCountE"><code class="docutils literal notranslate"><span class="pre">pCount</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t15pSubAllocationsE"><code class="docutils literal notranslate"><span class="pre">pSubAllocations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mem-experimental">
+<h1>Mem - Experimental<a class="headerlink" href="#mem-experimental" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="mem-experimental-functions">
+<h2>Mem - Experimental Functions<a class="headerlink" href="#mem-experimental-functions" title="Link to this heading">#</a></h2>
+<section id="zememgetipchandlefromfiledescriptorexp">
+<span id="id1"></span><h3>zeMemGetIpcHandleFromFileDescriptorExp<a class="headerlink" href="#zememgetipchandlefromfiledescriptorexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.6</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv438zeMemGetIpcHandleFromFileDescriptorExp19ze_context_handle_t8uint64_tP19ze_ipc_mem_handle_t">
+<span id="_CPPv338zeMemGetIpcHandleFromFileDescriptorExp19ze_context_handle_t8uint64_tP19ze_ipc_mem_handle_t"></span><span id="_CPPv238zeMemGetIpcHandleFromFileDescriptorExp19ze_context_handle_t8uint64_tP19ze_ipc_mem_handle_t"></span><span id="zeMemGetIpcHandleFromFileDescriptorExp__ze_context_handle_t.uint64_t.ze_ipc_mem_handle_tP"></span><span class="target" id="ze__api_8h_1a2f46a72486c03c6d12a6ddd886453fb6"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeMemGetIpcHandleFromFileDescriptorExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">handle</span></span>, <a class="reference internal" href="../apis/data_types.html#_CPPv419ze_ipc_mem_handle_t" title="ze_ipc_mem_handle_t"><span class="n"><span class="pre">ze_ipc_mem_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pIpcHandle</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zeMemGetIpcHandleFromFileDescriptorExp19ze_context_handle_t8uint64_tP19ze_ipc_mem_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates an IPC memory handle out of a file descriptor. </p>
+<p><ul class="simple">
+<li><p>Handle passed must be a valid file descriptor obtained with <a class="reference internal" href="../apis/mem.html#structze__external__memory__export__fd__t"><span class="std std-ref">ze_external_memory_export_fd_t</span></a> via <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a5a80cf4245a474db86cc727ea1345ff1"><span class="std std-ref">zeMemGetAllocProperties</span></a> or <a class="reference internal" href="../apis/physical_mem.html#ze__api_8h_1a0ff45a9e5675464bc5e2d855da4c9866"><span class="std std-ref">zePhysicalMemGetProperties</span></a>.</p></li>
+<li><p>Returned IPC handle may contain metadata in addition to the file descriptor.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of the context object </p></li>
+<li><p><strong>handle</strong> – [in] file descriptor </p></li>
+<li><p><strong>pIpcHandle</strong> – [out] Returned IPC memory handle </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pIpcHandle</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zememgetfiledescriptorfromipchandleexp">
+<span id="id2"></span><h3>zeMemGetFileDescriptorFromIpcHandleExp<a class="headerlink" href="#zememgetfiledescriptorfromipchandleexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.6</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv438zeMemGetFileDescriptorFromIpcHandleExp19ze_context_handle_t19ze_ipc_mem_handle_tP8uint64_t">
+<span id="_CPPv338zeMemGetFileDescriptorFromIpcHandleExp19ze_context_handle_t19ze_ipc_mem_handle_tP8uint64_t"></span><span id="_CPPv238zeMemGetFileDescriptorFromIpcHandleExp19ze_context_handle_t19ze_ipc_mem_handle_tP8uint64_t"></span><span id="zeMemGetFileDescriptorFromIpcHandleExp__ze_context_handle_t.ze_ipc_mem_handle_t.uint64_tP"></span><span class="target" id="ze__api_8h_1ae02473357742ee37a6adfd111b766fba"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeMemGetFileDescriptorFromIpcHandleExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="../apis/data_types.html#_CPPv419ze_ipc_mem_handle_t" title="ze_ipc_mem_handle_t"><span class="n"><span class="pre">ze_ipc_mem_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ipcHandle</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pHandle</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zeMemGetFileDescriptorFromIpcHandleExp19ze_context_handle_t19ze_ipc_mem_handle_tP8uint64_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Gets the file descriptor contained in an IPC memory handle. </p>
+<p><ul class="simple">
+<li><p>IPC memory handle must be a valid handle obtained with <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a4786c0182dfdb90ee2b3c6aa21bfcc07"><span class="std std-ref">zeMemGetIpcHandle</span></a>.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of the context object </p></li>
+<li><p><strong>ipcHandle</strong> – [in] IPC memory handle </p></li>
+<li><p><strong>pHandle</strong> – [out] Returned file descriptor </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pHandle</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zememsetatomicaccessattributeexp">
+<span id="id3"></span><h3>zeMemSetAtomicAccessAttributeExp<a class="headerlink" href="#zememsetatomicaccessattributeexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv432zeMemSetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_t33ze_memory_atomic_attr_exp_flags_t">
+<span id="_CPPv332zeMemSetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_t33ze_memory_atomic_attr_exp_flags_t"></span><span id="_CPPv232zeMemSetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_t33ze_memory_atomic_attr_exp_flags_t"></span><span id="zeMemSetAtomicAccessAttributeExp__ze_context_handle_t.ze_device_handle_t.voidCP.s.ze_memory_atomic_attr_exp_flags_t"></span><span class="target" id="ze__api_8h_1ad2dbef60f1c694dae480388723f717e5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeMemSetAtomicAccessAttributeExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="n"><span class="pre">ze_memory_atomic_attr_exp_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">attr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zeMemSetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_t33ze_memory_atomic_attr_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sets atomic access attributes for a shared allocation. </p>
+<p><ul class="simple">
+<li><p>If the shared-allocation is owned by multiple devices (i.e. nullptr was passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1aa487327d7e6a961daa87dd6ec04f570b"><span class="std std-ref">zeMemAllocShared</span></a> when creating it), then hDevice may be passed to set the attributes in that specific device. If nullptr is passed in hDevice, then the atomic attributes are set in all devices associated with the allocation.</p></li>
+<li><p>If the atomic access attribute select is not supported by the driver, <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a> is returned.</p></li>
+<li><p>The atomic access attribute may be only supported at a device-specific granularity, such as at a page boundary. In this case, the memory range may be expanded such that the start and end of the range satisfy granularity requirements.</p></li>
+<li><p>When calling this function multiple times with different flags, only the attributes from last call are honored.</p></li>
+<li><p>The application must not call this function for shared-allocations currently being used by the device.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same pointer.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of context </p></li>
+<li><p><strong>hDevice</strong> – [in] device associated with the memory advice </p></li>
+<li><p><strong>ptr</strong> – [in] Pointer to the start of the memory range </p></li>
+<li><p><strong>size</strong> – [in] Size in bytes of the memory range </p></li>
+<li><p><strong>attr</strong> – [in] Atomic access attributes to set for the specified range. Must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552b"><span class="std std-ref">ze_memory_atomic_attr_exp_flag_t</span></a>. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">ptr</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x7f</span> <span class="pre">&lt;</span> <span class="pre">attr</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zememgetatomicaccessattributeexp">
+<span id="id4"></span><h3>zeMemGetAtomicAccessAttributeExp<a class="headerlink" href="#zememgetatomicaccessattributeexp" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv432zeMemGetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_tP33ze_memory_atomic_attr_exp_flags_t">
+<span id="_CPPv332zeMemGetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_tP33ze_memory_atomic_attr_exp_flags_t"></span><span id="_CPPv232zeMemGetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_tP33ze_memory_atomic_attr_exp_flags_t"></span><span id="zeMemGetAtomicAccessAttributeExp__ze_context_handle_t.ze_device_handle_t.voidCP.s.ze_memory_atomic_attr_exp_flags_tP"></span><span class="target" id="ze__api_8h_1aa4b80c1f2cf2d31104a3d36867d68ea7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeMemGetAtomicAccessAttributeExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="n"><span class="pre">ze_memory_atomic_attr_exp_flags_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pAttr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zeMemGetAtomicAccessAttributeExp19ze_context_handle_t18ze_device_handle_tPKv6size_tP33ze_memory_atomic_attr_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieves the atomic access attributes previously set for a shared allocation. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads with the same pointer.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of context </p></li>
+<li><p><strong>hDevice</strong> – [in] device associated with the memory advice </p></li>
+<li><p><strong>ptr</strong> – [in] Pointer to the start of the memory range </p></li>
+<li><p><strong>size</strong> – [in] Size in bytes of the memory range </p></li>
+<li><p><strong>pAttr</strong> – [out] Atomic access attributes for the specified range </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">ptr</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pAttr</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="mem-experimental-enums">
+<h2>Mem - Experimental Enums<a class="headerlink" href="#mem-experimental-enums" title="Link to this heading">#</a></h2>
+<section id="ze-memory-atomic-attr-exp-flags-t">
+<span id="id5"></span><h3>ze_memory_atomic_attr_exp_flags_t<a class="headerlink" href="#ze-memory-atomic-attr-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv432ze_memory_atomic_attr_exp_flag_t">
+<span id="_CPPv332ze_memory_atomic_attr_exp_flag_t"></span><span id="_CPPv232ze_memory_atomic_attr_exp_flag_t"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_memory_atomic_attr_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv432ze_memory_atomic_attr_exp_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t41ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_ATOMICSE">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t41ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_ATOMICSE"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t41ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_ATOMICSE"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552ba93f2a38f727f32ad668491353b90f962"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_ATOMICS</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t41ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_ATOMICSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Atomics on the pointer are not allowed. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t46ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_HOST_ATOMICSE">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t46ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_HOST_ATOMICSE"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t46ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_HOST_ATOMICSE"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552ba8209584634d7235d8a38870e717da85c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_HOST_ATOMICS</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t46ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_HOST_ATOMICSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Host atomics on the pointer are not allowed. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_HOST_ATOMICSE">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_HOST_ATOMICSE"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_HOST_ATOMICSE"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552bad5b59aa718830f7961812324b7d1928b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_HOST_ATOMICS</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_HOST_ATOMICSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Host atomics on the pointer are allowed. Requires <a class="reference internal" href="../apis/device.html#ze__api_8h_1aacb39d994ad547447f8cc9d57aa6f3a2a353fc862fb488f5d69bb72baf4adc2da"><span class="std std-ref">ZE_MEMORY_ACCESS_CAP_FLAG_ATOMIC</span></a> returned by <a class="reference internal" href="../apis/device.html#ze__api_8h_1a65ad559e3707b9d395993e8185be4aca"><span class="std std-ref">zeDeviceGetMemoryAccessProperties</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_DEVICE_ATOMICSE">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_DEVICE_ATOMICSE"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_DEVICE_ATOMICSE"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552baf97e3052db46273e358cbfec8dd9b89a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_DEVICE_ATOMICS</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_DEVICE_ATOMICSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device atomics on the pointer are not allowed. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_DEVICE_ATOMICSE">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_DEVICE_ATOMICSE"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_DEVICE_ATOMICSE"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552ba4f2ab8546b9462dd0ad1ede98ae80d4d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_DEVICE_ATOMICS</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_DEVICE_ATOMICSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device atomics on the pointer are allowed. Requires <a class="reference internal" href="../apis/device.html#ze__api_8h_1aacb39d994ad547447f8cc9d57aa6f3a2a353fc862fb488f5d69bb72baf4adc2da"><span class="std std-ref">ZE_MEMORY_ACCESS_CAP_FLAG_ATOMIC</span></a> returned by <a class="reference internal" href="../apis/device.html#ze__api_8h_1a65ad559e3707b9d395993e8185be4aca"><span class="std std-ref">zeDeviceGetMemoryAccessProperties</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_SYSTEM_ATOMICSE">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_SYSTEM_ATOMICSE"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_SYSTEM_ATOMICSE"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552baf837a766aff18bdf365a6721de248448"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_SYSTEM_ATOMICS</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t48ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_NO_SYSTEM_ATOMICSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Concurrent atomics on the pointer from both host and device are not allowed </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_SYSTEM_ATOMICSE">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_SYSTEM_ATOMICSE"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_SYSTEM_ATOMICSE"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552ba54b9af5e879880fbcc62b92e396c272b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_SYSTEM_ATOMICS</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t45ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_SYSTEM_ATOMICSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Concurrent atomics on the pointer from both host and device are allowed. Requires <a class="reference internal" href="../apis/device.html#ze__api_8h_1aacb39d994ad547447f8cc9d57aa6f3a2a8d114f046c59fff63232dc2a355cf2b4"><span class="std std-ref">ZE_MEMORY_ACCESS_CAP_FLAG_CONCURRENT_ATOMIC</span></a> returned by <a class="reference internal" href="../apis/device.html#ze__api_8h_1a65ad559e3707b9d395993e8185be4aca"><span class="std std-ref">zeDeviceGetMemoryAccessProperties</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a020717d3d1d0f52f645226b7ffd4552ba8a39ee02c184f9e3a325761909d1e2c1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N32ze_memory_atomic_attr_exp_flag_t43ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_MEMORY_ATOMIC_ATTR_EXP_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-relaxed-allocation-limits-exp-flags-t">
+<span id="id6"></span><h3>ze_relaxed_allocation_limits_exp_flags_t<a class="headerlink" href="#ze-relaxed-allocation-limits-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.1</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv439ze_relaxed_allocation_limits_exp_flag_t">
+<span id="_CPPv339ze_relaxed_allocation_limits_exp_flag_t"></span><span id="_CPPv239ze_relaxed_allocation_limits_exp_flag_t"></span><span class="target" id="ze__api_8h_1afe1486056f5c75d3c73cebcf546be934"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_relaxed_allocation_limits_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv439ze_relaxed_allocation_limits_exp_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_exp_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_MAX_SIZEE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_exp_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_MAX_SIZEE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_exp_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_MAX_SIZEE"></span><span class="target" id="ze__api_8h_1afe1486056f5c75d3c73cebcf546be934a37b9751152f1ad3abade52e74241da2b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_MAX_SIZE</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_flag_t46ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_MAX_SIZEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[DEPRECATED] Allocation size may exceed the <code class="docutils literal notranslate"><span class="pre">maxMemAllocSize</span></code> member of <a class="reference internal" href="../apis/device.html#structze__device__properties__t"><span class="std std-ref">ze_device_properties_t</span></a>. Use ze_relaxed_allocation_limits_ext_flags_t MAX_SIZE instead. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_exp_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_exp_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_exp_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1afe1486056f5c75d3c73cebcf546be934a7e9ec1a93522f79d1db2573292394903"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_flag_t50ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_RELAXED_ALLOCATION_LIMITS_EXP_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="mem-experimental-structures">
+<h2>Mem - Experimental Structures<a class="headerlink" href="#mem-experimental-structures" title="Link to this heading">#</a></h2>
+<section id="ze-relaxed-allocation-limits-exp-desc-t">
+<span id="id7"></span><h3>ze_relaxed_allocation_limits_exp_desc_t<a class="headerlink" href="#ze-relaxed-allocation-limits-exp-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.1</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv439ze_relaxed_allocation_limits_exp_desc_t">
+<span id="_CPPv339ze_relaxed_allocation_limits_exp_desc_t"></span><span id="_CPPv239ze_relaxed_allocation_limits_exp_desc_t"></span><span id="ze_relaxed_allocation_limits_exp_desc_t"></span><span class="target" id="structze__relaxed__allocation__limits__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_relaxed_allocation_limits_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv439ze_relaxed_allocation_limits_exp_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>[DEPRECATED] Relaxed limits memory allocation descriptor. Use <a class="reference internal" href="../extensions/mem.html#structze__relaxed__allocation__limits__ext__desc__t"><span class="std std-ref">ze_relaxed_allocation_limits_ext_desc_t</span></a> instead. </p>
+<p><ul class="simple">
+<li><p>[DEPRECATED] This structure may be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1aa487327d7e6a961daa87dd6ec04f570b"><span class="std std-ref">zeMemAllocShared</span></a> or <a class="reference internal" href="../apis/mem.html#ze__api_8h_1ad47b7ece6b6c412dbb96fbe0afd89147"><span class="std std-ref">zeMemAllocDevice</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__device__mem__alloc__desc__t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a>. Use <a class="reference internal" href="../extensions/mem.html#structze__relaxed__allocation__limits__ext__desc__t"><span class="std std-ref">ze_relaxed_allocation_limits_ext_desc_t</span></a> instead.</p></li>
+<li><p>[DEPRECATED] This structure may also be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a920bf06c295d03b78ccf4e2f20dfa336"><span class="std std-ref">zeMemAllocHost</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__host__mem__alloc__desc__t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a>. Use <a class="reference internal" href="../extensions/mem.html#structze__relaxed__allocation__limits__ext__desc__t"><span class="std std-ref">ze_relaxed_allocation_limits_ext_desc_t</span></a> instead. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5stypeE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_exp_desc_t5stypeE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_exp_desc_t5stypeE"></span><span id="ze_relaxed_allocation_limits_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__relaxed__allocation__limits__exp__desc__t_1ace71b834507e17a0800be527637ca3b0"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5pNextE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_exp_desc_t5pNextE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_exp_desc_t5pNextE"></span><span id="ze_relaxed_allocation_limits_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__relaxed__allocation__limits__exp__desc__t_1a9da07a271212da2ec91c2af3d188c04d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5flagsE">
+<span id="_CPPv3N39ze_relaxed_allocation_limits_exp_desc_t5flagsE"></span><span id="_CPPv2N39ze_relaxed_allocation_limits_exp_desc_t5flagsE"></span><span id="ze_relaxed_allocation_limits_exp_desc_t::flags__ze_relaxed_allocation_limits_exp_flags_t"></span><span class="target" id="structze__relaxed__allocation__limits__exp__desc__t_1a03afaaaa41bc6d36bb56f97f1250b369"></span><span class="n"><span class="pre">ze_relaxed_allocation_limits_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N39ze_relaxed_allocation_limits_exp_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] [DEPRECATED] no longer supported, use <a class="reference internal" href="../extensions/mem.html#structze__relaxed__allocation__limits__ext__desc__t"><span class="std std-ref">ze_relaxed_allocation_limits_ext_desc_t</span></a> instead </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-memory-sub-allocations-exp-properties-t">
+<span id="id8"></span><h3>ze_memory_sub_allocations_exp_properties_t<a class="headerlink" href="#ze-memory-sub-allocations-exp-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.5</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv442ze_memory_sub_allocations_exp_properties_t">
+<span id="_CPPv342ze_memory_sub_allocations_exp_properties_t"></span><span id="_CPPv242ze_memory_sub_allocations_exp_properties_t"></span><span id="ze_memory_sub_allocations_exp_properties_t"></span><span class="target" id="structze__memory__sub__allocations__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_memory_sub_allocations_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv442ze_memory_sub_allocations_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sub-Allocations Properties. </p>
+<p><ul class="simple">
+<li><p>This structure may be passed to <a class="reference internal" href="../apis/mem.html#ze__api_8h_1a5a80cf4245a474db86cc727ea1345ff1"><span class="std std-ref">zeMemGetAllocProperties</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/mem.html#structze__memory__allocation__properties__t"><span class="std std-ref">ze_memory_allocation_properties_t</span></a>. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N42ze_memory_sub_allocations_exp_properties_t5stypeE">
+<span id="_CPPv3N42ze_memory_sub_allocations_exp_properties_t5stypeE"></span><span id="_CPPv2N42ze_memory_sub_allocations_exp_properties_t5stypeE"></span><span id="ze_memory_sub_allocations_exp_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__memory__sub__allocations__exp__properties__t_1a9a5af84d9206e74dd3901ef76b218057"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N42ze_memory_sub_allocations_exp_properties_t5pNextE">
+<span id="_CPPv3N42ze_memory_sub_allocations_exp_properties_t5pNextE"></span><span id="_CPPv2N42ze_memory_sub_allocations_exp_properties_t5pNextE"></span><span id="ze_memory_sub_allocations_exp_properties_t::pNext__voidP"></span><span class="target" id="structze__memory__sub__allocations__exp__properties__t_1a21e0b9f6630200c1d9d174805e03b2fb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N42ze_memory_sub_allocations_exp_properties_t6pCountE">
+<span id="_CPPv3N42ze_memory_sub_allocations_exp_properties_t6pCountE"></span><span id="_CPPv2N42ze_memory_sub_allocations_exp_properties_t6pCountE"></span><span id="ze_memory_sub_allocations_exp_properties_t::pCount__uint32_tP"></span><span class="target" id="structze__memory__sub__allocations__exp__properties__t_1a3b58d403836db9b33a04bb31650a0cc5"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pCount</span></span></span><a class="headerlink" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t6pCountE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] pointer to the number of sub-allocations. if count is zero, then the driver shall update the value with the total number of sub-allocations on which the allocation has been divided. if count is greater than the number of sub-allocations, then the driver shall update the value with the correct number of sub-allocations. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N42ze_memory_sub_allocations_exp_properties_t15pSubAllocationsE">
+<span id="_CPPv3N42ze_memory_sub_allocations_exp_properties_t15pSubAllocationsE"></span><span id="_CPPv2N42ze_memory_sub_allocations_exp_properties_t15pSubAllocationsE"></span><span id="ze_memory_sub_allocations_exp_properties_t::pSubAllocations__ze_sub_allocation_tP"></span><span class="target" id="structze__memory__sub__allocations__exp__properties__t_1aeca4ee3083c14b544e2753b334b14b04"></span><a class="reference internal" href="../apis/mem.html#_CPPv419ze_sub_allocation_t" title="ze_sub_allocation_t"><span class="n"><span class="pre">ze_sub_allocation_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pSubAllocations</span></span></span><a class="headerlink" href="#_CPPv4N42ze_memory_sub_allocations_exp_properties_t15pSubAllocationsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional][range(0, *pCount)] array of properties for sub-allocations. if count is less than the number of sub-allocations available, then driver shall only retrieve properties for that number of sub-allocations. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="command_list.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Command List - Experimental</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="module.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Module - Experimental</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zeMem</div><ul class="ctoc-list"><li><a href="mem.html#zememgetipchandlefromfiledescriptorexp">&hellip;GetIpcHandleFromFileDescriptorExp</a></li><li><a href="mem.html#zememgetfiledescriptorfromipchandleexp">&hellip;GetFileDescriptorFromIpcHandleExp</a></li><li><a href="mem.html#zememsetatomicaccessattributeexp">&hellip;SetAtomicAccessAttributeExp</a></li><li><a href="mem.html#zememgetatomicaccessattributeexp">&hellip;GetAtomicAccessAttributeExp</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="mem.html#ze-memory-atomic-attr-exp-flags-t">ze_memory_atomic_attr_exp_flags_t</a></li><li><a href="mem.html#ze-relaxed-allocation-limits-exp-flags-t">ze_relaxed_allocation_limits_exp_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="mem.html#ze-relaxed-allocation-limits-exp-desc-t">ze_relaxed_allocation_limits_exp_desc_t</a></li><li><a href="mem.html#ze-memory-sub-allocations-exp-properties-t">ze_memory_sub_allocations_exp_properties_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

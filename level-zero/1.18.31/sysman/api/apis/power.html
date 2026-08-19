@@ -1,0 +1,1583 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Power &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/power';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Psu" href="psu.html" />
+    <link rel="prev" title="Performance Factor" href="performance_factor.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/apis/power.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Power</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-functions">Power Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowergetproperties">zesPowerGetProperties</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zesPowerGetProperties16zes_pwr_handle_tP22zes_power_properties_t"><code class="docutils literal notranslate"><span class="pre">zesPowerGetProperties()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowergetenergycounter">zesPowerGetEnergyCounter</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zesPowerGetEnergyCounter16zes_pwr_handle_tP26zes_power_energy_counter_t"><code class="docutils literal notranslate"><span class="pre">zesPowerGetEnergyCounter()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowergetlimits">zesPowerGetLimits</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zesPowerGetLimits16zes_pwr_handle_tP27zes_power_sustained_limit_tP23zes_power_burst_limit_tP22zes_power_peak_limit_t"><code class="docutils literal notranslate"><span class="pre">zesPowerGetLimits()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowersetlimits">zesPowerSetLimits</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zesPowerSetLimits16zes_pwr_handle_tPK27zes_power_sustained_limit_tPK23zes_power_burst_limit_tPK22zes_power_peak_limit_t"><code class="docutils literal notranslate"><span class="pre">zesPowerSetLimits()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowergetenergythreshold">zesPowerGetEnergyThreshold</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zesPowerGetEnergyThreshold16zes_pwr_handle_tP22zes_energy_threshold_t"><code class="docutils literal notranslate"><span class="pre">zesPowerGetEnergyThreshold()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowersetenergythreshold">zesPowerSetEnergyThreshold</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zesPowerSetEnergyThreshold16zes_pwr_handle_td"><code class="docutils literal notranslate"><span class="pre">zesPowerSetEnergyThreshold()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowergetusage">zesPowerGetUsage</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416zesPowerGetUsage16zes_pwr_handle_tP8uint32_tP8uint32_t"><code class="docutils literal notranslate"><span class="pre">zesPowerGetUsage()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowergetlimitsext2">zesPowerGetLimitsExt2</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zesPowerGetLimitsExt216zes_pwr_handle_tP8uint32_t"><code class="docutils literal notranslate"><span class="pre">zesPowerGetLimitsExt2()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespowersetlimitsext2">zesPowerSetLimitsExt2</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zesPowerSetLimitsExt216zes_pwr_handle_tK8uint32_t"><code class="docutils literal notranslate"><span class="pre">zesPowerSetLimitsExt2()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-enums">Power Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-domain-t">zes_power_domain_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418zes_power_domain_t"><code class="docutils literal notranslate"><span class="pre">zes_power_domain_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_domain_t24ZES_POWER_DOMAIN_UNKNOWNE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_DOMAIN_UNKNOWN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_domain_t21ZES_POWER_DOMAIN_CARDE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_DOMAIN_CARD</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_domain_t24ZES_POWER_DOMAIN_PACKAGEE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_DOMAIN_PACKAGE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_domain_t22ZES_POWER_DOMAIN_STACKE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_DOMAIN_STACK</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_domain_t23ZES_POWER_DOMAIN_MEMORYE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_DOMAIN_MEMORY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_domain_t20ZES_POWER_DOMAIN_GPUE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_DOMAIN_GPU</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_domain_t29ZES_POWER_DOMAIN_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_DOMAIN_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-level-t">zes_power_level_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zes_power_level_t"><code class="docutils literal notranslate"><span class="pre">zes_power_level_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_power_level_t23ZES_POWER_LEVEL_UNKNOWNE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LEVEL_UNKNOWN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_power_level_t25ZES_POWER_LEVEL_SUSTAINEDE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LEVEL_SUSTAINED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_power_level_t21ZES_POWER_LEVEL_BURSTE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LEVEL_BURST</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_power_level_t20ZES_POWER_LEVEL_PEAKE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LEVEL_PEAK</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_power_level_t29ZES_POWER_LEVEL_INSTANTANEOUSE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LEVEL_INSTANTANEOUS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_power_level_t28ZES_POWER_LEVEL_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LEVEL_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-source-t">zes_power_source_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418zes_power_source_t"><code class="docutils literal notranslate"><span class="pre">zes_power_source_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_source_t20ZES_POWER_SOURCE_ANYE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_SOURCE_ANY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_source_t22ZES_POWER_SOURCE_MAINSE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_SOURCE_MAINS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_source_t24ZES_POWER_SOURCE_BATTERYE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_SOURCE_BATTERY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zes_power_source_t29ZES_POWER_SOURCE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_SOURCE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-limit-unit-t">zes_limit_unit_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416zes_limit_unit_t"><code class="docutils literal notranslate"><span class="pre">zes_limit_unit_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16zes_limit_unit_t22ZES_LIMIT_UNIT_UNKNOWNE"><code class="docutils literal notranslate"><span class="pre">ZES_LIMIT_UNIT_UNKNOWN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16zes_limit_unit_t22ZES_LIMIT_UNIT_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_LIMIT_UNIT_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16zes_limit_unit_t20ZES_LIMIT_UNIT_POWERE"><code class="docutils literal notranslate"><span class="pre">ZES_LIMIT_UNIT_POWER</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16zes_limit_unit_t27ZES_LIMIT_UNIT_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_LIMIT_UNIT_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-structures">Power Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-properties-t">zes_power_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zes_power_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_power_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t11onSubdeviceE"><code class="docutils literal notranslate"><span class="pre">onSubdevice</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t11subdeviceIdE"><code class="docutils literal notranslate"><span class="pre">subdeviceId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t10canControlE"><code class="docutils literal notranslate"><span class="pre">canControl</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t26isEnergyThresholdSupportedE"><code class="docutils literal notranslate"><span class="pre">isEnergyThresholdSupported</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t12defaultLimitE"><code class="docutils literal notranslate"><span class="pre">defaultLimit</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t8minLimitE"><code class="docutils literal notranslate"><span class="pre">minLimit</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_properties_t8maxLimitE"><code class="docutils literal notranslate"><span class="pre">maxLimit</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-energy-counter-t">zes_power_energy_counter_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zes_power_energy_counter_t"><code class="docutils literal notranslate"><span class="pre">zes_power_energy_counter_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zes_power_energy_counter_t6energyE"><code class="docutils literal notranslate"><span class="pre">energy</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26zes_power_energy_counter_t9timestampE"><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-sustained-limit-t">zes_power_sustained_limit_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zes_power_sustained_limit_t"><code class="docutils literal notranslate"><span class="pre">zes_power_sustained_limit_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_power_sustained_limit_t7enabledE"><code class="docutils literal notranslate"><span class="pre">enabled</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_power_sustained_limit_t5powerE"><code class="docutils literal notranslate"><span class="pre">power</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_power_sustained_limit_t8intervalE"><code class="docutils literal notranslate"><span class="pre">interval</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-burst-limit-t">zes_power_burst_limit_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zes_power_burst_limit_t"><code class="docutils literal notranslate"><span class="pre">zes_power_burst_limit_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_power_burst_limit_t7enabledE"><code class="docutils literal notranslate"><span class="pre">enabled</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_power_burst_limit_t5powerE"><code class="docutils literal notranslate"><span class="pre">power</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-peak-limit-t">zes_power_peak_limit_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zes_power_peak_limit_t"><code class="docutils literal notranslate"><span class="pre">zes_power_peak_limit_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_peak_limit_t7powerACE"><code class="docutils literal notranslate"><span class="pre">powerAC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_power_peak_limit_t7powerDCE"><code class="docutils literal notranslate"><span class="pre">powerDC</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-energy-threshold-t">zes_energy_threshold_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zes_energy_threshold_t"><code class="docutils literal notranslate"><span class="pre">zes_energy_threshold_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_energy_threshold_t6enableE"><code class="docutils literal notranslate"><span class="pre">enable</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_energy_threshold_t9thresholdE"><code class="docutils literal notranslate"><span class="pre">threshold</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_energy_threshold_t9processIdE"><code class="docutils literal notranslate"><span class="pre">processId</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="power">
+<h1>Power<a class="headerlink" href="#power" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="power-functions">
+<h2>Power Functions<a class="headerlink" href="#power-functions" title="Link to this heading">#</a></h2>
+<section id="zespowergetproperties">
+<span id="id1"></span><h3>zesPowerGetProperties<a class="headerlink" href="#zespowergetproperties" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421zesPowerGetProperties16zes_pwr_handle_tP22zes_power_properties_t">
+<span id="_CPPv321zesPowerGetProperties16zes_pwr_handle_tP22zes_power_properties_t"></span><span id="_CPPv221zesPowerGetProperties16zes_pwr_handle_tP22zes_power_properties_t"></span><span id="zesPowerGetProperties__zes_pwr_handle_t.zes_power_properties_tP"></span><span class="target" id="zes__api_8h_1a344242849ace66877150dc7bf9de6f04"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <a class="reference internal" href="#_CPPv422zes_power_properties_t" title="zes_power_properties_t"><span class="n"><span class="pre">zes_power_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesPowerGetProperties16zes_pwr_handle_tP22zes_power_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get properties related to a power domain. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pProperties</strong> – [in,out] Structure that will contain property data. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowergetenergycounter">
+<span id="id2"></span><h3>zesPowerGetEnergyCounter<a class="headerlink" href="#zespowergetenergycounter" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424zesPowerGetEnergyCounter16zes_pwr_handle_tP26zes_power_energy_counter_t">
+<span id="_CPPv324zesPowerGetEnergyCounter16zes_pwr_handle_tP26zes_power_energy_counter_t"></span><span id="_CPPv224zesPowerGetEnergyCounter16zes_pwr_handle_tP26zes_power_energy_counter_t"></span><span id="zesPowerGetEnergyCounter__zes_pwr_handle_t.zes_power_energy_counter_tP"></span><span class="target" id="zes__api_8h_1a37c6d3f484f3b0a3bff4e329f4991d79"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerGetEnergyCounter</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <a class="reference internal" href="#_CPPv426zes_power_energy_counter_t" title="zes_power_energy_counter_t"><span class="n"><span class="pre">zes_power_energy_counter_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pEnergy</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zesPowerGetEnergyCounter16zes_pwr_handle_tP26zes_power_energy_counter_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get energy counter. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pEnergy</strong> – [in,out] Will contain the latest snapshot of the energy counter and timestamp when the last counter value was measured. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pEnergy</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowergetlimits">
+<span id="id3"></span><h3>zesPowerGetLimits<a class="headerlink" href="#zespowergetlimits" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv417zesPowerGetLimits16zes_pwr_handle_tP27zes_power_sustained_limit_tP23zes_power_burst_limit_tP22zes_power_peak_limit_t">
+<span id="_CPPv317zesPowerGetLimits16zes_pwr_handle_tP27zes_power_sustained_limit_tP23zes_power_burst_limit_tP22zes_power_peak_limit_t"></span><span id="_CPPv217zesPowerGetLimits16zes_pwr_handle_tP27zes_power_sustained_limit_tP23zes_power_burst_limit_tP22zes_power_peak_limit_t"></span><span id="zesPowerGetLimits__zes_pwr_handle_t.zes_power_sustained_limit_tP.zes_power_burst_limit_tP.zes_power_peak_limit_tP"></span><span class="target" id="zes__api_8h_1ab423f84a9b8c24146ba1bd472eb455d8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerGetLimits</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <a class="reference internal" href="#_CPPv427zes_power_sustained_limit_t" title="zes_power_sustained_limit_t"><span class="n"><span class="pre">zes_power_sustained_limit_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSustained</span></span>, <a class="reference internal" href="#_CPPv423zes_power_burst_limit_t" title="zes_power_burst_limit_t"><span class="n"><span class="pre">zes_power_burst_limit_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBurst</span></span>, <a class="reference internal" href="#_CPPv422zes_power_peak_limit_t" title="zes_power_peak_limit_t"><span class="n"><span class="pre">zes_power_peak_limit_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPeak</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesPowerGetLimits16zes_pwr_handle_tP27zes_power_sustained_limit_tP23zes_power_burst_limit_tP22zes_power_peak_limit_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get power limits. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>[DEPRECATED] Use <a class="reference internal" href="../extensions/power.html#zes__api_8h_1ad9965e3fb03154a0321fb90933a1f69a"><span class="std std-ref">zesPowerGetLimitsExt</span></a>.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pSustained</strong> – [in,out][optional] The sustained power limit. If this is null, the current sustained power limits will not be returned. </p></li>
+<li><p><strong>pBurst</strong> – [in,out][optional] The burst power limit. If this is null, the current peak power limits will not be returned. </p></li>
+<li><p><strong>pPeak</strong> – [in,out][optional] The peak power limit. If this is null, the peak power limits will not be returned. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowersetlimits">
+<span id="id4"></span><h3>zesPowerSetLimits<a class="headerlink" href="#zespowersetlimits" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv417zesPowerSetLimits16zes_pwr_handle_tPK27zes_power_sustained_limit_tPK23zes_power_burst_limit_tPK22zes_power_peak_limit_t">
+<span id="_CPPv317zesPowerSetLimits16zes_pwr_handle_tPK27zes_power_sustained_limit_tPK23zes_power_burst_limit_tPK22zes_power_peak_limit_t"></span><span id="_CPPv217zesPowerSetLimits16zes_pwr_handle_tPK27zes_power_sustained_limit_tPK23zes_power_burst_limit_tPK22zes_power_peak_limit_t"></span><span id="zesPowerSetLimits__zes_pwr_handle_t.zes_power_sustained_limit_tCP.zes_power_burst_limit_tCP.zes_power_peak_limit_tCP"></span><span class="target" id="zes__api_8h_1a288dd8da3a8f1fa2ce71d52677ce9a2e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerSetLimits</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv427zes_power_sustained_limit_t" title="zes_power_sustained_limit_t"><span class="n"><span class="pre">zes_power_sustained_limit_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSustained</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv423zes_power_burst_limit_t" title="zes_power_burst_limit_t"><span class="n"><span class="pre">zes_power_burst_limit_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBurst</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv422zes_power_peak_limit_t" title="zes_power_peak_limit_t"><span class="n"><span class="pre">zes_power_peak_limit_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPeak</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesPowerSetLimits16zes_pwr_handle_tPK27zes_power_sustained_limit_tPK23zes_power_burst_limit_tPK22zes_power_peak_limit_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Set power limits. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>[DEPRECATED] Use <a class="reference internal" href="../extensions/power.html#zes__api_8h_1a30f6809d7a53a430c270d3acced1d4dc"><span class="std std-ref">zesPowerSetLimitsExt</span></a>.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pSustained</strong> – [in][optional] The sustained power limit. If this is null, no changes will be made to the sustained power limits. </p></li>
+<li><p><strong>pBurst</strong> – [in][optional] The burst power limit. If this is null, no changes will be made to the burst power limits. </p></li>
+<li><p><strong>pPeak</strong> – [in][optional] The peak power limit. If this is null, no changes will be made to the peak power limits. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to make these modifications.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a><ul>
+<li><p>The device is in use, meaning that the GPU is under Over clocking, applying power limits under overclocking is not supported. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowergetenergythreshold">
+<span id="id5"></span><h3>zesPowerGetEnergyThreshold<a class="headerlink" href="#zespowergetenergythreshold" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426zesPowerGetEnergyThreshold16zes_pwr_handle_tP22zes_energy_threshold_t">
+<span id="_CPPv326zesPowerGetEnergyThreshold16zes_pwr_handle_tP22zes_energy_threshold_t"></span><span id="_CPPv226zesPowerGetEnergyThreshold16zes_pwr_handle_tP22zes_energy_threshold_t"></span><span id="zesPowerGetEnergyThreshold__zes_pwr_handle_t.zes_energy_threshold_tP"></span><span class="target" id="zes__api_8h_1ad79def234231e26c309b25af6f14a107"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerGetEnergyThreshold</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <a class="reference internal" href="#_CPPv422zes_energy_threshold_t" title="zes_energy_threshold_t"><span class="n"><span class="pre">zes_energy_threshold_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pThreshold</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesPowerGetEnergyThreshold16zes_pwr_handle_tP22zes_energy_threshold_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get energy threshold. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pThreshold</strong> – [in,out] Returns information about the energy threshold setting - enabled/energy threshold/process ID. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pThreshold</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
+<li><p>Energy threshold not supported on this power domain (check the <code class="docutils literal notranslate"><span class="pre">isEnergyThresholdSupported</span></code> member of <a class="reference internal" href="#structzes__power__properties__t"><span class="std std-ref">zes_power_properties_t</span></a>).</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to request this feature. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowersetenergythreshold">
+<span id="id6"></span><h3>zesPowerSetEnergyThreshold<a class="headerlink" href="#zespowersetenergythreshold" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426zesPowerSetEnergyThreshold16zes_pwr_handle_td">
+<span id="_CPPv326zesPowerSetEnergyThreshold16zes_pwr_handle_td"></span><span id="_CPPv226zesPowerSetEnergyThreshold16zes_pwr_handle_td"></span><span id="zesPowerSetEnergyThreshold__zes_pwr_handle_t.double"></span><span class="target" id="zes__api_8h_1a458adf8bf4181ec3001c7ccec239012a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerSetEnergyThreshold</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">threshold</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesPowerSetEnergyThreshold16zes_pwr_handle_td" title="Link to this definition">#</a><br /></dt>
+<dd><p>Set energy threshold. </p>
+<p><ul class="simple">
+<li><p>An event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604aa3ee30dfeb9f8cb5f7a54bd1c96b346e"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED</span></a> will be generated when the delta energy consumed starting from this call exceeds the specified threshold. Use the function <a class="reference internal" href="device.html#zes__api_8h_1a89a63935b45a8354bbc07add8803c03d"><span class="std std-ref">zesDeviceEventRegister()</span></a> to start receiving the event.</p></li>
+<li><p>Only one running process can control the energy threshold at a given time. If another process attempts to change the energy threshold, the error <a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a> will be returned. The function <a class="reference internal" href="#zes__api_8h_1ad79def234231e26c309b25af6f14a107"><span class="std std-ref">zesPowerGetEnergyThreshold()</span></a> to determine the process ID currently controlling this setting.</p></li>
+<li><p>Calling this function will remove any pending energy thresholds and start counting from the time of this call.</p></li>
+<li><p>Once the energy threshold has been reached and the event generated, the threshold is automatically removed. It is up to the application to request a new threshold.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>threshold</strong> – [in] The energy threshold to be set in joules. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
+<li><p>Energy threshold not supported on this power domain (check the <code class="docutils literal notranslate"><span class="pre">isEnergyThresholdSupported</span></code> member of <a class="reference internal" href="#structzes__power__properties__t"><span class="std std-ref">zes_power_properties_t</span></a>).</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to request this feature.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a><ul>
+<li><p>Another running process has set the energy threshold. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowergetusage">
+<span id="id7"></span><h3>zesPowerGetUsage<a class="headerlink" href="#zespowergetusage" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.16</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416zesPowerGetUsage16zes_pwr_handle_tP8uint32_tP8uint32_t">
+<span id="_CPPv316zesPowerGetUsage16zes_pwr_handle_tP8uint32_tP8uint32_t"></span><span id="_CPPv216zesPowerGetUsage16zes_pwr_handle_tP8uint32_tP8uint32_t"></span><span id="zesPowerGetUsage__zes_pwr_handle_t.uint32_tP.uint32_tP"></span><span class="target" id="zes__api_8h_1a501d82cda21a6de3b43d478c05191b7b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerGetUsage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pInstantPower</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pAveragePower</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zesPowerGetUsage16zes_pwr_handle_tP8uint32_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get power usage. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>This function returns the different power usage values associated with the power domain.</p></li>
+<li><p>Computing the average power usage may cause this API to wait and return only after the average power is computed over an interval. Applications that do not need it should pass <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> for <code class="docutils literal notranslate"><span class="pre">pAveragePower</span></code> to reduce the time taken by this function.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Handle of the power domain. </p></li>
+<li><p><strong>pInstantPower</strong> – [out][optional] Returns the instant power usage in milliwatts. If this is <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, the instant power usage will not be returned. </p></li>
+<li><p><strong>pAveragePower</strong> – [out][optional] Returns the average power usage in milliwatts. If this is <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, the average power usage will not be returned. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">(nullptr</span> <span class="pre">==</span> <span class="pre">pInstantPower)</span> <span class="pre">&amp;&amp;</span> <span class="pre">(nullptr</span> <span class="pre">==</span> <span class="pre">pAveragePower)</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
+<li><p>The requested power usage value is not supported on this power domain.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to request this feature. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowergetlimitsext2">
+<span id="id8"></span><h3>zesPowerGetLimitsExt2<a class="headerlink" href="#zespowergetlimitsext2" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.16</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421zesPowerGetLimitsExt216zes_pwr_handle_tP8uint32_t">
+<span id="_CPPv321zesPowerGetLimitsExt216zes_pwr_handle_tP8uint32_t"></span><span id="_CPPv221zesPowerGetLimitsExt216zes_pwr_handle_tP8uint32_t"></span><span id="zesPowerGetLimitsExt2__zes_pwr_handle_t.uint32_tP"></span><span class="target" id="zes__api_8h_1ad1dcb036025c190c0ecf1d60c8a1a7b8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerGetLimitsExt2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pLimit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesPowerGetLimitsExt216zes_pwr_handle_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get power limits. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>This function returns the power limit associated with the power domain of the handle.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Power domain handle instance. </p></li>
+<li><p><strong>pLimit</strong> – [out] Returns limit value in milliwatts for given power domain. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pLimit</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zespowersetlimitsext2">
+<span id="id9"></span><h3>zesPowerSetLimitsExt2<a class="headerlink" href="#zespowersetlimitsext2" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.16</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421zesPowerSetLimitsExt216zes_pwr_handle_tK8uint32_t">
+<span id="_CPPv321zesPowerSetLimitsExt216zes_pwr_handle_tK8uint32_t"></span><span id="_CPPv221zesPowerSetLimitsExt216zes_pwr_handle_tK8uint32_t"></span><span id="zesPowerSetLimitsExt2__zes_pwr_handle_t.uint32_tC"></span><span class="target" id="zes__api_8h_1a01eef1fa5bc047b53dfdbfa0d8874102"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPowerSetLimitsExt2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_pwr_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPower</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">limit</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesPowerSetLimitsExt216zes_pwr_handle_tK8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Set power limits. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>This function sets the power limit associated with the power domain of the handle.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPower</strong> – [in] Power domain handle instance. </p></li>
+<li><p><strong>limit</strong> – [in] Limit value in milliwatts to be set for given power domain. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPower</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to make these modifications. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="power-enums">
+<h2>Power Enums<a class="headerlink" href="#power-enums" title="Link to this heading">#</a></h2>
+<section id="zes-power-domain-t">
+<span id="id10"></span><h3>zes_power_domain_t<a class="headerlink" href="#zes-power-domain-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv418zes_power_domain_t">
+<span id="_CPPv318zes_power_domain_t"></span><span id="_CPPv218zes_power_domain_t"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_domain_t</span></span></span><a class="headerlink" href="#_CPPv418zes_power_domain_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Power Domain. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_domain_t24ZES_POWER_DOMAIN_UNKNOWNE">
+<span id="_CPPv3N18zes_power_domain_t24ZES_POWER_DOMAIN_UNKNOWNE"></span><span id="_CPPv2N18zes_power_domain_t24ZES_POWER_DOMAIN_UNKNOWNE"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03a1ab182c366b253e0d58e6c7816320f5a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_DOMAIN_UNKNOWN</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_domain_t24ZES_POWER_DOMAIN_UNKNOWNE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power domain level cannot be determined. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_domain_t21ZES_POWER_DOMAIN_CARDE">
+<span id="_CPPv3N18zes_power_domain_t21ZES_POWER_DOMAIN_CARDE"></span><span id="_CPPv2N18zes_power_domain_t21ZES_POWER_DOMAIN_CARDE"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03a58a15c09f5df0a470f4e11614500390e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_DOMAIN_CARD</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_domain_t21ZES_POWER_DOMAIN_CARDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power domain is a card-level power domain. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_domain_t24ZES_POWER_DOMAIN_PACKAGEE">
+<span id="_CPPv3N18zes_power_domain_t24ZES_POWER_DOMAIN_PACKAGEE"></span><span id="_CPPv2N18zes_power_domain_t24ZES_POWER_DOMAIN_PACKAGEE"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03ab1c9d959750e87e4d73e5a884056239a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_DOMAIN_PACKAGE</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_domain_t24ZES_POWER_DOMAIN_PACKAGEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power domain is a package-level power domain. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_domain_t22ZES_POWER_DOMAIN_STACKE">
+<span id="_CPPv3N18zes_power_domain_t22ZES_POWER_DOMAIN_STACKE"></span><span id="_CPPv2N18zes_power_domain_t22ZES_POWER_DOMAIN_STACKE"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03a188da4e4a75ac1eb66122bf1455e1d7b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_DOMAIN_STACK</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_domain_t22ZES_POWER_DOMAIN_STACKE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power domain is a stack-level power domain. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_domain_t23ZES_POWER_DOMAIN_MEMORYE">
+<span id="_CPPv3N18zes_power_domain_t23ZES_POWER_DOMAIN_MEMORYE"></span><span id="_CPPv2N18zes_power_domain_t23ZES_POWER_DOMAIN_MEMORYE"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03a89bbf39b26992d9c487f085ffd1933f1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_DOMAIN_MEMORY</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_domain_t23ZES_POWER_DOMAIN_MEMORYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power domain is a memory-level power domain. <em class="since-note"> (since v1.8)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_domain_t20ZES_POWER_DOMAIN_GPUE">
+<span id="_CPPv3N18zes_power_domain_t20ZES_POWER_DOMAIN_GPUE"></span><span id="_CPPv2N18zes_power_domain_t20ZES_POWER_DOMAIN_GPUE"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03ab20df9068042fed6ab0d6fd7348433fb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_DOMAIN_GPU</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_domain_t20ZES_POWER_DOMAIN_GPUE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power domain is a GPU-level power domain. <em class="since-note"> (since v1.8)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_domain_t29ZES_POWER_DOMAIN_FORCE_UINT32E">
+<span id="_CPPv3N18zes_power_domain_t29ZES_POWER_DOMAIN_FORCE_UINT32E"></span><span id="_CPPv2N18zes_power_domain_t29ZES_POWER_DOMAIN_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a57bf74fa755196f67f962abf0169dc03afb363a7cf9733f59e99a30e049648930"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_DOMAIN_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_domain_t29ZES_POWER_DOMAIN_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_POWER_DOMAIN_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-power-level-t">
+<span id="id11"></span><h3>zes_power_level_t<a class="headerlink" href="#zes-power-level-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv417zes_power_level_t">
+<span id="_CPPv317zes_power_level_t"></span><span id="_CPPv217zes_power_level_t"></span><span class="target" id="zes__api_8h_1ac8a93f4499ce2809e4ee7fec71deb246"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_level_t</span></span></span><a class="headerlink" href="#_CPPv417zes_power_level_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Power Level Type. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_power_level_t23ZES_POWER_LEVEL_UNKNOWNE">
+<span id="_CPPv3N17zes_power_level_t23ZES_POWER_LEVEL_UNKNOWNE"></span><span id="_CPPv2N17zes_power_level_t23ZES_POWER_LEVEL_UNKNOWNE"></span><span class="target" id="zes__api_8h_1ac8a93f4499ce2809e4ee7fec71deb246ac85963f9674a23d226d6d0a10e4fe1a7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LEVEL_UNKNOWN</span></span></span><a class="headerlink" href="#_CPPv4N17zes_power_level_t23ZES_POWER_LEVEL_UNKNOWNE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power monitoring duration cannot be determined. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_power_level_t25ZES_POWER_LEVEL_SUSTAINEDE">
+<span id="_CPPv3N17zes_power_level_t25ZES_POWER_LEVEL_SUSTAINEDE"></span><span id="_CPPv2N17zes_power_level_t25ZES_POWER_LEVEL_SUSTAINEDE"></span><span class="target" id="zes__api_8h_1ac8a93f4499ce2809e4ee7fec71deb246ac61c679727c56404a0a4b8bad5a3ca0e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LEVEL_SUSTAINED</span></span></span><a class="headerlink" href="#_CPPv4N17zes_power_level_t25ZES_POWER_LEVEL_SUSTAINEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit determines effective power draw by computing a moving average of the actual power draw over a time interval (longer than BURST). </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_power_level_t21ZES_POWER_LEVEL_BURSTE">
+<span id="_CPPv3N17zes_power_level_t21ZES_POWER_LEVEL_BURSTE"></span><span id="_CPPv2N17zes_power_level_t21ZES_POWER_LEVEL_BURSTE"></span><span class="target" id="zes__api_8h_1ac8a93f4499ce2809e4ee7fec71deb246ad15e16b386569e6272f659687111ebcd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LEVEL_BURST</span></span></span><a class="headerlink" href="#_CPPv4N17zes_power_level_t21ZES_POWER_LEVEL_BURSTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit determines effective power draw by computing a moving average of the actual power draw over a time interval (longer than PEAK). </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_power_level_t20ZES_POWER_LEVEL_PEAKE">
+<span id="_CPPv3N17zes_power_level_t20ZES_POWER_LEVEL_PEAKE"></span><span id="_CPPv2N17zes_power_level_t20ZES_POWER_LEVEL_PEAKE"></span><span class="target" id="zes__api_8h_1ac8a93f4499ce2809e4ee7fec71deb246a85e746e403b16276ae0a45d7ea79ed81"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LEVEL_PEAK</span></span></span><a class="headerlink" href="#_CPPv4N17zes_power_level_t20ZES_POWER_LEVEL_PEAKE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit determines effective power draw by computing a moving average of the actual power draw over a very short time interval. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_power_level_t29ZES_POWER_LEVEL_INSTANTANEOUSE">
+<span id="_CPPv3N17zes_power_level_t29ZES_POWER_LEVEL_INSTANTANEOUSE"></span><span id="_CPPv2N17zes_power_level_t29ZES_POWER_LEVEL_INSTANTANEOUSE"></span><span class="target" id="zes__api_8h_1ac8a93f4499ce2809e4ee7fec71deb246a95ed8581c2d9e10dd4c565268eecd7f4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LEVEL_INSTANTANEOUS</span></span></span><a class="headerlink" href="#_CPPv4N17zes_power_level_t29ZES_POWER_LEVEL_INSTANTANEOUSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit predicts effective power draw using the current device configuration (frequency, voltage, etc…) &amp; throttles proactively to stay within the specified limit. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_power_level_t28ZES_POWER_LEVEL_FORCE_UINT32E">
+<span id="_CPPv3N17zes_power_level_t28ZES_POWER_LEVEL_FORCE_UINT32E"></span><span id="_CPPv2N17zes_power_level_t28ZES_POWER_LEVEL_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1ac8a93f4499ce2809e4ee7fec71deb246afff75325ca0be1ebf3fd6a0b92f661f4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LEVEL_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N17zes_power_level_t28ZES_POWER_LEVEL_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_POWER_LEVEL_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-power-source-t">
+<span id="id12"></span><h3>zes_power_source_t<a class="headerlink" href="#zes-power-source-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv418zes_power_source_t">
+<span id="_CPPv318zes_power_source_t"></span><span id="_CPPv218zes_power_source_t"></span><span class="target" id="zes__api_8h_1a5b28d2039616f7f39103b8dff31d9f91"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_source_t</span></span></span><a class="headerlink" href="#_CPPv418zes_power_source_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Power Source Type. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_source_t20ZES_POWER_SOURCE_ANYE">
+<span id="_CPPv3N18zes_power_source_t20ZES_POWER_SOURCE_ANYE"></span><span id="_CPPv2N18zes_power_source_t20ZES_POWER_SOURCE_ANYE"></span><span class="target" id="zes__api_8h_1a5b28d2039616f7f39103b8dff31d9f91a9edbe9d20456e4dd6b0e162627b8b651"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_SOURCE_ANY</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_source_t20ZES_POWER_SOURCE_ANYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Limit active no matter whether the power source is mains powered or battery powered. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_source_t22ZES_POWER_SOURCE_MAINSE">
+<span id="_CPPv3N18zes_power_source_t22ZES_POWER_SOURCE_MAINSE"></span><span id="_CPPv2N18zes_power_source_t22ZES_POWER_SOURCE_MAINSE"></span><span class="target" id="zes__api_8h_1a5b28d2039616f7f39103b8dff31d9f91a6f4d590e533bc54b4372656dce3ee853"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_SOURCE_MAINS</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_source_t22ZES_POWER_SOURCE_MAINSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Limit active only when the device is mains powered. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_source_t24ZES_POWER_SOURCE_BATTERYE">
+<span id="_CPPv3N18zes_power_source_t24ZES_POWER_SOURCE_BATTERYE"></span><span id="_CPPv2N18zes_power_source_t24ZES_POWER_SOURCE_BATTERYE"></span><span class="target" id="zes__api_8h_1a5b28d2039616f7f39103b8dff31d9f91ab676f53dc8bf3be621a0d8828d5b24f7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_SOURCE_BATTERY</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_source_t24ZES_POWER_SOURCE_BATTERYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Limit active only when the device is battery powered. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N18zes_power_source_t29ZES_POWER_SOURCE_FORCE_UINT32E">
+<span id="_CPPv3N18zes_power_source_t29ZES_POWER_SOURCE_FORCE_UINT32E"></span><span id="_CPPv2N18zes_power_source_t29ZES_POWER_SOURCE_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a5b28d2039616f7f39103b8dff31d9f91a03a5694a56a032beea8ee41fac4ebdef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_SOURCE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N18zes_power_source_t29ZES_POWER_SOURCE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_POWER_SOURCE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-limit-unit-t">
+<span id="id13"></span><h3>zes_limit_unit_t<a class="headerlink" href="#zes-limit-unit-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv416zes_limit_unit_t">
+<span id="_CPPv316zes_limit_unit_t"></span><span id="_CPPv216zes_limit_unit_t"></span><span class="target" id="zes__api_8h_1afeeb60cd3cbeb666ee965f4fb5387cc3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_limit_unit_t</span></span></span><a class="headerlink" href="#_CPPv416zes_limit_unit_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Limit Unit. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16zes_limit_unit_t22ZES_LIMIT_UNIT_UNKNOWNE">
+<span id="_CPPv3N16zes_limit_unit_t22ZES_LIMIT_UNIT_UNKNOWNE"></span><span id="_CPPv2N16zes_limit_unit_t22ZES_LIMIT_UNIT_UNKNOWNE"></span><span class="target" id="zes__api_8h_1afeeb60cd3cbeb666ee965f4fb5387cc3af60aa96be6b9ca6b969b92c9f695fdef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_LIMIT_UNIT_UNKNOWN</span></span></span><a class="headerlink" href="#_CPPv4N16zes_limit_unit_t22ZES_LIMIT_UNIT_UNKNOWNE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The PUnit power monitoring unit cannot be determined. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16zes_limit_unit_t22ZES_LIMIT_UNIT_CURRENTE">
+<span id="_CPPv3N16zes_limit_unit_t22ZES_LIMIT_UNIT_CURRENTE"></span><span id="_CPPv2N16zes_limit_unit_t22ZES_LIMIT_UNIT_CURRENTE"></span><span class="target" id="zes__api_8h_1afeeb60cd3cbeb666ee965f4fb5387cc3a13904513de139db693ce1b5b9541147b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_LIMIT_UNIT_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N16zes_limit_unit_t22ZES_LIMIT_UNIT_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The limit is specified in milliamperes of current drawn. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16zes_limit_unit_t20ZES_LIMIT_UNIT_POWERE">
+<span id="_CPPv3N16zes_limit_unit_t20ZES_LIMIT_UNIT_POWERE"></span><span id="_CPPv2N16zes_limit_unit_t20ZES_LIMIT_UNIT_POWERE"></span><span class="target" id="zes__api_8h_1afeeb60cd3cbeb666ee965f4fb5387cc3a52a58d54a2e8b862e7e7be647683a19b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_LIMIT_UNIT_POWER</span></span></span><a class="headerlink" href="#_CPPv4N16zes_limit_unit_t20ZES_LIMIT_UNIT_POWERE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The limit is specified in milliwatts of power generated. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N16zes_limit_unit_t27ZES_LIMIT_UNIT_FORCE_UINT32E">
+<span id="_CPPv3N16zes_limit_unit_t27ZES_LIMIT_UNIT_FORCE_UINT32E"></span><span id="_CPPv2N16zes_limit_unit_t27ZES_LIMIT_UNIT_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1afeeb60cd3cbeb666ee965f4fb5387cc3aaa6acf8916a8245588e461e4622c477b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_LIMIT_UNIT_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N16zes_limit_unit_t27ZES_LIMIT_UNIT_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_LIMIT_UNIT_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="power-structures">
+<h2>Power Structures<a class="headerlink" href="#power-structures" title="Link to this heading">#</a></h2>
+<section id="zes-power-properties-t">
+<span id="id14"></span><h3>zes_power_properties_t<a class="headerlink" href="#zes-power-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422zes_power_properties_t">
+<span id="_CPPv322zes_power_properties_t"></span><span id="_CPPv222zes_power_properties_t"></span><span id="zes_power_properties_t"></span><span class="target" id="structzes__power__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_properties_t</span></span></span><a class="headerlink" href="#_CPPv422zes_power_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Properties related to device power settings. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t5stypeE">
+<span id="_CPPv3N22zes_power_properties_t5stypeE"></span><span id="_CPPv2N22zes_power_properties_t5stypeE"></span><span id="zes_power_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__power__properties__t_1a1e1b1629903dfbd2f1ffa032208322ef"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t5pNextE">
+<span id="_CPPv3N22zes_power_properties_t5pNextE"></span><span id="_CPPv2N22zes_power_properties_t5pNextE"></span><span id="zes_power_properties_t::pNext__voidP"></span><span class="target" id="structzes__power__properties__t_1ac56672181539988883536776306b508d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t11onSubdeviceE">
+<span id="_CPPv3N22zes_power_properties_t11onSubdeviceE"></span><span id="_CPPv2N22zes_power_properties_t11onSubdeviceE"></span><span id="zes_power_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__power__properties__t_1a48e6ec987e2ce85cf7e5f055effecc7a"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t11subdeviceIdE">
+<span id="_CPPv3N22zes_power_properties_t11subdeviceIdE"></span><span id="_CPPv2N22zes_power_properties_t11subdeviceIdE"></span><span id="zes_power_properties_t::subdeviceId__uint32_t"></span><span class="target" id="structzes__power__properties__t_1a98007301dfb3823d8df228875192db92"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subdeviceId</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t11subdeviceIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] If onSubdevice is true, this gives the ID of the sub-device </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t10canControlE">
+<span id="_CPPv3N22zes_power_properties_t10canControlE"></span><span id="_CPPv2N22zes_power_properties_t10canControlE"></span><span id="zes_power_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__power__properties__t_1a8a6c8b9e81fb69c72c658826c4094d11"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Software can change the power limits of this domain assuming the user has permissions. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t26isEnergyThresholdSupportedE">
+<span id="_CPPv3N22zes_power_properties_t26isEnergyThresholdSupportedE"></span><span id="_CPPv2N22zes_power_properties_t26isEnergyThresholdSupportedE"></span><span id="zes_power_properties_t::isEnergyThresholdSupported__ze_bool_t"></span><span class="target" id="structzes__power__properties__t_1a8fd31ab7717cca0a5f6ee0c0755e5215"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isEnergyThresholdSupported</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t26isEnergyThresholdSupportedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Indicates if this power domain supports the energy threshold event (<a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604aa3ee30dfeb9f8cb5f7a54bd1c96b346e"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_ENERGY_THRESHOLD_CROSSED</span></a>). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t12defaultLimitE">
+<span id="_CPPv3N22zes_power_properties_t12defaultLimitE"></span><span id="_CPPv2N22zes_power_properties_t12defaultLimitE"></span><span id="zes_power_properties_t::defaultLimit__int32_t"></span><span class="target" id="structzes__power__properties__t_1a09ab2c1d4907402d7a50f4e731912089"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">defaultLimit</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t12defaultLimitE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] (Deprecated) The factory default TDP power limit of the part in milliwatts. A value of -1 means that this is not known. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t8minLimitE">
+<span id="_CPPv3N22zes_power_properties_t8minLimitE"></span><span id="_CPPv2N22zes_power_properties_t8minLimitE"></span><span id="zes_power_properties_t::minLimit__int32_t"></span><span class="target" id="structzes__power__properties__t_1a1ed1274bf53fbbacac36992e81b8d76d"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">minLimit</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t8minLimitE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] (Deprecated) The minimum power limit in milliwatts that can be requested. A value of -1 means that this is not known. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_properties_t8maxLimitE">
+<span id="_CPPv3N22zes_power_properties_t8maxLimitE"></span><span id="_CPPv2N22zes_power_properties_t8maxLimitE"></span><span id="zes_power_properties_t::maxLimit__int32_t"></span><span class="target" id="structzes__power__properties__t_1a919d098427c4ca7d258cbe60555b140c"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxLimit</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_properties_t8maxLimitE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] (Deprecated) The maximum power limit in milliwatts that can be requested. A value of -1 means that this is not known. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-power-energy-counter-t">
+<span id="id15"></span><h3>zes_power_energy_counter_t<a class="headerlink" href="#zes-power-energy-counter-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv426zes_power_energy_counter_t">
+<span id="_CPPv326zes_power_energy_counter_t"></span><span id="_CPPv226zes_power_energy_counter_t"></span><span id="zes_power_energy_counter_t"></span><span class="target" id="structzes__power__energy__counter__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_energy_counter_t</span></span></span><a class="headerlink" href="#_CPPv426zes_power_energy_counter_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Energy counter snapshot. </p>
+<p><ul class="simple">
+<li><p>Average power is calculated by taking two snapshots (s1, s2) and using the equation: PowerWatts = (s2.energy - s1.energy) / (s2.timestamp - s1.timestamp) </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zes_power_energy_counter_t6energyE">
+<span id="_CPPv3N26zes_power_energy_counter_t6energyE"></span><span id="_CPPv2N26zes_power_energy_counter_t6energyE"></span><span id="zes_power_energy_counter_t::energy__uint64_t"></span><span class="target" id="structzes__power__energy__counter__t_1aefdf2469630868d7cf0a4c05aca913eb"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">energy</span></span></span><a class="headerlink" href="#_CPPv4N26zes_power_energy_counter_t6energyE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The monotonic energy counter in microjoules. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N26zes_power_energy_counter_t9timestampE">
+<span id="_CPPv3N26zes_power_energy_counter_t9timestampE"></span><span id="_CPPv2N26zes_power_energy_counter_t9timestampE"></span><span id="zes_power_energy_counter_t::timestamp__uint64_t"></span><span class="target" id="structzes__power__energy__counter__t_1a5eab5886eaa5293ff71b60fe8e924e61"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timestamp</span></span></span><a class="headerlink" href="#_CPPv4N26zes_power_energy_counter_t9timestampE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Microsecond timestamp when energy was captured. This timestamp should only be used to calculate delta time between snapshots of this structure. Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base. The absolute value of the timestamp is only valid during within the application and may be different on the next execution. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-power-sustained-limit-t">
+<span id="id16"></span><h3>zes_power_sustained_limit_t<a class="headerlink" href="#zes-power-sustained-limit-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv427zes_power_sustained_limit_t">
+<span id="_CPPv327zes_power_sustained_limit_t"></span><span id="_CPPv227zes_power_sustained_limit_t"></span><span id="zes_power_sustained_limit_t"></span><span class="target" id="structzes__power__sustained__limit__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_sustained_limit_t</span></span></span><a class="headerlink" href="#_CPPv427zes_power_sustained_limit_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sustained power limits. </p>
+<p><ul class="simple">
+<li><p>The power controller (Punit) will throttle the operating frequency if the power averaged over a window (typically seconds) exceeds this limit.</p></li>
+<li><p>[DEPRECATED] No longer supported. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_power_sustained_limit_t7enabledE">
+<span id="_CPPv3N27zes_power_sustained_limit_t7enabledE"></span><span id="_CPPv2N27zes_power_sustained_limit_t7enabledE"></span><span id="zes_power_sustained_limit_t::enabled__ze_bool_t"></span><span class="target" id="structzes__power__sustained__limit__t_1aba8472f4dbc5b902a535aa0761d71a1d"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enabled</span></span></span><a class="headerlink" href="#_CPPv4N27zes_power_sustained_limit_t7enabledE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] indicates if the limit is enabled (true) or ignored (false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_power_sustained_limit_t5powerE">
+<span id="_CPPv3N27zes_power_sustained_limit_t5powerE"></span><span id="_CPPv2N27zes_power_sustained_limit_t5powerE"></span><span id="zes_power_sustained_limit_t::power__int32_t"></span><span class="target" id="structzes__power__sustained__limit__t_1a03e94fe8933edd695c4afc7aa04b21bc"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">power</span></span></span><a class="headerlink" href="#_CPPv4N27zes_power_sustained_limit_t5powerE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] power limit in milliwatts </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_power_sustained_limit_t8intervalE">
+<span id="_CPPv3N27zes_power_sustained_limit_t8intervalE"></span><span id="_CPPv2N27zes_power_sustained_limit_t8intervalE"></span><span id="zes_power_sustained_limit_t::interval__int32_t"></span><span class="target" id="structzes__power__sustained__limit__t_1acaf46ec4cc81bc006c6018bd353f1299"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interval</span></span></span><a class="headerlink" href="#_CPPv4N27zes_power_sustained_limit_t8intervalE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] power averaging window (Tau) in milliseconds </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-power-burst-limit-t">
+<span id="id17"></span><h3>zes_power_burst_limit_t<a class="headerlink" href="#zes-power-burst-limit-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423zes_power_burst_limit_t">
+<span id="_CPPv323zes_power_burst_limit_t"></span><span id="_CPPv223zes_power_burst_limit_t"></span><span id="zes_power_burst_limit_t"></span><span class="target" id="structzes__power__burst__limit__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_burst_limit_t</span></span></span><a class="headerlink" href="#_CPPv423zes_power_burst_limit_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Burst power limit. </p>
+<p><ul class="simple">
+<li><p>The power controller (Punit) will throttle the operating frequency of the device if the power averaged over a few milliseconds exceeds a limit known as PL2. Typically PL2 &gt; PL1 so that it permits the frequency to burst higher for short periods than would be otherwise permitted by PL1.</p></li>
+<li><p>[DEPRECATED] No longer supported. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_power_burst_limit_t7enabledE">
+<span id="_CPPv3N23zes_power_burst_limit_t7enabledE"></span><span id="_CPPv2N23zes_power_burst_limit_t7enabledE"></span><span id="zes_power_burst_limit_t::enabled__ze_bool_t"></span><span class="target" id="structzes__power__burst__limit__t_1abdca5710bf6d2620fe525d7de634b011"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enabled</span></span></span><a class="headerlink" href="#_CPPv4N23zes_power_burst_limit_t7enabledE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] indicates if the limit is enabled (true) or ignored (false) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_power_burst_limit_t5powerE">
+<span id="_CPPv3N23zes_power_burst_limit_t5powerE"></span><span id="_CPPv2N23zes_power_burst_limit_t5powerE"></span><span id="zes_power_burst_limit_t::power__int32_t"></span><span class="target" id="structzes__power__burst__limit__t_1ad50998d4d1bdbe25c5e088714144071e"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">power</span></span></span><a class="headerlink" href="#_CPPv4N23zes_power_burst_limit_t5powerE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] power limit in milliwatts </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-power-peak-limit-t">
+<span id="id18"></span><h3>zes_power_peak_limit_t<a class="headerlink" href="#zes-power-peak-limit-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422zes_power_peak_limit_t">
+<span id="_CPPv322zes_power_peak_limit_t"></span><span id="_CPPv222zes_power_peak_limit_t"></span><span id="zes_power_peak_limit_t"></span><span class="target" id="structzes__power__peak__limit__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_peak_limit_t</span></span></span><a class="headerlink" href="#_CPPv422zes_power_peak_limit_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Peak power limit. </p>
+<p><ul class="simple">
+<li><p>The power controller (Punit) will reactively/proactively throttle the operating frequency of the device when the instantaneous/100usec power exceeds this limit. The limit is known as PL4 or Psys. It expresses the maximum power that can be drawn from the power supply.</p></li>
+<li><p>If this power limit is removed or set too high, the power supply will generate an interrupt when it detects an overcurrent condition and the power controller will throttle the device frequencies down to min. It is thus better to tune the PL4 value in order to avoid such excursions.</p></li>
+<li><p>[DEPRECATED] No longer supported. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_peak_limit_t7powerACE">
+<span id="_CPPv3N22zes_power_peak_limit_t7powerACE"></span><span id="_CPPv2N22zes_power_peak_limit_t7powerACE"></span><span id="zes_power_peak_limit_t::powerAC__int32_t"></span><span class="target" id="structzes__power__peak__limit__t_1a721f760a494c4a22fa37131a82755817"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">powerAC</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_peak_limit_t7powerACE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] power limit in milliwatts for the AC power source. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_power_peak_limit_t7powerDCE">
+<span id="_CPPv3N22zes_power_peak_limit_t7powerDCE"></span><span id="_CPPv2N22zes_power_peak_limit_t7powerDCE"></span><span id="zes_power_peak_limit_t::powerDC__int32_t"></span><span class="target" id="structzes__power__peak__limit__t_1a1deaa5081f83079c846bab6212f6479c"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">powerDC</span></span></span><a class="headerlink" href="#_CPPv4N22zes_power_peak_limit_t7powerDCE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] power limit in milliwatts for the DC power source. On input, this is ignored if the product does not have a battery. On output, this will be -1 if the product does not have a battery. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-energy-threshold-t">
+<span id="id19"></span><h3>zes_energy_threshold_t<a class="headerlink" href="#zes-energy-threshold-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422zes_energy_threshold_t">
+<span id="_CPPv322zes_energy_threshold_t"></span><span id="_CPPv222zes_energy_threshold_t"></span><span id="zes_energy_threshold_t"></span><span class="target" id="structzes__energy__threshold__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_energy_threshold_t</span></span></span><a class="headerlink" href="#_CPPv422zes_energy_threshold_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Energy threshold. </p>
+<p><ul class="simple">
+<li><p>. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_energy_threshold_t6enableE">
+<span id="_CPPv3N22zes_energy_threshold_t6enableE"></span><span id="_CPPv2N22zes_energy_threshold_t6enableE"></span><span id="zes_energy_threshold_t::enable__ze_bool_t"></span><span class="target" id="structzes__energy__threshold__t_1ac52c68c957297b3441fae70de721ad92"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable</span></span></span><a class="headerlink" href="#_CPPv4N22zes_energy_threshold_t6enableE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Indicates if the energy threshold is enabled. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_energy_threshold_t9thresholdE">
+<span id="_CPPv3N22zes_energy_threshold_t9thresholdE"></span><span id="_CPPv2N22zes_energy_threshold_t9thresholdE"></span><span id="zes_energy_threshold_t::threshold__double"></span><span class="target" id="structzes__energy__threshold__t_1aa27dc605d220ddefa2955064184fff16"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">threshold</span></span></span><a class="headerlink" href="#_CPPv4N22zes_energy_threshold_t9thresholdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] The energy threshold in Joules. Will be 0.0 if no threshold has been set. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_energy_threshold_t9processIdE">
+<span id="_CPPv3N22zes_energy_threshold_t9processIdE"></span><span id="_CPPv2N22zes_energy_threshold_t9processIdE"></span><span id="zes_energy_threshold_t::processId__uint32_t"></span><span class="target" id="structzes__energy__threshold__t_1aab94225a099e0fc7d711671c0e98726b"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">processId</span></span></span><a class="headerlink" href="#_CPPv4N22zes_energy_threshold_t9processIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] The host process ID that set the energy threshold. Will be 0xFFFFFFFF if no threshold has been set. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="performance_factor.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Performance Factor</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="psu.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Psu</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zesPower</div><ul class="ctoc-list"><li><a href="power.html#zespowergetproperties">&hellip;GetProperties</a></li><li><a href="power.html#zespowergetenergycounter">&hellip;GetEnergyCounter</a></li><li><a href="power.html#zespowergetlimits">&hellip;GetLimits</a></li><li><a href="power.html#zespowersetlimits">&hellip;SetLimits</a></li><li><a href="power.html#zespowergetenergythreshold">&hellip;GetEnergyThreshold</a></li><li><a href="power.html#zespowersetenergythreshold">&hellip;SetEnergyThreshold</a></li><li><a href="power.html#zespowergetusage">&hellip;GetUsage</a></li><li><a href="power.html#zespowergetlimitsext2">&hellip;GetLimitsExt2</a></li><li><a href="power.html#zespowersetlimitsext2">&hellip;SetLimitsExt2</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">4</span></summary><ul class="ctoc-list"><li><a href="power.html#zes-power-domain-t">zes_power_domain_t</a></li><li><a href="power.html#zes-power-level-t">zes_power_level_t</a></li><li><a href="power.html#zes-power-source-t">zes_power_source_t</a></li><li><a href="power.html#zes-limit-unit-t">zes_limit_unit_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">6</span></summary><ul class="ctoc-list"><li><a href="power.html#zes-power-properties-t">zes_power_properties_t</a></li><li><a href="power.html#zes-power-energy-counter-t">zes_power_energy_counter_t</a></li><li><a href="power.html#zes-power-sustained-limit-t">zes_power_sustained_limit_t</a></li><li><a href="power.html#zes-power-burst-limit-t">zes_power_burst_limit_t</a></li><li><a href="power.html#zes-power-peak-limit-t">zes_power_peak_limit_t</a></li><li><a href="power.html#zes-energy-threshold-t">zes_energy_threshold_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

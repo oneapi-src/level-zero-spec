@@ -1,0 +1,869 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data Types - Extensions &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/extensions/data_types';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Experimental" href="../experimental/index.html" />
+    <link rel="prev" title="Engine - Extensions" href="engine.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/extensions/data_types.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Data Types - Extensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types-extension-enums">Data Types - Extension Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-power-limits-ext-version-t">zes_power_limits_ext_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zes_power_limits_ext_version_t"><code class="docutils literal notranslate"><span class="pre">zes_power_limits_ext_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_power_limits_ext_version_t32ZES_POWER_LIMITS_EXT_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LIMITS_EXT_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_power_limits_ext_version_t36ZES_POWER_LIMITS_EXT_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LIMITS_EXT_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_power_limits_ext_version_t41ZES_POWER_LIMITS_EXT_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_POWER_LIMITS_EXT_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-engine-activity-ext-version-t">zes_engine_activity_ext_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433zes_engine_activity_ext_version_t"><code class="docutils literal notranslate"><span class="pre">zes_engine_activity_ext_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33zes_engine_activity_ext_version_t35ZES_ENGINE_ACTIVITY_EXT_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_ENGINE_ACTIVITY_EXT_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33zes_engine_activity_ext_version_t39ZES_ENGINE_ACTIVITY_EXT_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_ENGINE_ACTIVITY_EXT_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33zes_engine_activity_ext_version_t44ZES_ENGINE_ACTIVITY_EXT_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_ENGINE_ACTIVITY_EXT_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-device-ecc-default-properties-ext-version-t">zes_device_ecc_default_properties_ext_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv447zes_device_ecc_default_properties_ext_version_t"><code class="docutils literal notranslate"><span class="pre">zes_device_ecc_default_properties_ext_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N47zes_device_ecc_default_properties_ext_version_t49ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N47zes_device_ecc_default_properties_ext_version_t53ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N47zes_device_ecc_default_properties_ext_version_t58ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-pci-link-speed-downgrade-ext-version-t">zes_pci_link_speed_downgrade_ext_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv442zes_pci_link_speed_downgrade_ext_version_t"><code class="docutils literal notranslate"><span class="pre">zes_pci_link_speed_downgrade_ext_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t44ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t48ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t53ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-device-ext-state-version-t">zes_device_ext_state_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zes_device_ext_state_version_t"><code class="docutils literal notranslate"><span class="pre">zes_device_ext_state_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_device_ext_state_version_t32ZES_DEVICE_EXT_STATE_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_EXT_STATE_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_device_ext_state_version_t36ZES_DEVICE_EXT_STATE_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_EXT_STATE_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_device_ext_state_version_t41ZES_DEVICE_EXT_STATE_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_EXT_STATE_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-oem-serial-id-ext-version-t">zes_oem_serial_id_ext_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zes_oem_serial_id_ext_version_t"><code class="docutils literal notranslate"><span class="pre">zes_oem_serial_id_ext_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_oem_serial_id_ext_version_t33ZES_OEM_SERIAL_ID_EXT_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_OEM_SERIAL_ID_EXT_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_oem_serial_id_ext_version_t37ZES_OEM_SERIAL_ID_EXT_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_OEM_SERIAL_ID_EXT_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_oem_serial_id_ext_version_t42ZES_OEM_SERIAL_ID_EXT_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_OEM_SERIAL_ID_EXT_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-device-health-ext-version-t">zes_device_health_ext_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zes_device_health_ext_version_t"><code class="docutils literal notranslate"><span class="pre">zes_device_health_ext_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_device_health_ext_version_t33ZES_DEVICE_HEALTH_EXT_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_HEALTH_EXT_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_device_health_ext_version_t37ZES_DEVICE_HEALTH_EXT_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_HEALTH_EXT_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_device_health_ext_version_t42ZES_DEVICE_HEALTH_EXT_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_HEALTH_EXT_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-memory-vendor-info-ext-version-t">zes_memory_vendor_info_ext_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436zes_memory_vendor_info_ext_version_t"><code class="docutils literal notranslate"><span class="pre">zes_memory_vendor_info_ext_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36zes_memory_vendor_info_ext_version_t38ZES_MEMORY_VENDOR_INFO_EXT_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZES_MEMORY_VENDOR_INFO_EXT_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36zes_memory_vendor_info_ext_version_t42ZES_MEMORY_VENDOR_INFO_EXT_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZES_MEMORY_VENDOR_INFO_EXT_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N36zes_memory_vendor_info_ext_version_t47ZES_MEMORY_VENDOR_INFO_EXT_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_MEMORY_VENDOR_INFO_EXT_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="data-types-extensions">
+<h1>Data Types - Extensions<a class="headerlink" href="#data-types-extensions" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="data-types-extension-enums">
+<h2>Data Types - Extension Enums<a class="headerlink" href="#data-types-extension-enums" title="Link to this heading">#</a></h2>
+<section id="zes-power-limits-ext-version-t">
+<span id="id1"></span><h3>zes_power_limits_ext_version_t<a class="headerlink" href="#zes-power-limits-ext-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv430zes_power_limits_ext_version_t">
+<span id="_CPPv330zes_power_limits_ext_version_t"></span><span id="_CPPv230zes_power_limits_ext_version_t"></span><span class="target" id="zes__api_8h_1a82c95f18bb0d3f4e92bd961cf215fa0a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_power_limits_ext_version_t</span></span></span><a class="headerlink" href="#_CPPv430zes_power_limits_ext_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Power Limits Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_power_limits_ext_version_t32ZES_POWER_LIMITS_EXT_VERSION_1_0E">
+<span id="_CPPv3N30zes_power_limits_ext_version_t32ZES_POWER_LIMITS_EXT_VERSION_1_0E"></span><span id="_CPPv2N30zes_power_limits_ext_version_t32ZES_POWER_LIMITS_EXT_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1a82c95f18bb0d3f4e92bd961cf215fa0aa55a0e60c5f822938880e2b92ba9581b6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LIMITS_EXT_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N30zes_power_limits_ext_version_t32ZES_POWER_LIMITS_EXT_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_power_limits_ext_version_t36ZES_POWER_LIMITS_EXT_VERSION_CURRENTE">
+<span id="_CPPv3N30zes_power_limits_ext_version_t36ZES_POWER_LIMITS_EXT_VERSION_CURRENTE"></span><span id="_CPPv2N30zes_power_limits_ext_version_t36ZES_POWER_LIMITS_EXT_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1a82c95f18bb0d3f4e92bd961cf215fa0aa3ef1f6b5ab520e3d15345b30040dc540"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LIMITS_EXT_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N30zes_power_limits_ext_version_t36ZES_POWER_LIMITS_EXT_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_power_limits_ext_version_t41ZES_POWER_LIMITS_EXT_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N30zes_power_limits_ext_version_t41ZES_POWER_LIMITS_EXT_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N30zes_power_limits_ext_version_t41ZES_POWER_LIMITS_EXT_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a82c95f18bb0d3f4e92bd961cf215fa0aa330fa23eb3ee4f93fff6b3d071536e3e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_POWER_LIMITS_EXT_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N30zes_power_limits_ext_version_t41ZES_POWER_LIMITS_EXT_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_POWER_LIMITS_EXT_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-engine-activity-ext-version-t">
+<span id="id2"></span><h3>zes_engine_activity_ext_version_t<a class="headerlink" href="#zes-engine-activity-ext-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv433zes_engine_activity_ext_version_t">
+<span id="_CPPv333zes_engine_activity_ext_version_t"></span><span id="_CPPv233zes_engine_activity_ext_version_t"></span><span class="target" id="zes__api_8h_1ac5fdfee8ea9a15d79d871ce4bd7998f9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_engine_activity_ext_version_t</span></span></span><a class="headerlink" href="#_CPPv433zes_engine_activity_ext_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Engine Activity Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33zes_engine_activity_ext_version_t35ZES_ENGINE_ACTIVITY_EXT_VERSION_1_0E">
+<span id="_CPPv3N33zes_engine_activity_ext_version_t35ZES_ENGINE_ACTIVITY_EXT_VERSION_1_0E"></span><span id="_CPPv2N33zes_engine_activity_ext_version_t35ZES_ENGINE_ACTIVITY_EXT_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1ac5fdfee8ea9a15d79d871ce4bd7998f9af22f5c1f1c087583acdc96d5c333117c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_ENGINE_ACTIVITY_EXT_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N33zes_engine_activity_ext_version_t35ZES_ENGINE_ACTIVITY_EXT_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33zes_engine_activity_ext_version_t39ZES_ENGINE_ACTIVITY_EXT_VERSION_CURRENTE">
+<span id="_CPPv3N33zes_engine_activity_ext_version_t39ZES_ENGINE_ACTIVITY_EXT_VERSION_CURRENTE"></span><span id="_CPPv2N33zes_engine_activity_ext_version_t39ZES_ENGINE_ACTIVITY_EXT_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1ac5fdfee8ea9a15d79d871ce4bd7998f9a377f2d0d41bd6ecd7b57e79380764693"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_ENGINE_ACTIVITY_EXT_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N33zes_engine_activity_ext_version_t39ZES_ENGINE_ACTIVITY_EXT_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33zes_engine_activity_ext_version_t44ZES_ENGINE_ACTIVITY_EXT_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N33zes_engine_activity_ext_version_t44ZES_ENGINE_ACTIVITY_EXT_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N33zes_engine_activity_ext_version_t44ZES_ENGINE_ACTIVITY_EXT_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1ac5fdfee8ea9a15d79d871ce4bd7998f9a498723f08b51a8f1f1a52ea178527eb0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_ENGINE_ACTIVITY_EXT_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N33zes_engine_activity_ext_version_t44ZES_ENGINE_ACTIVITY_EXT_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_ENGINE_ACTIVITY_EXT_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-device-ecc-default-properties-ext-version-t">
+<span id="id3"></span><h3>zes_device_ecc_default_properties_ext_version_t<a class="headerlink" href="#zes-device-ecc-default-properties-ext-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.13</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv447zes_device_ecc_default_properties_ext_version_t">
+<span id="_CPPv347zes_device_ecc_default_properties_ext_version_t"></span><span id="_CPPv247zes_device_ecc_default_properties_ext_version_t"></span><span class="target" id="zes__api_8h_1aad97d975774d599fcfdf8cb6ba2aec01"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_ecc_default_properties_ext_version_t</span></span></span><a class="headerlink" href="#_CPPv447zes_device_ecc_default_properties_ext_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device ECC default properties Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N47zes_device_ecc_default_properties_ext_version_t49ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_1_0E">
+<span id="_CPPv3N47zes_device_ecc_default_properties_ext_version_t49ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_1_0E"></span><span id="_CPPv2N47zes_device_ecc_default_properties_ext_version_t49ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1aad97d975774d599fcfdf8cb6ba2aec01a21544c7b548e134df6ec65d982ca2405"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N47zes_device_ecc_default_properties_ext_version_t49ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N47zes_device_ecc_default_properties_ext_version_t53ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_CURRENTE">
+<span id="_CPPv3N47zes_device_ecc_default_properties_ext_version_t53ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_CURRENTE"></span><span id="_CPPv2N47zes_device_ecc_default_properties_ext_version_t53ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1aad97d975774d599fcfdf8cb6ba2aec01affac602169d5458b7bb298f1479f69da"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N47zes_device_ecc_default_properties_ext_version_t53ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N47zes_device_ecc_default_properties_ext_version_t58ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N47zes_device_ecc_default_properties_ext_version_t58ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N47zes_device_ecc_default_properties_ext_version_t58ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1aad97d975774d599fcfdf8cb6ba2aec01a9138196dcebfdaf2d3226c0c0981ffe3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N47zes_device_ecc_default_properties_ext_version_t58ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_DEVICE_ECC_DEFAULT_PROPERTIES_EXT_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-pci-link-speed-downgrade-ext-version-t">
+<span id="id4"></span><h3>zes_pci_link_speed_downgrade_ext_version_t<a class="headerlink" href="#zes-pci-link-speed-downgrade-ext-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.15</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv442zes_pci_link_speed_downgrade_ext_version_t">
+<span id="_CPPv342zes_pci_link_speed_downgrade_ext_version_t"></span><span id="_CPPv242zes_pci_link_speed_downgrade_ext_version_t"></span><span class="target" id="zes__api_8h_1a58cd56939df00931843910abaef4f7ec"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_pci_link_speed_downgrade_ext_version_t</span></span></span><a class="headerlink" href="#_CPPv442zes_pci_link_speed_downgrade_ext_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>PCI Link Speed Downgrade Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t44ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0E">
+<span id="_CPPv3N42zes_pci_link_speed_downgrade_ext_version_t44ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0E"></span><span id="_CPPv2N42zes_pci_link_speed_downgrade_ext_version_t44ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1a58cd56939df00931843910abaef4f7eca361ef740c04715e8fc751daa337ab4f5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t44ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t48ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENTE">
+<span id="_CPPv3N42zes_pci_link_speed_downgrade_ext_version_t48ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENTE"></span><span id="_CPPv2N42zes_pci_link_speed_downgrade_ext_version_t48ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1a58cd56939df00931843910abaef4f7eca2d0b4e65993acaf60d330ca4b7d0e2f6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t48ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t53ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N42zes_pci_link_speed_downgrade_ext_version_t53ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N42zes_pci_link_speed_downgrade_ext_version_t53ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a58cd56939df00931843910abaef4f7eca4ff56874bd6252e2f73dc57cbe5e5d34"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N42zes_pci_link_speed_downgrade_ext_version_t53ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_PCI_LINK_SPEED_DOWNGRADE_EXT_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-device-ext-state-version-t">
+<span id="id5"></span><h3>zes_device_ext_state_version_t<a class="headerlink" href="#zes-device-ext-state-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv430zes_device_ext_state_version_t">
+<span id="_CPPv330zes_device_ext_state_version_t"></span><span id="_CPPv230zes_device_ext_state_version_t"></span><span class="target" id="zes__api_8h_1a63d4285128d8ee6a96d754baacae415d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_ext_state_version_t</span></span></span><a class="headerlink" href="#_CPPv430zes_device_ext_state_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device State Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_device_ext_state_version_t32ZES_DEVICE_EXT_STATE_VERSION_1_0E">
+<span id="_CPPv3N30zes_device_ext_state_version_t32ZES_DEVICE_EXT_STATE_VERSION_1_0E"></span><span id="_CPPv2N30zes_device_ext_state_version_t32ZES_DEVICE_EXT_STATE_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1a63d4285128d8ee6a96d754baacae415da2cea0fab26bb53573721323836eb8c76"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_EXT_STATE_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N30zes_device_ext_state_version_t32ZES_DEVICE_EXT_STATE_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_device_ext_state_version_t36ZES_DEVICE_EXT_STATE_VERSION_CURRENTE">
+<span id="_CPPv3N30zes_device_ext_state_version_t36ZES_DEVICE_EXT_STATE_VERSION_CURRENTE"></span><span id="_CPPv2N30zes_device_ext_state_version_t36ZES_DEVICE_EXT_STATE_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1a63d4285128d8ee6a96d754baacae415da1b683977aa7b98d0853cfc84c149c857"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_EXT_STATE_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N30zes_device_ext_state_version_t36ZES_DEVICE_EXT_STATE_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_device_ext_state_version_t41ZES_DEVICE_EXT_STATE_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N30zes_device_ext_state_version_t41ZES_DEVICE_EXT_STATE_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N30zes_device_ext_state_version_t41ZES_DEVICE_EXT_STATE_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a63d4285128d8ee6a96d754baacae415dafc950aac5826159fca18894d24f63c61"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_EXT_STATE_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N30zes_device_ext_state_version_t41ZES_DEVICE_EXT_STATE_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_DEVICE_EXT_STATE_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-oem-serial-id-ext-version-t">
+<span id="id6"></span><h3>zes_oem_serial_id_ext_version_t<a class="headerlink" href="#zes-oem-serial-id-ext-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.17</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431zes_oem_serial_id_ext_version_t">
+<span id="_CPPv331zes_oem_serial_id_ext_version_t"></span><span id="_CPPv231zes_oem_serial_id_ext_version_t"></span><span class="target" id="zes__api_8h_1a9a16073d5566dad6c27bf2d1a74f1cc0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_oem_serial_id_ext_version_t</span></span></span><a class="headerlink" href="#_CPPv431zes_oem_serial_id_ext_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>OEM Serial ID Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_oem_serial_id_ext_version_t33ZES_OEM_SERIAL_ID_EXT_VERSION_1_0E">
+<span id="_CPPv3N31zes_oem_serial_id_ext_version_t33ZES_OEM_SERIAL_ID_EXT_VERSION_1_0E"></span><span id="_CPPv2N31zes_oem_serial_id_ext_version_t33ZES_OEM_SERIAL_ID_EXT_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1a9a16073d5566dad6c27bf2d1a74f1cc0a493e60d8607bc17874fc0106018ccf0e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_OEM_SERIAL_ID_EXT_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N31zes_oem_serial_id_ext_version_t33ZES_OEM_SERIAL_ID_EXT_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_oem_serial_id_ext_version_t37ZES_OEM_SERIAL_ID_EXT_VERSION_CURRENTE">
+<span id="_CPPv3N31zes_oem_serial_id_ext_version_t37ZES_OEM_SERIAL_ID_EXT_VERSION_CURRENTE"></span><span id="_CPPv2N31zes_oem_serial_id_ext_version_t37ZES_OEM_SERIAL_ID_EXT_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1a9a16073d5566dad6c27bf2d1a74f1cc0a5c054a13bf76abf7eb0560148f8fd4b8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_OEM_SERIAL_ID_EXT_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N31zes_oem_serial_id_ext_version_t37ZES_OEM_SERIAL_ID_EXT_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_oem_serial_id_ext_version_t42ZES_OEM_SERIAL_ID_EXT_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N31zes_oem_serial_id_ext_version_t42ZES_OEM_SERIAL_ID_EXT_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N31zes_oem_serial_id_ext_version_t42ZES_OEM_SERIAL_ID_EXT_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a9a16073d5566dad6c27bf2d1a74f1cc0a92c2c682fd4c4d0007519ec0fb616b0f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_OEM_SERIAL_ID_EXT_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N31zes_oem_serial_id_ext_version_t42ZES_OEM_SERIAL_ID_EXT_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_OEM_SERIAL_ID_EXT_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-device-health-ext-version-t">
+<span id="id7"></span><h3>zes_device_health_ext_version_t<a class="headerlink" href="#zes-device-health-ext-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.18</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431zes_device_health_ext_version_t">
+<span id="_CPPv331zes_device_health_ext_version_t"></span><span id="_CPPv231zes_device_health_ext_version_t"></span><span class="target" id="zes__api_8h_1a28dba07edbf4ff47bd5b08eae3a48137"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_health_ext_version_t</span></span></span><a class="headerlink" href="#_CPPv431zes_device_health_ext_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device Health Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_device_health_ext_version_t33ZES_DEVICE_HEALTH_EXT_VERSION_1_0E">
+<span id="_CPPv3N31zes_device_health_ext_version_t33ZES_DEVICE_HEALTH_EXT_VERSION_1_0E"></span><span id="_CPPv2N31zes_device_health_ext_version_t33ZES_DEVICE_HEALTH_EXT_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1a28dba07edbf4ff47bd5b08eae3a48137a0bc1d5c6eb2a75f23205fb318cd705e9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_HEALTH_EXT_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N31zes_device_health_ext_version_t33ZES_DEVICE_HEALTH_EXT_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_device_health_ext_version_t37ZES_DEVICE_HEALTH_EXT_VERSION_CURRENTE">
+<span id="_CPPv3N31zes_device_health_ext_version_t37ZES_DEVICE_HEALTH_EXT_VERSION_CURRENTE"></span><span id="_CPPv2N31zes_device_health_ext_version_t37ZES_DEVICE_HEALTH_EXT_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1a28dba07edbf4ff47bd5b08eae3a48137a58a83947a39e7f71319bbb0bc8fd9951"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_HEALTH_EXT_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N31zes_device_health_ext_version_t37ZES_DEVICE_HEALTH_EXT_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31zes_device_health_ext_version_t42ZES_DEVICE_HEALTH_EXT_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N31zes_device_health_ext_version_t42ZES_DEVICE_HEALTH_EXT_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N31zes_device_health_ext_version_t42ZES_DEVICE_HEALTH_EXT_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a28dba07edbf4ff47bd5b08eae3a48137afb5018ce6b181e5d23b42f66edb6c0b8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_DEVICE_HEALTH_EXT_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N31zes_device_health_ext_version_t42ZES_DEVICE_HEALTH_EXT_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_DEVICE_HEALTH_EXT_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-memory-vendor-info-ext-version-t">
+<span id="id8"></span><h3>zes_memory_vendor_info_ext_version_t<a class="headerlink" href="#zes-memory-vendor-info-ext-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.18</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv436zes_memory_vendor_info_ext_version_t">
+<span id="_CPPv336zes_memory_vendor_info_ext_version_t"></span><span id="_CPPv236zes_memory_vendor_info_ext_version_t"></span><span class="target" id="zes__api_8h_1a1e11722c5163998f61ba266e08d83c78"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_memory_vendor_info_ext_version_t</span></span></span><a class="headerlink" href="#_CPPv436zes_memory_vendor_info_ext_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Memory Vendor Info Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N36zes_memory_vendor_info_ext_version_t38ZES_MEMORY_VENDOR_INFO_EXT_VERSION_1_0E">
+<span id="_CPPv3N36zes_memory_vendor_info_ext_version_t38ZES_MEMORY_VENDOR_INFO_EXT_VERSION_1_0E"></span><span id="_CPPv2N36zes_memory_vendor_info_ext_version_t38ZES_MEMORY_VENDOR_INFO_EXT_VERSION_1_0E"></span><span class="target" id="zes__api_8h_1a1e11722c5163998f61ba266e08d83c78a128431ee995d9b18ba446f189b2f692b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_MEMORY_VENDOR_INFO_EXT_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N36zes_memory_vendor_info_ext_version_t38ZES_MEMORY_VENDOR_INFO_EXT_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N36zes_memory_vendor_info_ext_version_t42ZES_MEMORY_VENDOR_INFO_EXT_VERSION_CURRENTE">
+<span id="_CPPv3N36zes_memory_vendor_info_ext_version_t42ZES_MEMORY_VENDOR_INFO_EXT_VERSION_CURRENTE"></span><span id="_CPPv2N36zes_memory_vendor_info_ext_version_t42ZES_MEMORY_VENDOR_INFO_EXT_VERSION_CURRENTE"></span><span class="target" id="zes__api_8h_1a1e11722c5163998f61ba266e08d83c78abf427f9a77197c23cf108a1a99e5bbee"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_MEMORY_VENDOR_INFO_EXT_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N36zes_memory_vendor_info_ext_version_t42ZES_MEMORY_VENDOR_INFO_EXT_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N36zes_memory_vendor_info_ext_version_t47ZES_MEMORY_VENDOR_INFO_EXT_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N36zes_memory_vendor_info_ext_version_t47ZES_MEMORY_VENDOR_INFO_EXT_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N36zes_memory_vendor_info_ext_version_t47ZES_MEMORY_VENDOR_INFO_EXT_VERSION_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a1e11722c5163998f61ba266e08d83c78a4220ee4340d70266fe46b2de537aa80e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_MEMORY_VENDOR_INFO_EXT_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N36zes_memory_vendor_info_ext_version_t47ZES_MEMORY_VENDOR_INFO_EXT_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_MEMORY_VENDOR_INFO_EXT_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="engine.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Engine - Extensions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../experimental/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Experimental</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">8</span></summary><ul class="ctoc-list"><li><a href="data_types.html#zes-power-limits-ext-version-t">zes_power_limits_ext_version_t</a></li><li><a href="data_types.html#zes-engine-activity-ext-version-t">zes_engine_activity_ext_version_t</a></li><li><a href="data_types.html#zes-device-ecc-default-properties-ext-version-t">zes_device_ecc_default_properties_ext_version_t</a></li><li><a href="data_types.html#zes-pci-link-speed-downgrade-ext-version-t">zes_pci_link_speed_downgrade_ext_version_t</a></li><li><a href="data_types.html#zes-device-ext-state-version-t">zes_device_ext_state_version_t</a></li><li><a href="data_types.html#zes-oem-serial-id-ext-version-t">zes_oem_serial_id_ext_version_t</a></li><li><a href="data_types.html#zes-device-health-ext-version-t">zes_device_health_ext_version_t</a></li><li><a href="data_types.html#zes-memory-vendor-info-ext-version-t">zes_memory_vendor_info_ext_version_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

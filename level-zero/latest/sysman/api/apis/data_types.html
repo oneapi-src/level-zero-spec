@@ -1,0 +1,1215 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data Types &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/data_types';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Extensions" href="../extensions/index.html" />
+    <link rel="prev" title="Temperature" href="temperature.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/apis/data_types.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Data Types</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types-enums">Data Types Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-structure-type-t">zes_structure_type_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zes_structure_type_t"><code class="docutils literal notranslate"><span class="pre">zes_structure_type_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_DEVICE_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PCI_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PCI_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DIAG_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DIAG_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_ENGINE_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_ENGINE_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t41ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_FAN_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FAN_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_FIRMWARE_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FIRMWARE_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_FREQ_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FREQ_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_LED_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_LED_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_MEM_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_MEM_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_PERF_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PERF_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_POWER_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_POWER_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PSU_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PSU_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_RAS_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_SCHED_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_SCHED_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SCHED_TIMEOUT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_SCHED_TIMEOUT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t45ZES_STRUCTURE_TYPE_SCHED_TIMESLICE_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_SCHED_TIMESLICE_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_STANDBY_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_STANDBY_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_TEMP_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_TEMP_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t31ZES_STRUCTURE_TYPE_DEVICE_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t32ZES_STRUCTURE_TYPE_PROCESS_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PROCESS_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PCI_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PCI_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_FABRIC_PORT_CONFIGE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_CONFIG</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_FABRIC_PORT_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FAN_CONFIGE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FAN_CONFIG</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FREQ_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FREQ_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_OC_CAPABILITIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_OC_CAPABILITIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_LED_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_LED_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_MEM_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_MEM_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PSU_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PSU_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_BASE_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_BASE_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_RAS_CONFIGE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_RAS_CONFIG</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_RAS_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_RAS_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t30ZES_STRUCTURE_TYPE_TEMP_CONFIGE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_TEMP_CONFIG</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t41ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2E"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DEVICE_ECC_DESCE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_ECC_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_ECC_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_ECC_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_LIMIT_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_POWER_LIMIT_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_POWER_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_OVERCLOCK_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_OVERCLOCK_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t45ZES_STRUCTURE_TYPE_FABRIC_PORT_ERROR_COUNTERSE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_ERROR_COUNTERS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_ENGINE_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_ENGINE_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_RESET_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_RESET_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t30ZES_STRUCTURE_TYPE_DEVICE_UUIDE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_UUID</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t46ZES_STRUCTURE_TYPE_POWER_DOMAIN_EXP_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_POWER_DOMAIN_EXP_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t60ZES_STRUCTURE_TYPE_MEM_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_MEM_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t48ZES_STRUCTURE_TYPE_MEMORY_PAGE_OFFLINE_STATE_EXPE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_MEMORY_PAGE_OFFLINE_STATE_EXP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SUBDEVICE_EXP_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_SUBDEVICE_EXP_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_VF_EXP_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_VF_EXP_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXPE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXPE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_EXP_CAPABILITIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_VF_EXP_CAPABILITIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP2E"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP2</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP2E"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP2</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_VF_EXP2_CAPABILITIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_VF_EXP2_CAPABILITIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t52ZES_STRUCTURE_TYPE_DEVICE_ECC_DEFAULT_PROPERTIES_EXTE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_ECC_DEFAULT_PROPERTIES_EXT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t53ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t58ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_STATE_EXP2E"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_RAS_STATE_EXP2</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_CONFIG_EXPE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_RAS_CONFIG_EXP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t47ZES_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_DEVICE_EXT_STATEE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_EXT_STATE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t52ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_structure_type_t31ZES_STRUCTURE_TYPE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_STRUCTURE_TYPE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types-structures">Data Types Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-base-properties-t">zes_base_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zes_base_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_base_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_base_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_base_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-base-desc-t">zes_base_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415zes_base_desc_t"><code class="docutils literal notranslate"><span class="pre">zes_base_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15zes_base_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15zes_base_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-base-state-t">zes_base_state_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416zes_base_state_t"><code class="docutils literal notranslate"><span class="pre">zes_base_state_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16zes_base_state_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N16zes_base_state_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-base-config-t">zes_base_config_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zes_base_config_t"><code class="docutils literal notranslate"><span class="pre">zes_base_config_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_base_config_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zes_base_config_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-base-capability-t">zes_base_capability_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zes_base_capability_t"><code class="docutils literal notranslate"><span class="pre">zes_base_capability_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_base_capability_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21zes_base_capability_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="data-types">
+<h1>Data Types<a class="headerlink" href="#data-types" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="data-types-enums">
+<h2>Data Types Enums<a class="headerlink" href="#data-types-enums" title="Link to this heading">#</a></h2>
+<section id="zes-structure-type-t">
+<span id="id1"></span><h3>zes_structure_type_t<a class="headerlink" href="#zes-structure-type-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv420zes_structure_type_t">
+<span id="_CPPv320zes_structure_type_t"></span><span id="_CPPv220zes_structure_type_t"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_structure_type_t</span></span></span><a class="headerlink" href="#_CPPv420zes_structure_type_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Defines structure types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_DEVICE_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t36ZES_STRUCTURE_TYPE_DEVICE_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t36ZES_STRUCTURE_TYPE_DEVICE_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230aa85d615cc8a67936d89ac31dbad9f2b6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_DEVICE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__device__properties__t"><span class="std std-ref">zes_device_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PCI_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PCI_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PCI_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ad291106075514023787384c467eb8b4e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PCI_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PCI_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__pci__properties__t"><span class="std std-ref">zes_pci_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t37ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t37ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a6f7413227f670d58df349fbecd5e8acd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__pci__bar__properties__t"><span class="std std-ref">zes_pci_bar_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DIAG_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DIAG_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DIAG_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a70eee91ed24d3e4e13089c4a3648e9e3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DIAG_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DIAG_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="diagnostics.html#structzes__diag__properties__t"><span class="std std-ref">zes_diag_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_ENGINE_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t36ZES_STRUCTURE_TYPE_ENGINE_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t36ZES_STRUCTURE_TYPE_ENGINE_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ab86174551121fe196dbeba6df17e87cf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_ENGINE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_ENGINE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="engine.html#structzes__engine__properties__t"><span class="std std-ref">zes_engine_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t41ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t41ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t41ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a21c3349aa4bd4082c90aac18067cc91a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t41ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="fabric_port.html#structzes__fabric__port__properties__t"><span class="std std-ref">zes_fabric_port_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_FAN_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_FAN_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_FAN_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a6e2a9438111f2597bebdfb25c9ae3665"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FAN_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_FAN_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="fan.html#structzes__fan__properties__t"><span class="std std-ref">zes_fan_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_FIRMWARE_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t38ZES_STRUCTURE_TYPE_FIRMWARE_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t38ZES_STRUCTURE_TYPE_FIRMWARE_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a730d953de1bdcc96746e4c8e882f6b17"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FIRMWARE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_FIRMWARE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="firmware.html#structzes__firmware__properties__t"><span class="std std-ref">zes_firmware_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_FREQ_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t34ZES_STRUCTURE_TYPE_FREQ_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t34ZES_STRUCTURE_TYPE_FREQ_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ab7c4a28316b95180a3416ac64a297f1e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FREQ_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_FREQ_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="frequency.html#structzes__freq__properties__t"><span class="std std-ref">zes_freq_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_LED_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_LED_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_LED_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a8eabd9121f0754cc4410186ce5fe7a98"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_LED_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_LED_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="led.html#structzes__led__properties__t"><span class="std std-ref">zes_led_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_MEM_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_MEM_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_MEM_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a2a299e572539df229c6ce4f3bb344692"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_MEM_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_MEM_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="memory.html#structzes__mem__properties__t"><span class="std std-ref">zes_mem_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_PERF_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t34ZES_STRUCTURE_TYPE_PERF_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t34ZES_STRUCTURE_TYPE_PERF_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a01230b1691f0c78f2e1c9ab4239b9fbe"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PERF_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_PERF_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="performance_factor.html#structzes__perf__properties__t"><span class="std std-ref">zes_perf_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_POWER_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t35ZES_STRUCTURE_TYPE_POWER_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t35ZES_STRUCTURE_TYPE_POWER_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a3ad22743169ef800f33aee81c7b7c89b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_POWER_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_POWER_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="power.html#structzes__power__properties__t"><span class="std std-ref">zes_power_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PSU_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PSU_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PSU_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ac81339cf4335425fed73ce3af39b9e0c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PSU_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_PSU_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="psu.html#structzes__psu__properties__t"><span class="std std-ref">zes_psu_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a969b66e19752540827ce18c9ded0c7ff"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_RAS_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="ras.html#structzes__ras__properties__t"><span class="std std-ref">zes_ras_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_SCHED_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t35ZES_STRUCTURE_TYPE_SCHED_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t35ZES_STRUCTURE_TYPE_SCHED_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a6273b51636f6b3489c57d0b9d0c2528f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_SCHED_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_SCHED_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="scheduler.html#structzes__sched__properties__t"><span class="std std-ref">zes_sched_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SCHED_TIMEOUT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SCHED_TIMEOUT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SCHED_TIMEOUT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ae751a2c70723c40711464754a3c78caf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_SCHED_TIMEOUT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SCHED_TIMEOUT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__sched__timeout__properties__t"><span class="std std-ref">zes_sched_timeout_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t45ZES_STRUCTURE_TYPE_SCHED_TIMESLICE_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t45ZES_STRUCTURE_TYPE_SCHED_TIMESLICE_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t45ZES_STRUCTURE_TYPE_SCHED_TIMESLICE_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a9e812e907274d0a615d83c9a73064437"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_SCHED_TIMESLICE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t45ZES_STRUCTURE_TYPE_SCHED_TIMESLICE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__sched__timeslice__properties__t"><span class="std std-ref">zes_sched_timeslice_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_STANDBY_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t37ZES_STRUCTURE_TYPE_STANDBY_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t37ZES_STRUCTURE_TYPE_STANDBY_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ac86c3165d23f86ed848dc33c91062f7f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_STANDBY_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_STANDBY_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="standby.html#structzes__standby__properties__t"><span class="std std-ref">zes_standby_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_TEMP_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t34ZES_STRUCTURE_TYPE_TEMP_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t34ZES_STRUCTURE_TYPE_TEMP_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a62d0604337fdae92e6f664ef3e5e8e9d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_TEMP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_TEMP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="temperature.html#structzes__temp__properties__t"><span class="std std-ref">zes_temp_properties_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t31ZES_STRUCTURE_TYPE_DEVICE_STATEE">
+<span id="_CPPv3N20zes_structure_type_t31ZES_STRUCTURE_TYPE_DEVICE_STATEE"></span><span id="_CPPv2N20zes_structure_type_t31ZES_STRUCTURE_TYPE_DEVICE_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ad2d1b9cf66b23ec9f2f86a9d06f5751d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t31ZES_STRUCTURE_TYPE_DEVICE_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__device__state__t"><span class="std std-ref">zes_device_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t32ZES_STRUCTURE_TYPE_PROCESS_STATEE">
+<span id="_CPPv3N20zes_structure_type_t32ZES_STRUCTURE_TYPE_PROCESS_STATEE"></span><span id="_CPPv2N20zes_structure_type_t32ZES_STRUCTURE_TYPE_PROCESS_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ad5c25057a592c343e514dd51ca0bb62c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PROCESS_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t32ZES_STRUCTURE_TYPE_PROCESS_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__process__state__t"><span class="std std-ref">zes_process_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PCI_STATEE">
+<span id="_CPPv3N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PCI_STATEE"></span><span id="_CPPv2N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PCI_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a0156166427209cdf549be2bce2045380"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PCI_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PCI_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__pci__state__t"><span class="std std-ref">zes_pci_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_FABRIC_PORT_CONFIGE">
+<span id="_CPPv3N20zes_structure_type_t37ZES_STRUCTURE_TYPE_FABRIC_PORT_CONFIGE"></span><span id="_CPPv2N20zes_structure_type_t37ZES_STRUCTURE_TYPE_FABRIC_PORT_CONFIGE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230abcb6f4e52d8860e908b01e0a92011a60"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_CONFIG</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_FABRIC_PORT_CONFIGE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="fabric_port.html#structzes__fabric__port__config__t"><span class="std std-ref">zes_fabric_port_config_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_FABRIC_PORT_STATEE">
+<span id="_CPPv3N20zes_structure_type_t36ZES_STRUCTURE_TYPE_FABRIC_PORT_STATEE"></span><span id="_CPPv2N20zes_structure_type_t36ZES_STRUCTURE_TYPE_FABRIC_PORT_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a89cdb85a311851b446d2f4854e15cc64"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_FABRIC_PORT_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="fabric_port.html#structzes__fabric__port__state__t"><span class="std std-ref">zes_fabric_port_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FAN_CONFIGE">
+<span id="_CPPv3N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FAN_CONFIGE"></span><span id="_CPPv2N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FAN_CONFIGE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a515d05d3d71b4fa58fac782e7ba0a683"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FAN_CONFIG</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FAN_CONFIGE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="fan.html#structzes__fan__config__t"><span class="std std-ref">zes_fan_config_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FREQ_STATEE">
+<span id="_CPPv3N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FREQ_STATEE"></span><span id="_CPPv2N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FREQ_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230aa592e4fc00b2dbfa12937901a3490324"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FREQ_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_FREQ_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="frequency.html#structzes__freq__state__t"><span class="std std-ref">zes_freq_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_OC_CAPABILITIESE">
+<span id="_CPPv3N20zes_structure_type_t34ZES_STRUCTURE_TYPE_OC_CAPABILITIESE"></span><span id="_CPPv2N20zes_structure_type_t34ZES_STRUCTURE_TYPE_OC_CAPABILITIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a202c6ba32b8a67136f1f4819caf59cf1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_OC_CAPABILITIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_OC_CAPABILITIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="frequency.html#structzes__oc__capabilities__t"><span class="std std-ref">zes_oc_capabilities_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_LED_STATEE">
+<span id="_CPPv3N20zes_structure_type_t28ZES_STRUCTURE_TYPE_LED_STATEE"></span><span id="_CPPv2N20zes_structure_type_t28ZES_STRUCTURE_TYPE_LED_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a604f72e2715c474cd5d00b2ce66f9ec6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_LED_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_LED_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="led.html#structzes__led__state__t"><span class="std std-ref">zes_led_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_MEM_STATEE">
+<span id="_CPPv3N20zes_structure_type_t28ZES_STRUCTURE_TYPE_MEM_STATEE"></span><span id="_CPPv2N20zes_structure_type_t28ZES_STRUCTURE_TYPE_MEM_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a194c5d014d5c9cdf56ac5fcf51023884"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_MEM_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_MEM_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="memory.html#structzes__mem__state__t"><span class="std std-ref">zes_mem_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PSU_STATEE">
+<span id="_CPPv3N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PSU_STATEE"></span><span id="_CPPv2N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PSU_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ad1ce9fbc8a0f2794da6770ec131bdd19"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PSU_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_PSU_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="psu.html#structzes__psu__state__t"><span class="std std-ref">zes_psu_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_BASE_STATEE">
+<span id="_CPPv3N20zes_structure_type_t29ZES_STRUCTURE_TYPE_BASE_STATEE"></span><span id="_CPPv2N20zes_structure_type_t29ZES_STRUCTURE_TYPE_BASE_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a6b45c12dea888d96fa8fec66e832f384"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_BASE_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_BASE_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="#structzes__base__state__t"><span class="std std-ref">zes_base_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_RAS_CONFIGE">
+<span id="_CPPv3N20zes_structure_type_t29ZES_STRUCTURE_TYPE_RAS_CONFIGE"></span><span id="_CPPv2N20zes_structure_type_t29ZES_STRUCTURE_TYPE_RAS_CONFIGE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230af9b270b37a3b8c84d0a7dea41adc2388"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_RAS_CONFIG</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t29ZES_STRUCTURE_TYPE_RAS_CONFIGE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="ras.html#structzes__ras__config__t"><span class="std std-ref">zes_ras_config_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_RAS_STATEE">
+<span id="_CPPv3N20zes_structure_type_t28ZES_STRUCTURE_TYPE_RAS_STATEE"></span><span id="_CPPv2N20zes_structure_type_t28ZES_STRUCTURE_TYPE_RAS_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230acf109a75125180fb14ebee8aafdc16c6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_RAS_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t28ZES_STRUCTURE_TYPE_RAS_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="ras.html#structzes__ras__state__t"><span class="std std-ref">zes_ras_state_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t30ZES_STRUCTURE_TYPE_TEMP_CONFIGE">
+<span id="_CPPv3N20zes_structure_type_t30ZES_STRUCTURE_TYPE_TEMP_CONFIGE"></span><span id="_CPPv2N20zes_structure_type_t30ZES_STRUCTURE_TYPE_TEMP_CONFIGE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a31cb94f7d5fbcbee45b5a037a023a531"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_TEMP_CONFIG</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t30ZES_STRUCTURE_TYPE_TEMP_CONFIGE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="temperature.html#structzes__temp__config__t"><span class="std std-ref">zes_temp_config_t</span></a></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t41ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2E">
+<span id="_CPPv3N20zes_structure_type_t41ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2E"></span><span id="_CPPv2N20zes_structure_type_t41ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2E"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a228aebea885fde6c1a9b9bb0d68724ca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t41ZES_STRUCTURE_TYPE_PCI_BAR_PROPERTIES_1_2E" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__pci__bar__properties__1__2__t"><span class="std std-ref">zes_pci_bar_properties_1_2_t</span></a><em class="since-note"> (since v1.2)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DEVICE_ECC_DESCE">
+<span id="_CPPv3N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DEVICE_ECC_DESCE"></span><span id="_CPPv2N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DEVICE_ECC_DESCE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a07c7c887833072907a128374d98f6e87"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_ECC_DESC</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_DEVICE_ECC_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__device__ecc__desc__t"><span class="std std-ref">zes_device_ecc_desc_t</span></a><em class="since-note"> (since v1.4)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_ECC_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_ECC_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_ECC_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a0c5483341bce0a5ec311871a8249aa17"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_ECC_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_ECC_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__device__ecc__properties__t"><span class="std std-ref">zes_device_ecc_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_LIMIT_EXT_DESCE">
+<span id="_CPPv3N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_LIMIT_EXT_DESCE"></span><span id="_CPPv2N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_LIMIT_EXT_DESCE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ad68b81502e73626b4977d8a0763bbdb1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_POWER_LIMIT_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_LIMIT_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/power.html#structzes__power__limit__ext__desc__t"><span class="std std-ref">zes_power_limit_ext_desc_t</span></a><em class="since-note"> (since v1.4)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_EXT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_EXT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_EXT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a23af5c3a09d6f7b4ce6739ae835a8601"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_POWER_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_POWER_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/power.html#structzes__power__ext__properties__t"><span class="std std-ref">zes_power_ext_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_OVERCLOCK_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t39ZES_STRUCTURE_TYPE_OVERCLOCK_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t39ZES_STRUCTURE_TYPE_OVERCLOCK_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230aa509d064c3894096c00efe0c0d424912"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_OVERCLOCK_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_OVERCLOCK_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="overclock.html#structzes__overclock__properties__t"><span class="std std-ref">zes_overclock_properties_t</span></a><em class="since-note"> (since v1.5)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t45ZES_STRUCTURE_TYPE_FABRIC_PORT_ERROR_COUNTERSE">
+<span id="_CPPv3N20zes_structure_type_t45ZES_STRUCTURE_TYPE_FABRIC_PORT_ERROR_COUNTERSE"></span><span id="_CPPv2N20zes_structure_type_t45ZES_STRUCTURE_TYPE_FABRIC_PORT_ERROR_COUNTERSE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a9833a6c1178c932722184274b33866bb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FABRIC_PORT_ERROR_COUNTERS</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t45ZES_STRUCTURE_TYPE_FABRIC_PORT_ERROR_COUNTERSE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="fabric_port.html#structzes__fabric__port__error__counters__t"><span class="std std-ref">zes_fabric_port_error_counters_t</span></a><em class="since-note"> (since v1.7)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_ENGINE_EXT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t40ZES_STRUCTURE_TYPE_ENGINE_EXT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t40ZES_STRUCTURE_TYPE_ENGINE_EXT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a88fa444e4b9c26b7e35ec4dd7beea2e2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_ENGINE_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_ENGINE_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/engine.html#structzes__engine__ext__properties__t"><span class="std std-ref">zes_engine_ext_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_RESET_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t35ZES_STRUCTURE_TYPE_RESET_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t35ZES_STRUCTURE_TYPE_RESET_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a9d29c333bedc6f50f681cd7b3295e99a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_RESET_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_RESET_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__reset__properties__t"><span class="std std-ref">zes_reset_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ac74efb5dd4a190c2cdcfd02de3dc9531"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t40ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/device.html#structzes__device__ext__properties__t"><span class="std std-ref">zes_device_ext_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t30ZES_STRUCTURE_TYPE_DEVICE_UUIDE">
+<span id="_CPPv3N20zes_structure_type_t30ZES_STRUCTURE_TYPE_DEVICE_UUIDE"></span><span id="_CPPv2N20zes_structure_type_t30ZES_STRUCTURE_TYPE_DEVICE_UUIDE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a0de49dbe1936f671c43b0e3120e707e5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_UUID</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t30ZES_STRUCTURE_TYPE_DEVICE_UUIDE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="device-2.html#structzes__uuid__t"><span class="std std-ref">zes_uuid_t</span></a><em class="since-note"> (since v1.7)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t46ZES_STRUCTURE_TYPE_POWER_DOMAIN_EXP_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t46ZES_STRUCTURE_TYPE_POWER_DOMAIN_EXP_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t46ZES_STRUCTURE_TYPE_POWER_DOMAIN_EXP_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a3cf9d0b1aa7edc2471d1c72347a91f42"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_POWER_DOMAIN_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t46ZES_STRUCTURE_TYPE_POWER_DOMAIN_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/power.html#structzes__power__domain__exp__properties__t"><span class="std std-ref">zes_power_domain_exp_properties_t</span></a><em class="since-note"> (since v1.8)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t60ZES_STRUCTURE_TYPE_MEM_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t60ZES_STRUCTURE_TYPE_MEM_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t60ZES_STRUCTURE_TYPE_MEM_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ae176d769e8d0ee3f38442cecd0466259"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_MEM_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t60ZES_STRUCTURE_TYPE_MEM_BANDWIDTH_COUNTER_BITS_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/memory.html#structzes__mem__bandwidth__counter__bits__exp__properties__t"><span class="std std-ref">zes_mem_bandwidth_counter_bits_exp_properties_t</span></a><em class="since-note"> (since v1.8)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t48ZES_STRUCTURE_TYPE_MEMORY_PAGE_OFFLINE_STATE_EXPE">
+<span id="_CPPv3N20zes_structure_type_t48ZES_STRUCTURE_TYPE_MEMORY_PAGE_OFFLINE_STATE_EXPE"></span><span id="_CPPv2N20zes_structure_type_t48ZES_STRUCTURE_TYPE_MEMORY_PAGE_OFFLINE_STATE_EXPE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230afd8f5f773453cd711b44217df9554e0d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_MEMORY_PAGE_OFFLINE_STATE_EXP</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t48ZES_STRUCTURE_TYPE_MEMORY_PAGE_OFFLINE_STATE_EXPE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/memory.html#structzes__mem__page__offline__state__exp__t"><span class="std std-ref">zes_mem_page_offline_state_exp_t</span></a><em class="since-note"> (since v1.8)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SUBDEVICE_EXP_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SUBDEVICE_EXP_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SUBDEVICE_EXP_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a4b6dad13dfee9f2afa2af954a9a62ba1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_SUBDEVICE_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t43ZES_STRUCTURE_TYPE_SUBDEVICE_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/device.html#structzes__subdevice__exp__properties__t"><span class="std std-ref">zes_subdevice_exp_properties_t</span></a><em class="since-note"> (since v1.9)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_VF_EXP_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t36ZES_STRUCTURE_TYPE_VF_EXP_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t36ZES_STRUCTURE_TYPE_VF_EXP_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230acd1f1b8e13bafacbc088a1d2c01525fc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_VF_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t36ZES_STRUCTURE_TYPE_VF_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/vf_management.html#structzes__vf__exp__properties__t"><span class="std std-ref">zes_vf_exp_properties_t</span></a><em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXPE">
+<span id="_CPPv3N20zes_structure_type_t34ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXPE"></span><span id="_CPPv2N20zes_structure_type_t34ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXPE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230af224996b53eb56d2b7da9452830ee3c2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t34ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXPE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/vf_management.html#structzes__vf__util__mem__exp__t"><span class="std std-ref">zes_vf_util_mem_exp_t</span></a><em class="since-note"> (since v1.9)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXPE">
+<span id="_CPPv3N20zes_structure_type_t37ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXPE"></span><span id="_CPPv2N20zes_structure_type_t37ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXPE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a8fca3a26757038769c2aa37cf06eaca4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t37ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXPE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/vf_management.html#structzes__vf__util__engine__exp__t"><span class="std std-ref">zes_vf_util_engine_exp_t</span></a><em class="since-note"> (since v1.9)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_EXP_CAPABILITIESE">
+<span id="_CPPv3N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_EXP_CAPABILITIESE"></span><span id="_CPPv2N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_EXP_CAPABILITIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a40fe5146e8b32328e2c63d4bd346cdac"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_VF_EXP_CAPABILITIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_EXP_CAPABILITIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/vf_management.html#structzes__vf__exp__capabilities__t"><span class="std std-ref">zes_vf_exp_capabilities_t</span></a><em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP2E">
+<span id="_CPPv3N20zes_structure_type_t35ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP2E"></span><span id="_CPPv2N20zes_structure_type_t35ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP2E"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a567586193b1d14644dec9ea1a1de8866"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP2</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_VF_UTIL_MEM_EXP2E" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/vf_management.html#structzes__vf__util__mem__exp2__t"><span class="std std-ref">zes_vf_util_mem_exp2_t</span></a><em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP2E">
+<span id="_CPPv3N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP2E"></span><span id="_CPPv2N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP2E"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a06696dc365f04614f547365c2d4ea197"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP2</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t38ZES_STRUCTURE_TYPE_VF_UTIL_ENGINE_EXP2E" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/vf_management.html#structzes__vf__util__engine__exp2__t"><span class="std std-ref">zes_vf_util_engine_exp2_t</span></a><em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_VF_EXP2_CAPABILITIESE">
+<span id="_CPPv3N20zes_structure_type_t39ZES_STRUCTURE_TYPE_VF_EXP2_CAPABILITIESE"></span><span id="_CPPv2N20zes_structure_type_t39ZES_STRUCTURE_TYPE_VF_EXP2_CAPABILITIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a5e2fdc5fbbfb0e3ec38b44c21a826378"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_VF_EXP2_CAPABILITIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t39ZES_STRUCTURE_TYPE_VF_EXP2_CAPABILITIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/vf_management.html#structzes__vf__exp2__capabilities__t"><span class="std std-ref">zes_vf_exp2_capabilities_t</span></a><em class="since-note"> (since v1.12)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t52ZES_STRUCTURE_TYPE_DEVICE_ECC_DEFAULT_PROPERTIES_EXTE">
+<span id="_CPPv3N20zes_structure_type_t52ZES_STRUCTURE_TYPE_DEVICE_ECC_DEFAULT_PROPERTIES_EXTE"></span><span id="_CPPv2N20zes_structure_type_t52ZES_STRUCTURE_TYPE_DEVICE_ECC_DEFAULT_PROPERTIES_EXTE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a1ab110fdf4cf6d2f1286e7db0f7a7fa7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_ECC_DEFAULT_PROPERTIES_EXT</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t52ZES_STRUCTURE_TYPE_DEVICE_ECC_DEFAULT_PROPERTIES_EXTE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/device.html#structzes__device__ecc__default__properties__ext__t"><span class="std std-ref">zes_device_ecc_default_properties_ext_t</span></a><em class="since-note"> (since v1.13)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t53ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATEE">
+<span id="_CPPv3N20zes_structure_type_t53ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATEE"></span><span id="_CPPv2N20zes_structure_type_t53ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a99469e3abba1545c0f7d96e494eae8a8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t53ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/device.html#structzes__pci__link__speed__downgrade__ext__state__t"><span class="std std-ref">zes_pci_link_speed_downgrade_ext_state_t</span></a><em class="since-note"> (since v1.15)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t58ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t58ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t58ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a1467aa37b9ffeba0ac4ad602063459a0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t58ZES_STRUCTURE_TYPE_PCI_LINK_SPEED_DOWNGRADE_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/device.html#structzes__pci__link__speed__downgrade__ext__properties__t"><span class="std std-ref">zes_pci_link_speed_downgrade_ext_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_STATE_EXP2E">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_STATE_EXP2E"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_STATE_EXP2E"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a0207e43b99a5367b02c6ef65c276c7ef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_RAS_STATE_EXP2</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_STATE_EXP2E" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/ras.html#structzes__ras__state__exp2__t"><span class="std std-ref">zes_ras_state_exp2_t</span></a><em class="since-note"> (since v1.16)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_CONFIG_EXPE">
+<span id="_CPPv3N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_CONFIG_EXPE"></span><span id="_CPPv2N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_CONFIG_EXPE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230ae3d0c8597e19741177f93f5f7a782587"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_RAS_CONFIG_EXP</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t33ZES_STRUCTURE_TYPE_RAS_CONFIG_EXPE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../experimental/ras.html#structzes__ras__config__exp__t"><span class="std std-ref">zes_ras_config_exp_t</span></a><em class="since-note"> (since v1.16)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t47ZES_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t47ZES_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t47ZES_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a50172035503bb296341f6037425648b6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t47ZES_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/device.html#structzes__oem__serial__id__ext__properties__t"><span class="std std-ref">zes_oem_serial_id_ext_properties_t</span></a><em class="since-note"> (since v1.17)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_DEVICE_EXT_STATEE">
+<span id="_CPPv3N20zes_structure_type_t35ZES_STRUCTURE_TYPE_DEVICE_EXT_STATEE"></span><span id="_CPPv2N20zes_structure_type_t35ZES_STRUCTURE_TYPE_DEVICE_EXT_STATEE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a59e58020c4b53ab554fc68f3154eb6b7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_DEVICE_EXT_STATE</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t35ZES_STRUCTURE_TYPE_DEVICE_EXT_STATEE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/device.html#structzes__device__ext__state__t"><span class="std std-ref">zes_device_ext_state_t</span></a><em class="since-note"> (since v1.17)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t52ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIESE">
+<span id="_CPPv3N20zes_structure_type_t52ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIESE"></span><span id="_CPPv2N20zes_structure_type_t52ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIESE"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230aeecb3b85b3fd2678804ebfe85d2dca13"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t52ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/memory.html#structzes__memory__vendor__info__ext__properties__t"><span class="std std-ref">zes_memory_vendor_info_ext_properties_t</span></a><em class="since-note"> (since v1.18)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_structure_type_t31ZES_STRUCTURE_TYPE_FORCE_UINT32E">
+<span id="_CPPv3N20zes_structure_type_t31ZES_STRUCTURE_TYPE_FORCE_UINT32E"></span><span id="_CPPv2N20zes_structure_type_t31ZES_STRUCTURE_TYPE_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a8644a53138705035ee08f86fe407f230a8a4d50f344d4dc2ab65d3671e9801ed7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_STRUCTURE_TYPE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N20zes_structure_type_t31ZES_STRUCTURE_TYPE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_STRUCTURE_TYPE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="data-types-structures">
+<h2>Data Types Structures<a class="headerlink" href="#data-types-structures" title="Link to this heading">#</a></h2>
+<section id="zes-base-properties-t">
+<span id="id2"></span><h3>zes_base_properties_t<a class="headerlink" href="#zes-base-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421zes_base_properties_t">
+<span id="_CPPv321zes_base_properties_t"></span><span id="_CPPv221zes_base_properties_t"></span><span id="zes_base_properties_t"></span><span class="target" id="structzes__base__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_base_properties_t</span></span></span><a class="headerlink" href="#_CPPv421zes_base_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Base for all properties types. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_base_properties_t5stypeE">
+<span id="_CPPv3N21zes_base_properties_t5stypeE"></span><span id="_CPPv2N21zes_base_properties_t5stypeE"></span><span id="zes_base_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__base__properties__t_1abbbc2a896f55809bc16b02796d2404bd"></span><a class="reference internal" href="#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N21zes_base_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_base_properties_t5pNextE">
+<span id="_CPPv3N21zes_base_properties_t5pNextE"></span><span id="_CPPv2N21zes_base_properties_t5pNextE"></span><span id="zes_base_properties_t::pNext__voidP"></span><span class="target" id="structzes__base__properties__t_1a37a3d79afdb3639b9659a7c7c483522d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N21zes_base_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-base-desc-t">
+<span id="id3"></span><h3>zes_base_desc_t<a class="headerlink" href="#zes-base-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv415zes_base_desc_t">
+<span id="_CPPv315zes_base_desc_t"></span><span id="_CPPv215zes_base_desc_t"></span><span id="zes_base_desc_t"></span><span class="target" id="structzes__base__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_base_desc_t</span></span></span><a class="headerlink" href="#_CPPv415zes_base_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Base for all descriptor types. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15zes_base_desc_t5stypeE">
+<span id="_CPPv3N15zes_base_desc_t5stypeE"></span><span id="_CPPv2N15zes_base_desc_t5stypeE"></span><span id="zes_base_desc_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__base__desc__t_1a9d48ff99fcb428e593a501f7732066b9"></span><a class="reference internal" href="#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N15zes_base_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15zes_base_desc_t5pNextE">
+<span id="_CPPv3N15zes_base_desc_t5pNextE"></span><span id="_CPPv2N15zes_base_desc_t5pNextE"></span><span id="zes_base_desc_t::pNext__voidCP"></span><span class="target" id="structzes__base__desc__t_1aa747b08e9db7182fde6567d2a10d12cf"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N15zes_base_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-base-state-t">
+<span id="id4"></span><h3>zes_base_state_t<a class="headerlink" href="#zes-base-state-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv416zes_base_state_t">
+<span id="_CPPv316zes_base_state_t"></span><span id="_CPPv216zes_base_state_t"></span><span id="zes_base_state_t"></span><span class="target" id="structzes__base__state__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_base_state_t</span></span></span><a class="headerlink" href="#_CPPv416zes_base_state_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Base for all state types. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16zes_base_state_t5stypeE">
+<span id="_CPPv3N16zes_base_state_t5stypeE"></span><span id="_CPPv2N16zes_base_state_t5stypeE"></span><span id="zes_base_state_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__base__state__t_1ab912dbcfde1d235f5f7553b40ec88904"></span><a class="reference internal" href="#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N16zes_base_state_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16zes_base_state_t5pNextE">
+<span id="_CPPv3N16zes_base_state_t5pNextE"></span><span id="_CPPv2N16zes_base_state_t5pNextE"></span><span id="zes_base_state_t::pNext__voidCP"></span><span class="target" id="structzes__base__state__t_1a63130dede22d85d57bbc218d7192d0b8"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N16zes_base_state_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-base-config-t">
+<span id="id5"></span><h3>zes_base_config_t<a class="headerlink" href="#zes-base-config-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv417zes_base_config_t">
+<span id="_CPPv317zes_base_config_t"></span><span id="_CPPv217zes_base_config_t"></span><span id="zes_base_config_t"></span><span class="target" id="structzes__base__config__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_base_config_t</span></span></span><a class="headerlink" href="#_CPPv417zes_base_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Base for all config types. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_base_config_t5stypeE">
+<span id="_CPPv3N17zes_base_config_t5stypeE"></span><span id="_CPPv2N17zes_base_config_t5stypeE"></span><span id="zes_base_config_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__base__config__t_1a408ef99f62a085cf79bf8c79a2271175"></span><a class="reference internal" href="#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N17zes_base_config_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17zes_base_config_t5pNextE">
+<span id="_CPPv3N17zes_base_config_t5pNextE"></span><span id="_CPPv2N17zes_base_config_t5pNextE"></span><span id="zes_base_config_t::pNext__voidCP"></span><span class="target" id="structzes__base__config__t_1a21375caf41b8824d50ae6ed779332601"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N17zes_base_config_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-base-capability-t">
+<span id="id6"></span><h3>zes_base_capability_t<a class="headerlink" href="#zes-base-capability-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421zes_base_capability_t">
+<span id="_CPPv321zes_base_capability_t"></span><span id="_CPPv221zes_base_capability_t"></span><span id="zes_base_capability_t"></span><span class="target" id="structzes__base__capability__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_base_capability_t</span></span></span><a class="headerlink" href="#_CPPv421zes_base_capability_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Base for all capability types. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_base_capability_t5stypeE">
+<span id="_CPPv3N21zes_base_capability_t5stypeE"></span><span id="_CPPv2N21zes_base_capability_t5stypeE"></span><span id="zes_base_capability_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__base__capability__t_1ab9e52f4b8d4aa8eb8848a3c177750ce4"></span><a class="reference internal" href="#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N21zes_base_capability_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21zes_base_capability_t5pNextE">
+<span id="_CPPv3N21zes_base_capability_t5pNextE"></span><span id="_CPPv2N21zes_base_capability_t5pNextE"></span><span id="zes_base_capability_t::pNext__voidCP"></span><span class="target" id="structzes__base__capability__t_1a92d83c47b6ec489a068e8b81d595feb3"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N21zes_base_capability_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="temperature.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Temperature</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../extensions/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Extensions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="data_types.html#zes-structure-type-t">zes_structure_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">5</span></summary><ul class="ctoc-list"><li><a href="data_types.html#zes-base-properties-t">zes_base_properties_t</a></li><li><a href="data_types.html#zes-base-desc-t">zes_base_desc_t</a></li><li><a href="data_types.html#zes-base-state-t">zes_base_state_t</a></li><li><a href="data_types.html#zes-base-config-t">zes_base_config_t</a></li><li><a href="data_types.html#zes-base-capability-t">zes_base_capability_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

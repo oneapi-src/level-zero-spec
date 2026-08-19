@@ -1,0 +1,800 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Driver - Extensions &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/extensions/driver';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Device - Extensions" href="device.html" />
+    <link rel="prev" title="Global - Extensions" href="global.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/extensions/driver.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Driver - Extensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#driver-extension-functions">Driver - Extension Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zedriverrtasformatcompatibilitycheckext">zeDriverRTASFormatCompatibilityCheckExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439zeDriverRTASFormatCompatibilityCheckExt18ze_driver_handle_t20ze_rtas_format_ext_t20ze_rtas_format_ext_t"><code class="docutils literal notranslate"><span class="pre">zeDriverRTASFormatCompatibilityCheckExt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#driver-extension-enums">Driver - Extension Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-driver-memory-free-policy-ext-flags-t">ze_driver_memory_free_policy_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_driver_memory_free_policy_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_driver_memory_free_policy_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_driver_memory_free_policy_ext_flag_t51ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_BLOCKING_FREEE"><code class="docutils literal notranslate"><span class="pre">ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_BLOCKING_FREE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_driver_memory_free_policy_ext_flag_t48ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_DEFER_FREEE"><code class="docutils literal notranslate"><span class="pre">ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_DEFER_FREE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_driver_memory_free_policy_ext_flag_t50ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-driver-ddi-handle-ext-flags-t">ze_driver_ddi_handle_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431ze_driver_ddi_handle_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_driver_ddi_handle_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_driver_ddi_handle_ext_flag_t54ZE_DRIVER_DDI_HANDLE_EXT_FLAG_DDI_HANDLE_EXT_SUPPORTEDE"><code class="docutils literal notranslate"><span class="pre">ZE_DRIVER_DDI_HANDLE_EXT_FLAG_DDI_HANDLE_EXT_SUPPORTED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_driver_ddi_handle_ext_flag_t42ZE_DRIVER_DDI_HANDLE_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_DRIVER_DDI_HANDLE_EXT_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#driver-extension-structures">Driver - Extension Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-driver-memory-free-ext-properties-t">ze_driver_memory_free_ext_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438ze_driver_memory_free_ext_properties_t"><code class="docutils literal notranslate"><span class="pre">ze_driver_memory_free_ext_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_driver_memory_free_ext_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_driver_memory_free_ext_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_driver_memory_free_ext_properties_t12freePoliciesE"><code class="docutils literal notranslate"><span class="pre">freePolicies</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-driver-ddi-handles-ext-properties-t">ze_driver_ddi_handles_ext_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438ze_driver_ddi_handles_ext_properties_t"><code class="docutils literal notranslate"><span class="pre">ze_driver_ddi_handles_ext_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_driver_ddi_handles_ext_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_driver_ddi_handles_ext_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N38ze_driver_ddi_handles_ext_properties_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="driver-extensions">
+<h1>Driver - Extensions<a class="headerlink" href="#driver-extensions" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="driver-extension-functions">
+<h2>Driver - Extension Functions<a class="headerlink" href="#driver-extension-functions" title="Link to this heading">#</a></h2>
+<section id="zedriverrtasformatcompatibilitycheckext">
+<span id="id1"></span><h3>zeDriverRTASFormatCompatibilityCheckExt<a class="headerlink" href="#zedriverrtasformatcompatibilitycheckext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.13</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv439zeDriverRTASFormatCompatibilityCheckExt18ze_driver_handle_t20ze_rtas_format_ext_t20ze_rtas_format_ext_t">
+<span id="_CPPv339zeDriverRTASFormatCompatibilityCheckExt18ze_driver_handle_t20ze_rtas_format_ext_t20ze_rtas_format_ext_t"></span><span id="_CPPv239zeDriverRTASFormatCompatibilityCheckExt18ze_driver_handle_t20ze_rtas_format_ext_t20ze_rtas_format_ext_t"></span><span id="zeDriverRTASFormatCompatibilityCheckExt__ze_driver_handle_t.ze_rtas_format_ext_t.ze_rtas_format_ext_t"></span><span class="target" id="ze__api_8h_1a6c1154a20f93a8bdc0d0c7a09f4b53b6"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDriverRTASFormatCompatibilityCheckExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <a class="reference internal" href="device.html#_CPPv420ze_rtas_format_ext_t" title="ze_rtas_format_ext_t"><span class="n"><span class="pre">ze_rtas_format_ext_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rtasFormatA</span></span>, <a class="reference internal" href="device.html#_CPPv420ze_rtas_format_ext_t" title="ze_rtas_format_ext_t"><span class="n"><span class="pre">ze_rtas_format_ext_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rtasFormatB</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv439zeDriverRTASFormatCompatibilityCheckExt18ze_driver_handle_t20ze_rtas_format_ext_t20ze_rtas_format_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Checks ray tracing acceleration structure format compatibility. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hDriver</strong> – [in] handle of driver object </p></li>
+<li><p><strong>rtasFormatA</strong> – [in] operand A </p></li>
+<li><p><strong>rtasFormatB</strong> – [in] operand B </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDriver</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="device.html#ze__api_8h_1a32bec84b78db7412a8facddff130b6b4aa55dc2b711c64925337ffdf30cadfa1e"><span class="std std-ref"><span class="pre">ZE_RTAS_FORMAT_EXT_MAX</span></span></a> <span class="pre">&lt;</span> <span class="pre">rtasFormatA</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="device.html#ze__api_8h_1a32bec84b78db7412a8facddff130b6b4aa55dc2b711c64925337ffdf30cadfa1e"><span class="std std-ref"><span class="pre">ZE_RTAS_FORMAT_EXT_MAX</span></span></a> <span class="pre">&lt;</span> <span class="pre">rtasFormatB</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a><ul>
+<li><p>An acceleration structure built with <code class="docutils literal notranslate"><span class="pre">rtasFormatA</span></code> is compatible with devices that report <code class="docutils literal notranslate"><span class="pre">rtasFormatB</span></code>.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5c7c2afdc6fed284c84b8d96bdc2e5a9"><span class="std std-ref">ZE_RESULT_EXT_ERROR_OPERANDS_INCOMPATIBLE</span></a><ul>
+<li><p>An acceleration structure built with <code class="docutils literal notranslate"><span class="pre">rtasFormatA</span></code> is <strong>not</strong> compatible with devices that report <code class="docutils literal notranslate"><span class="pre">rtasFormatB</span></code>. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="driver-extension-enums">
+<h2>Driver - Extension Enums<a class="headerlink" href="#driver-extension-enums" title="Link to this heading">#</a></h2>
+<section id="ze-driver-memory-free-policy-ext-flags-t">
+<span id="id2"></span><h3>ze_driver_memory_free_policy_ext_flags_t<a class="headerlink" href="#ze-driver-memory-free-policy-ext-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.3</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv439ze_driver_memory_free_policy_ext_flag_t">
+<span id="_CPPv339ze_driver_memory_free_policy_ext_flag_t"></span><span id="_CPPv239ze_driver_memory_free_policy_ext_flag_t"></span><span class="target" id="ze__api_8h_1a3a6b2605a9841709c9dc2dcd2aa759d9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_driver_memory_free_policy_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv439ze_driver_memory_free_policy_ext_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_driver_memory_free_policy_ext_flag_t51ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_BLOCKING_FREEE">
+<span id="_CPPv3N39ze_driver_memory_free_policy_ext_flag_t51ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_BLOCKING_FREEE"></span><span id="_CPPv2N39ze_driver_memory_free_policy_ext_flag_t51ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_BLOCKING_FREEE"></span><span class="target" id="ze__api_8h_1a3a6b2605a9841709c9dc2dcd2aa759d9aae9dd678a3b5ee9adc2136f36d753615"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_BLOCKING_FREE</span></span></span><a class="headerlink" href="#_CPPv4N39ze_driver_memory_free_policy_ext_flag_t51ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_BLOCKING_FREEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Blocks until all commands using the memory are complete before scheduling memory to be freed. Does not guarantee memory is freed upon return, only that it is safe and is scheduled to be freed. Actual freeing of memory is specific to user mode driver and kernel mode driver implementation and may be done asynchronously. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_driver_memory_free_policy_ext_flag_t48ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_DEFER_FREEE">
+<span id="_CPPv3N39ze_driver_memory_free_policy_ext_flag_t48ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_DEFER_FREEE"></span><span id="_CPPv2N39ze_driver_memory_free_policy_ext_flag_t48ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_DEFER_FREEE"></span><span class="target" id="ze__api_8h_1a3a6b2605a9841709c9dc2dcd2aa759d9a899a6813c6d30805fa39a2df4b0c0b9f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_DEFER_FREE</span></span></span><a class="headerlink" href="#_CPPv4N39ze_driver_memory_free_policy_ext_flag_t48ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_DEFER_FREEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Immediately schedules the memory to be freed and returns without blocking. Memory may be freed after all commands using the memory are complete. Actual freeing of memory is specific to user mode driver and kernel mode driver implementation and may be done asynchronously. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_driver_memory_free_policy_ext_flag_t50ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N39ze_driver_memory_free_policy_ext_flag_t50ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N39ze_driver_memory_free_policy_ext_flag_t50ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a3a6b2605a9841709c9dc2dcd2aa759d9afe8ea154f0777068c6a3cc890785dd6e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N39ze_driver_memory_free_policy_ext_flag_t50ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_DRIVER_MEMORY_FREE_POLICY_EXT_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-driver-ddi-handle-ext-flags-t">
+<span id="id3"></span><h3>ze_driver_ddi_handle_ext_flags_t<a class="headerlink" href="#ze-driver-ddi-handle-ext-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431ze_driver_ddi_handle_ext_flag_t">
+<span id="_CPPv331ze_driver_ddi_handle_ext_flag_t"></span><span id="_CPPv231ze_driver_ddi_handle_ext_flag_t"></span><span class="target" id="ze__api_8h_1a7d447b1d98cb937367337bd69b94d9a8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_driver_ddi_handle_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv431ze_driver_ddi_handle_ext_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_driver_ddi_handle_ext_flag_t54ZE_DRIVER_DDI_HANDLE_EXT_FLAG_DDI_HANDLE_EXT_SUPPORTEDE">
+<span id="_CPPv3N31ze_driver_ddi_handle_ext_flag_t54ZE_DRIVER_DDI_HANDLE_EXT_FLAG_DDI_HANDLE_EXT_SUPPORTEDE"></span><span id="_CPPv2N31ze_driver_ddi_handle_ext_flag_t54ZE_DRIVER_DDI_HANDLE_EXT_FLAG_DDI_HANDLE_EXT_SUPPORTEDE"></span><span class="target" id="ze__api_8h_1a7d447b1d98cb937367337bd69b94d9a8abd8e05b619dabf236f3425dfb95be95e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_DRIVER_DDI_HANDLE_EXT_FLAG_DDI_HANDLE_EXT_SUPPORTED</span></span></span><a class="headerlink" href="#_CPPv4N31ze_driver_ddi_handle_ext_flag_t54ZE_DRIVER_DDI_HANDLE_EXT_FLAG_DDI_HANDLE_EXT_SUPPORTEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Driver Supports DDI Handles Extension. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_driver_ddi_handle_ext_flag_t42ZE_DRIVER_DDI_HANDLE_EXT_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N31ze_driver_ddi_handle_ext_flag_t42ZE_DRIVER_DDI_HANDLE_EXT_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N31ze_driver_ddi_handle_ext_flag_t42ZE_DRIVER_DDI_HANDLE_EXT_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a7d447b1d98cb937367337bd69b94d9a8af1c28e33ff975b3b504d0f177a45881b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_DRIVER_DDI_HANDLE_EXT_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N31ze_driver_ddi_handle_ext_flag_t42ZE_DRIVER_DDI_HANDLE_EXT_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_DRIVER_DDI_HANDLE_EXT_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="driver-extension-structures">
+<h2>Driver - Extension Structures<a class="headerlink" href="#driver-extension-structures" title="Link to this heading">#</a></h2>
+<section id="ze-driver-memory-free-ext-properties-t">
+<span id="id4"></span><h3>ze_driver_memory_free_ext_properties_t<a class="headerlink" href="#ze-driver-memory-free-ext-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.3</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv438ze_driver_memory_free_ext_properties_t">
+<span id="_CPPv338ze_driver_memory_free_ext_properties_t"></span><span id="_CPPv238ze_driver_memory_free_ext_properties_t"></span><span id="ze_driver_memory_free_ext_properties_t"></span><span class="target" id="structze__driver__memory__free__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_driver_memory_free_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv438ze_driver_memory_free_ext_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Driver memory free properties queried using <a class="reference internal" href="../apis/driver.html#ze__api_8h_1a5966ada5681a58fe21b693a5eb34fde0"><span class="std std-ref">zeDriverGetProperties</span></a>. </p>
+<p><ul class="simple">
+<li><p>All drivers must support an immediate free policy, which is the default free policy.</p></li>
+<li><p>This structure may be returned from <a class="reference internal" href="../apis/driver.html#ze__api_8h_1a5966ada5681a58fe21b693a5eb34fde0"><span class="std std-ref">zeDriverGetProperties</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/driver.html#structze__driver__properties__t"><span class="std std-ref">ze_driver_properties_t</span></a>. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_driver_memory_free_ext_properties_t5stypeE">
+<span id="_CPPv3N38ze_driver_memory_free_ext_properties_t5stypeE"></span><span id="_CPPv2N38ze_driver_memory_free_ext_properties_t5stypeE"></span><span id="ze_driver_memory_free_ext_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__driver__memory__free__ext__properties__t_1a174e1a318e705f77d3ff933507331936"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N38ze_driver_memory_free_ext_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_driver_memory_free_ext_properties_t5pNextE">
+<span id="_CPPv3N38ze_driver_memory_free_ext_properties_t5pNextE"></span><span id="_CPPv2N38ze_driver_memory_free_ext_properties_t5pNextE"></span><span id="ze_driver_memory_free_ext_properties_t::pNext__voidP"></span><span class="target" id="structze__driver__memory__free__ext__properties__t_1a1328598512504c18d4c87395b7e855a3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N38ze_driver_memory_free_ext_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_driver_memory_free_ext_properties_t12freePoliciesE">
+<span id="_CPPv3N38ze_driver_memory_free_ext_properties_t12freePoliciesE"></span><span id="_CPPv2N38ze_driver_memory_free_ext_properties_t12freePoliciesE"></span><span id="ze_driver_memory_free_ext_properties_t::freePolicies__ze_driver_memory_free_policy_ext_flags_t"></span><span class="target" id="structze__driver__memory__free__ext__properties__t_1a635afd311dad64de9a8f8976b48ea9e2"></span><span class="n"><span class="pre">ze_driver_memory_free_policy_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">freePolicies</span></span></span><a class="headerlink" href="#_CPPv4N38ze_driver_memory_free_ext_properties_t12freePoliciesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Supported memory free policies. must be 0 or a combination of <a class="reference internal" href="#ze__api_8h_1a3a6b2605a9841709c9dc2dcd2aa759d9"><span class="std std-ref">ze_driver_memory_free_policy_ext_flag_t</span></a>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-driver-ddi-handles-ext-properties-t">
+<span id="id5"></span><h3>ze_driver_ddi_handles_ext_properties_t<a class="headerlink" href="#ze-driver-ddi-handles-ext-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.12</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv438ze_driver_ddi_handles_ext_properties_t">
+<span id="_CPPv338ze_driver_ddi_handles_ext_properties_t"></span><span id="_CPPv238ze_driver_ddi_handles_ext_properties_t"></span><span id="ze_driver_ddi_handles_ext_properties_t"></span><span class="target" id="structze__driver__ddi__handles__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_driver_ddi_handles_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv438ze_driver_ddi_handles_ext_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Driver DDI Handles properties queried using <a class="reference internal" href="../apis/driver.html#ze__api_8h_1a5966ada5681a58fe21b693a5eb34fde0"><span class="std std-ref">zeDriverGetProperties</span></a>. </p>
+<p><ul class="simple">
+<li><p>This structure may be returned from <a class="reference internal" href="../apis/driver.html#ze__api_8h_1a5966ada5681a58fe21b693a5eb34fde0"><span class="std std-ref">zeDriverGetProperties</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/driver.html#structze__driver__properties__t"><span class="std std-ref">ze_driver_properties_t</span></a>.</p></li>
+<li><p>Starting from spec version 1.17, support for this extension is assumed for any driver reporting API version 1.17 or later via <a class="reference internal" href="../apis/driver.html#ze__api_8h_1a3d24100fe018fc8eecc3aef101b0588e"><span class="std std-ref">zeDriverGetApiVersion</span></a>; the loader does NOT need to query the extension property for such drivers.</p></li>
+<li><p>For drivers reporting API version 1.16 or earlier, the loader must check for this extension before using DDI handles.</p></li>
+<li><p>This guarantee enables Level Zero extensions introduced in spec v1.17 or later to embed handles directly inside Level Zero structures (e.g., via pNext chains) without requiring the loader to translate or unwrap handles.</p></li>
+<li><p>Additionally, drivers may assume the loader will dispatch calls exclusively via the DDI tables embedded in their handles; the only exception is the global DDI table used during driver initialization and to read the reported API version. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_driver_ddi_handles_ext_properties_t5stypeE">
+<span id="_CPPv3N38ze_driver_ddi_handles_ext_properties_t5stypeE"></span><span id="_CPPv2N38ze_driver_ddi_handles_ext_properties_t5stypeE"></span><span id="ze_driver_ddi_handles_ext_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__driver__ddi__handles__ext__properties__t_1a047941545e63934ace4d3fcba550c002"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N38ze_driver_ddi_handles_ext_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_driver_ddi_handles_ext_properties_t5pNextE">
+<span id="_CPPv3N38ze_driver_ddi_handles_ext_properties_t5pNextE"></span><span id="_CPPv2N38ze_driver_ddi_handles_ext_properties_t5pNextE"></span><span id="ze_driver_ddi_handles_ext_properties_t::pNext__voidP"></span><span class="target" id="structze__driver__ddi__handles__ext__properties__t_1ade27e43eb6bb9aa535d33cec8a76e33f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N38ze_driver_ddi_handles_ext_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N38ze_driver_ddi_handles_ext_properties_t5flagsE">
+<span id="_CPPv3N38ze_driver_ddi_handles_ext_properties_t5flagsE"></span><span id="_CPPv2N38ze_driver_ddi_handles_ext_properties_t5flagsE"></span><span id="ze_driver_ddi_handles_ext_properties_t::flags__ze_driver_ddi_handle_ext_flags_t"></span><span class="target" id="structze__driver__ddi__handles__ext__properties__t_1ac3703dcba74036d2480688afd4588229"></span><span class="n"><span class="pre">ze_driver_ddi_handle_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N38ze_driver_ddi_handles_ext_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 0 (none) or a valid combination of ze_driver_ddi_handle_ext_flags_t</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="global.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Global - Extensions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="device.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Device - Extensions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="driver.html#zedriverrtasformatcompatibilitycheckext">zeDriverRTASFormatCompatibilityCheckExt</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="driver.html#ze-driver-memory-free-policy-ext-flags-t">ze_driver_memory_free_policy_ext_flags_t</a></li><li><a href="driver.html#ze-driver-ddi-handle-ext-flags-t">ze_driver_ddi_handle_ext_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="driver.html#ze-driver-memory-free-ext-properties-t">ze_driver_memory_free_ext_properties_t</a></li><li><a href="driver.html#ze-driver-ddi-handles-ext-properties-t">ze_driver_ddi_handles_ext_properties_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

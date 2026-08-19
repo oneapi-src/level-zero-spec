@@ -1,0 +1,1556 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fabric Port &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/fabric_port';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Fan" href="fan.html" />
+    <link rel="prev" title="Engine" href="engine.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/apis/fabric_port.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Fabric Port</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-port-functions">Fabric Port Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportgetproperties">zesFabricPortGetProperties</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zesFabricPortGetProperties24zes_fabric_port_handle_tP28zes_fabric_port_properties_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortGetProperties()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportgetlinktype">zesFabricPortGetLinkType</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zesFabricPortGetLinkType24zes_fabric_port_handle_tP22zes_fabric_link_type_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortGetLinkType()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportgetconfig">zesFabricPortGetConfig</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zesFabricPortGetConfig24zes_fabric_port_handle_tP24zes_fabric_port_config_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortGetConfig()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportsetconfig">zesFabricPortSetConfig</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zesFabricPortSetConfig24zes_fabric_port_handle_tPK24zes_fabric_port_config_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortSetConfig()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportgetstate">zesFabricPortGetState</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421zesFabricPortGetState24zes_fabric_port_handle_tP23zes_fabric_port_state_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortGetState()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportgetthroughput">zesFabricPortGetThroughput</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zesFabricPortGetThroughput24zes_fabric_port_handle_tP28zes_fabric_port_throughput_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortGetThroughput()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportgetfabricerrorcounters">zesFabricPortGetFabricErrorCounters</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435zesFabricPortGetFabricErrorCounters24zes_fabric_port_handle_tP32zes_fabric_port_error_counters_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortGetFabricErrorCounters()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfabricportgetmultiportthroughput">zesFabricPortGetMultiPortThroughput</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435zesFabricPortGetMultiPortThroughput19zes_device_handle_t8uint32_tP24zes_fabric_port_handle_tPP28zes_fabric_port_throughput_t"><code class="docutils literal notranslate"><span class="pre">zesFabricPortGetMultiPortThroughput()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-port-enums">Fabric Port Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-status-t">zes_fabric_port_status_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zes_fabric_port_status_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_status_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_UNKNOWNE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_STATUS_UNKNOWN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_HEALTHYE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_STATUS_HEALTHY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DEGRADEDE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_STATUS_DEGRADED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_status_t29ZES_FABRIC_PORT_STATUS_FAILEDE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_STATUS_FAILED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DISABLEDE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_STATUS_DISABLED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_status_t35ZES_FABRIC_PORT_STATUS_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_STATUS_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-qual-issue-flags-t">zes_fabric_port_qual_issue_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433zes_fabric_port_qual_issue_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_qual_issue_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33zes_fabric_port_qual_issue_flag_t43ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_LINK_ERRORSE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_LINK_ERRORS</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33zes_fabric_port_qual_issue_flag_t37ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_SPEEDE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_SPEED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33zes_fabric_port_qual_issue_flag_t44ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-failure-flags-t">zes_fabric_port_failure_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zes_fabric_port_failure_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_failure_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_fabric_port_failure_flag_t35ZES_FABRIC_PORT_FAILURE_FLAG_FAILEDE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_FAILED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_fabric_port_failure_flag_t45ZES_FABRIC_PORT_FAILURE_FLAG_TRAINING_TIMEOUTE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_TRAINING_TIMEOUT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_fabric_port_failure_flag_t37ZES_FABRIC_PORT_FAILURE_FLAG_FLAPPINGE"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_FLAPPING</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_fabric_port_failure_flag_t41ZES_FABRIC_PORT_FAILURE_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fabric-port-structures">Fabric Port Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-id-t">zes_fabric_port_id_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zes_fabric_port_id_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_id_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_fabric_port_id_t8fabricIdE"><code class="docutils literal notranslate"><span class="pre">fabricId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_fabric_port_id_t8attachIdE"><code class="docutils literal notranslate"><span class="pre">attachId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20zes_fabric_port_id_t10portNumberE"><code class="docutils literal notranslate"><span class="pre">portNumber</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-speed-t">zes_fabric_port_speed_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zes_fabric_port_speed_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_speed_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_speed_t7bitRateE"><code class="docutils literal notranslate"><span class="pre">bitRate</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_speed_t5widthE"><code class="docutils literal notranslate"><span class="pre">width</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-properties-t">zes_fabric_port_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv428zes_fabric_port_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t5modelE"><code class="docutils literal notranslate"><span class="pre">model</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t11onSubdeviceE"><code class="docutils literal notranslate"><span class="pre">onSubdevice</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t11subdeviceIdE"><code class="docutils literal notranslate"><span class="pre">subdeviceId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t6portIdE"><code class="docutils literal notranslate"><span class="pre">portId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t10maxRxSpeedE"><code class="docutils literal notranslate"><span class="pre">maxRxSpeed</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_properties_t10maxTxSpeedE"><code class="docutils literal notranslate"><span class="pre">maxTxSpeed</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-link-type-t">zes_fabric_link_type_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zes_fabric_link_type_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_link_type_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zes_fabric_link_type_t4descE"><code class="docutils literal notranslate"><span class="pre">desc</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-config-t">zes_fabric_port_config_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zes_fabric_port_config_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_config_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_config_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_config_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_config_t7enabledE"><code class="docutils literal notranslate"><span class="pre">enabled</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24zes_fabric_port_config_t9beaconingE"><code class="docutils literal notranslate"><span class="pre">beaconing</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-state-t">zes_fabric_port_state_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zes_fabric_port_state_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_state_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t6statusE"><code class="docutils literal notranslate"><span class="pre">status</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t13qualityIssuesE"><code class="docutils literal notranslate"><span class="pre">qualityIssues</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t14failureReasonsE"><code class="docutils literal notranslate"><span class="pre">failureReasons</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t12remotePortIdE"><code class="docutils literal notranslate"><span class="pre">remotePortId</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t7rxSpeedE"><code class="docutils literal notranslate"><span class="pre">rxSpeed</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_fabric_port_state_t7txSpeedE"><code class="docutils literal notranslate"><span class="pre">txSpeed</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-throughput-t">zes_fabric_port_throughput_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv428zes_fabric_port_throughput_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_throughput_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_throughput_t9timestampE"><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_throughput_t9rxCounterE"><code class="docutils literal notranslate"><span class="pre">rxCounter</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N28zes_fabric_port_throughput_t9txCounterE"><code class="docutils literal notranslate"><span class="pre">txCounter</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fabric-port-error-counters-t">zes_fabric_port_error_counters_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432zes_fabric_port_error_counters_t"><code class="docutils literal notranslate"><span class="pre">zes_fabric_port_error_counters_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_fabric_port_error_counters_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_fabric_port_error_counters_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_fabric_port_error_counters_t16linkFailureCountE"><code class="docutils literal notranslate"><span class="pre">linkFailureCount</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_fabric_port_error_counters_t16fwCommErrorCountE"><code class="docutils literal notranslate"><span class="pre">fwCommErrorCount</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_fabric_port_error_counters_t12fwErrorCountE"><code class="docutils literal notranslate"><span class="pre">fwErrorCount</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_fabric_port_error_counters_t16linkDegradeCountE"><code class="docutils literal notranslate"><span class="pre">linkDegradeCount</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="fabric-port">
+<h1>Fabric Port<a class="headerlink" href="#fabric-port" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="fabric-port-functions">
+<h2>Fabric Port Functions<a class="headerlink" href="#fabric-port-functions" title="Link to this heading">#</a></h2>
+<section id="zesfabricportgetproperties">
+<span id="id1"></span><h3>zesFabricPortGetProperties<a class="headerlink" href="#zesfabricportgetproperties" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426zesFabricPortGetProperties24zes_fabric_port_handle_tP28zes_fabric_port_properties_t">
+<span id="_CPPv326zesFabricPortGetProperties24zes_fabric_port_handle_tP28zes_fabric_port_properties_t"></span><span id="_CPPv226zesFabricPortGetProperties24zes_fabric_port_handle_tP28zes_fabric_port_properties_t"></span><span id="zesFabricPortGetProperties__zes_fabric_port_handle_t.zes_fabric_port_properties_tP"></span><span class="target" id="zes__api_8h_1a4c0e17be163c37d19127a20511f3a293"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPort</span></span>, <a class="reference internal" href="#_CPPv428zes_fabric_port_properties_t" title="zes_fabric_port_properties_t"><span class="n"><span class="pre">zes_fabric_port_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesFabricPortGetProperties24zes_fabric_port_handle_tP28zes_fabric_port_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Fabric port properties. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPort</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pProperties</strong> – [in,out] Will contain properties of the Fabric Port. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPort</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesfabricportgetlinktype">
+<span id="id2"></span><h3>zesFabricPortGetLinkType<a class="headerlink" href="#zesfabricportgetlinktype" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv424zesFabricPortGetLinkType24zes_fabric_port_handle_tP22zes_fabric_link_type_t">
+<span id="_CPPv324zesFabricPortGetLinkType24zes_fabric_port_handle_tP22zes_fabric_link_type_t"></span><span id="_CPPv224zesFabricPortGetLinkType24zes_fabric_port_handle_tP22zes_fabric_link_type_t"></span><span id="zesFabricPortGetLinkType__zes_fabric_port_handle_t.zes_fabric_link_type_tP"></span><span class="target" id="zes__api_8h_1a94d8204cc0d7eb16cf20cd2977d17c5e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortGetLinkType</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPort</span></span>, <a class="reference internal" href="#_CPPv422zes_fabric_link_type_t" title="zes_fabric_link_type_t"><span class="n"><span class="pre">zes_fabric_link_type_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pLinkType</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zesFabricPortGetLinkType24zes_fabric_port_handle_tP22zes_fabric_link_type_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Fabric port link type. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPort</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pLinkType</strong> – [in,out] Will contain details about the link attached to the Fabric port. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPort</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pLinkType</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesfabricportgetconfig">
+<span id="id3"></span><h3>zesFabricPortGetConfig<a class="headerlink" href="#zesfabricportgetconfig" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422zesFabricPortGetConfig24zes_fabric_port_handle_tP24zes_fabric_port_config_t">
+<span id="_CPPv322zesFabricPortGetConfig24zes_fabric_port_handle_tP24zes_fabric_port_config_t"></span><span id="_CPPv222zesFabricPortGetConfig24zes_fabric_port_handle_tP24zes_fabric_port_config_t"></span><span id="zesFabricPortGetConfig__zes_fabric_port_handle_t.zes_fabric_port_config_tP"></span><span class="target" id="zes__api_8h_1af31b80ea56ee371f35b1b78e2f78d21d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortGetConfig</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPort</span></span>, <a class="reference internal" href="#_CPPv424zes_fabric_port_config_t" title="zes_fabric_port_config_t"><span class="n"><span class="pre">zes_fabric_port_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesFabricPortGetConfig24zes_fabric_port_handle_tP24zes_fabric_port_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Fabric port configuration. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPort</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pConfig</strong> – [in,out] Will contain configuration of the Fabric Port. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPort</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pConfig</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesfabricportsetconfig">
+<span id="id4"></span><h3>zesFabricPortSetConfig<a class="headerlink" href="#zesfabricportsetconfig" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422zesFabricPortSetConfig24zes_fabric_port_handle_tPK24zes_fabric_port_config_t">
+<span id="_CPPv322zesFabricPortSetConfig24zes_fabric_port_handle_tPK24zes_fabric_port_config_t"></span><span id="_CPPv222zesFabricPortSetConfig24zes_fabric_port_handle_tPK24zes_fabric_port_config_t"></span><span id="zesFabricPortSetConfig__zes_fabric_port_handle_t.zes_fabric_port_config_tCP"></span><span class="target" id="zes__api_8h_1aa75684e0c1dafcb02759fba7de66d51d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortSetConfig</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPort</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv424zes_fabric_port_config_t" title="zes_fabric_port_config_t"><span class="n"><span class="pre">zes_fabric_port_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesFabricPortSetConfig24zes_fabric_port_handle_tPK24zes_fabric_port_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Set Fabric port configuration. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPort</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pConfig</strong> – [in] Contains new configuration of the Fabric Port. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPort</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pConfig</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to make these modifications. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesfabricportgetstate">
+<span id="id5"></span><h3>zesFabricPortGetState<a class="headerlink" href="#zesfabricportgetstate" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv421zesFabricPortGetState24zes_fabric_port_handle_tP23zes_fabric_port_state_t">
+<span id="_CPPv321zesFabricPortGetState24zes_fabric_port_handle_tP23zes_fabric_port_state_t"></span><span id="_CPPv221zesFabricPortGetState24zes_fabric_port_handle_tP23zes_fabric_port_state_t"></span><span id="zesFabricPortGetState__zes_fabric_port_handle_t.zes_fabric_port_state_tP"></span><span class="target" id="zes__api_8h_1a869f05d8e66253b4975bb010009d3b07"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPort</span></span>, <a class="reference internal" href="#_CPPv423zes_fabric_port_state_t" title="zes_fabric_port_state_t"><span class="n"><span class="pre">zes_fabric_port_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesFabricPortGetState24zes_fabric_port_handle_tP23zes_fabric_port_state_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Fabric port state - status (health/degraded/failed/disabled), reasons for link degradation or instability, current rx/tx speed. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPort</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pState</strong> – [in,out] Will contain the current state of the Fabric Port </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPort</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pState</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesfabricportgetthroughput">
+<span id="id6"></span><h3>zesFabricPortGetThroughput<a class="headerlink" href="#zesfabricportgetthroughput" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426zesFabricPortGetThroughput24zes_fabric_port_handle_tP28zes_fabric_port_throughput_t">
+<span id="_CPPv326zesFabricPortGetThroughput24zes_fabric_port_handle_tP28zes_fabric_port_throughput_t"></span><span id="_CPPv226zesFabricPortGetThroughput24zes_fabric_port_handle_tP28zes_fabric_port_throughput_t"></span><span id="zesFabricPortGetThroughput__zes_fabric_port_handle_t.zes_fabric_port_throughput_tP"></span><span class="target" id="zes__api_8h_1ae2473538b14d5993e101d9f0d2c2f848"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortGetThroughput</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPort</span></span>, <a class="reference internal" href="#_CPPv428zes_fabric_port_throughput_t" title="zes_fabric_port_throughput_t"><span class="n"><span class="pre">zes_fabric_port_throughput_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pThroughput</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesFabricPortGetThroughput24zes_fabric_port_handle_tP28zes_fabric_port_throughput_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Fabric port throughput. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPort</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pThroughput</strong> – [in,out] Will contain the Fabric port throughput counters. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPort</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pThroughput</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to query this telemetry. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesfabricportgetfabricerrorcounters">
+<span id="id7"></span><h3>zesFabricPortGetFabricErrorCounters<a class="headerlink" href="#zesfabricportgetfabricerrorcounters" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv435zesFabricPortGetFabricErrorCounters24zes_fabric_port_handle_tP32zes_fabric_port_error_counters_t">
+<span id="_CPPv335zesFabricPortGetFabricErrorCounters24zes_fabric_port_handle_tP32zes_fabric_port_error_counters_t"></span><span id="_CPPv235zesFabricPortGetFabricErrorCounters24zes_fabric_port_handle_tP32zes_fabric_port_error_counters_t"></span><span id="zesFabricPortGetFabricErrorCounters__zes_fabric_port_handle_t.zes_fabric_port_error_counters_tP"></span><span class="target" id="zes__api_8h_1a7fe8c8d610a417703b4b46f40805056e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortGetFabricErrorCounters</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPort</span></span>, <a class="reference internal" href="#_CPPv432zes_fabric_port_error_counters_t" title="zes_fabric_port_error_counters_t"><span class="n"><span class="pre">zes_fabric_port_error_counters_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pErrors</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zesFabricPortGetFabricErrorCounters24zes_fabric_port_handle_tP32zes_fabric_port_error_counters_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Fabric Port Error Counters. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+<li><p>The memory backing the arrays for phPorts and ppThroughputs must be allocated in system memory by the user who is also responsible for releasing them when they are no longer needed.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hPort</strong> – [in] Handle for the component. </p></li>
+<li><p><strong>pErrors</strong> – [in,out] Will contain the Fabric port Error counters. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hPort</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pErrors</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to query this telemetry. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesfabricportgetmultiportthroughput">
+<span id="id8"></span><h3>zesFabricPortGetMultiPortThroughput<a class="headerlink" href="#zesfabricportgetmultiportthroughput" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv435zesFabricPortGetMultiPortThroughput19zes_device_handle_t8uint32_tP24zes_fabric_port_handle_tPP28zes_fabric_port_throughput_t">
+<span id="_CPPv335zesFabricPortGetMultiPortThroughput19zes_device_handle_t8uint32_tP24zes_fabric_port_handle_tPP28zes_fabric_port_throughput_t"></span><span id="_CPPv235zesFabricPortGetMultiPortThroughput19zes_device_handle_t8uint32_tP24zes_fabric_port_handle_tPP28zes_fabric_port_throughput_t"></span><span id="zesFabricPortGetMultiPortThroughput__zes_device_handle_t.uint32_t.zes_fabric_port_handle_tP.zes_fabric_port_throughput_tPP"></span><span class="target" id="zes__api_8h_1a46fed648cc363983a9a813a00f9ebfb1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFabricPortGetMultiPortThroughput</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numPorts</span></span>, <span class="n"><span class="pre">zes_fabric_port_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phPort</span></span>, <a class="reference internal" href="#_CPPv428zes_fabric_port_throughput_t" title="zes_fabric_port_throughput_t"><span class="n"><span class="pre">zes_fabric_port_throughput_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pThroughput</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zesFabricPortGetMultiPortThroughput19zes_device_handle_t8uint32_tP24zes_fabric_port_handle_tPP28zes_fabric_port_throughput_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Fabric port throughput from multiple ports in a single call. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hDevice</strong> – [in] Sysman handle of the device. </p></li>
+<li><p><strong>numPorts</strong> – [in] Number of ports enumerated in function <a class="reference internal" href="device.html#zes__api_8h_1aeb7148399fa726a00db235fd5facfc4f"><span class="std std-ref">zesDeviceEnumFabricPorts</span></a></p></li>
+<li><p><strong>phPort</strong> – [in][range(0, numPorts)] array of fabric port handles provided by user to gather throughput values. </p></li>
+<li><p><strong>pThroughput</strong> – [out][range(0, numPorts)] array of fabric port throughput counters from multiple ports of type <a class="reference internal" href="#structzes__fabric__port__throughput__t"><span class="std std-ref">zes_fabric_port_throughput_t</span></a>. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phPort</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pThroughput</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="fabric-port-enums">
+<h2>Fabric Port Enums<a class="headerlink" href="#fabric-port-enums" title="Link to this heading">#</a></h2>
+<section id="zes-fabric-port-status-t">
+<span id="id9"></span><h3>zes_fabric_port_status_t<a class="headerlink" href="#zes-fabric-port-status-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv424zes_fabric_port_status_t">
+<span id="_CPPv324zes_fabric_port_status_t"></span><span id="_CPPv224zes_fabric_port_status_t"></span><span class="target" id="zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_status_t</span></span></span><a class="headerlink" href="#_CPPv424zes_fabric_port_status_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric port status. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_UNKNOWNE">
+<span id="_CPPv3N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_UNKNOWNE"></span><span id="_CPPv2N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_UNKNOWNE"></span><span class="target" id="zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a3e24b31bab51c21e4d23c63f79dd4e4b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_STATUS_UNKNOWN</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_UNKNOWNE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The port status cannot be determined. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_HEALTHYE">
+<span id="_CPPv3N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_HEALTHYE"></span><span id="_CPPv2N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_HEALTHYE"></span><span class="target" id="zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a67d1936561ae206f27ec1a208581e44e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_STATUS_HEALTHY</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_status_t30ZES_FABRIC_PORT_STATUS_HEALTHYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The port is up and operating as expected. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DEGRADEDE">
+<span id="_CPPv3N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DEGRADEDE"></span><span id="_CPPv2N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DEGRADEDE"></span><span class="target" id="zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a446e6e871b11f7f0c98429761bf7bb0f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_STATUS_DEGRADED</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DEGRADEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The port is up but has quality and/or speed degradation. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_status_t29ZES_FABRIC_PORT_STATUS_FAILEDE">
+<span id="_CPPv3N24zes_fabric_port_status_t29ZES_FABRIC_PORT_STATUS_FAILEDE"></span><span id="_CPPv2N24zes_fabric_port_status_t29ZES_FABRIC_PORT_STATUS_FAILEDE"></span><span class="target" id="zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a01d54a0ffdf8b3e805280490134d5098"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_STATUS_FAILED</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_status_t29ZES_FABRIC_PORT_STATUS_FAILEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Port connection instabilities are preventing workloads making forward progress </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DISABLEDE">
+<span id="_CPPv3N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DISABLEDE"></span><span id="_CPPv2N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DISABLEDE"></span><span class="target" id="zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a4e24287a7516b856ff8dea3575d98287"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_STATUS_DISABLED</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_status_t31ZES_FABRIC_PORT_STATUS_DISABLEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The port is configured down. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_status_t35ZES_FABRIC_PORT_STATUS_FORCE_UINT32E">
+<span id="_CPPv3N24zes_fabric_port_status_t35ZES_FABRIC_PORT_STATUS_FORCE_UINT32E"></span><span id="_CPPv2N24zes_fabric_port_status_t35ZES_FABRIC_PORT_STATUS_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835ac98855a05c16503a864419f20b8ac707"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_STATUS_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_status_t35ZES_FABRIC_PORT_STATUS_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_FABRIC_PORT_STATUS_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-qual-issue-flags-t">
+<span id="id10"></span><h3>zes_fabric_port_qual_issue_flags_t<a class="headerlink" href="#zes-fabric-port-qual-issue-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv433zes_fabric_port_qual_issue_flag_t">
+<span id="_CPPv333zes_fabric_port_qual_issue_flag_t"></span><span id="_CPPv233zes_fabric_port_qual_issue_flag_t"></span><span class="target" id="zes__api_8h_1a11f31bea8189f9de84f384d2800d09bb"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_qual_issue_flag_t</span></span></span><a class="headerlink" href="#_CPPv433zes_fabric_port_qual_issue_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33zes_fabric_port_qual_issue_flag_t43ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_LINK_ERRORSE">
+<span id="_CPPv3N33zes_fabric_port_qual_issue_flag_t43ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_LINK_ERRORSE"></span><span id="_CPPv2N33zes_fabric_port_qual_issue_flag_t43ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_LINK_ERRORSE"></span><span class="target" id="zes__api_8h_1a11f31bea8189f9de84f384d2800d09bba10830a13de30b4d07c3672b1f22461ba"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_LINK_ERRORS</span></span></span><a class="headerlink" href="#_CPPv4N33zes_fabric_port_qual_issue_flag_t43ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_LINK_ERRORSE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Excessive link errors are occurring. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33zes_fabric_port_qual_issue_flag_t37ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_SPEEDE">
+<span id="_CPPv3N33zes_fabric_port_qual_issue_flag_t37ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_SPEEDE"></span><span id="_CPPv2N33zes_fabric_port_qual_issue_flag_t37ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_SPEEDE"></span><span class="target" id="zes__api_8h_1a11f31bea8189f9de84f384d2800d09bbadff2a21cf9df317daa540b57bb058b7e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_SPEED</span></span></span><a class="headerlink" href="#_CPPv4N33zes_fabric_port_qual_issue_flag_t37ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_SPEEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>There is a degradation in the bitrate and/or width of the link. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33zes_fabric_port_qual_issue_flag_t44ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N33zes_fabric_port_qual_issue_flag_t44ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N33zes_fabric_port_qual_issue_flag_t44ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a11f31bea8189f9de84f384d2800d09bbabd4f5924d77527e75dabad964044534e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N33zes_fabric_port_qual_issue_flag_t44ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_FABRIC_PORT_QUAL_ISSUE_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-failure-flags-t">
+<span id="id11"></span><h3>zes_fabric_port_failure_flags_t<a class="headerlink" href="#zes-fabric-port-failure-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv430zes_fabric_port_failure_flag_t">
+<span id="_CPPv330zes_fabric_port_failure_flag_t"></span><span id="_CPPv230zes_fabric_port_failure_flag_t"></span><span class="target" id="zes__api_8h_1ad50fd9c6af5bf926a15f3379e79398cf"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_failure_flag_t</span></span></span><a class="headerlink" href="#_CPPv430zes_fabric_port_failure_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_fabric_port_failure_flag_t35ZES_FABRIC_PORT_FAILURE_FLAG_FAILEDE">
+<span id="_CPPv3N30zes_fabric_port_failure_flag_t35ZES_FABRIC_PORT_FAILURE_FLAG_FAILEDE"></span><span id="_CPPv2N30zes_fabric_port_failure_flag_t35ZES_FABRIC_PORT_FAILURE_FLAG_FAILEDE"></span><span class="target" id="zes__api_8h_1ad50fd9c6af5bf926a15f3379e79398cfa00e62224303744cbbc985771d60c8df0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_FAILED</span></span></span><a class="headerlink" href="#_CPPv4N30zes_fabric_port_failure_flag_t35ZES_FABRIC_PORT_FAILURE_FLAG_FAILEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A previously operating link has failed. Hardware will automatically retrain this port. This state will persist until either the physical connection is removed or the link trains successfully. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_fabric_port_failure_flag_t45ZES_FABRIC_PORT_FAILURE_FLAG_TRAINING_TIMEOUTE">
+<span id="_CPPv3N30zes_fabric_port_failure_flag_t45ZES_FABRIC_PORT_FAILURE_FLAG_TRAINING_TIMEOUTE"></span><span id="_CPPv2N30zes_fabric_port_failure_flag_t45ZES_FABRIC_PORT_FAILURE_FLAG_TRAINING_TIMEOUTE"></span><span class="target" id="zes__api_8h_1ad50fd9c6af5bf926a15f3379e79398cfaa30e33087b202b0cf359544e7ed17aab"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_TRAINING_TIMEOUT</span></span></span><a class="headerlink" href="#_CPPv4N30zes_fabric_port_failure_flag_t45ZES_FABRIC_PORT_FAILURE_FLAG_TRAINING_TIMEOUTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A connection has not been established within an expected time. Hardware will continue to attempt port training. This status will persist until either the physical connection is removed or the link successfully trains. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_fabric_port_failure_flag_t37ZES_FABRIC_PORT_FAILURE_FLAG_FLAPPINGE">
+<span id="_CPPv3N30zes_fabric_port_failure_flag_t37ZES_FABRIC_PORT_FAILURE_FLAG_FLAPPINGE"></span><span id="_CPPv2N30zes_fabric_port_failure_flag_t37ZES_FABRIC_PORT_FAILURE_FLAG_FLAPPINGE"></span><span class="target" id="zes__api_8h_1ad50fd9c6af5bf926a15f3379e79398cfa6948c8854d264e0f95e7c92bed104b53"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_FLAPPING</span></span></span><a class="headerlink" href="#_CPPv4N30zes_fabric_port_failure_flag_t37ZES_FABRIC_PORT_FAILURE_FLAG_FLAPPINGE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Port has excessively trained and then transitioned down for some period of time. Driver will allow port to continue to train, but will not enable the port for use until the port has been disabled and subsequently re-enabled using <a class="reference internal" href="#zes__api_8h_1aa75684e0c1dafcb02759fba7de66d51d"><span class="std std-ref">zesFabricPortSetConfig()</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_fabric_port_failure_flag_t41ZES_FABRIC_PORT_FAILURE_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N30zes_fabric_port_failure_flag_t41ZES_FABRIC_PORT_FAILURE_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N30zes_fabric_port_failure_flag_t41ZES_FABRIC_PORT_FAILURE_FLAG_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1ad50fd9c6af5bf926a15f3379e79398cfa1d6adb7f4310cf9685f0174acce702d5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_FABRIC_PORT_FAILURE_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N30zes_fabric_port_failure_flag_t41ZES_FABRIC_PORT_FAILURE_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_FABRIC_PORT_FAILURE_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="fabric-port-structures">
+<h2>Fabric Port Structures<a class="headerlink" href="#fabric-port-structures" title="Link to this heading">#</a></h2>
+<section id="zes-fabric-port-id-t">
+<span id="id12"></span><h3>zes_fabric_port_id_t<a class="headerlink" href="#zes-fabric-port-id-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv420zes_fabric_port_id_t">
+<span id="_CPPv320zes_fabric_port_id_t"></span><span id="_CPPv220zes_fabric_port_id_t"></span><span id="zes_fabric_port_id_t"></span><span class="target" id="structzes__fabric__port__id__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_id_t</span></span></span><a class="headerlink" href="#_CPPv420zes_fabric_port_id_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Unique identifier for a fabric port. </p>
+<p><ul class="simple">
+<li><p>This is not a universal identifier. The identified is guaranteed to be unique for the current hardware configuration of the system. Changes in the hardware may result in a different identifier for a given port.</p></li>
+<li><p>The main purpose of this identifier to build up an instantaneous topology map of system connectivity. An application should enumerate all fabric ports and match the <code class="docutils literal notranslate"><span class="pre">remotePortId</span></code> member of <a class="reference internal" href="#structzes__fabric__port__state__t"><span class="std std-ref">zes_fabric_port_state_t</span></a> to the <code class="docutils literal notranslate"><span class="pre">portId</span></code> member of <a class="reference internal" href="#structzes__fabric__port__properties__t"><span class="std std-ref">zes_fabric_port_properties_t</span></a>. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_fabric_port_id_t8fabricIdE">
+<span id="_CPPv3N20zes_fabric_port_id_t8fabricIdE"></span><span id="_CPPv2N20zes_fabric_port_id_t8fabricIdE"></span><span id="zes_fabric_port_id_t::fabricId__uint32_t"></span><span class="target" id="structzes__fabric__port__id__t_1a510376dfb865c7886498254c147845e5"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fabricId</span></span></span><a class="headerlink" href="#_CPPv4N20zes_fabric_port_id_t8fabricIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Unique identifier for the fabric end-point </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_fabric_port_id_t8attachIdE">
+<span id="_CPPv3N20zes_fabric_port_id_t8attachIdE"></span><span id="_CPPv2N20zes_fabric_port_id_t8attachIdE"></span><span id="zes_fabric_port_id_t::attachId__uint32_t"></span><span class="target" id="structzes__fabric__port__id__t_1a5467e1d2cc60b5476665cd61b45dec05"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">attachId</span></span></span><a class="headerlink" href="#_CPPv4N20zes_fabric_port_id_t8attachIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Unique identifier for the device attachment point </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N20zes_fabric_port_id_t10portNumberE">
+<span id="_CPPv3N20zes_fabric_port_id_t10portNumberE"></span><span id="_CPPv2N20zes_fabric_port_id_t10portNumberE"></span><span id="zes_fabric_port_id_t::portNumber__uint8_t"></span><span class="target" id="structzes__fabric__port__id__t_1a14ec98ebec26495a515065d8c5580fc3"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">portNumber</span></span></span><a class="headerlink" href="#_CPPv4N20zes_fabric_port_id_t10portNumberE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The logical port number (this is typically marked somewhere on the physical device) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-speed-t">
+<span id="id13"></span><h3>zes_fabric_port_speed_t<a class="headerlink" href="#zes-fabric-port-speed-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423zes_fabric_port_speed_t">
+<span id="_CPPv323zes_fabric_port_speed_t"></span><span id="_CPPv223zes_fabric_port_speed_t"></span><span id="zes_fabric_port_speed_t"></span><span class="target" id="structzes__fabric__port__speed__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_speed_t</span></span></span><a class="headerlink" href="#_CPPv423zes_fabric_port_speed_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric port speed in one direction. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_speed_t7bitRateE">
+<span id="_CPPv3N23zes_fabric_port_speed_t7bitRateE"></span><span id="_CPPv2N23zes_fabric_port_speed_t7bitRateE"></span><span id="zes_fabric_port_speed_t::bitRate__int64_t"></span><span class="target" id="structzes__fabric__port__speed__t_1a455c6151492090870d556dc7f6ff74bd"></span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bitRate</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_speed_t7bitRateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Bits/sec that the link is operating at. A value of -1 means that this property is unknown. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_speed_t5widthE">
+<span id="_CPPv3N23zes_fabric_port_speed_t5widthE"></span><span id="_CPPv2N23zes_fabric_port_speed_t5widthE"></span><span id="zes_fabric_port_speed_t::width__int32_t"></span><span class="target" id="structzes__fabric__port__speed__t_1a4bd2518644df6d0e8f0d58ae3cbb9cd7"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">width</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_speed_t5widthE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The number of lanes. A value of -1 means that this property is unknown. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-properties-t">
+<span id="id14"></span><h3>zes_fabric_port_properties_t<a class="headerlink" href="#zes-fabric-port-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv428zes_fabric_port_properties_t">
+<span id="_CPPv328zes_fabric_port_properties_t"></span><span id="_CPPv228zes_fabric_port_properties_t"></span><span id="zes_fabric_port_properties_t"></span><span class="target" id="structzes__fabric__port__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_properties_t</span></span></span><a class="headerlink" href="#_CPPv428zes_fabric_port_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric port properties. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t5stypeE">
+<span id="_CPPv3N28zes_fabric_port_properties_t5stypeE"></span><span id="_CPPv2N28zes_fabric_port_properties_t5stypeE"></span><span id="zes_fabric_port_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__fabric__port__properties__t_1a47f9e796240024ada7fd4b6485e44fde"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t5pNextE">
+<span id="_CPPv3N28zes_fabric_port_properties_t5pNextE"></span><span id="_CPPv2N28zes_fabric_port_properties_t5pNextE"></span><span id="zes_fabric_port_properties_t::pNext__voidP"></span><span class="target" id="structzes__fabric__port__properties__t_1a299f861e03f59f2c9d6eef51eca9e034"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t5modelE">
+<span id="_CPPv3N28zes_fabric_port_properties_t5modelE"></span><span id="_CPPv2N28zes_fabric_port_properties_t5modelE"></span><span id="zes_fabric_port_properties_t::model__cA"></span><span class="target" id="structzes__fabric__port__properties__t_1a573426a594797315cff7e3574c44ceec"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">model</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">ZES_MAX_FABRIC_PORT_MODEL_SIZE</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t5modelE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Description of port technology. Will be set to the string “unknown” if this cannot be determined for this port. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t11onSubdeviceE">
+<span id="_CPPv3N28zes_fabric_port_properties_t11onSubdeviceE"></span><span id="_CPPv2N28zes_fabric_port_properties_t11onSubdeviceE"></span><span id="zes_fabric_port_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__fabric__port__properties__t_1a63d08ca9d4118244aea14887c7782379"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] True if the port is located on a sub-device; false means that the port is on the device of the calling Sysman handle </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t11subdeviceIdE">
+<span id="_CPPv3N28zes_fabric_port_properties_t11subdeviceIdE"></span><span id="_CPPv2N28zes_fabric_port_properties_t11subdeviceIdE"></span><span id="zes_fabric_port_properties_t::subdeviceId__uint32_t"></span><span class="target" id="structzes__fabric__port__properties__t_1a8b8ce9ac3b091b522c5d7b41165bdb44"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subdeviceId</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t11subdeviceIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] If onSubdevice is true, this gives the ID of the sub-device </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t6portIdE">
+<span id="_CPPv3N28zes_fabric_port_properties_t6portIdE"></span><span id="_CPPv2N28zes_fabric_port_properties_t6portIdE"></span><span id="zes_fabric_port_properties_t::portId__zes_fabric_port_id_t"></span><span class="target" id="structzes__fabric__port__properties__t_1acf77d1c477e321046511d654e68083fd"></span><a class="reference internal" href="#_CPPv420zes_fabric_port_id_t" title="zes_fabric_port_id_t"><span class="n"><span class="pre">zes_fabric_port_id_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">portId</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t6portIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The unique port identifier </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t10maxRxSpeedE">
+<span id="_CPPv3N28zes_fabric_port_properties_t10maxRxSpeedE"></span><span id="_CPPv2N28zes_fabric_port_properties_t10maxRxSpeedE"></span><span id="zes_fabric_port_properties_t::maxRxSpeed__zes_fabric_port_speed_t"></span><span class="target" id="structzes__fabric__port__properties__t_1aac376b375b1b4fec3b19125e1b72ecf3"></span><a class="reference internal" href="#_CPPv423zes_fabric_port_speed_t" title="zes_fabric_port_speed_t"><span class="n"><span class="pre">zes_fabric_port_speed_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxRxSpeed</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t10maxRxSpeedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Maximum speed supported by the receive side of the port (sum of all lanes) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_properties_t10maxTxSpeedE">
+<span id="_CPPv3N28zes_fabric_port_properties_t10maxTxSpeedE"></span><span id="_CPPv2N28zes_fabric_port_properties_t10maxTxSpeedE"></span><span id="zes_fabric_port_properties_t::maxTxSpeed__zes_fabric_port_speed_t"></span><span class="target" id="structzes__fabric__port__properties__t_1a331c6e66642a53045c65c44f037b4fb4"></span><a class="reference internal" href="#_CPPv423zes_fabric_port_speed_t" title="zes_fabric_port_speed_t"><span class="n"><span class="pre">zes_fabric_port_speed_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxTxSpeed</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_properties_t10maxTxSpeedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Maximum speed supported by the transmit side of the port (sum of all lanes) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-fabric-link-type-t">
+<span id="id15"></span><h3>zes_fabric_link_type_t<a class="headerlink" href="#zes-fabric-link-type-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv422zes_fabric_link_type_t">
+<span id="_CPPv322zes_fabric_link_type_t"></span><span id="_CPPv222zes_fabric_link_type_t"></span><span id="zes_fabric_link_type_t"></span><span class="target" id="structzes__fabric__link__type__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_link_type_t</span></span></span><a class="headerlink" href="#_CPPv422zes_fabric_link_type_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Provides information about the fabric link attached to a port. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N22zes_fabric_link_type_t4descE">
+<span id="_CPPv3N22zes_fabric_link_type_t4descE"></span><span id="_CPPv2N22zes_fabric_link_type_t4descE"></span><span id="zes_fabric_link_type_t::desc__cA"></span><span class="target" id="structzes__fabric__link__type__t_1a23fd757e365e0a7cc6723346791a9657"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">desc</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">ZES_MAX_FABRIC_LINK_TYPE_SIZE</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N22zes_fabric_link_type_t4descE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Description of link technology. Will be set to the string “unknown” if this cannot be determined for this link. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-config-t">
+<span id="id16"></span><h3>zes_fabric_port_config_t<a class="headerlink" href="#zes-fabric-port-config-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv424zes_fabric_port_config_t">
+<span id="_CPPv324zes_fabric_port_config_t"></span><span id="_CPPv224zes_fabric_port_config_t"></span><span id="zes_fabric_port_config_t"></span><span class="target" id="structzes__fabric__port__config__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_config_t</span></span></span><a class="headerlink" href="#_CPPv424zes_fabric_port_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric port configuration. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_config_t5stypeE">
+<span id="_CPPv3N24zes_fabric_port_config_t5stypeE"></span><span id="_CPPv2N24zes_fabric_port_config_t5stypeE"></span><span id="zes_fabric_port_config_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__fabric__port__config__t_1a561b3c014e25687e5074a0978b22bd6e"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_config_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_config_t5pNextE">
+<span id="_CPPv3N24zes_fabric_port_config_t5pNextE"></span><span id="_CPPv2N24zes_fabric_port_config_t5pNextE"></span><span id="zes_fabric_port_config_t::pNext__voidCP"></span><span class="target" id="structzes__fabric__port__config__t_1a4a0e76d12a58ca9d9e82178a964814c2"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_config_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_config_t7enabledE">
+<span id="_CPPv3N24zes_fabric_port_config_t7enabledE"></span><span id="_CPPv2N24zes_fabric_port_config_t7enabledE"></span><span id="zes_fabric_port_config_t::enabled__ze_bool_t"></span><span class="target" id="structzes__fabric__port__config__t_1ad664884c32e8eff723e1f12f3b772211"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enabled</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_config_t7enabledE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Port is configured up/down </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N24zes_fabric_port_config_t9beaconingE">
+<span id="_CPPv3N24zes_fabric_port_config_t9beaconingE"></span><span id="_CPPv2N24zes_fabric_port_config_t9beaconingE"></span><span id="zes_fabric_port_config_t::beaconing__ze_bool_t"></span><span class="target" id="structzes__fabric__port__config__t_1ab907882897d0349c0c6cca5a60c07a1e"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">beaconing</span></span></span><a class="headerlink" href="#_CPPv4N24zes_fabric_port_config_t9beaconingE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out] Beaconing is configured on/off </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-state-t">
+<span id="id17"></span><h3>zes_fabric_port_state_t<a class="headerlink" href="#zes-fabric-port-state-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423zes_fabric_port_state_t">
+<span id="_CPPv323zes_fabric_port_state_t"></span><span id="_CPPv223zes_fabric_port_state_t"></span><span id="zes_fabric_port_state_t"></span><span class="target" id="structzes__fabric__port__state__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_state_t</span></span></span><a class="headerlink" href="#_CPPv423zes_fabric_port_state_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric port state. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t5stypeE">
+<span id="_CPPv3N23zes_fabric_port_state_t5stypeE"></span><span id="_CPPv2N23zes_fabric_port_state_t5stypeE"></span><span id="zes_fabric_port_state_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__fabric__port__state__t_1ac6b57a4b2e4ae0745dd9ee6c1924c878"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t5pNextE">
+<span id="_CPPv3N23zes_fabric_port_state_t5pNextE"></span><span id="_CPPv2N23zes_fabric_port_state_t5pNextE"></span><span id="zes_fabric_port_state_t::pNext__voidCP"></span><span class="target" id="structzes__fabric__port__state__t_1a9d924599439c7d92f7deb732f80570fb"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t6statusE">
+<span id="_CPPv3N23zes_fabric_port_state_t6statusE"></span><span id="_CPPv2N23zes_fabric_port_state_t6statusE"></span><span id="zes_fabric_port_state_t::status__zes_fabric_port_status_t"></span><span class="target" id="structzes__fabric__port__state__t_1a8dada0b2a275c124030dd76e650e19c7"></span><a class="reference internal" href="#_CPPv424zes_fabric_port_status_t" title="zes_fabric_port_status_t"><span class="n"><span class="pre">zes_fabric_port_status_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">status</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t6statusE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The current status of the port </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t13qualityIssuesE">
+<span id="_CPPv3N23zes_fabric_port_state_t13qualityIssuesE"></span><span id="_CPPv2N23zes_fabric_port_state_t13qualityIssuesE"></span><span id="zes_fabric_port_state_t::qualityIssues__zes_fabric_port_qual_issue_flags_t"></span><span class="target" id="structzes__fabric__port__state__t_1a17a9f19cf5bf3ec43ed925eb110e04f9"></span><span class="n"><span class="pre">zes_fabric_port_qual_issue_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">qualityIssues</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t13qualityIssuesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] If status is <a class="reference internal" href="#zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a446e6e871b11f7f0c98429761bf7bb0f"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_DEGRADED</span></a>, then this gives a combination of <a class="reference internal" href="#zes__api_8h_1a11f31bea8189f9de84f384d2800d09bb"><span class="std std-ref">zes_fabric_port_qual_issue_flag_t</span></a> for quality issues that have been detected; otherwise, 0 indicates there are no quality issues with the link at this time. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t14failureReasonsE">
+<span id="_CPPv3N23zes_fabric_port_state_t14failureReasonsE"></span><span id="_CPPv2N23zes_fabric_port_state_t14failureReasonsE"></span><span id="zes_fabric_port_state_t::failureReasons__zes_fabric_port_failure_flags_t"></span><span class="target" id="structzes__fabric__port__state__t_1ae84710048894471cc2dbb73eab757fda"></span><span class="n"><span class="pre">zes_fabric_port_failure_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">failureReasons</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t14failureReasonsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] If status is <a class="reference internal" href="#zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a01d54a0ffdf8b3e805280490134d5098"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_FAILED</span></a>, then this gives a combination of <a class="reference internal" href="#zes__api_8h_1ad50fd9c6af5bf926a15f3379e79398cf"><span class="std std-ref">zes_fabric_port_failure_flag_t</span></a> for reasons for the connection instability; otherwise, 0 indicates there are no connection stability issues at this time. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t12remotePortIdE">
+<span id="_CPPv3N23zes_fabric_port_state_t12remotePortIdE"></span><span id="_CPPv2N23zes_fabric_port_state_t12remotePortIdE"></span><span id="zes_fabric_port_state_t::remotePortId__zes_fabric_port_id_t"></span><span class="target" id="structzes__fabric__port__state__t_1a99cb345a280f31a20a8840bcd75389aa"></span><a class="reference internal" href="#_CPPv420zes_fabric_port_id_t" title="zes_fabric_port_id_t"><span class="n"><span class="pre">zes_fabric_port_id_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remotePortId</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t12remotePortIdE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The unique port identifier for the remote connection point if status is <a class="reference internal" href="#zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a67d1936561ae206f27ec1a208581e44e"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_HEALTHY</span></a>, <a class="reference internal" href="#zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a446e6e871b11f7f0c98429761bf7bb0f"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_DEGRADED</span></a> or <a class="reference internal" href="#zes__api_8h_1a1f819a53b8aa790887c0f4c8fe15f835a01d54a0ffdf8b3e805280490134d5098"><span class="std std-ref">ZES_FABRIC_PORT_STATUS_FAILED</span></a></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t7rxSpeedE">
+<span id="_CPPv3N23zes_fabric_port_state_t7rxSpeedE"></span><span id="_CPPv2N23zes_fabric_port_state_t7rxSpeedE"></span><span id="zes_fabric_port_state_t::rxSpeed__zes_fabric_port_speed_t"></span><span class="target" id="structzes__fabric__port__state__t_1a938922ed2487ab941f60df8af318c899"></span><a class="reference internal" href="#_CPPv423zes_fabric_port_speed_t" title="zes_fabric_port_speed_t"><span class="n"><span class="pre">zes_fabric_port_speed_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rxSpeed</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t7rxSpeedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Current maximum receive speed (sum of all lanes) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_fabric_port_state_t7txSpeedE">
+<span id="_CPPv3N23zes_fabric_port_state_t7txSpeedE"></span><span id="_CPPv2N23zes_fabric_port_state_t7txSpeedE"></span><span id="zes_fabric_port_state_t::txSpeed__zes_fabric_port_speed_t"></span><span class="target" id="structzes__fabric__port__state__t_1adcfdfa5fcb4d477672248a3244a0a479"></span><a class="reference internal" href="#_CPPv423zes_fabric_port_speed_t" title="zes_fabric_port_speed_t"><span class="n"><span class="pre">zes_fabric_port_speed_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">txSpeed</span></span></span><a class="headerlink" href="#_CPPv4N23zes_fabric_port_state_t7txSpeedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Current maximum transmit speed (sum of all lanes) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-throughput-t">
+<span id="id18"></span><h3>zes_fabric_port_throughput_t<a class="headerlink" href="#zes-fabric-port-throughput-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv428zes_fabric_port_throughput_t">
+<span id="_CPPv328zes_fabric_port_throughput_t"></span><span id="_CPPv228zes_fabric_port_throughput_t"></span><span id="zes_fabric_port_throughput_t"></span><span class="target" id="structzes__fabric__port__throughput__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_throughput_t</span></span></span><a class="headerlink" href="#_CPPv428zes_fabric_port_throughput_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric port throughput. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_throughput_t9timestampE">
+<span id="_CPPv3N28zes_fabric_port_throughput_t9timestampE"></span><span id="_CPPv2N28zes_fabric_port_throughput_t9timestampE"></span><span id="zes_fabric_port_throughput_t::timestamp__uint64_t"></span><span class="target" id="structzes__fabric__port__throughput__t_1a4efd3ce961e8d821e66d02ea069879fe"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timestamp</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_throughput_t9timestampE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Monotonic timestamp counter in microseconds when the measurement was made. This timestamp should only be used to calculate delta time between snapshots of this structure. Never take the delta of this timestamp with the timestamp from a different structure since they are not guaranteed to have the same base. The absolute value of the timestamp is only valid during within the application and may be different on the next execution. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_throughput_t9rxCounterE">
+<span id="_CPPv3N28zes_fabric_port_throughput_t9rxCounterE"></span><span id="_CPPv2N28zes_fabric_port_throughput_t9rxCounterE"></span><span id="zes_fabric_port_throughput_t::rxCounter__uint64_t"></span><span class="target" id="structzes__fabric__port__throughput__t_1acd65c6ef06498f075888277d372918e8"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rxCounter</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_throughput_t9rxCounterE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Monotonic counter for the number of bytes received (sum of all lanes). This includes all protocol overhead, not only the GPU traffic. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N28zes_fabric_port_throughput_t9txCounterE">
+<span id="_CPPv3N28zes_fabric_port_throughput_t9txCounterE"></span><span id="_CPPv2N28zes_fabric_port_throughput_t9txCounterE"></span><span id="zes_fabric_port_throughput_t::txCounter__uint64_t"></span><span class="target" id="structzes__fabric__port__throughput__t_1adfcad1a626e26b8d6f5a0c829c218f06"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">txCounter</span></span></span><a class="headerlink" href="#_CPPv4N28zes_fabric_port_throughput_t9txCounterE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Monotonic counter for the number of bytes transmitted (sum of all lanes). This includes all protocol overhead, not only the GPU traffic. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-fabric-port-error-counters-t">
+<span id="id19"></span><h3>zes_fabric_port_error_counters_t<a class="headerlink" href="#zes-fabric-port-error-counters-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv432zes_fabric_port_error_counters_t">
+<span id="_CPPv332zes_fabric_port_error_counters_t"></span><span id="_CPPv232zes_fabric_port_error_counters_t"></span><span id="zes_fabric_port_error_counters_t"></span><span class="target" id="structzes__fabric__port__error__counters__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fabric_port_error_counters_t</span></span></span><a class="headerlink" href="#_CPPv432zes_fabric_port_error_counters_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric Port Error Counters. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_fabric_port_error_counters_t5stypeE">
+<span id="_CPPv3N32zes_fabric_port_error_counters_t5stypeE"></span><span id="_CPPv2N32zes_fabric_port_error_counters_t5stypeE"></span><span id="zes_fabric_port_error_counters_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__fabric__port__error__counters__t_1a1de59094d8f58e69eef84556736556cd"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N32zes_fabric_port_error_counters_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_fabric_port_error_counters_t5pNextE">
+<span id="_CPPv3N32zes_fabric_port_error_counters_t5pNextE"></span><span id="_CPPv2N32zes_fabric_port_error_counters_t5pNextE"></span><span id="zes_fabric_port_error_counters_t::pNext__voidP"></span><span class="target" id="structzes__fabric__port__error__counters__t_1a368d4314f8f2a44fd6adb22bdb513f44"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N32zes_fabric_port_error_counters_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_fabric_port_error_counters_t16linkFailureCountE">
+<span id="_CPPv3N32zes_fabric_port_error_counters_t16linkFailureCountE"></span><span id="_CPPv2N32zes_fabric_port_error_counters_t16linkFailureCountE"></span><span id="zes_fabric_port_error_counters_t::linkFailureCount__uint64_t"></span><span class="target" id="structzes__fabric__port__error__counters__t_1a6e698081a5801398837d4e5181c080d3"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">linkFailureCount</span></span></span><a class="headerlink" href="#_CPPv4N32zes_fabric_port_error_counters_t16linkFailureCountE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Link Failure Error Count reported per port </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_fabric_port_error_counters_t16fwCommErrorCountE">
+<span id="_CPPv3N32zes_fabric_port_error_counters_t16fwCommErrorCountE"></span><span id="_CPPv2N32zes_fabric_port_error_counters_t16fwCommErrorCountE"></span><span id="zes_fabric_port_error_counters_t::fwCommErrorCount__uint64_t"></span><span class="target" id="structzes__fabric__port__error__counters__t_1a5e1bbce2c338445feeaa760212e3bdd5"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fwCommErrorCount</span></span></span><a class="headerlink" href="#_CPPv4N32zes_fabric_port_error_counters_t16fwCommErrorCountE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Firmware Communication Error Count reported per device </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_fabric_port_error_counters_t12fwErrorCountE">
+<span id="_CPPv3N32zes_fabric_port_error_counters_t12fwErrorCountE"></span><span id="_CPPv2N32zes_fabric_port_error_counters_t12fwErrorCountE"></span><span id="zes_fabric_port_error_counters_t::fwErrorCount__uint64_t"></span><span class="target" id="structzes__fabric__port__error__counters__t_1a1e2b933b9fa546d526435932535cb674"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fwErrorCount</span></span></span><a class="headerlink" href="#_CPPv4N32zes_fabric_port_error_counters_t12fwErrorCountE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Firmware reported Error Count reported per device </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_fabric_port_error_counters_t16linkDegradeCountE">
+<span id="_CPPv3N32zes_fabric_port_error_counters_t16linkDegradeCountE"></span><span id="_CPPv2N32zes_fabric_port_error_counters_t16linkDegradeCountE"></span><span id="zes_fabric_port_error_counters_t::linkDegradeCount__uint64_t"></span><span class="target" id="structzes__fabric__port__error__counters__t_1adf927ad1a6cbca8484ff58fb0ffa1446"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">linkDegradeCount</span></span></span><a class="headerlink" href="#_CPPv4N32zes_fabric_port_error_counters_t16linkDegradeCountE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Link Degrade Error Count reported per port </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="engine.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Engine</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="fan.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Fan</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">8</span></summary><div class="ctoc-prefix">zesFabricPort</div><ul class="ctoc-list"><li><a href="fabric_port.html#zesfabricportgetproperties">&hellip;GetProperties</a></li><li><a href="fabric_port.html#zesfabricportgetlinktype">&hellip;GetLinkType</a></li><li><a href="fabric_port.html#zesfabricportgetconfig">&hellip;GetConfig</a></li><li><a href="fabric_port.html#zesfabricportsetconfig">&hellip;SetConfig</a></li><li><a href="fabric_port.html#zesfabricportgetstate">&hellip;GetState</a></li><li><a href="fabric_port.html#zesfabricportgetthroughput">&hellip;GetThroughput</a></li><li><a href="fabric_port.html#zesfabricportgetfabricerrorcounters">&hellip;GetFabricErrorCounters</a></li><li><a href="fabric_port.html#zesfabricportgetmultiportthroughput">&hellip;GetMultiPortThroughput</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="fabric_port.html#zes-fabric-port-status-t">zes_fabric_port_status_t</a></li><li><a href="fabric_port.html#zes-fabric-port-qual-issue-flags-t">zes_fabric_port_qual_issue_flags_t</a></li><li><a href="fabric_port.html#zes-fabric-port-failure-flags-t">zes_fabric_port_failure_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">8</span></summary><ul class="ctoc-list"><li><a href="fabric_port.html#zes-fabric-port-id-t">zes_fabric_port_id_t</a></li><li><a href="fabric_port.html#zes-fabric-port-speed-t">zes_fabric_port_speed_t</a></li><li><a href="fabric_port.html#zes-fabric-port-properties-t">zes_fabric_port_properties_t</a></li><li><a href="fabric_port.html#zes-fabric-link-type-t">zes_fabric_link_type_t</a></li><li><a href="fabric_port.html#zes-fabric-port-config-t">zes_fabric_port_config_t</a></li><li><a href="fabric_port.html#zes-fabric-port-state-t">zes_fabric_port_state_t</a></li><li><a href="fabric_port.html#zes-fabric-port-throughput-t">zes_fabric_port_throughput_t</a></li><li><a href="fabric_port.html#zes-fabric-port-error-counters-t">zes_fabric_port_error_counters_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,893 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Metric &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tools/api/apis/metric';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Metric Streamer" href="metric_streamer.html" />
+    <link rel="prev" title="Metric Group" href="metric_group.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric_group.html">Metric Group</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/tools/api/apis/metric.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Metric</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-functions">Metric Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zetmetricget">zetMetricGet</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv412zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t"><code class="docutils literal notranslate"><span class="pre">zetMetricGet()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zetmetricgetproperties">zetMetricGetProperties</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t"><code class="docutils literal notranslate"><span class="pre">zetMetricGetProperties()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-enums">Metric Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-type-t">zet_metric_type_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zet_metric_type_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_type_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t24ZET_METRIC_TYPE_DURATIONE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_DURATION</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t21ZET_METRIC_TYPE_EVENTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_EVENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t32ZET_METRIC_TYPE_EVENT_WITH_RANGEE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_EVENT_WITH_RANGE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t26ZET_METRIC_TYPE_THROUGHPUTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_THROUGHPUT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t25ZET_METRIC_TYPE_TIMESTAMPE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_TIMESTAMP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t20ZET_METRIC_TYPE_FLAGE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_FLAG</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t21ZET_METRIC_TYPE_RATIOE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_RATIO</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t19ZET_METRIC_TYPE_RAWE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_RAW</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t35ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMPE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t31ZET_METRIC_TYPE_EVENT_EXP_STARTE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_START</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t29ZET_METRIC_TYPE_EVENT_EXP_ENDE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_END</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t47ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUEE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t34ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUFE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUF</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t22ZET_METRIC_TYPE_IP_EXPE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_IP_EXP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t18ZET_METRIC_TYPE_IPE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_IP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17zet_metric_type_t28ZET_METRIC_TYPE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_TYPE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-structures">Metric Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-properties-t">zet_metric_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zet_metric_properties_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t4nameE"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t11descriptionE"><code class="docutils literal notranslate"><span class="pre">description</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t9componentE"><code class="docutils literal notranslate"><span class="pre">component</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t10tierNumberE"><code class="docutils literal notranslate"><span class="pre">tierNumber</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t10metricTypeE"><code class="docutils literal notranslate"><span class="pre">metricType</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t10resultTypeE"><code class="docutils literal notranslate"><span class="pre">resultType</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_metric_properties_t11resultUnitsE"><code class="docutils literal notranslate"><span class="pre">resultUnits</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="metric">
+<h1>Metric<a class="headerlink" href="#metric" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="metric-functions">
+<h2>Metric Functions<a class="headerlink" href="#metric-functions" title="Link to this heading">#</a></h2>
+<section id="zetmetricget">
+<span id="id1"></span><h3>zetMetricGet<a class="headerlink" href="#zetmetricget" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t">
+<span id="_CPPv312zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t"></span><span id="_CPPv212zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t"></span><span id="zetMetricGet__zet_metric_group_handle_t.uint32_tP.zet_metric_handle_tP"></span><span class="target" id="zet__api_8h_1a0969e40568ceb40f43097947fe16af6a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGet</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_group_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricGroup</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="n"><span class="pre">zet_metric_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetrics</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412zetMetricGet25zet_metric_group_handle_tP8uint32_tP19zet_metric_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieves metric from a metric group. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hMetricGroup</strong> – [in] handle of the metric group </p></li>
+<li><p><strong>pCount</strong> – [in,out] pointer to the number of metrics. if count is zero, then the driver shall update the value with the total number of metrics available. if count is greater than the number of metrics available, then the driver shall update the value with the correct number of metrics available. </p></li>
+<li><p><strong>phMetrics</strong> – [in,out][optional][range(0, *pCount)] array of handle of metrics. if count is less than the number of metrics available, then driver shall only retrieve that number of metrics. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetricGroup</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pCount</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zetmetricgetproperties">
+<span id="id2"></span><h3>zetMetricGetProperties<a class="headerlink" href="#zetmetricgetproperties" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t">
+<span id="_CPPv322zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t"></span><span id="_CPPv222zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t"></span><span id="zetMetricGetProperties__zet_metric_handle_t.zet_metric_properties_tP"></span><span class="target" id="zet__api_8h_1add7e968bb0f85203370d89138e2b921b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetric</span></span>, <a class="reference internal" href="#_CPPv423zet_metric_properties_t" title="zet_metric_properties_t"><span class="n"><span class="pre">zet_metric_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zetMetricGetProperties19zet_metric_handle_tP23zet_metric_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieves attributes of a metric. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hMetric</strong> – [in] handle of the metric </p></li>
+<li><p><strong>pProperties</strong> – [in,out] metric properties </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hMetric</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="metric-enums">
+<h2>Metric Enums<a class="headerlink" href="#metric-enums" title="Link to this heading">#</a></h2>
+<section id="zet-metric-type-t">
+<span id="id3"></span><h3>zet_metric_type_t<a class="headerlink" href="#zet-metric-type-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv417zet_metric_type_t">
+<span id="_CPPv317zet_metric_type_t"></span><span id="_CPPv217zet_metric_type_t"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_type_t</span></span></span><a class="headerlink" href="#_CPPv417zet_metric_type_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t24ZET_METRIC_TYPE_DURATIONE">
+<span id="_CPPv3N17zet_metric_type_t24ZET_METRIC_TYPE_DURATIONE"></span><span id="_CPPv2N17zet_metric_type_t24ZET_METRIC_TYPE_DURATIONE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a48e0d08182af72dab5d2b59842e9351e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_DURATION</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t24ZET_METRIC_TYPE_DURATIONE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: duration. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t21ZET_METRIC_TYPE_EVENTE">
+<span id="_CPPv3N17zet_metric_type_t21ZET_METRIC_TYPE_EVENTE"></span><span id="_CPPv2N17zet_metric_type_t21ZET_METRIC_TYPE_EVENTE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a797a25adff21afbff01a56448afc0748"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_EVENT</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t21ZET_METRIC_TYPE_EVENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: event. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t32ZET_METRIC_TYPE_EVENT_WITH_RANGEE">
+<span id="_CPPv3N17zet_metric_type_t32ZET_METRIC_TYPE_EVENT_WITH_RANGEE"></span><span id="_CPPv2N17zet_metric_type_t32ZET_METRIC_TYPE_EVENT_WITH_RANGEE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a355a55955a3bd7060dcc7db67d123b6f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_EVENT_WITH_RANGE</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t32ZET_METRIC_TYPE_EVENT_WITH_RANGEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: event with range. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t26ZET_METRIC_TYPE_THROUGHPUTE">
+<span id="_CPPv3N17zet_metric_type_t26ZET_METRIC_TYPE_THROUGHPUTE"></span><span id="_CPPv2N17zet_metric_type_t26ZET_METRIC_TYPE_THROUGHPUTE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8aec193fcd04b40aed458c92c07bd287ce"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_THROUGHPUT</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t26ZET_METRIC_TYPE_THROUGHPUTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: throughput. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t25ZET_METRIC_TYPE_TIMESTAMPE">
+<span id="_CPPv3N17zet_metric_type_t25ZET_METRIC_TYPE_TIMESTAMPE"></span><span id="_CPPv2N17zet_metric_type_t25ZET_METRIC_TYPE_TIMESTAMPE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8abb9105f08a67c1e1f8423127eb9b65e1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_TIMESTAMP</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t25ZET_METRIC_TYPE_TIMESTAMPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: timestamp. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t20ZET_METRIC_TYPE_FLAGE">
+<span id="_CPPv3N17zet_metric_type_t20ZET_METRIC_TYPE_FLAGE"></span><span id="_CPPv2N17zet_metric_type_t20ZET_METRIC_TYPE_FLAGE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a2b3ece2d73f47565d504fb49b76b34bd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_FLAG</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t20ZET_METRIC_TYPE_FLAGE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: flag. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t21ZET_METRIC_TYPE_RATIOE">
+<span id="_CPPv3N17zet_metric_type_t21ZET_METRIC_TYPE_RATIOE"></span><span id="_CPPv2N17zet_metric_type_t21ZET_METRIC_TYPE_RATIOE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8af42caf0e984708fcc54de35fb71077eb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_RATIO</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t21ZET_METRIC_TYPE_RATIOE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: ratio. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t19ZET_METRIC_TYPE_RAWE">
+<span id="_CPPv3N17zet_metric_type_t19ZET_METRIC_TYPE_RAWE"></span><span id="_CPPv2N17zet_metric_type_t19ZET_METRIC_TYPE_RAWE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a40b2d339c85486e8d9a9f6b6f96f8db4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_RAW</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t19ZET_METRIC_TYPE_RAWE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: raw. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t35ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMPE">
+<span id="_CPPv3N17zet_metric_type_t35ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMPE"></span><span id="_CPPv2N17zet_metric_type_t35ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMPE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a374e5cd12d684f967fb7ecad8d1da609"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMP</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t35ZET_METRIC_TYPE_EVENT_EXP_TIMESTAMPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: event with only timestamp and value has no meaning. <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t31ZET_METRIC_TYPE_EVENT_EXP_STARTE">
+<span id="_CPPv3N17zet_metric_type_t31ZET_METRIC_TYPE_EVENT_EXP_STARTE"></span><span id="_CPPv2N17zet_metric_type_t31ZET_METRIC_TYPE_EVENT_EXP_STARTE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a42e40daf20b9a86a0f1a43e9416a8a61"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_START</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t31ZET_METRIC_TYPE_EVENT_EXP_STARTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: the first event of a start/end event pair. <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t29ZET_METRIC_TYPE_EVENT_EXP_ENDE">
+<span id="_CPPv3N17zet_metric_type_t29ZET_METRIC_TYPE_EVENT_EXP_ENDE"></span><span id="_CPPv2N17zet_metric_type_t29ZET_METRIC_TYPE_EVENT_EXP_ENDE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a82dc600d4f1725f5b9c5e0a4b8ecb03e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_END</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t29ZET_METRIC_TYPE_EVENT_EXP_ENDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: the second event of a start/end event pair. <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t47ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUEE">
+<span id="_CPPv3N17zet_metric_type_t47ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUEE"></span><span id="_CPPv2N17zet_metric_type_t47ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUEE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8ae8c0c94aa9ff301aeae819106126b6f8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUE</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t47ZET_METRIC_TYPE_EVENT_EXP_MONOTONIC_WRAPS_VALUEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: value of the event is a monotonically increasing value that can wrap around <em class="since-note"> (since v1.10)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t34ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUFE">
+<span id="_CPPv3N17zet_metric_type_t34ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUFE"></span><span id="_CPPv2N17zet_metric_type_t34ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUFE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8a421ef942517df8f4aafc3c5c356d83e2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUF</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t34ZET_METRIC_TYPE_EXP_EXPORT_DMA_BUFE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric which exports linux dma_buf, which could be imported/mapped to the host process <em class="since-note"> (since v1.11)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t22ZET_METRIC_TYPE_IP_EXPE">
+<span id="_CPPv3N17zet_metric_type_t22ZET_METRIC_TYPE_IP_EXPE"></span><span id="_CPPv2N17zet_metric_type_t22ZET_METRIC_TYPE_IP_EXPE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8ab0ac3aff32b9355dbe1766058e6ed48d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_IP_EXP</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t22ZET_METRIC_TYPE_IP_EXPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: instruction pointer. Deprecated, use <a class="reference internal" href="#zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8ad2b526b381a16453380a84fd6dc7fc6c"><span class="std std-ref">ZET_METRIC_TYPE_IP</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t18ZET_METRIC_TYPE_IPE">
+<span id="_CPPv3N17zet_metric_type_t18ZET_METRIC_TYPE_IPE"></span><span id="_CPPv2N17zet_metric_type_t18ZET_METRIC_TYPE_IPE"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8ad2b526b381a16453380a84fd6dc7fc6c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_IP</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t18ZET_METRIC_TYPE_IPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric type: instruction pointer. <em class="since-note"> (since v1.7)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N17zet_metric_type_t28ZET_METRIC_TYPE_FORCE_UINT32E">
+<span id="_CPPv3N17zet_metric_type_t28ZET_METRIC_TYPE_FORCE_UINT32E"></span><span id="_CPPv2N17zet_metric_type_t28ZET_METRIC_TYPE_FORCE_UINT32E"></span><span class="target" id="zet__api_8h_1a262cd5f87cb12967f62b8a30041615c8afbc219285e31ebccda28164942d89875"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZET_METRIC_TYPE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N17zet_metric_type_t28ZET_METRIC_TYPE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZET_METRIC_TYPE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="metric-structures">
+<h2>Metric Structures<a class="headerlink" href="#metric-structures" title="Link to this heading">#</a></h2>
+<section id="zet-metric-properties-t">
+<span id="id4"></span><h3>zet_metric_properties_t<a class="headerlink" href="#zet-metric-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv423zet_metric_properties_t">
+<span id="_CPPv323zet_metric_properties_t"></span><span id="_CPPv223zet_metric_properties_t"></span><span id="zet_metric_properties_t"></span><span class="target" id="structzet__metric__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_properties_t</span></span></span><a class="headerlink" href="#_CPPv423zet_metric_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric properties queried using <a class="reference internal" href="#zet__api_8h_1add7e968bb0f85203370d89138e2b921b"><span class="std std-ref">zetMetricGetProperties</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t5stypeE">
+<span id="_CPPv3N23zet_metric_properties_t5stypeE"></span><span id="_CPPv2N23zet_metric_properties_t5stypeE"></span><span id="zet_metric_properties_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__properties__t_1a810df4133cb75d5b4a085f5e5f6334ed"></span><a class="reference internal" href="data_types.html#_CPPv420zet_structure_type_t" title="zet_structure_type_t"><span class="n"><span class="pre">zet_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t5pNextE">
+<span id="_CPPv3N23zet_metric_properties_t5pNextE"></span><span id="_CPPv2N23zet_metric_properties_t5pNextE"></span><span id="zet_metric_properties_t::pNext__voidP"></span><span class="target" id="structzet__metric__properties__t_1a448b24913ba2464c52494cbc8ac6a52d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t4nameE">
+<span id="_CPPv3N23zet_metric_properties_t4nameE"></span><span id="_CPPv2N23zet_metric_properties_t4nameE"></span><span id="zet_metric_properties_t::name__cA"></span><span class="target" id="structzet__metric__properties__t_1adda8a532663f1be1bd145c8a10b0afc0"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">ZET_MAX_METRIC_NAME</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t4nameE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] metric name </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t11descriptionE">
+<span id="_CPPv3N23zet_metric_properties_t11descriptionE"></span><span id="_CPPv2N23zet_metric_properties_t11descriptionE"></span><span id="zet_metric_properties_t::description__cA"></span><span class="target" id="structzet__metric__properties__t_1ae5414730a585e86b0d3ebe9700319e19"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">description</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">ZET_MAX_METRIC_DESCRIPTION</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t11descriptionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] metric description </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t9componentE">
+<span id="_CPPv3N23zet_metric_properties_t9componentE"></span><span id="_CPPv2N23zet_metric_properties_t9componentE"></span><span id="zet_metric_properties_t::component__cA"></span><span class="target" id="structzet__metric__properties__t_1aad7a48865bc75a32470e4ac174ecd38e"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">component</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">ZET_MAX_METRIC_COMPONENT</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t9componentE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] metric component </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t10tierNumberE">
+<span id="_CPPv3N23zet_metric_properties_t10tierNumberE"></span><span id="_CPPv2N23zet_metric_properties_t10tierNumberE"></span><span id="zet_metric_properties_t::tierNumber__uint32_t"></span><span class="target" id="structzet__metric__properties__t_1ab6e59dc07cc897db1dab6345fd5f5d63"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tierNumber</span></span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t10tierNumberE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] number of tier </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t10metricTypeE">
+<span id="_CPPv3N23zet_metric_properties_t10metricTypeE"></span><span id="_CPPv2N23zet_metric_properties_t10metricTypeE"></span><span id="zet_metric_properties_t::metricType__zet_metric_type_t"></span><span class="target" id="structzet__metric__properties__t_1a690b81ed46285136a06f03d4aa3a6918"></span><a class="reference internal" href="#_CPPv417zet_metric_type_t" title="zet_metric_type_t"><span class="n"><span class="pre">zet_metric_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">metricType</span></span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t10metricTypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] metric type </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t10resultTypeE">
+<span id="_CPPv3N23zet_metric_properties_t10resultTypeE"></span><span id="_CPPv2N23zet_metric_properties_t10resultTypeE"></span><span id="zet_metric_properties_t::resultType__zet_value_type_t"></span><span class="target" id="structzet__metric__properties__t_1ab8620a01a145e079eae1c1d0f0f92690"></span><a class="reference internal" href="data_types.html#_CPPv416zet_value_type_t" title="zet_value_type_t"><span class="n"><span class="pre">zet_value_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resultType</span></span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t10resultTypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] metric result type </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N23zet_metric_properties_t11resultUnitsE">
+<span id="_CPPv3N23zet_metric_properties_t11resultUnitsE"></span><span id="_CPPv2N23zet_metric_properties_t11resultUnitsE"></span><span id="zet_metric_properties_t::resultUnits__cA"></span><span class="target" id="structzet__metric__properties__t_1af31b07b3059f0998c3bd72a0cb393f93"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resultUnits</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">ZET_MAX_METRIC_RESULT_UNITS</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N23zet_metric_properties_t11resultUnitsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] metric result units </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="metric_group.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Metric Group</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="metric_streamer.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Metric Streamer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zetMetric</div><ul class="ctoc-list"><li><a href="metric.html#zetmetricget">&hellip;Get</a></li><li><a href="metric.html#zetmetricgetproperties">&hellip;GetProperties</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric.html#zet-metric-type-t">zet_metric_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric.html#zet-metric-properties-t">zet_metric_properties_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

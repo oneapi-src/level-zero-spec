@@ -1,0 +1,1575 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Image &#8212; Level Zero Specification v1.18.31</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/apis/image';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Mem" href="mem.html" />
+    <link rel="prev" title="Fence" href="fence.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.18.31" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.18.31</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/apis/image.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Image</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-functions">Image Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zeimagegetproperties">zeImageGetProperties</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zeImageGetProperties18ze_device_handle_tPK15ze_image_desc_tP21ze_image_properties_t"><code class="docutils literal notranslate"><span class="pre">zeImageGetProperties()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zeimagecreate">zeImageCreate</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv413zeImageCreate19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_tP17ze_image_handle_t"><code class="docutils literal notranslate"><span class="pre">zeImageCreate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zeimagedestroy">zeImageDestroy</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv414zeImageDestroy17ze_image_handle_t"><code class="docutils literal notranslate"><span class="pre">zeImageDestroy()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-enums">Image Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-flags-t">ze_image_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415ze_image_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_image_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_flag_t26ZE_IMAGE_FLAG_KERNEL_WRITEE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FLAG_KERNEL_WRITE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_flag_t27ZE_IMAGE_FLAG_BIAS_UNCACHEDE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FLAG_BIAS_UNCACHED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_flag_t26ZE_IMAGE_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-type-t">ze_image_type_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415ze_image_type_t"><code class="docutils literal notranslate"><span class="pre">ze_image_type_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_1DE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_TYPE_1D</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_type_t21ZE_IMAGE_TYPE_1DARRAYE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_TYPE_1DARRAY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_2DE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_TYPE_2D</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_type_t21ZE_IMAGE_TYPE_2DARRAYE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_TYPE_2DARRAY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_3DE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_TYPE_3D</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_type_t20ZE_IMAGE_TYPE_BUFFERE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_TYPE_BUFFER</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_type_t26ZE_IMAGE_TYPE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_TYPE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-format-layout-t">ze_image_format_layout_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424ze_image_format_layout_t"><code class="docutils literal notranslate"><span class="pre">ze_image_format_layout_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t24ZE_IMAGE_FORMAT_LAYOUT_8E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_16E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_8_8E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8_8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_16_16E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16_16</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_32_32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32_32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t33ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_11_11_10E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_11_11_10</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_5_6_5E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_5_6_5</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_Y8E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_NV12E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_NV12</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUYVE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YUYV</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_VYUYE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_VYUY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YVYUE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YVYU</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_UYVYE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_UYVY</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AYUVE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_AYUV</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P010E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P010</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y410E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y410</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P012E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P012</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_Y16E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y16</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P016E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P016</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y216E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y216</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P216E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P216</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_P8E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUY2E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YUY2</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_A8P8E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_A8P8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_IA44E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_IA44</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AI44E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_AI44</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y416E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y416</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y210E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y210</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_I420E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_I420</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YV12E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YV12</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_400PE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_400P</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422HE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_422H</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422VE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_422V</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_444PE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_444P</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_RGBPE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_RGBP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_BRGPE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_BRGP</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_8_8_8E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8_8_8</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_16_16_16E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16_16_16</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_32_32_32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32_32_32</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N24ze_image_format_layout_t35ZE_IMAGE_FORMAT_LAYOUT_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-format-type-t">ze_image_format_type_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422ze_image_format_type_t"><code class="docutils literal notranslate"><span class="pre">ze_image_format_type_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_UINTE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_TYPE_UINT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_SINTE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_TYPE_SINT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_UNORME"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_TYPE_UNORM</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_SNORME"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_TYPE_SNORM</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_FLOATE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_TYPE_FLOAT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22ze_image_format_type_t33ZE_IMAGE_FORMAT_TYPE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_TYPE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-format-swizzle-t">ze_image_format_swizzle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425ze_image_format_swizzle_t"><code class="docutils literal notranslate"><span class="pre">ze_image_format_swizzle_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_RE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_R</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_GE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_G</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_BE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_B</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_AE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_A</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_0E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_1E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_1</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_XE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_X</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_DE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_D</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_image_format_swizzle_t36ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-sampler-filter-flags-t">ze_image_sampler_filter_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430ze_image_sampler_filter_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_image_sampler_filter_flag_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_image_sampler_filter_flag_t34ZE_IMAGE_SAMPLER_FILTER_FLAG_POINTE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_SAMPLER_FILTER_FLAG_POINT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_image_sampler_filter_flag_t35ZE_IMAGE_SAMPLER_FILTER_FLAG_LINEARE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_SAMPLER_FILTER_FLAG_LINEAR</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_image_sampler_filter_flag_t41ZE_IMAGE_SAMPLER_FILTER_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_SAMPLER_FILTER_FLAG_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#image-structures">Image Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-format-t">ze_image_format_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417ze_image_format_t"><code class="docutils literal notranslate"><span class="pre">ze_image_format_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_image_format_t6layoutE"><code class="docutils literal notranslate"><span class="pre">layout</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_image_format_t4typeE"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_image_format_t1xE"><code class="docutils literal notranslate"><span class="pre">x</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_image_format_t1yE"><code class="docutils literal notranslate"><span class="pre">y</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_image_format_t1zE"><code class="docutils literal notranslate"><span class="pre">z</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_image_format_t1wE"><code class="docutils literal notranslate"><span class="pre">w</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-desc-t">ze_image_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415ze_image_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_image_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t5flagsE"><code class="docutils literal notranslate"><span class="pre">flags</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t4typeE"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t6formatE"><code class="docutils literal notranslate"><span class="pre">format</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t5widthE"><code class="docutils literal notranslate"><span class="pre">width</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t6heightE"><code class="docutils literal notranslate"><span class="pre">height</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t5depthE"><code class="docutils literal notranslate"><span class="pre">depth</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t11arraylevelsE"><code class="docutils literal notranslate"><span class="pre">arraylevels</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_image_desc_t9miplevelsE"><code class="docutils literal notranslate"><span class="pre">miplevels</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-properties-t">ze_image_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421ze_image_properties_t"><code class="docutils literal notranslate"><span class="pre">ze_image_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21ze_image_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21ze_image_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N21ze_image_properties_t18samplerFilterFlagsE"><code class="docutils literal notranslate"><span class="pre">samplerFilterFlags</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="image">
+<h1>Image<a class="headerlink" href="#image" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.18.31</p>
+<section id="image-functions">
+<h2>Image Functions<a class="headerlink" href="#image-functions" title="Link to this heading">#</a></h2>
+<section id="zeimagegetproperties">
+<span id="id1"></span><h3>zeImageGetProperties<a class="headerlink" href="#zeimagegetproperties" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420zeImageGetProperties18ze_device_handle_tPK15ze_image_desc_tP21ze_image_properties_t">
+<span id="_CPPv320zeImageGetProperties18ze_device_handle_tPK15ze_image_desc_tP21ze_image_properties_t"></span><span id="_CPPv220zeImageGetProperties18ze_device_handle_tPK15ze_image_desc_tP21ze_image_properties_t"></span><span id="zeImageGetProperties__ze_device_handle_t.ze_image_desc_tCP.ze_image_properties_tP"></span><span class="target" id="ze__api_8h_1a4421f45d26f21ea1880597389fef04af"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv415ze_image_desc_t" title="ze_image_desc_t"><span class="n"><span class="pre">ze_image_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="#_CPPv421ze_image_properties_t" title="ze_image_properties_t"><span class="n"><span class="pre">ze_image_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pImageProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeImageGetProperties18ze_device_handle_tPK15ze_image_desc_tP21ze_image_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Retrieves supported properties of an image. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hDevice</strong> – [in] handle of the device </p></li>
+<li><p><strong>desc</strong> – [in] pointer to image descriptor </p></li>
+<li><p><strong>pImageProperties</strong> – [out] pointer to image properties </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pImageProperties</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x3</span> <span class="pre">&lt;</span> <span class="pre">desc-&gt;flags</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aa4cff3b9f22ff4a2ce80281e6d453647"><span class="std std-ref"><span class="pre">ZE_IMAGE_TYPE_BUFFER</span></span></a> <span class="pre">&lt;</span> <span class="pre">desc-&gt;type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zeimagecreate">
+<span id="id2"></span><h3>zeImageCreate<a class="headerlink" href="#zeimagecreate" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413zeImageCreate19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_tP17ze_image_handle_t">
+<span id="_CPPv313zeImageCreate19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_tP17ze_image_handle_t"></span><span id="_CPPv213zeImageCreate19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_tP17ze_image_handle_t"></span><span id="zeImageCreate__ze_context_handle_t.ze_device_handle_t.ze_image_desc_tCP.ze_image_handle_tP"></span><span class="target" id="ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv415ze_image_desc_t" title="ze_image_desc_t"><span class="n"><span class="pre">ze_image_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phImage</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413zeImageCreate19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_tP17ze_image_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates an image on the context. </p>
+<p><ul class="simple">
+<li><p>The application must only use the image for the device, or its sub-devices, which was provided during creation.</p></li>
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<p><div class="remark admonition">
+<p class="admonition-title">Remark</p>
+<p><em>Analogues</em><ul class="simple">
+<li><p>clCreateImage</p></li>
+</ul>
+</p>
+</div>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hContext</strong> – [in] handle of the context object </p></li>
+<li><p><strong>hDevice</strong> – [in] handle of the device </p></li>
+<li><p><strong>desc</strong> – [in] pointer to image descriptor </p></li>
+<li><p><strong>phImage</strong> – [out] pointer to handle of image object created </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phImage</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">0x3</span> <span class="pre">&lt;</span> <span class="pre">desc-&gt;flags</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aa4cff3b9f22ff4a2ce80281e6d453647"><span class="std std-ref"><span class="pre">ZE_IMAGE_TYPE_BUFFER</span></span></a> <span class="pre">&lt;</span> <span class="pre">desc-&gt;type</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a81837ddc59630042e4220ec72afd051c"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zeimagedestroy">
+<span id="id3"></span><h3>zeImageDestroy<a class="headerlink" href="#zeimagedestroy" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414zeImageDestroy17ze_image_handle_t">
+<span id="_CPPv314zeImageDestroy17ze_image_handle_t"></span><span id="_CPPv214zeImageDestroy17ze_image_handle_t"></span><span id="zeImageDestroy__ze_image_handle_t"></span><span class="target" id="ze__api_8h_1afc99631d44819bfc8722dc669b619bdd"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeImageDestroy17ze_image_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Deletes an image object. </p>
+<p><ul class="simple">
+<li><p>The application must ensure the device is not currently referencing the image before it is deleted.</p></li>
+<li><p>The implementation of this function may immediately free all Host and Device allocations associated with this image.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same image handle.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hImage</strong> – [in][release] handle of image object to destroy </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hImage</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af964b27d146102948a48f0ebabe3aee3"><span class="std std-ref">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="image-enums">
+<h2>Image Enums<a class="headerlink" href="#image-enums" title="Link to this heading">#</a></h2>
+<section id="ze-image-flags-t">
+<span id="id4"></span><h3>ze_image_flags_t<a class="headerlink" href="#ze-image-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv415ze_image_flag_t">
+<span id="_CPPv315ze_image_flag_t"></span><span id="_CPPv215ze_image_flag_t"></span><span class="target" id="ze__api_8h_1aa78acbb42e498edd49824cc7b47e4865"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_flag_t</span></span></span><a class="headerlink" href="#_CPPv415ze_image_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_flag_t26ZE_IMAGE_FLAG_KERNEL_WRITEE">
+<span id="_CPPv3N15ze_image_flag_t26ZE_IMAGE_FLAG_KERNEL_WRITEE"></span><span id="_CPPv2N15ze_image_flag_t26ZE_IMAGE_FLAG_KERNEL_WRITEE"></span><span class="target" id="ze__api_8h_1aa78acbb42e498edd49824cc7b47e4865af9cf51c27bbc75784d1342042f289674"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FLAG_KERNEL_WRITE</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_flag_t26ZE_IMAGE_FLAG_KERNEL_WRITEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>kernels will write contents </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_flag_t27ZE_IMAGE_FLAG_BIAS_UNCACHEDE">
+<span id="_CPPv3N15ze_image_flag_t27ZE_IMAGE_FLAG_BIAS_UNCACHEDE"></span><span id="_CPPv2N15ze_image_flag_t27ZE_IMAGE_FLAG_BIAS_UNCACHEDE"></span><span class="target" id="ze__api_8h_1aa78acbb42e498edd49824cc7b47e4865ad833e5af8af78c331fa02e273bc56bb8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FLAG_BIAS_UNCACHED</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_flag_t27ZE_IMAGE_FLAG_BIAS_UNCACHEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>device should not cache contents </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_flag_t26ZE_IMAGE_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N15ze_image_flag_t26ZE_IMAGE_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N15ze_image_flag_t26ZE_IMAGE_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1aa78acbb42e498edd49824cc7b47e4865aff1638a1c028c957c9be9c82bf79c9ad"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_flag_t26ZE_IMAGE_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_IMAGE_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-image-type-t">
+<span id="id5"></span><h3>ze_image_type_t<a class="headerlink" href="#ze-image-type-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv415ze_image_type_t">
+<span id="_CPPv315ze_image_type_t"></span><span id="_CPPv215ze_image_type_t"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_type_t</span></span></span><a class="headerlink" href="#_CPPv415ze_image_type_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported image types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_1DE">
+<span id="_CPPv3N15ze_image_type_t16ZE_IMAGE_TYPE_1DE"></span><span id="_CPPv2N15ze_image_type_t16ZE_IMAGE_TYPE_1DE"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a94063f2eac6f17e8acbbf2f023ce3a1a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_TYPE_1D</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_1DE" title="Link to this definition">#</a><br /></dt>
+<dd><p>1D </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_type_t21ZE_IMAGE_TYPE_1DARRAYE">
+<span id="_CPPv3N15ze_image_type_t21ZE_IMAGE_TYPE_1DARRAYE"></span><span id="_CPPv2N15ze_image_type_t21ZE_IMAGE_TYPE_1DARRAYE"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9ab883c63f65e9994ce107a6eaf039194b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_TYPE_1DARRAY</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_type_t21ZE_IMAGE_TYPE_1DARRAYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>1D array </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_2DE">
+<span id="_CPPv3N15ze_image_type_t16ZE_IMAGE_TYPE_2DE"></span><span id="_CPPv2N15ze_image_type_t16ZE_IMAGE_TYPE_2DE"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aeeb7130934a7f78934749244229881d1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_TYPE_2D</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_2DE" title="Link to this definition">#</a><br /></dt>
+<dd><p>2D </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_type_t21ZE_IMAGE_TYPE_2DARRAYE">
+<span id="_CPPv3N15ze_image_type_t21ZE_IMAGE_TYPE_2DARRAYE"></span><span id="_CPPv2N15ze_image_type_t21ZE_IMAGE_TYPE_2DARRAYE"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a0b9a73bf1ed31bb3f28b95b27af1cdb3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_TYPE_2DARRAY</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_type_t21ZE_IMAGE_TYPE_2DARRAYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>2D array </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_3DE">
+<span id="_CPPv3N15ze_image_type_t16ZE_IMAGE_TYPE_3DE"></span><span id="_CPPv2N15ze_image_type_t16ZE_IMAGE_TYPE_3DE"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a5af719a8ce69b54468f6e7382e4c4f07"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_TYPE_3D</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_type_t16ZE_IMAGE_TYPE_3DE" title="Link to this definition">#</a><br /></dt>
+<dd><p>3D </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_type_t20ZE_IMAGE_TYPE_BUFFERE">
+<span id="_CPPv3N15ze_image_type_t20ZE_IMAGE_TYPE_BUFFERE"></span><span id="_CPPv2N15ze_image_type_t20ZE_IMAGE_TYPE_BUFFERE"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aa4cff3b9f22ff4a2ce80281e6d453647"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_TYPE_BUFFER</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_type_t20ZE_IMAGE_TYPE_BUFFERE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Buffer. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_type_t26ZE_IMAGE_TYPE_FORCE_UINT32E">
+<span id="_CPPv3N15ze_image_type_t26ZE_IMAGE_TYPE_FORCE_UINT32E"></span><span id="_CPPv2N15ze_image_type_t26ZE_IMAGE_TYPE_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a00e9e15a618ca5a3295877cc118799f6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_TYPE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_type_t26ZE_IMAGE_TYPE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_IMAGE_TYPE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-image-format-layout-t">
+<span id="id6"></span><h3>ze_image_format_layout_t<a class="headerlink" href="#ze-image-format-layout-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv424ze_image_format_layout_t">
+<span id="_CPPv324ze_image_format_layout_t"></span><span id="_CPPv224ze_image_format_layout_t"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_format_layout_t</span></span></span><a class="headerlink" href="#_CPPv424ze_image_format_layout_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported image format layouts. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t24ZE_IMAGE_FORMAT_LAYOUT_8E">
+<span id="_CPPv3N24ze_image_format_layout_t24ZE_IMAGE_FORMAT_LAYOUT_8E"></span><span id="_CPPv2N24ze_image_format_layout_t24ZE_IMAGE_FORMAT_LAYOUT_8E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1caa7d7d14376bc492759e2f440e5995949"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t24ZE_IMAGE_FORMAT_LAYOUT_8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>8-bit single component layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_16E">
+<span id="_CPPv3N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_16E"></span><span id="_CPPv2N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_16E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca80caca655c568168e5831450d139b0c8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_16E" title="Link to this definition">#</a><br /></dt>
+<dd><p>16-bit single component layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_32E">
+<span id="_CPPv3N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_32E"></span><span id="_CPPv2N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_32E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca8202750b8aad5f7dc8066799162150e0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>32-bit single component layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_8_8E">
+<span id="_CPPv3N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_8_8E"></span><span id="_CPPv2N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_8_8E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca4ca7c0a11d6e9c5f3b37a77193d52bcb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8_8</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_8_8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>2-component 8-bit layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8E">
+<span id="_CPPv3N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8E"></span><span id="_CPPv2N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca23cd706641a249788915721f9cdcae6d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_8_8_8_8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>4-component 8-bit layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_16_16E">
+<span id="_CPPv3N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_16_16E"></span><span id="_CPPv2N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_16_16E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca0f9de3c81537a9248839ed330719b2bb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16_16</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_16_16E" title="Link to this definition">#</a><br /></dt>
+<dd><p>2-component 16-bit layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16E">
+<span id="_CPPv3N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16E"></span><span id="_CPPv2N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cad787d2058a47209b8bd50e6c3cd360fc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_16_16_16_16E" title="Link to this definition">#</a><br /></dt>
+<dd><p>4-component 16-bit layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_32_32E">
+<span id="_CPPv3N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_32_32E"></span><span id="_CPPv2N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_32_32E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca9b25305a14b1548948eb5fab2f5ae8f5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32_32</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_32_32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>2-component 32-bit layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32E">
+<span id="_CPPv3N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32E"></span><span id="_CPPv2N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca8ef824ed77f287d09b2ff62df0265283"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t34ZE_IMAGE_FORMAT_LAYOUT_32_32_32_32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>4-component 32-bit layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t33ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2E">
+<span id="_CPPv3N24ze_image_format_layout_t33ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2E"></span><span id="_CPPv2N24ze_image_format_layout_t33ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca6add2ff55c102e3b8418a7425613808a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t33ZE_IMAGE_FORMAT_LAYOUT_10_10_10_2E" title="Link to this definition">#</a><br /></dt>
+<dd><p>4-component 10_10_10_2 layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_11_11_10E">
+<span id="_CPPv3N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_11_11_10E"></span><span id="_CPPv2N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_11_11_10E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1caf69144e31d562bd35e284f84d073c5eb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_11_11_10</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_11_11_10E" title="Link to this definition">#</a><br /></dt>
+<dd><p>3-component 11_11_10 layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_5_6_5E">
+<span id="_CPPv3N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_5_6_5E"></span><span id="_CPPv2N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_5_6_5E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cab0a89dae9eb48d06b3cfa1b7e435cdf4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_5_6_5</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_5_6_5E" title="Link to this definition">#</a><br /></dt>
+<dd><p>3-component 5_6_5 layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1E">
+<span id="_CPPv3N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1E"></span><span id="_CPPv2N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca7d837ae2e8eca54d20ef50527dd86c89"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_5_5_5_1E" title="Link to this definition">#</a><br /></dt>
+<dd><p>4-component 5_5_5_1 layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4E">
+<span id="_CPPv3N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4E"></span><span id="_CPPv2N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca44e9e7f5f9d2f29e12c0c9a924c68a9f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t30ZE_IMAGE_FORMAT_LAYOUT_4_4_4_4E" title="Link to this definition">#</a><br /></dt>
+<dd><p>4-component 4_4_4_4 layout </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_Y8E">
+<span id="_CPPv3N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_Y8E"></span><span id="_CPPv2N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_Y8E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca09520b63caff11f4294cb0a1a1c29537"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y8</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_Y8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: Y8. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_NV12E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_NV12E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_NV12E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca08d854f08acbe0f0a8eaf24c5f9f7698"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_NV12</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_NV12E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: NV12. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUYVE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUYVE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUYVE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca101beae3e8ffbf4eda6a6fee92ab4b7a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YUYV</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUYVE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: YUYV. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_VYUYE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_VYUYE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_VYUYE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cad45de34e6c194644cc234c22088f254e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_VYUY</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_VYUYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: VYUY. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YVYUE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YVYUE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YVYUE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca1064adcf804eb1aa1aced18287aa351f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YVYU</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YVYUE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: YVYU. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_UYVYE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_UYVYE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_UYVYE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cabe267e4637713e2d72f8be4710565e11"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_UYVY</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_UYVYE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: UYVY. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AYUVE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AYUVE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AYUVE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca7df59a9890ea3b3e3fbd43b6ba053e42"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_AYUV</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AYUVE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: AYUV. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P010E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P010E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P010E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca5c4e00b1d09f75288290faca3976b18a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P010</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P010E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: P010. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y410E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y410E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y410E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca29e041fdbfb4e0d2c19d55a2984355c6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y410</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y410E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: Y410. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P012E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P012E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P012E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca6d614f946b3277631a8b91d8dd551cc8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P012</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P012E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: P012. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_Y16E">
+<span id="_CPPv3N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_Y16E"></span><span id="_CPPv2N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_Y16E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca6e995e07fda3124d582109302e909f0b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y16</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t26ZE_IMAGE_FORMAT_LAYOUT_Y16E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: Y16. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P016E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P016E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P016E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca34d510b3bef5c997e392d09c76568c4f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P016</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P016E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: P016. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y216E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y216E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y216E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca81c62f249811e029d5c93919e5274c21"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y216</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y216E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: Y216. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P216E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P216E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P216E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca9f87a8cc6a589a1cb8032b03d422be77"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P216</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_P216E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: P216. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_P8E">
+<span id="_CPPv3N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_P8E"></span><span id="_CPPv2N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_P8E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca281f72a110d945e84fb5259f91b2f0e5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_P8</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t25ZE_IMAGE_FORMAT_LAYOUT_P8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: P8. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUY2E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUY2E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUY2E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca46b8155c5fc62f3aa8425a0b9c018443"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YUY2</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YUY2E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: YUY2. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_A8P8E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_A8P8E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_A8P8E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca38b0b2a9508100d11d72ee1cfe3563e1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_A8P8</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_A8P8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: A8P8. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_IA44E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_IA44E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_IA44E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cae7ef6f14be968c12b448d16a44e4ed7e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_IA44</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_IA44E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: IA44. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AI44E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AI44E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AI44E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca3b2aa20ced7f4f0f10e119adb26c5a5a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_AI44</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_AI44E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: AI44. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y416E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y416E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y416E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca88e7c7691b2a84277fef5a30b387719c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y416</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y416E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: Y416. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y210E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y210E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y210E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cacd721e2bb0e5509aa765b5489aefe50e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_Y210</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_Y210E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: Y210. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_I420E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_I420E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_I420E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca8da9a3fd9e05a66683d7ab9b631512fb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_I420</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_I420E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: I420. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YV12E">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YV12E"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YV12E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cae67080e838c90008f91aa04872bf3660"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_YV12</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_YV12E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: YV12. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_400PE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_400PE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_400PE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca3edcab3a008f494e7b214bba6927d67b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_400P</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_400PE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: 400P. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422HE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422HE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422HE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca8b96e9908f8fc60f59a51b0225474db0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_422H</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422HE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: 422H. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422VE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422VE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422VE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cafdb430b7449ddd7f943ce2ccef3b7439"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_422V</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_422VE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: 422V. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_444PE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_444PE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_444PE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca9030a5450fff9e23c82e7dd2316d490e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_444P</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_444PE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: 444P. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_RGBPE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_RGBPE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_RGBPE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca147ce5cb0d9cc5314deeed891586e27e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_RGBP</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_RGBPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: RGBP. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_BRGPE">
+<span id="_CPPv3N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_BRGPE"></span><span id="_CPPv2N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_BRGPE"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca3e03899954621d947de56a3a2d62a6cc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_BRGP</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t27ZE_IMAGE_FORMAT_LAYOUT_BRGPE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Media Format: BRGP. Format type and swizzle is ignored for this. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_8_8_8E">
+<span id="_CPPv3N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_8_8_8E"></span><span id="_CPPv2N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_8_8_8E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca0aae7d35671d6f570c86f7870536a362"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_8_8_8</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t28ZE_IMAGE_FORMAT_LAYOUT_8_8_8E" title="Link to this definition">#</a><br /></dt>
+<dd><p>3-component 8-bit layout <em class="since-note"> (since v1.9)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_16_16_16E">
+<span id="_CPPv3N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_16_16_16E"></span><span id="_CPPv2N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_16_16_16E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1ca25a89378a7ea26238d8a8c10c8e33969"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_16_16_16</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_16_16_16E" title="Link to this definition">#</a><br /></dt>
+<dd><p>3-component 16-bit layout <em class="since-note"> (since v1.9)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_32_32_32E">
+<span id="_CPPv3N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_32_32_32E"></span><span id="_CPPv2N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_32_32_32E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1cab256b65d4d8cbe6d52f3d2e3b44c341a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_32_32_32</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t31ZE_IMAGE_FORMAT_LAYOUT_32_32_32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>3-component 32-bit layout <em class="since-note"> (since v1.9)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N24ze_image_format_layout_t35ZE_IMAGE_FORMAT_LAYOUT_FORCE_UINT32E">
+<span id="_CPPv3N24ze_image_format_layout_t35ZE_IMAGE_FORMAT_LAYOUT_FORCE_UINT32E"></span><span id="_CPPv2N24ze_image_format_layout_t35ZE_IMAGE_FORMAT_LAYOUT_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a5f41d72f011d7617b731c91709c3fd1caf4fbb25de243559ada6634cdc0df3792"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_LAYOUT_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N24ze_image_format_layout_t35ZE_IMAGE_FORMAT_LAYOUT_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_IMAGE_FORMAT_LAYOUT_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-image-format-type-t">
+<span id="id7"></span><h3>ze_image_format_type_t<a class="headerlink" href="#ze-image-format-type-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv422ze_image_format_type_t">
+<span id="_CPPv322ze_image_format_type_t"></span><span id="_CPPv222ze_image_format_type_t"></span><span class="target" id="ze__api_8h_1a2e3d6a914fe77ee1e445d29e64827e07"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_format_type_t</span></span></span><a class="headerlink" href="#_CPPv422ze_image_format_type_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported image format types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_UINTE">
+<span id="_CPPv3N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_UINTE"></span><span id="_CPPv2N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_UINTE"></span><span class="target" id="ze__api_8h_1a2e3d6a914fe77ee1e445d29e64827e07a6d62023e5dca322a5b8c308d3609dc5b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_TYPE_UINT</span></span></span><a class="headerlink" href="#_CPPv4N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_UINTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Unsigned integer. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_SINTE">
+<span id="_CPPv3N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_SINTE"></span><span id="_CPPv2N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_SINTE"></span><span class="target" id="ze__api_8h_1a2e3d6a914fe77ee1e445d29e64827e07a5f50b6597ad8d32990f912576da8dbca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_TYPE_SINT</span></span></span><a class="headerlink" href="#_CPPv4N22ze_image_format_type_t25ZE_IMAGE_FORMAT_TYPE_SINTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Signed integer. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_UNORME">
+<span id="_CPPv3N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_UNORME"></span><span id="_CPPv2N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_UNORME"></span><span class="target" id="ze__api_8h_1a2e3d6a914fe77ee1e445d29e64827e07a683e74a3ae8327e04bc7194a49acc379"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_TYPE_UNORM</span></span></span><a class="headerlink" href="#_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_UNORME" title="Link to this definition">#</a><br /></dt>
+<dd><p>Unsigned normalized integer. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_SNORME">
+<span id="_CPPv3N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_SNORME"></span><span id="_CPPv2N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_SNORME"></span><span class="target" id="ze__api_8h_1a2e3d6a914fe77ee1e445d29e64827e07a160e955a040c635c66ef097e3d76ab9e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_TYPE_SNORM</span></span></span><a class="headerlink" href="#_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_SNORME" title="Link to this definition">#</a><br /></dt>
+<dd><p>Signed normalized integer. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_FLOATE">
+<span id="_CPPv3N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_FLOATE"></span><span id="_CPPv2N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_FLOATE"></span><span class="target" id="ze__api_8h_1a2e3d6a914fe77ee1e445d29e64827e07a8467444189a8751d63668768382fe834"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_TYPE_FLOAT</span></span></span><a class="headerlink" href="#_CPPv4N22ze_image_format_type_t26ZE_IMAGE_FORMAT_TYPE_FLOATE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Float. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N22ze_image_format_type_t33ZE_IMAGE_FORMAT_TYPE_FORCE_UINT32E">
+<span id="_CPPv3N22ze_image_format_type_t33ZE_IMAGE_FORMAT_TYPE_FORCE_UINT32E"></span><span id="_CPPv2N22ze_image_format_type_t33ZE_IMAGE_FORMAT_TYPE_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a2e3d6a914fe77ee1e445d29e64827e07a48585e7e86bea7680a24d644bf248d7c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_TYPE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N22ze_image_format_type_t33ZE_IMAGE_FORMAT_TYPE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_IMAGE_FORMAT_TYPE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-image-format-swizzle-t">
+<span id="id8"></span><h3>ze_image_format_swizzle_t<a class="headerlink" href="#ze-image-format-swizzle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv425ze_image_format_swizzle_t">
+<span id="_CPPv325ze_image_format_swizzle_t"></span><span id="_CPPv225ze_image_format_swizzle_t"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_format_swizzle_t</span></span></span><a class="headerlink" href="#_CPPv425ze_image_format_swizzle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported image format component swizzle into channel. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_RE">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_RE"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_RE"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a9bb6c7cc66c27145e72b88da9b6cff0c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_R</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_RE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Red component. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_GE">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_GE"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_GE"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a86ee3b5b05e26c57b02c207c224c0c2d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_G</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_GE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Green component. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_BE">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_BE"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_BE"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a833234f202e8bdad268bc9fe4a33076f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_B</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_BE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Blue component. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_AE">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_AE"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_AE"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140abf8890c91720f22593630c270bee1101"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_A</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_AE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Alpha component. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_0E">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_0E"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_0E"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a9c2f33e9cb1d30f65d587ccb405dfab9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_0</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Zero. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_1E">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_1E"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_1E"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a220e80c5a185a2b6b1554cd42bfbf865"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_1</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_1E" title="Link to this definition">#</a><br /></dt>
+<dd><p>One. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_XE">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_XE"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_XE"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a86805310c4473f0162d65ca3645c1148"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_X</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_XE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Don’t care. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_DE">
+<span id="_CPPv3N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_DE"></span><span id="_CPPv2N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_DE"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a11e62091b1a4b1965d5e42ef9928441e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_D</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t25ZE_IMAGE_FORMAT_SWIZZLE_DE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Depth Component. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25ze_image_format_swizzle_t36ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32E">
+<span id="_CPPv3N25ze_image_format_swizzle_t36ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32E"></span><span id="_CPPv2N25ze_image_format_swizzle_t36ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a66e7a3aec5445e5456efde6313046140a9eea20d51f14f8625226986a630ddbdd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N25ze_image_format_swizzle_t36ZE_IMAGE_FORMAT_SWIZZLE_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_IMAGE_FORMAT_SWIZZLE_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-image-sampler-filter-flags-t">
+<span id="id9"></span><h3>ze_image_sampler_filter_flags_t<a class="headerlink" href="#ze-image-sampler-filter-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv430ze_image_sampler_filter_flag_t">
+<span id="_CPPv330ze_image_sampler_filter_flag_t"></span><span id="_CPPv230ze_image_sampler_filter_flag_t"></span><span class="target" id="ze__api_8h_1ac88f9cbf2ea7d51b69c2963f29e0b5a2"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_sampler_filter_flag_t</span></span></span><a class="headerlink" href="#_CPPv430ze_image_sampler_filter_flag_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_image_sampler_filter_flag_t34ZE_IMAGE_SAMPLER_FILTER_FLAG_POINTE">
+<span id="_CPPv3N30ze_image_sampler_filter_flag_t34ZE_IMAGE_SAMPLER_FILTER_FLAG_POINTE"></span><span id="_CPPv2N30ze_image_sampler_filter_flag_t34ZE_IMAGE_SAMPLER_FILTER_FLAG_POINTE"></span><span class="target" id="ze__api_8h_1ac88f9cbf2ea7d51b69c2963f29e0b5a2a14f6cea967b1a76e18be3d4c930b51f3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_SAMPLER_FILTER_FLAG_POINT</span></span></span><a class="headerlink" href="#_CPPv4N30ze_image_sampler_filter_flag_t34ZE_IMAGE_SAMPLER_FILTER_FLAG_POINTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>device supports point filtering </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_image_sampler_filter_flag_t35ZE_IMAGE_SAMPLER_FILTER_FLAG_LINEARE">
+<span id="_CPPv3N30ze_image_sampler_filter_flag_t35ZE_IMAGE_SAMPLER_FILTER_FLAG_LINEARE"></span><span id="_CPPv2N30ze_image_sampler_filter_flag_t35ZE_IMAGE_SAMPLER_FILTER_FLAG_LINEARE"></span><span class="target" id="ze__api_8h_1ac88f9cbf2ea7d51b69c2963f29e0b5a2a939995133feb72e1009441e0104158a0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_SAMPLER_FILTER_FLAG_LINEAR</span></span></span><a class="headerlink" href="#_CPPv4N30ze_image_sampler_filter_flag_t35ZE_IMAGE_SAMPLER_FILTER_FLAG_LINEARE" title="Link to this definition">#</a><br /></dt>
+<dd><p>device supports linear filtering </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_image_sampler_filter_flag_t41ZE_IMAGE_SAMPLER_FILTER_FLAG_FORCE_UINT32E">
+<span id="_CPPv3N30ze_image_sampler_filter_flag_t41ZE_IMAGE_SAMPLER_FILTER_FLAG_FORCE_UINT32E"></span><span id="_CPPv2N30ze_image_sampler_filter_flag_t41ZE_IMAGE_SAMPLER_FILTER_FLAG_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1ac88f9cbf2ea7d51b69c2963f29e0b5a2a1b007a700c5334f743a923800f0ab79d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_SAMPLER_FILTER_FLAG_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N30ze_image_sampler_filter_flag_t41ZE_IMAGE_SAMPLER_FILTER_FLAG_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_IMAGE_SAMPLER_FILTER_FLAG_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="image-structures">
+<h2>Image Structures<a class="headerlink" href="#image-structures" title="Link to this heading">#</a></h2>
+<section id="ze-image-format-t">
+<span id="id10"></span><h3>ze_image_format_t<a class="headerlink" href="#ze-image-format-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv417ze_image_format_t">
+<span id="_CPPv317ze_image_format_t"></span><span id="_CPPv217ze_image_format_t"></span><span id="ze_image_format_t"></span><span class="target" id="structze__image__format__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_format_t</span></span></span><a class="headerlink" href="#_CPPv417ze_image_format_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Image format. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17ze_image_format_t6layoutE">
+<span id="_CPPv3N17ze_image_format_t6layoutE"></span><span id="_CPPv2N17ze_image_format_t6layoutE"></span><span id="ze_image_format_t::layout__ze_image_format_layout_t"></span><span class="target" id="structze__image__format__t_1a1a00eafc34ddc541e10de53ec352c884"></span><a class="reference internal" href="#_CPPv424ze_image_format_layout_t" title="ze_image_format_layout_t"><span class="n"><span class="pre">ze_image_format_layout_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">layout</span></span></span><a class="headerlink" href="#_CPPv4N17ze_image_format_t6layoutE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image format component layout (e.g. N-component layouts and media formats) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17ze_image_format_t4typeE">
+<span id="_CPPv3N17ze_image_format_t4typeE"></span><span id="_CPPv2N17ze_image_format_t4typeE"></span><span id="ze_image_format_t::type__ze_image_format_type_t"></span><span class="target" id="structze__image__format__t_1afa5fa4ed5493d6f3b349b6bf9e4d8231"></span><a class="reference internal" href="#_CPPv422ze_image_format_type_t" title="ze_image_format_type_t"><span class="n"><span class="pre">ze_image_format_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N17ze_image_format_t4typeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image format type </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17ze_image_format_t1xE">
+<span id="_CPPv3N17ze_image_format_t1xE"></span><span id="_CPPv2N17ze_image_format_t1xE"></span><span id="ze_image_format_t::x__ze_image_format_swizzle_t"></span><span class="target" id="structze__image__format__t_1a4abb1ae9406e037de3c86b6d3541af11"></span><a class="reference internal" href="#_CPPv425ze_image_format_swizzle_t" title="ze_image_format_swizzle_t"><span class="n"><span class="pre">ze_image_format_swizzle_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">x</span></span></span><a class="headerlink" href="#_CPPv4N17ze_image_format_t1xE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image component swizzle into channel x </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17ze_image_format_t1yE">
+<span id="_CPPv3N17ze_image_format_t1yE"></span><span id="_CPPv2N17ze_image_format_t1yE"></span><span id="ze_image_format_t::y__ze_image_format_swizzle_t"></span><span class="target" id="structze__image__format__t_1aeeac6d164b847e7f59dfe58cfd80e1b5"></span><a class="reference internal" href="#_CPPv425ze_image_format_swizzle_t" title="ze_image_format_swizzle_t"><span class="n"><span class="pre">ze_image_format_swizzle_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">y</span></span></span><a class="headerlink" href="#_CPPv4N17ze_image_format_t1yE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image component swizzle into channel y </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17ze_image_format_t1zE">
+<span id="_CPPv3N17ze_image_format_t1zE"></span><span id="_CPPv2N17ze_image_format_t1zE"></span><span id="ze_image_format_t::z__ze_image_format_swizzle_t"></span><span class="target" id="structze__image__format__t_1a85f64f6e049fc1131dbf99853f33976a"></span><a class="reference internal" href="#_CPPv425ze_image_format_swizzle_t" title="ze_image_format_swizzle_t"><span class="n"><span class="pre">ze_image_format_swizzle_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">z</span></span></span><a class="headerlink" href="#_CPPv4N17ze_image_format_t1zE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image component swizzle into channel z </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N17ze_image_format_t1wE">
+<span id="_CPPv3N17ze_image_format_t1wE"></span><span id="_CPPv2N17ze_image_format_t1wE"></span><span id="ze_image_format_t::w__ze_image_format_swizzle_t"></span><span class="target" id="structze__image__format__t_1a4f03deb766d6fcba9b009ca730ede3b1"></span><a class="reference internal" href="#_CPPv425ze_image_format_swizzle_t" title="ze_image_format_swizzle_t"><span class="n"><span class="pre">ze_image_format_swizzle_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">w</span></span></span><a class="headerlink" href="#_CPPv4N17ze_image_format_t1wE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image component swizzle into channel w </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-image-desc-t">
+<span id="id11"></span><h3>ze_image_desc_t<a class="headerlink" href="#ze-image-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv415ze_image_desc_t">
+<span id="_CPPv315ze_image_desc_t"></span><span id="_CPPv215ze_image_desc_t"></span><span id="ze_image_desc_t"></span><span class="target" id="structze__image__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_desc_t</span></span></span><a class="headerlink" href="#_CPPv415ze_image_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Image descriptor. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t5stypeE">
+<span id="_CPPv3N15ze_image_desc_t5stypeE"></span><span id="_CPPv2N15ze_image_desc_t5stypeE"></span><span id="ze_image_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__desc__t_1a6eb3fb576284a6ad69aeb389fc9e7dd8"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t5pNextE">
+<span id="_CPPv3N15ze_image_desc_t5pNextE"></span><span id="_CPPv2N15ze_image_desc_t5pNextE"></span><span id="ze_image_desc_t::pNext__voidCP"></span><span class="target" id="structze__image__desc__t_1a33e744c4416dc60b0848bec099297451"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t5flagsE">
+<span id="_CPPv3N15ze_image_desc_t5flagsE"></span><span id="_CPPv2N15ze_image_desc_t5flagsE"></span><span id="ze_image_desc_t::flags__ze_image_flags_t"></span><span class="target" id="structze__image__desc__t_1ad06f06e18779db184bb46ea833976f47"></span><span class="n"><span class="pre">ze_image_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1aa78acbb42e498edd49824cc7b47e4865"><span class="std std-ref">ze_image_flag_t</span></a>; default is read-only, cached access. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t4typeE">
+<span id="_CPPv3N15ze_image_desc_t4typeE"></span><span id="_CPPv2N15ze_image_desc_t4typeE"></span><span id="ze_image_desc_t::type__ze_image_type_t"></span><span class="target" id="structze__image__desc__t_1a7cae342bb35e0c07ffbde34a58720bef"></span><a class="reference internal" href="#_CPPv415ze_image_type_t" title="ze_image_type_t"><span class="n"><span class="pre">ze_image_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t4typeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image type. Media format layouts are unsupported for <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aa4cff3b9f22ff4a2ce80281e6d453647"><span class="std std-ref">ZE_IMAGE_TYPE_BUFFER</span></a></p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t6formatE">
+<span id="_CPPv3N15ze_image_desc_t6formatE"></span><span id="_CPPv2N15ze_image_desc_t6formatE"></span><span id="ze_image_desc_t::format__ze_image_format_t"></span><span class="target" id="structze__image__desc__t_1a5e990cdb12dcbc8a09fedbc2217386b4"></span><a class="reference internal" href="#_CPPv417ze_image_format_t" title="ze_image_format_t"><span class="n"><span class="pre">ze_image_format_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">format</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t6formatE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] image format </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t5widthE">
+<span id="_CPPv3N15ze_image_desc_t5widthE"></span><span id="_CPPv2N15ze_image_desc_t5widthE"></span><span id="ze_image_desc_t::width__uint64_t"></span><span class="target" id="structze__image__desc__t_1a2fac58ecee3c533c48c6041ffcca10ac"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">width</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t5widthE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] width dimension. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aa4cff3b9f22ff4a2ce80281e6d453647"><span class="std std-ref">ZE_IMAGE_TYPE_BUFFER</span></a>: size in bytes; see the <code class="docutils literal notranslate"><span class="pre">maxImageBufferSize</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a94063f2eac6f17e8acbbf2f023ce3a1a"><span class="std std-ref">ZE_IMAGE_TYPE_1D</span></a>, <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9ab883c63f65e9994ce107a6eaf039194b"><span class="std std-ref">ZE_IMAGE_TYPE_1DARRAY</span></a>: width in pixels; see the <code class="docutils literal notranslate"><span class="pre">maxImageDims1D</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aeeb7130934a7f78934749244229881d1"><span class="std std-ref">ZE_IMAGE_TYPE_2D</span></a>, <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a0b9a73bf1ed31bb3f28b95b27af1cdb3"><span class="std std-ref">ZE_IMAGE_TYPE_2DARRAY</span></a>: width in pixels; see the <code class="docutils literal notranslate"><span class="pre">maxImageDims2D</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a5af719a8ce69b54468f6e7382e4c4f07"><span class="std std-ref">ZE_IMAGE_TYPE_3D</span></a>: width in pixels; see the <code class="docutils literal notranslate"><span class="pre">maxImageDims3D</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t6heightE">
+<span id="_CPPv3N15ze_image_desc_t6heightE"></span><span id="_CPPv2N15ze_image_desc_t6heightE"></span><span id="ze_image_desc_t::height__uint32_t"></span><span class="target" id="structze__image__desc__t_1af47e083406a6059b4e9ce60ed24d4a47"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">height</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t6heightE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] height dimension. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aeeb7130934a7f78934749244229881d1"><span class="std std-ref">ZE_IMAGE_TYPE_2D</span></a>, <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a0b9a73bf1ed31bb3f28b95b27af1cdb3"><span class="std std-ref">ZE_IMAGE_TYPE_2DARRAY</span></a>: height in pixels; see the <code class="docutils literal notranslate"><span class="pre">maxImageDims2D</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a5af719a8ce69b54468f6e7382e4c4f07"><span class="std std-ref">ZE_IMAGE_TYPE_3D</span></a>: height in pixels; see the <code class="docutils literal notranslate"><span class="pre">maxImageDims3D</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. other: ignored. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t5depthE">
+<span id="_CPPv3N15ze_image_desc_t5depthE"></span><span id="_CPPv2N15ze_image_desc_t5depthE"></span><span id="ze_image_desc_t::depth__uint32_t"></span><span class="target" id="structze__image__desc__t_1a713241cb7bceca5a830445b165297a3d"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">depth</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t5depthE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] depth dimension. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a5af719a8ce69b54468f6e7382e4c4f07"><span class="std std-ref">ZE_IMAGE_TYPE_3D</span></a>: depth in pixels; see the <code class="docutils literal notranslate"><span class="pre">maxImageDims3D</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. other: ignored. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t11arraylevelsE">
+<span id="_CPPv3N15ze_image_desc_t11arraylevelsE"></span><span id="_CPPv2N15ze_image_desc_t11arraylevelsE"></span><span id="ze_image_desc_t::arraylevels__uint32_t"></span><span class="target" id="structze__image__desc__t_1a0557add7a01df1e80bd2c9be1d708d63"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arraylevels</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t11arraylevelsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] array levels. <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9ab883c63f65e9994ce107a6eaf039194b"><span class="std std-ref">ZE_IMAGE_TYPE_1DARRAY</span></a>, <a class="reference internal" href="#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9a0b9a73bf1ed31bb3f28b95b27af1cdb3"><span class="std std-ref">ZE_IMAGE_TYPE_2DARRAY</span></a>: see the <code class="docutils literal notranslate"><span class="pre">maxImageArraySlices</span></code> member of <a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a> for limits. other: ignored. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N15ze_image_desc_t9miplevelsE">
+<span id="_CPPv3N15ze_image_desc_t9miplevelsE"></span><span id="_CPPv2N15ze_image_desc_t9miplevelsE"></span><span id="ze_image_desc_t::miplevels__uint32_t"></span><span class="target" id="structze__image__desc__t_1af01a340311830d61dacedb0706ba506f"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">miplevels</span></span></span><a class="headerlink" href="#_CPPv4N15ze_image_desc_t9miplevelsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] mipmap levels (must be 0) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="ze-image-properties-t">
+<span id="id12"></span><h3>ze_image_properties_t<a class="headerlink" href="#ze-image-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv421ze_image_properties_t">
+<span id="_CPPv321ze_image_properties_t"></span><span id="_CPPv221ze_image_properties_t"></span><span id="ze_image_properties_t"></span><span class="target" id="structze__image__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_properties_t</span></span></span><a class="headerlink" href="#_CPPv421ze_image_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Image properties. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21ze_image_properties_t5stypeE">
+<span id="_CPPv3N21ze_image_properties_t5stypeE"></span><span id="_CPPv2N21ze_image_properties_t5stypeE"></span><span id="ze_image_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__properties__t_1aa75bcb97a3b1cabd3195fb7b3d588033"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N21ze_image_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21ze_image_properties_t5pNextE">
+<span id="_CPPv3N21ze_image_properties_t5pNextE"></span><span id="_CPPv2N21ze_image_properties_t5pNextE"></span><span id="ze_image_properties_t::pNext__voidP"></span><span class="target" id="structze__image__properties__t_1a244e659424f9933a7fdc960ec7be10e0"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N21ze_image_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N21ze_image_properties_t18samplerFilterFlagsE">
+<span id="_CPPv3N21ze_image_properties_t18samplerFilterFlagsE"></span><span id="_CPPv2N21ze_image_properties_t18samplerFilterFlagsE"></span><span id="ze_image_properties_t::samplerFilterFlags__ze_image_sampler_filter_flags_t"></span><span class="target" id="structze__image__properties__t_1a84d0a5b23b90bec70bf9b41e08a69c68"></span><span class="n"><span class="pre">ze_image_sampler_filter_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplerFilterFlags</span></span></span><a class="headerlink" href="#_CPPv4N21ze_image_properties_t18samplerFilterFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] supported sampler filtering. returns 0 (unsupported) or a combination of <a class="reference internal" href="#ze__api_8h_1ac88f9cbf2ea7d51b69c2963f29e0b5a2"><span class="std std-ref">ze_image_sampler_filter_flag_t</span></a>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="fence.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fence</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="mem.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Mem</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">3</span></summary><div class="ctoc-prefix">zeImage</div><ul class="ctoc-list"><li><a href="image.html#zeimagegetproperties">&hellip;GetProperties</a></li><li><a href="image.html#zeimagecreate">&hellip;Create</a></li><li><a href="image.html#zeimagedestroy">&hellip;Destroy</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">6</span></summary><ul class="ctoc-list"><li><a href="image.html#ze-image-flags-t">ze_image_flags_t</a></li><li><a href="image.html#ze-image-type-t">ze_image_type_t</a></li><li><a href="image.html#ze-image-format-layout-t">ze_image_format_layout_t</a></li><li><a href="image.html#ze-image-format-type-t">ze_image_format_type_t</a></li><li><a href="image.html#ze-image-format-swizzle-t">ze_image_format_swizzle_t</a></li><li><a href="image.html#ze-image-sampler-filter-flags-t">ze_image_sampler_filter_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="image.html#ze-image-format-t">ze_image_format_t</a></li><li><a href="image.html#ze-image-desc-t">ze_image_desc_t</a></li><li><a href="image.html#ze-image-properties-t">ze_image_properties_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
