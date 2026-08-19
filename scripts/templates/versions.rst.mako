@@ -25,6 +25,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.18.31`_
+    - 2026-8-19
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.18.31/index.html>`__
   * - `Level Zero v1.17.24`_
     - 2026-6-25
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.17.24/index.html>`__
@@ -124,6 +127,38 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.18.31
+~~~~~~~~~~~~~~~~~~~
+
+* New Features in v1.18
+
+    - Promote the Power Saving Hint experimental extension to a standard extension
+    - New Core APIs for handle introspection
+      - zeKernelGetModuleHandle and zeModuleGetDeviceHandle
+    - Add zeDeviceGetCompilerInfo generic compiler-info query
+    - Add zeCommandListAppendSignalEventWithParameters and zeCommandListAppendWaitOnEventsWithParameters
+    - Add ze_init_driver_app_version_ext for applications to declare their API version at zeInitDrivers
+    - Add IPC Physical Memory Range extension
+    - Add ze_device_npu_properties_ext_t extension for NPU device properties, including compiler capability fields
+    - Add CommandQueue SetPriority optional extension
+    - Add Sysman Device Health extension to get and set device health status
+    - Add Sysman support for optional delayed device discovery
+    - Add Sysman composite temperature sensor support
+    - Add Sysman memory vendor ID query
+    - Add additional device state flags to zes_device_state_ext_flags_t
+
+* Patches since v1.17.24 release
+
+    - Extend return codes from zeGraphInstantiateExt and refine the Record and Replay Graph specification
+    - Update Counter-Based Events IPC restrictions
+    - Fix incorrect Counter-Based Event operation in documentation
+    - Clarify cross-device aggregated events usage
+    - Update zesPowerGetUsage usage details
+    - Cleanup of metrics dma_buf export docs and sample
+    - Fix unused reference link for zePhysicalMem
+    - Spelling and grammar fixes
+
 
 Level Zero v1.17.24
 ~~~~~~~~~~~~~~~~~~~
