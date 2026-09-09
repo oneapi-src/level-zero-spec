@@ -863,8 +863,19 @@ def _generate_returns(obj, meta):
                         for i, m in enumerate(meta['struct'][typename]['members']):
                             mtypename = type_traits.base(m['type'])
 
-                            if type_traits.is_pointer(m['type']) and not param_traits.is_optional({'desc': m['desc']}):
-                                _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], m['name']))
+                            if type_traits.is_pointer(m['type']):
+                                if not param_traits.is_optional({'desc': m['desc']}):
+                                    _append(rets, "$X_RESULT_ERROR_INVALID_NULL_POINTER", "`nullptr == %s->%s`"%(item['name'], m['name']))
+
+                                # range-check the pointee of a single-level input pointer to an enum.
+                                # arrays ([range]) would need a loop, which a boolean check cannot express.
+                                if (type_traits.is_enum(m['type'], meta)
+                                        and m['type'].count('*') == 1
+                                        and param_traits.is_input({'desc': m['desc']})
+                                        and not param_traits.is_range(m)
+                                        and not param_traits.is_mbz(m)):
+                                    _append(rets, "$X_RESULT_ERROR_INVALID_ENUMERATION", "`nullptr != %s->%s && %s < *%s->%s`"%(item['name'], m['name'], meta['enum'][mtypename]['max'], item['name'], m['name']))
+                                    _append(rets, "$X_RESULT_ERROR_UNSUPPORTED_ENUMERATION", [])
 
                             elif type_traits.is_enum(m['type'], meta):
                                 if re.match(r"stype", m['name']):
