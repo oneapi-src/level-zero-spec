@@ -19,21 +19,9 @@ MetricGroup Marker Support Extension
 API
 ----
 
-* Structures
-
-    * ${t}_metric_source_id_exp_t
-
 * Functions
 
     * ${t}CommandListAppendMarkerExp
-
-
-Metric Source ID
-~~~~~~~~~~~~~~~~~
-
-Devices can include more than one HW architecture for profiling.
-Each individual profiling architecture can generate separate metrics data and can behave as individual Metric Source.
-The Metric Sources can be identified by an unique id that can be retrieved using {t}_metric_source_id_exp_t
 
 MetricGroup Marker
 ~~~~~~~~~~~~~~~~~~~
@@ -50,26 +38,29 @@ The following pseudo-code demonstrates how Metric Group Markers could be generat
 
     // 1. Select the metric group for the metrics to be collected using zetMetricGroupGet
 
-    // 2. Identify sourceId of the selected metric group
-    ${t}_metric_source_id_exp_t metricGroupSourceId{};
-    metricGroupSourceId.stype = ZET_STRUCTURE_TYPE_METRIC_SOURCE_ID_EXP;
+    // 2. Identify sourceId of the selected metric group. See ZET_experimental_metric_source_id for details.
+     ${t}_metric_source_id_exp_t metricGroupSourceId{};
+    metricGroupSourceId.stype = ${T}_STRUCTURE_TYPE_METRIC_SOURCE_ID_EXP;
+    metricGroupSourceId.pNext = nullptr;
 
     ${t}_metric_group_properties_t metricGroupProperties;
+    metricGroupProperties.stype = ${T}_STRUCTURE_TYPE_METRIC_GROUP_PROPERTIES;
     metricGroupProperties.pNext = &metricGroupSourceId;
 
     // Get the SourceId from the metricGroupProperties
     ${t}MetricGroupGetProperties(hInterestedMetricGroup, &metricGroupProperties); 
-    uint32_t markerSourceId = metricGroupSourceId.sourceId;
+    uint32_t markerSourceId = metricGroupSourceId.sourceId;   /* retrieve from ZET_experimental_metric_source_id */;
 
     // 3. Get Metric Group which support Marker Generation for that Metric Source
     zet_metric_group_handle_t hMarkerMetricGroup{};
     for (hMetricGroup : allMetricGroups){
         ${t}_metric_group_type_exp_t metricGroupType{};
-        metricGroupType.stype = {ZET_STRUCTURE_TYPE_METRIC_GROUP_TYPE_EXP};
+        metricGroupType.stype = ${T}_STRUCTURE_TYPE_METRIC_GROUP_TYPE_EXP;
+        metricGroupType.pNext = &metricGroupSourceId;
 
         // Get Metric Group Type and Source Id using zetMetricGroupGetProperties
         metricGroupProperties.pNext = &metricGroupType;
-        metricGroupType.pNext = &metricGroupSourceId;
+        
         ${t}MetricGroupGetProperties(hMetricGroup, &metricGroupProperties);
 
         if(metricGroupType.type == ZET_METRIC_GROUP_TYPE_EXP_FLAG_MARKER &&
