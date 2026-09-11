@@ -777,6 +777,14 @@ etors:
       desc: $x_ipc_phys_mem_handle_range_ext_desc_t
       version: "1.18"
       value: "0x0002004B"
+    - name: COMMAND_QUEUE_QOS_EXT_DESC
+      desc: $x_command_queue_qos_ext_desc_t
+      version: "1.19"
+      value: "0x0002004C"
+    - name: COMMAND_QUEUE_QOS_EXT_PROPERTIES
+      desc: $x_command_queue_qos_ext_properties_t
+      version: "1.19"
+      value: "0x0002004D"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

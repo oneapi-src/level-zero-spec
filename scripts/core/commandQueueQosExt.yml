@@ -1,0 +1,128 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for Command Queue Quality of Service"
+version: "1.19"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Command Queue QoS Extension Name"
+version: "1.19"
+name: $X_COMMAND_QUEUE_QOS_EXT_NAME
+value: '"$X_extension_command_queue_qos"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Command Queue QoS Extension Version(s)"
+version: "1.19"
+name: $x_command_queue_qos_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: |
+      Supported command queue Quality of Service (QoS) levels.
+      Expresses desired power/energy characteristics for work submitted through
+      a command queue; orthogonal to $x_command_queue_priority_t, which expresses
+      scheduling urgency instead. A queue may combine an explicit priority with
+      an explicit QoS level.
+      Applications must not perform relational comparisons (e.g. less-than,
+      greater-than) between QoS levels; only equality checks are guaranteed to
+      be meaningful. The numeric values are not guaranteed to be ordered by
+      energy efficiency, and future levels may be added without preserving any
+      such order.
+version: "1.19"
+class: $xCommandQueue
+name: $x_command_queue_qos_ext_t
+etors:
+    - name: DEFAULT
+      value: "0"
+      desc: "[default] implicit default behavior; uses the driver/OS-selected QoS level"
+    - name: HIGH
+      value: "1"
+      desc: "foreground / latency-sensitive workloads"
+    - name: MEDIUM
+      value: "2"
+      desc: "nominal scheduling class"
+    - name: LOW
+      value: "3"
+      desc: "reduced energy usage with forward progress guaranteed"
+    - name: UTILITY
+      value: "4"
+      desc: "more energy efficient than LOW while still guaranteeing forward progress"
+    - name: ECO
+      value: "5"
+      desc: "maximum energy savings; no forward progress guarantee"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Command Queue QoS descriptor"
+version: "1.19"
+class: $xCommandQueue
+name: $x_command_queue_qos_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_command_queue_qos_ext_t
+      name: qos
+      desc: "[in] requested QoS level for this command queue"
+      init: "$X_COMMAND_QUEUE_QOS_EXT_DEFAULT"
+details:
+    - "This structure may be passed to $xCommandQueueCreate via the `pNext` member of $x_command_queue_desc_t to request a non-default QoS level at creation time, or to $xCommandQueueSetQosExt to change the level of an existing command queue."
+    - "Setting `qos` to $X_COMMAND_QUEUE_QOS_EXT_DEFAULT requests the driver/OS-selected default; when chained to $x_command_queue_desc_t at creation time this is equivalent to not chaining this structure at all."
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Command Queue QoS properties queried from a command queue"
+version: "1.19"
+class: $xCommandQueue
+name: $x_command_queue_qos_ext_properties_t
+base: $x_base_properties_t
+members:
+    - type: $x_command_queue_qos_ext_t
+      name: qos
+      desc: "[out] effective QoS level of the command queue; never $X_COMMAND_QUEUE_QOS_EXT_DEFAULT"
+    - type: "$x_bool_t"
+      name: isOverridden
+      desc: "[out] true if `qos` was specified by the application, either at creation time through $x_command_queue_qos_ext_desc_t or by a call to $xCommandQueueSetQosExt; false if `qos` is the driver/OS-selected default"
+details:
+    - "This structure is populated by $xCommandQueueGetQosExt."
+    - "`qos` reports the resolved level, so $X_COMMAND_QUEUE_QOS_EXT_DEFAULT is never returned; a queue running at the driver/OS default reports the concrete level that default resolved to, with `isOverridden` set to false."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Sets the Quality of Service level of a command queue."
+version: "1.19"
+class: $xCommandQueue
+name: SetQosExt
+details:
+    - "The application may call this function from simultaneous threads."
+    - "This function changes the QoS level of an existing command queue, overriding both the driver default and any level specified at creation through $x_command_queue_qos_ext_desc_t; the updated value is reported by $xCommandQueueGetQosExt."
+    - "Setting `qos` of the descriptor to $X_COMMAND_QUEUE_QOS_EXT_DEFAULT clears any active override and returns the queue to the driver/OS-selected default."
+    - "Whether the new QoS level affects commands already submitted to the command queue, or only commands submitted after this call, is implementation-defined."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: "const $x_command_queue_qos_ext_desc_t*"
+      name: desc
+      desc: "[in] pointer to QoS descriptor"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Gets the effective Quality of Service level of a command queue."
+version: "1.19"
+class: $xCommandQueue
+name: GetQosExt
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+    - "Reports the effective QoS level after resolving any application-specified level against the driver/OS default, and whether that level was application-specified."
+params:
+    - type: $x_command_queue_handle_t
+      name: hCommandQueue
+      desc: "[in] handle of the command queue"
+    - type: "$x_command_queue_qos_ext_properties_t*"
+      name: pProperties
+      desc: "[in,out] query result for QoS properties of the command queue"
