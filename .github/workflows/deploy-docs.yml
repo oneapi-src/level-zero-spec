@@ -8,8 +8,8 @@ on:
     types: [opened, synchronize, reopened]
 
 env:
-  http_proxy: http://proxy-dmz.intel.com:912
-  https_proxy: http://proxy-dmz.intel.com:912
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
   DOCKER_BUILDKIT: '1'
 
 permissions:
@@ -38,8 +38,9 @@ jobs:
       - name: Build container image
         run: | #bash
           docker build \
-            --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
-            --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
+            --build-arg BASE_REGISTRY=${{ vars.CI_BASE_IMAGE }} \
+            --build-arg http_proxy=${{ vars.CI_HTTP_PROXY }} \
+            --build-arg https_proxy=${{ vars.CI_HTTP_PROXY }} \
             -t ghcr.io/oneapi-src/spec-build:latest \
             -f .github/docker/build.Dockerfile \
             .

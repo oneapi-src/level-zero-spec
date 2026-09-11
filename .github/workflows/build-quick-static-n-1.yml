@@ -14,8 +14,8 @@ on:
   workflow_dispatch:
 
 env:
-  http_proxy: http://proxy-dmz.intel.com:912
-  https_proxy: http://proxy-dmz.intel.com:912
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
   DOCKER_BUILDKIT: '1'
 
 jobs:
@@ -34,8 +34,9 @@ jobs:
     - name: Build container image
       run: | #bash
         docker build \
-          --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
-          --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
+          --build-arg BASE_REGISTRY=${{ vars.CI_BASE_IMAGE }} \
+          --build-arg http_proxy=${{ vars.CI_HTTP_PROXY }} \
+          --build-arg https_proxy=${{ vars.CI_HTTP_PROXY }} \
           -t ghcr.io/oneapi-src/spec-build:latest \
           -f spec-head/.github/docker/build.Dockerfile \
           spec-head/
@@ -69,7 +70,6 @@ jobs:
         ref: master
         path: loader-head
         token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
-    - uses: intel-sandbox/action-setup-jq@main
     - name: json2src head
       run: | #bash
         docker run \
@@ -83,7 +83,7 @@ jobs:
       working-directory: spec-head
       run: | #bash
         set -o pipefail
-        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
+        python3 -c "import json; print('\n'.join(p for p in json.load(open('scripts/generated.json')) if p.startswith('../include')))" |
         cut -c 4- |
         sort |
         xargs -I{} cp -v ./{} ../loader-head/{}

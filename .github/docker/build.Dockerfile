@@ -1,5 +1,10 @@
 # syntax=docker/dockerfile:1.4
-FROM amr-registry.caas.intel.com/level-zero-linux-compute/oneapi-src/level-zero/ubuntu-24.04:master
+# BASE_REGISTRY is the registry path prefix, passed in from the CI_BASE_IMAGE repo
+# variable so the internal registry hostname is not stored in this public repo.
+# BASE_IMAGE is the image name and tag; change it here to move to another distro.
+ARG BASE_REGISTRY
+ARG BASE_IMAGE=ubuntu-24.04:master
+FROM ${BASE_REGISTRY}${BASE_IMAGE}
 
 SHELL ["/bin/bash", "-e", "-c"]
 

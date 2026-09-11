@@ -15,8 +15,8 @@ on:
   workflow_dispatch:
 
 env:
-  http_proxy: http://proxy-dmz.intel.com:912
-  https_proxy: http://proxy-dmz.intel.com:912
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
   DOCKER_BUILDKIT: '1'
 
 jobs:
@@ -27,9 +27,20 @@ jobs:
       fail-fast: false
       matrix:
         container:
-          - ubuntu:22.04
-          - ubuntu:24.04
-          - redhat/ubi9:latest
+          # Use registry-qualified distro images so the matrix does not depend on
+          # unauthenticated Docker Hub pulls, which are capped at 100 per 6h per IP --
+          # a quota shared by every job on these runners. CI_IMAGE_MIRROR points at an
+          # internal pull-through mirror of Docker Hub that has no such limit; the same
+          # mirror is used by codespell.yml.
+          - name: ubuntu:22.04
+            image: ${{ vars.CI_IMAGE_MIRROR }}/ubuntu:22.04
+          - name: ubuntu:24.04
+            image: ${{ vars.CI_IMAGE_MIRROR }}/ubuntu:24.04
+          - name: ubuntu:26.04
+            image: ${{ vars.CI_IMAGE_MIRROR }}/ubuntu:26.04
+          # UBI 9 comes from Red Hat's own registry, which is unmetered.
+          - name: redhat/ubi9:latest
+            image: registry.access.redhat.com/ubi9/ubi:latest
     steps:
     # ----- Spec-generated loader preamble (see loader-integration.yml) -----
     - name: Checkout spec-head
@@ -42,8 +53,9 @@ jobs:
     - name: Build container image
       run: | #bash
         docker build \
-          --build-arg http_proxy=http://proxy-dmz.intel.com:912 \
-          --build-arg https_proxy=http://proxy-dmz.intel.com:912 \
+          --build-arg BASE_REGISTRY=${{ vars.CI_BASE_IMAGE }} \
+          --build-arg http_proxy=${{ vars.CI_HTTP_PROXY }} \
+          --build-arg https_proxy=${{ vars.CI_HTTP_PROXY }} \
           -t ghcr.io/oneapi-src/spec-build:latest \
           -f spec-head/.github/docker/build.Dockerfile \
           spec-head/
@@ -77,7 +89,6 @@ jobs:
         ref: master
         path: loader-head
         token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
-    - uses: intel-sandbox/action-setup-jq@main
     - name: json2src head
       run: | #bash
         docker run \
@@ -91,12 +102,12 @@ jobs:
       working-directory: spec-head
       run: | #bash
         set -o pipefail
-        jq -r '.[] | select(.|test("^../include"))' scripts/generated.json |
+        python3 -c "import json; print('\n'.join(p for p in json.load(open('scripts/generated.json')) if p.startswith('../include')))" |
         cut -c 4- |
         sort |
         xargs -I{} cp -v ./{} ../loader-head/{}
     # ----- Re-created build-quick logic, run in the matrix distro container -----
-    - name: Build loader on ${{ matrix.container }}
+    - name: Build loader on ${{ matrix.container.name }}
       id: build_test
       continue-on-error: true
       run: | #bash
@@ -110,9 +121,9 @@ jobs:
           --interactive \
           -v $PWD:$PWD \
           -w $PWD/loader-head \
-          -e http_proxy=http://proxy-dmz.intel.com:912 \
-          -e https_proxy=http://proxy-dmz.intel.com:912 \
-          ${{ matrix.container }} \
+          -e http_proxy=${{ vars.CI_HTTP_PROXY }} \
+          -e https_proxy=${{ vars.CI_HTTP_PROXY }} \
+          ${{ matrix.container.image }} \
           bash -e <<'EOF'
         if [ -f /etc/redhat-release ]; then
           # RHEL/UBI-based system
@@ -147,7 +158,7 @@ jobs:
       if: steps.build_test.outcome == 'failure'
       run: | #bash
         {
-          echo "## ❌ Build/test failed on ${{ matrix.container }}"
+          echo "## ❌ Build/test failed on ${{ matrix.container.name }}"
           echo ""
           echo '<details><summary>Output (last 300 lines)</summary>'
           echo ""

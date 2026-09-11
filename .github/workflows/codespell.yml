@@ -21,8 +21,8 @@ name: Codespell
 #     runner and no root-owned files are left in the workspace.
 #   * The image must not come from Docker Hub, which allows only 100 unauthenticated
 #     pulls per 6h per IP -- a quota shared by every job on these runners, and one
-#     this repo exhausts several times a day. amr-registry.caas.intel.com/cache is
-#     Intel's pull-through mirror of Docker Hub and has no such limit.
+#     this repo exhausts several times a day. CI_IMAGE_MIRROR points at an internal
+#     pull-through mirror of Docker Hub and has no such limit.
 
 on:
   pull_request:
@@ -34,8 +34,8 @@ permissions:
   pull-requests: write
 
 env:
-  http_proxy: http://proxy-dmz.intel.com:912
-  https_proxy: http://proxy-dmz.intel.com:912
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
 
 jobs:
   codespell:
@@ -58,9 +58,9 @@ jobs:
         set +e
         docker run --rm \
           -v $PWD:$PWD -w $PWD \
-          -e http_proxy=http://proxy-dmz.intel.com:912 \
-          -e https_proxy=http://proxy-dmz.intel.com:912 \
-          amr-registry.caas.intel.com/cache/library/python:3.13-slim \
+          -e http_proxy=${{ vars.CI_HTTP_PROXY }} \
+          -e https_proxy=${{ vars.CI_HTTP_PROXY }} \
+          ${{ vars.CI_IMAGE_MIRROR }}/python:3.13-slim \
           bash -c 'pip install -q --disable-pip-version-check --root-user-action=ignore codespell==2.4.3 1>&2 && codespell' \
           > codespell.txt
         rc=$?

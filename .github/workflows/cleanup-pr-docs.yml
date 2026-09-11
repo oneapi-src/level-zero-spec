@@ -5,8 +5,8 @@ on:
     types: [closed]
 
 env:
-  http_proxy: http://proxy-dmz.intel.com:912
-  https_proxy: http://proxy-dmz.intel.com:912
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
 
 permissions:
   contents: write
