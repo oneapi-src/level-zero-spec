@@ -39,6 +39,12 @@ etors:
     - name: COMPOSITE
       desc: "The normalized temperature across the SOC, Memory and Voltage Regulators at which shutdown will occur"
       version: "1.18"
+    - name: GPU_BOARD_SINGLE
+      desc: "The temperature measured by a single sensor on the GPU Board"
+      version: "1.19"
+    - name: VOLTAGE_REGULATOR_SINGLE
+      desc: "The temperature measured by a single sensor on a Voltage Regulator"
+      version: "1.19"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Temperature sensor properties"
