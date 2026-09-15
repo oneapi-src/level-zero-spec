@@ -49,7 +49,7 @@ The following pseudo-code demonstrates how Metric Group Markers could be generat
 
     // Get the SourceId from the metricGroupProperties
     ${t}MetricGroupGetProperties(hInterestedMetricGroup, &metricGroupProperties); 
-    uint32_t markerSourceId = metricGroupSourceId.sourceId;   /* retrieve from ZET_experimental_metric_source_id */;
+    uint32_t markerSourceId = metricGroupSourceId.sourceId;   // retrieve from ZET_experimental_metric_source_id
 
     // 3. Get Metric Group which support Marker Generation for that Metric Source
     zet_metric_group_handle_t hMarkerMetricGroup{};
