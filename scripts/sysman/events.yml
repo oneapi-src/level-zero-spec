@@ -47,6 +47,9 @@ etors:
     - name: SURVIVABILITY_MODE_DETECTED
       desc: "Event is triggered when graphics driver encounter an error condition."
       version: "1.9"
+    - name: INFO_LOG_CPER_DATA_AVAILABLE_EXT
+      desc: "Event is triggered when the CPER format info log data is available."
+      version: "1.19"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Specify the list of events to listen to for a given device"

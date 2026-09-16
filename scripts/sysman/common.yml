@@ -296,6 +296,22 @@ etors:
       value: "0x00020019"
       desc: $s_memory_vendor_info_ext_properties_t
       version: "1.18"
+    - name: INFO_LOG_EXT_PROPERTIES
+      value: "0x00020020"
+      desc: $s_info_log_ext_properties_t
+      version: "1.19"
+    - name: INFO_LOG_INSTANCE_EXT_DESC
+      value: "0x00020021"
+      desc: $s_info_log_instance_ext_desc_t
+      version: "1.19"
+    - name: INFO_LOG_METADATA_EXT
+      value: "0x00020022"
+      desc: $s_info_log_metadata_ext_t
+      version: "1.19"
+    - name: INFO_LOG_READ_STATUS_EXT
+      value: "0x00020023"
+      desc: $s_info_log_read_status_ext_t
+      version: "1.19"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
