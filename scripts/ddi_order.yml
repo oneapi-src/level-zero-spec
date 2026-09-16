@@ -1,0 +1,94 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# Canonical DDI table order, one bucket per namespace.
+#
+# The slot a class occupies in $x_dditable_t / $x_dditable_driver_t is ABI: moving a
+# member changes the binary layout that every already-built loader and driver agrees
+# on. That order used to fall out of YAML *filename* order, so renaming or adding a
+# .yml silently reshuffled the tables. This file is the single source of truth instead.
+#
+# Ordering is ABI only WITHIN a bucket, because a bucket is exactly one namespace's
+# table (ze/zet/zes/zer -> $x_dditable_driver_t, $t_..., $s_..., $r_...). The buckets
+# do NOT share a number space: each starts at 1, and adding a class to one namespace
+# never renumbers another. This keeps the namespaces decoupled (e.g. Sysman can move
+# to a separately-versioned product without disturbing core's ordinals).
+#
+# Rules:
+#   - Every class named by a spec doc must be listed here exactly once, in the bucket
+#     for its namespace. Parsing fails otherwise; see parse_specs._assign_ddi_ordinals.
+#   - APPEND a new class at the end of its bucket with that bucket's next unused
+#     ordinal (query: python run.py --next_ddi_ordinal). Never renumber, reorder, or
+#     remove an existing entry -- that is an ABI break, not a cleanup.
+#   - Class names are unique across all buckets.
+#
+classes:
+    core:
+        - { name: "$xRTASBuilder",           ordinal: 1 }
+        - { name: "$xRTASParallelOperation", ordinal: 2 }
+        - { name: "$x",                      ordinal: 3 }
+        - { name: "$xExternalSemaphore",     ordinal: 4 }
+        - { name: "$xDriver",                ordinal: 5 }
+        - { name: "$xDevice",                ordinal: 6 }
+        - { name: "$xContext",               ordinal: 7 }
+        - { name: "$xCommandQueue",          ordinal: 8 }
+        - { name: "$xCommandList",           ordinal: 9 }
+        - { name: "$xImage",                 ordinal: 10 }
+        - { name: "$xMem",                   ordinal: 11 }
+        - { name: "$xFence",                 ordinal: 12 }
+        - { name: "$xEventPool",             ordinal: 13 }
+        - { name: "$xEvent",                 ordinal: 14 }
+        - { name: "$xModule",                ordinal: 15 }
+        - { name: "$xModuleBuildLog",        ordinal: 16 }
+        - { name: "$xKernel",                ordinal: 17 }
+        - { name: "$xSampler",               ordinal: 18 }
+        - { name: "$xPhysicalMem",           ordinal: 19 }
+        - { name: "$xVirtualMem",            ordinal: 20 }
+        - { name: "$xFabricVertex",          ordinal: 21 }
+        - { name: "$xFabricEdge",            ordinal: 22 }
+        - { name: "$xGraph",                 ordinal: 23 }
+        - { name: "$xExecutableGraph",       ordinal: 24 }
+    tools:
+        - { name: "$tMetricProgrammable",    ordinal: 1 }
+        - { name: "$tMetricTracer",          ordinal: 2 }
+        - { name: "$tMetricDecoder",         ordinal: 3 }
+        - { name: "$tDriver",                ordinal: 4 }
+        - { name: "$tDevice",                ordinal: 5 }
+        - { name: "$tContext",               ordinal: 6 }
+        - { name: "$tCommandList",           ordinal: 7 }
+        - { name: "$tModule",                ordinal: 8 }
+        - { name: "$tKernel",                ordinal: 9 }
+        - { name: "$tMetric",                ordinal: 10 }
+        - { name: "$tMetricGroup",           ordinal: 11 }
+        - { name: "$tMetricStreamer",        ordinal: 12 }
+        - { name: "$tMetricQueryPool",       ordinal: 13 }
+        - { name: "$tMetricQuery",           ordinal: 14 }
+        - { name: "$tTracerExp",             ordinal: 15 }
+        - { name: "$tDebug",                 ordinal: 16 }
+    sysman:
+        - { name: "$s",                      ordinal: 1 }
+        - { name: "$sDevice",                ordinal: 2 }
+        - { name: "$sDriver",                ordinal: 3 }
+        - { name: "$sOverclock",             ordinal: 4 }
+        - { name: "$sScheduler",             ordinal: 5 }
+        - { name: "$sPerformanceFactor",     ordinal: 6 }
+        - { name: "$sPower",                 ordinal: 7 }
+        - { name: "$sFrequency",             ordinal: 8 }
+        - { name: "$sEngine",                ordinal: 9 }
+        - { name: "$sStandby",               ordinal: 10 }
+        - { name: "$sFirmware",              ordinal: 11 }
+        - { name: "$sMemory",                ordinal: 12 }
+        - { name: "$sFabricPort",            ordinal: 13 }
+        - { name: "$sTemperature",           ordinal: 14 }
+        - { name: "$sPsu",                   ordinal: 15 }
+        - { name: "$sFan",                   ordinal: 16 }
+        - { name: "$sLed",                   ordinal: 17 }
+        - { name: "$sRas",                   ordinal: 18 }
+        - { name: "$sDiagnostics",           ordinal: 19 }
+        - { name: "$sVFManagement",          ordinal: 20 }
+        - { name: "$sInfoLog",               ordinal: 21 }
+        - { name: "$sInfoLogInstance",       ordinal: 22 }
+    runtime:
+        - { name: "$r",                      ordinal: 1 }

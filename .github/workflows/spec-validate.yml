@@ -1,0 +1,207 @@
+# Fast fail-first gate for the spec sources.
+#
+# Every other PR workflow (build-quick, build-quick-static, build-quick-static-n-1,
+# loader-integration, deploy-docs) starts by generating the spec from scripts/*.yml and
+# only then does its expensive work -- loader builds across distros, CTest, doxygen,
+# sphinx, publishing. A malformed .yml therefore turns every one of them red at roughly
+# the same early step, and none of them explain why: their PR reporters read
+# docs/doxygen-warnings.log and docs/rst-errors.log, which do not exist yet when run.py
+# dies during parsing.
+#
+# This job runs generation ONLY -- no loader, no doxygen, no sphinx, no matrix -- so it
+# reports first and is the single place a contributor has to look. It covers run.py
+# phases 0-3: YAML parse, ddi_order.yml validation, header/source generation, and RST
+# reference resolution. Only doxygen/sphinx (phase 5) remain exclusive to deploy-docs.
+name: Spec Validate
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+env:
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
+  DOCKER_BUILDKIT: '1'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+# A superseded run has nothing useful left to say, and cancelling it keeps pushes from
+# racing to comment on the same PR. Safe to cancel here precisely because this workflow
+# only reads and reports -- it publishes nothing.
+concurrency:
+  group: "spec-validate-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: [self-hosted, Linux]
+    if: github.repository_owner == 'intel-innersource'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          clean: true
+          # Full history + tags: the spec version is derived from the most recent tag.
+          fetch-depth: 0
+          fetch-tags: true
+
+      # Same image as every other workflow, on purpose. Validating against a
+      # differently-provisioned environment would let this job go green on a
+      # dependency set the real builds never use.
+      - name: Build container image
+        run: | #bash
+          docker build \
+            --build-arg BASE_REGISTRY=${{ vars.CI_BASE_IMAGE }} \
+            --build-arg http_proxy=${{ vars.CI_HTTP_PROXY }} \
+            --build-arg https_proxy=${{ vars.CI_HTTP_PROXY }} \
+            -t ghcr.io/oneapi-src/spec-build:latest \
+            -f .github/docker/build.Dockerfile \
+            .
+
+      - name: Detect version from git tags
+        run: | #bash
+          # Find the most recent tag matching v<MAJOR>.<MINOR>.<PATCH> (single 'v' prefix only)
+          LATEST_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+' | head -1)
+          if [ -z "$LATEST_TAG" ]; then
+            echo "Error: No version tags matching v<MAJOR>.<MINOR>.* found" >&2
+            exit 1
+          fi
+          # Extract MAJOR.MINOR only
+          VER=$(echo "$LATEST_TAG" | grep -oP '^v\K[0-9]+\.[0-9]+')
+          echo "Detected version: $VER (from tag $LATEST_TAG)"
+          echo "VER=$VER" >> $GITHUB_ENV
+
+      - name: Generate spec
+        id: generate
+        # continue-on-error so the reporting step below can surface the diagnostics
+        # before the job is failed explicitly by the final step.
+        continue-on-error: true
+        run: | #bash
+          # pipefail is REQUIRED: without it the pipeline exits with tee's status (always
+          # 0), the step would report success, and a broken spec would pass this gate.
+          set -o pipefail
+          # Capture the build log so the reporter can quote it for failures that produce
+          # no structured log (anything raised in phases 0-2). It lives in RUNNER_TEMP,
+          # not docs/, because generate_docs.prepare() wipes docs/ in phase 3.
+          docker run \
+            --rm \
+            -v $PWD:$PWD \
+            -w $PWD/scripts \
+            -e TZ=UTC \
+            ghcr.io/oneapi-src/spec-build:latest \
+            /opt/spec-venv/bin/python3 ./run.py '--rst' '--!html' '--!build' --ver $VER \
+            2>&1 | tee "$RUNNER_TEMP/spec-validate.log"
+
+      - name: Report validation failure
+        if: steps.generate.outcome == 'failure'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // Identifies this workflow's comment so repeated pushes edit one comment
+            // instead of appending a new one to the PR every time.
+            const MARKER = '<!-- spec-validate-report -->';
+            const MAX = 60;
+
+            // run.py prints one "Parsing ./core/foo.yml..." line per spec file -- ~70 of
+            // them, which would otherwise crowd the actual error out of the quoted tail.
+            const NOISE = /^Parsing \.\/.*\.\.\.$/;
+
+            const read = p => fs.existsSync(p)
+              ? fs.readFileSync(p, 'utf8')
+                  .split('\n')
+                  // Strip the runner's absolute workspace prefix so paths read as repo-relative.
+                  .map(l => l.replace(`${process.env.GITHUB_WORKSPACE}/`, ''))
+                  .filter(l => l.trim() && !NOISE.test(l))
+              : [];
+
+            // Unresolved RST/sample-code references are collected via util.makeError in
+            // phase 3 and written here. Anything earlier -- a YAML syntax error, a class
+            // missing from ddi_order.yml, a duplicate ordinal -- raises before this file
+            // can exist, so fall back to the tail of the captured build log.
+            const rst = read('docs/rst-errors.log');
+            const structured = rst.length > 0;
+            const lines = structured ? rst : read(`${process.env.RUNNER_TEMP}/spec-validate.log`);
+
+            let body = `${MARKER}\n## ❌ Spec validation failed\n\n`;
+
+            if (!lines.length) {
+              body += 'Generation failed but produced no diagnostics. See the workflow log.\n';
+            } else if (structured) {
+              const shown = lines.slice(0, MAX);
+              body += `Generation reported **${lines.length}** unresolved `;
+              body += `${lines.length === 1 ? 'reference' : 'references'} in the spec RST/sample code:\n\n`;
+              body += '```\n' + shown.join('\n') + '\n```\n';
+              if (lines.length > shown.length) {
+                body += `\n_…and ${lines.length - shown.length} more. See the workflow log for the full list._\n`;
+              }
+              body += '\n> These reference symbols that do not exist in the parsed spec. ';
+              body += 'Fix the reference in the source `scripts/<section>/*.rst` page ';
+              body += '(or add the missing symbol to `scripts/<section>/*.yml`).\n';
+            } else {
+              // The failure is at the end of the log; everything before it is progress
+              // noise ("Parsing ./core/foo.yml..."), so quote the tail rather than the head.
+              const shown = lines.slice(-MAX);
+              body += 'The spec failed to generate. Last ';
+              body += `${shown.length} ${shown.length === 1 ? 'line' : 'lines'} of the build log:\n\n`;
+              if (lines.length > shown.length) {
+                body += `_…${lines.length - shown.length} earlier lines omitted. See the workflow log for the full output._\n\n`;
+              }
+              body += '```\n' + shown.join('\n') + '\n```\n';
+              body += '\n> This is usually a malformed `scripts/<section>/*.yml`, or a new ';
+              body += 'class missing from `scripts/ddi_order.yml`. The error above states ';
+              body += 'which, and what to do about it.\n';
+            }
+
+            body += '\n_The other CI workflows generate the spec too, so they will fail ';
+            body += 'here as well until this is fixed._\n';
+
+            core.summary.addRaw(body).write();
+
+            if (context.eventName !== 'pull_request') return;
+
+            const issue_number = context.payload.pull_request.number;
+            const { owner, repo } = context.repo;
+
+            const existing = (await github.paginate(github.rest.issues.listComments, {
+              issue_number, owner, repo,
+            })).find(c => c.body.includes(MARKER));
+
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ issue_number, owner, repo, body });
+            }
+
+      # Clear a stale failure comment once the spec generates cleanly again, so a fixed
+      # PR does not keep showing an obsolete error at the top of the thread.
+      - name: Resolve previous failure comment
+        if: steps.generate.outcome == 'success' && github.event_name == 'pull_request'
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const MARKER = '<!-- spec-validate-report -->';
+            const issue_number = context.payload.pull_request.number;
+            const { owner, repo } = context.repo;
+
+            const existing = (await github.paginate(github.rest.issues.listComments, {
+              issue_number, owner, repo,
+            })).find(c => c.body.includes(MARKER));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner, repo, comment_id: existing.id,
+                body: `${MARKER}\n## ✅ Spec validation passed\n\nThe spec generates cleanly. The previously reported errors are fixed.\n`,
+              });
+            }
+
+      - name: Fail if validation failed
+        if: steps.generate.outcome == 'failure'
+        run: exit 1

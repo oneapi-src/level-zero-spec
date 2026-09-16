@@ -1015,7 +1015,11 @@ Public:
 """
 def get_pfntables(specs, meta, namespace, tags):
     tables = []
-    for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
+    # 'ddi_ordinal' is declared in ddi_order.yml and is unique per class, so this
+    # order is fixed by data. Sorting on the header-derived 'ordinal' instead left
+    # ties that the stable sort resolved by YAML filename order, which meant a file
+    # rename could reorder $x_dditable_t members and break ABI.
+    for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ddi_ordinal']):
         objs, exp_objs = get_class_function_objs_exp(specs, cname)
         if len(objs) > 0:
             name = get_table_name(namespace, tags, objs[0])
@@ -1089,7 +1093,8 @@ Public:
 """
 def get_pfncbtables(specs, meta, namespace, tags):
     tables = []
-    for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ordinal']):
+    # ABI-ordered by ddi_order.yml, as in get_pfntables above.
+    for cname in sorted(meta['class'], key=lambda x: meta['class'][x]['ddi_ordinal']):
         objs = get_class_function_objs(specs, cname, "1.0")
         if len(objs) > 0:
             name = get_table_name(namespace, tags, {'class': cname})

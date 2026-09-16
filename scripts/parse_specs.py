@@ -1004,6 +1004,224 @@ def _generate_ref(specs, tags, ref):
 
 
 """
+    validates a ddi_order.yml document and returns it as an ordered
+    {bucket: {class name: ordinal}} mapping.
+
+    'classes' is a mapping of per-namespace buckets, each an independently-numbered
+    list. Ordering is ABI only within a bucket (a bucket is one namespace's table),
+    so buckets do not share a number space. Class names are unique across all buckets.
+"""
+def _ddi_order_from_docs(docs, source):
+    docs = list(docs or [])
+    if not docs or not isinstance(docs[0], dict) or 'classes' not in docs[0]:
+        raise Exception("%s is missing or has no 'classes' mapping"%source)
+
+    classes = docs[0]['classes']
+    if not isinstance(classes, dict):
+        raise Exception("%s: 'classes' must be a mapping of bucket -> list (per-namespace tables)"%source)
+
+    buckets = {}
+    name_bucket = {}
+    for bucket, entries in classes.items():
+        order = {}
+        used = {}
+        for entry in entries or []:
+            name, ordinal = entry['name'], entry['ordinal']
+            if name in name_bucket:
+                raise Exception("%s: '%s' listed in both '%s' and '%s'"%(source, name, name_bucket[name], bucket))
+            if ordinal in used:
+                raise Exception("%s[%s]: ordinal %s used by both '%s' and '%s'"%(source, bucket, ordinal, used[ordinal], name))
+            name_bucket[name] = bucket
+            order[name] = ordinal
+            used[ordinal] = name
+        buckets[bucket] = order
+    return buckets
+
+"""
+    reads the canonical DDI class order (ddi_order.yml) as {bucket: {name: ordinal}}
+"""
+_ddi_order_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ddi_order.yml")
+_ddi_order = None
+def _get_ddi_order():
+    global _ddi_order
+    if _ddi_order is None:
+        _ddi_order = _ddi_order_from_docs(util.yamlRead(_ddi_order_path), _ddi_order_path)
+    return _ddi_order
+
+"""
+    flattens {bucket: {name: ordinal}} to (name -> global sort key, name -> bucket).
+
+    The global key is a running counter over buckets in file order, then by each
+    bucket's local ordinal. Only relative order WITHIN a bucket is meaningful (that
+    is what a namespace's table is built from); the cross-bucket order the counter
+    implies is inert, since a class only emits into its own namespace's table.
+"""
+def _flatten_ddi_order(buckets):
+    name_key = {}
+    name_bucket = {}
+    running = 0
+    for bucket, order in buckets.items():
+        for name in sorted(order, key=lambda n: order[n]):
+            running += 1
+            name_key[name] = running
+            name_bucket[name] = bucket
+    return name_key, name_bucket
+
+"""
+    the bucket a new class should be appended to, chosen by namespace prefix
+    (e.g. '$x' -> core) from where existing classes already live; None if unknown
+"""
+def _bucket_for_name(buckets, name):
+    prefix_bucket = {}
+    for bucket, order in buckets.items():
+        for existing in order:
+            prefix_bucket.setdefault(existing[:2], bucket)
+    return prefix_bucket.get(name[:2])
+
+"""
+    next unused ordinal per bucket (one past each bucket's highest), as {bucket: next}.
+    Also exposed as 'run.py --next_ddi_ordinal'.
+"""
+def next_ddi_ordinal():
+    return {bucket: (max(order.values(), default=0) + 1)
+            for bucket, order in _get_ddi_order().items()}
+
+"""
+    formats paste-ready ddi_order.yml entries for the given class names, grouped
+    under the bucket each belongs to and numbered from that bucket's next ordinal
+"""
+def _ddi_order_suggestion(names):
+    buckets = _get_ddi_order()
+    nexts = next_ddi_ordinal()
+    width = max([len(n) for order in buckets.values() for n in order] + [len(n) for n in names]) + 3
+    by_bucket = {}
+    for name in names:
+        by_bucket.setdefault(_bucket_for_name(buckets, name) or "core", []).append(name)
+    lines = []
+    for bucket, bnames in by_bucket.items():
+        start = nexts.get(bucket, 1)
+        lines.append("    %s:"%bucket)
+        for n, name in enumerate(bnames):
+            lines.append('        - { name: %-*s ordinal: %d }'%(width, '"%s",'%name, start + n))
+    return "\n".join(lines)
+
+"""
+    stamps each class with its canonical DDI ordinal (a global sort key derived from
+    the per-namespace buckets)
+
+    Table order within $x_dditable_t is ABI, so it must come from declared data. It
+    used to come from the header-derived 'ordinal' alone, which is shared by every
+    class of the same spec version; the stable sort then broke those ties on YAML
+    *filename* order, so renaming or adding a .yml silently reshuffled the tables.
+"""
+def _assign_ddi_ordinals(meta):
+    buckets = _get_ddi_order()
+    name_key, _name_bucket = _flatten_ddi_order(buckets)
+
+    unlisted = sorted(c for c in meta.get('class', {}) if c not in name_key)
+    if unlisted:
+        raise Exception(
+            "class(es) %s are missing from ddi_order.yml.\n\n"
+            "Append the following under the matching bucket in scripts/ddi_order.yml:\n\n"
+            "%s\n\n"
+            "(query bucket next-ordinals any time with: python run.py --next_ddi_ordinal).\n"
+            "Append only. Never renumber or reorder an existing entry: DDI table order is ABI."
+            %(", ".join(unlisted), _ddi_order_suggestion(unlisted)))
+
+    for cname, cls in meta.get('class', {}).items():
+        cls['ddi_ordinal'] = name_key[cname]
+
+"""
+    reads scripts/ddi_order.yml as it existed at a git revision, as {class: ordinal};
+    returns None if git, the revision, or the file at that revision is unavailable.
+
+    '-c safe.directory=*' neutralizes git's dubious-ownership guard, which otherwise
+    trips when the repo is bind-mounted into a CI container owned by another user.
+"""
+def _ddi_order_at_git_ref(ref):
+    import subprocess
+    scriptdir = os.path.dirname(_ddi_order_path)
+    try:
+        out = subprocess.run(
+            ['git', '-c', 'safe.directory=*', 'show', '%s:./ddi_order.yml'%ref],
+            cwd=scriptdir, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    except FileNotFoundError:
+        return None  # git not installed
+    if out.returncode != 0:
+        return None  # ref, or the file at that ref (e.g. before it was added), is absent
+    try:
+        return _ddi_order_from_docs(
+            yaml.load_all(out.stdout.decode('utf-8'), Loader=yaml.SafeLoader),
+            "ddi_order.yml@%s"%ref)
+    except Exception:
+        return None  # unrecognized/pre-bucket format at that ref -> skip the cross-version check
+
+"""
+    most recent release tag (vMAJOR.MINOR...) reachable from HEAD, or None
+"""
+def _latest_release_tag():
+    import subprocess
+    scriptdir = os.path.dirname(_ddi_order_path)
+    try:
+        out = subprocess.run(
+            ['git', '-c', 'safe.directory=*', 'describe', '--tags', '--abbrev=0', '--match', 'v[0-9]*'],
+            cwd=scriptdir, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    except FileNotFoundError:
+        return None
+    if out.returncode != 0:
+        return None
+    return out.stdout.decode('utf-8').strip() or None
+
+"""
+    verifies ddi_order.yml has not broken DDI-table ABI relative to the last release.
+
+    The slot a class occupies in a namespace's table is ABI: once a version ships,
+    that class's ordinal within its bucket is frozen. Each bucket is compared against
+    the same bucket at the most recent release tag, rejecting the only three edits
+    that shift a released slot -- renumbering an existing class, removing one, or
+    inserting a new class ahead of (ordinal <=) the last released one in that bucket.
+    Appending at the end of a bucket is allowed. Buckets are independent, so churn in
+    one namespace never trips the check for another.
+
+    Returns (ok, checked, message). checked is False when no baseline is available
+    (git/tag/file missing) so the caller can decide whether that is fatal (CI) or a
+    skip (offline local build).
+"""
+def check_ddi_abi(baseline_ref=None):
+    current = _get_ddi_order()
+    ref = baseline_ref or _latest_release_tag()
+    if not ref:
+        return (True, False, "DDI ABI check skipped: no release tag found to compare against.")
+    baseline = _ddi_order_at_git_ref(ref)
+    if baseline is None:
+        return (True, False, "DDI ABI check skipped: no comparable ddi_order.yml at %s."%ref)
+
+    problems = []
+    for bucket, base_order in baseline.items():
+        cur_order = current.get(bucket, {})
+        frozen_max = max(base_order.values(), default=0)
+        for name, ordinal in sorted(base_order.items(), key=lambda kv: kv[1]):
+            if name not in cur_order:
+                problems.append("  [%s] %-26s released at ordinal %d, now REMOVED"%(bucket, name, ordinal))
+            elif cur_order[name] != ordinal:
+                problems.append("  [%s] %-26s released at ordinal %d, now RENUMBERED to %d"%(bucket, name, ordinal, cur_order[name]))
+        for name, ordinal in sorted(cur_order.items(), key=lambda kv: kv[1]):
+            if name not in base_order and ordinal <= frozen_max:
+                problems.append("  [%s] %-26s INSERTED at ordinal %d, ahead of the last released ordinal %d"%(bucket, name, ordinal, frozen_max))
+
+    if problems:
+        msg = ("DDI table ABI break vs %s: a released class ordinal in scripts/ddi_order.yml changed.\n\n"
+               "%s\n\n"
+               "These slots are ABI once shipped: an older driver fills the table at the old\n"
+               "offsets while a newer loader reads the new ones, calling the wrong pointer.\n"
+               "Restore the released ordinals and APPEND new classes at the end of their bucket\n"
+               "(next per bucket: %s)."
+               %(ref, "\n".join(problems),
+                 ", ".join("%s=%d"%(b, n) for b, n in next_ddi_ordinal().items())))
+        return (False, True, msg)
+    return (True, True, "DDI table order is ABI-compatible with %s."%ref)
+
+"""
 Entry-point:
     Reads each YML file and extracts data
     Returns list of data per file
@@ -1057,6 +1275,7 @@ def parse(section, version, tags, meta, ref):
             })
 
     specs = sorted(specs, key=lambda s: s['header']['ordinal'])
+    _assign_ddi_ordinals(meta)
     _generate_extra(specs, meta)
 
     ref = _generate_ref(specs, tags, ref)

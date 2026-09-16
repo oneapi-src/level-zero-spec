@@ -162,9 +162,6 @@ Main entry:
     Do everything...
 """
 def main():
-    # Validate dependency versions before doing any work.
-    check_requirements()
-
     # Configure Python to treat warnings as errors
     warnings.filterwarnings('error')
 
@@ -183,8 +180,29 @@ def main():
     add_argument(parser, "warnings_as_errors", "treating documentation warnings as build errors.", True)
     parser.add_argument("--ver", type=str, default=None, required=False, help="specification version to generate (e.g. 1.17). If omitted, detected from the most recent git tag.")
     parser.add_argument("--versions_url_override", type=str, default=None, required=False, help="override the sidebar 'Versions' link target. Accepts a full URL (rendered as an external link) or an internal doc name like 'versions' (links to this build's own versions.html). If unset, uses the canonical latest versions page.")
+    parser.add_argument("--next_ddi_ordinal", action="store_true", help="print the next unused ordinal per bucket for a new class in ddi_order.yml, then exit.")
+    parser.add_argument("--check_ddi_abi", action="store_true", help="verify ddi_order.yml has not broken DDI-table ABI vs the last release tag, then exit (1 on break).")
 
     args = vars(parser.parse_args())
+
+    # query-only: answered from ddi_order.yml alone, so skip the dependency check,
+    # version detection and parsing. Prints one "bucket next" line per namespace:
+    #   core 25
+    #   sysman 21
+    if args['next_ddi_ordinal']:
+        for bucket, nxt in parse_specs.next_ddi_ordinal().items():
+            print("%s %d" % (bucket, nxt))
+        sys.exit(0)
+
+    # check-only: compares ddi_order.yml against the last release tag and exits.
+    # Needs only yaml + git, so it runs before the dependency check and parsing.
+    if args['check_ddi_abi']:
+        ok, _checked, message = parse_specs.check_ddi_abi()
+        print(message)
+        sys.exit(0 if ok else 1)
+
+    # Validate dependency versions before doing any work.
+    check_requirements()
 
     if args['ver'] is None:
         args['ver'] = detect_version_git_major_minor()
@@ -200,6 +218,16 @@ def main():
         args['rev'] = args['ver']
     else:
         args['rev'] = revision()
+
+    # Guard DDI-table ABI on every build: reshuffling a released class ordinal in
+    # ddi_order.yml breaks N-1 loader/driver compatibility. A real break fails the
+    # build here (locally and in CI). When no git/tag baseline is available (e.g. an
+    # offline shallow clone) the check reports skipped and the build continues.
+    abi_ok, _abi_checked, abi_message = parse_specs.check_ddi_abi()
+    if not abi_ok:
+        print("\nERROR: %s" % abi_message)
+        sys.exit(1)
+    print(abi_message)
 
     sep = "--------------------------------------------"
     sections_on = [s for s in configParser.sections() if args.get(s, False)]
