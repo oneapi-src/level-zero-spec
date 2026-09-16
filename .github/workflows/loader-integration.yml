@@ -503,6 +503,36 @@ jobs:
           -w $PWD \
           ghcr.io/oneapi-src/spec-build:latest \
           python3 spec-head/scripts/update_ze_api_version.py base.dump head.dump
+    - name: Downgrade ABI Checker DWARF storage-location rules to Low
+      # abi-dumper keeps the LAST entry of a DWARF location list, not the first,
+      # so these two rules report where -Og parked a value late in the function
+      # body, not how it was passed. On x86-64 the real argument registers and
+      # stack slots follow from parameter types and order alone, so any genuine
+      # break is already reported by Parameter_Type_*/Added_*/Removed_* rules.
+      # Low keeps both findings in the report without failing the job.
+      run: | #bash
+        set -eo pipefail
+        docker run \
+          --rm \
+          --interactive \
+          -v $PWD:$PWD \
+          -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          python3 - <<'PY'
+        import re
+        path = "abi-compliance-checker/modules/RulesBin.xml"
+        text = open(path).read()
+        for rule in ("Parameter_Changed_Register", "Parameter_Changed_Offset"):
+            text, count = re.subn(
+                r"(<id>\s*%s\s*</id>\s*<severity>\s*)High(\s*</severity>)" % rule,
+                r"\1Low\2", text)
+            print("%s: %d rule(s) downgraded" % (rule, count))
+            assert count == 1, "rule %s not found -- checker version changed?" % rule
+        open(path, "w").write(text)
+        PY
+        docker run --rm -v $PWD:$PWD -w $PWD \
+          ghcr.io/oneapi-src/spec-build:latest \
+          chown $(id -u):$(id -g) abi-compliance-checker/modules/RulesBin.xml
     - name: Compare dumps
       id: abi-check
       continue-on-error: true
