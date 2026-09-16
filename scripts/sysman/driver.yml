@@ -84,6 +84,45 @@ params:
             if count is less than the number of sysman drivers available, then the loader shall only retrieve that number of sysman drivers.
 --- #--------------------------------------------------------------------------
 type: macro
+desc: "Maximum system driver version string size"
+version: "1.19"
+name: $S_MAX_SYSTEM_DRIVER_VERSION
+value: "256"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Sysman driver properties queried using $sDriverGetProperties"
+version: "1.19"
+class: $sDriver
+name: $s_driver_properties_t
+base: $s_base_properties_t
+members:
+    - type: $s_uuid_t
+      name: uuid
+      desc: "[out] universal unique identifier of the sysman driver instance."
+    - type: uint32_t
+      name: driverVersion
+      desc: |
+        [out] sysman driver version
+        The sysman driver version is a non-zero, monotonically increasing value where higher values always indicate a more recent version.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Retrieves properties of the sysman driver."
+version: "1.19"
+class: $sDriver
+name: GetProperties
+ordinal: "1"
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the sysman driver instance"
+    - type: "$s_driver_properties_t*"
+      name: pDriverProperties
+      desc: "[in,out] query result for sysman driver properties"
+--- #--------------------------------------------------------------------------
+type: macro
 desc: "Maximum extension name string size"
 version: "1.8"
 name: $S_MAX_EXTENSION_NAME

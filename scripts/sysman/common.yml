@@ -217,6 +217,9 @@ etors:
     - name: DEVICE_UUID
       desc: $s_uuid_t
       version: "1.7"
+    - name: DRIVER_PROPERTIES
+      desc: $s_driver_properties_t
+      version: "1.19"
     - name: POWER_DOMAIN_EXP_PROPERTIES
       value: "0x00020001"
       desc: $s_power_domain_exp_properties_t
@@ -353,3 +356,18 @@ members:
       name: pNext
       desc: "[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext)."
       init: nullptr
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum device universal unique id (UUID) size in bytes."
+name: $S_MAX_UUID_SIZE
+value: "16"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device universal unique id (UUID)"
+version: "1.7"
+class: $sDevice
+name: $s_uuid_t
+members:
+   - type: uint8_t
+     name: "id[$S_MAX_UUID_SIZE]"
+     desc: "[out] Data representing a device UUID"

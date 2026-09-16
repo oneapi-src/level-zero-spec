@@ -44,11 +44,6 @@ desc: "Maximum number of characters in string properties."
 name: $S_STRING_PROPERTY_SIZE
 value: "64"
 --- #--------------------------------------------------------------------------
-type: macro
-desc: "Maximum device universal unique id (UUID) size in bytes."
-name: $S_MAX_UUID_SIZE
-value: "16"
---- #--------------------------------------------------------------------------
 type: enum
 desc: "Types of accelerator engines"
 class: $sDevice
@@ -132,16 +127,6 @@ members:
     - type: $s_reset_type_t
       name: resetType
       desc: "[in] Type of reset needs to be performed"
---- #--------------------------------------------------------------------------
-type: struct
-desc: "Device universal unique id (UUID)"
-version: "1.7"
-class: $sDevice
-name: $s_uuid_t
-members:
-   - type: uint8_t
-     name: "id[$S_MAX_UUID_SIZE]"
-     desc: "[out] opaque data representing a device UUID"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported device types"
