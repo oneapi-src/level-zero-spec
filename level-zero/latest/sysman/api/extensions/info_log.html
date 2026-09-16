@@ -1,0 +1,1078 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Info Log - Extensions &#8212; Level Zero Specification v1.19.12</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/extensions/info_log';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Info Log Instance - Extensions" href="info_log_instance.html" />
+    <link rel="prev" title="Engine - Extensions" href="engine.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19.12" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/extensions/info_log.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Info Log - Extensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#info-log-extension-functions">Info Log - Extension Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesinfologgetpropertiesext">zesInfoLogGetPropertiesExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zesInfoLogGetPropertiesExt21zes_info_log_handle_tP29zes_info_log_ext_properties_t"><code class="docutils literal notranslate"><span class="pre">zesInfoLogGetPropertiesExt()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesinfologcreateinstanceext">zesInfoLogCreateInstanceExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zesInfoLogCreateInstanceExt21zes_info_log_handle_tPKcP32zes_info_log_instance_ext_desc_tP30zes_info_log_instance_handle_t"><code class="docutils literal notranslate"><span class="pre">zesInfoLogCreateInstanceExt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#info-log-extension-enums">Info Log - Extension Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-info-log-type-ext-t">zes_info_log_type_ext_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zes_info_log_type_ext_t"><code class="docutils literal notranslate"><span class="pre">zes_info_log_type_ext_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_info_log_type_ext_t28ZES_INFO_LOG_TYPE_EXT_DEVICEE"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_TYPE_EXT_DEVICE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_info_log_type_ext_t34ZES_INFO_LOG_TYPE_EXT_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_TYPE_EXT_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-info-log-format-ext-t">zes_info_log_format_ext_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zes_info_log_format_ext_t"><code class="docutils literal notranslate"><span class="pre">zes_info_log_format_ext_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_info_log_format_ext_t28ZES_INFO_LOG_FORMAT_EXT_CPERE"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_FORMAT_EXT_CPER</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25zes_info_log_format_ext_t36ZES_INFO_LOG_FORMAT_EXT_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_FORMAT_EXT_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-info-log-record-type-ext-t">zes_info_log_record_type_ext_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zes_info_log_record_type_ext_t"><code class="docutils literal notranslate"><span class="pre">zes_info_log_record_type_ext_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_record_type_ext_t36ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWNE"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWN</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_record_type_ext_t42ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONALE"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONAL</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_record_type_ext_t44ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTEDE"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTED</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_record_type_ext_t46ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLEE"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLE</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_record_type_ext_t40ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_FATALE"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_FATAL</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_record_type_ext_t41ZES_INFO_LOG_RECORD_TYPE_EXT_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#info-log-extension-structures">Info Log - Extension Structures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-info-log-ext-properties-t">zes_info_log_ext_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv429zes_info_log_ext_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_info_log_ext_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zes_info_log_ext_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zes_info_log_ext_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zes_info_log_ext_properties_t11infoLogTypeE"><code class="docutils literal notranslate"><span class="pre">infoLogType</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zes_info_log_ext_properties_t13infoLogFormatE"><code class="docutils literal notranslate"><span class="pre">infoLogFormat</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zes_info_log_ext_properties_t24isNamedInstanceSupportedE"><code class="docutils literal notranslate"><span class="pre">isNamedInstanceSupported</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N29zes_info_log_ext_properties_t19isPeekDataSupportedE"><code class="docutils literal notranslate"><span class="pre">isPeekDataSupported</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-info-log-instance-ext-desc-t">zes_info_log_instance_ext_desc_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432zes_info_log_instance_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">zes_info_log_instance_ext_desc_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_info_log_instance_ext_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_info_log_instance_ext_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32zes_info_log_instance_ext_desc_t15pBufferSizeInKbE"><code class="docutils literal notranslate"><span class="pre">pBufferSizeInKb</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-info-log-metadata-ext-t">zes_info_log_metadata_ext_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zes_info_log_metadata_ext_t"><code class="docutils literal notranslate"><span class="pre">zes_info_log_metadata_ext_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t7addressE"><code class="docutils literal notranslate"><span class="pre">address</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t4uuidE"><code class="docutils literal notranslate"><span class="pre">uuid</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t9timestampE"><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t12lengthOfDataE"><code class="docutils literal notranslate"><span class="pre">lengthOfData</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t6offsetE"><code class="docutils literal notranslate"><span class="pre">offset</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_info_log_metadata_ext_t10recordTypeE"><code class="docutils literal notranslate"><span class="pre">recordType</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-info-log-read-status-ext-t">zes_info_log_read_status_ext_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zes_info_log_read_status_ext_t"><code class="docutils literal notranslate"><span class="pre">zes_info_log_read_status_ext_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_read_status_ext_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_read_status_ext_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_read_status_ext_t18droppedRecordCountE"><code class="docutils literal notranslate"><span class="pre">droppedRecordCount</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_read_status_ext_t16consumedDataSizeE"><code class="docutils literal notranslate"><span class="pre">consumedDataSize</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30zes_info_log_read_status_ext_t13hasDataToReadE"><code class="docutils literal notranslate"><span class="pre">hasDataToRead</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="info-log-extensions">
+<h1>Info Log - Extensions<a class="headerlink" href="#info-log-extensions" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<section id="info-log-extension-functions">
+<h2>Info Log - Extension Functions<a class="headerlink" href="#info-log-extension-functions" title="Link to this heading">#</a></h2>
+<section id="zesinfologgetpropertiesext">
+<span id="id1"></span><h3>zesInfoLogGetPropertiesExt<a class="headerlink" href="#zesinfologgetpropertiesext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv426zesInfoLogGetPropertiesExt21zes_info_log_handle_tP29zes_info_log_ext_properties_t">
+<span id="_CPPv326zesInfoLogGetPropertiesExt21zes_info_log_handle_tP29zes_info_log_ext_properties_t"></span><span id="_CPPv226zesInfoLogGetPropertiesExt21zes_info_log_handle_tP29zes_info_log_ext_properties_t"></span><span id="zesInfoLogGetPropertiesExt__zes_info_log_handle_t.zes_info_log_ext_properties_tP"></span><span class="target" id="zes__api_8h_1af55c5396148b4b79c0a084931ee49e22"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogGetPropertiesExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLog</span></span>, <a class="reference internal" href="#_CPPv429zes_info_log_ext_properties_t" title="zes_info_log_ext_properties_t"><span class="n"><span class="pre">zes_info_log_ext_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesInfoLogGetPropertiesExt21zes_info_log_handle_tP29zes_info_log_ext_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get info log properties. </p>
+<p><ul class="simple">
+<li><p>The application may call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hInfoLog</strong> – [in] handle of the info log </p></li>
+<li><p><strong>pProperties</strong> – [in,out] Will contain the properties of the info log. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hInfoLog</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pProperties</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesinfologcreateinstanceext">
+<span id="id2"></span><h3>zesInfoLogCreateInstanceExt<a class="headerlink" href="#zesinfologcreateinstanceext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427zesInfoLogCreateInstanceExt21zes_info_log_handle_tPKcP32zes_info_log_instance_ext_desc_tP30zes_info_log_instance_handle_t">
+<span id="_CPPv327zesInfoLogCreateInstanceExt21zes_info_log_handle_tPKcP32zes_info_log_instance_ext_desc_tP30zes_info_log_instance_handle_t"></span><span id="_CPPv227zesInfoLogCreateInstanceExt21zes_info_log_handle_tPKcP32zes_info_log_instance_ext_desc_tP30zes_info_log_instance_handle_t"></span><span id="zesInfoLogCreateInstanceExt__zes_info_log_handle_t.cCP.zes_info_log_instance_ext_desc_tP.zes_info_log_instance_handle_tP"></span><span class="target" id="zes__api_8h_1a183e3b68162ac42700ed00426f7846f5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogCreateInstanceExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLog</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pInstanceName</span></span>, <a class="reference internal" href="#_CPPv432zes_info_log_instance_ext_desc_t" title="zes_info_log_instance_ext_desc_t"><span class="n"><span class="pre">zes_info_log_instance_ext_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDesc</span></span>, <span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phInfoLogInstance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesInfoLogCreateInstanceExt21zes_info_log_handle_tPKcP32zes_info_log_instance_ext_desc_tP30zes_info_log_instance_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Create a collection instance for an info log. </p>
+<p><ul class="simple">
+<li><p>Creating a collection instance starts the collection of records into a buffer owned by that instance.</p></li>
+<li><p>Records collected by an instance are retrieved using <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, or inspected without being consumed using <a class="reference internal" href="info_log_instance.html#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a>.</p></li>
+<li><p>Collection continues until the instance is deleted using <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a53decc73912fed0c7832205f875c8bdc"><span class="std std-ref">zesInfoLogInstanceDeleteExt</span></a>, which also releases the resources allocated by the instance during create operation.</p></li>
+<li><p>A named collection instance collects records into a buffer that is not shared with other collection instances. Named collection instances are only supported when isNamedInstanceSupported of <a class="reference internal" href="#structzes__info__log__ext__properties__t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is true.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">pInstanceName</span></code> is nullptr, then records are collected from the default/global buffer of the info log, which may be shared with other consumers and can have data from different sources.</p></li>
+<li><p>The application must not call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hInfoLog</strong> – [in] handle of the info log </p></li>
+<li><p><strong>pInstanceName</strong> – [in][optional] name of the collection instance to create. if nullptr, then the default buffer of the info log shall be used. </p></li>
+<li><p><strong>pDesc</strong> – [in,out] pointer to the descriptor of the collection instance to create. </p></li>
+<li><p><strong>phInfoLogInstance</strong> – [out] handle of the collection instance that was created. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hInfoLog</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pDesc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phInfoLogInstance</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">pInstanceName</span> <span class="pre">!=</span> <span class="pre">nullptr</span></code> and isNamedInstanceSupported of <a class="reference internal" href="#structzes__info__log__ext__properties__t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is false.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af964b27d146102948a48f0ebabe3aee3"><span class="std std-ref">ZE_RESULT_ERROR_HANDLE_OBJECT_IN_USE</span></a><ul>
+<li><p>A collection instance was already created with the same name.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to collect info log records. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="info-log-extension-enums">
+<h2>Info Log - Extension Enums<a class="headerlink" href="#info-log-extension-enums" title="Link to this heading">#</a></h2>
+<section id="zes-info-log-type-ext-t">
+<span id="id3"></span><h3>zes_info_log_type_ext_t<a class="headerlink" href="#zes-info-log-type-ext-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv423zes_info_log_type_ext_t">
+<span id="_CPPv323zes_info_log_type_ext_t"></span><span id="_CPPv223zes_info_log_type_ext_t"></span><span class="target" id="zes__api_8h_1aac8c6ae4aa5ac206ce488319709935e9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_info_log_type_ext_t</span></span></span><a class="headerlink" href="#_CPPv423zes_info_log_type_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Info log types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_info_log_type_ext_t28ZES_INFO_LOG_TYPE_EXT_DEVICEE">
+<span id="_CPPv3N23zes_info_log_type_ext_t28ZES_INFO_LOG_TYPE_EXT_DEVICEE"></span><span id="_CPPv2N23zes_info_log_type_ext_t28ZES_INFO_LOG_TYPE_EXT_DEVICEE"></span><span class="target" id="zes__api_8h_1aac8c6ae4aa5ac206ce488319709935e9a851e8b443429f0921b5bfad2b88be58c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_TYPE_EXT_DEVICE</span></span></span><a class="headerlink" href="#_CPPv4N23zes_info_log_type_ext_t28ZES_INFO_LOG_TYPE_EXT_DEVICEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Log of device reported errors and other device reported information. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23zes_info_log_type_ext_t34ZES_INFO_LOG_TYPE_EXT_FORCE_UINT32E">
+<span id="_CPPv3N23zes_info_log_type_ext_t34ZES_INFO_LOG_TYPE_EXT_FORCE_UINT32E"></span><span id="_CPPv2N23zes_info_log_type_ext_t34ZES_INFO_LOG_TYPE_EXT_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1aac8c6ae4aa5ac206ce488319709935e9a19144c16f587228575c7822012b7fda4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_TYPE_EXT_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N23zes_info_log_type_ext_t34ZES_INFO_LOG_TYPE_EXT_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_INFO_LOG_TYPE_EXT_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-info-log-format-ext-t">
+<span id="id4"></span><h3>zes_info_log_format_ext_t<a class="headerlink" href="#zes-info-log-format-ext-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv425zes_info_log_format_ext_t">
+<span id="_CPPv325zes_info_log_format_ext_t"></span><span id="_CPPv225zes_info_log_format_ext_t"></span><span class="target" id="zes__api_8h_1ae56a4d3c58ae57a14b7930f6fb45145d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_info_log_format_ext_t</span></span></span><a class="headerlink" href="#_CPPv425zes_info_log_format_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Info log record formats. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_info_log_format_ext_t28ZES_INFO_LOG_FORMAT_EXT_CPERE">
+<span id="_CPPv3N25zes_info_log_format_ext_t28ZES_INFO_LOG_FORMAT_EXT_CPERE"></span><span id="_CPPv2N25zes_info_log_format_ext_t28ZES_INFO_LOG_FORMAT_EXT_CPERE"></span><span class="target" id="zes__api_8h_1ae56a4d3c58ae57a14b7930f6fb45145dacdbb17cce5c72adb67bfe6ce6d25dd70"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_FORMAT_EXT_CPER</span></span></span><a class="headerlink" href="#_CPPv4N25zes_info_log_format_ext_t28ZES_INFO_LOG_FORMAT_EXT_CPERE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Each record is a UEFI Common Platform Error Record (CPER). The application is responsible for decoding the record contents. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N25zes_info_log_format_ext_t36ZES_INFO_LOG_FORMAT_EXT_FORCE_UINT32E">
+<span id="_CPPv3N25zes_info_log_format_ext_t36ZES_INFO_LOG_FORMAT_EXT_FORCE_UINT32E"></span><span id="_CPPv2N25zes_info_log_format_ext_t36ZES_INFO_LOG_FORMAT_EXT_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1ae56a4d3c58ae57a14b7930f6fb45145dacd4e88a9efb77dc416c83a94969179d2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_FORMAT_EXT_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N25zes_info_log_format_ext_t36ZES_INFO_LOG_FORMAT_EXT_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_INFO_LOG_FORMAT_EXT_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="zes-info-log-record-type-ext-t">
+<span id="id5"></span><h3>zes_info_log_record_type_ext_t<a class="headerlink" href="#zes-info-log-record-type-ext-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv430zes_info_log_record_type_ext_t">
+<span id="_CPPv330zes_info_log_record_type_ext_t"></span><span id="_CPPv230zes_info_log_record_type_ext_t"></span><span class="target" id="zes__api_8h_1a4de48040f519d9a194b37ae1e4933838"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_info_log_record_type_ext_t</span></span></span><a class="headerlink" href="#_CPPv430zes_info_log_record_type_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Info log record types. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_record_type_ext_t36ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWNE">
+<span id="_CPPv3N30zes_info_log_record_type_ext_t36ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWNE"></span><span id="_CPPv2N30zes_info_log_record_type_ext_t36ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWNE"></span><span class="target" id="zes__api_8h_1a4de48040f519d9a194b37ae1e4933838a86d3726a57cb58aad6238d985126cbc4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWN</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_record_type_ext_t36ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWNE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of the record could not be determined. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_record_type_ext_t42ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONALE">
+<span id="_CPPv3N30zes_info_log_record_type_ext_t42ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONALE"></span><span id="_CPPv2N30zes_info_log_record_type_ext_t42ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONALE"></span><span class="target" id="zes__api_8h_1a4de48040f519d9a194b37ae1e4933838a0c7f51055962527478ce7fecdc1accc4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONAL</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_record_type_ext_t42ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONALE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The record does not report an error. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_record_type_ext_t44ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTEDE">
+<span id="_CPPv3N30zes_info_log_record_type_ext_t44ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTEDE"></span><span id="_CPPv2N30zes_info_log_record_type_ext_t44ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTEDE"></span><span class="target" id="zes__api_8h_1a4de48040f519d9a194b37ae1e4933838a3b56c6afe9a5c1a17f117d6c699988b1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTED</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_record_type_ext_t44ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTEDE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The record reports an error that was corrected by the device. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_record_type_ext_t46ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLEE">
+<span id="_CPPv3N30zes_info_log_record_type_ext_t46ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLEE"></span><span id="_CPPv2N30zes_info_log_record_type_ext_t46ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLEE"></span><span class="target" id="zes__api_8h_1a4de48040f519d9a194b37ae1e4933838a54a4895ecefd9f924f8215ea7c9c2d03"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLE</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_record_type_ext_t46ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The record reports an error that was not corrected by the device and that is not fatal. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_record_type_ext_t40ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_FATALE">
+<span id="_CPPv3N30zes_info_log_record_type_ext_t40ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_FATALE"></span><span id="_CPPv2N30zes_info_log_record_type_ext_t40ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_FATALE"></span><span class="target" id="zes__api_8h_1a4de48040f519d9a194b37ae1e4933838aea20c5ab518fb0aff792f6b1203b08d3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_FATAL</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_record_type_ext_t40ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_FATALE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The record reports an error that was not corrected by the device and that is fatal. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_record_type_ext_t41ZES_INFO_LOG_RECORD_TYPE_EXT_FORCE_UINT32E">
+<span id="_CPPv3N30zes_info_log_record_type_ext_t41ZES_INFO_LOG_RECORD_TYPE_EXT_FORCE_UINT32E"></span><span id="_CPPv2N30zes_info_log_record_type_ext_t41ZES_INFO_LOG_RECORD_TYPE_EXT_FORCE_UINT32E"></span><span class="target" id="zes__api_8h_1a4de48040f519d9a194b37ae1e4933838a8bb14dedb8faec5bcb3e5ef754756503"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZES_INFO_LOG_RECORD_TYPE_EXT_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_record_type_ext_t41ZES_INFO_LOG_RECORD_TYPE_EXT_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZES_INFO_LOG_RECORD_TYPE_EXT_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="info-log-extension-structures">
+<h2>Info Log - Extension Structures<a class="headerlink" href="#info-log-extension-structures" title="Link to this heading">#</a></h2>
+<section id="zes-info-log-ext-properties-t">
+<span id="id6"></span><h3>zes_info_log_ext_properties_t<a class="headerlink" href="#zes-info-log-ext-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv429zes_info_log_ext_properties_t">
+<span id="_CPPv329zes_info_log_ext_properties_t"></span><span id="_CPPv229zes_info_log_ext_properties_t"></span><span id="zes_info_log_ext_properties_t"></span><span class="target" id="structzes__info__log__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_info_log_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv429zes_info_log_ext_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Info log properties. </p>
+<p><ul class="simple">
+<li><p>This structure is returned by <a class="reference internal" href="#zes__api_8h_1af55c5396148b4b79c0a084931ee49e22"><span class="std std-ref">zesInfoLogGetPropertiesExt</span></a></p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N29zes_info_log_ext_properties_t5stypeE">
+<span id="_CPPv3N29zes_info_log_ext_properties_t5stypeE"></span><span id="_CPPv2N29zes_info_log_ext_properties_t5stypeE"></span><span id="zes_info_log_ext_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__info__log__ext__properties__t_1a854ab017ccf9c0694bd977212615eb66"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N29zes_info_log_ext_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N29zes_info_log_ext_properties_t5pNextE">
+<span id="_CPPv3N29zes_info_log_ext_properties_t5pNextE"></span><span id="_CPPv2N29zes_info_log_ext_properties_t5pNextE"></span><span id="zes_info_log_ext_properties_t::pNext__voidP"></span><span class="target" id="structzes__info__log__ext__properties__t_1ac395eb9fb09573372a583ca5f7628340"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N29zes_info_log_ext_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N29zes_info_log_ext_properties_t11infoLogTypeE">
+<span id="_CPPv3N29zes_info_log_ext_properties_t11infoLogTypeE"></span><span id="_CPPv2N29zes_info_log_ext_properties_t11infoLogTypeE"></span><span id="zes_info_log_ext_properties_t::infoLogType__zes_info_log_type_ext_t"></span><span class="target" id="structzes__info__log__ext__properties__t_1a6b4f0753231c3fbd02a14b4651116d7a"></span><a class="reference internal" href="#_CPPv423zes_info_log_type_ext_t" title="zes_info_log_type_ext_t"><span class="n"><span class="pre">zes_info_log_type_ext_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">infoLogType</span></span></span><a class="headerlink" href="#_CPPv4N29zes_info_log_ext_properties_t11infoLogTypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Type of the information carried by this info log. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N29zes_info_log_ext_properties_t13infoLogFormatE">
+<span id="_CPPv3N29zes_info_log_ext_properties_t13infoLogFormatE"></span><span id="_CPPv2N29zes_info_log_ext_properties_t13infoLogFormatE"></span><span id="zes_info_log_ext_properties_t::infoLogFormat__zes_info_log_format_ext_t"></span><span class="target" id="structzes__info__log__ext__properties__t_1a76733e60743afb7bc2f4e0763078c66d"></span><a class="reference internal" href="#_CPPv425zes_info_log_format_ext_t" title="zes_info_log_format_ext_t"><span class="n"><span class="pre">zes_info_log_format_ext_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">infoLogFormat</span></span></span><a class="headerlink" href="#_CPPv4N29zes_info_log_ext_properties_t13infoLogFormatE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Format of the records returned by this info log. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N29zes_info_log_ext_properties_t24isNamedInstanceSupportedE">
+<span id="_CPPv3N29zes_info_log_ext_properties_t24isNamedInstanceSupportedE"></span><span id="_CPPv2N29zes_info_log_ext_properties_t24isNamedInstanceSupportedE"></span><span id="zes_info_log_ext_properties_t::isNamedInstanceSupported__ze_bool_t"></span><span class="target" id="structzes__info__log__ext__properties__t_1add7d522cd7fab8cddb8fa3b9e89c5e31"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isNamedInstanceSupported</span></span></span><a class="headerlink" href="#_CPPv4N29zes_info_log_ext_properties_t24isNamedInstanceSupportedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Indicates whether named collection instances are supported for this info log. If false, then <a class="reference internal" href="#zes__api_8h_1a183e3b68162ac42700ed00426f7846f5"><span class="std std-ref">zesInfoLogCreateInstanceExt</span></a> must be called with <code class="docutils literal notranslate"><span class="pre">pInstanceName</span></code> set to nullptr. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N29zes_info_log_ext_properties_t19isPeekDataSupportedE">
+<span id="_CPPv3N29zes_info_log_ext_properties_t19isPeekDataSupportedE"></span><span id="_CPPv2N29zes_info_log_ext_properties_t19isPeekDataSupportedE"></span><span id="zes_info_log_ext_properties_t::isPeekDataSupported__ze_bool_t"></span><span class="target" id="structzes__info__log__ext__properties__t_1a54c0604eb20db89a8aeb55b27ba00915"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isPeekDataSupported</span></span></span><a class="headerlink" href="#_CPPv4N29zes_info_log_ext_properties_t19isPeekDataSupportedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Indicates whether the records of this info log can be read without being consumed. If false, then <a class="reference internal" href="info_log_instance.html#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a> shall return <a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a>. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-info-log-instance-ext-desc-t">
+<span id="id7"></span><h3>zes_info_log_instance_ext_desc_t<a class="headerlink" href="#zes-info-log-instance-ext-desc-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv432zes_info_log_instance_ext_desc_t">
+<span id="_CPPv332zes_info_log_instance_ext_desc_t"></span><span id="_CPPv232zes_info_log_instance_ext_desc_t"></span><span id="zes_info_log_instance_ext_desc_t"></span><span class="target" id="structzes__info__log__instance__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_info_log_instance_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv432zes_info_log_instance_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Info log collection instance descriptor. </p>
+<p><ul class="simple">
+<li><p>This structure is passed to <a class="reference internal" href="#zes__api_8h_1a183e3b68162ac42700ed00426f7846f5"><span class="std std-ref">zesInfoLogCreateInstanceExt</span></a> to configure the collection instance.</p></li>
+<li><p>Each member is optional. If a member is nullptr, then the driver shall use its default value for that setting.</p></li>
+<li><p>On input, each non-null member points to the value requested by the application. On output, the driver shall update the pointed-to value with the value that was actually applied, which may be rounded to the closest value the driver supports. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_info_log_instance_ext_desc_t5stypeE">
+<span id="_CPPv3N32zes_info_log_instance_ext_desc_t5stypeE"></span><span id="_CPPv2N32zes_info_log_instance_ext_desc_t5stypeE"></span><span id="zes_info_log_instance_ext_desc_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__info__log__instance__ext__desc__t_1aa8cbb898f0b6e3ccbc77a0c3adafceff"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N32zes_info_log_instance_ext_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_info_log_instance_ext_desc_t5pNextE">
+<span id="_CPPv3N32zes_info_log_instance_ext_desc_t5pNextE"></span><span id="_CPPv2N32zes_info_log_instance_ext_desc_t5pNextE"></span><span id="zes_info_log_instance_ext_desc_t::pNext__voidCP"></span><span class="target" id="structzes__info__log__instance__ext__desc__t_1ab14516b2d1e5b87dee07077be7f07e4d"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N32zes_info_log_instance_ext_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N32zes_info_log_instance_ext_desc_t15pBufferSizeInKbE">
+<span id="_CPPv3N32zes_info_log_instance_ext_desc_t15pBufferSizeInKbE"></span><span id="_CPPv2N32zes_info_log_instance_ext_desc_t15pBufferSizeInKbE"></span><span id="zes_info_log_instance_ext_desc_t::pBufferSizeInKb__uint32_tP"></span><span class="target" id="structzes__info__log__instance__ext__desc__t_1ada65ef8b6a9b5f8dced85d0625e514a0"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pBufferSizeInKb</span></span></span><a class="headerlink" href="#_CPPv4N32zes_info_log_instance_ext_desc_t15pBufferSizeInKbE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] pointer to the size, in kilobytes, of the buffer used to collect records. if nullptr, then the driver shall use its default buffer size. if *pBufferSizeInKb == 0, then implementation shall update pBufferSizeInKb with the default buffer size. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-info-log-metadata-ext-t">
+<span id="id8"></span><h3>zes_info_log_metadata_ext_t<a class="headerlink" href="#zes-info-log-metadata-ext-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv427zes_info_log_metadata_ext_t">
+<span id="_CPPv327zes_info_log_metadata_ext_t"></span><span id="_CPPv227zes_info_log_metadata_ext_t"></span><span id="zes_info_log_metadata_ext_t"></span><span class="target" id="structzes__info__log__metadata__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_info_log_metadata_ext_t</span></span></span><a class="headerlink" href="#_CPPv427zes_info_log_metadata_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metadata describing a single info log record. </p>
+<p><ul class="simple">
+<li><p>An array of these structures is returned by <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> and by <a class="reference internal" href="info_log_instance.html#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a>, one element per record.</p></li>
+<li><p>A record is located within the data buffer returned by those functions using <code class="docutils literal notranslate"><span class="pre">offset</span></code> and <code class="docutils literal notranslate"><span class="pre">lengthOfData</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">recordType</span></code> is derived by the driver from the contents of the record. The record itself is the authoritative source of this information, and takes precedence if the two disagree.</p></li>
+<li><p>For an info log whose format is <a class="reference internal" href="#zes__api_8h_1ae56a4d3c58ae57a14b7930f6fb45145dacdbb17cce5c72adb67bfe6ce6d25dd70"><span class="std std-ref">ZES_INFO_LOG_FORMAT_EXT_CPER</span></a>, <code class="docutils literal notranslate"><span class="pre">recordType</span></code> reflects the severity reported in the header of the record. An individual section of that record may report a higher severity than the header does.</p></li>
+<li><p>The application must treat a value of <code class="docutils literal notranslate"><span class="pre">recordType</span></code> that it does not recognize as <a class="reference internal" href="#zes__api_8h_1a4de48040f519d9a194b37ae1e4933838a86d3726a57cb58aad6238d985126cbc4"><span class="std std-ref">ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWN</span></a>. The numeric values of <a class="reference internal" href="#zes__api_8h_1a4de48040f519d9a194b37ae1e4933838"><span class="std std-ref">zes_info_log_record_type_ext_t</span></a> do not express an order of severity and must not be compared for magnitude. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t5stypeE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t5stypeE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t5stypeE"></span><span id="zes_info_log_metadata_ext_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__info__log__metadata__ext__t_1a9414f5f845adbae4968dd827958b7f46"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t5pNextE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t5pNextE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t5pNextE"></span><span id="zes_info_log_metadata_ext_t::pNext__voidP"></span><span class="target" id="structzes__info__log__metadata__ext__t_1a03efc13052d3f0bd160606ed3ee7a778"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t7addressE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t7addressE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t7addressE"></span><span id="zes_info_log_metadata_ext_t::address__zes_pci_address_t"></span><span class="target" id="structzes__info__log__metadata__ext__t_1a9d3e52ede61fcafb68a62fcf7fd759b5"></span><a class="reference internal" href="../apis/device-2.html#_CPPv417zes_pci_address_t" title="zes_pci_address_t"><span class="n"><span class="pre">zes_pci_address_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t7addressE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] PCI address of the device that generated the record. A value of 0 for <code class="docutils literal notranslate"><span class="pre">domain</span></code>, <code class="docutils literal notranslate"><span class="pre">bus</span></code>, <code class="docutils literal notranslate"><span class="pre">device</span></code>, and <code class="docutils literal notranslate"><span class="pre">function</span></code> indicates that the PCI address could not be determined. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t4uuidE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t4uuidE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t4uuidE"></span><span id="zes_info_log_metadata_ext_t::uuid__zes_uuid_t"></span><span class="target" id="structzes__info__log__metadata__ext__t_1aab47a42a27bfe23e0d0267c9a13707fa"></span><a class="reference internal" href="../apis/device-2.html#_CPPv410zes_uuid_t" title="zes_uuid_t"><span class="n"><span class="pre">zes_uuid_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uuid</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t4uuidE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] universal unique identifier of the device that generated the record. A value of 0 indicates that the UUID could not be determined. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t9timestampE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t9timestampE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t9timestampE"></span><span id="zes_info_log_metadata_ext_t::timestamp__uint64_t"></span><span class="target" id="structzes__info__log__metadata__ext__t_1add74514707f72533ae4c5cb9f4c9526f"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timestamp</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t9timestampE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Time when the record was generated, in nanoseconds. The reference point of this timestamp is implementation specific and is only guaranteed to be consistent across records returned by the same info log. A value of 0 indicates that the timestamp could not be determined. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t12lengthOfDataE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t12lengthOfDataE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t12lengthOfDataE"></span><span id="zes_info_log_metadata_ext_t::lengthOfData__uint32_t"></span><span class="target" id="structzes__info__log__metadata__ext__t_1aad5028c112305ed06b930b342550561c"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lengthOfData</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t12lengthOfDataE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Length of the record, in bytes. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t6offsetE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t6offsetE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t6offsetE"></span><span id="zes_info_log_metadata_ext_t::offset__uint32_t"></span><span class="target" id="structzes__info__log__metadata__ext__t_1ae0ae45d1fd18dc6b80e1454caa0fa0d5"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">offset</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t6offsetE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Byte offset of the record from the start of the returned data buffer. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N27zes_info_log_metadata_ext_t10recordTypeE">
+<span id="_CPPv3N27zes_info_log_metadata_ext_t10recordTypeE"></span><span id="_CPPv2N27zes_info_log_metadata_ext_t10recordTypeE"></span><span id="zes_info_log_metadata_ext_t::recordType__zes_info_log_record_type_ext_t"></span><span class="target" id="structzes__info__log__metadata__ext__t_1a12131d5b14b4ac8cf45064dd1c1962bb"></span><a class="reference internal" href="#_CPPv430zes_info_log_record_type_ext_t" title="zes_info_log_record_type_ext_t"><span class="n"><span class="pre">zes_info_log_record_type_ext_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recordType</span></span></span><a class="headerlink" href="#_CPPv4N27zes_info_log_metadata_ext_t10recordTypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Type of the information reported by the record. <a class="reference internal" href="#zes__api_8h_1a4de48040f519d9a194b37ae1e4933838a86d3726a57cb58aad6238d985126cbc4"><span class="std std-ref">ZES_INFO_LOG_RECORD_TYPE_EXT_UNKNOWN</span></a> indicates that the type could not be determined. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+<section id="zes-info-log-read-status-ext-t">
+<span id="id9"></span><h3>zes_info_log_read_status_ext_t<a class="headerlink" href="#zes-info-log-read-status-ext-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv430zes_info_log_read_status_ext_t">
+<span id="_CPPv330zes_info_log_read_status_ext_t"></span><span id="_CPPv230zes_info_log_read_status_ext_t"></span><span id="zes_info_log_read_status_ext_t"></span><span class="target" id="structzes__info__log__read__status__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_info_log_read_status_ext_t</span></span></span><a class="headerlink" href="#_CPPv430zes_info_log_read_status_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Status of a read from an info log collection instance. </p>
+<p><ul class="simple">
+<li><p>This structure is optionally returned by <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> and by <a class="reference internal" href="info_log_instance.html#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">consumedDataSize</span></code> reports the progress made through the data held by the collection instance, which is not related to the amount of record data returned by the call. </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_read_status_ext_t5stypeE">
+<span id="_CPPv3N30zes_info_log_read_status_ext_t5stypeE"></span><span id="_CPPv2N30zes_info_log_read_status_ext_t5stypeE"></span><span id="zes_info_log_read_status_ext_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__info__log__read__status__ext__t_1ac867320f96e6e602e8509a4a0b95a879"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_read_status_ext_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_read_status_ext_t5pNextE">
+<span id="_CPPv3N30zes_info_log_read_status_ext_t5pNextE"></span><span id="_CPPv2N30zes_info_log_read_status_ext_t5pNextE"></span><span id="zes_info_log_read_status_ext_t::pNext__voidP"></span><span class="target" id="structzes__info__log__read__status__ext__t_1a4145408555a40e943e416acb8bab8ddd"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_read_status_ext_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_read_status_ext_t18droppedRecordCountE">
+<span id="_CPPv3N30zes_info_log_read_status_ext_t18droppedRecordCountE"></span><span id="_CPPv2N30zes_info_log_read_status_ext_t18droppedRecordCountE"></span><span id="zes_info_log_read_status_ext_t::droppedRecordCount__int64_t"></span><span class="target" id="structzes__info__log__read__status__ext__t_1afbf9cb45a781d59de17c7160e7f8ccf3"></span><span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">droppedRecordCount</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_read_status_ext_t18droppedRecordCountE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Number of records that were dropped because the collection buffer overflowed. A value of <code class="docutils literal notranslate"><span class="pre">-1</span></code> indicates that one or more records were dropped and that their number could not be determined. The application must check whether <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> or <a class="reference internal" href="info_log_instance.html#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a> returned <a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ab59771124b21914ac45ef9e2a50ed249"><span class="std std-ref">ZE_RESULT_WARNING_DROPPED_DATA</span></a> before inspecting <code class="docutils literal notranslate"><span class="pre">droppedRecordCount</span></code>, since a value of <code class="docutils literal notranslate"><span class="pre">0</span></code> is otherwise ambiguous between no records dropped and the status not having been reported. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_read_status_ext_t16consumedDataSizeE">
+<span id="_CPPv3N30zes_info_log_read_status_ext_t16consumedDataSizeE"></span><span id="_CPPv2N30zes_info_log_read_status_ext_t16consumedDataSizeE"></span><span id="zes_info_log_read_status_ext_t::consumedDataSize__uint64_t"></span><span class="target" id="structzes__info__log__read__status__ext__t_1aa6e70a45dde73f1ad50b2cd5decf5ee6"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">consumedDataSize</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_read_status_ext_t16consumedDataSizeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Number of bytes that this call read out of the data held by the collection instance. This value counts all of the data that was searched, including data that does not belong to a record, and is therefore not related to the size of the record data returned by the call. For <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, this data is consumed and shall not be searched again by a subsequent call. If consumedDataSize = 0, then <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> did not consume any data, similar to <a class="reference internal" href="info_log_instance.html#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N30zes_info_log_read_status_ext_t13hasDataToReadE">
+<span id="_CPPv3N30zes_info_log_read_status_ext_t13hasDataToReadE"></span><span id="_CPPv2N30zes_info_log_read_status_ext_t13hasDataToReadE"></span><span id="zes_info_log_read_status_ext_t::hasDataToRead__ze_bool_t"></span><span class="target" id="structzes__info__log__read__status__ext__t_1a280c15fd6fe596c44f8d763ec0f660aa"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hasDataToRead</span></span></span><a class="headerlink" href="#_CPPv4N30zes_info_log_read_status_ext_t13hasDataToReadE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Indicates whether the collection instance holds records that were not returned by this call. This is true when the call stopped before all records were examined, for example because <code class="docutils literal notranslate"><span class="pre">timeout</span></code> elapsed, because <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> or <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code> was too small to hold all of the records that were found, or because the next record available was larger than <code class="docutils literal notranslate"><span class="pre">*pSize</span></code>. This value is a hint. Records may be collected, and for <a class="reference internal" href="info_log_instance.html#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> consumed, after this function returns. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="engine.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Engine - Extensions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="info_log_instance.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Info Log Instance - Extensions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zesInfoLog</div><ul class="ctoc-list"><li><a href="info_log.html#zesinfologgetpropertiesext">&hellip;GetPropertiesExt</a></li><li><a href="info_log.html#zesinfologcreateinstanceext">&hellip;CreateInstanceExt</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="info_log.html#zes-info-log-type-ext-t">zes_info_log_type_ext_t</a></li><li><a href="info_log.html#zes-info-log-format-ext-t">zes_info_log_format_ext_t</a></li><li><a href="info_log.html#zes-info-log-record-type-ext-t">zes_info_log_record_type_ext_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">4</span></summary><ul class="ctoc-list"><li><a href="info_log.html#zes-info-log-ext-properties-t">zes_info_log_ext_properties_t</a></li><li><a href="info_log.html#zes-info-log-instance-ext-desc-t">zes_info_log_instance_ext_desc_t</a></li><li><a href="info_log.html#zes-info-log-metadata-ext-t">zes_info_log_metadata_ext_t</a></li><li><a href="info_log.html#zes-info-log-read-status-ext-t">zes_info_log_read_status_ext_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

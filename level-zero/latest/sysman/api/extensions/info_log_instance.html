@@ -1,0 +1,761 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Info Log Instance - Extensions &#8212; Level Zero Specification v1.19.12</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/extensions/info_log_instance';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Data Types - Extensions" href="data_types.html" />
+    <link rel="prev" title="Info Log - Extensions" href="info_log.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19.12" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/sysman/api/extensions/info_log_instance.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Info Log Instance - Extensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#info-log-instance-extension-functions">Info Log Instance - Extension Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesinfologinstancereadwithmetadataext">zesInfoLogInstanceReadWithMetadataExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"><code class="docutils literal notranslate"><span class="pre">zesInfoLogInstanceReadWithMetadataExt()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesinfologinstancepeekwithmetadataext">zesInfoLogInstancePeekWithMetadataExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"><code class="docutils literal notranslate"><span class="pre">zesInfoLogInstancePeekWithMetadataExt()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesinfologinstancedeleteext">zesInfoLogInstanceDeleteExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t"><code class="docutils literal notranslate"><span class="pre">zesInfoLogInstanceDeleteExt()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="info-log-instance-extensions">
+<h1>Info Log Instance - Extensions<a class="headerlink" href="#info-log-instance-extensions" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<section id="info-log-instance-extension-functions">
+<h2>Info Log Instance - Extension Functions<a class="headerlink" href="#info-log-instance-extension-functions" title="Link to this heading">#</a></h2>
+<section id="zesinfologinstancereadwithmetadataext">
+<span id="id1"></span><h3>zesInfoLogInstanceReadWithMetadataExt<a class="headerlink" href="#zesinfologinstancereadwithmetadataext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv437zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t">
+<span id="_CPPv337zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="_CPPv237zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="zesInfoLogInstanceReadWithMetadataExt__zes_info_log_instance_handle_t.uint64_t.uint32_tP.uint8_tP.uint32_tP.zes_info_log_metadata_ext_tP.zes_info_log_read_status_ext_tP"></span><span class="target" id="zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstanceReadWithMetadataExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuffer</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRecordCount</span></span>, <a class="reference internal" href="info_log.html#_CPPv427zes_info_log_metadata_ext_t" title="zes_info_log_metadata_ext_t"><span class="n"><span class="pre">zes_info_log_metadata_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptors</span></span>, <a class="reference internal" href="info_log.html#_CPPv430zes_info_log_read_status_ext_t" title="zes_info_log_read_status_ext_t"><span class="n"><span class="pre">zes_info_log_read_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pReadStatus</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Read collected info log records and their metadata. </p>
+<p><ul class="simple">
+<li><p>A call in which <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> is zero or <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> is zero on input is a query call. A query call reports the total size, in bytes, of the record data and the total number of records that were found, does not write to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> or <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>, and does not consume any record. <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> and <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code> may be nullptr on a query call and are otherwise ignored by it.</p></li>
+<li><p>The application can optionally make a query call first to determine the size of the buffer and the number of descriptors it must provide.</p></li>
+<li><p>Records are consumed as they are returned. A record returned by one call will not be returned again by a subsequent call.</p></li>
+<li><p><a class="reference internal" href="#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a> returns the same records without consuming them.</p></li>
+<li><p>This function searches the data held by the collection instance for records. The amount of data that must be searched is not related to the amount of record data returned, because the collection instance may hold a large amount of data that contains no record. <code class="docutils literal notranslate"><span class="pre">timeout</span></code> bounds the search and applies to the query call as well.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hasDataToRead</span></code> in <a class="reference internal" href="info_log.html#structzes__info__log__read__status__ext__t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a> reports whether records remain, and is the value the application should use to decide whether to call this function again.</p></li>
+<li><p>The application must not call this function from simultaneous threads.</p></li>
+<li><p>The implementation of this function should be lock-free.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hInfoLogInstance</strong> – [in] handle of the info log collection instance </p></li>
+<li><p><strong>timeout</strong> – [in] maximum time, in milliseconds, that this function may spend searching the collection instance for records. if zero, then the function shall return immediately without searching. if <code class="docutils literal notranslate"><span class="pre">UINT64_MAX</span></code>, then the function shall not return until it has searched all of the data held by the collection instance. when this time elapses, the function shall return <a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a> with the records it has found so far, which may be none. due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies. </p></li>
+<li><p><strong>pSize</strong> – [in,out] pointer to the size, in bytes, of the record data. on input, the value is the size of <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code>. if the value is zero, or if <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> is zero, then this is a query call: the driver shall update the value with the total size of the record data that was found and shall not consume any record. otherwise, on output the driver shall update the value with the size of the record data written to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code>. </p></li>
+<li><p><strong>pBuffer</strong> – [in,out][optional][range(0, *pSize)] buffer that will contain the record data. the driver shall not write to this buffer on a query call, and the application may pass nullptr for such a call. </p></li>
+<li><p><strong>pRecordCount</strong> – [in,out] pointer to the number of records. on input, the value is the number of elements in <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>. if the value is zero, or if <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> is zero, then this is a query call: the driver shall update the value with the total number of records that were found and shall not consume any record. otherwise, on output the driver shall update the value with the number of records written to <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>. </p></li>
+<li><p><strong>pDescriptors</strong> – [in,out][optional][range(0, *pRecordCount)] array of metadata describing each record written to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code>. the driver shall not write to this array on a query call, and the application may pass nullptr for such a call. the application must initialize the stype member of each element in the array. </p></li>
+<li><p><strong>pReadStatus</strong> – [in,out][optional] pointer to a structure that will contain the status of this call. if nullptr, then the driver shall not report the status of this call, and the application cannot determine whether records were dropped or whether records remain available. the application must initialize the stype member. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hInfoLogInstance</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pSize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pRecordCount</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ab59771124b21914ac45ef9e2a50ed249"><span class="std std-ref">ZE_RESULT_WARNING_DROPPED_DATA</span></a><ul>
+<li><p>One or more records were dropped because the collection buffer overflowed. The number of records dropped is reported in <a class="reference internal" href="info_log.html#structzes__info__log__read__status__ext__t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a>.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to read info log records. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesinfologinstancepeekwithmetadataext">
+<span id="id2"></span><h3>zesInfoLogInstancePeekWithMetadataExt<a class="headerlink" href="#zesinfologinstancepeekwithmetadataext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv437zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t">
+<span id="_CPPv337zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="_CPPv237zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="zesInfoLogInstancePeekWithMetadataExt__zes_info_log_instance_handle_t.uint64_t.uint32_tP.uint8_tP.uint32_tP.zes_info_log_metadata_ext_tP.zes_info_log_read_status_ext_tP"></span><span class="target" id="zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstancePeekWithMetadataExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuffer</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRecordCount</span></span>, <a class="reference internal" href="info_log.html#_CPPv427zes_info_log_metadata_ext_t" title="zes_info_log_metadata_ext_t"><span class="n"><span class="pre">zes_info_log_metadata_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptors</span></span>, <a class="reference internal" href="info_log.html#_CPPv430zes_info_log_read_status_ext_t" title="zes_info_log_read_status_ext_t"><span class="n"><span class="pre">zes_info_log_read_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pReadStatus</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Read collected info log records and their metadata without consuming them. </p>
+<p><ul class="simple">
+<li><p>This function is equivalent to <a class="reference internal" href="#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, except that the records it returns are not consumed and remain available to subsequent calls to either function.</p></li>
+<li><p>Reading records without consuming them is only supported when isPeekDataSupported of <a class="reference internal" href="info_log.html#structzes__info__log__ext__properties__t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is true.</p></li>
+<li><p>As with <a class="reference internal" href="#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, a call in which <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> is zero or <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> is zero on input is a query call, which reports the total size, in bytes, of the record data and the total number of records that were found without writing to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> or <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>.</p></li>
+<li><p>The application should then call this function with <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> and <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> both non-zero to inspect the records that are available.</p></li>
+<li><p>The application must not call this function from simultaneous threads.</p></li>
+<li><p>The application must not call this function and <a class="reference internal" href="#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> simultaneously with the same handle.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hInfoLogInstance</strong> – [in] handle of the info log collection instance </p></li>
+<li><p><strong>timeout</strong> – [in] maximum time, in milliseconds, that this function may spend searching the collection instance for records. if zero, then the function shall return immediately without searching. if <code class="docutils literal notranslate"><span class="pre">UINT64_MAX</span></code>, then the function shall not return until it has searched all of the data held by the collection instance. when this time elapses, the function shall return <a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a> with the records it has found so far, which may be none. due to external dependencies, timeout may be rounded to the closest value allowed by the accuracy of those dependencies. </p></li>
+<li><p><strong>pSize</strong> – [in,out] pointer to the size, in bytes, of the record data. on input, the value is the size of <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code>. if the value is zero, or if <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> is zero, then this is a query call: the driver shall update the value with the total size of the record data that was found. otherwise, on output the driver shall update the value with the size of the record data written to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code>. </p></li>
+<li><p><strong>pBuffer</strong> – [in,out][optional][range(0, *pSize)] buffer that will contain the record data. the driver shall not write to this buffer on a query call, and the application may pass nullptr for such a call. </p></li>
+<li><p><strong>pRecordCount</strong> – [in,out] pointer to the number of records. on input, the value is the number of elements in <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>. if the value is zero, or if <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> is zero, then this is a query call: the driver shall update the value with the total number of records that were found. otherwise, on output the driver shall update the value with the number of records written to <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>. </p></li>
+<li><p><strong>pDescriptors</strong> – [in,out][optional][range(0, *pRecordCount)] array of metadata describing each record written to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code>. the driver shall not write to this array on a query call, and the application may pass nullptr for such a call. the application must initialize the stype member of each element in the array. </p></li>
+<li><p><strong>pReadStatus</strong> – [in,out][optional] pointer to a structure that will contain the status of this call. if nullptr, then the driver shall not report the status of this call, and the application cannot determine whether records were dropped or whether records remain available. the application must initialize the stype member. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hInfoLogInstance</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pSize</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pRecordCount</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
+<li><p>isPeekDataSupported of <a class="reference internal" href="info_log.html#structzes__info__log__ext__properties__t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is false.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ab59771124b21914ac45ef9e2a50ed249"><span class="std std-ref">ZE_RESULT_WARNING_DROPPED_DATA</span></a><ul>
+<li><p>One or more records were dropped because the collection buffer overflowed. The number of records dropped is reported in <a class="reference internal" href="info_log.html#structzes__info__log__read__status__ext__t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a>.</p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
+<li><p>User does not have permissions to read info log records. </p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="zesinfologinstancedeleteext">
+<span id="id3"></span><h3>zesInfoLogInstanceDeleteExt<a class="headerlink" href="#zesinfologinstancedeleteext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.19</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t">
+<span id="_CPPv327zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t"></span><span id="_CPPv227zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t"></span><span id="zesInfoLogInstanceDeleteExt__zes_info_log_instance_handle_t"></span><span class="target" id="zes__api_8h_1a53decc73912fed0c7832205f875c8bdc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstanceDeleteExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Delete a collection instance of an info log. </p>
+<p><ul class="simple">
+<li><p>Deleting a collection instance stops the collection of records into that instance and releases the resources used by the instance.</p></li>
+<li><p>The application must ensure that no other function is using the handle when calling this function.</p></li>
+<li><p>The application must not call this function from simultaneous threads with the same handle.</p></li>
+<li><p>The implementation of this function must be thread-safe.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hInfoLogInstance</strong> – [in][release] handle of the info log collection instance to delete </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hInfoLogInstance</span></code></p></li>
+</ul>
+</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="info_log.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Info Log - Extensions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="data_types.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data Types - Extensions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">3</span></summary><div class="ctoc-prefix">zesInfoLogInstance</div><ul class="ctoc-list"><li><a href="info_log_instance.html#zesinfologinstancereadwithmetadataext">&hellip;ReadWithMetadataExt</a></li><li><a href="info_log_instance.html#zesinfologinstancepeekwithmetadataext">&hellip;PeekWithMetadataExt</a></li><li><a href="info_log_instance.html#zesinfologinstancedeleteext">&hellip;DeleteExt</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

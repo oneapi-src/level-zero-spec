@@ -1,0 +1,753 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Info Logs Extension &#8212; Level Zero Specification v1.19.12</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=25f55f25" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/EXT_InfoLogs';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19.12" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../core/INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/EXT.html">Extensions</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api.html">API Documentation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../core/api.html">Core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../core/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../core/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/sysman/EXT_InfoLogs.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Info Logs Extension</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#info-logs-overview">Info Logs Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerating-info-logs-and-querying-properties">Enumerating Info Logs and Querying Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collecting-and-reading-records">Collecting and Reading Records</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="info-logs-extension">
+<span id="zes-extension-info-logs"></span><h1>Info Logs Extension<a class="headerlink" href="#info-logs-extension" title="Link to this heading">#</a></h1>
+<p class="ext-version"><em>Introduced in Level Zero version 1.19</em></p>
+<section id="api">
+<h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>Enumerations</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api/extensions/data_types.html#zes-info-logs-ext-version-t"><span class="std std-ref">zes_info_logs_ext_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zes-info-log-type-ext-t"><span class="std std-ref">zes_info_log_type_ext_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zes-info-log-format-ext-t"><span class="std std-ref">zes_info_log_format_ext_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zes-info-log-record-type-ext-t"><span class="std std-ref">zes_info_log_record_type_ext_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Handles</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>zes_info_log_handle_t</p></li>
+<li><p>zes_info_log_instance_handle_t</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Structures</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zes-info-log-ext-properties-t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zes-info-log-instance-ext-desc-t"><span class="std std-ref">zes_info_log_instance_ext_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zes-info-log-metadata-ext-t"><span class="std std-ref">zes_info_log_metadata_ext_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zes-info-log-read-status-ext-t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Functions</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="api/extensions/driver.html#zesdriverenuminfologsext"><span class="std std-ref">zesDriverEnumInfoLogsExt</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zesinfologgetpropertiesext"><span class="std std-ref">zesInfoLogGetPropertiesExt</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log.html#zesinfologcreateinstanceext"><span class="std std-ref">zesInfoLogCreateInstanceExt</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log_instance.html#zesinfologinstancereadwithmetadataext"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log_instance.html#zesinfologinstancepeekwithmetadataext"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/info_log_instance.html#zesinfologinstancedeleteext"><span class="std std-ref">zesInfoLogInstanceDeleteExt</span></a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Macros</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ZES_INFO_LOGS_EXT_NAME</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<section id="info-logs-overview">
+<h3>Info Logs Overview<a class="headerlink" href="#info-logs-overview" title="Link to this heading">#</a></h3>
+<p>An info log is a stream of records reported by the driver, where each record describes
+an error or another event of interest that occurred on one of the devices managed by
+that driver.</p>
+<p>Info logs are driver scoped: a single info log may carry records generated by any of the
+devices managed by the driver. The device that generated a record is identified by the
+PCI address and the UUID reported in the metadata of that record.</p>
+<p>The format of the records is reported by <a class="reference internal" href="api/extensions/info_log.html#zesinfologgetpropertiesext"><span class="std std-ref">zesInfoLogGetPropertiesExt</span></a>. Records in
+<code class="docutils literal notranslate"><span class="pre">:ref:`ZES_INFO_LOG_FORMAT_EXT_CPER</span> <span class="pre">&lt;zes-info-log-format-ext-t&gt;`\</span></code> format are UEFI Common Platform Error Records; the
+extension returns them as opaque binary data and the application is responsible for
+decoding them.</p>
+</section>
+<section id="enumerating-info-logs-and-querying-properties">
+<h3>Enumerating Info Logs and Querying Properties<a class="headerlink" href="#enumerating-info-logs-and-querying-properties" title="Link to this heading">#</a></h3>
+<pre class="literal-block">// Query the number of info logs supported by the driver
+uint32_t logCount = 0;
+<a class="reference internal" href="api/extensions/driver.html#zesdriverenuminfologsext"><span class="std std-ref">zesDriverEnumInfoLogsExt</span></a>(hDriver, &amp;logCount, nullptr);
+
+if (logCount == 0) {
+    output(&quot;No info logs available\n&quot;);
+    return;
+}
+
+zes_info_log_handle_t* phInfoLogs = (zes_info_log_handle_t*)
+    allocate(logCount * sizeof(zes_info_log_handle_t));
+<a class="reference internal" href="api/extensions/driver.html#zesdriverenuminfologsext"><span class="std std-ref">zesDriverEnumInfoLogsExt</span></a>(hDriver, &amp;logCount, phInfoLogs);
+
+// Query the properties of the first info log
+<a class="reference internal" href="api/extensions/info_log.html#zes-info-log-ext-properties-t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> logProps = {};
+logProps.stype = <a class="reference internal" href="api/apis/data_types.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_INFO_LOG_EXT_PROPERTIES</span></a>;
+logProps.pNext = nullptr;
+
+<a class="reference internal" href="api/extensions/info_log.html#zesinfologgetpropertiesext"><span class="std std-ref">zesInfoLogGetPropertiesExt</span></a>(phInfoLogs[0], &amp;logProps);
+
+output(&quot;Info log type: %u, format: %u\n&quot;,
+       logProps.infoLogType, logProps.infoLogFormat);
+output(&quot;Named collection instances supported: %s\n&quot;,
+       logProps.isNamedInstanceSupported ? &quot;yes&quot; : &quot;no&quot;);
+output(&quot;Peek supported: %s\n&quot;,
+       logProps.isPeekDataSupported ? &quot;yes&quot; : &quot;no&quot;);</pre>
+</section>
+<section id="collecting-and-reading-records">
+<h3>Collecting and Reading Records<a class="headerlink" href="#collecting-and-reading-records" title="Link to this heading">#</a></h3>
+<pre class="literal-block">// Request a 256 KB collection buffer
+uint32_t bufferSizeInKb = 256;
+
+<a class="reference internal" href="api/extensions/info_log.html#zes-info-log-instance-ext-desc-t"><span class="std std-ref">zes_info_log_instance_ext_desc_t</span></a> desc = {};
+desc.stype = <a class="reference internal" href="api/apis/data_types.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_INFO_LOG_INSTANCE_EXT_DESC</span></a>;
+desc.pNext = nullptr;
+desc.pBufferSizeInKb = &amp;bufferSizeInKb;
+
+// Named instances require isNamedInstanceSupported == true
+const char* pInstanceName =
+    logProps.isNamedInstanceSupported ? &quot;my_collection&quot; : nullptr;
+
+zes_info_log_instance_handle_t hInstance = nullptr;
+if (<a class="reference internal" href="api/extensions/info_log.html#zesinfologcreateinstanceext"><span class="std std-ref">zesInfoLogCreateInstanceExt</span></a>(phInfoLogs[0], pInstanceName, &amp;desc, &amp;hInstance)
+        != <a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a>) {
+    output(&quot;Could not start info log collection\n&quot;);
+    return;
+}
+
+// The driver may round the requested values; re-read what was applied
+output(&quot;Collecting into %u KB\n&quot;, bufferSizeInKb);
+
+const uint64_t timeoutInMs = 500;
+
+// Size a working buffer once
+const uint32_t bufferSize = 64 * 1024;
+const uint32_t maxRecords = 64;
+
+uint8_t* pBuffer = (uint8_t*) allocate(bufferSize);
+<a class="reference internal" href="api/extensions/info_log.html#zes-info-log-metadata-ext-t"><span class="std std-ref">zes_info_log_metadata_ext_t</span></a>* pDescriptors = (<a class="reference internal" href="api/extensions/info_log.html#zes-info-log-metadata-ext-t"><span class="std std-ref">zes_info_log_metadata_ext_t</span></a>*)
+    allocate(maxRecords * sizeof(<a class="reference internal" href="api/extensions/info_log.html#zes-info-log-metadata-ext-t"><span class="std std-ref">zes_info_log_metadata_ext_t</span></a>));
+
+ze_bool_t hasDataToRead = true;
+while (hasDataToRead) {
+    uint32_t size = bufferSize;
+    uint32_t recordCount = maxRecords;
+
+    for (uint32_t i = 0; i &lt; maxRecords; i++) {
+        pDescriptors[i].stype = <a class="reference internal" href="api/apis/data_types.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_INFO_LOG_METADATA_EXT</span></a>;
+        pDescriptors[i].pNext = nullptr;
+    }
+
+    <a class="reference internal" href="api/extensions/info_log.html#zes-info-log-read-status-ext-t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a> readStatus = {};
+    readStatus.stype = <a class="reference internal" href="api/apis/data_types.html#zes-structure-type-t"><span class="std std-ref">ZES_STRUCTURE_TYPE_INFO_LOG_READ_STATUS_EXT</span></a>;
+    readStatus.pNext = nullptr;
+
+    <a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> result = <a class="reference internal" href="api/extensions/info_log_instance.html#zesinfologinstancereadwithmetadataext"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>(
+        hInstance, timeoutInMs, &amp;size, pBuffer,
+        &amp;recordCount, pDescriptors, &amp;readStatus);
+
+    if (result != <a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a> &amp;&amp;
+        result != <a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ZE_RESULT_WARNING_DROPPED_DATA</span></a>) {
+        output(&quot;Could not read info log records\n&quot;);
+        break;
+    }
+
+    if (result == <a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ZE_RESULT_WARNING_DROPPED_DATA</span></a>) {
+        // The collection buffer overflowed. Consider a larger pBufferSizeInKb
+        // or reading more often.
+        if (readStatus.droppedRecordCount == UINT32_MAX) {
+            output(&quot;Warning: records were dropped, count unknown\n&quot;);
+        } else {
+            output(&quot;Warning: %u records dropped\n&quot;,
+                   readStatus.droppedRecordCount);
+        }
+    }
+
+    for (uint32_t i = 0; i &lt; recordCount; i++) {
+        output(&quot;Record %u: device %04x:%02x:%02x.%x, timestamp %llu ns, %u bytes\n&quot;,
+               i, pDescriptors[i].address.domain, pDescriptors[i].address.bus,
+               pDescriptors[i].address.device, pDescriptors[i].address.function,
+               pDescriptors[i].timestamp, pDescriptors[i].lengthOfData);
+
+        switch (pDescriptors[i].recordType) {
+        case <a class="reference internal" href="api/extensions/info_log.html#zes-info-log-record-type-ext-t"><span class="std std-ref">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_RECOVERABLE</span></a>:
+            escalate(&amp;pDescriptors[i]);
+            break;
+        case <a class="reference internal" href="api/extensions/info_log.html#zes-info-log-record-type-ext-t"><span class="std std-ref">ZES_INFO_LOG_RECORD_TYPE_EXT_ERROR_CORRECTED</span></a>:
+        case <a class="reference internal" href="api/extensions/info_log.html#zes-info-log-record-type-ext-t"><span class="std std-ref">ZES_INFO_LOG_RECORD_TYPE_EXT_INFORMATIONAL</span></a>:
+            break;
+        default:
+            // Includes values added by a later version of this extension
+            break;
+        }
+
+        const uint8_t* pRecord = pBuffer + pDescriptors[i].offset;
+        process(pRecord, pDescriptors[i].lengthOfData);
+    }
+
+    hasDataToRead = readStatus.hasDataToRead;
+}
+
+free(pDescriptors);
+free(pBuffer);
+
+// Cleanup
+<a class="reference internal" href="api/extensions/info_log_instance.html#zesinfologinstancedeleteext"><span class="std std-ref">zesInfoLogInstanceDeleteExt</span></a>(hInstance);
+free(phInfoLogs);</pre>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#info-logs-overview">Info Logs Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerating-info-logs-and-querying-properties">Enumerating Info Logs and Querying Properties</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collecting-and-reading-records">Collecting and Reading Records</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
