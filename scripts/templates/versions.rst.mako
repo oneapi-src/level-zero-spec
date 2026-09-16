@@ -25,6 +25,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.19.12`_
+    - 2026-9-16
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.19.12/index.html>`__
   * - `Level Zero v1.18.31`_
     - 2026-8-19
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.18.31/index.html>`__
@@ -127,6 +130,36 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.19.12
+~~~~~~~~~~~~~~~~~~~
+
+* New Features in v1.19
+
+    - Add CommandQueue Quality of Service (QoS) extensions
+
+      - zeCommandQueueSetQosExt and zeCommandQueueGetQosExt
+
+    - Add Sysman Info Logs extensions to enumerate and read device info logs, including CPER records
+
+      - zesDriverEnumInfoLogsExt, zesInfoLogGetPropertiesExt, zesInfoLogCreateInstanceExt
+      - zesInfoLogInstanceReadWithMetadataExt, zesInfoLogInstancePeekWithMetadataExt, zesInfoLogInstanceDeleteExt
+
+    - Add Sysman support for listening to driver scoped events
+
+      - zesDriverEventRegisterExt and zesDriverEventListenExt
+
+    - Add API to query properties of a Sysman driver instance
+
+      - zesDriverGetProperties 
+      
+    - Add Metric Source Id experimental extension, split out from the Metric Group Marker extension
+
+* Patches since v1.18.31 release
+
+    - Update the sensor descriptions of the VR and Board temperature sensors
+    - Fix a compile warning in the Metric Group Marker sample code
+
 
 Level Zero v1.18.31
 ~~~~~~~~~~~~~~~~~~~
