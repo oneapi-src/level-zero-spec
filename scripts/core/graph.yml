@@ -73,6 +73,14 @@ etors:
     - name: SIMPLE
       value: "0x1"
       desc: "simple mode"
+    - name: DETAILED_WITH_EVENT_NODES
+      value: "0x2"
+      desc: "detailed mode with all event operations dumped as graph nodes"
+      version: "1.20"
+    - name: SIMPLE_WITH_EVENT_NODES
+      value: "0x3"
+      desc: "simple mode with all event operations dumped as graph nodes"
+      version: "1.20"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Record and Replay Graph dump descriptor"
