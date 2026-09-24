@@ -44,7 +44,7 @@ etors:
       desc: "Supports appending a command list into a graph"
     - name: CB_EXTERNAL_IPC
       value: "$X_BIT(4)"
-      desc: "Supports waiting/signaling events that were created with both ZEX_COUNTER_BASED_EVENT_FLAG_IPC and ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL"
+      desc: "Supports waiting/signaling events that were created with both ZE_EVENT_COUNTER_BASED_FLAG_IPC and ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Supported Record and Replay Graph properties. This structure is accepted as pNext to $x_device_properties_t"
@@ -139,7 +139,7 @@ details:
     - "If the device does not support $X_RECORD_REPLAY_GRAPH_EXT_FLAG_APPEND_COMMANDLIST, then while capture is active, calling $xCommandListImmediateAppendCommandListsExp on the capturing command list returns an error ($X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED)."
     - "If the device does not support $X_RECORD_REPLAY_GRAPH_EXT_FLAG_SUBGRAPHS, then while capture is active, calling $xCommandListAppendGraphExt on the capturing command list returns an error ($X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED)."
     - "While capture is active, host-side synchronization operations on recorded work, such as $xCommandListHostSynchronize or $xEventHostSynchronize, return $X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED."
-    - "While capture is active, internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) captured in the graph cannot be used outside the graph; such use returns an error ($X_RESULT_ERROR_GRAPH_INTERNAL_EVENT)."
+    - "While capture is active, internal counter-based events (i.e. without ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL) captured in the graph cannot be used outside the graph; such use returns an error ($X_RESULT_ERROR_GRAPH_INTERNAL_EVENT)."
     - "The command list on which capture starts is called the primary command list for a given capture session."
     - "If an event signaled by a captured command list is used in the wait list of another immediate command list, that command list also enters graph capture mode. This creates a fork. The command list from which the fork originated is called the parent, and the forked command list is called the child. A child command list may itself be used to create additional forks, resulting in a tree of command lists participating in the same graph capture."
     - "Subsequent signals from the parent command list to a child command list are allowed and do not create additional forks or capture sessions; the child command list remains in the same capture session as the parent command list."
@@ -149,7 +149,7 @@ details:
     - "Commands that append work (for example, compute kernels or data transfers) to a recording child command list after the intended join operation are treated as unjoined work, and the graph is considered invalid. Commands that do not append work (for example, event signal and wait operations) are allowed after the join operation and do not invalidate the graph."
     - "All restrictions described for $xCommandListBeginGraphCaptureExt apply to recording child command lists as well."
     - "It is invalid to merge two separate graph capture sessions (i.e. with different primary command lists) by waiting on an event associated with a different graph (operation will return $X_RESULT_ERROR_GRAPH_CAPTURE_MERGE_ATTEMPT)."
-    - "If the device does not support $X_RECORD_REPLAY_GRAPH_EXT_FLAG_CB_EXTERNAL_IPC, then using an event that was created with both ZEX_COUNTER_BASED_EVENT_FLAG_IPC and ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL returns an error ($X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED) during append operations."
+    - "If the device does not support $X_RECORD_REPLAY_GRAPH_EXT_FLAG_CB_EXTERNAL_IPC, then using an event that was created with both ZE_EVENT_COUNTER_BASED_FLAG_IPC and ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL returns an error ($X_RESULT_ERROR_GRAPH_CAPTURE_UNSUPPORTED) during append operations."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -204,7 +204,7 @@ details:
   - "After this call succeeds, subsequent append operations submit work to the device normally."
   - "If capture mode is not active on the command list, an error is returned."
   - "After this call succeeds, events signaled by previously captured commands do not create new forks."
-  - "After this call succeeds, internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) can be reused by the application and don't interfere with recorded state."
+  - "After this call succeeds, internal counter-based events (i.e. without ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL) can be reused by the application and don't interfere with recorded state."
 params:
     - type: $x_command_list_handle_t
       name: hCommandList
@@ -290,9 +290,10 @@ name: InstantiateExt
 details:
     - "Multiple executable graph objects may be created from a single recorded graph."
     - "Recorded regular events (not counter-based) are shared between executable graph instances; the application is responsible for avoiding data races during concurrent execution of multiple graph instances."
-    - "Recorded internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used only for synchronization within the graph. Their state is tied to the underlying execution queue and is not shared between executable graph instances."
-    - "Recorded external counter-based events (i.e. with ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used to synchronize the graph with device commands submitted outside the graph (for example, before or after $xCommandListAppendGraphExt) and with the host. External counter-based events may incur additional overhead compared to internal counter-based events."
+    - "Recorded internal counter-based events (i.e. without ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL) may be used only for synchronization within the graph. Their state is tied to the underlying execution queue and is not shared between executable graph instances."
+    - "Recorded external counter-based events (i.e. with ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL) may be used to synchronize the graph with device commands submitted outside the graph (for example, before or after $xCommandListAppendGraphExt) and with the host. External counter-based events may incur additional overhead compared to internal counter-based events."
     - "Resources used in captured commands (e.g. buffers passed to kernels as arguments) are shared between instances; the application is responsible for avoiding data races during concurrent execution."
+    - "The application must **not** call this function from simultaneous threads with the same graph handle."
     - "The function returns `ZE_RESULT_ERROR_INVALID_GRAPH` when the recorded graph is invalid, for example when it contains forks that were never joined back to the primary command list."
     - "The function returns `ZE_RESULT_ERROR_INVALID_ARGUMENT` when graph capture has not been ended with ::zeCommandListEndGraphCaptureExt."
 
