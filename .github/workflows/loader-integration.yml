@@ -522,9 +522,13 @@ jobs:
         import re
         path = "abi-compliance-checker/modules/RulesBin.xml"
         text = open(path).read()
+        # The cached checker folder can already hold a "Low" RulesBin.xml
+        # from an earlier run. So match "High" or "Low".
+        # Fail only when the rule id is gone (the checker version changed).
+        # Do not fail only because an earlier run already changed it.
         for rule in ("Parameter_Changed_Register", "Parameter_Changed_Offset"):
             text, count = re.subn(
-                r"(<id>\s*%s\s*</id>\s*<severity>\s*)High(\s*</severity>)" % rule,
+                r"(<id>\s*%s\s*</id>\s*<severity>\s*)(?:High|Low)(\s*</severity>)" % rule,
                 r"\1Low\2", text)
             print("%s: %d rule(s) downgraded" % (rule, count))
             assert count == 1, "rule %s not found -- checker version changed?" % rule
