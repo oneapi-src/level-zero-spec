@@ -47,7 +47,7 @@ The following psuedo-code demonstrates a sequence for obtaining extended informa
         ${x}_device_compute_dotproduct_ext_properties_t* pDpDeviceCaps = allocate(sizeof(${x}_device_compute_dotproduct_ext_properties_t));
 
         pDpDeviceCaps.stype =  ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_DOTPRODUCT_EXT_PROPERTIES;
-        devComputeProp.stype = ZE_STRUCTURE_TYPE_DEVICE_COMPUTEPROPERTIES;
+        devComputeProp.stype = ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES;
         devComputeProp.pNext = pDpDeviceCaps;
 
         //obtain device and extended memory properties

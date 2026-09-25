@@ -66,10 +66,10 @@ The following pseudo-code demonstrates a sequence for obtaining the p2p bandwidt
 
     ${x}_device_p2p_properties_t P2PProps;
     ${x}_device_p2p_bandwidth_exp_properties_t P2PBandwidthProps;
-    P2PProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
-    P2Props.pNext = &P2PbandwidthProps;
-    P2PBandwidthProps = ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXT_PROPERTIES;
-    P2PBandwidthProps = nullptr;
+    P2PProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES;
+    P2PProps.pNext = &P2PBandwidthProps;
+    P2PBandwidthProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES;
+    P2PBandwidthProps.pNext = nullptr;
 
     // Assume devices are stored in array called devices of size devCount
     for (uint32_t dev = 0; dev < devCount; ++dev) {
