@@ -24,6 +24,10 @@ etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
+    - name: "1_1"
+      value: "$X_MAKE_VERSION( 1, 1 )"
+      desc: "version 1.1"
+      version: "1.20"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle of external semaphore object"
@@ -259,3 +263,91 @@ returns:
         - "`(nullptr == waitParams) && (0 < numSemaphores)`"
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
         - "Commandlist handle does not correspond to an immediate command list"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Signal an external semaphore on a command queue"
+version: "1.20"
+class: $xCommandQueue
+name: SignalExternalSemaphoreExt
+details:
+    - "Signals an external semaphore."
+    - "The signal is ordered against the command lists submitted to the same command queue, and is honoured when the command queue reaches this point in its submission order."
+    - "Unlike $xCommandListAppendSignalExternalSemaphoreExt, the value is taken at submission rather than when the operation is appended, so a command list recorded once may be replayed with $xCommandQueueExecuteCommandLists against a different value each time."
+    - "This function may be called from simultaneous threads with the same command queue handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_command_queue_handle_t"
+      name: "hCommandQueue"
+      desc: |
+            [in] The command queue handle.
+    - type: "uint32_t"
+      name: "numSemaphores"
+      desc: |
+            [in] The number of external semaphores.
+    - type: "$x_external_semaphore_ext_handle_t*"
+      name: "phSemaphores"
+      desc: |
+            [in][range(0, numSemaphores)] The array of pointers to external semaphore handles to be signaled by the command queue.
+    - type: "$x_external_semaphore_signal_params_ext_t*"
+      name: "signalParams"
+      desc: |
+            [in][range(0, numSemaphores)] The array of pointers to external semaphore signal parameters.
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before signaling; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before signaling"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+        - "`(nullptr == phSemaphores) && (0 < numSemaphores)`"
+        - "`(nullptr == signalParams) && (0 < numSemaphores)`"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Wait on external semaphores on a command queue"
+version: "1.20"
+class: $xCommandQueue
+name: WaitExternalSemaphoreExt
+details:
+    - "Waits on external semaphores."
+    - "The wait is ordered against the command lists submitted to the same command queue, and blocks execution of subsequent submissions until the semaphores reach the requested values."
+    - "Unlike $xCommandListAppendWaitExternalSemaphoreExt, the value is taken at submission rather than when the operation is appended, so a command list recorded once may be replayed with $xCommandQueueExecuteCommandLists against a different value each time."
+    - "This function may be called from simultaneous threads with the same command queue handle."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: "$x_command_queue_handle_t"
+      name: "hCommandQueue"
+      desc: |
+            [in] The command queue handle.
+    - type: "uint32_t"
+      name: "numSemaphores"
+      desc: |
+            [in] The number of external semaphores.
+    - type: "$x_external_semaphore_ext_handle_t*"
+      name: "phSemaphores"
+      desc: |
+            [in][range(0, numSemaphores)] The array of pointers to external semaphore handles to be waited on by the command queue.
+    - type: "$x_external_semaphore_wait_params_ext_t*"
+      name: "waitParams"
+      desc: |
+            [in][range(0, numSemaphores)] The array of pointers to external semaphore wait parameters.
+    - type: $x_event_handle_t
+      name: hSignalEvent
+      desc: "[in][optional] handle of the event to signal on completion"
+    - type: uint32_t
+      name: numWaitEvents
+      desc: "[in][optional] number of events to wait on before waiting; must be 0 if `nullptr == phWaitEvents`"
+    - type: "$x_event_handle_t*"
+      name: phWaitEvents
+      desc: "[in][optional][range(0, numWaitEvents)] handle of the events to wait on before waiting"
+returns:
+    - $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT
+    - $X_RESULT_ERROR_INVALID_SIZE:
+        - "`(nullptr == phWaitEvents) && (0 < numWaitEvents)`"
+        - "`(nullptr == phSemaphores) && (0 < numSemaphores)`"
+        - "`(nullptr == waitParams) && (0 < numSemaphores)`"
