@@ -39,14 +39,14 @@ jobs:
         echo "=== Disk ==="
         df -h --output=target,size,used,avail,pcent | grep -E "^Filesystem|^/$|^/home|^/tmp"
     - name: Checkout spec-head
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         clean: true
         fetch-depth: 0
         fetch-tags: true
         path: spec-head
     - name: Checkout spec-base
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         ref: master
         clean: true
@@ -58,7 +58,7 @@ jobs:
       run: echo "sha=$(git -C spec-base rev-parse HEAD)" >> $GITHUB_OUTPUT
     - name: Restore spec-base artifacts cache
       id: cache-spec-base
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: |
           spec-base/docs
@@ -146,7 +146,7 @@ jobs:
       run:  echo 'Artifact URL is ${{ steps.upload-diff-artifact.outputs.artifact-url }}'
     - name: Write comment to PR
       if: steps.include-diff.outputs.diff == '1'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -189,7 +189,7 @@ jobs:
       run:  echo 'RST Artifact URL is ${{ steps.upload-rst-diff-artifact.outputs.artifact-url }}'
     - name: Write RST diff comment to PR
       if: steps.rst-diff.outputs.diff == '1'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -232,7 +232,7 @@ jobs:
       run:  echo 'HTML Artifact URL is ${{ steps.upload-html-diff-artifact.outputs.artifact-url }}'
     - name: Write HTML diff comment to PR
       if: steps.html-diff.outputs.diff == '1'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -255,7 +255,7 @@ jobs:
         retention-days: 30
     - name: Comment with HTML preview info
       if: steps.html-diff.outputs.diff == '1'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -287,7 +287,7 @@ jobs:
               body: body
             });
     - name: Checkout loader-head
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         clean: true
         repository: oneapi-src/level-zero
@@ -299,7 +299,7 @@ jobs:
       # as the cache key for base.dump — so we only rebuild the base when master
       # has actually changed, not on every PR run.
       id: loader-master-sha
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
         script: |
@@ -322,14 +322,14 @@ jobs:
       # Note: save-always is deprecated — saving is handled by the explicit
       # actions/cache/save step at the end of the job using if: always().
       id: cache-base-abi-dump
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: base.dump
         key: base-abi-dump-${{ steps.loader-master-sha.outputs.sha }}
         restore-keys: |
           base-abi-dump-
     - name: Checkout loader-base
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         clean: true
         repository: oneapi-src/level-zero
@@ -385,7 +385,7 @@ jobs:
       run:  echo 'Artifact URL is ${{ steps.upload-loader-diff-artifact.outputs.artifact-url }}'
     - name: Write loader diff comment to PR
       if: steps.loader-source-diff.outputs.diff == '1'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -433,7 +433,7 @@ jobs:
         make -j$(nproc)
         EOF
     - name: Checkout abi-dumper
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         clean: true
         repository: lvc/abi-dumper
@@ -488,7 +488,7 @@ jobs:
 
     - name: Restore abi-compliance-checker cache
       id: cache-acc
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: abi-compliance-checker
         key: abi-compliance-checker-2.3
@@ -560,7 +560,7 @@ jobs:
     - name: Check for reviewer approval of ABI failure
       id: check-approval
       if: steps.abi-check.outcome == 'failure'
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -592,7 +592,7 @@ jobs:
     - name: Write loader ABI Report comment to PR
       continue-on-error: true
       if: "steps.loader-source-diff.outputs.diff == '1' || steps.include-diff.outputs.diff == '1' || steps.rst-diff.outputs.diff == '1' || steps.html-diff.outputs.diff == '1'"
-      uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -616,7 +616,7 @@ jobs:
             });
     - name: Save spec-base artifacts cache
       if: always() && steps.cache-spec-base.outputs.cache-primary-key != '' && steps.cache-spec-base.outputs.cache-hit != 'true'
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: |
           spec-base/docs
@@ -624,7 +624,7 @@ jobs:
         key: ${{ steps.cache-spec-base.outputs.cache-primary-key }}
     - name: Save abi-compliance-checker cache
       if: always() && steps.cache-acc.outputs.cache-primary-key != '' && steps.cache-acc.outputs.cache-hit != 'true'
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: abi-compliance-checker
         key: ${{ steps.cache-acc.outputs.cache-primary-key }}
@@ -638,7 +638,7 @@ jobs:
       # The hashFiles guard ensures we never cache a missing base.dump under the
       # master-SHA key (which would poison subsequent runs on a false cache hit).
       if: always() && steps.cache-base-abi-dump.outputs.cache-primary-key != '' && steps.cache-base-abi-dump.outputs.cache-hit != 'true' && hashFiles('base.dump') != ''
-      uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: base.dump
         key: ${{ steps.cache-base-abi-dump.outputs.cache-primary-key }}
