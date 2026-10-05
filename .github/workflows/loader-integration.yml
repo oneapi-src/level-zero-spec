@@ -12,9 +12,15 @@ env:
   NODE_USE_ENV_PROXY: '1'
   DOCKER_BUILDKIT: '1'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: [self-hosted, Linux]
+    permissions:
+      contents: read
+      pull-requests: write
     if: github.repository_owner == 'intel-innersource'
     steps:
     - name: Print runner machine metrics

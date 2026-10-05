@@ -18,6 +18,9 @@ env:
   https_proxy: ${{ vars.CI_HTTP_PROXY }}
   DOCKER_BUILDKIT: '1'
 
+permissions:
+  contents: read
+
 jobs:
   build-linux:
     runs-on: [self-hosted, Linux]

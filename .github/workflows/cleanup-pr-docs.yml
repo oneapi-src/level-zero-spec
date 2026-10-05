@@ -9,11 +9,13 @@ env:
   https_proxy: ${{ vars.CI_HTTP_PROXY }}
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   cleanup-pr-docs:
     runs-on: [self-hosted, Linux]
+    permissions:
+      contents: write
     if: github.repository_owner == 'intel-innersource'
     steps:
       - name: Checkout gh-pages branch
