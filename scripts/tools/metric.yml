@@ -333,6 +333,7 @@ name: Open
 decl: static
 details:
     - "The notification event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_HOST_VISIBLE flag."
+    - "The notification event must **not** be a Counter Based Event. The Driver signals the notification event from the host and the application resets it, neither of which is allowed for Counter Based Events. $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT is returned if `hNotificationEvent` is a Counter Based Event."
     - "The duration of the signal event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application must **not** call this function from simultaneous threads with the same device handle."
 params:
@@ -558,6 +559,7 @@ details:
     - "The application must ensure the metric query and events are accessible by the device on which the command list was created."
     - "The application must ensure the command list, events and metric query were created on the same context."
     - "The duration of the signal event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
+    - "`hSignalEvent` must **not** be a Counter Based Event. $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT is returned if `hSignalEvent` is a Counter Based Event."
     - "If numWaitEvents is zero, then all previous commands are completed prior to the execution of the query."
     - "If numWaitEvents is non-zero, then all phWaitEvents must be signaled prior to the execution of the query."
     - "This command blocks all following commands from beginning until the execution of the query completes."

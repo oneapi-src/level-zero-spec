@@ -81,6 +81,7 @@ name: CreateExp
 decl: static
 details:
     - "The notification event must have been created from an event pool that was created using $X_EVENT_POOL_FLAG_HOST_VISIBLE flag."
+    - "The notification event must **not** be a Counter Based Event. The Driver signals the notification event from the host and the application resets it, neither of which is allowed for Counter Based Events. $X_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT is returned if `hNotificationEvent` is a Counter Based Event."
     - "The duration of the signal event created from an event pool that was created using $X_EVENT_POOL_FLAG_KERNEL_TIMESTAMP flag is undefined. However, for consistency and orthogonality the event will report correctly as signaled when used by other event API functionality."
     - "The application must **not** call this function from simultaneous threads with the same device handle."
     - "The metric tracer is created in disabled state"
