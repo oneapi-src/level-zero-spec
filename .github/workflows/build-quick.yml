@@ -91,7 +91,6 @@ jobs:
         repository: oneapi-src/level-zero
         ref: master
         path: loader-head
-        token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
     - name: json2src head
       run: | #bash
         docker run \

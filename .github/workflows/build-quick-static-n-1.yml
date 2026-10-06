@@ -72,7 +72,6 @@ jobs:
         repository: oneapi-src/level-zero
         ref: master
         path: loader-head
-        token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
     - name: json2src head
       run: | #bash
         docker run \
@@ -98,7 +97,6 @@ jobs:
         repository: oneapi-src/level-zero
         ref: master
         path: loader-base
-        token: ${{ secrets.LOADER_INNERSOURCE_TOKEN }}
     # ----- Re-created build-quick-static-n-1 logic -----
     - name: Build static loader from loader master
       working-directory: loader-base
