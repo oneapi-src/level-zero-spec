@@ -28,7 +28,7 @@ jobs:
     steps:
     # ----- Spec-generated loader preamble (loader-head, see loader-integration.yml) -----
     - name: Checkout spec-head
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         clean: true
         fetch-depth: 0
@@ -66,7 +66,7 @@ jobs:
           ghcr.io/oneapi-src/spec-build:latest \
           /opt/spec-venv/bin/python3 ./run.py --debug '--!html' '--!rst' '--!build' --ver $VER
     - name: Checkout loader-head
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         clean: true
         repository: oneapi-src/level-zero
@@ -91,7 +91,7 @@ jobs:
         xargs -I{} cp -v ./{} ../loader-head/{}
     # ----- loader-base: plain loader master, built as-is (n-1 / static side) -----
     - name: Checkout loader-base
-      uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         clean: true
         repository: oneapi-src/level-zero
