@@ -410,9 +410,6 @@ etors:
       desc: "The link is up but has quality and/or bandwidth degradation"
     - name: STABILITY_ISSUES
       desc: "The link has stability issues and preventing workloads making forward progress"
-    - name: LINK_ERROR
-      desc: "The device does not respond on the bus and its configuration space reads back as all ones"
-      version: "1.20"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "PCI link quality degradation reasons"
