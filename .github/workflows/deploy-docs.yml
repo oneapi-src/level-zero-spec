@@ -97,107 +97,77 @@ jobs:
             ghcr.io/oneapi-src/spec-build:latest \
             /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER --versions_url_override "$VERSIONS_URL_OVERRIDE"
 
-      # Doxygen runs with WARN_AS_ERROR=FAIL_ON_WARNINGS (scripts/Doxyfile), so any
-      # unresolvable doc reference fails the build. generate_docs.py saves doxygen's
-      # stderr -- which is diagnostics only, no progress noise -- to this file, so we can
-      # quote just the actionable lines rather than the whole build log.
-      - name: Report documentation warnings
+      # Each docs build phase that can fail on bad references saves just its actionable
+      # lines to a log under docs/, so we quote those rather than the whole build log:
+      #  - rst-errors.log: unresolved symbols in scripts/<section>/*.rst (run.py phase 3)
+      #  - doxygen-warnings.log: doxygen runs with WARN_AS_ERROR=FAIL_ON_WARNINGS
+      #  - sphinx-warnings.log: sphinx-build runs with -W, e.g. a broken :ref: label
+      - name: Report documentation errors
         if: steps.gen_docs.outcome == 'failure'
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
-            const path = 'docs/doxygen-warnings.log';
+            const reports = [
+              {
+                path: 'docs/rst-errors.log',
+                what: n => `Generation reported **${n}** unresolved ${n === 1 ? 'reference' : 'references'} in the spec RST/sample code`,
+                hint: '> These reference symbols that do not exist in the parsed spec. ' +
+                      'Fix the reference in the source `scripts/<section>/*.rst` page ' +
+                      '(or add the missing symbol to `scripts/<section>/*.yml`).\n',
+              },
+              {
+                path: 'docs/doxygen-warnings.log',
+                what: n => `Doxygen reported **${n}** unresolved documentation ${n === 1 ? 'reference' : 'references'}`,
+                hint: '> Line numbers refer to the **generated** headers. Fix the source ' +
+                      'YAML in `scripts/<section>/*.yml` instead.\n' +
+                      '> To reference a struct member write ``` `memberName` member of ' +
+                      '$x_some_struct_t ``` rather than `$x_some_struct_t.memberName`.\n',
+              },
+              {
+                path: 'docs/sphinx-warnings.log',
+                what: n => `Sphinx reported **${n}** ${n === 1 ? 'warning' : 'warnings'}`,
+                hint: '> Paths refer to the **generated** `docs/source` pages. Fix the source ' +
+                      '`scripts/<section>/*.rst` page or `scripts/templates/*.mako` template. ' +
+                      'An `undefined label` usually means a `:ref:` target page is missing.\n',
+              },
+            ];
 
-            if (!fs.existsSync(path) || !fs.readFileSync(path, 'utf8').trim()) {
-              core.info('No doxygen warning log; documentation generation failed for another reason.');
-              return;
-            }
-
-            // Strip the runner's absolute workspace prefix so paths read as repo-relative.
-            let lines = fs.readFileSync(path, 'utf8')
-              .split('\n')
-              .filter(l => l.trim())
-              .map(l => l.replace(`${process.env.GITHUB_WORKSPACE}/`, ''));
-
-            const total = lines.length;
             const MAX = 50;
-            const shown = lines.slice(0, MAX);
-            const omitted = total - shown.length;
+            let posted = false;
+            for (const r of reports) {
+              if (!fs.existsSync(r.path) || !fs.readFileSync(r.path, 'utf8').trim()) continue;
 
-            let body = '## ❌ Documentation build failed\n\n';
-            body += `Doxygen reported **${total}** unresolved documentation `;
-            body += `${total === 1 ? 'reference' : 'references'}:\n\n`;
-            body += '```\n' + shown.join('\n') + '\n```\n';
-            if (omitted > 0) {
-              body += `\n_…and ${omitted} more. See the workflow log for the full list._\n`;
+              // Strip the runner's absolute workspace prefix so paths read as repo-relative.
+              const lines = fs.readFileSync(r.path, 'utf8')
+                .split('\n')
+                .filter(l => l.trim())
+                .map(l => l.replace(`${process.env.GITHUB_WORKSPACE}/`, ''));
+              const shown = lines.slice(0, MAX);
+              const omitted = lines.length - shown.length;
+
+              let body = '## ❌ Documentation build failed\n\n';
+              body += `${r.what(lines.length)}:\n\n`;
+              body += '```\n' + shown.join('\n') + '\n```\n';
+              if (omitted > 0) {
+                body += `\n_…and ${omitted} more. See the workflow log for the full list._\n`;
+              }
+              body += '\n' + r.hint;
+
+              core.summary.addRaw(body).write();
+              if (context.eventName === 'pull_request') {
+                await github.rest.issues.createComment({
+                  issue_number: context.payload.pull_request.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: body
+                });
+              }
+              posted = true;
             }
-            body += '\n> Line numbers refer to the **generated** headers. Fix the source ';
-            body += 'YAML in `scripts/<section>/*.yml` instead.\n';
-            body += '> To reference a struct member write ``` `memberName` member of ';
-            body += '$x_some_struct_t ``` rather than `$x_some_struct_t.memberName`.\n';
-
-            core.summary.addRaw(body).write();
-
-            if (context.eventName === 'pull_request') {
-              await github.rest.issues.createComment({
-                issue_number: context.payload.pull_request.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: body
-              });
-            }
-
-      # RST generation (generate_docs.py) resolves the symbols referenced in the
-      # hand-authored scripts/<section>/*.rst pages and sample code. An unresolved
-      # reference is collected via util.makeError and fails run.py in phase 3 -- before
-      # doxygen runs -- with the actionable lines saved to docs/rst-errors.log.
-      - name: Report reference errors
-        if: steps.gen_docs.outcome == 'failure'
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const path = 'docs/rst-errors.log';
-
-            if (!fs.existsSync(path) || !fs.readFileSync(path, 'utf8').trim()) {
-              core.info('No RST error log; documentation generation failed for another reason.');
-              return;
-            }
-
-            // Strip the runner's absolute workspace prefix so paths read as repo-relative.
-            let lines = fs.readFileSync(path, 'utf8')
-              .split('\n')
-              .filter(l => l.trim())
-              .map(l => l.replace(`${process.env.GITHUB_WORKSPACE}/`, ''));
-
-            const total = lines.length;
-            const MAX = 50;
-            const shown = lines.slice(0, MAX);
-            const omitted = total - shown.length;
-
-            let body = '## ❌ Documentation build failed\n\n';
-            body += `Generation reported **${total}** unresolved `;
-            body += `${total === 1 ? 'reference' : 'references'} in the spec RST/sample code:\n\n`;
-            body += '```\n' + shown.join('\n') + '\n```\n';
-            if (omitted > 0) {
-              body += `\n_…and ${omitted} more. See the workflow log for the full list._\n`;
-            }
-            body += '\n> These reference symbols that do not exist in the parsed spec. ';
-            body += 'Fix the reference in the source `scripts/<section>/*.rst` page ';
-            body += '(or add the missing symbol to `scripts/<section>/*.yml`).\n';
-
-            core.summary.addRaw(body).write();
-
-            if (context.eventName === 'pull_request') {
-              await github.rest.issues.createComment({
-                issue_number: context.payload.pull_request.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: body
-              });
+            if (!posted) {
+              core.info('No documentation error log; generation failed for another reason.');
             }
 
       - name: Fail if documentation generation failed

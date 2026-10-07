@@ -230,6 +230,9 @@ _ETOR_SINCE_FILENAME = "etor_since.json"
 # build log. Written under docs/, which is gitignored.
 DOXYGEN_WARNINGS_FILENAME = "doxygen-warnings.log"
 
+# Same idea for sphinx-build: its -w option copies just the warnings to this file.
+SPHINX_WARNINGS_FILENAME = "sphinx-warnings.log"
+
 """
     Collect enum values whose version exceeds their enum's version (i.e. added to an
     already-existing enum) into _ETOR_SINCE, keyed by the C enumerator name exactly as
@@ -809,7 +812,7 @@ def generate_common(dstpath, sections, ver, rev, versions_url, warnings_as_error
 Entry-point:
     generate HTML files using reStructuredText (rst) and Doxygen template
 """
-def generate_html(dstpath):
+def generate_html(dstpath, warnings_as_errors=True):
     sourcepath = os.path.join(dstpath, "source")
 
     print("Generating HTML...")
@@ -817,12 +820,28 @@ def generate_html(dstpath):
     # so it works correctly when invoked via a virtualenv (e.g. /opt/spec-venv).
     sphinx_build = os.path.join(os.path.dirname(sys.executable), "sphinx-build")
     cmdline = "%s -M html %s ../docs -j auto" % (sphinx_build, sourcepath)
+
+    # Drop any log from a previous run so CI can never quote stale diagnostics.
+    warnlog = os.path.join(dstpath, SPHINX_WARNINGS_FILENAME)
+    if util.exists(warnlog):
+        os.remove(warnlog)
+    cmdline += " -w %s" % warnlog
+    if warnings_as_errors:
+        # --keep-going reports every warning, not just the first, before failing.
+        cmdline += " -W --keep-going"
+    else:
+        print("  WARNING: sphinx warnings-as-errors DISABLED (--!warnings_as_errors)")
+
     print(cmdline)
     os.environ["PYTHONWARNINGS"] = "ignore"
     rc = os.waitstatus_to_exitcode(os.system(cmdline))
     os.environ.pop("PYTHONWARNINGS")
     if rc > 0:
-        raise Exception("sphinx-build returned %d"%rc)
+        raise Exception(
+            "sphinx-build returned %d.\n"
+            "A WARNING above such as \"undefined label\" is a broken :ref: link in a page "
+            "generated from scripts/<section>/*.rst -- fix the label or add the missing page.\n"
+            "As a last resort, re-run with --!warnings_as_errors." % rc)
 
     # Annotate later-added enum values with "(since vX)" in the final HTML. Done here
     # (on pinned Breathe/Sphinx output) rather than on Doxygen's XML for cross-env parity.

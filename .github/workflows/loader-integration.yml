@@ -85,6 +85,8 @@ jobs:
         VER=$(echo "$LATEST_TAG" | grep -oP '^v\K[0-9]+\.[0-9]+')
         echo "Detected version: $VER (from tag $LATEST_TAG)"
         echo "VER=$VER" >> $GITHUB_ENV
+    # Docs warnings are gated (and reported) once, by deploy-docs.yml; here they must not
+    # stop the loader/ABI diffs.
     - name: Generate spec-head artifacts
       run: | #bash
         docker run \
@@ -93,7 +95,7 @@ jobs:
           -w $PWD/spec-head/scripts \
           -e TZ=UTC \
           ghcr.io/oneapi-src/spec-build:latest \
-          /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
+          /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' '--!warnings_as_errors' --ver $VER
     - name: Generate spec-base artifacts
       if: steps.cache-spec-base.outputs.cache-hit != 'true'
       run: | #bash
@@ -103,7 +105,7 @@ jobs:
           -w $PWD/spec-base/scripts \
           -e TZ=UTC \
           ghcr.io/oneapi-src/spec-build:latest \
-          /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' --ver $VER
+          /opt/spec-venv/bin/python3 ./run.py --debug '--html' '--rst' '--!build' '--!warnings_as_errors' --ver $VER
     - name: Determine if there is a diff between header files
       id: include-diff
       # Keep --no-index. Other workflows can leave a .git in the shared runner
