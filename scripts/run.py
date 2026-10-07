@@ -312,7 +312,7 @@ def main():
 
     # phase 6: publish documentation
     if args['html']:
-        generate_docs.generate_html(docpath)
+        generate_docs.generate_html(docpath, args['warnings_as_errors'])
 
     produced = (
         (["rst"]            if args["rst"]           else []) +
