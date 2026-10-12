@@ -566,6 +566,79 @@ The pseudo code below shows how to output the PCI BDF address:
                pciProps.address.device,
                pciProps.address.function);
 
+PCI configuration space properties
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The structure ${s}_pci_config_properties_t exposes identification and link capability
+registers read from the PCI configuration space of a device, such as the vendor and
+device ids, the subsystem ids, the revision id, the PCI Express capability version and
+the supported link speeds.
+
+These properties can be queried in two ways:
+
+- For a device that has already been enumerated, by chaining
+  ${s}_pci_config_properties_t to the ``pNext`` member of ${s}_pci_properties_t
+  when calling ${s}DevicePciGetProperties.
+- For every device supported by the driver that is present on the PCI bus, by calling
+  ${s}DriverGetPciDeviceProperties. This works whether or not a kernel mode driver is
+  installed or bound to the device, and is supported when ${s}Init is called with
+  ``${S}_INIT_FLAG_NO_DEVICES``, so that PCI devices can be inspected before (or
+  without) device enumeration.
+
+A device that does not respond on the bus, and whose configuration space therefore reads
+back as all ones, is reported with a link status of ``${S}_PCI_LINK_STATUS_LINK_ERROR``.
+
+The pseudo code below shows how to query the PCI configuration space properties:
+
+.. parsed-literal::
+
+   // Initialize Sysman without enumerating devices
+   ${s}Init(${S}_INIT_FLAG_NO_DEVICES);
+
+   uint32_t driverCount = 1;
+   ${s}_driver_handle_t hDriver = nullptr;
+   ${s}DriverGet(&driverCount, &hDriver);
+
+   // Query the number of PCI devices supported by the driver
+   uint32_t deviceCount = 0;
+   ${s}DriverGetPciDeviceProperties(hDriver, &deviceCount, nullptr);
+
+   ${s}_driver_pci_device_properties_t* pProps = (${s}_driver_pci_device_properties_t*)
+       allocate(deviceCount * sizeof(${s}_driver_pci_device_properties_t));
+   for (uint32_t i = 0; i < deviceCount; i++) {
+       pProps[i].stype = ${S}_STRUCTURE_TYPE_DRIVER_PCI_DEVICE_PROPERTIES;
+       pProps[i].pNext = nullptr;
+       pProps[i].configProperties.stype = ${S}_STRUCTURE_TYPE_PCI_CONFIG_PROPERTIES;
+       pProps[i].configProperties.pNext = nullptr;
+   }
+
+   ${s}DriverGetPciDeviceProperties(hDriver, &deviceCount, pProps);
+
+   for (uint32_t i = 0; i < deviceCount; i++) {
+       output("Device %04x:%02x:%02x.%x, vendor id: 0x%04x, device id: 0x%04x\\n",
+              pProps[i].address.domain, pProps[i].address.bus,
+              pProps[i].address.device, pProps[i].address.function,
+              pProps[i].configProperties.vendorId, pProps[i].configProperties.deviceId);
+
+       if (pProps[i].status == ${S}_PCI_LINK_STATUS_LINK_ERROR) {
+           output("  Device does not respond on the bus\\n");
+       }
+   }
+
+   free(pProps);
+
+   // For an enumerated device, the same structure can instead be chained to
+   // ${s}_pci_properties_t and queried through the device-level PCI properties API
+   ${s}_pci_config_properties_t configProps = {};
+   configProps.stype = ${S}_STRUCTURE_TYPE_PCI_CONFIG_PROPERTIES;
+   configProps.pNext = nullptr;
+
+   ${s}_pci_properties_t pciProps = {};
+   pciProps.stype = ${S}_STRUCTURE_TYPE_PCI_PROPERTIES;
+   pciProps.pNext = &configProps;
+
+   ${s}DevicePciGetProperties(hDevice, &pciProps);
+
 .. _Power:
 
 Operations on power domains
