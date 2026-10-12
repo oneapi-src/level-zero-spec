@@ -1029,6 +1029,10 @@ etors:
     - name: COUNTER_BASED_EXTERNAL_INTERRUPT_WAIT
       value: "$X_BIT(3)"
       desc: "Counter-based Event waiting for external interrupt id supported"
+    - name: COUNTER_BASED_IPC_BIDIRECTIONAL
+      value: "$X_BIT(4)"
+      desc: "Counter-based Event IPC sharing is bi-directional. See $xEventCounterBasedOpenIpcHandle"
+      version: "1.20"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Device Event properties struct. Can be passed as pNext to $x_device_properties_t to obtain properties"

@@ -1613,7 +1613,7 @@ Key features
 - No need to wait for completion before reusing/destroying
 - CB Event doesn't own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver
 - A CB Event's device association is not fixed at creation. It re-associates with the signaling device on each signal operation. See `Device association`_.
-- IPC sharing is one-directional by default. IPC CB Event opened in a different process can be used only for waiting, and the handle must be opened again to observe a new state. Bi-directional sharing, where the opened Event can also be signaled and both processes observe the latest state, is requested with ${X}_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL. See `IPC sharing`_.
+- IPC sharing is bi-directional when the device reports ${X}_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL. The opened Event can also be signaled and both processes observe the latest state. Otherwise IPC sharing is one-directional: IPC CB Event opened in a different process can be used only for waiting, and the handle must be opened again to observe a new state. See `IPC sharing`_.
 - Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section
 - When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion
 - Event can be destroyed without waiting for completion, even if profiling is enabled
@@ -1654,10 +1654,10 @@ IPC sharing
 ^^^^^^^^^^^
 Counter Based Event has dedicated API calls to handle IPC operations: ${x}EventCounterBasedGetIpcHandle, ${x}EventCounterBasedOpenIpcHandle, ${x}EventCounterBasedCloseIpcHandle
 
-Two sharing modes are defined. The mode is selected when the Event is created and can't be changed later:
+Two sharing modes are defined. The mode of an Event created with ${X}_EVENT_COUNTER_BASED_FLAG_IPC depends on the device used to create it:
 
-- ${X}_EVENT_COUNTER_BASED_FLAG_IPC alone selects one-directional sharing
-- ${X}_EVENT_COUNTER_BASED_FLAG_IPC combined with ${X}_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL selects bi-directional sharing. ${x}EventCounterBasedCreate returns ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE if the Driver doesn't provide it
+- If the device reports ${X}_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL in ${x}_device_event_properties_t, sharing is bi-directional
+- Otherwise sharing is one-directional
 
 **One-directional sharing**
 
