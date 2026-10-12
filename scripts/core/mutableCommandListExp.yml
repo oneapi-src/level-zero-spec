@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2024 Intel Corporation
+# Copyright (C) 2024-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -7,17 +7,17 @@
 #
 --- #--------------------------------------------------------------------------
 type: header
-desc: "Intel $OneApi Level-Zero Extension for supporting compute graphs with dynamic properties."
+desc: "[DEPRECATED] Intel $OneApi Level-Zero Extension for supporting compute graphs with dynamic properties."
 version: "1.9"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "Mutable Command List Extension Name"
+desc: "[DEPRECATED] Mutable Command List Extension Name"
 version: "1.9"
 name: $X_MUTABLE_COMMAND_LIST_EXP_NAME
 value: '"$X_experimental_mutable_command_list"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Mutable Command List Extension Version(s)"
+desc: "[DEPRECATED] Mutable Command List Extension Version(s)"
 version: "1.9"
 name: $x_mutable_command_list_exp_version_t
 etors:
@@ -30,7 +30,7 @@ etors:
       version: "1.10"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Mutable command flags"
+desc: "[DEPRECATED] Mutable command flags"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_exp_flags_t
@@ -55,7 +55,7 @@ etors:
       version: "1.10"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable command identifier descriptor"
+desc: "[DEPRECATED] Mutable command identifier descriptor"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_id_exp_desc_t
@@ -69,7 +69,7 @@ members:
               - in order to include kernel instruction mutation, $X_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION must be explicitly included
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "Mutable command list flags"
+desc: "[DEPRECATED] Mutable command list flags"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_list_exp_flags_t
@@ -78,7 +78,7 @@ etors:
       desc: "reserved"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable command list properties"
+desc: "[DEPRECATED] Mutable command list properties"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_list_exp_properties_t
@@ -92,7 +92,7 @@ members:
       desc: "[out] mutable command flags"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable command list descriptor"
+desc: "[DEPRECATED] Mutable command list descriptor"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_command_list_exp_desc_t
@@ -105,7 +105,7 @@ members:
               - must be 0 (default) or a valid combination of $x_mutable_command_list_exp_flag_t
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable commands descriptor"
+desc: "[DEPRECATED] Mutable commands descriptor"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_commands_exp_desc_t
@@ -116,7 +116,7 @@ members:
       desc: "[in] must be 0, this field is reserved for future use"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable kernel argument descriptor"
+desc: "[DEPRECATED] Mutable kernel argument descriptor"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_kernel_argument_exp_desc_t
@@ -136,7 +136,7 @@ members:
       desc: "[in] pointer to kernel argument value"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable kernel group count descriptor"
+desc: "[DEPRECATED] Mutable kernel group count descriptor"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_group_count_exp_desc_t
@@ -150,7 +150,7 @@ members:
       desc: "[in] pointer to group count"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable kernel group size descriptor"
+desc: "[DEPRECATED] Mutable kernel group size descriptor"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_group_size_exp_desc_t
@@ -170,7 +170,7 @@ members:
       desc: "[in] group size for Z dimension to use for the kernel"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable kernel global offset descriptor"
+desc: "[DEPRECATED] Mutable kernel global offset descriptor"
 version: "1.9"
 class: $xCommandList
 name: $x_mutable_global_offset_exp_desc_t
@@ -190,7 +190,7 @@ members:
       desc: "[in] global offset for Z dimension to use for this kernel"
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Mutable graph argument descriptor"
+desc: "[DEPRECATED] Mutable graph argument descriptor"
 version: "1.10"
 class: $xCommandList
 name: $x_mutable_graph_argument_exp_desc_t
@@ -207,7 +207,7 @@ members:
       desc: "[in] pointer to graph argument value"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns a unique command identifier for the next command to be appended to a command list."
+desc: "[DEPRECATED] Returns a unique command identifier for the next command to be appended to a command list."
 version: "1.9"
 class: $xCommandList
 name: GetNextCommandIdExp
@@ -228,7 +228,7 @@ params:
       desc: "[out] pointer to mutable command identifier to be written"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Returns a unique command identifier for the next command to be appended to a command list. Provides possible kernel handles for kernel mutation when $X_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION flag is present."
+desc: "[DEPRECATED] Returns a unique command identifier for the next command to be appended to a command list. Provides possible kernel handles for kernel mutation when $X_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION flag is present."
 version: "1.10"
 class: $xCommandList
 name: GetNextCommandIdWithKernelsExp
@@ -255,7 +255,7 @@ params:
       desc: "[out] pointer to mutable command identifier to be written"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Updates mutable commands."
+desc: "[DEPRECATED] Updates mutable commands."
 version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandsExp
@@ -277,7 +277,7 @@ returns:
        - "Invalid kernel argument or not matching update descriptor provided"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Query whether a command list was created with the mutable command list extension."
+desc: "[DEPRECATED] Query whether a command list was created with the mutable command list extension."
 version: "1.17"
 class: $xCommandList
 name: IsMutableExp
@@ -293,7 +293,7 @@ params:
       desc: "[out] pointer bool determining whether command list was created with mutable extension"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Updates the signal event for a mutable command in a mutable command list."
+desc: "[DEPRECATED] Updates the signal event for a mutable command in a mutable command list."
 version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandSignalEventExp
@@ -316,7 +316,7 @@ params:
       desc: "[in][optional] handle of the event to signal on completion"
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Updates the wait events for a mutable command in a mutable command list."
+desc: "[DEPRECATED] Updates the wait events for a mutable command in a mutable command list."
 version: "1.9"
 class: $xCommandList
 name: UpdateMutableCommandWaitEventsExp
@@ -348,7 +348,7 @@ returns:
        - "The `numWaitEvents` parameter does not match that of the original command."
 --- #--------------------------------------------------------------------------
 type: function
-desc: "Updates the kernel for a mutable command in a mutable command list."
+desc: "[DEPRECATED] Updates the kernel for a mutable command in a mutable command list."
 version: "1.10"
 class: $xCommandList
 name: UpdateMutableCommandKernelsExp

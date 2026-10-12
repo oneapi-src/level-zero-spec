@@ -10,9 +10,9 @@ from templates import helper as th
 
 .. _ZE_experimental_mutable_command_list:
 
-================================
- Mutable Command List Extension
-================================
+============================================
+ Mutable Command List Experimental Extension
+============================================
 
 API
 ----

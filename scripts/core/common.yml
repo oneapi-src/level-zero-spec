@@ -785,6 +785,42 @@ etors:
       desc: $x_command_queue_qos_ext_properties_t
       version: "1.19"
       value: "0x0002004D"
+    - name: MUTABLE_COMMAND_LIST_EXT_PROPERTIES
+      desc: $x_mutable_command_list_ext_properties_t
+      version: "1.20"
+      value: "0x0002004E"
+    - name: MUTABLE_COMMAND_LIST_EXT_DESC
+      desc: $x_mutable_command_list_ext_desc_t
+      version: "1.20"
+      value: "0x0002004F"
+    - name: MUTABLE_COMMAND_ID_EXT_DESC
+      desc: $x_mutable_command_id_ext_desc_t
+      version: "1.20"
+      value: "0x00020050"
+    - name: MUTABLE_COMMANDS_EXT_DESC
+      desc: $x_mutable_commands_ext_desc_t
+      version: "1.20"
+      value: "0x00020051"
+    - name: MUTABLE_KERNEL_ARGUMENT_EXT_DESC
+      desc: $x_mutable_kernel_argument_ext_desc_t
+      version: "1.20"
+      value: "0x00020052"
+    - name: MUTABLE_GROUP_COUNT_EXT_DESC
+      desc: $x_mutable_group_count_ext_desc_t
+      version: "1.20"
+      value: "0x00020053"
+    - name: MUTABLE_GROUP_SIZE_EXT_DESC
+      desc: $x_mutable_group_size_ext_desc_t
+      version: "1.20"
+      value: "0x00020054"
+    - name: MUTABLE_GLOBAL_OFFSET_EXT_DESC
+      desc: $x_mutable_global_offset_ext_desc_t
+      version: "1.20"
+      value: "0x00020055"
+    - name: MUTABLE_GRAPH_ARGUMENT_EXT_DESC
+      desc: $x_mutable_graph_argument_ext_desc_t
+      version: "1.20"
+      value: "0x00020056"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
