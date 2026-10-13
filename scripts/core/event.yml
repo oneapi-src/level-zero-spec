@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -162,6 +162,19 @@ etors:
       value: "$X_BIT(2)"
       desc: "Host synchronization APIs wait for external interrupt id. Can be used only for Counter Based Events"
 --- #--------------------------------------------------------------------------
+type: enum
+desc: "Event extension flags"
+class: $xEvent
+name: $x_event_ext_flags_t
+version: "1.20"
+etors:
+    - name: APPEND_GRAPH_EXTERNAL
+      value: "$X_BIT(0)"
+      desc: |
+            Causes the specified event to be treated as if it had been created with $X_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL for this append operation only.
+            If the event was created with $X_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL, this flag has no effect.
+            If this flag is used on a non-recording command list, then $X_RESULT_ERROR_UNSUPPORTED_FEATURE is returned.
+--- #--------------------------------------------------------------------------
 type: struct
 desc: "Event sync mode descriptor"
 class: $xEvent
@@ -270,6 +283,20 @@ members:
             [in] final completion value, when value under deviceAddress is equal or greater then this value then event is considered as completed.
             Must not exceed the value returned by $xDeviceGetCounterBasedEventMaxValue.
             User is responsible for ensuring that the value aggregated under `deviceAddress` (initial value plus any number of `incrementValue` additions) does not exceed that maximum at any point in time.
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Event extension flags descriptor"
+class: $xEvent
+name: $x_event_ext_flags_desc_t
+base: $x_base_desc_t
+version: "1.20"
+members:
+    - type: $x_event_ext_flags_t
+      name: flags
+      desc: |
+            [in] event extension flags.
+            must be 0 (default) or a valid combination of $x_event_ext_flags_t
+      init: "0"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates an event from the pool."

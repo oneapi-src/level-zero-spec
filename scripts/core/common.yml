@@ -821,6 +821,10 @@ etors:
       desc: $x_mutable_graph_argument_ext_desc_t
       version: "1.20"
       value: "0x00020056"
+    - name: EVENT_EXT_FLAGS_DESC
+      desc: $x_event_ext_flags_desc_t
+      version: "1.20"
+      value: "0x00020057"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"
