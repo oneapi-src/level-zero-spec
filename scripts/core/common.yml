@@ -825,6 +825,10 @@ etors:
       desc: $x_event_ext_flags_desc_t
       version: "1.20"
       value: "0x00020057"
+    - name: INIT_DRIVER_PROPERTIES_EXT_DESC
+      desc: $x_init_driver_properties_ext_desc_t
+      version: "1.20"
+      value: "0x00020058"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

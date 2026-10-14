@@ -1,0 +1,59 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension APIs for declaring driver-wide properties at initialization"
+version: "1.20"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Init Driver Properties Extension Name"
+version: "1.20"
+name: $X_INIT_DRIVER_PROPERTIES_EXT_NAME
+value: '"$X_extension_init_driver_properties"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Init Driver Properties Extension Version(s)"
+version: "1.20"
+name: $x_init_driver_properties_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported init-time driver property flags"
+version: "1.20"
+name: $x_init_driver_properties_ext_flags_t
+etors:
+    - name: OPTIMIZE_MEMORY
+      value: "$X_BIT(0)"
+      desc: "Reduce memory footprint for the driver(s) being initialized; may trade performance for lower memory usage. mirrors $X_CONTEXT_FLAG_OPTIMIZE_MEMORY, applied driver-wide at initialization instead of per-context. mutually exclusive with OPTIMIZE_PERFORMANCE. if neither this nor OPTIMIZE_PERFORMANCE is set, the memory/performance trade-off is driver implementation specific"
+    - name: OPTIMIZE_PERFORMANCE
+      value: "$X_BIT(1)"
+      desc: "Explicitly optimize for performance for the driver(s) being initialized; may trade memory footprint for higher performance. mirrors $X_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE, applied driver-wide at initialization instead of per-context. mutually exclusive with OPTIMIZE_MEMORY. if neither this nor OPTIMIZE_MEMORY is set, the memory/performance trade-off is driver implementation specific"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Init Driver Properties descriptor"
+version: "1.20"
+class: $x
+name: $x_init_driver_properties_ext_desc_t
+base: $x_base_desc_t
+members:
+    - type: $x_init_driver_properties_ext_flags_t
+      name: flags
+      desc: |
+            [in] driver property flags.
+            must be 0 (default) or a valid combination of $x_init_driver_properties_ext_flag_t.
+      init: "0"
+details:
+    - "This structure may be passed to $xInitDrivers, via the `pNext` member of $x_init_driver_type_desc_t, to declare driver-wide properties for the driver(s) being initialized. It is a general-purpose extension point; additional flags may be added to $x_init_driver_properties_ext_flags_t in the future without requiring a new structure or a new $x_structure_type_t value."
+    - "OPTIMIZE_MEMORY requests that the driver(s) being initialized reduce their memory footprint, mirroring $X_CONTEXT_FLAG_OPTIMIZE_MEMORY but applied at driver initialization instead of per-context. When set, it establishes the default memory-optimization behavior for the driver(s) initialized by this call; contexts subsequently created via $xContextCreate or $xContextCreateEx without an explicit $X_CONTEXT_FLAG_OPTIMIZE_MEMORY or $X_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE flag inherit this default. A context that explicitly sets its own $x_context_flags_t flags overrides the driver-level default for that context."
+    - "OPTIMIZE_PERFORMANCE explicitly requests that the driver(s) being initialized optimize for performance, mirroring $X_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE but applied at driver initialization instead of per-context. When set, it establishes the default performance-optimization behavior for the driver(s) initialized by this call in the same way that setting OPTIMIZE_MEMORY establishes the opposite default. OPTIMIZE_MEMORY and OPTIMIZE_PERFORMANCE are mutually exclusive; if both are set, $xInitDrivers returns $X_RESULT_ERROR_INVALID_ARGUMENT."
+    - "If neither OPTIMIZE_MEMORY nor OPTIMIZE_PERFORMANCE is set, the memory/performance trade-off for the driver(s) initialized by this call is driver implementation specific."
+    - "If this structure is not provided, the driver must assume no driver-wide properties were requested and fall back to its standard default behavior for each unset flag."
+    - "This structure has no effect on drivers already initialized by a prior call to $xInitDrivers or $xInit[Deprecated]; those drivers keep whatever behavior was in effect when they were first initialized."

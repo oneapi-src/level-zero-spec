@@ -146,6 +146,9 @@ params:
       name: desc
       desc: |
             [in] descriptor containing the driver type initialization details including $x_init_driver_type_flag_t combinations.
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "the `pNext` chain of `desc` contains a $x_init_driver_properties_ext_desc_t with both $X_INIT_DRIVER_PROPERTIES_EXT_FLAG_OPTIMIZE_MEMORY and $X_INIT_DRIVER_PROPERTIES_EXT_FLAG_OPTIMIZE_PERFORMANCE set"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported API versions"

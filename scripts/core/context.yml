@@ -15,8 +15,14 @@ desc: "Supported context creation flags"
 class: $xContext
 name: $x_context_flags_t
 etors:
-    - name: TBD
-      desc: "reserved for future use"
+    - name: OPTIMIZE_MEMORY
+      value: "$X_BIT(0)"
+      version: "1.20"
+      desc: "Reduce memory footprint; may trade performance for lower memory usage; mutually exclusive with $X_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE. If neither this nor OPTIMIZE_PERFORMANCE is set, the memory/performance trade-off is driver implementation specific"
+    - name: OPTIMIZE_PERFORMANCE
+      value: "$X_BIT(1)"
+      version: "1.20"
+      desc: "Explicitly optimize for performance; may trade memory footprint for higher performance; mutually exclusive with $X_CONTEXT_FLAG_OPTIMIZE_MEMORY. If neither this nor OPTIMIZE_MEMORY is set, the memory/performance trade-off is driver implementation specific"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Context descriptor"
@@ -52,6 +58,9 @@ params:
     - type: $x_context_handle_t*
       name: phContext
       desc: "[out] pointer to handle of context object created"
+returns:
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "`(desc->flags & $X_CONTEXT_FLAG_OPTIMIZE_MEMORY) && (desc->flags & $X_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE)`"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Creates a context for the driver."
@@ -88,6 +97,8 @@ params:
 returns:
     - $X_RESULT_ERROR_INVALID_SIZE:
         - "`(nullptr == phDevices) && (0 < numDevices)`"
+    - $X_RESULT_ERROR_INVALID_ARGUMENT:
+        - "`(desc->flags & $X_CONTEXT_FLAG_OPTIMIZE_MEMORY) && (desc->flags & $X_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE)`"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Destroys a context."
