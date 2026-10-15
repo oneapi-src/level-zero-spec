@@ -1,0 +1,59 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Sysman Extension APIs for Device GPU Topology"
+version: "1.20"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Device GPU Topology Extension Name"
+version: "1.20"
+name: $S_DEVICE_GPU_TOPOLOGY_EXT_NAME
+value: '"$XS_extension_device_gpu_topology"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Device GPU Topology Extension Version(s)"
+version: "1.20"
+name: $s_device_gpu_topology_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+      version: "1.20"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Device GPU Topology Extension structure"
+version: "1.20"
+class: $sDevice
+name: $s_device_gpu_topology_ext_properties_t
+base: $s_base_properties_t
+details:
+    - "This structure can be passed as an extension structure to $sDeviceGetProperties via pNext member"
+    - "Returns the GPU topology of the device"
+members:
+    - type: uint32_t
+      name: numSlices
+      desc: "[out] Total number of slices across the entire device."
+    - type: uint32_t
+      name: numXeCores
+      desc: "[out] Total number of Xe Cores across the entire device. An Xe Core is what earlier GPU generations call a sub-slice."
+    - type: uint32_t
+      name: numVectorEngines
+      desc: "[out] Total number of vector engines across the entire device. A vector engine is what earlier GPU generations call an EU."
+    - type: uint32_t
+      name: numMatrixEngines
+      desc: "[out] Total number of matrix engines across the entire device."
+    - type: uint32_t
+      name: numThreads
+      desc: "[out] Total number of hardware threads across the entire device."
+    - type: char
+      name: "generationName[$S_STRING_PROPERTY_SIZE]"
+      desc: |
+            [out] Name of the GPU generation of the device.
+            This value is human-readable text intended for display and logging purposes only.
+            Applications that make decisions based on the device architecture should instead use an immutable identifier, such as the `ipVersion` member of $x_device_ip_version_ext_t, the `deviceId` member of $x_device_properties_t, or the `uuid` member of $s_device_ext_properties_t.
