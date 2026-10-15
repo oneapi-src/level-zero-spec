@@ -78,3 +78,39 @@ params:
 returns:
     - $X_RESULT_ERROR_UNSUPPORTED_FEATURE:
         - "an extension passed via pNext is not supported"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Checks whether a specific compiler-info element is supported by the device."
+version: "1.20"
+class: $xDevice
+name: GetCompilerInfoSupported
+details:
+    - "This query complements $xDeviceGetCompilerInfo: instead of listing all supported elements of a category, it checks support for a single element supplied by the application."
+    - "paramName selects the category and therefore the type of pElement: a null-terminated name for COMPILER_OPTIONS, DRIVER_OPTIONS, and SPIRV_EXTENSIONS; a null-terminated string representation of a uint32_t numeric capability identifier for SPIRV_CAPABILITIES."
+    - "For the option categories (COMPILER_OPTIONS, DRIVER_OPTIONS), pValue optionally narrows the check to a specific option value; when pValue is nullptr, only the option named by pElement is checked. pValue is ignored for other categories."
+    - "Support is reported through pSupported. No element names are enumerated, so support can be queried for elements the driver does not list publicly."
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $x_device_handle_t
+      name: hDevice
+      desc: "[in] handle of the device"
+    - type: $x_device_compiler_info_t
+      name: paramName
+      desc: "[in] compiler-info category the queried element belongs to"
+    - type: "const void*"
+      name: pNext
+      init: "nullptr"
+      desc: "[in][optional] additional extensions passed to the function"
+    - type: "const void*"
+      name: pElement
+      desc: "[in] element whose support is being checked; its type is determined by paramName"
+    - type: "const char*"
+      name: pValue
+      init: "nullptr"
+      desc: |
+            [in][optional] for the option categories, a null-terminated value to check together with the option named by pElement.
+            When nullptr, only the element itself is checked. Ignored for non-option categories.
+    - type: "$x_bool_t*"
+      name: pSupported
+      desc: "[out] on success, set to true if the element (and value, when provided) is supported by the device compiler, false otherwise"

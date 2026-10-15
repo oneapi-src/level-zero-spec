@@ -1959,6 +1959,81 @@ Module build options can be passed with ${x}_module_desc_t as a string.
 
 ## --validate=on
 
+%if _version_compare_gequal(ver, "1.18"):
+.. _compiler-info-query:
+
+Compiler-Info Query
+~~~~~~~~~~~~~~~~~~~
+
+%if _version_compare_gequal(ver, "1.20"):
+The SPIR-V capabilities, SPIR-V extensions, and build options supported by a device can be queried
+with compiler-scoped device queries. ${x}DeviceGetCompilerInfo returns a full list; the value
+selected by ${x}_device_compiler_info_t determines which compiler-info list is returned (see the
+enumeration for the available selectors and their payload layout). List queries use the standard
+two-call convention with a single in/out size parameter: query the size with ``pData`` null, allocate,
+then call again to fill. ${x}DeviceGetCompilerInfoSupported complements it by checking support for a
+single, application-supplied element without allocating or walking the full list.
+%else:
+The SPIR-V capabilities, SPIR-V extensions, and build options supported by a device can be queried
+with a single, compiler-scoped device query, ${x}DeviceGetCompilerInfo. The value selected by
+${x}_device_compiler_info_t determines which compiler-info list is returned; see the enumeration
+for the available selectors and their payload layout. The result uses the standard two-call
+convention with a single in/out size parameter: query the size with ``pData`` null, allocate, then
+call again to fill.
+%endif
+
+SPIR-V capabilities are returned as an array of ``uint32_t`` numeric identifiers. First query the 
+size, it will return the total number of bytes in the array. You will then need to calculate the 
+number of elements by dividing by the type, size / sizeof(uint32_t), using an appropriately sized 
+array to then issue the read:
+
+.. parsed-literal::
+
+       size_t size = 0;
+       ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES, nullptr, &size, nullptr);
+       std::vector<uint32_t> caps(size / sizeof(uint32_t));
+       ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES, nullptr, &size, caps.data());
+
+SPIR-V extensions are returned as fixed-width, null-terminated names, each ${X}_MAX_EXTENSION_NAME bytes.
+Allocate a byte buffer of the reported size and iterate name by name:
+
+.. parsed-literal::
+
+       size_t size = 0;
+       ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS, nullptr, &size, nullptr);
+       std::vector<char> buffer(size);
+       ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS, nullptr, &size, buffer.data());
+       for (size_t offset = 0; offset < size; offset += ${X}_MAX_EXTENSION_NAME) {
+           // buffer.data() + offset points to a null-terminated extension name
+       }
+
+Compiler options are returned as a single null-terminated string of space-separated tokens. Driver
+options use ${X}_DEVICE_COMPILER_INFO_DRIVER_OPTIONS with the exact same allocation and read pattern:
+
+.. parsed-literal::
+
+       size_t size = 0;
+       ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_COMPILER_OPTIONS, nullptr, &size, nullptr);
+       std::vector<char> options(size);
+       ${x}DeviceGetCompilerInfo(hDevice, ${X}_DEVICE_COMPILER_INFO_COMPILER_OPTIONS, nullptr, &size, options.data());
+       // options.data() is one null-terminated string, e.g. "-${x}-opt-a -${x}-opt-b"
+
+%if _version_compare_gequal(ver, "1.20"):
+To check a single element instead of listing all of them, use ${x}DeviceGetCompilerInfoSupported. It
+reports the result through ``pSupported``, so no size query or buffer is needed. The element type
+follows paramName: a null-terminated name for the extension and option categories, a ``uint32_t``
+numeric identifier for SPIR-V capabilities. For the option categories, ``pValue`` optionally narrows
+the check to a specific option value:
+
+.. parsed-literal::
+
+       ${x}_bool_t bf16Supported = false;
+       ${x}DeviceGetCompilerInfoSupported(hDevice, ${X}_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS, nullptr, "SPV_INTEL_bfloat16_conversion", nullptr, &bf16Supported);
+       ${x}_bool_t optionSupported = false;
+       ${x}DeviceGetCompilerInfoSupported(hDevice, ${X}_DEVICE_COMPILER_INFO_COMPILER_OPTIONS, nullptr, "-${x}-opt-large-register-file", nullptr, &optionSupported);
+
+%endif
+%endif
 Module Specialization Constants
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
