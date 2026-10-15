@@ -1177,7 +1177,36 @@ The following pseudo-code demonstrates submission of commands to a command queue
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
        // synchronize host and device
-       ${x}CommandQueueSynchronize(hCommandQueue, UINT32_MAX);
+       ${x}CommandQueueSynchronize(hCommandQueue, UINT64_MAX);
+
+       // Reset (recycle) command list for new commands
+       ${x}CommandListReset(hCommandList);
+       ...
+
+Submission of a command list to an immediate command list
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- An immediate command list can also execute a command list.
+- By definition, a command list cannot be executed concurrently on multiple immediate command lists.
+- A command list may be submitted multiple times.  It is up to the application to ensure
+  that the command list can be executed multiple times.
+- Execution on an immediate command list can use an event to signal completion instead of a fence.
+- Execution on an immediate command list can use multiple events to wait on before starting
+  execution of a command list.
+
+The following pseudo-code demonstrates executing a command list on an immediate command list:
+
+.. parsed-literal::
+
+       ...
+       // finished appending commands
+       ${x}CommandListClose(hCommandList);
+
+       // Execute command list on an immediate command list
+       ${x}CommandListImmediateAppendCommandListsWithParameters(hImmediateCommandList, 1, &hCommandList, nullptr, nullptr, 0, nullptr);
+
+       // synchronize host and device
+       ${x}CommandListHostSynchronize(hImmediateCommandList, UINT64_MAX);
 
        // Reset (recycle) command list for new commands
        ${x}CommandListReset(hCommandList);
@@ -1395,7 +1424,7 @@ The following pseudo-code demonstrates a sequence for creation, submission and q
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
        // Wait for fence to be signaled
-       ${x}FenceHostSynchronize(hFence, UINT32_MAX);
+       ${x}FenceHostSynchronize(hFence, UINT64_MAX);
        ${x}FenceReset(hFence);
        ...
 
@@ -1633,7 +1662,7 @@ Regular Event rely on memory state controlled by the user (explicit Reset calls)
        // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc.
        // Its also safe to delete Event object.
 
-       ${x}EventHostSynchronize(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc
+       ${x}EventHostSynchronize(event1, UINT64_MAX); // wait for counter=Y on memory CL3_alloc
 
 Device association
 ^^^^^^^^^^^^^^^^^^^
@@ -2997,7 +3026,7 @@ The following pseudo-code demonstrates a sequence for using fine-grain residency
        ${x}CommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, hFence);
 
        // wait until complete
-       ${x}FenceHostSynchronize(hFence, UINT32_MAX);
+       ${x}FenceHostSynchronize(hFence, UINT64_MAX);
 
        // Finally, evict to free device resources
        ${x}ContextEvictMemory(hContext, hDevice, begin->next, sizeof(node));
@@ -3351,7 +3380,7 @@ Sending process creates event at same location
        };
        ${x}EventCreate(hEventPool, &eventDesc, &hEvent);
 
-       ${x}EventHostSynchronize(hEvent, UINT32_MAX);
+       ${x}EventHostSynchronize(hEvent, UINT64_MAX);
 
 
 Note, there is no guaranteed address equivalence for the values of ``hEvent`` in each process.
