@@ -173,7 +173,7 @@ members:
       desc: "[out] Total bytes written to memory"
     - type: uint64_t
       name: maxBandwidth
-      desc: "[out] Current maximum bandwidth in units of bytes/sec"
+      desc: "[out] Current maximum bandwidth in units of bytes/sec. Use 1000 (not 1024) to convert to higher-order units."
     - type: uint64_t
       name: timestamp
       desc: |
