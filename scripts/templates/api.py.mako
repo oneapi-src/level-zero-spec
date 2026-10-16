@@ -19,6 +19,10 @@ from templates import helper as th
 import platform
 from ctypes import *
 from enum import *
+%if n != x:
+# Uses types and macros from the core API.
+from ${x} import *
+%endif
 
 ${"###############################################################################"}
 __version__ = "1.0"
@@ -39,7 +43,7 @@ ${"##"} ${line}
 def ${th.make_macro_name(n, tags, obj)}:
     return ${th.subt(n, tags, obj['value'])}
 %elif 'altvalue' not in obj and not obj['value'].startswith("__"):
-${th.make_macro_name(n, tags, obj)} = ${th.subt(n, tags, obj['value'])}
+${th.make_macro_name(n, tags, obj)} = ${th.get_py_macro_value(n, tags, obj)}
 %else:
 # ${th.make_macro_name(n, tags, obj)} not required for python
 %endif
@@ -64,7 +68,7 @@ class ${th.make_type_name(n, tags, obj)}(c_int):
 
 ## STRUCT/UNION ###############################################################
 %elif re.match(r"struct|union", obj['type']):
-class ${th.make_type_name(n, tags, obj)}(Structure):
+class ${th.make_type_name(n, tags, obj)}(${"Union" if obj['type'] == "union" else "Structure"}):
     _fields_ = [
         %for line in th.make_member_lines(n, tags, obj, py=True, meta=meta):
         ${line}
@@ -74,11 +78,22 @@ class ${th.make_type_name(n, tags, obj)}(Structure):
 %elif re.match(r"handle", obj['type']):
 class ${th.make_type_name(n, tags, obj)}(c_void_p):
     pass
+## CALLBACK ###################################################################
+%elif re.match(r"callback", obj['type']):
+${th.make_type_name(n, tags, obj)} = CFUNCTYPE( ${th.get_py_return_type(n, tags, obj['returntype'])}, ${", ".join(th.get_ctype_name(n, tags, p) for p in obj['params'])} )
 %endif
 
 %endif # !class && !function
 %endfor # objects
 %endfor # specs
+%if n == x:
+${"###############################################################################"}
+${"##"} @brief Tracing callback tables are not generated for python; this is opaque
+${"##"}        so the tools API can alias it.
+class ${x}_callbacks_t(Structure):
+    pass
+
+%endif
 ${"###############################################################################"}
 __use_win_types = "Windows" == platform.uname()[0]
 <%
@@ -90,9 +105,9 @@ ${"#############################################################################
 ${"##"} @brief Function-pointer for ${th.make_func_name(n, tags, obj)}
 %if 'condition' not in obj:
 if __use_win_types:
-    _${th.make_func_name(n, tags, obj)}_t = WINFUNCTYPE( ${obj['return_type']}, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
+    _${th.make_func_name(n, tags, obj)}_t = WINFUNCTYPE( ${th.get_py_return_type(n, tags, obj['return_type'])}, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
 else:
-    _${th.make_func_name(n, tags, obj)}_t = CFUNCTYPE( ${obj['return_type']}, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
+    _${th.make_func_name(n, tags, obj)}_t = CFUNCTYPE( ${th.get_py_return_type(n, tags, obj['return_type'])}, ${", ".join(th.make_param_lines(n, tags, obj, py=True, meta=meta, format=["type"]))} )
 %endif # condition
 
 %endfor # functions

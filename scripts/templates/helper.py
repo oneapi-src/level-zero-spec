@@ -684,27 +684,56 @@ def _get_type_name(namespace, tags, obj, item):
     return name
 
 """
+Public:
+    returns python expression for a C macro value
+"""
+def get_py_macro_value(namespace, tags, obj):
+    value = subt(namespace, tags, obj['value'])
+    # Python has no integer suffixes, and its ints are unbounded, so ~ on a
+    # 64-bit unsigned value must be masked to keep C's all-ones result.
+    is_u64 = re.search(r"\d(?:[uU][lL]{2}|[lL]{2}[uU])\b", value)
+    value = re.sub(r"\b(0[xX][0-9a-fA-F]+|\d+)(?:[uU][lL]{0,2}|[lL]{1,2}[uU]?)\b", r"\1", value)
+    if is_u64 and "~" in value:
+        value = "(%s & 0xFFFFFFFFFFFFFFFF)"%value
+    return value
+
+"""
+Public:
+    returns python c_type for a function or callback return type
+"""
+def get_py_return_type(namespace, tags, type):
+    if type == "void":
+        return "None"
+    return get_ctype_name(namespace, tags, {'type': type})
+
+"""
 Private:
     returns python c_type name of any type
 """
 def get_ctype_name(namespace, tags, item):
     name = subt(namespace, tags, item['type'])
+    # "T *" must stay one token, or _remove_const keeps only the "*".
+    name = re.sub(r"\s+\*", "*", name)
     name = _remove_const(name)
     name = re.sub(r"void\*", "c_void_p", name)
     name = re.sub(r"char\*", "c_char_p", name)
-    name = re.sub(r"uint8_t", "c_ubyte", name)
-    name = re.sub(r"uint16_t", "c_ushort", name)
-    name = re.sub(r"uint32_t", "c_ulong", name)
-    name = re.sub(r"uint64_t", "c_ulonglong", name)
-    name = re.sub(r"size_t", "c_size_t", name)
-    name = re.sub(r"float", "c_float", name)
-    name = re.sub(r"double", "c_double", name)
+    name = re.sub(r"\buint8_t\b", "c_uint8", name)
+    name = re.sub(r"\buint16_t\b", "c_uint16", name)
+    name = re.sub(r"\buint32_t\b", "c_uint32", name)
+    name = re.sub(r"\buint64_t\b", "c_uint64", name)
+    name = re.sub(r"\bsize_t\b", "c_size_t", name)
+    name = re.sub(r"\bfloat\b", "c_float", name)
+    name = re.sub(r"\bdouble\b", "c_double", name)
     name = re.sub(r"\bchar", "c_char", name)
+    name = re.sub(r"\bint(8|16|32|64)_t", r"c_int\1", name)
     name = re.sub(r"\bint", "c_int", name)
 
     if type_traits.is_pointer(name):
-        name = _remove_ptr(name)
-        name = "POINTER(%s)"%name
+        # One POINTER() per '*', so T** becomes POINTER(POINTER(T)).
+        depth = len(name) - len(name.rstrip("*"))
+        name = _remove_ptr(name, last=False)
+        for _ in range(depth):
+            name = "POINTER(%s)"%name
 
     elif 'name' in item and value_traits.is_array(item['name']):
         length = subt(namespace, tags, value_traits.get_array_length(item['name']))
