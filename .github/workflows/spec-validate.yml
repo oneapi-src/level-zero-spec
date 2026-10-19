@@ -37,7 +37,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  attribution:
+    uses: ./.github/workflows/commit-attribution.yml
+    with:
+      gate: true
+    # Required by the called workflow's declared permissions; a gate run does not comment.
+    permissions:
+      contents: read
+      pull-requests: write
+
   validate:
+    needs: attribution
     runs-on: [self-hosted, Linux]
     if: github.repository_owner == 'intel-innersource'
     steps:

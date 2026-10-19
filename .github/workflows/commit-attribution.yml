@@ -1,0 +1,108 @@
+# Blocks PRs whose commits credit anyone other than a real person with an @intel.com
+# email: author, committer, and every `*-by:` trailer (Signed-off-by, Co-authored-by,
+# ...). Any mention of an AI tool in a commit message, PR title or PR description also
+# fails. The fix must be a rewrite of local history (amend / rebase + force-push), so
+# no such message ever reaches master. Make this a required check on master.
+#
+# The check script is stdlib-only Python, so it runs on the runner's python3 directly.
+#
+# The expensive PR workflows also call this file as their first job (gate: true) and
+# make every other job `needs:` it, so no build starts on a bad PR. A gate run checks
+# commits only and posts no comment: this standalone run owns the PR comment and the
+# PR title/description check (gate runs do not re-run on a title edit). On non-PR
+# events (push, workflow_dispatch) the gate passes without checking anything.
+name: Commit Attribution
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize, reopened, edited]
+  workflow_call:
+    inputs:
+      gate:
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
+
+jobs:
+  attribution:
+    runs-on: [self-hosted, Linux]
+    if: github.repository_owner == 'intel-innersource'
+    # github.workflow is the caller's name in a gate run, so gates never cancel each other.
+    concurrency:
+      group: "commit-attribution-${{ github.workflow }}-${{ github.ref }}"
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      if: github.event_name == 'pull_request'
+      with:
+        fetch-depth: 0
+
+    - name: Check commit attribution
+      id: check
+      if: github.event_name == 'pull_request'
+      # PR text is untrusted, so it goes through env, never inline in the script.
+      env:
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        BASE_REF: ${{ github.event.pull_request.base.ref }}
+        PR_TITLE: ${{ !inputs.gate && github.event.pull_request.title || '' }}
+        PR_BODY: ${{ !inputs.gate && github.event.pull_request.body || '' }}
+      run: | #bash
+        rm -f attribution.md
+        set +e
+        python3 .github/scripts/check_commit_attribution.py \
+          --range "$BASE_SHA..$HEAD_SHA" --base-ref "$BASE_REF" --report attribution.md
+        rc=$?
+        if [ $rc -ne 0 ] && [ $rc -ne 1 ]; then
+          echo "::error::The attribution check could not run (exit $rc)."
+          exit 1
+        fi
+        if [ -f attribution.md ]; then cat attribution.md >> "$GITHUB_STEP_SUMMARY"; fi
+
+    - name: Post or update PR comment
+      if: github.event_name == 'pull_request' && !inputs.gate
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      with:
+        script: |
+          const fs = require('fs');
+          const marker = '<!-- commit-attribution-report -->';
+          const { owner, repo } = context.repo;
+          const issue_number = context.issue.number;
+
+          const report = fs.existsSync('attribution.md')
+            ? fs.readFileSync('attribution.md', 'utf8').trim()
+            : '';
+
+          const comments = await github.paginate(github.rest.issues.listComments, {
+            owner, repo, issue_number, per_page: 100,
+          });
+          const existing = comments.find(c => c.body && c.body.includes(marker));
+
+          let body;
+          if (!report) {
+            if (!existing) return;
+            body = `${marker}\n:white_check_mark: **Commit attribution: fixed.** All commits and the PR text now pass.`;
+          } else {
+            body = `${marker}\n${report}`;
+          }
+
+          if (existing) {
+            await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+          } else {
+            await github.rest.issues.createComment({ owner, repo, issue_number, body });
+          }
+
+    - name: Fail if attribution problems were found
+      run: | #bash
+        if [ -f attribution.md ]; then
+          echo "Commit attribution problems found; see the PR comment and the job summary."
+          exit 1
+        fi
