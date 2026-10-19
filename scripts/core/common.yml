@@ -829,6 +829,14 @@ etors:
       desc: $x_init_driver_properties_ext_desc_t
       version: "1.20"
       value: "0x00020058"
+    - name: COMMAND_VISIT_EXT_DESC
+      desc: $x_command_visit_ext_desc_t
+      version: "1.20"
+      value: "0x00020059"
+    - name: CONCRETE_VISITOR_EXT_DESC
+      desc: $x_concrete_visitor_ext_desc_t
+      version: "1.20"
+      value: "0x0002005A"
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "External memory type flags"

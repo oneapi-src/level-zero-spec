@@ -47,6 +47,12 @@ etors:
       desc: |
             Try to offload copy operations to different engines. Applicable only for compute queues.
             This is only a hint. Driver may ignore it per append call, based on platform capabilities or internal heuristics.
+    - name: ENABLE_COMMAND_VISIT
+      version: "1.20"
+      desc: |
+            command list is configured to support command visit via $xCommandListVisitExt.
+            this flag should be set when command visit is required.
+            this flag is intended only for non-immediate (i.e. recorded) command lists.
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command List descriptor"

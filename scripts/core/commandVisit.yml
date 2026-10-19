@@ -1,0 +1,151 @@
+#
+# Copyright (C) 2026 Intel Corporation
+#
+# SPDX-License-Identifier: MIT
+#
+# See YaML.md for syntax definition
+#
+--- #--------------------------------------------------------------------------
+type: header
+desc: "Intel $OneApi Level-Zero Extension for visiting commands recorded in command lists and graphs."
+version: "1.20"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Command Visit Extension Name"
+version: "1.20"
+name: $X_COMMAND_VISIT_EXT_NAME
+value: '"$X_extension_command_visit"'
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Command Visit Extension version(s)"
+version: "1.20"
+name: $x_command_visit_ext_version_t
+etors:
+    - name: "1_0"
+      value: "$X_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Calling convention for visit extension callbacks"
+version: "1.20"
+condition: "defined(_WIN32)"
+name: $X_VISITOR_CCONV
+value: __cdecl
+altvalue: ""
+--- #--------------------------------------------------------------------------
+type: callback
+desc: "Callback function pointer type for hooks executed before and after the default operation during command visit."
+version: "1.20"
+name: $x_command_visit_ext_default_op_callback_t
+convention: $X_VISITOR_CCONV
+returntype: void
+params:
+    - type: "const char*"
+      name: fname
+      desc: "[in] function name of the visited API command"
+    - type: void*
+      name: userData
+      desc: "[in] user-defined data passed from $x_command_visit_ext_desc_t"
+    - type: uint32_t*
+      name: pNumWaitEvents
+      desc: "[in,out] pointer to wait event count for the current command"
+    - type: "$x_event_handle_t**"
+      name: pphWaitEvents
+      desc: "[in,out] pointer to wait event list for the current command"
+    - type: "$x_event_handle_t*"
+      name: phSignalEvent
+      desc: "[in,out] pointer to command signal event handle"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Defines specialized command visit behavior for a specific Level Zero API function."
+version: "1.20"
+name: $x_concrete_visitor_ext_desc_t
+base: $x_base_desc_t
+details:
+    - "This structure may be passed to $xCommandListVisitExt or $xGraphVisitExt via the `pNext` member of $x_command_visit_ext_desc_t."
+    - "Concrete visitors for multiple API functions may be provided by chaining multiple instances of this structure."
+    - "Each instance in the chain must specify a unique `fname`."
+members:
+    - type: "const char*"
+      name: fname
+      desc: "[in] Level Zero API function name for which callback behavior is defined"
+    - type: void*
+      name: callback
+      desc: "[in] callback function pointer; must have the same return type and parameter list as the visited API function named by `fname`, followed by one additional trailing `void*` parameter that receives `userData` from $x_command_visit_ext_desc_t, and must use the $X_VISITOR_CCONV calling convention"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Defines default operation for command visit."
+version: "1.20"
+name: $x_command_visit_ext_default_op_t
+etors:
+    - name: IGNORE
+      value: "0"
+      desc: "ignore command if concrete callback is not provided"
+    - name: REAPPEND
+      value: "1"
+      desc: "re-append command if concrete callback is not provided"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Defines behavior of command visit."
+version: "1.20"
+name: $x_command_visit_ext_desc_t
+base: $x_base_desc_t
+requires: ["ZE_extension_driver_ddi_handles"]
+members:
+    - type: void*
+      name: userData
+      desc: "[in][optional] user-defined data passed to callbacks"
+    - type: "$x_command_list_handle_t"
+      name: hReappendTargetCommandList
+      desc: "[in][optional] target command list handle used for default re-append operation; must not be null if `defaultOp` is $X_COMMAND_VISIT_EXT_DEFAULT_OP_REAPPEND"
+    - type: $x_command_visit_ext_default_op_callback_t
+      name: beforeDefaultOpClb
+      desc: "[in][optional] callback invoked before `defaultOp` for each command that has no concrete visitor"
+    - type: $x_command_visit_ext_default_op_t
+      name: defaultOp
+      desc: "[in] default operation to execute for a given command when no concrete callback is provided for it (via $x_concrete_visitor_ext_desc_t)"
+    - type: $x_command_visit_ext_default_op_callback_t
+      name: afterDefaultOpClb
+      desc: "[in][optional] callback invoked after `defaultOp` for each command that has no concrete visitor"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Visits all commands in a command list in recorded order."
+version: "1.20"
+class: $xCommandList
+name: VisitExt
+decl: static
+details:
+    - "The implementation must support $X_COMMAND_VISIT_EXT_NAME extension."
+    - "Only command lists created with $X_COMMAND_LIST_FLAG_ENABLE_COMMAND_VISIT flag can be visited."
+    - "Commands are visited in the same order as they were originally recorded."
+params:
+    - type: $x_command_list_handle_t
+      name: hCommandList
+      desc: "[in] handle of command list to visit"
+    - type: "const $x_command_visit_ext_desc_t*"
+      name: pDesc
+      desc: "[in] pointer to command visit descriptor"
+returns:
+    - $X_RESULT_ERROR_INVALID_NULL_HANDLE:
+        - "`($X_COMMAND_VISIT_EXT_DEFAULT_OP_REAPPEND == pDesc->defaultOp) && (nullptr == pDesc->hReappendTargetCommandList)`"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Visits all commands in a graph in recorded order."
+version: "1.20"
+class: $xGraph
+name: VisitExt
+decl: static
+details:
+    - "The implementation must support $X_COMMAND_VISIT_EXT_NAME extension."
+    - "Graphs can always be visited; no explicit opt-in flag is required at graph creation."
+    - "Commands are visited in the same order as they were originally recorded."
+params:
+    - type: $x_graph_handle_t
+      name: hGraph
+      desc: "[in] handle of graph to visit"
+    - type: "const $x_command_visit_ext_desc_t*"
+      name: pDesc
+      desc: "[in] pointer to command visit descriptor"
+returns:
+    - $X_RESULT_ERROR_INVALID_NULL_HANDLE:
+        - "`($X_COMMAND_VISIT_EXT_DEFAULT_OP_REAPPEND == pDesc->defaultOp) && (nullptr == pDesc->hReappendTargetCommandList)`"
