@@ -62,6 +62,52 @@ This extension allows applications to capture append operations from immediate c
 
 Applications can query support and capabilities using ${x}_record_replay_graph_ext_properties_t and ${x}_record_replay_graph_ext_flags_t. Captured graphs can be inspected with ${x}GraphDumpContentsExt, and ${x}_record_replay_graph_ext_dump_desc_t controls dump behavior.
 
+Querying the driver and the device
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Query the driver to determine if the Record and Replay extension is available.
+2. Query the device to determine which graph capabilities are available.
+3. Immutable graph support is the minimum required for a functional record and replay graph.
+
+.. parsed-literal::
+
+    ${x}_driver_handle_t hDriver; // initialized driver
+    ${x}_device_handle_t hDevice; // created device out of the driver
+
+    // query extension count
+    uint32_t extensionsCount = 0;
+    ${x}DriverGetExtensionProperties(hDriver, &extensionsCount, nullptr);
+
+    ${x}_driver_extension_properties_t \*driverExtensions; // allocate memory under this pointer to fit extensionsCount elements
+    ${x}DriverGetExtensionProperties(hDriver, &extensionsCount, driverExtensions);
+
+    // discover graph extension
+    const char \*extensionName = "ZE_extension_record_replay_graph";
+    size_t extensionNameLength = strlen(extensionName);
+
+    for (uint32_t i = 0; i < extensionsCount; i++) {
+        if (strncmp(driverExtensions[i].name, extensionName, extensionNameLength) == 0) {
+            printf("Extension %s found at version %u.%u\n",
+                   extensionName,
+                   ${X}_MAJOR_VERSION(driverExtensions[i].version),
+                   ${X}_MINOR_VERSION(driverExtensions[i].version));
+        }
+    }
+
+    ${x}_record_replay_graph_ext_properties_t graphProperties = {
+        ${X}_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_PROPERTIES
+    };
+
+    ${x}_device_properties_t deviceProps = {
+        ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2   // ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
+    };
+    deviceProps.pNext = &graphProperties;
+
+    ${x}DeviceGetProperties(hDevice, &deviceProps);
+    if (!(graphProperties.graphFlags & ${X}_RECORD_REPLAY_GRAPH_EXT_FLAG_IMMUTABLE_GRAPH)) {
+        printf("Basic graph functionality for this device is not available\n");
+    }
+
 Typical Flow
 ~~~~~~~~~~~~
 
