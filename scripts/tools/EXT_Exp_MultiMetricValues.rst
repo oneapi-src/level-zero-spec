@@ -34,6 +34,26 @@ The following code demonstrates how to calculate and process multiple metric val
 
 .. parsed-literal::
 
+       // Check that the driver supports the extension and which version it reports
+       uint32_t extensionCount = 0;
+       ${x}DriverGetExtensionProperties(hDriver, &extensionCount, nullptr);
+
+       std::vector<${x}_driver_extension_properties_t> extensionProperties(extensionCount);
+       ${x}DriverGetExtensionProperties(hDriver, &extensionCount, extensionProperties.data());
+
+       uint32_t extensionVersion = 0;
+       for (uint32_t i = 0; i < extensionCount; i++) {
+           if (strcmp(extensionProperties[i].name, ${T}_MULTI_METRICS_EXP_NAME) == 0) {
+               extensionVersion = extensionProperties[i].version;
+               break;
+           }
+       }
+
+       if (extensionVersion == 0) {
+           // Extension is not supported by the driver
+           return;
+       }
+
        // Get data count and total metric count
        uint32_t dataCount = 0;
        uint32_t totalMetricCount = 0;
@@ -64,7 +84,7 @@ The following code demonstrates how to calculate and process multiple metric val
            for (uint32_t report = 0; report < reportCount; report++) {
                for (uint32_t metric = 0; metric < metricCount ; metric++) {
                    const size_t metricIndex = report * metricCount + metric;
-                   process_metric_value(metricValues[startIndex + metricIndex]));
+                   process_metric_value(metricValues[startIndex + metricIndex], extensionVersion);
                }
            }
 
