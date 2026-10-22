@@ -19,6 +19,12 @@ etors:
       desc: "Format is SPIRV IL format"
     - name: NATIVE
       desc: "Format is device native format"
+    - name: PISA
+      version: "1.20"
+      desc: "Format is PISA intermediate representation"
+    - name: OCLC
+      version: "1.20"
+      desc: "Format is OpenCL C source"
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Specialization constants - User defined constants"
