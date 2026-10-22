@@ -137,7 +137,7 @@ jobs:
     # HTTP(S)_PROXY settings and the upload fails with ECONNRESET. v7.0.1
     # reworked the upload path and uploads successfully through the proxy, so
     # every artifact upload in this job is pinned to v7.0.1.
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       if: steps.include-diff.outputs.diff == '1'
       id: upload-diff-artifact
       with:
@@ -180,7 +180,7 @@ jobs:
         diff_comment = f"```diff\n{diff_content}\n```"
         with open('rst_results_comment.txt', 'w') as results_file:
             results_file.write(diff_comment)
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       if: steps.rst-diff.outputs.diff == '1'
       id: upload-rst-diff-artifact
       with:
@@ -223,7 +223,7 @@ jobs:
         diff_comment = f"```diff\n{diff_content}\n```"
         with open('html_results_comment.txt', 'w') as results_file:
             results_file.write(diff_comment)
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       if: steps.html-diff.outputs.diff == '1'
       id: upload-html-diff-artifact
       with:
@@ -247,7 +247,7 @@ jobs:
             });
     - name: Upload HTML documentation artifacts for preview
       if: steps.html-diff.outputs.diff == '1'
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       id: upload-html-docs
       with:
         name: html-documentation-preview
@@ -373,7 +373,7 @@ jobs:
         loader_diff_comment = f"```diff\n{loader_diff_content}\n```"
         with open('loader_results_comment.txt', 'w') as results_file:
             results_file.write(loader_diff_comment)
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       if: steps.loader-source-diff.outputs.diff == '1'
       id: upload-loader-diff-artifact
       with:
@@ -582,7 +582,7 @@ jobs:
             console.log('No reviewer approval found for ABI failure');
             core.setOutput('approved', 'false');
           }
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       id: abi-report-artifact
       continue-on-error: true
       with:
