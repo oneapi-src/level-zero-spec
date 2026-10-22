@@ -446,6 +446,7 @@ name: GetDefaultContext
 details:
     - "The implementation of this function should be lock-free."
     - "This returned context contains all the devices available in the driver."
+    - "The default context is created by the driver, so no $x_context_flags_t can be supplied for it. It follows the memory/performance default established for the driver by $x_init_driver_properties_ext_desc_t at $xInitDrivers time, if one was established; otherwise its memory/performance trade-off is driver implementation specific."
     - "This function does not return error code, to get info about failure user may use $xDriverGetLastErrorDescription function."
     - "In case of failure, this function returns null."
     - "Details on the error can be retrieved using $xDriverGetLastErrorDescription function."
