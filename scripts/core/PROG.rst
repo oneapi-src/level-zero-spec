@@ -1921,10 +1921,12 @@ of the system.
 Modules
 -------
 
-Modules can be created from an IL or directly from native format using ${x}ModuleCreate.
+Modules can be created from an IL, from `PISA`_ assembly text, from OpenCL C source, or directly from native format using ${x}ModuleCreate.
 
 - ${x}ModuleCreate takes a format argument that specifies the input format.
-- ${x}ModuleCreate performs a compilation step when format is IL.
+- ${x}ModuleCreate performs a compilation step when format is IL, PISA assembly text (${X}_MODULE_FORMAT_PISA) or OpenCL C source (${X}_MODULE_FORMAT_OCLC).
+
+.. _PISA: https://intel.github.io/pisa/
 
 The following pseudo-code demonstrates a sequence for creating a module from an OpenCL kernel:
 

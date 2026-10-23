@@ -21,7 +21,7 @@ etors:
       desc: "Format is device native format"
     - name: PISA
       version: "1.20"
-      desc: "Format is PISA intermediate representation"
+      desc: "Format is PISA assembly text, as defined by the Portable ISA (PISA) Specification"
     - name: OCLC
       version: "1.20"
       desc: "Format is OpenCL C source"
@@ -52,16 +52,16 @@ members:
       desc: "[in] Module format passed in with pInputModule"
     - type: "size_t"
       name: inputSize
-      desc: "[in] size of input IL or ISA from pInputModule."
+      desc: "[in] size in bytes of input pointed to by pInputModule"
       init: "0"
     - type: "const uint8_t*"
       name: pInputModule
-      desc: "[in] pointer to IL or ISA"
+      desc: "[in] pointer to input in format as defined by format"
       init: nullptr
     - type: "const char*"
       name: pBuildFlags
       desc: |
-            [in][optional] string containing one or more (comma-separated) compiler flags. If unsupported, flag is ignored with a warning.
+            [in][optional] string containing one or more space-separated compiler flags. If unsupported, flag is ignored with a warning. For $X_MODULE_FORMAT_OCLC, OpenCL C build options (e.g. "-D", "-cl-std") are also accepted.
               - "-$x-opt-disable"
                    - Disable optimizations
               - "-$x-opt-level"
