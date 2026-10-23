@@ -762,6 +762,29 @@ namespace ze {
 </td></tr>
 </table>
 
+## Deprecation
+* Use the `deprecated` mapping to mark anything as deprecated. Do not put deprecation text such as `[DEPRECATED]` or `@deprecated` in `desc` or `details`.
+* `deprecated` is allowed on every document type, on enum etors, and on struct|union members.
+* On a `header`, `deprecated` marks the whole extension as deprecated. It is only allowed in extension files (the header `desc` must contain "Extension"). Every object in the file inherits it, unless the object has its own `deprecated`. Do not change the header `desc` to mark deprecation; the header `desc` affects the DDI table order.
+* `deprecated` requires the following scalar field: {`since`}
+  - `since` is the spec version in which the item became deprecated, e.g. `"1.17"`; it must not be before the item's `version`
+* `deprecated` requires at least one of the following scalar fields: {`use`, `related`, `reason`}
+  - `use` is the replacement symbol, e.g. `$xInitDrivers`; the docs link to it ("Use X instead."). Always set it when a replacement exists.
+  - `related` is a symbol that is not an exact replacement but helps, e.g. the API that now provides the data; the docs link to it ("Related: X."). Use either `use` or `related`, not both.
+  - `use` or `related` may instead be an external link written as `"Text <https://...>"`, for a replacement outside the spec (e.g. a loader layer). The docs show `Text` as the link.
+  - `reason` is a short free-text explanation; if there is no replacement, it must say so, e.g. `"No replacement."`
+* When generating a version older than `since`, the item is not deprecated.
+* The build fails on free-text deprecation markers in `.yml` and `.rst` sources, such as `[DEPRECATED]`, `@deprecated`, `**DEPRECATED**`, `(deprecated)`, or "this extension/API/function/structure ... is deprecated". Use the `deprecated` mapping instead; the generator writes the standard text, badge, and links. Plain prose about other things (for example environment variables) is allowed.
+
+```yml
+type: function
+desc: "Initialize the drivers"
+name: $xInit
+deprecated:
+    since: "1.10"
+    use: $xInitDrivers
+```
+
 ## Extensions
 * Each extensions must be defined in a unique `.yml` file
 * The extension file must be added to the section being extended; i.e. extensions to core APIs must be added to the `core` folder, etc.

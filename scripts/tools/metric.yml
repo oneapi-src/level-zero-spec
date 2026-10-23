@@ -135,9 +135,10 @@ etors:
       version: "1.11"
       value: "0x7ffffffd"
     - name: IP_EXP
-      desc:
-            "1.6": "Metric type: instruction pointer"
-            "1.7": "Metric type: instruction pointer. Deprecated, use $T_METRIC_TYPE_IP."
+      desc: "Metric type: instruction pointer"
+      deprecated:
+          since: "1.7"
+          use: $T_METRIC_TYPE_IP
       value: "0x7ffffffe"
     - name: IP
       desc: "Metric type: instruction pointer"
@@ -412,8 +413,8 @@ params:
             pRawDataSize will be updated by the driver to reflect the actual number of bytes written into the buffer.
             If the size returns the full size requested, the application may need to issue additional reads to
             retrieve any remaining reports that did not fit into the buffer.
-            @deprecated: The behavior of passing in zero size and the function returning the required size is deprecated,
-                         for now it returns only the maximum buffer size regardless of how much data there is available to be read.
+            Passing in zero size to get the required size is deprecated behavior; for now the function returns
+            only the maximum buffer size regardless of how much data there is available to be read.
     - type: uint8_t*
       name: pRawData
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing streamer reports in raw format"

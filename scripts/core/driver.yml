@@ -26,8 +26,10 @@ class: $x
 name: Init
 decl: static
 ordinal: "0"
+deprecated:
+    since: "1.10"
+    use: $xInitDrivers
 details:
-    - "@deprecated since 1.10. Please use zeInitDrivers()"
     - "The application must call this function or zeInitDrivers before calling any other function."
     - "If this function is not called then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
     - "Only one instance of each driver will be initialized per process."
@@ -51,8 +53,10 @@ decl: static
 ordinal: "0"
 analogue:
     - clGetPlatformIDs
+deprecated:
+    since: "1.10"
+    use: $xInitDrivers
 details:
-    - "@deprecated since 1.10. Please use zeInitDrivers()"
     - "Usage of zeInitDrivers and zeDriverGet is mutually exclusive and should not be used together. Usage of them together will result in undefined behavior."
     - "A driver represents a collection of physical devices."
     - "Multiple calls to this function will return identical driver handles, in the same order."
@@ -114,13 +118,13 @@ version: "1.10"
 decl: static
 ordinal: "0"
 details:
-    - "The application must call this function or zeInit before calling any other function. (zeInit is [Deprecated] and is replaced by zeInitDrivers)"
-    - "Calls to zeInit[Deprecated] or InitDrivers will not alter the drivers retrieved through either api."
-    - "Drivers init through zeInit[Deprecated] or InitDrivers will not be reInitialized once init in an application.
+    - "The application must call this function or zeInit before calling any other function."
+    - "Calls to zeInit or InitDrivers will not alter the drivers retrieved through either api."
+    - "Drivers init through zeInit or InitDrivers will not be reInitialized once init in an application.
        The Loader will determine if the already init driver needs to be delivered to the user through the init type flags."
     - "Already init Drivers will not be uninitialized if the call to InitDrivers does not include that driver's type.
        Those init drivers which don't match the init flags will not have their driver handles returned to the user in that InitDrivers call."
-    - "If this function or zeInit[Deprecated] is not called, then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
+    - "If this function or zeInit is not called, then all other functions will return $X_RESULT_ERROR_UNINITIALIZED."
     - "Only one instance of each driver will be initialized per process."
     - "A driver represents a collection of physical devices."
     - "Multiple calls to this function will return identical driver handles, in the same order."

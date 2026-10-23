@@ -58,6 +58,9 @@ desc: "Copy Bandwidth Properties"
 version: "1.4"
 class: $xCommandQueue
 name: $x_copy_bandwidth_exp_properties_t
+deprecated:
+    since: "1.14"
+    reason: "No replacement."
 base: $x_base_properties_t
 members:
     - type: uint32_t
@@ -68,4 +71,3 @@ members:
       desc: "[out] copy bandwidth unit"
 details:
     - "This structure may be passed to $xDeviceGetCommandQueueGroupProperties by having the pNext member of $x_command_queue_group_properties_t point at this struct."
-    - "1.14": "[DEPRECATED]"

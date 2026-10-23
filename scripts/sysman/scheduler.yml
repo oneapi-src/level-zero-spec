@@ -22,9 +22,11 @@ etors:
     - name: EXCLUSIVE
       desc: "Any application or context can run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work."
     - name: COMPUTE_UNIT_DEBUG
-      desc:
-        "1.0": "This is a special mode that must ben enabled when debugging an application that uses this device e.g. using the Level0 Debug API. It has the effect of disabling any timeouts on workload execution time and will change workload scheduling to ensure debug accuracy."
-        "1.8": "[DEPRECATED] No longer supported."
+      desc: "This is a special mode that must ben enabled when debugging an application that uses this device e.g. using the Level0 Debug API. It has the effect of disabling any timeouts on workload execution time and will change workload scheduling to ensure debug accuracy."
+      deprecated:
+          since: "1.8"
+          related: $tDebugAttach
+          reason: "Enable debugging with ZET_ENABLE_PROGRAM_DEBUGGING, and select devices with ZE_AFFINITY_MASK."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Properties related to scheduler component"
@@ -253,12 +255,15 @@ type: function
 desc: "Change scheduler mode to $S_SCHED_MODE_COMPUTE_UNIT_DEBUG"
 class: $sScheduler
 name: SetComputeUnitDebugMode
+deprecated:
+    since: "1.8"
+    related: $tDebugAttach
+    reason: "Enable debugging with ZET_ENABLE_PROGRAM_DEBUGGING, and select devices with ZE_AFFINITY_MASK."
 details:
     - "This is a special mode that must ben enabled when debugging an application that uses this device e.g. using the Level0 Debug API."
     - "It ensures that only one command queue can execute work on the hardware at a given time. Work is permitted to run as long as needed without enforcing any scheduler fairness policies."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_sched_handle_t
       name: hScheduler

@@ -19,10 +19,6 @@ from templates import helper as th
  Image View Extension
 =========================
 
-%if _version_compare_gequal(ver, "1.5"):
-This experimental extension is deprecated and replaced by the :ref:`${th.subt(namespace, tags, X)}_extension_image_view <${th.subt(namespace, tags, X)}_extension_image_view>` standard extension.
-%endif
-
 API
 ----
 

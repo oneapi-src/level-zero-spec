@@ -12,7 +12,7 @@ import glob
 import json
 import fnmatch
 import subprocess
-from parse_specs import _version_compare_less, _version_compare_equal, _version_compare_greater, _version_compare_lequal, _version_compare_gequal
+from parse_specs import RE_DEPRECATION_MARKER, _version_compare_less, _version_compare_equal, _version_compare_greater, _version_compare_lequal, _version_compare_gequal
 from templates import helper as th
 
 RE_ENABLE   = r"^\#\#\s*\-\-validate\s*\=\s*on$"
@@ -119,6 +119,13 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
         if not enable:
             outlines.append(line)
             continue
+
+        # deprecation is shown from the YAML 'deprecated' field, never free text
+        m = RE_DEPRECATION_MARKER.search(line)
+        if m:
+            error_msg = "%s(%s) : error : free-text deprecation marker '%s'; put a 'deprecated' field on the YAML object instead (see YaML.md)"%(fin, iline+1, m.group(0))
+            print(error_msg)
+            util.makeError(error_msg)
 
         # new line will contain proper tags for reStructuredText if needed
         newline = line
@@ -303,6 +310,64 @@ def _inject_etor_versions_html(htmlpath):
                 f.truncate()
 
 """
+    Turn the generated "[DEPRECATED since X]" text tag (see helper.make_deprecated_tag)
+    into a styled badge wherever it shows: briefs, enum values, members, params.
+    Text only -- never inside a tag's attributes.
+    Also drop what the page callout already says: doxygen's "Deprecated: Since X."
+    block made from the generated @deprecated (helper.make_details_lines), and the
+    tag on the brief of an object that has a callout.
+"""
+def _badge_deprecated_html(htmlpath):
+    tag_re = re.compile(r'\[DEPRECATED since (\d+\.\d+)\](?![^<]*>)')
+    block_re = re.compile(r'<p><dl>\s*<dt class="sig sig-object cpp">\s*<em><span class="pre">'
+                          r'Deprecated:</span></em></dt>\s*<dd><p>Since \d+\.\d+\.'
+                          r'(?:(?!</dd>).)*</dd></dl>\s*</p>\s*', re.S)
+    # the brief's tag right under a page callout repeats it; enum values, members
+    # and params have no callout, so they keep their badge
+    brief_re = re.compile(r'(<p class="api-deprecated">(?:(?!</p>).)*</p>\s*<dl class="cpp [^"]+">'
+                          r'\s*<dt (?:(?!</dt>).)*</dt>\s*<dd><p>)\[DEPRECATED since \d+\.\d+\]\s*', re.S)
+    for fn in glob.iglob(os.path.join(os.path.abspath(htmlpath), "**", "*.html"), recursive=True):
+        with open(fn, encoding="utf-8") as f:
+            data = f.read()
+        new = brief_re.sub(r'\1', data)
+        new = tag_re.sub(r'<span class="deprecated-badge">Deprecated since \1</span>', new)
+        new = block_re.sub('', new)
+        if new != data:
+            with open(fn, "w", encoding="utf-8") as f:
+                f.write(new)
+
+"""
+    Point cross-references at an API's section heading (e.g. #zeinitdrivers) rather
+    than its signature anchor (#ze__api_8h_1a...), which lands below the heading.
+    Only ids of the section's own first definition are retargeted, so links to enum
+    values or struct members still land on their row.
+"""
+def _retarget_api_links_html(htmlpath):
+    files = glob.glob(os.path.join(os.path.abspath(htmlpath), "**", "*.html"), recursive=True)
+    sec_re = re.compile(r'<section id="([^"]+)">((?:(?!<section|</dt>).)*?<h[1-6][^>]*>'
+                        r'(?:(?!<section|</dt>).)*?<dt class="sig sig-object[^"]*"(?:(?!</dt>).)*)</dt>',
+                        re.S)
+    pages, targets = {}, {}
+    for fn in files:
+        with open(fn, encoding="utf-8") as f:
+            pages[fn] = f.read()
+        for m in sec_re.finditer(pages[fn]):
+            dt = m.group(2)[m.group(2).rfind('<dt '):]
+            for i in re.findall(r'id="([^"]+)"', dt):
+                targets[(fn, i)] = m.group(1)
+
+    ref_re = re.compile(r'(<a class="reference internal" href=")([^"#]*)#([^"]+)"')
+    for fn, data in pages.items():
+        def repl(m):
+            page = os.path.normpath(os.path.join(os.path.dirname(fn), m.group(2))) if m.group(2) else fn
+            sec = targets.get((page, m.group(3)))
+            return '%s%s#%s"'%(m.group(1), m.group(2), sec) if sec else m.group(0)
+        new = ref_re.sub(repl, data)
+        if new != data:
+            with open(fn, "w", encoding="utf-8") as f:
+                f.write(new)
+
+"""
     Reproduce Sphinx's HTML id for a heading/label from an object name, so we can
     build cross-page anchor links without a Sphinx round-trip. For the identifier
     names used here this matches nodes.make_id: lower-case, non-alphanumerics ->
@@ -343,16 +408,20 @@ def _common_func_prefix(names):
 # Structures". Base ("") gets no suffix. Empty adjective => base behavior.
 _TIERS = [("base", "apis", "APIs", ""),
           ("ext", "extensions", "Extensions", "Extension"),
-          ("exp", "experimental", "Experimental", "Experimental")]
+          ("exp", "experimental", "Experimental", "Experimental"),
+          ("deprecated", "deprecated", "Deprecated", "Deprecated")]
 
 """
-    per-object maturity derived from its name: 'exp' (experimental), 'ext' (stable
-    extension), or 'base'. Uses the reliable object-name signal (Exp/Ext suffix on
+    per-object maturity: 'deprecated' if it has a 'deprecated' record, else derived
+    from its name: 'exp' (experimental), 'ext' (stable extension), or 'base'. Uses the reliable object-name signal (Exp/Ext suffix on
     functions, _exp_/_ext_ on type names) rather than the header desc (whose parse
     regex is anchored/broken -- see TODO.md). Base files are internally mixed
     (device.yml = base + ext), so maturity MUST be per-object, not per-file.
 """
 def _obj_maturity(obj):
+    # deprecated objects leave their tier, whatever their maturity
+    if obj.get('deprecated'):
+        return "deprecated"
     name = obj.get('name', "")
     if re.search(r"Exp[0-9]*$", name) or re.search(r"_exp[0-9]*_", name):
         return "exp"
@@ -534,7 +603,7 @@ def _class_pages(buckets, meta, namespace, tags, tier_title="", tier_adjective="
     non-empty tiers: [{'dir','title','pages':[{slug,title,objects}]}].
 """
 def _build_tiers(specs, meta, namespace, tags):
-    buckets = {"base": {}, "ext": {}, "exp": {}}
+    buckets = {"base": {}, "ext": {}, "exp": {}, "deprecated": {}}
     for s in specs:
         for obj in s['objects']:
             if not re.match(RE_API_OBJ_TYPE, obj['type']):
@@ -578,6 +647,33 @@ def _extension_version_maps(specs, namespace, tags):
     return enum_ver, struct_ver
 
 """
+    Map each enum/struct/union (SUBSTITUTED name) to its 'deprecated' record, for
+    extension doc pages. Includes records inherited from a deprecated extension header.
+"""
+def _extension_deprecation_map(specs, namespace, tags):
+    return {th.subt(namespace, tags, obj['name']): obj['deprecated']
+            for s in specs for obj in s['objects']
+            if obj.get('deprecated') and re.match(r"enum|struct|union", obj['type'])}
+
+"""
+    Map each object (SUBSTITUTED name) to its extension name: the value of the
+    nearest preceding *_NAME macro in its file, e.g. ZE_experimental_power_saving_hint.
+"""
+def _extension_name_map(specs, namespace, tags):
+    names = {}
+    for s in specs:
+        ext = None
+        for obj in s['objects']:
+            if obj['type'] == 'macro' and obj['name'].endswith('_NAME'):
+                ext = th.subt(namespace, tags, obj.get('value', '')).strip('"\'')
+            elif ext:
+                names[th.subt(namespace, tags, obj['name'])] = ext
+    return names
+
+def _page_refs(text, name):
+    return name in text or name.replace('_', '-') in text
+
+"""
     Resolve an extension page's introduced spec version:
       1. the version enum it references (authoritative), else
       2. the earliest structure_type-etor version among its ext/exp structs, else None.
@@ -586,23 +682,107 @@ def _extension_version_maps(specs, namespace, tags):
     enum (generate_rst turns None into a build error, no manual override).
 """
 def _extension_intro_version(text, enum_ver, struct_ver):
-    def refd(name):
-        return name in text or name.replace('_', '-') in text
     for table in (enum_ver, struct_ver):
-        hits = [v for n, v in table.items() if refd(n)]
+        hits = [v for n, v in table.items() if _page_refs(text, n)]
         if hits:
             return min(hits, key=th.version_key)
     return None
 
 """
+    Resolve an extension page's 'deprecated' record from the same object that sets
+    its introduced version: the earliest version enum it references, else its ext/exp
+    structs (only if all of them are deprecated). Returns (object name, record);
+    record is None if not deprecated.
+"""
+def _extension_deprecation(text, enum_ver, struct_ver, dep_map):
+    hits = [n for n in enum_ver if _page_refs(text, n)]
+    if hits:
+        name = min(hits, key=lambda n: th.version_key(enum_ver[n]))
+        return name, dep_map.get(name)
+    hits = [n for n in struct_ver if _page_refs(text, n)]
+    recs = [dep_map.get(n) for n in hits]
+    return (hits[0], recs[0]) if recs and all(recs) else (None, None)
+
+"""
+    RST list-table rows for one deprecated item: name, since, replacement, notes.
+"""
+def _deprecated_row(item, dep, namespace, tags, meta):
+    if 'use' in dep:
+        use = th.make_symbol_ref(namespace, tags, dep['use'], meta)
+    elif 'related' in dep:
+        use = "Related: " + th.make_symbol_ref(namespace, tags, dep['related'], meta)
+    else:
+        use = "--"
+    reason = th.subt(namespace, tags, dep.get('reason', ""))
+    return ["   * - %s" % item, "     - %s" % dep['since'], "     - %s" % use, "     - %s" % reason]
+
+"""
+    Write <section>/deprecated.rst: every deprecated extension, function, enum,
+    struct, enum value and member in the section, each with its replacement link.
+    Objects deprecated only through their extension are listed via the extension.
+    Returns False (and writes nothing) if nothing is deprecated.
+"""
+def _write_deprecated_page(dstpath, title, ext_deps, specs, namespace, tags, meta, has_tier):
+    groups = {k: [] for k in ("Extensions", "Functions", "Enumerations", "Structures",
+                              "Enumeration values", "Structure members", "Other")}
+    for doc, ext_name, dep in ext_deps:
+        groups["Extensions"].append((":doc:`%s <%s>`" % (ext_name, doc), dep))
+    for s in specs:
+        for obj in s['objects']:
+            t, dep = obj['type'], obj.get('deprecated')
+            if dep and not dep.get('from_header'):
+                name = th.make_func_name(namespace, tags, obj) if t == 'function' \
+                    else th.subt(namespace, tags, obj['name'])
+                if t == 'function' and 'condition' not in obj:
+                    groups["Functions"].append((":ref:`%s`" % name, dep))
+                elif t == 'enum':
+                    groups["Enumerations"].append((":ref:`%s`" % name.replace("_", "-"), dep))
+                elif t in ('struct', 'union'):
+                    groups["Structures"].append((":ref:`%s`" % name.replace("_", "-"), dep))
+                elif not (t == 'macro' and name.endswith('_NAME')):  # covered by its extension row
+                    groups["Other"].append(("``%s``" % name, dep))
+            tname = th.subt(namespace, tags, obj.get('name', ""))
+            for et in obj.get('etors', []) if t == 'enum' else []:
+                if et.get('deprecated'):
+                    groups["Enumeration values"].append(
+                        (th.make_symbol_ref(namespace, tags, et['name'], meta), et['deprecated']))
+            for m in obj.get('members', []) if t in ('struct', 'union') else []:
+                if m.get('deprecated'):
+                    groups["Structure members"].append((":ref:`%s.%s <%s>`" % (
+                        tname, m['name'], tname.replace("_", "-")), m['deprecated']))
+    if not any(groups.values()):
+        return False
+
+    bar = "=" * max(60, len(title))
+    lines = [bar, title, bar, "",
+             "Everything below is deprecated. Use the replacement where one is listed.", ""]
+    if has_tier:
+        lines += ["The reference pages are under :doc:`Deprecated APIs <api/deprecated/index>`.", ""]
+    for label, rows in groups.items():
+        if not rows:
+            continue
+        lines += [label, "-" * len(label), "",
+                  ".. list-table::", "   :header-rows: 1", "   :widths: 28 6 28 38",
+                  "   :class: deprecated-table", "",
+                  "   * - Name", "     - Since", "     - Replacement", "     - Notes"]
+        for item, dep in sorted(rows, key=lambda r: r[0].lower()):
+            lines += _deprecated_row(item, dep, namespace, tags, meta)
+        lines.append("")
+    with open(os.path.join(dstpath, "deprecated.rst"), "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    return True
+
+"""
     Inject the "Introduced in Level Zero version X.Y" note just after an extension
     page's title block (overline/title/underline).
 """
-def _inject_ext_version(fout, text, version):
+def _inject_ext_version(fout, text, version, deprecated_rst=""):
     m = re.search(r'^={3,}[ \t]*\n.+\n={3,}[ \t]*\n', text, re.M)
     if not m:
         return
     note = "\n.. rst-class:: ext-version\n\n*Introduced in Level Zero version %s*\n" % version
+    if deprecated_rst:
+        note += "\n.. rst-class:: api-deprecated\n\n%s\n" % deprecated_rst
     text = text[:m.end()] + note + text[m.end():]
     with open(fout, "w", encoding="utf-8") as f:
         f.write(text)
@@ -619,6 +799,9 @@ def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta):
     util.makePath(dstpath)
     util.removeFiles(dstpath, "*.rst")
     enum_ver, struct_ver = _extension_version_maps(specs, namespace, tags)
+    dep_map = _extension_deprecation_map(specs, namespace, tags)
+    ext_names = _extension_name_map(specs, namespace, tags)
+    ext_deps = []
     for fin in util.findFiles(srcpath, "*.rst"):
         fout = os.path.join(dstpath, os.path.basename(fin))
         loc += _generate_valid_rst(os.path.abspath(fin), fout, namespace, tags, ver, rev, meta)
@@ -631,7 +814,12 @@ def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta):
                 _text = f.read()
             _v = _extension_intro_version(_text, enum_ver, struct_ver)
             if _v:
-                _inject_ext_version(fout, _text, _v)
+                _obj, _dep = _extension_deprecation(_text, enum_ver, struct_ver, dep_map)
+                if _dep:
+                    _doc = os.path.splitext(os.path.basename(fin))[0]
+                    ext_deps.append((_doc, ext_names.get(_obj, _doc), _dep))
+                _inject_ext_version(fout, _text, _v, th.make_deprecated_rst(
+                    namespace, tags, {'deprecated': _dep}, meta) if _dep else "")
             else:
                 util.makeError("%s : extension page has no resolvable version -- it "
                                "must reference its *_version_t enum (in an Enumerations "
@@ -702,6 +890,9 @@ def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta):
                 maxdepth=1)
             tier_entries.append("api/%s/index" % tier['dir'])
 
+        _write_deprecated_page(dstpath, groupname + " - Deprecated", ext_deps, specs,
+                               namespace, tags, meta, "api/deprecated/index" in tier_entries)
+
         # section index: toctree of the tier landing pages
         util.makoWrite(
             os.path.join("templates", "api_listing.mako"),
@@ -758,7 +949,7 @@ def generate_common(dstpath, sections, ver, rev, versions_url, warnings_as_error
 
     # generate sphinx configuration file with version
     loc = 0
-    for fn in ["conf.py", "index.rst", "api.rst", "versions.rst"]:
+    for fn in ["conf.py", "index.rst", "api.rst", "deprecated.rst", "versions.rst"]:
         loc += util.makoWrite(
             "./templates/%s.mako" % fn,
             os.path.join(sourcepath, fn),
@@ -847,6 +1038,8 @@ def generate_html(dstpath, warnings_as_errors=True):
     # (on pinned Breathe/Sphinx output) rather than on Doxygen's XML for cross-env parity.
     _ensure_etor_since_loaded(dstpath)
     _inject_etor_versions_html(os.path.join(dstpath, "html"))
+    _retarget_api_links_html(os.path.join(dstpath, "html"))
+    _badge_deprecated_html(os.path.join(dstpath, "html"))
 
 """
 Entry-point:

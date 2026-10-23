@@ -47,4 +47,4 @@ The following rules apply:
 * A context that explicitly sets its own ${x}_context_flags_t flags overrides the driver-level default for that context.
 * The default context returned by ${x}DriverGetDefaultContext is created by the driver itself, not via ${x}ContextCreate or ${x}ContextCreateEx, so the application cannot supply ${x}_context_flags_t for it. The default context follows the driver-level default established by this structure, if one was established; otherwise its memory/performance trade-off is driver implementation specific.
 * If this structure is not provided, the driver must assume no driver-wide properties were requested and fall back to its standard default behavior for each unset flag.
-* This structure has no effect on drivers already initialized by a prior call to ${x}InitDrivers or ${x}Init[Deprecated]; those drivers keep whatever behavior was in effect when they were first initialized.
+* This structure has no effect on drivers already initialized by a prior call to ${x}InitDrivers or ${x}Init; those drivers keep whatever behavior was in effect when they were first initialized.

@@ -35,7 +35,7 @@ Avoid using both the zesInit() API and the ZES_ENABLE_SYSMAN=1 environment varia
 %endif
 %if _version_compare_gequal(ver, "1.16"):
 
-**DEPRECATION NOTICE:** The ZES_ENABLE_SYSMAN environment variable is deprecated as of version 1.16.
+**Note:** The ZES_ENABLE_SYSMAN environment variable is deprecated as of version 1.16.
 Applications should use ${s}Init() for initialization instead. The environment variable is maintained
 only for backward compatibility with legacy applications.
 %endif
@@ -47,7 +47,7 @@ The following environment variables are optional
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Sysman          | ZES_ENABLE_SYSMAN                   | {**0**, 1} | **@deprecated since 1.16** Use ${s}Init() instead.                                 |
+| Sysman          | ZES_ENABLE_SYSMAN                   | {**0**, 1} | Deprecated since 1.16. Use ${s}Init() instead.                                     |
 |                 |                                     |            | Enables driver initialization and dependencies for system management              |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Sysman          | ZES_ENABLE_SYSMAN_LOW_POWER         | {**0**, 1} | Driver initializes the device in low power mode                                   |

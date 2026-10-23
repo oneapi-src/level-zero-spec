@@ -30,7 +30,7 @@ The following environment variables are required to be enabled during ${x}Init f
 +=================+=====================================+============+===================================================================================+
 | Tools           | ${T}_ENABLE_API_TRACING_EXP          | {**0**, 1} | Enables driver instrumentation for API tracing                                    |
 %if _version_compare_gequal(ver, "1.5"):
-|                 |                                     |            | **Note**: This tracing environment variable is **deprecated**. Please use the     |
+|                 |                                     |            | **Note**: This tracing environment variable is deprecated. Please use the         |
 |                 |                                     |            | tracing loader layer instead.                                                     |
 %endif
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+

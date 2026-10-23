@@ -666,7 +666,7 @@ def make_etor_lines(namespace, tags, obj, py=False, meta=None):
             prologue = "%s,"%(name)
 
         comment_style = "##" if py else "///<"
-        for line in split_line(subt(namespace, tags, item['desc'], True), 70):
+        for line in split_line(_make_item_desc(namespace, tags, item), 70):
             lines.append("%s%s %s"%(append_ws(prologue, 72), comment_style, line))
             prologue = ""
 
@@ -814,7 +814,7 @@ def make_member_lines(namespace, tags, obj, prefix="", py=False, meta=None):
 
         comment_style = "##" if py else "///<"
         ws_count = 64 if py else 72
-        for line in split_line(subt(namespace, tags, item['desc'], True), 70):
+        for line in split_line(_make_item_desc(namespace, tags, item), 70):
             lines.append("%s%s %s"%(append_ws(prologue, ws_count), comment_style, line))
             prologue = ""
     return lines
@@ -859,8 +859,7 @@ def make_param_lines(namespace, tags, obj, py=False, decl=False, meta=None, form
                     prologue += delim
 
             if "desc" in format:
-                desc = item['desc']
-                for line in split_line(subt(namespace, tags, desc, True), 70):
+                for line in split_line(_make_item_desc(namespace, tags, item), 70):
                     lines.append("%s///< %s"%(append_ws(prologue, 72), line))
                     prologue = ""
             else:
@@ -870,6 +869,99 @@ def make_param_lines(namespace, tags, obj, py=False, decl=False, meta=None, form
         lines = ["void"]
     return lines
 
+# deprecated 'use'/'related' may be an external link: "Text <https://...>"
+RE_EXTERNAL_LINK = re.compile(r"^\s*(.+?)\s*<(https?://[^>\s]+)>\s*$")
+
+"""
+Public:
+    returns the standard deprecation tag, or "" if obj is not deprecated
+    format: "[DEPRECATED since X]"
+"""
+def make_deprecated_tag(obj):
+    dep = obj.get('deprecated')
+    return "[DEPRECATED since %s]"%dep['since'] if dep else ""
+
+"""
+Public:
+    returns the standard deprecation note body, or "" if obj is not deprecated
+    format: "REASON Use REPLACEMENT instead." or "REASON Related: SYMBOL."
+"""
+def make_deprecated_note(namespace, tags, obj):
+    dep = obj.get('deprecated')
+    if not dep:
+        return ""
+    words = []
+    if 'reason' in dep:
+        words.append(dep['reason'])
+    # "Text <URL>" reads as "Text (URL)" in comments; doxygen takes <...> for HTML
+    target = RE_EXTERNAL_LINK.sub(r"\1 (\2)", dep.get('use', dep.get('related', "")))
+    if 'use' in dep:
+        words.append("Use %s instead."%target)
+    elif 'related' in dep:
+        words.append("Related: %s."%target)
+    return subt(namespace, tags, " ".join(words), True)
+
+"""
+Public:
+    returns an RST :ref: to a symbol's doc anchor; an extension-name macro links to
+    its extension page. Sphinx -W fails the build if the target does not exist.
+"""
+def make_symbol_ref(namespace, tags, symbol, meta):
+    ext = RE_EXTERNAL_LINK.match(symbol)
+    if ext:
+        return "`%s <%s>`__"%(ext.group(1), ext.group(2))
+    name = subt(namespace, tags, symbol)
+    for enum, info in meta.get('enum', {}).items():
+        if symbol in info.get('etors', []):
+            return ":ref:`%s <%s>`"%(name, subt(namespace, tags, enum).replace("_", "-"))
+    macro = meta.get('macro', {}).get(symbol)
+    if macro:
+        if not macro['values']:
+            raise Exception("cannot link macro without a value: %s"%symbol)
+        label = subt(namespace, tags, macro['values'][0]).strip('"')
+        return ":ref:`%s <%s>`"%(label, label)
+    if name.endswith("_t"):
+        return ":ref:`%s`"%name.replace("_", "-")
+    if re.match(r"^[a-z]+[A-Z]\w*$", name):
+        return ":ref:`%s`"%name
+    raise Exception("cannot link deprecated 'use' symbol: %s"%symbol)
+
+"""
+Public:
+    returns the RST deprecation callout text for a doc page, or "" if not deprecated
+    format: "**Deprecated** since X. REASON Use :ref:`REPLACEMENT` instead."
+"""
+def make_deprecated_rst(namespace, tags, obj, meta):
+    dep = obj.get('deprecated')
+    if not dep:
+        return ""
+    words = ["**Deprecated** since %s."%dep['since']]
+    if 'reason' in dep:
+        words.append(subt(namespace, tags, dep['reason']))
+    if 'use' in dep:
+        words.append("Use %s instead."%make_symbol_ref(namespace, tags, dep['use'], meta))
+    elif 'related' in dep:
+        words.append("Related: %s."%make_symbol_ref(namespace, tags, dep['related'], meta))
+    return " ".join(words)
+
+"""
+Private:
+    returns an etor/member/param desc with the deprecation tag and note added;
+    the tag goes after any leading annotations such as [in][optional][range(...)]
+    format: "[out] [DEPRECATED since X] DESCRIPTION REASON Use REPLACEMENT instead."
+"""
+def _make_item_desc(namespace, tags, item):
+    desc = subt(namespace, tags, item['desc'], True)
+    if not item.get('deprecated'):
+        return desc
+    m = re.match(r"((?:\[[^\]]*\]\s*)*)(.*)", desc, re.S)
+    body = m.group(2).strip()
+    note = make_deprecated_note(namespace, tags, item)
+    if note and body and body[-1] not in ".!?":
+        body += "."
+    words = [m.group(1).strip(), make_deprecated_tag(item), body, note]
+    return " ".join(w for w in words if w)
+
 """
 Public:
     returns a list of strings for the description
@@ -878,7 +970,10 @@ Public:
 def make_desc_lines(namespace, tags, obj):
     lines = []
     prologue = "@brief"
-    for line in split_line(subt(namespace, tags, obj['desc'], True), 70):
+    desc = subt(namespace, tags, obj['desc'], True)
+    if obj.get('deprecated'):
+        desc = make_deprecated_tag(obj) + " " + desc
+    for line in split_line(desc, 70):
         lines.append("%s %s"%(prologue, line))
         prologue = "      "
     return lines
@@ -911,6 +1006,14 @@ def make_details_lines(namespace, tags, obj):
                 for line in split_line(subt(namespace, tags, item, True), 70):
                         lines.append("%s %s"%(prologue, line))
                         prologue = "     "
+    # doxygen renders this as a "Deprecated" block and adds it to its deprecated list
+    if obj.get('deprecated'):
+        lines.append("")
+        prologue = "@deprecated"
+        note = "Since %s. %s"%(obj['deprecated']['since'], make_deprecated_note(namespace, tags, obj))
+        for line in split_line(note.strip(), 70):
+            lines.append("%s %s"%(prologue, line))
+            prologue = "           "
     if 'analogue' in obj:
         lines.append("")
         lines.append("@remarks")

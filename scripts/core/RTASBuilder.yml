@@ -9,6 +9,9 @@
 type: header
 desc: "Intel $OneApi Level-Zero Extension for supporting ray tracing acceleration structure builder."
 version: "1.7"
+deprecated:
+    since: "1.13"
+    use: $X_RTAS_EXT_NAME
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Ray Tracing Acceleration Structure Builder Extension Name"

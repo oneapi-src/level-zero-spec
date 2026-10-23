@@ -61,6 +61,12 @@ ${"-" * len(fname)}
 .. rst-class:: api-version
 
 *Added in version ${obj.get('version', '1.0')}*
+%if obj.get('deprecated'):
+
+.. rst-class:: api-deprecated
+
+${th.make_deprecated_rst(n, tags, obj, meta)}
+%endif
 
 .. doxygenfunction:: ${fname}
     :project: LevelZero
@@ -91,6 +97,12 @@ ${"-" * len(tname)}
 .. rst-class:: api-version
 
 *Added in version ${obj.get('version', '1.0')}*
+%if obj.get('deprecated'):
+
+.. rst-class:: api-deprecated
+
+${th.make_deprecated_rst(n, tags, obj, meta)}
+%endif
 
 .. doxygenenum:: ${th.make_enum_name(n, tags, obj)}
     :project: LevelZero
@@ -120,6 +132,12 @@ ${"-" * len(tname)}
 .. rst-class:: api-version
 
 *Added in version ${obj.get('version', '1.0')}*
+%if obj.get('deprecated'):
+
+.. rst-class:: api-deprecated
+
+${th.make_deprecated_rst(n, tags, obj, meta)}
+%endif
 
 %if re.match(r"struct", obj['type']):
 .. doxygenstruct:: ${tname}

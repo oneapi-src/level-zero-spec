@@ -148,6 +148,10 @@ type: enum
 desc: "Overclocking modes"
 class: $sFrequency
 name: $s_oc_mode_t
+deprecated:
+    since: "1.8"
+    use: $s_overclock_mode_t
+    reason: "Overclocking moved to the Overclock API."
 etors:
     - name: "OFF"
       value: "0"
@@ -158,17 +162,18 @@ etors:
       desc: "Overclock interpolative mode - In this mode, the voltage/frequency curve can be extended with a new voltage/frequency point that will be interpolated. The existing voltage/frequency points can also be offset (up or down) by a fixed voltage. This mode disables FIXED and OVERRIDE modes."
     - name: FIXED
       desc: "Overclocking fixed Mode - In this mode, hardware will disable most frequency throttling and lock the frequency and voltage at the specified overclock values. This mode disables OVERRIDE and INTERPOLATIVE modes. This mode can damage the part, most of the protections are disabled on this mode."  
-details:
-    - "1.8": "[DEPRECATED] No longer supported."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Overclocking properties"
 class: $sFrequency
 name: $s_oc_capabilities_t
+deprecated:
+    since: "1.8"
+    use: $s_overclock_properties_t
+    reason: "Overclocking moved to the Overclock API."
 base: $s_base_capability_t
 details:
     - "Provides all the overclocking capabilities and properties supported by the device for the frequency domain."
-    - "1.8": "[DEPRECATED] No longer supported."
 members:
     - type: $x_bool_t
       name: isOcSupported
@@ -340,10 +345,13 @@ type: function
 desc: "Get the overclocking capabilities."
 class: $sFrequency
 name: OcGetCapabilities
+deprecated:
+    since: "1.8"
+    use: $sOverclockGetDomainProperties
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -356,10 +364,13 @@ type: function
 desc: "Get the current overclocking frequency target, if extended moded is supported, will returned in 1 Mhz granularity."
 class: $sFrequency
 name: OcGetFrequencyTarget
+deprecated:
+    since: "1.8"
+    use: $sOverclockGetControlCurrentValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -381,10 +392,13 @@ type: function
 desc: "Set the current overclocking frequency target, if extended moded is supported, can be set in 1 Mhz granularity."
 class: $sFrequency
 name: OcSetFrequencyTarget
+deprecated:
+    since: "1.8"
+    use: $sOverclockSetControlUserValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -406,10 +420,13 @@ type: function
 desc: "Get the current overclocking voltage settings."
 class: $sFrequency
 name: OcGetVoltageTarget
+deprecated:
+    since: "1.8"
+    use: $sOverclockGetControlCurrentValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -434,10 +451,13 @@ type: function
 desc: "Set the current overclocking voltage settings."
 class: $sFrequency
 name: OcSetVoltageTarget
+deprecated:
+    since: "1.8"
+    use: $sOverclockSetControlUserValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -462,10 +482,13 @@ type: function
 desc: "Set the current overclocking mode."
 class: $sFrequency
 name: OcSetMode
+deprecated:
+    since: "1.8"
+    use: $sOverclockSetControlUserValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -487,10 +510,13 @@ type: function
 desc: "Get the current overclocking mode."
 class: $sFrequency
 name: OcGetMode
+deprecated:
+    since: "1.8"
+    use: $sOverclockGetControlCurrentValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -512,10 +538,13 @@ type: function
 desc: "Get the maximum current limit setting."
 class: $sFrequency
 name: OcGetIccMax
+deprecated:
+    since: "1.8"
+    use: $sOverclockGetControlCurrentValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -532,11 +561,14 @@ type: function
 desc: "Change the maximum current limit setting."
 class: $sFrequency
 name: OcSetIccMax
+deprecated:
+    since: "1.8"
+    use: $sOverclockSetControlUserValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "Setting ocIccMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -559,10 +591,13 @@ type: function
 desc: "Get the maximum temperature limit setting."
 class: $sFrequency
 name: OcGetTjMax
+deprecated:
+    since: "1.8"
+    use: $sOverclockGetControlCurrentValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency
@@ -578,11 +613,14 @@ type: function
 desc: "Change the maximum temperature limit setting."
 class: $sFrequency
 name: OcSetTjMax
+deprecated:
+    since: "1.8"
+    use: $sOverclockSetControlUserValue
+    reason: "Overclocking moved to the Overclock API."
 details:
     - "Setting ocTjMax to 0.0 will return the value to the factory default."
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
-    - "1.8": "[DEPRECATED] No longer supported."
 params:
     - type: $s_freq_handle_t
       name: hFrequency

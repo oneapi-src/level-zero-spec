@@ -152,9 +152,11 @@ members:
     - type: uint64_t
       name: size
       desc: |
-            [out] The total allocatable memory in bytes (can be less than the `physicalSize` member of $s_mem_properties_t). *DEPRECATED* 
-             This member can no longer track the allocatable memory reliably. Clients depending on this information can use the 
-             zeDeviceGetProperties with ze_device_usablemem_size_ext_properties_t extension to get information of the available usable memory.
+            [out] The total allocatable memory in bytes (can be less than the `physicalSize` member of $s_mem_properties_t).
+      deprecated:
+          since: "1.15"
+          use: $x_device_usablemem_size_ext_properties_t
+          reason: "This member can no longer track the allocatable memory reliably."
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Memory bandwidth"
@@ -187,9 +189,12 @@ desc: "Extension properties for Memory bandwidth"
 version: "1.7"
 class: $sMemory
 name: $s_mem_ext_bandwidth_t
+deprecated:
+    since: "1.8"
+    use: $s_mem_bandwidth_counter_bits_exp_properties_t
+    reason: "The original struct lacked an stype field."
 details:
     - "Number of counter bits"
-    - "1.8": "[DEPRECATED] No longer supported."
 members:
     - type: uint32_t
       name: memoryTimestampValidBits

@@ -14,6 +14,14 @@ import copy
 from templates.helper import param_traits, type_traits, value_traits, get_tag, version_key
 
 default_version = "1.0"
+
+# free-text deprecation markers and "this extension/API/... is deprecated" notes;
+# the 'deprecated' field replaces them (see YaML.md). Other prose (env vars,
+# behavior, sample code comments) stays allowed.
+RE_DEPRECATION_MARKER = re.compile(
+    r"\[deprecated|@deprecated|\*+deprecat|\(deprecated|deprecation\s+(?:warning|notice)|\bdeprecated,\s*use\b"
+    r"|\b(?:extension|api|function|structure|struct|flag|member|enum)\b[^.]{0,80}?\b(?:is|has\s+been)\s+deprecated",
+    re.I)
 all_versions = ["1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "2.0"]
 
 """
@@ -114,6 +122,44 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception(prefix+"'version' must be a string: '%s'"%type(d['version']))
 
         return d.get('version', base_version)
+
+    # 'deprecated' is the one structured deprecation marker; see YaML.md
+    def __validate_deprecated(d, prefix="", base_version=default_version):
+        if 'deprecated' not in d:
+            return
+        dep = d['deprecated']
+        if not isinstance(dep, dict):
+            raise Exception(prefix+"'deprecated' must be a mapping: '%s'"%type(dep))
+        extra = set(dep) - {'since', 'use', 'related', 'reason'}
+        if extra:
+            raise Exception(prefix+"'deprecated' has unknown keys: %s"%sorted(extra))
+        if 'since' not in dep:
+            raise Exception(prefix+"'deprecated' requires 'since'")
+        # readers must find the replacement, or be told there is none
+        if not ({'use', 'related', 'reason'} & set(dep)):
+            raise Exception(prefix+"'deprecated' requires 'use', 'related' or 'reason' (e.g. \"No replacement.\")")
+        if 'use' in dep and 'related' in dep:
+            raise Exception(prefix+"'deprecated' takes 'use' (exact replacement) or 'related', not both")
+        for k, v in dep.items():
+            if not isinstance(v, str):
+                raise Exception(prefix+"'deprecated.%s' must be a string: '%s'"%(k, type(v)))
+        if not re.match(r"^\d+\.\d+$", dep['since']):
+            raise Exception(prefix+"'deprecated.since' must be a version like \"1.17\": '%s'"%dep['since'])
+        if _version_compare_less(dep['since'], d.get('version', base_version)):
+            raise Exception(prefix+"'deprecated.since' must not be before 'version': %s"%dep['since'])
+
+    def __validate_no_deprecation_marker(d, path=""):
+        if isinstance(d, dict):
+            for k, v in d.items():
+                if k != 'deprecated':
+                    __validate_no_deprecation_marker(v, "%s.%s"%(path, k) if path else str(k))
+        elif isinstance(d, list):
+            for i, v in enumerate(d):
+                __validate_no_deprecation_marker(v, "%s[%s]"%(path, i))
+        elif isinstance(d, str):
+            m = RE_DEPRECATION_MARKER.search(d)
+            if m:
+                raise Exception("'%s' has free-text deprecation marker '%s'; use the 'deprecated' field instead (see YaML.md)"%(path, m.group(0)))
 
     def __validate_tag(d, key, tags, case):
         for x in tags:
@@ -228,6 +274,7 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception(prefix+"'value' must be less than 0x7fffffff: %s"%value)
 
             ver = __validate_version(item, prefix=prefix, base_version=d_ver)
+            __validate_deprecated(item, prefix=prefix, base_version=d_ver)
             if item.get('value'):
                 max_ver = ver
             if _version_compare_less(ver, max_ver):
@@ -280,6 +327,7 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
 
             ver = __validate_version(item, prefix=prefix, base_version=d_ver)
+            __validate_deprecated(item, prefix=prefix, base_version=d_ver)
             if _version_compare_less(ver, max_ver):
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
@@ -348,6 +396,10 @@ def _validate_doc(f, d, tags, line_num):
 
             __validate_ordinal(d)
             __validate_version(d)
+
+            # a deprecated header deprecates every object in the file
+            if 'deprecated' in d and not re.search(r"extension", d['desc'], re.I):
+                raise Exception("'deprecated' on a header is only allowed in extension files")
 
         elif 'macro' == d['type']:
             if ('desc' not in d) or ('name' not in d) or ('value' not in d):
@@ -433,6 +485,9 @@ def _validate_doc(f, d, tags, line_num):
             __validate_details(d)
             __validate_ordinal(d)
             __validate_version(d)
+
+        __validate_deprecated(d)
+        __validate_no_deprecation_marker(d)
 
         return True
 
@@ -550,6 +605,9 @@ def _filter_version(d, max_ver):
         return None
 
     def __filter_desc(d):
+        # not yet deprecated in this build version
+        if 'deprecated' in d and _version_compare_greater(d['deprecated']['since'], max_ver):
+            del d['deprecated']
         if 'desc' in d and isinstance(d['desc'], dict):
             for k, v in d['desc'].items():
                 if _version_compare_lequal(k, max_ver):
@@ -1106,6 +1164,30 @@ def _ddi_order_suggestion(names):
     return "\n".join(lines)
 
 """
+    Objects that inherit a deprecated extension header's record link to their own
+    Ext twin (e.g. $xFooExp -> $xFooExt) when it exists, instead of the whole
+    replacement extension. Only types with doc pages; version enums keep the
+    extension link for the extension's own row.
+"""
+def _link_ext_twins(specs, meta):
+    for s in specs:
+        for obj in s['objects']:
+            dep = obj.get('deprecated')
+            t = obj['type']
+            if not (dep and dep.get('from_header')) or t not in ('function', 'enum', 'struct', 'union') \
+                    or obj['name'].endswith('version_t'):
+                continue
+            if t == 'function':
+                name = obj.get('class', "") + obj['name']
+                twin = re.sub(r"Exp\d*$", "Ext", name)
+            else:
+                name = obj['name']
+                twin = re.sub(r"_exp\d*(?=_)", "_ext", name)
+            if twin != name and twin in meta.get(t, {}):
+                obj['deprecated'] = {k: v for k, v in dep.items() if k != 'related'}
+                obj['deprecated']['use'] = twin
+
+"""
     stamps each class with its canonical DDI ordinal (a global sort key derived from
     the per-namespace buckets)
 
@@ -1263,6 +1345,9 @@ def parse(section, version, tags, meta, ref):
                 header['ordinal'] *= 1000 if re.match(r"experimental", header.get('desc',"").lower()) else 1
 
             elif header:
+                # objects of a deprecated extension inherit its record, unless they set their own
+                if header.get('deprecated') and 'deprecated' not in d:
+                    d['deprecated'] = dict(header['deprecated'], from_header=True)
                 # for d in _make_versions(d, float(version)):
                 objects.append(d)
                 meta = _generate_meta(d, header['ordinal'], meta)
@@ -1275,6 +1360,7 @@ def parse(section, version, tags, meta, ref):
             })
 
     specs = sorted(specs, key=lambda s: s['header']['ordinal'])
+    _link_ext_twins(specs, meta)
     _assign_ddi_ordinals(meta)
     _generate_extra(specs, meta)
 

@@ -52,44 +52,58 @@ details:
     - "This structure may also be passed to $xMemAllocHost, via the `pNext` member of $x_host_mem_alloc_desc_t."
 --- #--------------------------------------------------------------------------
 type: header
-desc: "[DEPRECATED] Intel $OneApi Level-Zero Extension for supporting relaxed allocation limits. Use the standard `ZE_extension_relaxed_allocation_limits` extension instead."
+desc: "Intel $OneApi Level-Zero Extension for supporting relaxed allocation limits."
 version: "1.1"
 --- #--------------------------------------------------------------------------
 type: macro
-desc: "[DEPRECATED] Relaxed Allocation Limits Extension Name. Use $X_RELAXED_ALLOCATION_LIMITS_EXT_NAME instead."
+desc: "Relaxed Allocation Limits Extension Name"
 version: "1.1"
+deprecated:
+    since: "1.17"
+    use: $X_RELAXED_ALLOCATION_LIMITS_EXT_NAME
 name: $X_RELAXED_ALLOCATION_LIMITS_EXP_NAME
 value: '"$X_experimental_relaxed_allocation_limits"'
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "[DEPRECATED] Relaxed Allocation Limits Extension Version(s). Use $x_relaxed_allocation_limits_ext_version_t instead."
+desc: "Relaxed Allocation Limits Extension Version(s)"
 version: "1.1"
+deprecated:
+    since: "1.17"
+    use: $X_RELAXED_ALLOCATION_LIMITS_EXT_NAME
 name: $x_relaxed_allocation_limits_exp_version_t
 etors:
     - name: "1_0"
       value: "$X_MAKE_VERSION( 1, 0 )"
-      desc: "[DEPRECATED] version 1.0"
+      desc: "version 1.0"
 --- #--------------------------------------------------------------------------
 type: enum
-desc: "[DEPRECATED] Supported relaxed memory allocation flags. Use $x_relaxed_allocation_limits_ext_flags_t instead."
+desc: "Supported relaxed memory allocation flags"
 version: "1.1"
+deprecated:
+    since: "1.17"
+    use: $x_relaxed_allocation_limits_ext_flags_t
 class: $xMem
 name: $x_relaxed_allocation_limits_exp_flags_t
 etors:
     - name: MAX_SIZE
-      desc: "[DEPRECATED] Allocation size may exceed the `maxMemAllocSize` member of $x_device_properties_t. Use $x_relaxed_allocation_limits_ext_flags_t MAX_SIZE instead."
+      desc: "Allocation size may exceed the `maxMemAllocSize` member of $x_device_properties_t."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "[DEPRECATED] Relaxed limits memory allocation descriptor. Use $x_relaxed_allocation_limits_ext_desc_t instead."
+desc: "Relaxed limits memory allocation descriptor"
 version: "1.1"
+deprecated:
+    since: "1.17"
+    use: $x_relaxed_allocation_limits_ext_desc_t
 class: $xMem
 name: $x_relaxed_allocation_limits_exp_desc_t
 base: $x_base_desc_t
 members:
     - type: $x_relaxed_allocation_limits_exp_flags_t
       name: flags
-      desc: "[in] [DEPRECATED] no longer supported, use $x_relaxed_allocation_limits_ext_desc_t instead"
+      desc: |
+            [in] flags specifying allocation limits to relax.
+            must be 0 (default) or a valid combination of $x_relaxed_allocation_limits_exp_flag_t;
       init: "0"
 details:
-    - "[DEPRECATED] This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t. Use $x_relaxed_allocation_limits_ext_desc_t instead."
-    - "[DEPRECATED] This structure may also be passed to $xMemAllocHost, via the `pNext` member of $x_host_mem_alloc_desc_t. Use $x_relaxed_allocation_limits_ext_desc_t instead."
+    - "This structure may be passed to $xMemAllocShared or $xMemAllocDevice, via the `pNext` member of $x_device_mem_alloc_desc_t."
+    - "This structure may also be passed to $xMemAllocHost, via the `pNext` member of $x_host_mem_alloc_desc_t."

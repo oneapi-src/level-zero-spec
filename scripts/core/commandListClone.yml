@@ -9,6 +9,10 @@
 type: header
 desc: "Intel $OneApi Level-Zero Extension for supporting compute graphs."
 version: "1.9"
+deprecated:
+    since: "1.17"
+    use: $X_MUTABLE_COMMAND_LIST_EXT_NAME
+    reason: "Mutable command lists replace command list cloning."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Command List Clone Extension Name"
@@ -33,7 +37,6 @@ name: CreateCloneExp
 decl: static
 ordinal: "0"
 details:
-    - "@deprecated since 1.17"
     - "The source command list must be created with the $X_COMMAND_LIST_FLAG_EXP_CLONEABLE flag."
     - "The source command list must be closed prior to cloning."
     - "The source command list may be cloned while it is running on the device."

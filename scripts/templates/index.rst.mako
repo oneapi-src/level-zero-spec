@@ -20,4 +20,5 @@
    core/SPIRV.rst
    core/EXT.rst
    api.rst
+   deprecated.rst
    Versions <${versions_url}>

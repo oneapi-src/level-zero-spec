@@ -20,7 +20,10 @@ etors:
             command queue should be optimized for submission to a single device engine.
             driver **must** disable any implicit optimizations for distributing work across multiple engines.
             this flag should be used when applications want full control over multi-engine submission and scheduling.
-            This flag is **DEPRECATED** as flag $X_COMMAND_LIST_FLAG_EXPLICIT_ONLY is **DEPRECATED**.
+      deprecated:
+          since: "1.13"
+          related: $xDeviceGetSubDevices
+          reason: "To place work on specific sub-devices, submit to sub-device handles or set ZE_FLAT_DEVICE_HIERARCHY=FLAT."
     - name: IN_ORDER
       version: "1.7"
       desc: |

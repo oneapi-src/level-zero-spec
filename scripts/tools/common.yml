@@ -103,9 +103,10 @@ etors:
     - name: DEBUG_REGSET_PROPERTIES
       desc: $t_debug_regset_properties_t
     - name: GLOBAL_METRICS_TIMESTAMPS_EXP_PROPERTIES
-      desc:
-            "1.5": $t_metric_global_timestamps_resolution_exp_t
-            "1.7": $t_metric_global_timestamps_resolution_exp_t. Deprecated, use $T_STRUCTURE_TYPE_METRIC_GLOBAL_TIMESTAMPS_RESOLUTION_EXP.
+      desc: $t_metric_global_timestamps_resolution_exp_t
+      deprecated:
+          since: "1.7"
+          use: $T_STRUCTURE_TYPE_METRIC_GLOBAL_TIMESTAMPS_RESOLUTION_EXP
       version: "1.5"
       value: "0x9"
     - name: METRIC_GLOBAL_TIMESTAMPS_RESOLUTION_EXP
@@ -116,9 +117,10 @@ etors:
       desc: $t_tracer_exp_desc_t
       value: "0x00010001"
     - name: METRICS_CALCULATE_EXP_DESC
-      desc:
-            "1.6": $t_metric_calculate_exp_desc_t
-            "1.7": $t_metric_calculate_exp_desc_t. Deprecated, use $T_STRUCTURE_TYPE_METRIC_CALCULATE_EXP_DESC.
+      desc: $t_metric_calculate_exp_desc_t
+      deprecated:
+          since: "1.7"
+          use: $T_STRUCTURE_TYPE_METRIC_CALCULATE_EXP_DESC
       version: "1.6"
       value: "0x00010002"
     - name: METRIC_CALCULATE_EXP_DESC

@@ -57,4 +57,4 @@ details:
     - "If neither OPTIMIZE_MEMORY nor OPTIMIZE_PERFORMANCE is set, the memory/performance trade-off for the driver(s) initialized by this call is driver implementation specific."
     - "The default context returned by $xDriverGetDefaultContext is created by the driver itself, not via $xContextCreate or $xContextCreateEx, so the application cannot supply $x_context_flags_t for it. The default context follows the driver-level default established by this structure, if one was established; otherwise its memory/performance trade-off is driver implementation specific."
     - "If this structure is not provided, the driver must assume no driver-wide properties were requested and fall back to its standard default behavior for each unset flag."
-    - "This structure has no effect on drivers already initialized by a prior call to $xInitDrivers or $xInit[Deprecated]; those drivers keep whatever behavior was in effect when they were first initialized."
+    - "This structure has no effect on drivers already initialized by a prior call to $xInitDrivers or $xInit; those drivers keep whatever behavior was in effect when they were first initialized."

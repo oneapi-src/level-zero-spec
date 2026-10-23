@@ -39,6 +39,9 @@ extern "C" {
 %for spec in specs:
 %if len(spec['objects']):
 // ${th.subt(n, tags, spec['header']['desc'])}
+%if spec['header'].get('deprecated'):
+// ${th.make_deprecated_tag(spec['header'])} ${th.make_deprecated_note(n, tags, spec['header'])}
+%endif
 #if !defined(__GNUC__)
 #pragma region ${spec['name']}
 #endif

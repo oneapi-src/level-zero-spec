@@ -363,7 +363,10 @@ etors:
     - name: DRIVER_IPC_PROPERTIES
       desc: $x_driver_ipc_properties_t
     - name: DEVICE_PROPERTIES
-      desc: "$x_device_properties_t. @deprecated since 1.17: Use $X_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 instead."
+      desc: $x_device_properties_t
+      deprecated:
+          since: "1.17"
+          use: $X_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2
     - name: DEVICE_COMPUTE_PROPERTIES
       desc: $x_device_compute_properties_t
     - name: DEVICE_MODULE_PROPERTIES
@@ -535,6 +538,9 @@ etors:
       version: "1.2"
     - name: COPY_BANDWIDTH_EXP_PROPERTIES
       desc: $x_copy_bandwidth_exp_properties_t
+      deprecated:
+          since: "1.14"
+          reason: "No replacement."
       version: "1.4"
       value: "0x00020009"
     - name: DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES

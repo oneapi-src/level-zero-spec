@@ -8,6 +8,10 @@
 --- #--------------------------------------------------------------------------
 type: header
 desc: "Intel $OneApi Level-Zero Tool Experimental Extension APIs for API Tracing"
+deprecated:
+    since: "1.14"
+    use: "L0 Loader API Tracing <https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing>"
+    reason: "Not supported in L0 drivers; tracing moved to the loader."
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "API Tracing Experimental Extension Name"
@@ -45,7 +49,6 @@ name: Create
 decl: static
 ordinal: "0"
 details:
-    - "@deprecated This function is not supported in L0 drivers and has been replaced by the Loader Tracing Layer. See the Loader Tracing documentation for more details."
     - "The application must only use the tracer for the context which was provided during creation."
     - "The tracer is created in the disabled state."
     - "The application may call this function from simultaneous threads."
@@ -68,7 +71,6 @@ name: Destroy
 decl: static
 ordinal: "0"
 details:
-    - "@deprecated This function is not supported in L0 drivers and has been replaced by the Loader Tracing Layer. See the Loader Tracing documentation for more details."
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
     - "The implementation of this function must be thread-safe."
     - "The implementation of this function will stall and wait on any outstanding threads executing callbacks before freeing any Host allocations associated with this tracer."
@@ -84,7 +86,6 @@ desc: "Sets the collection of callbacks to be executed **before** driver executi
 class: $tTracerExp
 name: SetPrologues
 details:
-    - "@deprecated This function is not supported in L0 drivers and has been replaced by the Loader Tracing Layer. See the Loader Tracing documentation for more details."
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
@@ -101,7 +102,6 @@ desc: "Sets the collection of callbacks to be executed **after** driver executio
 class: $tTracerExp
 name: SetEpilogues
 details:
-    - "@deprecated This function is not supported in L0 drivers and has been replaced by the Loader Tracing Layer. See the Loader Tracing documentation for more details."
     - "The application only needs to set the function pointers it is interested in receiving; all others should be 'nullptr'"
     - "The application must ensure that no other threads are executing functions for which the tracing functions are changing."
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
@@ -118,7 +118,6 @@ desc: "Enables (or disables) the tracer"
 class: $tTracerExp
 name: SetEnabled
 details:
-    - "@deprecated This function is not supported in L0 drivers and has been replaced by the Loader Tracing Layer. See the Loader Tracing documentation for more details."
     - "The application must **not** call this function from simultaneous threads with the same tracer handle."
 params:
     - type: "$t_tracer_exp_handle_t"

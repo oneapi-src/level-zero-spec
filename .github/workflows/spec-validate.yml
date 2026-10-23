@@ -145,8 +145,8 @@ jobs:
               body += 'Generation failed but produced no diagnostics. See the workflow log.\n';
             } else if (structured) {
               const shown = lines.slice(0, MAX);
-              body += `Generation reported **${lines.length}** unresolved `;
-              body += `${lines.length === 1 ? 'reference' : 'references'} in the spec RST/sample code:\n\n`;
+              body += `Generation reported **${lines.length}** `;
+              body += `${lines.length === 1 ? 'problem' : 'problems'} in the spec RST/sample code:\n\n`;
               body += '```\n' + shown.join('\n') + '\n```\n';
               if (lines.length > shown.length) {
                 body += `\n_…and ${lines.length - shown.length} more. See the workflow log for the full list._\n`;
