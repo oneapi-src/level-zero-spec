@@ -666,8 +666,10 @@ def make_etor_lines(namespace, tags, obj, py=False, meta=None):
             prologue = "%s,"%(name)
 
         comment_style = "##" if py else "///<"
+        # Doxygen misorders the text if a continuation line starts left of the first line
+        width = len(append_ws(prologue, 72))
         for line in split_line(_make_item_desc(namespace, tags, item), 70):
-            lines.append("%s%s %s"%(append_ws(prologue, 72), comment_style, line))
+            lines.append("%s%s %s"%(append_ws(prologue, width), comment_style, line))
             prologue = ""
 
     if not py:
