@@ -145,6 +145,16 @@ etors:
       desc: |
             Counter-based event is used for synchronization between recorded graph commands and commands submitted outside the graph (see $xGraphInstantiateExt in $X_RECORD_REPLAY_GRAPH_EXT_NAME for details).
       version: "1.17"
+    - name: IPC_BIDIRECTIONAL
+      value: "$X_BIT(7)"
+      desc: |
+            Extends $X_EVENT_COUNTER_BASED_FLAG_IPC with bi-directional sharing. Event opened in another process observes the latest state and can also be used for signaling.
+            Must be combined with $X_EVENT_COUNTER_BASED_FLAG_IPC
+      version: "1.18"
+      deprecated:
+          since: "1.20"
+          reason: "Ignored. The IPC sharing mode depends on the device."
+          related: $X_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Supported event sync mode flags"
