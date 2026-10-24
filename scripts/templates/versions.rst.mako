@@ -25,6 +25,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.20.41`_
+    - 2026-10-23
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.20.41/index.html>`__
   * - `Level Zero v1.19.12`_
     - 2026-9-16
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.19.12/index.html>`__
@@ -130,6 +133,60 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.20.41
+~~~~~~~~~~~~~~~~~~~
+
+* New Features in v1.20
+
+    - Promote the Mutable Command List experimental extension to a standard extension
+
+      - zeCommandListGetNextCommandIdExt, zeCommandListGetNextCommandIdWithKernelsExt, zeCommandListUpdateMutableCommandsExt
+      - zeCommandListUpdateMutableCommandSignalEventExt, zeCommandListUpdateMutableCommandWaitEventsExt
+      - zeCommandListUpdateMutableCommandKernelsExt, zeCommandListIsMutableExt
+
+    - Add Command Visit extension to walk the commands recorded in a command list or graph
+
+      - zeCommandListVisitExt and zeGraphVisitExt
+
+    - Add command queue external semaphore signal and wait
+
+      - zeCommandQueueSignalExternalSemaphoreExt and zeCommandQueueWaitExternalSemaphoreExt
+
+    - Add ZE_CONTEXT_FLAG_OPTIMIZE_MEMORY and ZE_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE context creation flags
+    - Add Init Driver Properties extension to set the same memory/performance hint at zeInitDrivers
+    - Add zeDeviceGetCompilerInfoSupported single-element compiler-info support query
+    - Add PISA and OpenCL C module input formats (ZE_MODULE_FORMAT_PISA and ZE_MODULE_FORMAT_OCLC)
+    - Add external graph event flag extension (ze_event_ext_flags_desc_t)
+    - Add graph dump modes that dump event operations as graph nodes
+    - Allow transitive join operations in Record and Replay Graphs
+    - Add ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL device query for Counter-Based Event IPC sharing mode
+
+      - Deprecate the ZE_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL event creation flag added in v1.18; it is now ignored
+
+    - Add version 1.1 of the Calculate Multiple Metrics experimental extension
+    - Add Sysman driver level PCI device properties query
+
+      - zesDriverGetPciDeviceProperties
+
+    - Add Sysman Device GPU Topology Properties extension (zes_device_gpu_topology_ext_properties_t)
+    - Add Sysman Device Index extension to get the GPU index (zes_device_index_ext_properties_t)
+    - Standardize deprecation marking and add a Deprecated section to the documentation
+
+* Patches since v1.19.12 release
+
+    - Graph extension cleanup and clarification
+    - Add an example for querying graph extension capabilities
+    - Clarify ZE_CONTEXT_FLAG_OPTIMIZE_* flags with the default context
+    - Clarify module inputs for the PISA and OpenCL C formats
+    - Clarify usage of zeCommandListImmediateAppendCommandListsWithParameters
+    - Require a power of 2 pattern size for memory fill functions
+    - Clarify that Metrics APIs do not support Counter-Based Events
+    - Update the memory bandwidth description
+    - Fix undefined stype names in two extension code samples
+    - Fix generated Python bindings
+    - Fix the order of enum value descriptions in the documentation for long enum names
+
 
 Level Zero v1.19.12
 ~~~~~~~~~~~~~~~~~~~
