@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Record and Replay Graph Extension &#8212; Level Zero Specification v1.19.12</title>
+    <title>Record and Replay Graph Extension &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -446,7 +475,9 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#record-and-replay-graph">Record and Replay Graph</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#querying-the-driver-and-the-device">Querying the driver and the device</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#typical-flow">Typical Flow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#external-events">External Events</a></li>
 </ul>
 </li>
 </ul>
@@ -496,6 +527,7 @@
 <li><p><a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-version-t"><span class="std std-ref">ze_record_replay_graph_ext_version_t</span></a></p></li>
 <li><p><a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-flags-t"><span class="std std-ref">ze_record_replay_graph_ext_flags_t</span></a></p></li>
 <li><p><a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-dump-mode-t"><span class="std std-ref">ze_record_replay_graph_ext_dump_mode_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/event.html#ze-event-ext-flags-t"><span class="std std-ref">ze_event_ext_flags_t</span></a></p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -504,6 +536,7 @@
 <div><ul class="simple">
 <li><p><a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-properties-t"><span class="std std-ref">ze_record_replay_graph_ext_properties_t</span></a></p></li>
 <li><p><a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-dump-desc-t"><span class="std std-ref">ze_record_replay_graph_ext_dump_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/extensions/event.html#ze-event-ext-flags-desc-t"><span class="std std-ref">ze_event_ext_flags_desc_t</span></a></p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -512,6 +545,50 @@
 <h3>Record and Replay Graph<a class="headerlink" href="#record-and-replay-graph" title="Link to this heading">#</a></h3>
 <p>This extension allows applications to capture append operations from immediate command lists into a graph, instantiate that graph, and replay it efficiently.</p>
 <p>Applications can query support and capabilities using <a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-properties-t"><span class="std std-ref">ze_record_replay_graph_ext_properties_t</span></a> and <a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-flags-t"><span class="std std-ref">ze_record_replay_graph_ext_flags_t</span></a>. Captured graphs can be inspected with <a class="reference internal" href="api/extensions/graph.html#zegraphdumpcontentsext"><span class="std std-ref">zeGraphDumpContentsExt</span></a>, and <a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-dump-desc-t"><span class="std std-ref">ze_record_replay_graph_ext_dump_desc_t</span></a> controls dump behavior.</p>
+</section>
+<section id="querying-the-driver-and-the-device">
+<h3>Querying the driver and the device<a class="headerlink" href="#querying-the-driver-and-the-device" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Query the driver to determine if the Record and Replay extension is available.</p></li>
+<li><p>Query the device to determine which graph capabilities are available.</p></li>
+<li><p>Immutable graph support is the minimum required for a functional record and replay graph.</p></li>
+</ol>
+<pre class="literal-block">ze_driver_handle_t hDriver; // initialized driver
+ze_device_handle_t hDevice; // created device out of the driver
+
+// query extension count
+uint32_t extensionsCount = 0;
+<a class="reference internal" href="api/apis/driver.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a>(hDriver, &amp;extensionsCount, nullptr);
+
+<a class="reference internal" href="api/apis/driver.html#ze-driver-extension-properties-t"><span class="std std-ref">ze_driver_extension_properties_t</span></a> *driverExtensions; // allocate memory under this pointer to fit extensionsCount elements
+<a class="reference internal" href="api/apis/driver.html#zedrivergetextensionproperties"><span class="std std-ref">zeDriverGetExtensionProperties</span></a>(hDriver, &amp;extensionsCount, driverExtensions);
+
+// discover graph extension
+const char *extensionName = &quot;ZE_extension_record_replay_graph&quot;;
+size_t extensionNameLength = strlen(extensionName);
+
+for (uint32_t i = 0; i &lt; extensionsCount; i++) {
+    if (strncmp(driverExtensions[i].name, extensionName, extensionNameLength) == 0) {
+        printf(&quot;Extension %s found at version %u.%un&quot;,
+               extensionName,
+               ZE_MAJOR_VERSION(driverExtensions[i].version),
+               ZE_MINOR_VERSION(driverExtensions[i].version));
+    }
+}
+
+<a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-properties-t"><span class="std std-ref">ze_record_replay_graph_ext_properties_t</span></a> graphProperties = {
+    <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_PROPERTIES</span></a>
+};
+
+<a class="reference internal" href="api/apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> deviceProps = {
+    <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2</span></a>   // <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></a> deprecated since 1.17
+};
+deviceProps.pNext = &amp;graphProperties;
+
+<a class="reference internal" href="api/apis/device.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>(hDevice, &amp;deviceProps);
+if (!(graphProperties.graphFlags &amp; <a class="reference internal" href="api/extensions/data_types.html#ze-record-replay-graph-ext-flags-t"><span class="std std-ref">ZE_RECORD_REPLAY_GRAPH_EXT_FLAG_IMMUTABLE_GRAPH</span></a>)) {
+    printf(&quot;Basic graph functionality for this device is not availablen&quot;);
+}</pre>
 </section>
 <section id="typical-flow">
 <h3>Typical Flow<a class="headerlink" href="#typical-flow" title="Link to this heading">#</a></h3>
@@ -524,6 +601,62 @@
 <li><p>Optionally dump graph contents with <a class="reference internal" href="api/extensions/graph.html#zegraphdumpcontentsext"><span class="std std-ref">zeGraphDumpContentsExt</span></a>.</p></li>
 <li><p>Destroy executable and recorded graph objects using <a class="reference internal" href="api/extensions/executable_graph.html#zeexecutablegraphdestroyext"><span class="std std-ref">zeExecutableGraphDestroyExt</span></a> and <a class="reference internal" href="api/extensions/graph.html#zegraphdestroyext"><span class="std std-ref">zeGraphDestroyExt</span></a>.</p></li>
 </ol>
+</section>
+<section id="external-events">
+<h3>External Events<a class="headerlink" href="#external-events" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Counter based events created with <a class="reference internal" href="api/apis/event.html#ze-event-counter-based-flags-t"><span class="std std-ref">ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL</span></a> can be used for synchronization outside of a graph, both on the device and on the host.</p></li>
+<li><dl class="simple">
+<dt>Counter based events created without this flag can also act as GRAPH_EXTERNAL events when used while recording a graph with</dt><dd><p><a class="reference internal" href="api/apis/command_list-2.html#zecommandlistappendwaitoneventswithparameters"><span class="std std-ref">zeCommandListAppendWaitOnEventsWithParameters</span></a> or <a class="reference internal" href="api/apis/command_list-2.html#zecommandlistappendsignaleventwithparameters"><span class="std std-ref">zeCommandListAppendSignalEventWithParameters</span></a> and an event flags descriptor specifying <a class="reference internal" href="api/extensions/event.html#ze-event-ext-flags-t"><span class="std std-ref">ZE_EVENT_EXT_FLAG_APPEND_GRAPH_EXTERNAL</span></a>.</p>
+</dd>
+</dl>
+</li>
+<li><p>The flag affects only the wait or signal operation for which it is specified and does not modify the event object itself.</p></li>
+<li><dl class="simple">
+<dt>The state of an external wait event is refreshed when <a class="reference internal" href="api/extensions/command_list.html#zecommandlistappendgraphext"><span class="std std-ref">zeCommandListAppendGraphExt</span></a> is called.</dt><dd><p>Therefore, if the event was signaled from an immediate command list or from a different graph, the current wait state is propagated to the graph before graph execution.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>The state of an external signal event is reattached to the current graph when <a class="reference internal" href="api/extensions/command_list.html#zecommandlistappendgraphext"><span class="std std-ref">zeCommandListAppendGraphExt</span></a> is called.</dt><dd><p>Therefore, if the event was previously used by a different graph or an immediate command list, it becomes associated with the current graph and subsequent event state updates are driven by the current graph execution.
+As a result, <a class="reference internal" href="api/apis/event.html#zeeventquerystatus"><span class="std std-ref">zeEventQueryStatus</span></a> may return <a class="reference internal" href="api/apis/data_types.html#ze-result-t"><span class="std std-ref">ZE_RESULT_NOT_READY</span></a>.</p>
+</dd>
+</dl>
+</li>
+</ol>
+<pre class="literal-block">ze_command_list_handle_t hCommandList; // immediate command list in record mode for the root branch
+ze_command_list_handle_t hChildCommandList; // immediate command list used for the fork branch
+ze_event_handle_t hEvent; // counter based event not created with <a class="reference internal" href="api/apis/event.html#ze-event-counter-based-flags-t"><span class="std std-ref">ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL</span></a>
+
+<a class="reference internal" href="api/extensions/event.html#ze-event-ext-flags-desc-t"><span class="std std-ref">ze_event_ext_flags_desc_t</span></a> graphExternalDesc = {
+    <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESC</span></a>,      // stype
+    nullptr,                                       // pNext
+    <a class="reference internal" href="api/extensions/event.html#ze-event-ext-flags-t"><span class="std std-ref">ZE_EVENT_EXT_FLAG_APPEND_GRAPH_EXTERNAL</span></a>      // flags
+};
+
+// now the event acts as an external wait event, can receive the signals from outside the graph (for example from another graph, an immediate command list or a mutable command list)
+<a class="reference internal" href="api/apis/command_list-2.html#zecommandlistappendwaitoneventswithparameters"><span class="std std-ref">zeCommandListAppendWaitOnEventsWithParameters</span></a>(hCommandList, &amp;graphExternalDesc, 1, &amp;hEvent);
+
+// now the event acts as an internal signal event to pass a signal within the graph to the fork branch
+<a class="reference internal" href="api/apis/command_list.html#zecommandlistappendsignalevent"><span class="std std-ref">zeCommandListAppendSignalEvent</span></a>(hCommandList, hEvent);
+
+// now the event acts as an internal wait event used to receive the signal from the root branch
+<a class="reference internal" href="api/apis/command_list.html#zecommandlistappendwaitonevents"><span class="std std-ref">zeCommandListAppendWaitOnEvents</span></a>(hChildCommandList, 1, &amp;hEvent);
+
+// some work inside the fork branch
+/// ...
+
+// now the event acts as an internal signal event to pass a signal from the fork branch back to the root branch
+<a class="reference internal" href="api/apis/command_list.html#zecommandlistappendsignalevent"><span class="std std-ref">zeCommandListAppendSignalEvent</span></a>(hChildCommandList, hEvent);
+
+// now the event acts as an internal wait event used to receive the signal from the fork branch
+<a class="reference internal" href="api/apis/command_list.html#zecommandlistappendwaitonevents"><span class="std std-ref">zeCommandListAppendWaitOnEvents</span></a>(hCommandList, 1, &amp;hEvent);
+
+// some work inside the root branch
+// ...
+
+// now the event acts as an external signal event; the event can be used outside the graph for host or device synchronization
+<a class="reference internal" href="api/apis/command_list-2.html#zecommandlistappendsignaleventwithparameters"><span class="std std-ref">zeCommandListAppendSignalEventWithParameters</span></a>(hCommandList, &amp;graphExternalDesc, hEvent);</pre>
 </section>
 </section>
 </section>
@@ -559,7 +692,9 @@
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#record-and-replay-graph">Record and Replay Graph</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#querying-the-driver-and-the-device">Querying the driver and the device</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#typical-flow">Typical Flow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#external-events">External Events</a></li>
 </ul>
 </li>
 </ul>

@@ -1,7 +1,7 @@
 ============================================================
 Event - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Event - Extension Functions
@@ -26,6 +26,19 @@ Event - Extension Enums
 =======================
 
 
+.. _ze-event-ext-flags-t:
+
+ze_event_ext_flags_t
+--------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: ze_event_ext_flag_t
+    :project: LevelZero
+
+
 .. _ze-event-query-kernel-timestamps-ext-flags-t:
 
 ze_event_query_kernel_timestamps_ext_flags_t
@@ -41,6 +54,21 @@ ze_event_query_kernel_timestamps_ext_flags_t
  
 Event - Extension Structures
 ============================
+
+
+.. _ze-event-ext-flags-desc-t:
+
+ze_event_ext_flags_desc_t
+-------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenstruct:: ze_event_ext_flags_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
 
 
 .. _ze-synchronized-timestamp-data-ext-t:

@@ -1,13 +1,26 @@
 ============================================================
 Data Types - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 
 
 Data Types - Extension Enums
 ============================
+
+
+.. _zes-device-index-ext-version-t:
+
+zes_device_index_ext_version_t
+------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: zes_device_index_ext_version_t
+    :project: LevelZero
 
 
 .. _zes-power-limits-ext-version-t:
@@ -124,6 +137,19 @@ zes_info_logs_ext_version_t
 *Added in version 1.19*
 
 .. doxygenenum:: zes_info_logs_ext_version_t
+    :project: LevelZero
+
+
+.. _zes-device-gpu-topology-ext-version-t:
+
+zes_device_gpu_topology_ext_version_t
+-------------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: zes_device_gpu_topology_ext_version_t
     :project: LevelZero
 
  

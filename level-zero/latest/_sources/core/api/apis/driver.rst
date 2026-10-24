@@ -1,24 +1,11 @@
 ============================================================
 Driver
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Driver Functions
 ================
-
-
-.. _zeDriverGet:
-
-zeDriverGet
------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zeDriverGet
-    :project: LevelZero
 
 
 .. _zeDriverGetApiVersion:

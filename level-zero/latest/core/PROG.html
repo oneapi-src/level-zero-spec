@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Core Programming Guide &#8212; Level Zero Specification v1.19.12</title>
+    <title>Core Programming Guide &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Introduction" href="INTRO.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -490,6 +519,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#creation-1">Creation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#appending">Appending</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-of-a-command-list-to-an-immediate-command-list">Submission of a command list to an immediate command list</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#recycling">Recycling</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#low-latency-immediate-command-lists">Low-Latency Immediate Command Lists</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#appending-kernels-with-additional-parameters">Appending kernels with additional parameters</a></li>
@@ -531,6 +561,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modules-and-kernels">Modules and Kernels</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modules">Modules</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#module-build-options">Module Build Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compiler-info-query">Compiler-Info Query</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#module-specialization-constants">Module Specialization Constants</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#module-build-log">Module Build Log</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamically-linked-modules">Dynamically Linked Modules</a></li>
@@ -1804,7 +1835,33 @@ For example, events must be explicitly reset prior to re-execution.</p></li>
 <a class="reference internal" href="api/apis/command_queue.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>(hCommandQueue, 1, &amp;hCommandList, nullptr);
 
 // synchronize host and device
-<a class="reference internal" href="api/apis/command_queue.html#zecommandqueuesynchronize"><span class="std std-ref">zeCommandQueueSynchronize</span></a>(hCommandQueue, UINT32_MAX);
+<a class="reference internal" href="api/apis/command_queue.html#zecommandqueuesynchronize"><span class="std std-ref">zeCommandQueueSynchronize</span></a>(hCommandQueue, UINT64_MAX);
+
+// Reset (recycle) command list for new commands
+<a class="reference internal" href="api/apis/command_list.html#zecommandlistreset"><span class="std std-ref">zeCommandListReset</span></a>(hCommandList);
+...</pre>
+</section>
+<section id="submission-of-a-command-list-to-an-immediate-command-list">
+<h4>Submission of a command list to an immediate command list<a class="headerlink" href="#submission-of-a-command-list-to-an-immediate-command-list" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>An immediate command list can also execute a command list.</p></li>
+<li><p>By definition, a command list cannot be executed concurrently on multiple immediate command lists.</p></li>
+<li><p>A command list may be submitted multiple times.  It is up to the application to ensure
+that the command list can be executed multiple times.</p></li>
+<li><p>Execution on an immediate command list can use an event to signal completion instead of a fence.</p></li>
+<li><p>Execution on an immediate command list can use multiple events to wait on before starting
+execution of a command list.</p></li>
+</ul>
+<p>The following pseudo-code demonstrates executing a command list on an immediate command list:</p>
+<pre class="literal-block">...
+// finished appending commands
+<a class="reference internal" href="api/apis/command_list.html#zecommandlistclose"><span class="std std-ref">zeCommandListClose</span></a>(hCommandList);
+
+// Execute command list on an immediate command list
+<a class="reference internal" href="api/apis/command_list-2.html#zecommandlistimmediateappendcommandlistswithparameters"><span class="std std-ref">zeCommandListImmediateAppendCommandListsWithParameters</span></a>(hImmediateCommandList, 1, &amp;hCommandList, nullptr, nullptr, 0, nullptr);
+
+// synchronize host and device
+<a class="reference internal" href="api/apis/command_list-2.html#zecommandlisthostsynchronize"><span class="std std-ref">zeCommandListHostSynchronize</span></a>(hImmediateCommandList, UINT64_MAX);
 
 // Reset (recycle) command list for new commands
 <a class="reference internal" href="api/apis/command_list.html#zecommandlistreset"><span class="std std-ref">zeCommandListReset</span></a>(hCommandList);
@@ -2008,7 +2065,7 @@ ze_fence_handle_t hFence;
 <a class="reference internal" href="api/apis/command_queue.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>(hCommandQueue, 1, &amp;hCommandList, hFence);
 
 // Wait for fence to be signaled
-<a class="reference internal" href="api/apis/fence.html#zefencehostsynchronize"><span class="std std-ref">zeFenceHostSynchronize</span></a>(hFence, UINT32_MAX);
+<a class="reference internal" href="api/apis/fence.html#zefencehostsynchronize"><span class="std std-ref">zeFenceHostSynchronize</span></a>(hFence, UINT64_MAX);
 <a class="reference internal" href="api/apis/fence.html#zefencereset"><span class="std std-ref">zeFenceReset</span></a>(hFence);
 ...</pre>
 <p>The primary usage model for fences is to notify the Host when a command list has finished execution to allow:</p>
@@ -2212,7 +2269,7 @@ Note that some operations may be optimized, and the counter value may not direct
 <li><p>No need to wait for completion before reusing/destroying</p></li>
 <li><p>CB Event doesn’t own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver</p></li>
 <li><p>A CB Event’s device association is not fixed at creation. It re-associates with the signaling device on each signal operation. See <a class="reference internal" href="#device-association">Device association</a>.</p></li>
-<li><p>IPC sharing is one-directional by default. IPC CB Event opened in a different process can be used only for waiting, and the handle must be opened again to observe a new state. Bi-directional sharing, where the opened Event can also be signaled and both processes observe the latest state, is requested with <a class="reference internal" href="api/apis/event.html#ze-event-counter-based-flags-t"><span class="std std-ref">ZE_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL</span></a>. See <a class="reference internal" href="#ipc-sharing">IPC sharing</a>.</p></li>
+<li><p>IPC sharing is bi-directional when the device reports <a class="reference internal" href="api/apis/device.html#ze-device-event-properties-flags-t"><span class="std std-ref">ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL</span></a>. The opened Event can also be signaled and both processes observe the latest state. Otherwise IPC sharing is one-directional: IPC CB Event opened in a different process can be used only for waiting, and the handle must be opened again to observe a new state. See <a class="reference internal" href="#ipc-sharing">IPC sharing</a>.</p></li>
 <li><p>Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section</p></li>
 <li><p>When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion</p></li>
 <li><p>Event can be destroyed without waiting for completion, even if profiling is enabled</p></li>
@@ -2230,7 +2287,7 @@ Note that some operations may be optimized, and the counter value may not direct
 // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc.
 // Its also safe to delete Event object.
 
-<a class="reference internal" href="api/apis/event.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc</pre>
+<a class="reference internal" href="api/apis/event.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>(event1, UINT64_MAX); // wait for counter=Y on memory CL3_alloc</pre>
 </section>
 <section id="device-association">
 <h5>Device association<a class="headerlink" href="#device-association" title="Link to this heading">#</a></h5>
@@ -2248,10 +2305,10 @@ Note that some operations may be optimized, and the counter value may not direct
 <section id="ipc-sharing">
 <h5>IPC sharing<a class="headerlink" href="#ipc-sharing" title="Link to this heading">#</a></h5>
 <p>Counter Based Event has dedicated API calls to handle IPC operations: <a class="reference internal" href="api/apis/event.html#zeeventcounterbasedgetipchandle"><span class="std std-ref">zeEventCounterBasedGetIpcHandle</span></a>, <a class="reference internal" href="api/apis/event.html#zeeventcounterbasedopenipchandle"><span class="std std-ref">zeEventCounterBasedOpenIpcHandle</span></a>, <a class="reference internal" href="api/apis/event.html#zeeventcounterbasedcloseipchandle"><span class="std std-ref">zeEventCounterBasedCloseIpcHandle</span></a></p>
-<p>Two sharing modes are defined. The mode is selected when the Event is created and can’t be changed later:</p>
+<p>Two sharing modes are defined. The mode of an Event created with <a class="reference internal" href="api/apis/event.html#ze-event-counter-based-flags-t"><span class="std std-ref">ZE_EVENT_COUNTER_BASED_FLAG_IPC</span></a> depends on the device used to create it:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="api/apis/event.html#ze-event-counter-based-flags-t"><span class="std std-ref">ZE_EVENT_COUNTER_BASED_FLAG_IPC</span></a> alone selects one-directional sharing</p></li>
-<li><p><a class="reference internal" href="api/apis/event.html#ze-event-counter-based-flags-t"><span class="std std-ref">ZE_EVENT_COUNTER_BASED_FLAG_IPC</span></a> combined with <a class="reference internal" href="api/apis/event.html#ze-event-counter-based-flags-t"><span class="std std-ref">ZE_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL</span></a> selects bi-directional sharing. <a class="reference internal" href="api/apis/event.html#zeeventcounterbasedcreate"><span class="std std-ref">zeEventCounterBasedCreate</span></a> returns <a class="reference internal" href="api/apis/data_types.html#ze-result-t"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a> if the Driver doesn’t provide it</p></li>
+<li><p>If the device reports <a class="reference internal" href="api/apis/device.html#ze-device-event-properties-flags-t"><span class="std std-ref">ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL</span></a> in <a class="reference internal" href="api/apis/event.html#ze-device-event-properties-t"><span class="std std-ref">ze_device_event_properties_t</span></a>, sharing is bi-directional</p></li>
+<li><p>Otherwise sharing is one-directional</p></li>
 </ul>
 <p><strong>One-directional sharing</strong></p>
 <p>As mentioned previously, signaling CB Event replaces its state. Opened Event can be used only for waiting/querying (on host and on Device).</p>
@@ -2446,10 +2503,10 @@ of the system.</p>
 <img alt="../_images/core_module.png" src="../_images/core_module.png" />
 <section id="modules">
 <span id="id7"></span><h3>Modules<a class="headerlink" href="#modules" title="Link to this heading">#</a></h3>
-<p>Modules can be created from an IL or directly from native format using <a class="reference internal" href="api/apis/module.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a>.</p>
+<p>Modules can be created from an IL, from <a class="reference external" href="https://intel.github.io/pisa/">PISA</a> assembly text, from OpenCL C source, or directly from native format using <a class="reference internal" href="api/apis/module.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a>.</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="api/apis/module.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a> takes a format argument that specifies the input format.</p></li>
-<li><p><a class="reference internal" href="api/apis/module.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a> performs a compilation step when format is IL.</p></li>
+<li><p><a class="reference internal" href="api/apis/module.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a> performs a compilation step when format is IL, PISA assembly text (<a class="reference internal" href="api/apis/module.html#ze-module-format-t"><span class="std std-ref">ZE_MODULE_FORMAT_PISA</span></a>) or OpenCL C source (<a class="reference internal" href="api/apis/module.html#ze-module-format-t"><span class="std std-ref">ZE_MODULE_FORMAT_OCLC</span></a>).</p></li>
 </ul>
 <p>The following pseudo-code demonstrates a sequence for creating a module from an OpenCL kernel:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">__kernel</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">image_scaling</span><span class="p">(</span><span class="w"> </span><span class="n">__read_only</span><span class="w">  </span><span class="n">image2d_t</span><span class="w"> </span><span class="n">src_img</span><span class="p">,</span>
@@ -2533,6 +2590,49 @@ ze_module_handle_t hModule;
 </tbody>
 </table>
 </div>
+</section>
+<section id="compiler-info-query">
+<span id="id8"></span><h4>Compiler-Info Query<a class="headerlink" href="#compiler-info-query" title="Link to this heading">#</a></h4>
+<p>The SPIR-V capabilities, SPIR-V extensions, and build options supported by a device can be queried
+with compiler-scoped device queries. <a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a> returns a full list; the value
+selected by <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ze_device_compiler_info_t</span></a> determines which compiler-info list is returned (see the
+enumeration for the available selectors and their payload layout). List queries use the standard
+two-call convention with a single in/out size parameter: query the size with <code class="docutils literal notranslate"><span class="pre">pData</span></code> null, allocate,
+then call again to fill. <a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfosupported"><span class="std std-ref">zeDeviceGetCompilerInfoSupported</span></a> complements it by checking support for a
+single, application-supplied element without allocating or walking the full list.</p>
+<p>SPIR-V capabilities are returned as an array of <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code> numeric identifiers. First query the
+size, it will return the total number of bytes in the array. You will then need to calculate the
+number of elements by dividing by the type, size / sizeof(uint32_t), using an appropriately sized
+array to then issue the read:</p>
+<pre class="literal-block">size_t size = 0;
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES</span></a>, nullptr, &amp;size, nullptr);
+std::vector&lt;uint32_t&gt; caps(size / sizeof(uint32_t));
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES</span></a>, nullptr, &amp;size, caps.data());</pre>
+<p>SPIR-V extensions are returned as fixed-width, null-terminated names, each ZE_MAX_EXTENSION_NAME bytes.
+Allocate a byte buffer of the reported size and iterate name by name:</p>
+<pre class="literal-block">size_t size = 0;
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS</span></a>, nullptr, &amp;size, nullptr);
+std::vector&lt;char&gt; buffer(size);
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS</span></a>, nullptr, &amp;size, buffer.data());
+for (size_t offset = 0; offset &lt; size; offset += ZE_MAX_EXTENSION_NAME) {
+    // buffer.data() + offset points to a null-terminated extension name
+}</pre>
+<p>Compiler options are returned as a single null-terminated string of space-separated tokens. Driver
+options use <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_DRIVER_OPTIONS</span></a> with the exact same allocation and read pattern:</p>
+<pre class="literal-block">size_t size = 0;
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_COMPILER_OPTIONS</span></a>, nullptr, &amp;size, nullptr);
+std::vector&lt;char&gt; options(size);
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_COMPILER_OPTIONS</span></a>, nullptr, &amp;size, options.data());
+// options.data() is one null-terminated string, e.g. &quot;-ze-opt-a -ze-opt-b&quot;</pre>
+<p>To check a single element instead of listing all of them, use <a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfosupported"><span class="std std-ref">zeDeviceGetCompilerInfoSupported</span></a>. It
+reports the result through <code class="docutils literal notranslate"><span class="pre">pSupported</span></code>, so no size query or buffer is needed. The element type
+follows paramName: a null-terminated name for the extension and option categories, a <code class="docutils literal notranslate"><span class="pre">uint32_t</span></code>
+numeric identifier for SPIR-V capabilities. For the option categories, <code class="docutils literal notranslate"><span class="pre">pValue</span></code> optionally narrows
+the check to a specific option value:</p>
+<pre class="literal-block">ze_bool_t bf16Supported = false;
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfosupported"><span class="std std-ref">zeDeviceGetCompilerInfoSupported</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS</span></a>, nullptr, &quot;SPV_INTEL_bfloat16_conversion&quot;, nullptr, &amp;bf16Supported);
+ze_bool_t optionSupported = false;
+<a class="reference internal" href="api/apis/device.html#zedevicegetcompilerinfosupported"><span class="std std-ref">zeDeviceGetCompilerInfoSupported</span></a>(hDevice, <a class="reference internal" href="api/apis/data_types.html#ze-device-compiler-info-t"><span class="std std-ref">ZE_DEVICE_COMPILER_INFO_COMPILER_OPTIONS</span></a>, nullptr, &quot;-ze-opt-large-register-file&quot;, nullptr, &amp;optionSupported);</pre>
 </section>
 <section id="module-specialization-constants">
 <h4>Module Specialization Constants<a class="headerlink" href="#module-specialization-constants" title="Link to this heading">#</a></h4>
@@ -2641,7 +2741,7 @@ interface.</p>
 </section>
 </section>
 <section id="kernels">
-<span id="id8"></span><h3>Kernels<a class="headerlink" href="#kernels" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>Kernels<a class="headerlink" href="#kernels" title="Link to this heading">#</a></h3>
 <p>A Kernel is a reference to a kernel within a module and it supports both explicit and implicit kernel
 arguments along with data needed for launch.</p>
 <p>The following pseudo-code demonstrates a sequence for creating a kernel from a module:</p>
@@ -2678,7 +2778,7 @@ if (result == <a class="reference internal" href="api/apis/data_types.html#ze-re
 </section>
 </section>
 <section id="execution-1">
-<span id="id9"></span><h3>Execution<a class="headerlink" href="#execution-1" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>Execution<a class="headerlink" href="#execution-1" title="Link to this heading">#</a></h3>
 <section id="kernel-group-size">
 <h4>Kernel Group Size<a class="headerlink" href="#kernel-group-size" title="Link to this heading">#</a></h4>
 <p>The group size for a kernel can be set using <a class="reference internal" href="api/apis/kernel.html#zekernelsetgroupsize"><span class="std std-ref">zeKernelSetGroupSize</span></a>. If a group size is not
@@ -2851,8 +2951,8 @@ To ensure all output has been flushed to the output stream, wait on the event as
 <section id="environment-variables">
 <h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">#</a></h3>
 <p>The following table documents the supported knobs for overriding default functional behavior.</p>
-<div class="pst-scrollable-table-container"><table class="table" id="id14">
-<caption><span class="caption-text">Environment Variables</span><a class="headerlink" href="#id14" title="Link to this table">#</a></caption>
+<div class="pst-scrollable-table-container"><table class="table" id="id15">
+<caption><span class="caption-text">Environment Variables</span><a class="headerlink" href="#id15" title="Link to this table">#</a></caption>
 <colgroup>
 <col style="width: 15.0%" />
 <col style="width: 35.0%" />
@@ -2896,7 +2996,7 @@ To ensure all output has been flushed to the output stream, wait on the event as
 </table>
 </div>
 <section id="driver-ordering">
-<span id="id10"></span><h4>Driver Ordering<a class="headerlink" href="#driver-ordering" title="Link to this heading">#</a></h4>
+<span id="id11"></span><h4>Driver Ordering<a class="headerlink" href="#driver-ordering" title="Link to this heading">#</a></h4>
 <p>The Level Zero Runtime provides the ability to change the default driver used in “zer” Level Zero Runtime APIs through an environment variable to enable flexible driver selection and ordering.</p>
 <p>This environment variable is read by the Level Zero Loader to determine the order in which drivers are initialized and used.</p>
 <p>A robust driver selector is created considering multiple drivers of different types with the following supported syntax:</p>
@@ -3703,7 +3803,7 @@ node* begin = nullptr;
 <a class="reference internal" href="api/apis/command_queue.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>(hCommandQueue, 1, &amp;hCommandList, hFence);
 
 // wait until complete
-<a class="reference internal" href="api/apis/fence.html#zefencehostsynchronize"><span class="std std-ref">zeFenceHostSynchronize</span></a>(hFence, UINT32_MAX);
+<a class="reference internal" href="api/apis/fence.html#zefencehostsynchronize"><span class="std std-ref">zeFenceHostSynchronize</span></a>(hFence, UINT64_MAX);
 
 // Finally, evict to free device resources
 <a class="reference internal" href="api/apis/context.html#zecontextevictmemory"><span class="std std-ref">zeContextEvictMemory</span></a>(hContext, hDevice, begin-&gt;next, sizeof(node));
@@ -3736,7 +3836,7 @@ clGetProgramInfo(cl_program, CL_PROGRAM_BINARIES, clDeviceBinary, &amp;clDeviceB
 <a class="reference internal" href="api/apis/kernel.html#zekernelcreate"><span class="std std-ref">zeKernelCreate</span></a>(hModule, nullptr, hKernel); // same Kernel as OpenCL in Level-Zero</pre>
 </section>
 <section id="inter-process-communication">
-<span id="id11"></span><h3>Inter-Process Communication<a class="headerlink" href="#inter-process-communication" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>Inter-Process Communication<a class="headerlink" href="#inter-process-communication" title="Link to this heading">#</a></h3>
 <p>The API allows sharing of memory objects across different device
 processes. Since each process has its own virtual address space, there
 is no guarantee that the same virtual address will be available when the
@@ -3749,7 +3849,7 @@ Level-Zero allocations across processes:</p>
 <li><p><a class="reference internal" href="#events-1"><span class="std std-ref">Events</span></a></p></li>
 </ol>
 <section id="memory-1">
-<span id="id12"></span><h4>Memory<a class="headerlink" href="#memory-1" title="Link to this heading">#</a></h4>
+<span id="id13"></span><h4>Memory<a class="headerlink" href="#memory-1" title="Link to this heading">#</a></h4>
 <p>Physical memory handles (<code class="docutils literal notranslate"><span class="pre">ze_physical_mem_handle_t</span></code>) may be used as the source for IPC handles
 in both <a class="reference internal" href="api/apis/mem.html#zememgetipchandle"><span class="std std-ref">zeMemGetIpcHandle</span></a> and <a class="reference internal" href="api/apis/mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>. There are two ways to obtain an
 IPC handle backed by physical memory:</p>
@@ -3926,7 +4026,7 @@ void* dptr = nullptr;
 </section>
 </section>
 <section id="events-1">
-<span id="id13"></span><h4>Events<a class="headerlink" href="#events-1" title="Link to this heading">#</a></h4>
+<span id="id14"></span><h4>Events<a class="headerlink" href="#events-1" title="Link to this heading">#</a></h4>
 <p>The following code examples demonstrate how to use the event IPC APIs:</p>
 <ol class="arabic simple">
 <li><p>First, the event pool is created, packaged, and sent on the sending process:</p></li>
@@ -3987,7 +4087,7 @@ ze_event_pool_handle_t hEventPool;
 };
 <a class="reference internal" href="api/apis/event.html#zeeventcreate"><span class="std std-ref">zeEventCreate</span></a>(hEventPool, &amp;eventDesc, &amp;hEvent);
 
-<a class="reference internal" href="api/apis/event.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>(hEvent, UINT32_MAX);</pre>
+<a class="reference internal" href="api/apis/event.html#zeeventhostsynchronize"><span class="std std-ref">zeEventHostSynchronize</span></a>(hEvent, UINT64_MAX);</pre>
 <p>Note, there is no guaranteed address equivalence for the values of <code class="docutils literal notranslate"><span class="pre">hEvent</span></code> in each process.</p>
 <ol class="arabic simple" start="4">
 <li><p>To cleanup, first close the pool handle in the receiving process:</p></li>
@@ -4257,6 +4357,7 @@ void* vaSecondHalf = (uint8_t*)vaBase + segmentSize;
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#creation-1">Creation</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#appending">Appending</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#submission">Submission</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#submission-of-a-command-list-to-an-immediate-command-list">Submission of a command list to an immediate command list</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#recycling">Recycling</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#low-latency-immediate-command-lists">Low-Latency Immediate Command Lists</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#appending-kernels-with-additional-parameters">Appending kernels with additional parameters</a></li>
@@ -4298,6 +4399,7 @@ void* vaSecondHalf = (uint8_t*)vaBase + segmentSize;
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modules-and-kernels">Modules and Kernels</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modules">Modules</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#module-build-options">Module Build Options</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compiler-info-query">Compiler-Info Query</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#module-specialization-constants">Module Specialization Constants</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#module-build-log">Module Build Log</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamically-linked-modules">Dynamically Linked Modules</a></li>

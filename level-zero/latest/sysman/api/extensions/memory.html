@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Memory - Extensions &#8212; Level Zero Specification v1.19.12</title>
+    <title>Memory - Extensions &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/extensions/memory';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Power - Extensions" href="power.html" />
-    <link rel="prev" title="Driver - Extensions" href="driver.html" />
+    <link rel="next" title="Info Log - Extensions" href="info_log.html" />
+    <link rel="prev" title="Engine - Extensions" href="engine.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -445,13 +474,6 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-extension-structures">Memory - Extension Structures</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-mem-ext-bandwidth-t">zes_mem_ext_bandwidth_t</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zes_mem_ext_bandwidth_t"><code class="docutils literal notranslate"><span class="pre">zes_mem_ext_bandwidth_t</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zes_mem_ext_bandwidth_t24memoryTimestampValidBitsE"><code class="docutils literal notranslate"><span class="pre">memoryTimestampValidBits</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-memory-vendor-info-ext-properties-t">zes_memory_vendor_info_ext_properties_t</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439zes_memory_vendor_info_ext_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_memory_vendor_info_ext_properties_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39zes_memory_vendor_info_ext_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
@@ -478,42 +500,18 @@
                   
   <section id="memory-extensions">
 <h1>Memory - Extensions<a class="headerlink" href="#memory-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="memory-extension-structures">
 <h2>Memory - Extension Structures<a class="headerlink" href="#memory-extension-structures" title="Link to this heading">#</a></h2>
-<section id="zes-mem-ext-bandwidth-t">
-<span id="id1"></span><h3>zes_mem_ext_bandwidth_t<a class="headerlink" href="#zes-mem-ext-bandwidth-t" title="Link to this heading">#</a></h3>
-<p class="api-version"><em>Added in version 1.7</em></p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv423zes_mem_ext_bandwidth_t">
-<span id="_CPPv323zes_mem_ext_bandwidth_t"></span><span id="_CPPv223zes_mem_ext_bandwidth_t"></span><span id="zes_mem_ext_bandwidth_t"></span><span class="target" id="structzes__mem__ext__bandwidth__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_mem_ext_bandwidth_t</span></span></span><a class="headerlink" href="#_CPPv423zes_mem_ext_bandwidth_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Extension properties for Memory bandwidth. </p>
-<p><ul class="simple">
-<li><p>Number of counter bits</p></li>
-<li><p>[DEPRECATED] No longer supported. </p></li>
-</ul>
-</p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N23zes_mem_ext_bandwidth_t24memoryTimestampValidBitsE">
-<span id="_CPPv3N23zes_mem_ext_bandwidth_t24memoryTimestampValidBitsE"></span><span id="_CPPv2N23zes_mem_ext_bandwidth_t24memoryTimestampValidBitsE"></span><span id="zes_mem_ext_bandwidth_t::memoryTimestampValidBits__uint32_t"></span><span class="target" id="structzes__mem__ext__bandwidth__t_1aaf3c11515e5f223051137a0c2ab6fb03"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memoryTimestampValidBits</span></span></span><a class="headerlink" href="#_CPPv4N23zes_mem_ext_bandwidth_t24memoryTimestampValidBitsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Returns the number of valid bits in the timestamp values </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
-</section>
 <section id="zes-memory-vendor-info-ext-properties-t">
-<span id="id2"></span><h3>zes_memory_vendor_info_ext_properties_t<a class="headerlink" href="#zes-memory-vendor-info-ext-properties-t" title="Link to this heading">#</a></h3>
+<span id="id1"></span><h3>zes_memory_vendor_info_ext_properties_t<a class="headerlink" href="#zes-memory-vendor-info-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv439zes_memory_vendor_info_ext_properties_t">
 <span id="_CPPv339zes_memory_vendor_info_ext_properties_t"></span><span id="_CPPv239zes_memory_vendor_info_ext_properties_t"></span><span id="zes_memory_vendor_info_ext_properties_t"></span><span class="target" id="structzes__memory__vendor__info__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_memory_vendor_info_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv439zes_memory_vendor_info_ext_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Memory Vendor Info Extension Properties structure. </p>
 <p><ul class="simple">
-<li><p>This structure can be passed as an extension structure to <a class="reference internal" href="../apis/memory.html#zes__api_8h_1a6b763217e3b659dd7b92666400e9848d"><span class="std std-ref">zesMemoryGetProperties</span></a> via pNext member</p></li>
+<li><p>This structure can be passed as an extension structure to <a class="reference internal" href="../apis/memory.html#zesmemorygetproperties"><span class="std std-ref">zesMemoryGetProperties</span></a> via pNext member</p></li>
 <li><p>Returns the memory vendor ID and the memory vendor name </p></li>
 </ul>
 </p>
@@ -521,7 +519,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N39zes_memory_vendor_info_ext_properties_t5stypeE">
-<span id="_CPPv3N39zes_memory_vendor_info_ext_properties_t5stypeE"></span><span id="_CPPv2N39zes_memory_vendor_info_ext_properties_t5stypeE"></span><span id="zes_memory_vendor_info_ext_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__memory__vendor__info__ext__properties__t_1a1dd735458c6f653cfbe6566dab8afc4d"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N39zes_memory_vendor_info_ext_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N39zes_memory_vendor_info_ext_properties_t5stypeE"></span><span id="_CPPv2N39zes_memory_vendor_info_ext_properties_t5stypeE"></span><span id="zes_memory_vendor_info_ext_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__memory__vendor__info__ext__properties__t_1a1dd735458c6f653cfbe6566dab8afc4d"></span><a class="reference internal" href="../apis/data_types.html#zes-structure-type-t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N39zes_memory_vendor_info_ext_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -568,20 +566,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="driver.html"
+       href="engine.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Driver - Extensions</p>
+        <p class="prev-next-title">Engine - Extensions</p>
       </div>
     </a>
     <a class="right-next"
-       href="power.html"
+       href="info_log.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Power - Extensions</p>
+        <p class="prev-next-title">Info Log - Extensions</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -601,7 +599,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="memory.html#zes-mem-ext-bandwidth-t">zes_mem_ext_bandwidth_t</a></li><li><a href="memory.html#zes-memory-vendor-info-ext-properties-t">zes_memory_vendor_info_ext_properties_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="memory.html#zes-memory-vendor-info-ext-properties-t">zes_memory_vendor_info_ext_properties_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

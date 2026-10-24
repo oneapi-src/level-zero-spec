@@ -14,7 +14,9 @@
 
 *Introduced in Level Zero version 1.1*
 
-This experimental extension is deprecated since version 1.17 onwards and replaced by the :ref:`ZE_extension_relaxed_allocation_limits <ZE_extension_relaxed_allocation_limits>` standard extension.
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.17. Use :ref:`ZE_extension_relaxed_allocation_limits <ZE_extension_relaxed_allocation_limits>` instead.
 
 API
 ----

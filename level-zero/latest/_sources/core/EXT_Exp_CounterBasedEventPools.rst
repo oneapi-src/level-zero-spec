@@ -11,7 +11,11 @@
 
 *Introduced in Level Zero version 1.8*
 
-    - This experimental extension is deprecated and replaced by the :ref:`Counter-based events<counter-based-events>`
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.15. Use :ref:`zeEventCounterBasedCreate` instead.
+
+For the replacement, see :ref:`Counter-based events<counter-based-events>`.
 
 API
 ----

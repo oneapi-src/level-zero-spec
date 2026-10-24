@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Memory &#8212; Level Zero Specification v1.19.12</title>
+    <title>Memory &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Led" href="led.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -570,7 +599,7 @@
                   
   <section id="memory">
 <h1>Memory<a class="headerlink" href="#memory" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="memory-functions">
 <h2>Memory Functions<a class="headerlink" href="#memory-functions" title="Link to this heading">#</a></h2>
 <section id="zesmemorygetproperties">
@@ -578,7 +607,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zesMemoryGetProperties16zes_mem_handle_tP20zes_mem_properties_t">
-<span id="_CPPv322zesMemoryGetProperties16zes_mem_handle_tP20zes_mem_properties_t"></span><span id="_CPPv222zesMemoryGetProperties16zes_mem_handle_tP20zes_mem_properties_t"></span><span id="zesMemoryGetProperties__zes_mem_handle_t.zes_mem_properties_tP"></span><span class="target" id="zes__api_8h_1a6b763217e3b659dd7b92666400e9848d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesMemoryGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMemory</span></span>, <a class="reference internal" href="#_CPPv420zes_mem_properties_t" title="zes_mem_properties_t"><span class="n"><span class="pre">zes_mem_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesMemoryGetProperties16zes_mem_handle_tP20zes_mem_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zesMemoryGetProperties16zes_mem_handle_tP20zes_mem_properties_t"></span><span id="_CPPv222zesMemoryGetProperties16zes_mem_handle_tP20zes_mem_properties_t"></span><span id="zesMemoryGetProperties__zes_mem_handle_t.zes_mem_properties_tP"></span><span class="target" id="zes__api_8h_1a6b763217e3b659dd7b92666400e9848d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesMemoryGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMemory</span></span>, <a class="reference internal" href="#zes-mem-properties-t" title="zes_mem_properties_t"><span class="n"><span class="pre">zes_mem_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesMemoryGetProperties16zes_mem_handle_tP20zes_mem_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get memory properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -627,7 +656,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zesMemoryGetState16zes_mem_handle_tP15zes_mem_state_t">
-<span id="_CPPv317zesMemoryGetState16zes_mem_handle_tP15zes_mem_state_t"></span><span id="_CPPv217zesMemoryGetState16zes_mem_handle_tP15zes_mem_state_t"></span><span id="zesMemoryGetState__zes_mem_handle_t.zes_mem_state_tP"></span><span class="target" id="zes__api_8h_1a596327e378746a9b987fc42fd3380f5e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesMemoryGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMemory</span></span>, <a class="reference internal" href="#_CPPv415zes_mem_state_t" title="zes_mem_state_t"><span class="n"><span class="pre">zes_mem_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesMemoryGetState16zes_mem_handle_tP15zes_mem_state_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zesMemoryGetState16zes_mem_handle_tP15zes_mem_state_t"></span><span id="_CPPv217zesMemoryGetState16zes_mem_handle_tP15zes_mem_state_t"></span><span id="zesMemoryGetState__zes_mem_handle_t.zes_mem_state_tP"></span><span class="target" id="zes__api_8h_1a596327e378746a9b987fc42fd3380f5e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesMemoryGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMemory</span></span>, <a class="reference internal" href="#zes-mem-state-t" title="zes_mem_state_t"><span class="n"><span class="pre">zes_mem_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesMemoryGetState16zes_mem_handle_tP15zes_mem_state_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get memory state - health, allocated. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -676,7 +705,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zesMemoryGetBandwidth16zes_mem_handle_tP19zes_mem_bandwidth_t">
-<span id="_CPPv321zesMemoryGetBandwidth16zes_mem_handle_tP19zes_mem_bandwidth_t"></span><span id="_CPPv221zesMemoryGetBandwidth16zes_mem_handle_tP19zes_mem_bandwidth_t"></span><span id="zesMemoryGetBandwidth__zes_mem_handle_t.zes_mem_bandwidth_tP"></span><span class="target" id="zes__api_8h_1a6bacef6ec68f47e9eac10b09ba0759ea"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesMemoryGetBandwidth</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMemory</span></span>, <a class="reference internal" href="#_CPPv419zes_mem_bandwidth_t" title="zes_mem_bandwidth_t"><span class="n"><span class="pre">zes_mem_bandwidth_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBandwidth</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesMemoryGetBandwidth16zes_mem_handle_tP19zes_mem_bandwidth_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zesMemoryGetBandwidth16zes_mem_handle_tP19zes_mem_bandwidth_t"></span><span id="_CPPv221zesMemoryGetBandwidth16zes_mem_handle_tP19zes_mem_bandwidth_t"></span><span id="zesMemoryGetBandwidth__zes_mem_handle_t.zes_mem_bandwidth_tP"></span><span class="target" id="zes__api_8h_1a6bacef6ec68f47e9eac10b09ba0759ea"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesMemoryGetBandwidth</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMemory</span></span>, <a class="reference internal" href="#zes-mem-bandwidth-t" title="zes_mem_bandwidth_t"><span class="n"><span class="pre">zes_mem_bandwidth_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBandwidth</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesMemoryGetBandwidth16zes_mem_handle_tP19zes_mem_bandwidth_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get memory bandwidth. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -996,12 +1025,12 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420zes_mem_properties_t">
 <span id="_CPPv320zes_mem_properties_t"></span><span id="_CPPv220zes_mem_properties_t"></span><span id="zes_mem_properties_t"></span><span class="target" id="structzes__mem__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_mem_properties_t</span></span></span><a class="headerlink" href="#_CPPv420zes_mem_properties_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Memory properties. To get the memory vendor ID and memory vendor name, pNext member of this structure should point to an instance of <a class="reference internal" href="../extensions/memory.html#structzes__memory__vendor__info__ext__properties__t"><span class="std std-ref">zes_memory_vendor_info_ext_properties_t</span></a> with its stype set to <a class="reference internal" href="data_types.html#zes__api_8h_1a8644a53138705035ee08f86fe407f230aeecb3b85b3fd2678804ebfe85d2dca13"><span class="std std-ref">ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIES</span></a>. </p>
+<dd><p>Memory properties. To get the memory vendor ID and memory vendor name, pNext member of this structure should point to an instance of <a class="reference internal" href="../extensions/memory.html#zes-memory-vendor-info-ext-properties-t"><span class="std std-ref">zes_memory_vendor_info_ext_properties_t</span></a> with its stype set to <a class="reference internal" href="data_types.html#zes__api_8h_1a8644a53138705035ee08f86fe407f230aeecb3b85b3fd2678804ebfe85d2dca13"><span class="std std-ref">ZES_STRUCTURE_TYPE_MEMORY_VENDOR_INFO_EXT_PROPERTIES</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_mem_properties_t5stypeE">
-<span id="_CPPv3N20zes_mem_properties_t5stypeE"></span><span id="_CPPv2N20zes_mem_properties_t5stypeE"></span><span id="zes_mem_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__mem__properties__t_1abc72bd699321ffb9e62f1f2b7a1d632e"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20zes_mem_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_mem_properties_t5stypeE"></span><span id="_CPPv2N20zes_mem_properties_t5stypeE"></span><span id="zes_mem_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__mem__properties__t_1abc72bd699321ffb9e62f1f2b7a1d632e"></span><a class="reference internal" href="data_types.html#zes-structure-type-t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20zes_mem_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -1013,7 +1042,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_mem_properties_t4typeE">
-<span id="_CPPv3N20zes_mem_properties_t4typeE"></span><span id="_CPPv2N20zes_mem_properties_t4typeE"></span><span id="zes_mem_properties_t::type__zes_mem_type_t"></span><span class="target" id="structzes__mem__properties__t_1a66a253471adaa642e7ef4bfba0807c1f"></span><a class="reference internal" href="#_CPPv414zes_mem_type_t" title="zes_mem_type_t"><span class="n"><span class="pre">zes_mem_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N20zes_mem_properties_t4typeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_mem_properties_t4typeE"></span><span id="_CPPv2N20zes_mem_properties_t4typeE"></span><span id="zes_mem_properties_t::type__zes_mem_type_t"></span><span class="target" id="structzes__mem__properties__t_1a66a253471adaa642e7ef4bfba0807c1f"></span><a class="reference internal" href="#zes-mem-type-t" title="zes_mem_type_t"><span class="n"><span class="pre">zes_mem_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N20zes_mem_properties_t4typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] The memory type </p>
 </dd></dl>
 
@@ -1031,14 +1060,14 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_mem_properties_t8locationE">
-<span id="_CPPv3N20zes_mem_properties_t8locationE"></span><span id="_CPPv2N20zes_mem_properties_t8locationE"></span><span id="zes_mem_properties_t::location__zes_mem_loc_t"></span><span class="target" id="structzes__mem__properties__t_1ac4b40ed41eb614cef66e7a2d101691d4"></span><a class="reference internal" href="#_CPPv413zes_mem_loc_t" title="zes_mem_loc_t"><span class="n"><span class="pre">zes_mem_loc_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">location</span></span></span><a class="headerlink" href="#_CPPv4N20zes_mem_properties_t8locationE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_mem_properties_t8locationE"></span><span id="_CPPv2N20zes_mem_properties_t8locationE"></span><span id="zes_mem_properties_t::location__zes_mem_loc_t"></span><span class="target" id="structzes__mem__properties__t_1ac4b40ed41eb614cef66e7a2d101691d4"></span><a class="reference internal" href="#zes-mem-loc-t" title="zes_mem_loc_t"><span class="n"><span class="pre">zes_mem_loc_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">location</span></span></span><a class="headerlink" href="#_CPPv4N20zes_mem_properties_t8locationE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Location of this memory (system, device) </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_mem_properties_t12physicalSizeE">
 <span id="_CPPv3N20zes_mem_properties_t12physicalSizeE"></span><span id="_CPPv2N20zes_mem_properties_t12physicalSizeE"></span><span id="zes_mem_properties_t::physicalSize__uint64_t"></span><span class="target" id="structzes__mem__properties__t_1ab5128fa9baad82ae42d9821d1d317708"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">physicalSize</span></span></span><a class="headerlink" href="#_CPPv4N20zes_mem_properties_t12physicalSizeE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Physical memory capacity in bytes. A value of 0 indicates that this property is not known. However, a call to <a class="reference internal" href="#zes__api_8h_1a596327e378746a9b987fc42fd3380f5e"><span class="std std-ref">zesMemoryGetState()</span></a> will return the available free physical memory. </p>
+<dd><p>[out] Physical memory capacity in bytes. A value of 0 indicates that this property is not known. However, a call to <a class="reference internal" href="#zesmemorygetstate"><span class="std std-ref">zesMemoryGetState()</span></a> will return the available free physical memory. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1072,7 +1101,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15zes_mem_state_t5stypeE">
-<span id="_CPPv3N15zes_mem_state_t5stypeE"></span><span id="_CPPv2N15zes_mem_state_t5stypeE"></span><span id="zes_mem_state_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__mem__state__t_1ae04f397ac6c88c31a5ae45b881fe6be6"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N15zes_mem_state_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N15zes_mem_state_t5stypeE"></span><span id="_CPPv2N15zes_mem_state_t5stypeE"></span><span id="zes_mem_state_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__mem__state__t_1ae04f397ac6c88c31a5ae45b881fe6be6"></span><a class="reference internal" href="data_types.html#zes-structure-type-t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N15zes_mem_state_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -1084,7 +1113,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15zes_mem_state_t6healthE">
-<span id="_CPPv3N15zes_mem_state_t6healthE"></span><span id="_CPPv2N15zes_mem_state_t6healthE"></span><span id="zes_mem_state_t::health__zes_mem_health_t"></span><span class="target" id="structzes__mem__state__t_1a737ca9eca0d1ef37053262cc6416e282"></span><a class="reference internal" href="#_CPPv416zes_mem_health_t" title="zes_mem_health_t"><span class="n"><span class="pre">zes_mem_health_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">health</span></span></span><a class="headerlink" href="#_CPPv4N15zes_mem_state_t6healthE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N15zes_mem_state_t6healthE"></span><span id="_CPPv2N15zes_mem_state_t6healthE"></span><span id="zes_mem_state_t::health__zes_mem_health_t"></span><span class="target" id="structzes__mem__state__t_1a737ca9eca0d1ef37053262cc6416e282"></span><a class="reference internal" href="#zes-mem-health-t" title="zes_mem_health_t"><span class="n"><span class="pre">zes_mem_health_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">health</span></span></span><a class="headerlink" href="#_CPPv4N15zes_mem_state_t6healthE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates the health of the memory </p>
 </dd></dl>
 
@@ -1097,7 +1126,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15zes_mem_state_t4sizeE">
 <span id="_CPPv3N15zes_mem_state_t4sizeE"></span><span id="_CPPv2N15zes_mem_state_t4sizeE"></span><span id="zes_mem_state_t::size__uint64_t"></span><span class="target" id="structzes__mem__state__t_1a9218811cf31822eb848fd436de08efb1"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><a class="headerlink" href="#_CPPv4N15zes_mem_state_t4sizeE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] The total allocatable memory in bytes (can be less than the <code class="docutils literal notranslate"><span class="pre">physicalSize</span></code> member of <a class="reference internal" href="#structzes__mem__properties__t"><span class="std std-ref">zes_mem_properties_t</span></a>). <em>DEPRECATED</em> This member can no longer track the allocatable memory reliably. Clients depending on this information can use the zeDeviceGetProperties with <a class="reference internal" href="../../../core/api/extensions/device.html#structze__device__usablemem__size__ext__properties__t"><span class="std std-ref">ze_device_usablemem_size_ext_properties_t</span></a> extension to get information of the available usable memory. </p>
+<dd><p>[out] <span class="deprecated-badge">Deprecated since 1.15</span> The total allocatable memory in bytes (can be less than the <code class="docutils literal notranslate"><span class="pre">physicalSize</span></code> member of <a class="reference internal" href="#zes-mem-properties-t"><span class="std std-ref">zes_mem_properties_t</span></a>). This member can no longer track the allocatable memory reliably. Use <a class="reference internal" href="../../../core/api/extensions/device.html#ze-device-usablemem-size-ext-properties-t"><span class="std std-ref">ze_device_usablemem_size_ext_properties_t</span></a> instead. </p>
 </dd></dl>
 
 </div>
@@ -1134,7 +1163,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19zes_mem_bandwidth_t12maxBandwidthE">
 <span id="_CPPv3N19zes_mem_bandwidth_t12maxBandwidthE"></span><span id="_CPPv2N19zes_mem_bandwidth_t12maxBandwidthE"></span><span id="zes_mem_bandwidth_t::maxBandwidth__uint64_t"></span><span class="target" id="structzes__mem__bandwidth__t_1a3e12bb043f453df2a04b88e898c08281"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxBandwidth</span></span></span><a class="headerlink" href="#_CPPv4N19zes_mem_bandwidth_t12maxBandwidthE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Current maximum bandwidth in units of bytes/sec </p>
+<dd><p>[out] Current maximum bandwidth in units of bytes/sec. Use 1000 (not 1024) to convert to higher-order units. </p>
 </dd></dl>
 
 <dl class="cpp var">

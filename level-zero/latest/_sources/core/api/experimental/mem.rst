@@ -1,7 +1,7 @@
 ============================================================
 Mem - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Mem - Experimental Functions
@@ -77,37 +77,9 @@ ze_memory_atomic_attr_exp_flags_t
 .. doxygenenum:: ze_memory_atomic_attr_exp_flag_t
     :project: LevelZero
 
-
-.. _ze-relaxed-allocation-limits-exp-flags-t:
-
-ze_relaxed_allocation_limits_exp_flags_t
-----------------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.1*
-
-.. doxygenenum:: ze_relaxed_allocation_limits_exp_flag_t
-    :project: LevelZero
-
  
 Mem - Experimental Structures
 =============================
-
-
-.. _ze-relaxed-allocation-limits-exp-desc-t:
-
-ze_relaxed_allocation_limits_exp_desc_t
----------------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.1*
-
-.. doxygenstruct:: ze_relaxed_allocation_limits_exp_desc_t
-    :project: LevelZero
-    :members:
-    :undoc-members:
 
 
 .. _ze-memory-sub-allocations-exp-properties-t:

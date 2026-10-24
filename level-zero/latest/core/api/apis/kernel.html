@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Kernel &#8212; Level Zero Specification v1.19.12</title>
+    <title>Kernel &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Module Build Log" href="module_build_log.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -585,7 +614,7 @@
                   
   <section id="kernel">
 <h1>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="kernel-functions">
 <h2>Kernel Functions<a class="headerlink" href="#kernel-functions" title="Link to this heading">#</a></h2>
 <section id="zekernelcreate">
@@ -593,10 +622,10 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t">
-<span id="_CPPv314zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t"></span><span id="_CPPv214zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t"></span><span id="zeKernelCreate__ze_module_handle_t.ze_kernel_desc_tCP.ze_kernel_handle_tP"></span><span class="target" id="ze__api_8h_1a5aa0d8bb227ccaad0ecd4e5531716a1b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416ze_kernel_desc_t" title="ze_kernel_desc_t"><span class="n"><span class="pre">ze_kernel_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phKernel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t"></span><span id="_CPPv214zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t"></span><span id="zeKernelCreate__ze_module_handle_t.ze_kernel_desc_tCP.ze_kernel_handle_tP"></span><span class="target" id="ze__api_8h_1a5aa0d8bb227ccaad0ecd4e5531716a1b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-kernel-desc-t" title="ze_kernel_desc_t"><span class="n"><span class="pre">ze_kernel_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phKernel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeKernelCreate18ze_module_handle_tPK16ze_kernel_desc_tP18ze_kernel_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Create a kernel from the module. </p>
 <p><ul class="simple">
-<li><p>Modules that have unresolved imports need to be dynamically linked before a kernel can be created from them. (See <a class="reference internal" href="module.html#ze__api_8h_1a0d1f9dff8d8d28f49d6ecd154be75106"><span class="std std-ref">zeModuleDynamicLink</span></a>)</p></li>
+<li><p>Modules that have unresolved imports need to be dynamically linked before a kernel can be created from them. (See <a class="reference internal" href="module.html#zemoduledynamiclink"><span class="std std-ref">zeModuleDynamicLink</span></a>)</p></li>
 <li><p>The application may call this function from simultaneous threads.</p></li>
 <li><p>The implementation of this function must be thread-safe.</p></li>
 </ul>
@@ -653,7 +682,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zeKernelDestroy18ze_kernel_handle_t">
-<span id="_CPPv315zeKernelDestroy18ze_kernel_handle_t"></span><span id="_CPPv215zeKernelDestroy18ze_kernel_handle_t"></span><span id="zeKernelDestroy__ze_kernel_handle_t"></span><span class="target" id="ze__api_8h_1a8f7fe5eff7d774b5a1f2a066af939cff"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeKernelDestroy18ze_kernel_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zeKernelDestroy18ze_kernel_handle_t"></span><span id="_CPPv215zeKernelDestroy18ze_kernel_handle_t"></span><span id="zeKernelDestroy__ze_kernel_handle_t"></span><span class="target" id="ze__api_8h_1a8f7fe5eff7d774b5a1f2a066af939cff"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeKernelDestroy18ze_kernel_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys a kernel object. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the device is not currently referencing the kernel before it is deleted.</p></li>
@@ -698,10 +727,10 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zeKernelSetCacheConfig18ze_kernel_handle_t23ze_cache_config_flags_t">
-<span id="_CPPv322zeKernelSetCacheConfig18ze_kernel_handle_t23ze_cache_config_flags_t"></span><span id="_CPPv222zeKernelSetCacheConfig18ze_kernel_handle_t23ze_cache_config_flags_t"></span><span id="zeKernelSetCacheConfig__ze_kernel_handle_t.ze_cache_config_flags_t"></span><span class="target" id="ze__api_8h_1a9d1a10fe57a06b4454d9fa3dae08f37b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetCacheConfig</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_cache_config_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeKernelSetCacheConfig18ze_kernel_handle_t23ze_cache_config_flags_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zeKernelSetCacheConfig18ze_kernel_handle_t23ze_cache_config_flags_t"></span><span id="_CPPv222zeKernelSetCacheConfig18ze_kernel_handle_t23ze_cache_config_flags_t"></span><span id="zeKernelSetCacheConfig__ze_kernel_handle_t.ze_cache_config_flags_t"></span><span class="target" id="ze__api_8h_1a9d1a10fe57a06b4454d9fa3dae08f37b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetCacheConfig</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_cache_config_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeKernelSetCacheConfig18ze_kernel_handle_t23ze_cache_config_flags_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Sets the preferred cache configuration. </p>
 <p><ul class="simple">
-<li><p>The cache configuration will be used when a <a class="reference internal" href="command_list.html#ze__api_8h_1adfc6228586a0d177d6307b0f39eeaee9"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a> variant is called.</p></li>
+<li><p>The cache configuration will be used when a <a class="reference internal" href="command_list.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a> variant is called.</p></li>
 <li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same kernel handle.</p></li>
 <li><p>The implementation of this function should be lock-free.</p></li>
 </ul>
@@ -710,7 +739,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hKernel</strong> – [in] handle of the kernel object </p></li>
-<li><p><strong>flags</strong> – [in] cache configuration. must be 0 (default configuration) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a68ae44a42083d62da0f03fe83ef3c7a4"><span class="std std-ref">ze_cache_config_flag_t</span></a>. </p></li>
+<li><p><strong>flags</strong> – [in] cache configuration. must be 0 (default configuration) or a valid combination of <a class="reference internal" href="#ze-cache-config-flags-t"><span class="std std-ref">ze_cache_config_flag_t</span></a>. </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -749,10 +778,10 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t">
-<span id="_CPPv320zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t"></span><span id="_CPPv220zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t"></span><span id="zeKernelSetGroupSize__ze_kernel_handle_t.uint32_t.uint32_t.uint32_t"></span><span class="target" id="ze__api_8h_1a9d3dc4231a6449494e53fb1692ed8cb7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetGroupSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">groupSizeX</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">groupSizeY</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">groupSizeZ</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv320zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t"></span><span id="_CPPv220zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t"></span><span id="zeKernelSetGroupSize__ze_kernel_handle_t.uint32_t.uint32_t.uint32_t"></span><span class="target" id="ze__api_8h_1a9d3dc4231a6449494e53fb1692ed8cb7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetGroupSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">groupSizeX</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">groupSizeY</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">groupSizeZ</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeKernelSetGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set group size for a kernel. </p>
 <p><ul class="simple">
-<li><p>The group size will be used when a <a class="reference internal" href="command_list.html#ze__api_8h_1adfc6228586a0d177d6307b0f39eeaee9"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a> variant is called.</p></li>
+<li><p>The group size will be used when a <a class="reference internal" href="command_list.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a> variant is called.</p></li>
 <li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same kernel handle.</p></li>
 <li><p>The implementation of this function should be lock-free.</p></li>
 </ul>
@@ -798,10 +827,10 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t">
-<span id="_CPPv324zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t"></span><span id="_CPPv224zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t"></span><span id="zeKernelSuggestGroupSize__ze_kernel_handle_t.uint32_t.uint32_t.uint32_t.uint32_tP.uint32_tP.uint32_tP"></span><span class="target" id="ze__api_8h_1afad8c87e36c3fb1a18750be98227acb3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSuggestGroupSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">globalSizeX</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">globalSizeY</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">globalSizeZ</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">groupSizeX</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">groupSizeY</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">groupSizeZ</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t"></span><span id="_CPPv224zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t"></span><span id="zeKernelSuggestGroupSize__ze_kernel_handle_t.uint32_t.uint32_t.uint32_t.uint32_tP.uint32_tP.uint32_tP"></span><span class="target" id="ze__api_8h_1afad8c87e36c3fb1a18750be98227acb3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSuggestGroupSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">globalSizeX</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">globalSizeY</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">globalSizeZ</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">groupSizeX</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">groupSizeY</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">groupSizeZ</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeKernelSuggestGroupSize18ze_kernel_handle_t8uint32_t8uint32_t8uint32_tP8uint32_tP8uint32_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Query a suggested group size for a kernel given a global size for each dimension. </p>
 <p><ul class="simple">
-<li><p>This function ignores the group size that is set using <a class="reference internal" href="#ze__api_8h_1a9d3dc4231a6449494e53fb1692ed8cb7"><span class="std std-ref">zeKernelSetGroupSize</span></a>.</p></li>
+<li><p>This function ignores the group size that is set using <a class="reference internal" href="#zekernelsetgroupsize"><span class="std std-ref">zeKernelSetGroupSize</span></a>.</p></li>
 <li><p>The application may call this function from simultaneous threads.</p></li>
 <li><p>The implementation of this function should be lock-free.</p></li>
 </ul>
@@ -856,12 +885,12 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv439zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t">
-<span id="_CPPv339zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t"></span><span id="_CPPv239zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t"></span><span id="zeKernelSuggestMaxCooperativeGroupCount__ze_kernel_handle_t.uint32_tP"></span><span class="target" id="ze__api_8h_1af0b050a6cc08132ef84a8618942ce125"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSuggestMaxCooperativeGroupCount</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">totalGroupCount</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv439zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv339zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t"></span><span id="_CPPv239zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t"></span><span id="zeKernelSuggestMaxCooperativeGroupCount__ze_kernel_handle_t.uint32_tP"></span><span class="target" id="ze__api_8h_1af0b050a6cc08132ef84a8618942ce125"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSuggestMaxCooperativeGroupCount</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">totalGroupCount</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv439zeKernelSuggestMaxCooperativeGroupCount18ze_kernel_handle_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Query a suggested max group count for a cooperative kernel. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
 <li><p>The implementation of this function should be lock-free.</p></li>
-<li><p>Applications are recommended to use <a class="reference internal" href="#ze__api_8h_1afad8c87e36c3fb1a18750be98227acb3"><span class="std std-ref">zeKernelSuggestGroupSize</span></a> and <a class="reference internal" href="#ze__api_8h_1a9d3dc4231a6449494e53fb1692ed8cb7"><span class="std std-ref">zeKernelSetGroupSize</span></a> first before calling this function and launching cooperative kernels. Otherwise, implementation may return <a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ade51cf698db72dacd34378a5c33d45cf"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION</span></a>.</p></li>
+<li><p>Applications are recommended to use <a class="reference internal" href="#zekernelsuggestgroupsize"><span class="std std-ref">zeKernelSuggestGroupSize</span></a> and <a class="reference internal" href="#zekernelsetgroupsize"><span class="std std-ref">zeKernelSetGroupSize</span></a> first before calling this function and launching cooperative kernels. Otherwise, implementation may return <a class="reference internal" href="data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ade51cf698db72dacd34378a5c33d45cf"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_GROUP_SIZE_DIMENSION</span></a>.</p></li>
 </ul>
 </p>
 <dl class="field-list simple">
@@ -906,10 +935,10 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv">
-<span id="_CPPv324zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv"></span><span id="_CPPv224zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv"></span><span id="zeKernelSetArgumentValue__ze_kernel_handle_t.uint32_t.s.voidCP"></span><span class="target" id="ze__api_8h_1a47e1f10f9454bfb095fd92f51ab6734d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetArgumentValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argIndex</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argSize</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pArgValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv"></span><span id="_CPPv224zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv"></span><span id="zeKernelSetArgumentValue__ze_kernel_handle_t.uint32_t.s.voidCP"></span><span class="target" id="ze__api_8h_1a47e1f10f9454bfb095fd92f51ab6734d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetArgumentValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argIndex</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argSize</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pArgValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeKernelSetArgumentValue18ze_kernel_handle_t8uint32_t6size_tPKv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set kernel argument for a kernel. </p>
 <p><ul class="simple">
-<li><p>The argument values will be used when a <a class="reference internal" href="command_list.html#ze__api_8h_1adfc6228586a0d177d6307b0f39eeaee9"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a> variant is called.</p></li>
+<li><p>The argument values will be used when a <a class="reference internal" href="command_list.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a> variant is called.</p></li>
 <li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same kernel handle.</p></li>
 <li><p>The implementation of this function should be lock-free.</p></li>
 <li><p>If argument is SLM (size), then SLM size in bytes for this resource is provided as argument size and argument value is null</p></li>
@@ -958,7 +987,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zeKernelSetIndirectAccess18ze_kernel_handle_t33ze_kernel_indirect_access_flags_t">
-<span id="_CPPv325zeKernelSetIndirectAccess18ze_kernel_handle_t33ze_kernel_indirect_access_flags_t"></span><span id="_CPPv225zeKernelSetIndirectAccess18ze_kernel_handle_t33ze_kernel_indirect_access_flags_t"></span><span id="zeKernelSetIndirectAccess__ze_kernel_handle_t.ze_kernel_indirect_access_flags_t"></span><span class="target" id="ze__api_8h_1aab934d0cb24ad02ed19651be8b0d0429"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetIndirectAccess</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_kernel_indirect_access_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeKernelSetIndirectAccess18ze_kernel_handle_t33ze_kernel_indirect_access_flags_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zeKernelSetIndirectAccess18ze_kernel_handle_t33ze_kernel_indirect_access_flags_t"></span><span id="_CPPv225zeKernelSetIndirectAccess18ze_kernel_handle_t33ze_kernel_indirect_access_flags_t"></span><span id="zeKernelSetIndirectAccess__ze_kernel_handle_t.ze_kernel_indirect_access_flags_t"></span><span class="target" id="ze__api_8h_1aab934d0cb24ad02ed19651be8b0d0429"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelSetIndirectAccess</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_kernel_indirect_access_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeKernelSetIndirectAccess18ze_kernel_handle_t33ze_kernel_indirect_access_flags_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Sets kernel indirect access flags. </p>
 <p><ul class="simple">
 <li><p>The application should specify which allocations will be indirectly accessed by the kernel to allow driver to optimize which allocations are made resident</p></li>
@@ -1009,7 +1038,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zeKernelGetIndirectAccess18ze_kernel_handle_tP33ze_kernel_indirect_access_flags_t">
-<span id="_CPPv325zeKernelGetIndirectAccess18ze_kernel_handle_tP33ze_kernel_indirect_access_flags_t"></span><span id="_CPPv225zeKernelGetIndirectAccess18ze_kernel_handle_tP33ze_kernel_indirect_access_flags_t"></span><span id="zeKernelGetIndirectAccess__ze_kernel_handle_t.ze_kernel_indirect_access_flags_tP"></span><span class="target" id="ze__api_8h_1a06e05932b9f6aec260360f4fb03de54d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetIndirectAccess</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_kernel_indirect_access_flags_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFlags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeKernelGetIndirectAccess18ze_kernel_handle_tP33ze_kernel_indirect_access_flags_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zeKernelGetIndirectAccess18ze_kernel_handle_tP33ze_kernel_indirect_access_flags_t"></span><span id="_CPPv225zeKernelGetIndirectAccess18ze_kernel_handle_tP33ze_kernel_indirect_access_flags_t"></span><span id="zeKernelGetIndirectAccess__ze_kernel_handle_t.ze_kernel_indirect_access_flags_tP"></span><span class="target" id="ze__api_8h_1a06e05932b9f6aec260360f4fb03de54d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetIndirectAccess</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_kernel_indirect_access_flags_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFlags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeKernelGetIndirectAccess18ze_kernel_handle_tP33ze_kernel_indirect_access_flags_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve kernel indirect access flags. </p>
 <p><ul class="simple">
 <li><p>This function may be called from simultaneous threads with the same Kernel handle.</p></li>
@@ -1058,7 +1087,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zeKernelGetSourceAttributes18ze_kernel_handle_tP8uint32_tPPc">
-<span id="_CPPv327zeKernelGetSourceAttributes18ze_kernel_handle_tP8uint32_tPPc"></span><span id="_CPPv227zeKernelGetSourceAttributes18ze_kernel_handle_tP8uint32_tPPc"></span><span id="zeKernelGetSourceAttributes__ze_kernel_handle_t.uint32_tP.cPP"></span><span class="target" id="ze__api_8h_1a16ca5eec738efd37e4e2acfd79edecff"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetSourceAttributes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pString</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeKernelGetSourceAttributes18ze_kernel_handle_tP8uint32_tPPc" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zeKernelGetSourceAttributes18ze_kernel_handle_tP8uint32_tPPc"></span><span id="_CPPv227zeKernelGetSourceAttributes18ze_kernel_handle_tP8uint32_tPPc"></span><span id="zeKernelGetSourceAttributes__ze_kernel_handle_t.uint32_tP.cPP"></span><span class="target" id="ze__api_8h_1a16ca5eec738efd37e4e2acfd79edecff"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetSourceAttributes</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pString</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeKernelGetSourceAttributes18ze_kernel_handle_tP8uint32_tPPc" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve all declared kernel attributes (i.e. can be specified with <strong>attribute</strong> in runtime language). </p>
 <p><ul class="simple">
 <li><p>This function may be called from simultaneous threads with the same Kernel handle.</p></li>
@@ -1108,7 +1137,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t">
-<span id="_CPPv321zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t"></span><span id="_CPPv221zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t"></span><span id="zeKernelGetProperties__ze_kernel_handle_t.ze_kernel_properties_tP"></span><span class="target" id="ze__api_8h_1a434629dad419e08e03e477ea43ae081d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <a class="reference internal" href="#_CPPv422ze_kernel_properties_t" title="ze_kernel_properties_t"><span class="n"><span class="pre">ze_kernel_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pKernelProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t"></span><span id="_CPPv221zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t"></span><span id="zeKernelGetProperties__ze_kernel_handle_t.ze_kernel_properties_tP"></span><span class="target" id="ze__api_8h_1a434629dad419e08e03e477ea43ae081d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <a class="reference internal" href="#ze-kernel-properties-t" title="ze_kernel_properties_t"><span class="n"><span class="pre">ze_kernel_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pKernelProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeKernelGetProperties18ze_kernel_handle_tP22ze_kernel_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve kernel properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1157,7 +1186,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zeKernelGetName18ze_kernel_handle_tP6size_tPc">
-<span id="_CPPv315zeKernelGetName18ze_kernel_handle_tP6size_tPc"></span><span id="_CPPv215zeKernelGetName18ze_kernel_handle_tP6size_tPc"></span><span id="zeKernelGetName__ze_kernel_handle_t.sP.cP"></span><span class="target" id="ze__api_8h_1a494fba15792caa6a8a987aa5ffd1792a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetName</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pName</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeKernelGetName18ze_kernel_handle_tP6size_tPc" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zeKernelGetName18ze_kernel_handle_tP6size_tPc"></span><span id="_CPPv215zeKernelGetName18ze_kernel_handle_tP6size_tPc"></span><span id="zeKernelGetName__ze_kernel_handle_t.sP.cP"></span><span class="target" id="ze__api_8h_1a494fba15792caa6a8a987aa5ffd1792a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetName</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pName</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeKernelGetName18ze_kernel_handle_tP6size_tPc" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve kernel name from Kernel. </p>
 <p><ul class="simple">
 <li><p>The caller can pass nullptr for pName when querying only for size.</p></li>
@@ -1209,7 +1238,7 @@
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeKernelGetModuleHandle18ze_kernel_handle_tP18ze_module_handle_t">
-<span id="_CPPv323zeKernelGetModuleHandle18ze_kernel_handle_tP18ze_module_handle_t"></span><span id="_CPPv223zeKernelGetModuleHandle18ze_kernel_handle_tP18ze_module_handle_t"></span><span id="zeKernelGetModuleHandle__ze_kernel_handle_t.ze_module_handle_tP"></span><span class="target" id="ze__api_8h_1aee67e459882d87f677ca48ebe11086c6"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetModuleHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModule</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeKernelGetModuleHandle18ze_kernel_handle_tP18ze_module_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeKernelGetModuleHandle18ze_kernel_handle_tP18ze_module_handle_t"></span><span id="_CPPv223zeKernelGetModuleHandle18ze_kernel_handle_tP18ze_module_handle_t"></span><span id="zeKernelGetModuleHandle__ze_kernel_handle_t.ze_module_handle_tP"></span><span class="target" id="ze__api_8h_1aee67e459882d87f677ca48ebe11086c6"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeKernelGetModuleHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModule</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeKernelGetModuleHandle18ze_kernel_handle_tP18ze_module_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve the handle of the module from which the kernel was created. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1359,7 +1388,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16ze_kernel_desc_t5stypeE">
-<span id="_CPPv3N16ze_kernel_desc_t5stypeE"></span><span id="_CPPv2N16ze_kernel_desc_t5stypeE"></span><span id="ze_kernel_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__kernel__desc__t_1a63f6902049541afb21536eea9d4b2726"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N16ze_kernel_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N16ze_kernel_desc_t5stypeE"></span><span id="_CPPv2N16ze_kernel_desc_t5stypeE"></span><span id="ze_kernel_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__kernel__desc__t_1a63f6902049541afb21536eea9d4b2726"></span><a class="reference internal" href="data_types.html#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N16ze_kernel_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -1372,7 +1401,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16ze_kernel_desc_t5flagsE">
 <span id="_CPPv3N16ze_kernel_desc_t5flagsE"></span><span id="_CPPv2N16ze_kernel_desc_t5flagsE"></span><span id="ze_kernel_desc_t::flags__ze_kernel_flags_t"></span><span class="target" id="structze__kernel__desc__t_1a7671bf612a2016c12603f4246e710fcf"></span><span class="n"><span class="pre">ze_kernel_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N16ze_kernel_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a7b0c1aadf430f2868e9144dca986121a"><span class="std std-ref">ze_kernel_flag_t</span></a>; default behavior may use driver-based residency. </p>
+<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze-kernel-flags-t"><span class="std std-ref">ze_kernel_flag_t</span></a>; default behavior may use driver-based residency. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1396,7 +1425,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22ze_kernel_properties_t5stypeE">
-<span id="_CPPv3N22ze_kernel_properties_t5stypeE"></span><span id="_CPPv2N22ze_kernel_properties_t5stypeE"></span><span id="ze_kernel_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__kernel__properties__t_1a764a7e3f89b5c482d075f27b64ebc462"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N22ze_kernel_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N22ze_kernel_properties_t5stypeE"></span><span id="_CPPv2N22ze_kernel_properties_t5stypeE"></span><span id="ze_kernel_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__kernel__properties__t_1a764a7e3f89b5c482d075f27b64ebc462"></span><a class="reference internal" href="data_types.html#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N22ze_kernel_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -1474,7 +1503,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22ze_kernel_properties_t4uuidE">
-<span id="_CPPv3N22ze_kernel_properties_t4uuidE"></span><span id="_CPPv2N22ze_kernel_properties_t4uuidE"></span><span id="ze_kernel_properties_t::uuid__ze_kernel_uuid_t"></span><span class="target" id="structze__kernel__properties__t_1a87f5b49d4e5221f5f0e573976fda3251"></span><a class="reference internal" href="data_types.html#_CPPv416ze_kernel_uuid_t" title="ze_kernel_uuid_t"><span class="n"><span class="pre">ze_kernel_uuid_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uuid</span></span></span><a class="headerlink" href="#_CPPv4N22ze_kernel_properties_t4uuidE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N22ze_kernel_properties_t4uuidE"></span><span id="_CPPv2N22ze_kernel_properties_t4uuidE"></span><span id="ze_kernel_properties_t::uuid__ze_kernel_uuid_t"></span><span class="target" id="structze__kernel__properties__t_1a87f5b49d4e5221f5f0e573976fda3251"></span><a class="reference internal" href="data_types.html#ze-kernel-uuid-t" title="ze_kernel_uuid_t"><span class="n"><span class="pre">ze_kernel_uuid_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uuid</span></span></span><a class="headerlink" href="#_CPPv4N22ze_kernel_properties_t4uuidE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] universal unique identifier. </p>
 </dd></dl>
 
@@ -1490,14 +1519,14 @@
 <span id="_CPPv343ze_kernel_preferred_group_size_properties_t"></span><span id="_CPPv243ze_kernel_preferred_group_size_properties_t"></span><span id="ze_kernel_preferred_group_size_properties_t"></span><span class="target" id="structze__kernel__preferred__group__size__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_kernel_preferred_group_size_properties_t</span></span></span><a class="headerlink" href="#_CPPv443ze_kernel_preferred_group_size_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Additional kernel preferred group size properties. </p>
 <p><ul class="simple">
-<li><p>This structure may be passed to <a class="reference internal" href="#ze__api_8h_1a434629dad419e08e03e477ea43ae081d"><span class="std std-ref">zeKernelGetProperties</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="#structze__kernel__properties__t"><span class="std std-ref">ze_kernel_properties_t</span></a>, to query additional kernel preferred group size properties. </p></li>
+<li><p>This structure may be passed to <a class="reference internal" href="#zekernelgetproperties"><span class="std std-ref">zeKernelGetProperties</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="#ze-kernel-properties-t"><span class="std std-ref">ze_kernel_properties_t</span></a>, to query additional kernel preferred group size properties. </p></li>
 </ul>
 </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N43ze_kernel_preferred_group_size_properties_t5stypeE">
-<span id="_CPPv3N43ze_kernel_preferred_group_size_properties_t5stypeE"></span><span id="_CPPv2N43ze_kernel_preferred_group_size_properties_t5stypeE"></span><span id="ze_kernel_preferred_group_size_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__kernel__preferred__group__size__properties__t_1a7193ccfa7505c7d1238b03566592febc"></span><a class="reference internal" href="data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N43ze_kernel_preferred_group_size_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N43ze_kernel_preferred_group_size_properties_t5stypeE"></span><span id="_CPPv2N43ze_kernel_preferred_group_size_properties_t5stypeE"></span><span id="ze_kernel_preferred_group_size_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__kernel__preferred__group__size__properties__t_1a7193ccfa7505c7d1238b03566592febc"></span><a class="reference internal" href="data_types.html#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N43ze_kernel_preferred_group_size_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 

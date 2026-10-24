@@ -1,26 +1,13 @@
 ============================================================
 Data Types - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 
 
 Data Types - Experimental Enums
 ===============================
-
-
-.. _zet-api-tracing-exp-version-t:
-
-zet_api_tracing_exp_version_t
------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenenum:: zet_api_tracing_exp_version_t
-    :project: LevelZero
 
 
 .. _ze-calculate-multiple-metrics-exp-version-t:

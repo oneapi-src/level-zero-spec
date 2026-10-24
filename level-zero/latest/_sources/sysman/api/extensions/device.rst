@@ -1,7 +1,7 @@
 ============================================================
 Device - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Device - Extension Functions
@@ -110,6 +110,21 @@ zes_device_ext_properties_t
     :undoc-members:
 
 
+.. _zes-device-index-ext-properties-t:
+
+zes_device_index_ext_properties_t
+---------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenstruct:: zes_device_index_ext_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
 .. _zes-device-ecc-default-properties-ext-t:
 
 zes_device_ecc_default_properties_ext_t
@@ -180,6 +195,21 @@ zes_oem_serial_id_ext_properties_t
 *Added in version 1.17*
 
 .. doxygenstruct:: zes_oem_serial_id_ext_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+.. _zes-device-gpu-topology-ext-properties-t:
+
+zes_device_gpu_topology_ext_properties_t
+----------------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenstruct:: zes_device_gpu_topology_ext_properties_t
     :project: LevelZero
     :members:
     :undoc-members:

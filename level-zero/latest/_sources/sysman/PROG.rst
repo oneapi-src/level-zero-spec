@@ -24,7 +24,7 @@ The System Resource Management library should be initialized by calling :ref:`ze
 
 Avoid using both the zesInit() API and the ZES_ENABLE_SYSMAN=1 environment variable simultaneously for initialization.
 
-**DEPRECATION NOTICE:** The ZES_ENABLE_SYSMAN environment variable is deprecated as of version 1.16.
+**Note:** The ZES_ENABLE_SYSMAN environment variable is deprecated as of version 1.16.
 Applications should use :ref:`zesInit`\() for initialization instead. The environment variable is maintained
 only for backward compatibility with legacy applications.
 
@@ -34,7 +34,7 @@ The following environment variables are optional
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
-| Sysman          | ZES_ENABLE_SYSMAN                   | {**0**, 1} | **@deprecated since 1.16** Use zesInit() instead.                                 |
+| Sysman          | ZES_ENABLE_SYSMAN                   | {**0**, 1} | Deprecated since 1.16. Use zesInit() instead.                                     |
 |                 |                                     |            | Enables driver initialization and dependencies for system management              |
 +-----------------+-------------------------------------+------------+-----------------------------------------------------------------------------------+
 | Sysman          | ZES_ENABLE_SYSMAN_LOW_POWER         | {**0**, 1} | Driver initializes the device in low power mode                                   |
@@ -549,6 +549,79 @@ The pseudo code below shows how to output the PCI BDF address:
                pciProps.address.bus,
                pciProps.address.device,
                pciProps.address.function);
+
+PCI configuration space properties
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The structure :ref:`zes-pci-config-properties-t` exposes identification and link capability
+registers read from the PCI configuration space of a device, such as the vendor and
+device ids, the subsystem ids, the revision id, the PCI Express capability version and
+the supported link speeds.
+
+These properties can be queried in two ways:
+
+- For a device that has already been enumerated, by chaining
+  :ref:`zes-pci-config-properties-t` to the ``pNext`` member of :ref:`zes-pci-properties-t`
+  when calling :ref:`zesDevicePciGetProperties`\.
+- For every device supported by the driver that is present on the PCI bus, by calling
+  :ref:`zesDriverGetPciDeviceProperties`\. This works whether or not a kernel mode driver is
+  installed or bound to the device, and is supported when :ref:`zesInit` is called with
+  ``:ref:`ZES_INIT_FLAG_NO_DEVICES <zes-init-flags-t>`\``, so that PCI devices can be inspected before (or
+  without) device enumeration.
+
+A device that does not respond on the bus, and whose configuration space therefore reads
+back as all ones, is reported with a link status of ``:ref:`ZES_PCI_LINK_STATUS_LINK_ERROR <zes-pci-link-status-t>`\``.
+
+The pseudo code below shows how to query the PCI configuration space properties:
+
+.. parsed-literal::
+
+   // Initialize Sysman without enumerating devices
+   :ref:`zesInit`\(:ref:`ZES_INIT_FLAG_NO_DEVICES <zes-init-flags-t>`\);
+
+   uint32_t driverCount = 1;
+   zes_driver_handle_t hDriver = nullptr;
+   :ref:`zesDriverGet`\(&driverCount, &hDriver);
+
+   // Query the number of PCI devices supported by the driver
+   uint32_t deviceCount = 0;
+   :ref:`zesDriverGetPciDeviceProperties`\(hDriver, &deviceCount, nullptr);
+
+   :ref:`zes-driver-pci-device-properties-t`\* pProps = (:ref:`zes-driver-pci-device-properties-t`\*)
+       allocate(deviceCount * sizeof(:ref:`zes-driver-pci-device-properties-t`\));
+   for (uint32_t i = 0; i < deviceCount; i++) {
+       pProps[i].stype = :ref:`ZES_STRUCTURE_TYPE_DRIVER_PCI_DEVICE_PROPERTIES <zes-structure-type-t>`\;
+       pProps[i].pNext = nullptr;
+       pProps[i].configProperties.stype = :ref:`ZES_STRUCTURE_TYPE_PCI_CONFIG_PROPERTIES <zes-structure-type-t>`\;
+       pProps[i].configProperties.pNext = nullptr;
+   }
+
+   :ref:`zesDriverGetPciDeviceProperties`\(hDriver, &deviceCount, pProps);
+
+   for (uint32_t i = 0; i < deviceCount; i++) {
+       output("Device %04x:%02x:%02x.%x, vendor id: 0x%04x, device id: 0x%04x\\n",
+              pProps[i].address.domain, pProps[i].address.bus,
+              pProps[i].address.device, pProps[i].address.function,
+              pProps[i].configProperties.vendorId, pProps[i].configProperties.deviceId);
+
+       if (pProps[i].status == :ref:`ZES_PCI_LINK_STATUS_LINK_ERROR <zes-pci-link-status-t>`\) {
+           output("  Device does not respond on the bus\\n");
+       }
+   }
+
+   free(pProps);
+
+   // For an enumerated device, the same structure can instead be chained to
+   // :ref:`zes-pci-properties-t` and queried through the device-level PCI properties API
+   :ref:`zes-pci-config-properties-t` configProps = {};
+   configProps.stype = :ref:`ZES_STRUCTURE_TYPE_PCI_CONFIG_PROPERTIES <zes-structure-type-t>`\;
+   configProps.pNext = nullptr;
+
+   :ref:`zes-pci-properties-t` pciProps = {};
+   pciProps.stype = :ref:`ZES_STRUCTURE_TYPE_PCI_PROPERTIES <zes-structure-type-t>`\;
+   pciProps.pNext = &configProps;
+
+   :ref:`zesDevicePciGetProperties`\(hDevice, &pciProps);
 
 .. _Power:
 

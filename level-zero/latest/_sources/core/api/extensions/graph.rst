@@ -1,7 +1,7 @@
 ============================================================
 Graph - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Graph - Extension Functions
@@ -135,6 +135,19 @@ zeGraphGetIdExt
 *Added in version 1.18*
 
 .. doxygenfunction:: zeGraphGetIdExt
+    :project: LevelZero
+
+
+.. _zeGraphVisitExt:
+
+zeGraphVisitExt
+---------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenfunction:: zeGraphVisitExt
     :project: LevelZero
 
 

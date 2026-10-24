@@ -1,7 +1,7 @@
 ============================================================
 Driver
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Driver Functions
@@ -86,6 +86,19 @@ zesDriverGetProperties
     :project: LevelZero
 
 
+.. _zesDriverGetPciDeviceProperties:
+
+zesDriverGetPciDeviceProperties
+-------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenfunction:: zesDriverGetPciDeviceProperties
+    :project: LevelZero
+
+
 
 Driver Enums
 ============
@@ -133,6 +146,21 @@ zes_driver_extension_properties_t
 *Added in version 1.8*
 
 .. doxygenstruct:: zes_driver_extension_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+.. _zes-driver-pci-device-properties-t:
+
+zes_driver_pci_device_properties_t
+----------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenstruct:: zes_driver_pci_device_properties_t
     :project: LevelZero
     :members:
     :undoc-members:

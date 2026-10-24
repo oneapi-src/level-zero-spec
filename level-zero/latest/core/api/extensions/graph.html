@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Graph - Extensions &#8212; Level Zero Specification v1.19.12</title>
+    <title>Graph - Extensions &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -48,10 +48,10 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Executable Graph - Extensions" href="executable_graph.html" />
-    <link rel="prev" title="Event - Extensions" href="event.html" />
+    <link rel="prev" title="Kernel - Extensions" href="kernel.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -485,6 +514,10 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415zeGraphGetIdExt17ze_graph_handle_tP8uint64_t"><code class="docutils literal notranslate"><span class="pre">zeGraphGetIdExt()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zegraphvisitext">zeGraphVisitExt</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415zeGraphVisitExt17ze_graph_handle_tPK27ze_command_visit_ext_desc_t"><code class="docutils literal notranslate"><span class="pre">zeGraphVisitExt()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -500,7 +533,7 @@
                   
   <section id="graph-extensions">
 <h1>Graph - Extensions<a class="headerlink" href="#graph-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="graph-extension-functions">
 <h2>Graph - Extension Functions<a class="headerlink" href="#graph-extension-functions" title="Link to this heading">#</a></h2>
 <section id="zegraphcreateext">
@@ -508,12 +541,12 @@
 <p class="api-version"><em>Added in version 1.17</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416zeGraphCreateExt19ze_context_handle_tPKvP17ze_graph_handle_t">
-<span id="_CPPv316zeGraphCreateExt19ze_context_handle_tPKvP17ze_graph_handle_t"></span><span id="_CPPv216zeGraphCreateExt19ze_context_handle_tPKvP17ze_graph_handle_t"></span><span id="zeGraphCreateExt__ze_context_handle_t.voidCP.ze_graph_handle_tP"></span><span class="target" id="ze__api_8h_1a03eafe29b74ce5ca6937436b09a43fa7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphCreateExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span>, <span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeGraphCreateExt19ze_context_handle_tPKvP17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv316zeGraphCreateExt19ze_context_handle_tPKvP17ze_graph_handle_t"></span><span id="_CPPv216zeGraphCreateExt19ze_context_handle_tPKvP17ze_graph_handle_t"></span><span id="zeGraphCreateExt__ze_context_handle_t.voidCP.ze_graph_handle_tP"></span><span class="target" id="ze__api_8h_1a03eafe29b74ce5ca6937436b09a43fa7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphCreateExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span>, <span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeGraphCreateExt19ze_context_handle_tPKvP17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a new graph object. </p>
 <p><ul class="simple">
 <li><p>A newly created graph is an empty container for captured operations.</p></li>
-<li><p>The application may instantiate executable graph objects from a recorded graph using <a class="reference internal" href="#ze__api_8h_1a4cf6b4783e8b33685dab2983d4a15650"><span class="std std-ref">zeGraphInstantiateExt</span></a>.</p></li>
-<li><p>The application may begin capturing into an empty graph using <a class="reference internal" href="command_list.html#ze__api_8h_1a47d02cf47089c704a5c8bc50b5deee9e"><span class="std std-ref">zeCommandListBeginCaptureIntoGraphExt</span></a>.</p></li>
+<li><p>The application may instantiate executable graph objects from a recorded graph using <a class="reference internal" href="#zegraphinstantiateext"><span class="std std-ref">zeGraphInstantiateExt</span></a>.</p></li>
+<li><p>The application may begin capturing into an empty graph using <a class="reference internal" href="command_list.html#zecommandlistbegincaptureintographext"><span class="std std-ref">zeCommandListBeginCaptureIntoGraphExt</span></a>.</p></li>
 </ul>
 </p>
 <dl class="field-list simple">
@@ -559,7 +592,7 @@
 <p class="api-version"><em>Added in version 1.17</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431zeGraphGetPrimaryCommandListExt17ze_graph_handle_tP24ze_command_list_handle_t">
-<span id="_CPPv331zeGraphGetPrimaryCommandListExt17ze_graph_handle_tP24ze_command_list_handle_t"></span><span id="_CPPv231zeGraphGetPrimaryCommandListExt17ze_graph_handle_tP24ze_command_list_handle_t"></span><span id="zeGraphGetPrimaryCommandListExt__ze_graph_handle_t.ze_command_list_handle_tP"></span><span class="target" id="ze__api_8h_1a4785a8d74864efbcaa7467c844526ecc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphGetPrimaryCommandListExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phCommandList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zeGraphGetPrimaryCommandListExt17ze_graph_handle_tP24ze_command_list_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv331zeGraphGetPrimaryCommandListExt17ze_graph_handle_tP24ze_command_list_handle_t"></span><span id="_CPPv231zeGraphGetPrimaryCommandListExt17ze_graph_handle_tP24ze_command_list_handle_t"></span><span id="zeGraphGetPrimaryCommandListExt__ze_graph_handle_t.ze_command_list_handle_tP"></span><span class="target" id="ze__api_8h_1a4785a8d74864efbcaa7467c844526ecc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphGetPrimaryCommandListExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="n"><span class="pre">ze_command_list_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phCommandList</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zeGraphGetPrimaryCommandListExt17ze_graph_handle_tP24ze_command_list_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns the primary command list associated with a graph capture session. </p>
 <p><ul class="simple">
 <li><p>The returned command list is the command list that initiated capture for the graph during its recording stage.</p></li>
@@ -608,7 +641,7 @@
 <p class="api-version"><em>Added in version 1.17</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432zeGraphSetDestructionCallbackExt17ze_graph_handle_t32zex_mem_graph_free_callback_fn_tPvPKv">
-<span id="_CPPv332zeGraphSetDestructionCallbackExt17ze_graph_handle_t32zex_mem_graph_free_callback_fn_tPvPKv"></span><span id="_CPPv232zeGraphSetDestructionCallbackExt17ze_graph_handle_t32zex_mem_graph_free_callback_fn_tPvPKv"></span><span id="zeGraphSetDestructionCallbackExt__ze_graph_handle_t.zex_mem_graph_free_callback_fn_t.voidP.voidCP"></span><span class="target" id="ze__api_8h_1a05ddb081f679cc4342a90d6a53a071ee"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphSetDestructionCallbackExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="n"><span class="pre">zex_mem_graph_free_callback_fn_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pfnCallback</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pUserData</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zeGraphSetDestructionCallbackExt17ze_graph_handle_t32zex_mem_graph_free_callback_fn_tPvPKv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv332zeGraphSetDestructionCallbackExt17ze_graph_handle_t32zex_mem_graph_free_callback_fn_tPvPKv"></span><span id="_CPPv232zeGraphSetDestructionCallbackExt17ze_graph_handle_t32zex_mem_graph_free_callback_fn_tPvPKv"></span><span id="zeGraphSetDestructionCallbackExt__ze_graph_handle_t.zex_mem_graph_free_callback_fn_t.voidP.voidCP"></span><span class="target" id="ze__api_8h_1a05ddb081f679cc4342a90d6a53a071ee"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphSetDestructionCallbackExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="n"><span class="pre">zex_mem_graph_free_callback_fn_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pfnCallback</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pUserData</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zeGraphSetDestructionCallbackExt17ze_graph_handle_t32zex_mem_graph_free_callback_fn_tPvPKv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Registers a host callback that is invoked when a graph is destroyed. </p>
 <p><ul class="simple">
 <li><p>Callbacks may be registered while a graph is being recorded or after executable graph instances have been created from it.</p></li>
@@ -657,16 +690,17 @@
 <p class="api-version"><em>Added in version 1.17</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zeGraphInstantiateExt17ze_graph_handle_tPKvP28ze_executable_graph_handle_t">
-<span id="_CPPv321zeGraphInstantiateExt17ze_graph_handle_tPKvP28ze_executable_graph_handle_t"></span><span id="_CPPv221zeGraphInstantiateExt17ze_graph_handle_tPKvP28ze_executable_graph_handle_t"></span><span id="zeGraphInstantiateExt__ze_graph_handle_t.voidCP.ze_executable_graph_handle_tP"></span><span class="target" id="ze__api_8h_1a4cf6b4783e8b33685dab2983d4a15650"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphInstantiateExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span>, <span class="n"><span class="pre">ze_executable_graph_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phExecutableGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeGraphInstantiateExt17ze_graph_handle_tPKvP28ze_executable_graph_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zeGraphInstantiateExt17ze_graph_handle_tPKvP28ze_executable_graph_handle_t"></span><span id="_CPPv221zeGraphInstantiateExt17ze_graph_handle_tPKvP28ze_executable_graph_handle_t"></span><span id="zeGraphInstantiateExt__ze_graph_handle_t.voidCP.ze_executable_graph_handle_tP"></span><span class="target" id="ze__api_8h_1a4cf6b4783e8b33685dab2983d4a15650"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphInstantiateExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span>, <span class="n"><span class="pre">ze_executable_graph_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phExecutableGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeGraphInstantiateExt17ze_graph_handle_tPKvP28ze_executable_graph_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates an executable graph object from a recorded graph. </p>
 <p><ul class="simple">
 <li><p>Multiple executable graph objects may be created from a single recorded graph.</p></li>
 <li><p>Recorded regular events (not counter-based) are shared between executable graph instances; the application is responsible for avoiding data races during concurrent execution of multiple graph instances.</p></li>
-<li><p>Recorded internal counter-based events (i.e. without ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used only for synchronization within the graph. Their state is tied to the underlying execution queue and is not shared between executable graph instances.</p></li>
-<li><p>Recorded external counter-based events (i.e. with ZEX_COUNTER_BASED_EVENT_FLAG_GRAPH_EXTERNAL) may be used to synchronize the graph with device commands submitted outside the graph (for example, before or after <a class="reference internal" href="command_list.html#ze__api_8h_1a3a8a30c08e13acda54096605a145cf81"><span class="std std-ref">zeCommandListAppendGraphExt</span></a>) and with the host. External counter-based events may incur additional overhead compared to internal counter-based events.</p></li>
+<li><p>Recorded internal counter-based events (i.e. without ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL) may be used only for synchronization within the graph. Their state is tied to the underlying execution queue and is not shared between executable graph instances.</p></li>
+<li><p>Recorded external counter-based events (i.e. with ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL) may be used to synchronize the graph with device commands submitted outside the graph (for example, before or after <a class="reference internal" href="command_list.html#zecommandlistappendgraphext"><span class="std std-ref">zeCommandListAppendGraphExt</span></a>) and with the host. External counter-based events may incur additional overhead compared to internal counter-based events.</p></li>
 <li><p>Resources used in captured commands (e.g. buffers passed to kernels as arguments) are shared between instances; the application is responsible for avoiding data races during concurrent execution.</p></li>
+<li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same graph handle.</p></li>
 <li><p>The function returns <code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_INVALID_GRAPH</span></code> when the recorded graph is invalid, for example when it contains forks that were never joined back to the primary command list.</p></li>
-<li><p>The function returns <code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></code> when graph capture has not been ended with <a class="reference internal" href="command_list.html#ze__api_8h_1a2dfa1f1706dd7a4e14ac24856ca3b4e1"><span class="std std-ref">zeCommandListEndGraphCaptureExt</span></a>.</p></li>
+<li><p>The function returns <code class="docutils literal notranslate"><span class="pre">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></code> when graph capture has not been ended with <a class="reference internal" href="command_list.html#zecommandlistendgraphcaptureext"><span class="std std-ref">zeCommandListEndGraphCaptureExt</span></a>.</p></li>
 </ul>
 </p>
 <dl class="field-list simple">
@@ -713,7 +747,7 @@
 <p class="api-version"><em>Added in version 1.17</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zeGraphIsEmptyExt17ze_graph_handle_t">
-<span id="_CPPv317zeGraphIsEmptyExt17ze_graph_handle_t"></span><span id="_CPPv217zeGraphIsEmptyExt17ze_graph_handle_t"></span><span id="zeGraphIsEmptyExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1a6ebe3235684855bcbddff3b7be963e12"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphIsEmptyExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeGraphIsEmptyExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zeGraphIsEmptyExt17ze_graph_handle_t"></span><span id="_CPPv217zeGraphIsEmptyExt17ze_graph_handle_t"></span><span id="zeGraphIsEmptyExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1a6ebe3235684855bcbddff3b7be963e12"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphIsEmptyExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeGraphIsEmptyExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Queries whether a graph is empty. </p>
 <p><ul class="simple">
 <li><p>The function returns <code class="docutils literal notranslate"><span class="pre">ZE_RESULT_QUERY_TRUE</span></code> when the graph contains no operations.</p></li>
@@ -756,7 +790,7 @@
 <p class="api-version"><em>Added in version 1.17</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zeGraphDumpContentsExt17ze_graph_handle_tPKcPKv">
-<span id="_CPPv322zeGraphDumpContentsExt17ze_graph_handle_tPKcPKv"></span><span id="_CPPv222zeGraphDumpContentsExt17ze_graph_handle_tPKcPKv"></span><span id="zeGraphDumpContentsExt__ze_graph_handle_t.cCP.voidCP"></span><span class="target" id="ze__api_8h_1aef645881e14593fde808179dd4d8baf8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphDumpContentsExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">filePath</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeGraphDumpContentsExt17ze_graph_handle_tPKcPKv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zeGraphDumpContentsExt17ze_graph_handle_tPKcPKv"></span><span id="_CPPv222zeGraphDumpContentsExt17ze_graph_handle_tPKcPKv"></span><span id="zeGraphDumpContentsExt__ze_graph_handle_t.cCP.voidCP"></span><span class="target" id="ze__api_8h_1aef645881e14593fde808179dd4d8baf8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphDumpContentsExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">filePath</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeGraphDumpContentsExt17ze_graph_handle_tPKcPKv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Writes a DOT description of a recorded graph to disk. </p>
 <p><ul class="simple">
 <li><p>The generated DOT output captures the graph structure and recorded append operations.</p></li>
@@ -806,7 +840,7 @@
 <p class="api-version"><em>Added in version 1.17</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zeGraphDestroyExt17ze_graph_handle_t">
-<span id="_CPPv317zeGraphDestroyExt17ze_graph_handle_t"></span><span id="_CPPv217zeGraphDestroyExt17ze_graph_handle_t"></span><span id="zeGraphDestroyExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1ae5e0c6f255931aa3a1625822e0f9ce47"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphDestroyExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeGraphDestroyExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zeGraphDestroyExt17ze_graph_handle_t"></span><span id="_CPPv217zeGraphDestroyExt17ze_graph_handle_t"></span><span id="zeGraphDestroyExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1ae5e0c6f255931aa3a1625822e0f9ce47"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphDestroyExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeGraphDestroyExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys a recorded graph object. </p>
 <p><ul class="simple">
 <li><p>All executable graph instances created from the recorded graph must be destroyed before this function is called.</p></li>
@@ -848,7 +882,7 @@
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zeGraphPauseCaptureExt17ze_graph_handle_t">
-<span id="_CPPv322zeGraphPauseCaptureExt17ze_graph_handle_t"></span><span id="_CPPv222zeGraphPauseCaptureExt17ze_graph_handle_t"></span><span id="zeGraphPauseCaptureExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1a4fcc2cae4ffc83fa04148485a367e11f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphPauseCaptureExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeGraphPauseCaptureExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zeGraphPauseCaptureExt17ze_graph_handle_t"></span><span id="_CPPv222zeGraphPauseCaptureExt17ze_graph_handle_t"></span><span id="zeGraphPauseCaptureExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1a4fcc2cae4ffc83fa04148485a367e11f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphPauseCaptureExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeGraphPauseCaptureExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Pauses recording to the specified graph. Affected immediate command lists (both primary command lists and child command lists from which graph was recording) can be reused for any purpose during this pause without affecting the paused recording. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -888,7 +922,7 @@
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeGraphResumeCaptureExt17ze_graph_handle_t">
-<span id="_CPPv323zeGraphResumeCaptureExt17ze_graph_handle_t"></span><span id="_CPPv223zeGraphResumeCaptureExt17ze_graph_handle_t"></span><span id="zeGraphResumeCaptureExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1a8789b61bea62fe34d6382792ddef8455"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphResumeCaptureExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeGraphResumeCaptureExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeGraphResumeCaptureExt17ze_graph_handle_t"></span><span id="_CPPv223zeGraphResumeCaptureExt17ze_graph_handle_t"></span><span id="zeGraphResumeCaptureExt__ze_graph_handle_t"></span><span class="target" id="ze__api_8h_1a8789b61bea62fe34d6382792ddef8455"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphResumeCaptureExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeGraphResumeCaptureExt17ze_graph_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Resumes capturing commands to the graph after a pause. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -928,7 +962,7 @@
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zeGraphGetIdExt17ze_graph_handle_tP8uint64_t">
-<span id="_CPPv315zeGraphGetIdExt17ze_graph_handle_tP8uint64_t"></span><span id="_CPPv215zeGraphGetIdExt17ze_graph_handle_tP8uint64_t"></span><span id="zeGraphGetIdExt__ze_graph_handle_t.uint64_tP"></span><span class="target" id="ze__api_8h_1a404b414298523d44c4169d1c019f1c7a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphGetIdExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pGraphId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeGraphGetIdExt17ze_graph_handle_tP8uint64_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zeGraphGetIdExt17ze_graph_handle_tP8uint64_t"></span><span id="_CPPv215zeGraphGetIdExt17ze_graph_handle_tP8uint64_t"></span><span id="zeGraphGetIdExt__ze_graph_handle_t.uint64_tP"></span><span class="target" id="ze__api_8h_1a404b414298523d44c4169d1c019f1c7a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphGetIdExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pGraphId</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeGraphGetIdExt17ze_graph_handle_tP8uint64_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Gets monotonically increasing, process-unique ID of the graph. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -967,6 +1001,62 @@
 </dd></dl>
 
 </section>
+<section id="zegraphvisitext">
+<span id="id11"></span><h3>zeGraphVisitExt<a class="headerlink" href="#zegraphvisitext" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.20</em></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv415zeGraphVisitExt17ze_graph_handle_tPK27ze_command_visit_ext_desc_t">
+<span id="_CPPv315zeGraphVisitExt17ze_graph_handle_tPK27ze_command_visit_ext_desc_t"></span><span id="_CPPv215zeGraphVisitExt17ze_graph_handle_tPK27ze_command_visit_ext_desc_t"></span><span id="zeGraphVisitExt__ze_graph_handle_t.ze_command_visit_ext_desc_tCP"></span><span class="target" id="ze__api_8h_1acfd2d6cd9445529ee4ce4c4aaf667188"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeGraphVisitExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_graph_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hGraph</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-command-visit-ext-desc-t" title="ze_command_visit_ext_desc_t"><span class="n"><span class="pre">ze_command_visit_ext_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDesc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeGraphVisitExt17ze_graph_handle_tPK27ze_command_visit_ext_desc_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Visits all commands in a graph in recorded order. </p>
+<p><ul class="simple">
+<li><p>The implementation must support ZE_COMMAND_VISIT_EXT_NAME extension.</p></li>
+<li><p>Graphs can always be visited; no explicit opt-in flag is required at graph creation.</p></li>
+<li><p>Commands are visited in the same order as they were originally recorded.</p></li>
+</ul>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hGraph</strong> – [in] handle of graph to visit </p></li>
+<li><p><strong>pDesc</strong> – [in] pointer to command visit descriptor </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hGraph</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(</span><a class="reference internal" href="data_types.html#ze__api_8h_1a8c80bd93de643649805aa66a2212ee0dafa1785968fba5580e3347a236f2fb752"><span class="std std-ref"><span class="pre">ZE_COMMAND_VISIT_EXT_DEFAULT_OP_REAPPEND</span></span></a> <span class="pre">==</span> <span class="pre">pDesc-&gt;defaultOp)</span> <span class="pre">&amp;&amp;</span> <span class="pre">(nullptr</span> <span class="pre">==</span> <span class="pre">pDesc-&gt;hReappendTargetCommandList)</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">pDesc</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
+<li><p><code class="docutils literal notranslate"><a class="reference internal" href="data_types.html#ze__api_8h_1a8c80bd93de643649805aa66a2212ee0dafa1785968fba5580e3347a236f2fb752"><span class="std std-ref"><span class="pre">ZE_COMMAND_VISIT_EXT_DEFAULT_OP_REAPPEND</span></span></a> <span class="pre">&lt;</span> <span class="pre">pDesc-&gt;defaultOp</span></code></p></li>
+</ul>
+</p></li>
+<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </section>
 </section>
 
@@ -982,12 +1072,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="event.html"
+       href="kernel.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Event - Extensions</p>
+        <p class="prev-next-title">Kernel - Extensions</p>
       </div>
     </a>
     <a class="right-next"
@@ -1015,7 +1105,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">10</span></summary><div class="ctoc-prefix">zeGraph</div><ul class="ctoc-list"><li><a href="graph.html#zegraphcreateext">&hellip;CreateExt</a></li><li><a href="graph.html#zegraphgetprimarycommandlistext">&hellip;GetPrimaryCommandListExt</a></li><li><a href="graph.html#zegraphsetdestructioncallbackext">&hellip;SetDestructionCallbackExt</a></li><li><a href="graph.html#zegraphinstantiateext">&hellip;InstantiateExt</a></li><li><a href="graph.html#zegraphisemptyext">&hellip;IsEmptyExt</a></li><li><a href="graph.html#zegraphdumpcontentsext">&hellip;DumpContentsExt</a></li><li><a href="graph.html#zegraphdestroyext">&hellip;DestroyExt</a></li><li><a href="graph.html#zegraphpausecaptureext">&hellip;PauseCaptureExt</a></li><li><a href="graph.html#zegraphresumecaptureext">&hellip;ResumeCaptureExt</a></li><li><a href="graph.html#zegraphgetidext">&hellip;GetIdExt</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">11</span></summary><div class="ctoc-prefix">zeGraph</div><ul class="ctoc-list"><li><a href="graph.html#zegraphcreateext">&hellip;CreateExt</a></li><li><a href="graph.html#zegraphgetprimarycommandlistext">&hellip;GetPrimaryCommandListExt</a></li><li><a href="graph.html#zegraphsetdestructioncallbackext">&hellip;SetDestructionCallbackExt</a></li><li><a href="graph.html#zegraphinstantiateext">&hellip;InstantiateExt</a></li><li><a href="graph.html#zegraphisemptyext">&hellip;IsEmptyExt</a></li><li><a href="graph.html#zegraphdumpcontentsext">&hellip;DumpContentsExt</a></li><li><a href="graph.html#zegraphdestroyext">&hellip;DestroyExt</a></li><li><a href="graph.html#zegraphpausecaptureext">&hellip;PauseCaptureExt</a></li><li><a href="graph.html#zegraphresumecaptureext">&hellip;ResumeCaptureExt</a></li><li><a href="graph.html#zegraphgetidext">&hellip;GetIdExt</a></li><li><a href="graph.html#zegraphvisitext">&hellip;VisitExt</a></li></ul></details>
   </nav></div>
 
 </div></div>

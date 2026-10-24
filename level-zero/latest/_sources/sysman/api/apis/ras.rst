@@ -1,7 +1,7 @@
 ============================================================
 Ras
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Ras Functions
@@ -18,32 +18,6 @@ zesRasGetProperties
 *Added in version 1.0*
 
 .. doxygenfunction:: zesRasGetProperties
-    :project: LevelZero
-
-
-.. _zesRasGetConfig:
-
-zesRasGetConfig
----------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesRasGetConfig
-    :project: LevelZero
-
-
-.. _zesRasSetConfig:
-
-zesRasSetConfig
----------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesRasSetConfig
     :project: LevelZero
 
 

@@ -1,7 +1,7 @@
 ============================================================
 Power
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Power Functions
@@ -31,32 +31,6 @@ zesPowerGetEnergyCounter
 *Added in version 1.0*
 
 .. doxygenfunction:: zesPowerGetEnergyCounter
-    :project: LevelZero
-
-
-.. _zesPowerGetLimits:
-
-zesPowerGetLimits
------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesPowerGetLimits
-    :project: LevelZero
-
-
-.. _zesPowerSetLimits:
-
-zesPowerSetLimits
------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesPowerSetLimits
     :project: LevelZero
 
 
@@ -211,51 +185,6 @@ zes_power_energy_counter_t
 *Added in version 1.0*
 
 .. doxygenstruct:: zes_power_energy_counter_t
-    :project: LevelZero
-    :members:
-    :undoc-members:
-
-
-.. _zes-power-sustained-limit-t:
-
-zes_power_sustained_limit_t
----------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenstruct:: zes_power_sustained_limit_t
-    :project: LevelZero
-    :members:
-    :undoc-members:
-
-
-.. _zes-power-burst-limit-t:
-
-zes_power_burst_limit_t
------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenstruct:: zes_power_burst_limit_t
-    :project: LevelZero
-    :members:
-    :undoc-members:
-
-
-.. _zes-power-peak-limit-t:
-
-zes_power_peak_limit_t
-----------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenstruct:: zes_power_peak_limit_t
     :project: LevelZero
     :members:
     :undoc-members:

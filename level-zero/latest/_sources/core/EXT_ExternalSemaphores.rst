@@ -20,6 +20,8 @@ API
     * :ref:`zeDeviceReleaseExternalSemaphoreExt`
     * :ref:`zeCommandListAppendSignalExternalSemaphoreExt`
     * :ref:`zeCommandListAppendWaitExternalSemaphoreExt`
+    * :ref:`zeCommandQueueSignalExternalSemaphoreExt`
+    * :ref:`zeCommandQueueWaitExternalSemaphoreExt`
 
 * Enumerations
 
@@ -53,6 +55,7 @@ Semantics and Behavior model
 6. The semaphore objects are currently only allowed to be imported into L0 and therefore the semaphore semantics/definitions of the exporter API needs to be honoured by the application.
 7. Resetting semaphore object needs to be handled by the exporter as L0 capabilities are only to import and perform operations on the semaphore object itself.
 8. :ref:`zeCommandListAppendSignalExternalSemaphoreExt` and :ref:`zeCommandListAppendWaitExternalSemaphoreExt` calls must only be executed on an immediate commandlist.
+9. :ref:`zeCommandQueueSignalExternalSemaphoreExt` and :ref:`zeCommandQueueWaitExternalSemaphoreExt` place the same signal and wait operations on a command queue instead. The value is taken at submission rather than when the operation is appended, so a command list recorded once may be replayed with :ref:`zeCommandQueueExecuteCommandLists` against a different semaphore value each time. The operation is ordered against the other submissions to that queue.
 
 Following pseudo-code demonstrates a sequence for importing external semaphore from Vulkan and using it in L0:
 
@@ -83,3 +86,41 @@ Following pseudo-code demonstrates a sequence for importing external semaphore f
     signalParams.pNext = nullptr;
     :ref:`zeCommandListAppendLaunchKernel`\(commandList, kernel, ..., event2, 0, nullptr);
     :ref:`zeCommandListAppendSignalExternalSemaphoreExt`\(commandList, &semaphore0, &signalParams, 1, event3, 1, &event2);
+
+Queue-level signal and wait
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The command list functions above take their semaphore value when the operation is appended. That suits an
+immediate command list, where appending is submitting, but it cannot express a value that changes per
+submission: an application that records a command list once and replays it with
+:ref:`zeCommandQueueExecuteCommandLists` would reuse the value captured at record time, and would have to
+re-record the list for every new value.
+
+:ref:`zeCommandQueueSignalExternalSemaphoreExt` and :ref:`zeCommandQueueWaitExternalSemaphoreExt` close that gap by
+placing the operation on the command queue instead, taking the value at submission. The recorded command
+list stays unmodified and reusable, and the operation is honoured in the queue's submission order.
+
+Following pseudo-code demonstrates waiting on an imported semaphore before a recorded command list runs, and
+signalling it once that command list completes:
+
+.. parsed-literal::
+    // Import the external semaphore as above
+    ze_external_semaphore_ext_handle_t semaphore0 = nullptr;
+    :ref:`zeDeviceImportExternalSemaphoreExt`\(device, &desc, &semaphore0);
+
+    // Record the command list once, up front
+    ze_command_list_handle_t commandList = ...;
+    :ref:`zeCommandListAppendLaunchKernel`\(commandList, kernel, ..., nullptr, 0, nullptr);
+    :ref:`zeCommandListClose`\(commandList);
+
+    // Wait for the producer to reach the agreed value before the recorded work runs
+    :ref:`ze-external-semaphore-wait-params-ext-t` waitParams = {};
+    waitParams.value = producerValue;
+    :ref:`zeCommandQueueWaitExternalSemaphoreExt`\(commandQueue, 1, &semaphore0, &waitParams, nullptr, 0, nullptr);
+
+    :ref:`zeCommandQueueExecuteCommandLists`\(commandQueue, 1, &commandList, nullptr);
+
+    // Signal the consumer once the submitted work completes
+    :ref:`ze-external-semaphore-signal-params-ext-t` signalParams = {};
+    signalParams.value = consumerValue;
+    :ref:`zeCommandQueueSignalExternalSemaphoreExt`\(commandQueue, 1, &semaphore0, &signalParams, nullptr, 0, nullptr);

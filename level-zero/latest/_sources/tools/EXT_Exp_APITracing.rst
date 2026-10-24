@@ -11,6 +11,10 @@
 
 *Introduced in Level Zero version 1.0*
 
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use `L0 Loader API Tracing <https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing>`__ instead.
+
 API
 ----
 

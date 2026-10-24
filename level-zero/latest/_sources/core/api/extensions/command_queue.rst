@@ -1,7 +1,7 @@
 ============================================================
 Command Queue - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Command Queue - Extension Functions
@@ -44,6 +44,32 @@ zeCommandQueueGetQosExt
 *Added in version 1.19*
 
 .. doxygenfunction:: zeCommandQueueGetQosExt
+    :project: LevelZero
+
+
+.. _zeCommandQueueSignalExternalSemaphoreExt:
+
+zeCommandQueueSignalExternalSemaphoreExt
+----------------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenfunction:: zeCommandQueueSignalExternalSemaphoreExt
+    :project: LevelZero
+
+
+.. _zeCommandQueueWaitExternalSemaphoreExt:
+
+zeCommandQueueWaitExternalSemaphoreExt
+--------------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenfunction:: zeCommandQueueWaitExternalSemaphoreExt
     :project: LevelZero
 
 

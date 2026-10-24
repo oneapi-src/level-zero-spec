@@ -1,7 +1,7 @@
 ============================================================
 Device
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Device Functions
@@ -304,6 +304,19 @@ zeDeviceGetCompilerInfo
 *Added in version 1.18*
 
 .. doxygenfunction:: zeDeviceGetCompilerInfo
+    :project: LevelZero
+
+
+.. _zeDeviceGetCompilerInfoSupported:
+
+zeDeviceGetCompilerInfoSupported
+--------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenfunction:: zeDeviceGetCompilerInfoSupported
     :project: LevelZero
 
 

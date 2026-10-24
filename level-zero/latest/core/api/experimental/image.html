@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Image - Experimental &#8212; Level Zero Specification v1.19.12</title>
+    <title>Image - Experimental &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/experimental/image';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Event Pool - Experimental" href="event_pool.html" />
+    <link rel="next" title="Fabric Vertex - Experimental" href="fabric_vertex.html" />
     <link rel="prev" title="Event - Experimental" href="event.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Experimental</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -449,10 +478,6 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv429zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t"><code class="docutils literal notranslate"><span class="pre">zeImageGetMemoryPropertiesExp()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zeimageviewcreateexp">zeImageViewCreateExp</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zeImageViewCreateExp19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_t17ze_image_handle_tP17ze_image_handle_t"><code class="docutils literal notranslate"><span class="pre">zeImageViewCreateExp()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zeimagegetdeviceoffsetexp">zeImageGetDeviceOffsetExp</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t"><code class="docutils literal notranslate"><span class="pre">zeImageGetDeviceOffsetExp()</span></code></a></li>
 </ul>
@@ -479,15 +504,6 @@
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_image_memory_properties_exp_t4sizeE"><code class="docutils literal notranslate"><span class="pre">size</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_image_memory_properties_exp_t8rowPitchE"><code class="docutils literal notranslate"><span class="pre">rowPitch</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_image_memory_properties_exp_t10slicePitchE"><code class="docutils literal notranslate"><span class="pre">slicePitch</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-view-planar-exp-desc-t">ze_image_view_planar_exp_desc_t</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431ze_image_view_planar_exp_desc_t"><code class="docutils literal notranslate"><span class="pre">ze_image_view_planar_exp_desc_t</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_image_view_planar_exp_desc_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_image_view_planar_exp_desc_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_image_view_planar_exp_desc_t10planeIndexE"><code class="docutils literal notranslate"><span class="pre">planeIndex</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -525,7 +541,7 @@
                   
   <section id="image-experimental">
 <h1>Image - Experimental<a class="headerlink" href="#image-experimental" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="image-experimental-functions">
 <h2>Image - Experimental Functions<a class="headerlink" href="#image-experimental-functions" title="Link to this heading">#</a></h2>
 <section id="zeimagegetmemorypropertiesexp">
@@ -533,7 +549,7 @@
 <p class="api-version"><em>Added in version 1.2</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv429zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t">
-<span id="_CPPv329zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t"></span><span id="_CPPv229zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t"></span><span id="zeImageGetMemoryPropertiesExp__ze_image_handle_t.ze_image_memory_properties_exp_tP"></span><span class="target" id="ze__api_8h_1a58f57373a0e57e3de269a5f40c58e41d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageGetMemoryPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span>, <a class="reference internal" href="#_CPPv432ze_image_memory_properties_exp_t" title="ze_image_memory_properties_exp_t"><span class="n"><span class="pre">ze_image_memory_properties_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMemoryProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv329zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t"></span><span id="_CPPv229zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t"></span><span id="zeImageGetMemoryPropertiesExp__ze_image_handle_t.ze_image_memory_properties_exp_tP"></span><span class="target" id="ze__api_8h_1a58f57373a0e57e3de269a5f40c58e41d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageGetMemoryPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span>, <a class="reference internal" href="#ze-image-memory-properties-exp-t" title="ze_image_memory_properties_exp_t"><span class="n"><span class="pre">ze_image_memory_properties_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMemoryProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429zeImageGetMemoryPropertiesExp17ze_image_handle_tP32ze_image_memory_properties_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Query image memory properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -586,89 +602,12 @@
 </dd></dl>
 
 </section>
-<section id="zeimageviewcreateexp">
-<span id="id2"></span><h3>zeImageViewCreateExp<a class="headerlink" href="#zeimageviewcreateexp" title="Link to this heading">#</a></h3>
-<p class="api-version"><em>Added in version 1.2</em></p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv420zeImageViewCreateExp19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_t17ze_image_handle_tP17ze_image_handle_t">
-<span id="_CPPv320zeImageViewCreateExp19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_t17ze_image_handle_tP17ze_image_handle_t"></span><span id="_CPPv220zeImageViewCreateExp19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_t17ze_image_handle_tP17ze_image_handle_t"></span><span id="zeImageViewCreateExp__ze_context_handle_t.ze_device_handle_t.ze_image_desc_tCP.ze_image_handle_t.ze_image_handle_tP"></span><span class="target" id="ze__api_8h_1a30561b564f1b5a609c1b2069a50ab704"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageViewCreateExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../apis/image.html#_CPPv415ze_image_desc_t" title="ze_image_desc_t"><span class="n"><span class="pre">ze_image_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span>, <span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phImageView</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeImageViewCreateExp19ze_context_handle_t18ze_device_handle_tPK15ze_image_desc_t17ze_image_handle_tP17ze_image_handle_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Create image view on the context. </p>
-<p><ul class="simple">
-<li><p>The application must only use the image view for the device, or its sub-devices, which was provided during creation.</p></li>
-<li><p>The application may call this function from simultaneous threads.</p></li>
-<li><p>The implementation of this function must be thread-safe.</p></li>
-<li><p>The implementation must support ZE_IMAGE_VIEW_EXP_NAME extension.</p></li>
-<li><p>Image views are treated as images from the API.</p></li>
-<li><p>Image views provide a mechanism to redescribe how an image is interpreted (e.g. different format).</p></li>
-<li><p>Image views become disabled when their corresponding image resource is destroyed.</p></li>
-<li><p>Use <a class="reference internal" href="../apis/image.html#ze__api_8h_1afc99631d44819bfc8722dc669b619bdd"><span class="std std-ref">zeImageDestroy</span></a> to destroy image view objects.</p></li>
-<li><p>Note: This function is deprecated and replaced by <a class="reference internal" href="../extensions/image.html#ze__api_8h_1a1042c86868981ce575d315a3107a7583"><span class="std std-ref">zeImageViewCreateExt</span></a>.</p></li>
-</ul>
-</p>
-<p><div class="remark admonition">
-<p class="admonition-title">Remark</p>
-<p><em>Analogues</em><ul class="simple">
-<li><p>None</p></li>
-</ul>
-</p>
-</div>
-</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>hContext</strong> – [in] handle of the context object </p></li>
-<li><p><strong>hDevice</strong> – [in] handle of the device </p></li>
-<li><p><strong>desc</strong> – [in] pointer to image descriptor </p></li>
-<li><p><strong>hImage</strong> – [in] handle of image object to create view from </p></li>
-<li><p><strong>phImageView</strong> – [out] pointer to handle of image object created for view </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ae892446ebfef04994eaa45d020c528cd"><span class="std std-ref">ZE_RESULT_SUCCESS</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aed109126c34c65188f22b5bdb6c4c37f"><span class="std std-ref">ZE_RESULT_ERROR_UNINITIALIZED</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1068b875393bd04173ce6d2810189890"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_LOST</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a92f42c5377d848e194d8c5cf37726c48"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_HOST_MEMORY</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a5bab92487a6c32ddc14770ca229ed6e5"><span class="std std-ref">ZE_RESULT_ERROR_OUT_OF_DEVICE_MEMORY</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a42c974b1c60eb3e9860c74dd61d915b1"><span class="std std-ref">ZE_RESULT_ERROR_DEPENDENCY_UNAVAILABLE</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767aa5ffefdd605ca01b9bb98fb54b0d289f"><span class="std std-ref">ZE_RESULT_ERROR_NOT_AVAILABLE</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8da51b2d5ba4b6a3847a0a4b310ee7ef"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_REQUIRES_RESET</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8a2441426a3f9c8af1190f0636552206"><span class="std std-ref">ZE_RESULT_ERROR_DEVICE_IN_LOW_POWER_STATE</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1c36e23d54f606922dbfa1e51c507e99"><span class="std std-ref">ZE_RESULT_ERROR_UNKNOWN</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a21376db55e4a4577d2b527dfcd6bb381"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_HANDLE</span></a><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hContext</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hDevice</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">hImage</span></code></p></li>
-</ul>
-</p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a90dc7f955a711ba2377da3125672400f"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_NULL_POINTER</span></a><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">desc</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nullptr</span> <span class="pre">==</span> <span class="pre">phImageView</span></code></p></li>
-</ul>
-</p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767af36d7426d6ba8735c9966ceef575d087"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ENUMERATION</span></a><ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">0x3</span> <span class="pre">&lt;</span> <span class="pre">desc-&gt;flags</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><a class="reference internal" href="../apis/image.html#ze__api_8h_1a6e4ce85debe3caeadb2cd2d73a4730f9aa4cff3b9f22ff4a2ce80281e6d453647"><span class="std std-ref"><span class="pre">ZE_IMAGE_TYPE_BUFFER</span></span></a> <span class="pre">&lt;</span> <span class="pre">desc-&gt;type</span></code></p></li>
-</ul>
-</p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a3f4c6fa3cb126a9b3578793b06b8d390"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_ENUMERATION</span></a></p></li>
-<li><p><a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a81837ddc59630042e4220ec72afd051c"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_IMAGE_FORMAT</span></a></p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
 <section id="zeimagegetdeviceoffsetexp">
-<span id="id3"></span><h3>zeImageGetDeviceOffsetExp<a class="headerlink" href="#zeimagegetdeviceoffsetexp" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeImageGetDeviceOffsetExp<a class="headerlink" href="#zeimagegetdeviceoffsetexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t">
-<span id="_CPPv325zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t"></span><span id="_CPPv225zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t"></span><span id="zeImageGetDeviceOffsetExp__ze_image_handle_t.uint64_tP"></span><span class="target" id="ze__api_8h_1a473283300a042b9fa09a8d3e401b0e7b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageGetDeviceOffsetExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDeviceOffset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t"></span><span id="_CPPv225zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t"></span><span id="zeImageGetDeviceOffsetExp__ze_image_handle_t.uint64_tP"></span><span class="target" id="ze__api_8h_1a473283300a042b9fa09a8d3e401b0e7b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeImageGetDeviceOffsetExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDeviceOffset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeImageGetDeviceOffsetExp17ze_image_handle_tP8uint64_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get bindless device offset for image. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads</p></li>
@@ -718,7 +657,7 @@
 <section id="image-experimental-enums">
 <h2>Image - Experimental Enums<a class="headerlink" href="#image-experimental-enums" title="Link to this heading">#</a></h2>
 <section id="ze-image-bindless-exp-flags-t">
-<span id="id4"></span><h3>ze_image_bindless_exp_flags_t<a class="headerlink" href="#ze-image-bindless-exp-flags-t" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>ze_image_bindless_exp_flags_t<a class="headerlink" href="#ze-image-bindless-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv428ze_image_bindless_exp_flag_t">
@@ -727,13 +666,13 @@
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N28ze_image_bindless_exp_flag_t35ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESSE">
 <span id="_CPPv3N28ze_image_bindless_exp_flag_t35ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESSE"></span><span id="_CPPv2N28ze_image_bindless_exp_flag_t35ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESSE"></span><span class="target" id="ze__api_8h_1a49c6d019cfcf64f7256e2205e28aac00a292546a128898a2a673c25dfdde4fac1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS</span></span></span><a class="headerlink" href="#_CPPv4N28ze_image_bindless_exp_flag_t35ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESSE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Bindless images are created with <a class="reference internal" href="../apis/image.html#ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"><span class="std std-ref">zeImageCreate</span></a>. The image handle created with this flag is valid on both host and device. </p>
+<dd><p>Bindless images are created with <a class="reference internal" href="../apis/image.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>. The image handle created with this flag is valid on both host and device. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N28ze_image_bindless_exp_flag_t40ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGEE">
 <span id="_CPPv3N28ze_image_bindless_exp_flag_t40ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGEE"></span><span id="_CPPv2N28ze_image_bindless_exp_flag_t40ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGEE"></span><span class="target" id="ze__api_8h_1a49c6d019cfcf64f7256e2205e28aac00a545dcf3ac48db742f4fe5acad0e5b6c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE</span></span></span><a class="headerlink" href="#_CPPv4N28ze_image_bindless_exp_flag_t40ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGEE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Bindless sampled images are created with <a class="reference internal" href="../apis/image.html#ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"><span class="std std-ref">zeImageCreate</span></a> by combining BINDLESS and SAMPLED_IMAGE. Create sampled image view from bindless unsampled image using SAMPLED_IMAGE. </p>
+<dd><p>Bindless sampled images are created with <a class="reference internal" href="../apis/image.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a> by combining BINDLESS and SAMPLED_IMAGE. Create sampled image view from bindless unsampled image using SAMPLED_IMAGE. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
@@ -749,7 +688,7 @@
 <section id="image-experimental-structures">
 <h2>Image - Experimental Structures<a class="headerlink" href="#image-experimental-structures" title="Link to this heading">#</a></h2>
 <section id="ze-image-memory-properties-exp-t">
-<span id="id5"></span><h3>ze_image_memory_properties_exp_t<a class="headerlink" href="#ze-image-memory-properties-exp-t" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>ze_image_memory_properties_exp_t<a class="headerlink" href="#ze-image-memory-properties-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv432ze_image_memory_properties_exp_t">
@@ -759,7 +698,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N32ze_image_memory_properties_exp_t5stypeE">
-<span id="_CPPv3N32ze_image_memory_properties_exp_t5stypeE"></span><span id="_CPPv2N32ze_image_memory_properties_exp_t5stypeE"></span><span id="ze_image_memory_properties_exp_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__memory__properties__exp__t_1a84f328be0c98bcd4cff60dbbc72ccc73"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N32ze_image_memory_properties_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N32ze_image_memory_properties_exp_t5stypeE"></span><span id="_CPPv2N32ze_image_memory_properties_exp_t5stypeE"></span><span id="ze_image_memory_properties_exp_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__memory__properties__exp__t_1a84f328be0c98bcd4cff60dbbc72ccc73"></span><a class="reference internal" href="../apis/data_types.html#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N32ze_image_memory_properties_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -791,49 +730,18 @@
 </dd></dl>
 
 </section>
-<section id="ze-image-view-planar-exp-desc-t">
-<span id="id6"></span><h3>ze_image_view_planar_exp_desc_t<a class="headerlink" href="#ze-image-view-planar-exp-desc-t" title="Link to this heading">#</a></h3>
-<p class="api-version"><em>Added in version 1.2</em></p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv431ze_image_view_planar_exp_desc_t">
-<span id="_CPPv331ze_image_view_planar_exp_desc_t"></span><span id="_CPPv231ze_image_view_planar_exp_desc_t"></span><span id="ze_image_view_planar_exp_desc_t"></span><span class="target" id="structze__image__view__planar__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_view_planar_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv431ze_image_view_planar_exp_desc_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Image view planar descriptor. </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N31ze_image_view_planar_exp_desc_t5stypeE">
-<span id="_CPPv3N31ze_image_view_planar_exp_desc_t5stypeE"></span><span id="_CPPv2N31ze_image_view_planar_exp_desc_t5stypeE"></span><span id="ze_image_view_planar_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__view__planar__exp__desc__t_1a3035a178e74c4d076c75dc7c724a28be"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N31ze_image_view_planar_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] type of this structure </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N31ze_image_view_planar_exp_desc_t5pNextE">
-<span id="_CPPv3N31ze_image_view_planar_exp_desc_t5pNextE"></span><span id="_CPPv2N31ze_image_view_planar_exp_desc_t5pNextE"></span><span id="ze_image_view_planar_exp_desc_t::pNext__voidCP"></span><span class="target" id="structze__image__view__planar__exp__desc__t_1a0282a8be577cdd926625ee1124a4271f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N31ze_image_view_planar_exp_desc_t5pNextE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N31ze_image_view_planar_exp_desc_t10planeIndexE">
-<span id="_CPPv3N31ze_image_view_planar_exp_desc_t10planeIndexE"></span><span id="_CPPv2N31ze_image_view_planar_exp_desc_t10planeIndexE"></span><span id="ze_image_view_planar_exp_desc_t::planeIndex__uint32_t"></span><span class="target" id="structze__image__view__planar__exp__desc__t_1a6289ba193146b2cd88fbe56e7b302b3e"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">planeIndex</span></span></span><a class="headerlink" href="#_CPPv4N31ze_image_view_planar_exp_desc_t10planeIndexE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[DEPRECATED] no longer supported, use <a class="reference internal" href="../extensions/image.html#structze__image__view__planar__ext__desc__t"><span class="std std-ref">ze_image_view_planar_ext_desc_t</span></a> instead </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
-</section>
 <section id="ze-image-bindless-exp-desc-t">
-<span id="id7"></span><h3>ze_image_bindless_exp_desc_t<a class="headerlink" href="#ze-image-bindless-exp-desc-t" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>ze_image_bindless_exp_desc_t<a class="headerlink" href="#ze-image-bindless-exp-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv428ze_image_bindless_exp_desc_t">
 <span id="_CPPv328ze_image_bindless_exp_desc_t"></span><span id="_CPPv228ze_image_bindless_exp_desc_t"></span><span id="ze_image_bindless_exp_desc_t"></span><span class="target" id="structze__image__bindless__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_bindless_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv428ze_image_bindless_exp_desc_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Image descriptor for bindless images. This structure may be passed to <a class="reference internal" href="../apis/image.html#ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"><span class="std std-ref">zeImageCreate</span></a> via pNext member of <a class="reference internal" href="../apis/image.html#structze__image__desc__t"><span class="std std-ref">ze_image_desc_t</span></a>. </p>
+<dd><p>Image descriptor for bindless images. This structure may be passed to <a class="reference internal" href="../apis/image.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a> via pNext member of <a class="reference internal" href="../apis/image.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N28ze_image_bindless_exp_desc_t5stypeE">
-<span id="_CPPv3N28ze_image_bindless_exp_desc_t5stypeE"></span><span id="_CPPv2N28ze_image_bindless_exp_desc_t5stypeE"></span><span id="ze_image_bindless_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__bindless__exp__desc__t_1a887899dcfdbfc3ae446a807bd35fcef9"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N28ze_image_bindless_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N28ze_image_bindless_exp_desc_t5stypeE"></span><span id="_CPPv2N28ze_image_bindless_exp_desc_t5stypeE"></span><span id="ze_image_bindless_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__bindless__exp__desc__t_1a887899dcfdbfc3ae446a807bd35fcef9"></span><a class="reference internal" href="../apis/data_types.html#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N28ze_image_bindless_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -846,7 +754,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N28ze_image_bindless_exp_desc_t5flagsE">
 <span id="_CPPv3N28ze_image_bindless_exp_desc_t5flagsE"></span><span id="_CPPv2N28ze_image_bindless_exp_desc_t5flagsE"></span><span id="ze_image_bindless_exp_desc_t::flags__ze_image_bindless_exp_flags_t"></span><span class="target" id="structze__image__bindless__exp__desc__t_1a6030184b29b4259194ac3deeb25c72cc"></span><span class="n"><span class="pre">ze_image_bindless_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N28ze_image_bindless_exp_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] image flags. must be 0 (default) or a valid value of <a class="reference internal" href="#ze__api_8h_1a49c6d019cfcf64f7256e2205e28aac00"><span class="std std-ref">ze_image_bindless_exp_flag_t</span></a> default behavior is bindless images are not used when creating handles via <a class="reference internal" href="../apis/image.html#ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"><span class="std std-ref">zeImageCreate</span></a>. When the flag is passed to <a class="reference internal" href="../apis/image.html#ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"><span class="std std-ref">zeImageCreate</span></a>, then only the memory for the image is allocated. Additional image handles can be created with <a class="reference internal" href="../extensions/image.html#ze__api_8h_1a1042c86868981ce575d315a3107a7583"><span class="std std-ref">zeImageViewCreateExt</span></a>. When <a class="reference internal" href="#ze__api_8h_1a49c6d019cfcf64f7256e2205e28aac00a545dcf3ac48db742f4fe5acad0e5b6c5"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE</span></a> flag is passed, <a class="reference internal" href="../apis/sampler.html#structze__sampler__desc__t"><span class="std std-ref">ze_sampler_desc_t</span></a> must be attached via pNext member of <a class="reference internal" href="#structze__image__bindless__exp__desc__t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a>. </p>
+<dd><p>[in] image flags. must be 0 (default) or a valid value of <a class="reference internal" href="#ze-image-bindless-exp-flags-t"><span class="std std-ref">ze_image_bindless_exp_flag_t</span></a> default behavior is bindless images are not used when creating handles via <a class="reference internal" href="../apis/image.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>. When the flag is passed to <a class="reference internal" href="../apis/image.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>, then only the memory for the image is allocated. Additional image handles can be created with <a class="reference internal" href="../extensions/image.html#zeimageviewcreateext"><span class="std std-ref">zeImageViewCreateExt</span></a>. When <a class="reference internal" href="#ze__api_8h_1a49c6d019cfcf64f7256e2205e28aac00a545dcf3ac48db742f4fe5acad0e5b6c5"><span class="std std-ref">ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE</span></a> flag is passed, <a class="reference internal" href="../apis/sampler.html#ze-sampler-desc-t"><span class="std std-ref">ze_sampler_desc_t</span></a> must be attached via pNext member of <a class="reference internal" href="#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a>. </p>
 </dd></dl>
 
 </div>
@@ -854,17 +762,17 @@
 
 </section>
 <section id="ze-image-pitched-exp-desc-t">
-<span id="id8"></span><h3>ze_image_pitched_exp_desc_t<a class="headerlink" href="#ze-image-pitched-exp-desc-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>ze_image_pitched_exp_desc_t<a class="headerlink" href="#ze-image-pitched-exp-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv427ze_image_pitched_exp_desc_t">
 <span id="_CPPv327ze_image_pitched_exp_desc_t"></span><span id="_CPPv227ze_image_pitched_exp_desc_t"></span><span id="ze_image_pitched_exp_desc_t"></span><span class="target" id="structze__image__pitched__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_pitched_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv427ze_image_pitched_exp_desc_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Image descriptor for bindless images created from pitched allocations. This structure may be passed to <a class="reference internal" href="../apis/image.html#ze__api_8h_1ab0bca470a8b549512c423f9175fb876b"><span class="std std-ref">zeImageCreate</span></a> via pNext member of <a class="reference internal" href="../apis/image.html#structze__image__desc__t"><span class="std std-ref">ze_image_desc_t</span></a>. </p>
+<dd><p>Image descriptor for bindless images created from pitched allocations. This structure may be passed to <a class="reference internal" href="../apis/image.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a> via pNext member of <a class="reference internal" href="../apis/image.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27ze_image_pitched_exp_desc_t5stypeE">
-<span id="_CPPv3N27ze_image_pitched_exp_desc_t5stypeE"></span><span id="_CPPv2N27ze_image_pitched_exp_desc_t5stypeE"></span><span id="ze_image_pitched_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__pitched__exp__desc__t_1a950a8196b2ff271957bcdc22b5ece81b"></span><a class="reference internal" href="../apis/data_types.html#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N27ze_image_pitched_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N27ze_image_pitched_exp_desc_t5stypeE"></span><span id="_CPPv2N27ze_image_pitched_exp_desc_t5stypeE"></span><span id="ze_image_pitched_exp_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__image__pitched__exp__desc__t_1a950a8196b2ff271957bcdc22b5ece81b"></span><a class="reference internal" href="../apis/data_types.html#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N27ze_image_pitched_exp_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -877,7 +785,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27ze_image_pitched_exp_desc_t3ptrE">
 <span id="_CPPv3N27ze_image_pitched_exp_desc_t3ptrE"></span><span id="_CPPv2N27ze_image_pitched_exp_desc_t3ptrE"></span><span id="ze_image_pitched_exp_desc_t::ptr__voidP"></span><span class="target" id="structze__image__pitched__exp__desc__t_1a267a4204aab8256fa25ac112ec44fb37"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">ptr</span></span></span><a class="headerlink" href="#_CPPv4N27ze_image_pitched_exp_desc_t3ptrE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] pointer to pitched device allocation allocated using <a class="reference internal" href="../apis/mem.html#ze__api_8h_1ad47b7ece6b6c412dbb96fbe0afd89147"><span class="std std-ref">zeMemAllocDevice</span></a></p>
+<dd><p>[in] pointer to pitched device allocation allocated using <a class="reference internal" href="../apis/mem.html#zememallocdevice"><span class="std std-ref">zeMemAllocDevice</span></a></p>
 </dd></dl>
 
 </div>
@@ -908,11 +816,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="event_pool.html"
+       href="fabric_vertex.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Event Pool - Experimental</p>
+        <p class="prev-next-title">Fabric Vertex - Experimental</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -932,7 +840,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">3</span></summary><div class="ctoc-prefix">zeImage</div><ul class="ctoc-list"><li><a href="image.html#zeimagegetmemorypropertiesexp">&hellip;GetMemoryPropertiesExp</a></li><li><a href="image.html#zeimageviewcreateexp">&hellip;ViewCreateExp</a></li><li><a href="image.html#zeimagegetdeviceoffsetexp">&hellip;GetDeviceOffsetExp</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="image.html#ze-image-bindless-exp-flags-t">ze_image_bindless_exp_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">4</span></summary><ul class="ctoc-list"><li><a href="image.html#ze-image-memory-properties-exp-t">ze_image_memory_properties_exp_t</a></li><li><a href="image.html#ze-image-view-planar-exp-desc-t">ze_image_view_planar_exp_desc_t</a></li><li><a href="image.html#ze-image-bindless-exp-desc-t">ze_image_bindless_exp_desc_t</a></li><li><a href="image.html#ze-image-pitched-exp-desc-t">ze_image_pitched_exp_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zeImageGet</div><ul class="ctoc-list"><li><a href="image.html#zeimagegetmemorypropertiesexp">&hellip;MemoryPropertiesExp</a></li><li><a href="image.html#zeimagegetdeviceoffsetexp">&hellip;DeviceOffsetExp</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="image.html#ze-image-bindless-exp-flags-t">ze_image_bindless_exp_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="image.html#ze-image-memory-properties-exp-t">ze_image_memory_properties_exp_t</a></li><li><a href="image.html#ze-image-bindless-exp-desc-t">ze_image_bindless_exp_desc_t</a></li><li><a href="image.html#ze-image-pitched-exp-desc-t">ze_image_pitched_exp_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

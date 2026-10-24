@@ -3,13 +3,17 @@
 
 .. _ZE_experimental_mutable_command_list:
 
-================================
- Mutable Command List Extension
-================================
+============================================
+ Mutable Command List Experimental Extension
+============================================
 
 .. rst-class:: ext-version
 
 *Introduced in Level Zero version 1.9*
+
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.20. Use :ref:`ZE_extension_mutable_command_list <ZE_extension_mutable_command_list>` instead.
 
 API
 ----

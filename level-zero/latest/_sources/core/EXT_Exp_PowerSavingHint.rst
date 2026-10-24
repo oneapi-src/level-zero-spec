@@ -3,8 +3,6 @@
 
 .. _ZE_experimental_power_saving_hint:
 
-This experimental extension is deprecated since version 1.18 onwards and replaced by the :ref:`ZE_extension_power_saving_hint <ZE_extension_power_saving_hint>` standard extension.
-
 ============================
  Power Saving Hint Extension
 ============================
@@ -12,6 +10,10 @@ This experimental extension is deprecated since version 1.18 onwards and replace
 .. rst-class:: ext-version
 
 *Introduced in Level Zero version 1.2*
+
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.18. Use :ref:`ZE_extension_power_saving_hint <ZE_extension_power_saving_hint>` instead.
 
 API
 ----

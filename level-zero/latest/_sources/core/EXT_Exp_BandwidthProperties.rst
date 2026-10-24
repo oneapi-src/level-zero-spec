@@ -48,7 +48,7 @@ of hops between the accelerators, etc... The net physical bandwidth & physical l
 accelerators are zero unless the accelerators are directly connected to each other by a fabric, and
 account for link technology, number of links, etc...
 
-The structure :ref:`ze-copy-bandwidth-exp-properties-t` is deprecated from version 1.14 onwards.
+:ref:`ze-copy-bandwidth-exp-properties-t` is deprecated since version 1.14.
 
 The following pseudo-code demonstrates a sequence for obtaining the p2p bandwidth & latency between two devices:
 
@@ -63,10 +63,10 @@ The following pseudo-code demonstrates a sequence for obtaining the p2p bandwidt
 
     :ref:`ze-device-p2p-properties-t` P2PProps;
     :ref:`ze-device-p2p-bandwidth-exp-properties-t` P2PBandwidthProps;
-    P2PProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES
-    P2Props.pNext = &P2PbandwidthProps;
-    P2PBandwidthProps = ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXT_PROPERTIES;
-    P2PBandwidthProps = nullptr;
+    P2PProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES;
+    P2PProps.pNext = &P2PBandwidthProps;
+    P2PBandwidthProps.stype = ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES;
+    P2PBandwidthProps.pNext = nullptr;
 
     // Assume devices are stored in array called devices of size devCount
     for (uint32_t dev = 0; dev < devCount; ++dev) {
@@ -78,36 +78,3 @@ The following pseudo-code demonstrates a sequence for obtaining the p2p bandwidt
             latTable[dev][peer_dev] = P2PProps.pNext->logicalLatency;
         }
     }
-
-
-Engines from different command queue groups may drive differing amounts of bandwidth over the same link between two accelerators. The copy bandwidth of the engines within each command queue group is provided to help users determine which command queue group to pick the right types and numbers of engines from the accelerator for driving each copy operation given constraints such as the maximum bandwidth that a link supports, current usage of engines, etc... For example, some command queue groups that support copy may afford engines that support a higher copy bandwidth as compared to those from a different command queue group. For driving copies from local memory to local memory, it may be advisable to use an engine from a higher copy bandwidth group. For performing copies between devices interconnected with a lower bandwidth link, it may suffice to use an engine from a lower copy bandwidth group.
-
-The following pseudo-code demonstrates a sequence for obtaining the copy bandwidth of the engines in each command queue group:
-
-.. parsed-literal::
-
-    // Discover all command queue groups
-    uint32_t cmdqueueGroupCount = 0;
-    :ref:`zeDeviceGetCommandQueueGroupProperties`\(hDevice, &cmdqueueGroupCount, nullptr);
-
-    :ref:`ze-command-queue-group-properties-t`\* cmdqueueGroupProperties = (:ref:`ze-command-queue-group-properties-t`\*)
-        allocate(cmdqueueGroupCount * sizeof(:ref:`ze-command-queue-group-properties-t`\));
-    for( uint32_t i = 0; i < cmdqueueGroupCount; ++i ) {
-        cmdqueueGroupProperties[i].stype = :ref:`ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES <ze-structure-type-t>`\;
-        cmdqueueGroupProperties[i].pNext = &cmdqueueGroupBandwidth[i];
-    }
-    :ref:`zeDeviceGetCommandQueueGroupProperties`\(hDevice, &cmdqueueGroupCount, cmdqueueGroupProperties);
-
-
-    // Find a command queue type that supports copy & print the copy bandwidth
-    uint32_t computeQueueGroupOrdinal = cmdqueueGroupCount;
-    for( uint32_t i = 0; i < cmdqueueGroupCount; ++i ) {
-        if( cmdqueueGroupProperties[ i ].flags & :ref:`ZE_COMMAND_QUEUE_GROUP_PROPERTY_FLAG_COPY <ze-command-queue-group-property-flags-t>` ) {
-            computeQueueGroupOrdinal = i;
-            printf("copyBandwidth: %ul\n", cmdqueueGroupBandwidth[i].copyBandwidth)
-            break;
-        }
-    }
-
-    if(computeQueueGroupOrdinal == cmdqueueGroupCount)
-        return; // no compute queues found

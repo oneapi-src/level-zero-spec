@@ -1164,7 +1164,36 @@ The following pseudo-code demonstrates submission of commands to a command queue
        :ref:`zeCommandQueueExecuteCommandLists`\(hCommandQueue, 1, &hCommandList, nullptr);
 
        // synchronize host and device
-       :ref:`zeCommandQueueSynchronize`\(hCommandQueue, UINT32_MAX);
+       :ref:`zeCommandQueueSynchronize`\(hCommandQueue, UINT64_MAX);
+
+       // Reset (recycle) command list for new commands
+       :ref:`zeCommandListReset`\(hCommandList);
+       ...
+
+Submission of a command list to an immediate command list
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- An immediate command list can also execute a command list.
+- By definition, a command list cannot be executed concurrently on multiple immediate command lists.
+- A command list may be submitted multiple times.  It is up to the application to ensure
+  that the command list can be executed multiple times.
+- Execution on an immediate command list can use an event to signal completion instead of a fence.
+- Execution on an immediate command list can use multiple events to wait on before starting
+  execution of a command list.
+
+The following pseudo-code demonstrates executing a command list on an immediate command list:
+
+.. parsed-literal::
+
+       ...
+       // finished appending commands
+       :ref:`zeCommandListClose`\(hCommandList);
+
+       // Execute command list on an immediate command list
+       :ref:`zeCommandListImmediateAppendCommandListsWithParameters`\(hImmediateCommandList, 1, &hCommandList, nullptr, nullptr, 0, nullptr);
+
+       // synchronize host and device
+       :ref:`zeCommandListHostSynchronize`\(hImmediateCommandList, UINT64_MAX);
 
        // Reset (recycle) command list for new commands
        :ref:`zeCommandListReset`\(hCommandList);
@@ -1382,7 +1411,7 @@ The following pseudo-code demonstrates a sequence for creation, submission and q
        :ref:`zeCommandQueueExecuteCommandLists`\(hCommandQueue, 1, &hCommandList, hFence);
 
        // Wait for fence to be signaled
-       :ref:`zeFenceHostSynchronize`\(hFence, UINT32_MAX);
+       :ref:`zeFenceHostSynchronize`\(hFence, UINT64_MAX);
        :ref:`zeFenceReset`\(hFence);
        ...
 
@@ -1600,7 +1629,7 @@ Key features
 - No need to wait for completion before reusing/destroying
 - CB Event doesn't own any memory allocations. Can be reused/destroyed with low cost. Timestamp allocation is also handled internally by the Driver
 - A CB Event's device association is not fixed at creation. It re-associates with the signaling device on each signal operation. See `Device association`_.
-- IPC sharing is one-directional by default. IPC CB Event opened in a different process can be used only for waiting, and the handle must be opened again to observe a new state. Bi-directional sharing, where the opened Event can also be signaled and both processes observe the latest state, is requested with :ref:`ZE_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL <ze-event-counter-based-flags-t>`\. See `IPC sharing`_.
+- IPC sharing is bi-directional when the device reports :ref:`ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL <ze-device-event-properties-flags-t>`\. The opened Event can also be signaled and both processes observe the latest state. Otherwise IPC sharing is one-directional: IPC CB Event opened in a different process can be used only for waiting, and the handle must be opened again to observe a new state. See `IPC sharing`_.
 - Regular command list (known as recorded or non-immediate) is a special use case for CB Events. Will be described in separate section
 - When Event is reset (assigned as signal event to new append call), new timestamp data storage is provided implicitly. User can immediately query new data, without handling the completion
 - Event can be destroyed without waiting for completion, even if profiling is enabled
@@ -1620,7 +1649,7 @@ Regular Event rely on memory state controlled by the user (explicit Reset calls)
        // cmdList2 can be still running on GPU. It waits for counter=X on memory CL1_alloc.
        // Its also safe to delete Event object.
 
-       :ref:`zeEventHostSynchronize`\(event1, UINT32_MAX); // wait for counter=Y on memory CL3_alloc
+       :ref:`zeEventHostSynchronize`\(event1, UINT64_MAX); // wait for counter=Y on memory CL3_alloc
 
 Device association
 ^^^^^^^^^^^^^^^^^^^
@@ -1641,10 +1670,10 @@ IPC sharing
 ^^^^^^^^^^^
 Counter Based Event has dedicated API calls to handle IPC operations: :ref:`zeEventCounterBasedGetIpcHandle`\, :ref:`zeEventCounterBasedOpenIpcHandle`\, :ref:`zeEventCounterBasedCloseIpcHandle`
 
-Two sharing modes are defined. The mode is selected when the Event is created and can't be changed later:
+Two sharing modes are defined. The mode of an Event created with :ref:`ZE_EVENT_COUNTER_BASED_FLAG_IPC <ze-event-counter-based-flags-t>` depends on the device used to create it:
 
-- :ref:`ZE_EVENT_COUNTER_BASED_FLAG_IPC <ze-event-counter-based-flags-t>` alone selects one-directional sharing
-- :ref:`ZE_EVENT_COUNTER_BASED_FLAG_IPC <ze-event-counter-based-flags-t>` combined with :ref:`ZE_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL <ze-event-counter-based-flags-t>` selects bi-directional sharing. :ref:`zeEventCounterBasedCreate` returns :ref:`ZE_RESULT_ERROR_UNSUPPORTED_FEATURE <ze-result-t>` if the Driver doesn't provide it
+- If the device reports :ref:`ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL <ze-device-event-properties-flags-t>` in :ref:`ze-device-event-properties-t`\, sharing is bi-directional
+- Otherwise sharing is one-directional
 
 **One-directional sharing**
 
@@ -1879,10 +1908,12 @@ of the system.
 Modules
 -------
 
-Modules can be created from an IL or directly from native format using :ref:`zeModuleCreate`\.
+Modules can be created from an IL, from `PISA`_ assembly text, from OpenCL C source, or directly from native format using :ref:`zeModuleCreate`\.
 
 - :ref:`zeModuleCreate` takes a format argument that specifies the input format.
-- :ref:`zeModuleCreate` performs a compilation step when format is IL.
+- :ref:`zeModuleCreate` performs a compilation step when format is IL, PISA assembly text (:ref:`ZE_MODULE_FORMAT_PISA <ze-module-format-t>`\) or OpenCL C source (:ref:`ZE_MODULE_FORMAT_OCLC <ze-module-format-t>`\).
+
+.. _PISA: https://intel.github.io/pisa/
 
 The following pseudo-code demonstrates a sequence for creating a module from an OpenCL kernel:
 
@@ -1943,6 +1974,68 @@ Module build options can be passed with :ref:`ze-module-desc-t` as a string.
 | -g                                         | Include debugging information.                                                                                                                       | Disabled | GPU            |
 +--------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------+----------+----------------+
 
+
+.. _compiler-info-query:
+
+Compiler-Info Query
+~~~~~~~~~~~~~~~~~~~
+
+The SPIR-V capabilities, SPIR-V extensions, and build options supported by a device can be queried
+with compiler-scoped device queries. :ref:`zeDeviceGetCompilerInfo` returns a full list; the value
+selected by :ref:`ze-device-compiler-info-t` determines which compiler-info list is returned (see the
+enumeration for the available selectors and their payload layout). List queries use the standard
+two-call convention with a single in/out size parameter: query the size with ``pData`` null, allocate,
+then call again to fill. :ref:`zeDeviceGetCompilerInfoSupported` complements it by checking support for a
+single, application-supplied element without allocating or walking the full list.
+
+SPIR-V capabilities are returned as an array of ``uint32_t`` numeric identifiers. First query the 
+size, it will return the total number of bytes in the array. You will then need to calculate the 
+number of elements by dividing by the type, size / sizeof(uint32_t), using an appropriately sized 
+array to then issue the read:
+
+.. parsed-literal::
+
+       size_t size = 0;
+       :ref:`zeDeviceGetCompilerInfo`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES <ze-device-compiler-info-t>`\, nullptr, &size, nullptr);
+       std::vector<uint32_t> caps(size / sizeof(uint32_t));
+       :ref:`zeDeviceGetCompilerInfo`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIES <ze-device-compiler-info-t>`\, nullptr, &size, caps.data());
+
+SPIR-V extensions are returned as fixed-width, null-terminated names, each ZE_MAX_EXTENSION_NAME bytes.
+Allocate a byte buffer of the reported size and iterate name by name:
+
+.. parsed-literal::
+
+       size_t size = 0;
+       :ref:`zeDeviceGetCompilerInfo`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS <ze-device-compiler-info-t>`\, nullptr, &size, nullptr);
+       std::vector<char> buffer(size);
+       :ref:`zeDeviceGetCompilerInfo`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS <ze-device-compiler-info-t>`\, nullptr, &size, buffer.data());
+       for (size_t offset = 0; offset < size; offset += ZE_MAX_EXTENSION_NAME) {
+           // buffer.data() + offset points to a null-terminated extension name
+       }
+
+Compiler options are returned as a single null-terminated string of space-separated tokens. Driver
+options use :ref:`ZE_DEVICE_COMPILER_INFO_DRIVER_OPTIONS <ze-device-compiler-info-t>` with the exact same allocation and read pattern:
+
+.. parsed-literal::
+
+       size_t size = 0;
+       :ref:`zeDeviceGetCompilerInfo`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_COMPILER_OPTIONS <ze-device-compiler-info-t>`\, nullptr, &size, nullptr);
+       std::vector<char> options(size);
+       :ref:`zeDeviceGetCompilerInfo`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_COMPILER_OPTIONS <ze-device-compiler-info-t>`\, nullptr, &size, options.data());
+       // options.data() is one null-terminated string, e.g. "-ze-opt-a -ze-opt-b"
+
+To check a single element instead of listing all of them, use :ref:`zeDeviceGetCompilerInfoSupported`\. It
+reports the result through ``pSupported``, so no size query or buffer is needed. The element type
+follows paramName: a null-terminated name for the extension and option categories, a ``uint32_t``
+numeric identifier for SPIR-V capabilities. For the option categories, ``pValue`` optionally narrows
+the check to a specific option value:
+
+.. parsed-literal::
+
+       ze_bool_t bf16Supported = false;
+       :ref:`zeDeviceGetCompilerInfoSupported`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS <ze-device-compiler-info-t>`\, nullptr, "SPV_INTEL_bfloat16_conversion", nullptr, &bf16Supported);
+       ze_bool_t optionSupported = false;
+       :ref:`zeDeviceGetCompilerInfoSupported`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_COMPILER_OPTIONS <ze-device-compiler-info-t>`\, nullptr, "-ze-opt-large-register-file", nullptr, &optionSupported);
 
 Module Specialization Constants
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2872,7 +2965,7 @@ The following pseudo-code demonstrates a sequence for using fine-grain residency
        :ref:`zeCommandQueueExecuteCommandLists`\(hCommandQueue, 1, &hCommandList, hFence);
 
        // wait until complete
-       :ref:`zeFenceHostSynchronize`\(hFence, UINT32_MAX);
+       :ref:`zeFenceHostSynchronize`\(hFence, UINT64_MAX);
 
        // Finally, evict to free device resources
        :ref:`zeContextEvictMemory`\(hContext, hDevice, begin->next, sizeof(node));
@@ -3215,7 +3308,7 @@ Sending process creates event at same location
        };
        :ref:`zeEventCreate`\(hEventPool, &eventDesc, &hEvent);
 
-       :ref:`zeEventHostSynchronize`\(hEvent, UINT32_MAX);
+       :ref:`zeEventHostSynchronize`\(hEvent, UINT64_MAX);
 
 
 Note, there is no guaranteed address equivalence for the values of ``hEvent`` in each process.

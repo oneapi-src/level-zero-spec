@@ -1,7 +1,7 @@
 ============================================================
 Kernel - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 

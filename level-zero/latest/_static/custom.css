@@ -48,6 +48,46 @@
     font-style: italic;
 }
 
+/* Deprecation callout under an API heading or extension page title (emitted via
+   `.. rst-class:: api-deprecated`). Loud on purpose: readers must not miss it, and
+   it carries the link to the replacement. */
+.api-deprecated {
+    border-left: 0.3rem solid var(--pst-color-warning, #f0b37e);
+    background-color: var(--pst-color-warning-bg, #fff4e5);
+    padding: 0.4rem 0.75rem;
+    margin: 0.3rem 0 0.9rem;
+    border-radius: 0.2rem;
+}
+.api-deprecated::before {
+    content: "\26A0\FE0E  ";   /* warning sign, text style */
+    font-weight: 700;
+}
+
+/* "Deprecated since X" badge replacing the generated "[DEPRECATED since X]" tag in
+   briefs, enum values, members and params (generate_docs._badge_deprecated_html). */
+.deprecated-badge {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1.4;
+    padding: 0 0.4em;
+    margin-right: 0.3em;
+    border-radius: 0.25rem;
+    color: var(--pst-color-on-surface, #000);
+    background-color: var(--pst-color-warning, #f0b37e);
+    vertical-align: 0.1em;
+}
+
+/* Tables on the per-section Deprecated pages. Fixed layout so the column widths
+   hold, and long identifiers (no spaces) wrap instead of pushing columns off-screen. */
+table.deprecated-table {
+    table-layout: fixed;
+    width: 100%;
+}
+table.deprecated-table td {
+    overflow-wrap: anywhere;
+}
+
 /* Make better use of wide displays -- responsively.
  *
  * The theme (pydata/sphinx_book_theme) traps the ENTIRE layout band

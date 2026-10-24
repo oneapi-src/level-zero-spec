@@ -1,7 +1,7 @@
 ============================================================
 Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 .. toctree::
    :maxdepth: 1
@@ -11,7 +11,6 @@ oneAPI Level Zero Specification - Version 1.19.12
    Metric Decoder <metric_decoder>
    Device <device>
    Command List <command_list>
-   Tracer Exp <tracer_exp>
    Metric Group <metric_group>
    Metric <metric>
    Data Types <data_types>

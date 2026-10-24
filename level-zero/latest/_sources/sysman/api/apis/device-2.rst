@@ -1,24 +1,11 @@
 ============================================================
 Device
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Device Functions
 ================
-
-
-.. _zesDeviceEccAvailable:
-
-zesDeviceEccAvailable
----------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.4*
-
-.. doxygenfunction:: zesDeviceEccAvailable
-    :project: LevelZero
 
 
 .. _zesDeviceEccConfigurable:
@@ -350,6 +337,19 @@ zes_sched_mode_t
 .. doxygenenum:: zes_sched_mode_t
     :project: LevelZero
 
+
+.. _zes-pci-link-speed-flags-t:
+
+zes_pci_link_speed_flags_t
+--------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: zes_pci_link_speed_flag_t
+    :project: LevelZero
+
  
 Device Structures
 =================
@@ -590,6 +590,21 @@ zes_sched_timeslice_properties_t
 *Added in version 1.0*
 
 .. doxygenstruct:: zes_sched_timeslice_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+.. _zes-pci-config-properties-t:
+
+zes_pci_config_properties_t
+---------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenstruct:: zes_pci_config_properties_t
     :project: LevelZero
     :members:
     :undoc-members:

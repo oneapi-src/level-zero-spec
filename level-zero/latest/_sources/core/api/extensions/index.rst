@@ -1,7 +1,7 @@
 ============================================================
 Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 .. toctree::
    :maxdepth: 1
@@ -15,11 +15,11 @@ oneAPI Level Zero Specification - Version 1.19.12
    Context <context>
    Command Queue <command_queue>
    Command List <command_list>
+   Event <event>
    Mem <mem>
    Image <image>
    Module <module>
    Kernel <kernel>
-   Event <event>
    Graph <graph>
    Executable Graph <executable_graph>
    Data Types <data_types>

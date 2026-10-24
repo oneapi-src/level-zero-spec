@@ -1,7 +1,7 @@
 ============================================================
 Device - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Device - Experimental Functions
@@ -21,35 +21,6 @@ zeDeviceGetFabricVertexExp
     :project: LevelZero
 
 
-
-Device - Experimental Enums
-===========================
-
-
-.. _ze-rtas-device-exp-flags-t:
-
-ze_rtas_device_exp_flags_t
---------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.7*
-
-.. doxygenenum:: ze_rtas_device_exp_flag_t
-    :project: LevelZero
-
-
-.. _ze-rtas-format-exp-t:
-
-ze_rtas_format_exp_t
---------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.7*
-
-.. doxygenenum:: ze_rtas_format_exp_t
-    :project: LevelZero
 
  
 Device - Experimental Structures
@@ -81,21 +52,6 @@ ze_device_p2p_bandwidth_exp_properties_t
 *Added in version 1.4*
 
 .. doxygenstruct:: ze_device_p2p_bandwidth_exp_properties_t
-    :project: LevelZero
-    :members:
-    :undoc-members:
-
-
-.. _ze-rtas-device-exp-properties-t:
-
-ze_rtas_device_exp_properties_t
--------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.7*
-
-.. doxygenstruct:: ze_rtas_device_exp_properties_t
     :project: LevelZero
     :members:
     :undoc-members:

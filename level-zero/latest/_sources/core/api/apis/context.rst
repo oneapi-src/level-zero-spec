@@ -1,7 +1,7 @@
 ============================================================
 Context
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Context Functions
@@ -140,19 +140,6 @@ ze_context_flags_t
 *Added in version 1.0*
 
 .. doxygenenum:: ze_context_flag_t
-    :project: LevelZero
-
-
-.. _ze-power-saving-hint-type-t:
-
-ze_power_saving_hint_type_t
----------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.2*
-
-.. doxygenenum:: ze_power_saving_hint_type_t
     :project: LevelZero
 
  

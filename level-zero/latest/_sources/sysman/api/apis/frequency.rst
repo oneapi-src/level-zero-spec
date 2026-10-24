@@ -1,7 +1,7 @@
 ============================================================
 Frequency
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Frequency Functions
@@ -86,149 +86,6 @@ zesFrequencyGetThrottleTime
     :project: LevelZero
 
 
-.. _zesFrequencyOcGetCapabilities:
-
-zesFrequencyOcGetCapabilities
------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcGetCapabilities
-    :project: LevelZero
-
-
-.. _zesFrequencyOcGetFrequencyTarget:
-
-zesFrequencyOcGetFrequencyTarget
---------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcGetFrequencyTarget
-    :project: LevelZero
-
-
-.. _zesFrequencyOcSetFrequencyTarget:
-
-zesFrequencyOcSetFrequencyTarget
---------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcSetFrequencyTarget
-    :project: LevelZero
-
-
-.. _zesFrequencyOcGetVoltageTarget:
-
-zesFrequencyOcGetVoltageTarget
-------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcGetVoltageTarget
-    :project: LevelZero
-
-
-.. _zesFrequencyOcSetVoltageTarget:
-
-zesFrequencyOcSetVoltageTarget
-------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcSetVoltageTarget
-    :project: LevelZero
-
-
-.. _zesFrequencyOcSetMode:
-
-zesFrequencyOcSetMode
----------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcSetMode
-    :project: LevelZero
-
-
-.. _zesFrequencyOcGetMode:
-
-zesFrequencyOcGetMode
----------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcGetMode
-    :project: LevelZero
-
-
-.. _zesFrequencyOcGetIccMax:
-
-zesFrequencyOcGetIccMax
------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcGetIccMax
-    :project: LevelZero
-
-
-.. _zesFrequencyOcSetIccMax:
-
-zesFrequencyOcSetIccMax
------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcSetIccMax
-    :project: LevelZero
-
-
-.. _zesFrequencyOcGetTjMax:
-
-zesFrequencyOcGetTjMax
-----------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcGetTjMax
-    :project: LevelZero
-
-
-.. _zesFrequencyOcSetTjMax:
-
-zesFrequencyOcSetTjMax
-----------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesFrequencyOcSetTjMax
-    :project: LevelZero
-
-
 
 Frequency Enums
 ===============
@@ -244,19 +101,6 @@ zes_freq_throttle_reason_flags_t
 *Added in version 1.0*
 
 .. doxygenenum:: zes_freq_throttle_reason_flag_t
-    :project: LevelZero
-
-
-.. _zes-oc-mode-t:
-
-zes_oc_mode_t
--------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenenum:: zes_oc_mode_t
     :project: LevelZero
 
  
@@ -319,21 +163,6 @@ zes_freq_throttle_time_t
 *Added in version 1.0*
 
 .. doxygenstruct:: zes_freq_throttle_time_t
-    :project: LevelZero
-    :members:
-    :undoc-members:
-
-
-.. _zes-oc-capabilities-t:
-
-zes_oc_capabilities_t
----------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenstruct:: zes_oc_capabilities_t
     :project: LevelZero
     :members:
     :undoc-members:

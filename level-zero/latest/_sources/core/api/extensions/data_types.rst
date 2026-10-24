@@ -1,7 +1,7 @@
 ============================================================
 Data Types - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 
@@ -555,6 +555,71 @@ ze_command_queue_qos_ext_version_t
 .. doxygenenum:: ze_command_queue_qos_ext_version_t
     :project: LevelZero
 
+
+.. _ze-command-visit-ext-version-t:
+
+ze_command_visit_ext_version_t
+------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: ze_command_visit_ext_version_t
+    :project: LevelZero
+
+
+.. _ze-command-visit-ext-default-op-t:
+
+ze_command_visit_ext_default_op_t
+---------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: ze_command_visit_ext_default_op_t
+    :project: LevelZero
+
+
+.. _ze-init-driver-properties-ext-version-t:
+
+ze_init_driver_properties_ext_version_t
+---------------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: ze_init_driver_properties_ext_version_t
+    :project: LevelZero
+
+
+.. _ze-init-driver-properties-ext-flags-t:
+
+ze_init_driver_properties_ext_flags_t
+-------------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: ze_init_driver_properties_ext_flag_t
+    :project: LevelZero
+
+
+.. _ze-mutable-command-list-ext-version-t:
+
+ze_mutable_command_list_ext_version_t
+-------------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenenum:: ze_mutable_command_list_ext_version_t
+    :project: LevelZero
+
  
 Data Types - Extension Structures
 =================================
@@ -750,6 +815,36 @@ ze_record_replay_graph_ext_dump_desc_t
 *Added in version 1.17*
 
 .. doxygenstruct:: ze_record_replay_graph_ext_dump_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+.. _ze-concrete-visitor-ext-desc-t:
+
+ze_concrete_visitor_ext_desc_t
+------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenstruct:: ze_concrete_visitor_ext_desc_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+.. _ze-command-visit-ext-desc-t:
+
+ze_command_visit_ext_desc_t
+---------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.20*
+
+.. doxygenstruct:: ze_command_visit_ext_desc_t
     :project: LevelZero
     :members:
     :undoc-members:

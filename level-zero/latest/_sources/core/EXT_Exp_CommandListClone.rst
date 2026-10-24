@@ -11,6 +11,10 @@
 
 *Introduced in Level Zero version 1.9*
 
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.17. Mutable command lists replace command list cloning. Use :ref:`ZE_extension_mutable_command_list <ZE_extension_mutable_command_list>` instead.
+
 API
 ----
 

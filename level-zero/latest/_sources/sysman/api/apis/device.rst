@@ -7,7 +7,7 @@ Device
 
    device-2
 
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Device Functions
@@ -261,19 +261,6 @@ zesDeviceEnumPowerDomains
     :project: LevelZero
 
 
-.. _zesDeviceGetCardPowerDomain:
-
-zesDeviceGetCardPowerDomain
----------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesDeviceGetCardPowerDomain
-    :project: LevelZero
-
-
 .. _zesDeviceEnumPsus:
 
 zesDeviceEnumPsus
@@ -336,6 +323,19 @@ zesDeviceEnumTemperatureSensors
 *Added in version 1.0*
 
 .. doxygenfunction:: zesDeviceEnumTemperatureSensors
+    :project: LevelZero
+
+
+.. _zesDeviceEccAvailable:
+
+zesDeviceEccAvailable
+---------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.4*
+
+.. doxygenfunction:: zesDeviceEccAvailable
     :project: LevelZero
 
 

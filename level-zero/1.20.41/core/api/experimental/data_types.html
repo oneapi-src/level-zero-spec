@@ -1,0 +1,1015 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data Types - Experimental &#8212; Level Zero Specification v1.20.41</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/experimental/data_types';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Deprecated" href="../deprecated/index.html" />
+    <link rel="prev" title="Fabric Edge - Experimental" href="fabric_edge.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.20.41" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../INTRO.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../PROG.html">Core Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tools/PROG.html">Tools Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sysman/PROG.html">Sysman Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../runtime/PROG.html">Runtime Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../SPIRV.html">SPIR-V Programming Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../EXT.html">Extensions</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../api.html">API Documentation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Core</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/external_semaphore.html">External Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Experimental</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
+<li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_programmable.html">Metric Programmable</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_tracer.html">Metric Tracer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../runtime/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../runtime/api/apis/global.html">Global</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sysman/deprecated.html">Sysman - Deprecated</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/core/api/experimental/data_types.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Data Types - Experimental</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types-experimental-enums">Data Types - Experimental Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-program-exp-version-t">ze_module_program_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431ze_module_program_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_module_program_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_module_program_exp_version_t33ZE_MODULE_PROGRAM_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_PROGRAM_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_module_program_exp_version_t37ZE_MODULE_PROGRAM_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_PROGRAM_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_module_program_exp_version_t42ZE_MODULE_PROGRAM_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_PROGRAM_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-global-offset-exp-version-t">ze_global_offset_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430ze_global_offset_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_global_offset_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_global_offset_exp_version_t32ZE_GLOBAL_OFFSET_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_GLOBAL_OFFSET_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_global_offset_exp_version_t36ZE_GLOBAL_OFFSET_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_GLOBAL_OFFSET_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_global_offset_exp_version_t41ZE_GLOBAL_OFFSET_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_GLOBAL_OFFSET_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-event-query-timestamps-exp-version-t">ze_event_query_timestamps_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv439ze_event_query_timestamps_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_event_query_timestamps_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_event_query_timestamps_exp_version_t41ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_event_query_timestamps_exp_version_t45ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_event_query_timestamps_exp_version_t50ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-image-memory-properties-exp-version-t">ze_image_memory_properties_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv440ze_image_memory_properties_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_image_memory_properties_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N40ze_image_memory_properties_exp_version_t42ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N40ze_image_memory_properties_exp_version_t46ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N40ze_image_memory_properties_exp_version_t51ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-scheduling-hints-exp-version-t">ze_scheduling_hints_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv433ze_scheduling_hints_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_scheduling_hints_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_scheduling_hints_exp_version_t35ZE_SCHEDULING_HINTS_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_SCHEDULING_HINTS_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_scheduling_hints_exp_version_t39ZE_SCHEDULING_HINTS_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_SCHEDULING_HINTS_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N33ze_scheduling_hints_exp_version_t44ZE_SCHEDULING_HINTS_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_SCHEDULING_HINTS_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-bandwidth-properties-exp-version-t">ze_bandwidth_properties_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437ze_bandwidth_properties_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_bandwidth_properties_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_bandwidth_properties_exp_version_t39ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_bandwidth_properties_exp_version_t43ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37ze_bandwidth_properties_exp_version_t48ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-fabric-exp-version-t">ze_fabric_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423ze_fabric_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_fabric_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_fabric_exp_version_t25ZE_FABRIC_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_fabric_exp_version_t29ZE_FABRIC_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23ze_fabric_exp_version_t34ZE_FABRIC_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_FABRIC_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-sub-allocations-exp-version-t">ze_sub_allocations_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432ze_sub_allocations_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_sub_allocations_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_sub_allocations_exp_version_t34ZE_SUB_ALLOCATIONS_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_SUB_ALLOCATIONS_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_sub_allocations_exp_version_t38ZE_SUB_ALLOCATIONS_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_SUB_ALLOCATIONS_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N32ze_sub_allocations_exp_version_t43ZE_SUB_ALLOCATIONS_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_SUB_ALLOCATIONS_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-bindless-image-exp-version-t">ze_bindless_image_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431ze_bindless_image_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_bindless_image_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_bindless_image_exp_version_t33ZE_BINDLESS_IMAGE_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_BINDLESS_IMAGE_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_bindless_image_exp_version_t37ZE_BINDLESS_IMAGE_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_BINDLESS_IMAGE_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_bindless_image_exp_version_t42ZE_BINDLESS_IMAGE_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_BINDLESS_IMAGE_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-kernel-get-binary-exp-version-t">ze_kernel_get_binary_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv434ze_kernel_get_binary_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_kernel_get_binary_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_kernel_get_binary_exp_version_t36ZE_KERNEL_GET_BINARY_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_KERNEL_GET_BINARY_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_kernel_get_binary_exp_version_t40ZE_KERNEL_GET_BINARY_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_KERNEL_GET_BINARY_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_kernel_get_binary_exp_version_t45ZE_KERNEL_GET_BINARY_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_KERNEL_GET_BINARY_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-kernel-get-allocation-properties-exp-version-t">ze_kernel_get_allocation_properties_exp_version_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv449ze_kernel_get_allocation_properties_exp_version_t"><code class="docutils literal notranslate"><span class="pre">ze_kernel_get_allocation_properties_exp_version_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t51ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_1_0E"><code class="docutils literal notranslate"><span class="pre">ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_1_0</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t55ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_CURRENTE"><code class="docutils literal notranslate"><span class="pre">ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_CURRENT</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t60ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_FORCE_UINT32</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="data-types-experimental">
+<h1>Data Types - Experimental<a class="headerlink" href="#data-types-experimental" title="Link to this heading">#</a></h1>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<section id="data-types-experimental-enums">
+<h2>Data Types - Experimental Enums<a class="headerlink" href="#data-types-experimental-enums" title="Link to this heading">#</a></h2>
+<section id="ze-module-program-exp-version-t">
+<span id="id1"></span><h3>ze_module_program_exp_version_t<a class="headerlink" href="#ze-module-program-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431ze_module_program_exp_version_t">
+<span id="_CPPv331ze_module_program_exp_version_t"></span><span id="_CPPv231ze_module_program_exp_version_t"></span><span class="target" id="ze__api_8h_1a8874ddae5a61025499bd6c6ea6e38085"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_program_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv431ze_module_program_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Module Program Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_module_program_exp_version_t33ZE_MODULE_PROGRAM_EXP_VERSION_1_0E">
+<span id="_CPPv3N31ze_module_program_exp_version_t33ZE_MODULE_PROGRAM_EXP_VERSION_1_0E"></span><span id="_CPPv2N31ze_module_program_exp_version_t33ZE_MODULE_PROGRAM_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a8874ddae5a61025499bd6c6ea6e38085a95f38ccdaca34f35ab196048e9828422"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_PROGRAM_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N31ze_module_program_exp_version_t33ZE_MODULE_PROGRAM_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_module_program_exp_version_t37ZE_MODULE_PROGRAM_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N31ze_module_program_exp_version_t37ZE_MODULE_PROGRAM_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N31ze_module_program_exp_version_t37ZE_MODULE_PROGRAM_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a8874ddae5a61025499bd6c6ea6e38085a1c87a36f3af31c2a25c01206a2ccf582"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_PROGRAM_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N31ze_module_program_exp_version_t37ZE_MODULE_PROGRAM_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_module_program_exp_version_t42ZE_MODULE_PROGRAM_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N31ze_module_program_exp_version_t42ZE_MODULE_PROGRAM_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N31ze_module_program_exp_version_t42ZE_MODULE_PROGRAM_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a8874ddae5a61025499bd6c6ea6e38085ab6b0ae24eb06a2925869cfaeb2fe070a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_MODULE_PROGRAM_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N31ze_module_program_exp_version_t42ZE_MODULE_PROGRAM_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_MODULE_PROGRAM_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-global-offset-exp-version-t">
+<span id="id2"></span><h3>ze_global_offset_exp_version_t<a class="headerlink" href="#ze-global-offset-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.1</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv430ze_global_offset_exp_version_t">
+<span id="_CPPv330ze_global_offset_exp_version_t"></span><span id="_CPPv230ze_global_offset_exp_version_t"></span><span class="target" id="ze__api_8h_1a0feeae3ae38908c69fb26c266111f0fb"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_global_offset_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv430ze_global_offset_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Global Offset Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_global_offset_exp_version_t32ZE_GLOBAL_OFFSET_EXP_VERSION_1_0E">
+<span id="_CPPv3N30ze_global_offset_exp_version_t32ZE_GLOBAL_OFFSET_EXP_VERSION_1_0E"></span><span id="_CPPv2N30ze_global_offset_exp_version_t32ZE_GLOBAL_OFFSET_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a0feeae3ae38908c69fb26c266111f0fba6dfaaa22b6a94189172b9d96f4ff3480"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_GLOBAL_OFFSET_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N30ze_global_offset_exp_version_t32ZE_GLOBAL_OFFSET_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_global_offset_exp_version_t36ZE_GLOBAL_OFFSET_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N30ze_global_offset_exp_version_t36ZE_GLOBAL_OFFSET_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N30ze_global_offset_exp_version_t36ZE_GLOBAL_OFFSET_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a0feeae3ae38908c69fb26c266111f0fba0d54688fc6c0d06029f81c2253ee10cd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_GLOBAL_OFFSET_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N30ze_global_offset_exp_version_t36ZE_GLOBAL_OFFSET_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N30ze_global_offset_exp_version_t41ZE_GLOBAL_OFFSET_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N30ze_global_offset_exp_version_t41ZE_GLOBAL_OFFSET_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N30ze_global_offset_exp_version_t41ZE_GLOBAL_OFFSET_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a0feeae3ae38908c69fb26c266111f0fba9853b41e216cca02d98eab3b0ee3af14"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_GLOBAL_OFFSET_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N30ze_global_offset_exp_version_t41ZE_GLOBAL_OFFSET_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_GLOBAL_OFFSET_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-event-query-timestamps-exp-version-t">
+<span id="id3"></span><h3>ze_event_query_timestamps_exp_version_t<a class="headerlink" href="#ze-event-query-timestamps-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.2</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv439ze_event_query_timestamps_exp_version_t">
+<span id="_CPPv339ze_event_query_timestamps_exp_version_t"></span><span id="_CPPv239ze_event_query_timestamps_exp_version_t"></span><span class="target" id="ze__api_8h_1a8b94ed2890594ad1ad87acbd968b0ba1"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_query_timestamps_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv439ze_event_query_timestamps_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Event Query Timestamps Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_event_query_timestamps_exp_version_t41ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_1_0E">
+<span id="_CPPv3N39ze_event_query_timestamps_exp_version_t41ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_1_0E"></span><span id="_CPPv2N39ze_event_query_timestamps_exp_version_t41ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a8b94ed2890594ad1ad87acbd968b0ba1a77b2531eb86f9117f545dba8a8df8310"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N39ze_event_query_timestamps_exp_version_t41ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_event_query_timestamps_exp_version_t45ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N39ze_event_query_timestamps_exp_version_t45ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N39ze_event_query_timestamps_exp_version_t45ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a8b94ed2890594ad1ad87acbd968b0ba1aa1bfa4a0ad3d0e63ee5a39f7e3919db6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N39ze_event_query_timestamps_exp_version_t45ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N39ze_event_query_timestamps_exp_version_t50ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N39ze_event_query_timestamps_exp_version_t50ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N39ze_event_query_timestamps_exp_version_t50ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a8b94ed2890594ad1ad87acbd968b0ba1a2f9f6b685dd70f45a123df67edce59da"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N39ze_event_query_timestamps_exp_version_t50ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_EVENT_QUERY_TIMESTAMPS_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-image-memory-properties-exp-version-t">
+<span id="id4"></span><h3>ze_image_memory_properties_exp_version_t<a class="headerlink" href="#ze-image-memory-properties-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.2</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv440ze_image_memory_properties_exp_version_t">
+<span id="_CPPv340ze_image_memory_properties_exp_version_t"></span><span id="_CPPv240ze_image_memory_properties_exp_version_t"></span><span class="target" id="ze__api_8h_1a7c1e3d6acaab3a9796bf1ec107d731db"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_memory_properties_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv440ze_image_memory_properties_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Image Memory Properties Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N40ze_image_memory_properties_exp_version_t42ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_1_0E">
+<span id="_CPPv3N40ze_image_memory_properties_exp_version_t42ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_1_0E"></span><span id="_CPPv2N40ze_image_memory_properties_exp_version_t42ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a7c1e3d6acaab3a9796bf1ec107d731dba8da6ebbe880637540558acf97d7be932"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N40ze_image_memory_properties_exp_version_t42ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N40ze_image_memory_properties_exp_version_t46ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N40ze_image_memory_properties_exp_version_t46ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N40ze_image_memory_properties_exp_version_t46ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a7c1e3d6acaab3a9796bf1ec107d731dba8a4d39652e5df2e888521d46f75140ae"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N40ze_image_memory_properties_exp_version_t46ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N40ze_image_memory_properties_exp_version_t51ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N40ze_image_memory_properties_exp_version_t51ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N40ze_image_memory_properties_exp_version_t51ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a7c1e3d6acaab3a9796bf1ec107d731dba903dda7aebf1453e7536a30ad360f80c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N40ze_image_memory_properties_exp_version_t51ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_IMAGE_MEMORY_PROPERTIES_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-scheduling-hints-exp-version-t">
+<span id="id5"></span><h3>ze_scheduling_hints_exp_version_t<a class="headerlink" href="#ze-scheduling-hints-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.2</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv433ze_scheduling_hints_exp_version_t">
+<span id="_CPPv333ze_scheduling_hints_exp_version_t"></span><span id="_CPPv233ze_scheduling_hints_exp_version_t"></span><span class="target" id="ze__api_8h_1a22e47937bfc717ca5be005ff815fd3d8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_scheduling_hints_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv433ze_scheduling_hints_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Kernel Scheduling Hints Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_scheduling_hints_exp_version_t35ZE_SCHEDULING_HINTS_EXP_VERSION_1_0E">
+<span id="_CPPv3N33ze_scheduling_hints_exp_version_t35ZE_SCHEDULING_HINTS_EXP_VERSION_1_0E"></span><span id="_CPPv2N33ze_scheduling_hints_exp_version_t35ZE_SCHEDULING_HINTS_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a22e47937bfc717ca5be005ff815fd3d8afe14371819086407f915d1f417c43a4e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_SCHEDULING_HINTS_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N33ze_scheduling_hints_exp_version_t35ZE_SCHEDULING_HINTS_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_scheduling_hints_exp_version_t39ZE_SCHEDULING_HINTS_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N33ze_scheduling_hints_exp_version_t39ZE_SCHEDULING_HINTS_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N33ze_scheduling_hints_exp_version_t39ZE_SCHEDULING_HINTS_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a22e47937bfc717ca5be005ff815fd3d8a38575f8597f3fa56789cf987f2ce7639"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_SCHEDULING_HINTS_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N33ze_scheduling_hints_exp_version_t39ZE_SCHEDULING_HINTS_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N33ze_scheduling_hints_exp_version_t44ZE_SCHEDULING_HINTS_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N33ze_scheduling_hints_exp_version_t44ZE_SCHEDULING_HINTS_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N33ze_scheduling_hints_exp_version_t44ZE_SCHEDULING_HINTS_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a22e47937bfc717ca5be005ff815fd3d8a74cf82fb177950b74b4dbe9e9c3e6555"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_SCHEDULING_HINTS_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N33ze_scheduling_hints_exp_version_t44ZE_SCHEDULING_HINTS_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_SCHEDULING_HINTS_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-bandwidth-properties-exp-version-t">
+<span id="id6"></span><h3>ze_bandwidth_properties_exp_version_t<a class="headerlink" href="#ze-bandwidth-properties-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv437ze_bandwidth_properties_exp_version_t">
+<span id="_CPPv337ze_bandwidth_properties_exp_version_t"></span><span id="_CPPv237ze_bandwidth_properties_exp_version_t"></span><span class="target" id="ze__api_8h_1acb16aad852deeb5ce37f39d65a37973b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_bandwidth_properties_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv437ze_bandwidth_properties_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Bandwidth Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_bandwidth_properties_exp_version_t39ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_1_0E">
+<span id="_CPPv3N37ze_bandwidth_properties_exp_version_t39ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_1_0E"></span><span id="_CPPv2N37ze_bandwidth_properties_exp_version_t39ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1acb16aad852deeb5ce37f39d65a37973ba9016483c22b24933ac5e3e7f9b5f6d73"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N37ze_bandwidth_properties_exp_version_t39ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_bandwidth_properties_exp_version_t43ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N37ze_bandwidth_properties_exp_version_t43ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N37ze_bandwidth_properties_exp_version_t43ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1acb16aad852deeb5ce37f39d65a37973bae4f5d4879e124e3a4e67ffe345012ec8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N37ze_bandwidth_properties_exp_version_t43ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N37ze_bandwidth_properties_exp_version_t48ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N37ze_bandwidth_properties_exp_version_t48ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N37ze_bandwidth_properties_exp_version_t48ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1acb16aad852deeb5ce37f39d65a37973ba1f1b51ba8fd8cc1c9606404bec37773b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N37ze_bandwidth_properties_exp_version_t48ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_BANDWIDTH_PROPERTIES_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-fabric-exp-version-t">
+<span id="id7"></span><h3>ze_fabric_exp_version_t<a class="headerlink" href="#ze-fabric-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.4</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv423ze_fabric_exp_version_t">
+<span id="_CPPv323ze_fabric_exp_version_t"></span><span id="_CPPv223ze_fabric_exp_version_t"></span><span class="target" id="ze__api_8h_1a33ed1785677adab4f336d563f5609892"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fabric_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv423ze_fabric_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Fabric Topology Discovery Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_fabric_exp_version_t25ZE_FABRIC_EXP_VERSION_1_0E">
+<span id="_CPPv3N23ze_fabric_exp_version_t25ZE_FABRIC_EXP_VERSION_1_0E"></span><span id="_CPPv2N23ze_fabric_exp_version_t25ZE_FABRIC_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a33ed1785677adab4f336d563f5609892a3957dd1037ceda4f0490da29a1668c33"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N23ze_fabric_exp_version_t25ZE_FABRIC_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_fabric_exp_version_t29ZE_FABRIC_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N23ze_fabric_exp_version_t29ZE_FABRIC_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N23ze_fabric_exp_version_t29ZE_FABRIC_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a33ed1785677adab4f336d563f5609892a75b7fa128e258e519c9d25f0249f02a4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N23ze_fabric_exp_version_t29ZE_FABRIC_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N23ze_fabric_exp_version_t34ZE_FABRIC_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N23ze_fabric_exp_version_t34ZE_FABRIC_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N23ze_fabric_exp_version_t34ZE_FABRIC_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a33ed1785677adab4f336d563f5609892ab7668c21edc0a53c8f1f4e71b26968f1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_FABRIC_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N23ze_fabric_exp_version_t34ZE_FABRIC_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_FABRIC_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-sub-allocations-exp-version-t">
+<span id="id8"></span><h3>ze_sub_allocations_exp_version_t<a class="headerlink" href="#ze-sub-allocations-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.5</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv432ze_sub_allocations_exp_version_t">
+<span id="_CPPv332ze_sub_allocations_exp_version_t"></span><span id="_CPPv232ze_sub_allocations_exp_version_t"></span><span class="target" id="ze__api_8h_1a0951bd525620eb8657d248c69c60e228"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_sub_allocations_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv432ze_sub_allocations_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sub-Allocations Properties Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_sub_allocations_exp_version_t34ZE_SUB_ALLOCATIONS_EXP_VERSION_1_0E">
+<span id="_CPPv3N32ze_sub_allocations_exp_version_t34ZE_SUB_ALLOCATIONS_EXP_VERSION_1_0E"></span><span id="_CPPv2N32ze_sub_allocations_exp_version_t34ZE_SUB_ALLOCATIONS_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a0951bd525620eb8657d248c69c60e228a4b9bca87c74d4bf441afc61ed0601883"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_SUB_ALLOCATIONS_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N32ze_sub_allocations_exp_version_t34ZE_SUB_ALLOCATIONS_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_sub_allocations_exp_version_t38ZE_SUB_ALLOCATIONS_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N32ze_sub_allocations_exp_version_t38ZE_SUB_ALLOCATIONS_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N32ze_sub_allocations_exp_version_t38ZE_SUB_ALLOCATIONS_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a0951bd525620eb8657d248c69c60e228ab579b06c7fc637e903747dd7af03b79b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_SUB_ALLOCATIONS_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N32ze_sub_allocations_exp_version_t38ZE_SUB_ALLOCATIONS_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N32ze_sub_allocations_exp_version_t43ZE_SUB_ALLOCATIONS_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N32ze_sub_allocations_exp_version_t43ZE_SUB_ALLOCATIONS_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N32ze_sub_allocations_exp_version_t43ZE_SUB_ALLOCATIONS_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a0951bd525620eb8657d248c69c60e228afa75521b0a095a73f21976633111e6e2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_SUB_ALLOCATIONS_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N32ze_sub_allocations_exp_version_t43ZE_SUB_ALLOCATIONS_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_SUB_ALLOCATIONS_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-bindless-image-exp-version-t">
+<span id="id9"></span><h3>ze_bindless_image_exp_version_t<a class="headerlink" href="#ze-bindless-image-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.9</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv431ze_bindless_image_exp_version_t">
+<span id="_CPPv331ze_bindless_image_exp_version_t"></span><span id="_CPPv231ze_bindless_image_exp_version_t"></span><span class="target" id="ze__api_8h_1a87620de241e3734d0ac6ed65b2769507"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_bindless_image_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv431ze_bindless_image_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Bindless Image Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_bindless_image_exp_version_t33ZE_BINDLESS_IMAGE_EXP_VERSION_1_0E">
+<span id="_CPPv3N31ze_bindless_image_exp_version_t33ZE_BINDLESS_IMAGE_EXP_VERSION_1_0E"></span><span id="_CPPv2N31ze_bindless_image_exp_version_t33ZE_BINDLESS_IMAGE_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1a87620de241e3734d0ac6ed65b2769507ab15d0d95d6102a5b8ca761b10a955e88"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_BINDLESS_IMAGE_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N31ze_bindless_image_exp_version_t33ZE_BINDLESS_IMAGE_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_bindless_image_exp_version_t37ZE_BINDLESS_IMAGE_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N31ze_bindless_image_exp_version_t37ZE_BINDLESS_IMAGE_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N31ze_bindless_image_exp_version_t37ZE_BINDLESS_IMAGE_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1a87620de241e3734d0ac6ed65b2769507a1b283f4ca9614bd8fde3387ed6ecee70"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_BINDLESS_IMAGE_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N31ze_bindless_image_exp_version_t37ZE_BINDLESS_IMAGE_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N31ze_bindless_image_exp_version_t42ZE_BINDLESS_IMAGE_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N31ze_bindless_image_exp_version_t42ZE_BINDLESS_IMAGE_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N31ze_bindless_image_exp_version_t42ZE_BINDLESS_IMAGE_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1a87620de241e3734d0ac6ed65b2769507ae1c6e1e2ad3633ee647b338a680ca035"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_BINDLESS_IMAGE_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N31ze_bindless_image_exp_version_t42ZE_BINDLESS_IMAGE_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_BINDLESS_IMAGE_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-kernel-get-binary-exp-version-t">
+<span id="id10"></span><h3>ze_kernel_get_binary_exp_version_t<a class="headerlink" href="#ze-kernel-get-binary-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.11</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv434ze_kernel_get_binary_exp_version_t">
+<span id="_CPPv334ze_kernel_get_binary_exp_version_t"></span><span id="_CPPv234ze_kernel_get_binary_exp_version_t"></span><span class="target" id="ze__api_8h_1ac54c4679cb7b4658ff998c5ec3a034bb"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_kernel_get_binary_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv434ze_kernel_get_binary_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Kernel Binary Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_kernel_get_binary_exp_version_t36ZE_KERNEL_GET_BINARY_EXP_VERSION_1_0E">
+<span id="_CPPv3N34ze_kernel_get_binary_exp_version_t36ZE_KERNEL_GET_BINARY_EXP_VERSION_1_0E"></span><span id="_CPPv2N34ze_kernel_get_binary_exp_version_t36ZE_KERNEL_GET_BINARY_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1ac54c4679cb7b4658ff998c5ec3a034bbac537d5f4e0419c9e4855184d5f93144b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_KERNEL_GET_BINARY_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N34ze_kernel_get_binary_exp_version_t36ZE_KERNEL_GET_BINARY_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_kernel_get_binary_exp_version_t40ZE_KERNEL_GET_BINARY_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N34ze_kernel_get_binary_exp_version_t40ZE_KERNEL_GET_BINARY_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N34ze_kernel_get_binary_exp_version_t40ZE_KERNEL_GET_BINARY_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1ac54c4679cb7b4658ff998c5ec3a034bba10796622ae48cb1276339db5a76edd07"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_KERNEL_GET_BINARY_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N34ze_kernel_get_binary_exp_version_t40ZE_KERNEL_GET_BINARY_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N34ze_kernel_get_binary_exp_version_t45ZE_KERNEL_GET_BINARY_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N34ze_kernel_get_binary_exp_version_t45ZE_KERNEL_GET_BINARY_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N34ze_kernel_get_binary_exp_version_t45ZE_KERNEL_GET_BINARY_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1ac54c4679cb7b4658ff998c5ec3a034bbab586abf2328a2df4b1c5520e6f5e2656"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_KERNEL_GET_BINARY_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N34ze_kernel_get_binary_exp_version_t45ZE_KERNEL_GET_BINARY_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_KERNEL_GET_BINARY_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="ze-kernel-get-allocation-properties-exp-version-t">
+<span id="id11"></span><h3>ze_kernel_get_allocation_properties_exp_version_t<a class="headerlink" href="#ze-kernel-get-allocation-properties-exp-version-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.14</em></p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv449ze_kernel_get_allocation_properties_exp_version_t">
+<span id="_CPPv349ze_kernel_get_allocation_properties_exp_version_t"></span><span id="_CPPv249ze_kernel_get_allocation_properties_exp_version_t"></span><span class="target" id="ze__api_8h_1ab971923158b9d200cfb7da0efba5d2a6"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_kernel_get_allocation_properties_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv449ze_kernel_get_allocation_properties_exp_version_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Get Kernel Allocation Properties Extension Version(s) </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t51ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_1_0E">
+<span id="_CPPv3N49ze_kernel_get_allocation_properties_exp_version_t51ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_1_0E"></span><span id="_CPPv2N49ze_kernel_get_allocation_properties_exp_version_t51ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_1_0E"></span><span class="target" id="ze__api_8h_1ab971923158b9d200cfb7da0efba5d2a6ab98f0c0de38ee30a153aef7dcda4a292"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_1_0</span></span></span><a class="headerlink" href="#_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t51ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_1_0E" title="Link to this definition">#</a><br /></dt>
+<dd><p>version 1.0 </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t55ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_CURRENTE">
+<span id="_CPPv3N49ze_kernel_get_allocation_properties_exp_version_t55ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_CURRENTE"></span><span id="_CPPv2N49ze_kernel_get_allocation_properties_exp_version_t55ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_CURRENTE"></span><span class="target" id="ze__api_8h_1ab971923158b9d200cfb7da0efba5d2a6ab3548ad54f2f6b113c3c0c4938859407"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_CURRENT</span></span></span><a class="headerlink" href="#_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t55ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_CURRENTE" title="Link to this definition">#</a><br /></dt>
+<dd><p>latest known version </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t60ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_FORCE_UINT32E">
+<span id="_CPPv3N49ze_kernel_get_allocation_properties_exp_version_t60ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_FORCE_UINT32E"></span><span id="_CPPv2N49ze_kernel_get_allocation_properties_exp_version_t60ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_FORCE_UINT32E"></span><span class="target" id="ze__api_8h_1ab971923158b9d200cfb7da0efba5d2a6a176d01c7dbb065fce330b8d41ff7f7fa"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_FORCE_UINT32</span></span></span><a class="headerlink" href="#_CPPv4N49ze_kernel_get_allocation_properties_exp_version_t60ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_FORCE_UINT32E" title="Link to this definition">#</a><br /></dt>
+<dd><p>Value marking end of ZE_KERNEL_GET_ALLOCATION_PROPERTIES_EXP_VERSION_* ENUMs. </p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="fabric_edge.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fabric Edge - Experimental</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../deprecated/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Deprecated</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div id="pst-class-toc-heading-2" class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> In this class
+  </div>
+  <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
+    <details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">11</span></summary><ul class="ctoc-list"><li><a href="data_types.html#ze-module-program-exp-version-t">ze_module_program_exp_version_t</a></li><li><a href="data_types.html#ze-global-offset-exp-version-t">ze_global_offset_exp_version_t</a></li><li><a href="data_types.html#ze-event-query-timestamps-exp-version-t">ze_event_query_timestamps_exp_version_t</a></li><li><a href="data_types.html#ze-image-memory-properties-exp-version-t">ze_image_memory_properties_exp_version_t</a></li><li><a href="data_types.html#ze-scheduling-hints-exp-version-t">ze_scheduling_hints_exp_version_t</a></li><li><a href="data_types.html#ze-bandwidth-properties-exp-version-t">ze_bandwidth_properties_exp_version_t</a></li><li><a href="data_types.html#ze-fabric-exp-version-t">ze_fabric_exp_version_t</a></li><li><a href="data_types.html#ze-sub-allocations-exp-version-t">ze_sub_allocations_exp_version_t</a></li><li><a href="data_types.html#ze-bindless-image-exp-version-t">ze_bindless_image_exp_version_t</a></li><li><a href="data_types.html#ze-kernel-get-binary-exp-version-t">ze_kernel_get_binary_exp_version_t</a></li><li><a href="data_types.html#ze-kernel-get-allocation-properties-exp-version-t">ze_kernel_get_allocation_properties_exp_version_t</a></li></ul></details>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

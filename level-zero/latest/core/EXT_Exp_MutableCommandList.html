@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Mutable Command List Extension &#8212; Level Zero Specification v1.19.12</title>
+    <title>Mutable Command List Experimental Extension &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
     <link rel="search" title="Search" href="../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -434,7 +463,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Mutable Command List Extension</h1>
+    <h1>Mutable Command List Experimental Extension</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -444,7 +473,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mutable Command List Extension</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mutable Command List Experimental Extension</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a></li>
 </ul>
 </li>
@@ -461,45 +490,46 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="mutable-command-list-extension">
-<span id="ze-experimental-mutable-command-list"></span><h1>Mutable Command List Extension<a class="headerlink" href="#mutable-command-list-extension" title="Link to this heading">#</a></h1>
+  <section id="mutable-command-list-experimental-extension">
+<span id="ze-experimental-mutable-command-list"></span><h1>Mutable Command List Experimental Extension<a class="headerlink" href="#mutable-command-list-experimental-extension" title="Link to this heading">#</a></h1>
 <p class="ext-version"><em>Introduced in Level Zero version 1.9</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.20. Use <a class="reference internal" href="EXT_MutableCommandList.html#ze-extension-mutable-command-list"><span class="std std-ref">ZE_extension_mutable_command_list</span></a> instead.</p>
 <section id="api">
 <h2>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h2>
 <ul>
 <li><p>Enumerations</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference internal" href="api/experimental/data_types.html#ze-mutable-command-list-exp-version-t"><span class="std std-ref">ze_mutable_command_list_exp_version_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ze_mutable_command_exp_flags_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-list-exp-flags-t"><span class="std std-ref">ze_mutable_command_list_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/data_types.html#ze-mutable-command-list-exp-version-t"><span class="std std-ref">ze_mutable_command_list_exp_version_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ze_mutable_command_exp_flags_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-list-exp-flags-t"><span class="std std-ref">ze_mutable_command_list_exp_flags_t</span></a></p></li>
 </ul>
 </div></blockquote>
 </li>
 <li><p>Structures</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-group-size-exp-desc-t"><span class="std std-ref">ze_mutable_group_size_exp_desc_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-global-offset-exp-desc-t"><span class="std std-ref">ze_mutable_global_offset_exp_desc_t</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#ze-mutable-graph-argument-exp-desc-t"><span class="std std-ref">ze_mutable_graph_argument_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-group-size-exp-desc-t"><span class="std std-ref">ze_mutable_group_size_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-global-offset-exp-desc-t"><span class="std std-ref">ze_mutable_global_offset_exp_desc_t</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-graph-argument-exp-desc-t"><span class="std std-ref">ze_mutable_graph_argument_exp_desc_t</span></a></p></li>
 </ul>
 </div></blockquote>
 </li>
 <li><p>Functions</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><a class="reference internal" href="api/experimental/command_list.html#zecommandlistgetnextcommandidexp"><span class="std std-ref">zeCommandListGetNextCommandIdExp</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#zecommandlistgetnextcommandidwithkernelsexp"><span class="std std-ref">zeCommandListGetNextCommandIdWithKernelsExp</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandsignaleventexp"><span class="std std-ref">zeCommandListUpdateMutableCommandSignalEventExp</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandwaiteventsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandWaitEventsExp</span></a></p></li>
-<li><p><a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandkernelsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandKernelsExp</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#zecommandlistgetnextcommandidexp"><span class="std std-ref">zeCommandListGetNextCommandIdExp</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#zecommandlistgetnextcommandidwithkernelsexp"><span class="std std-ref">zeCommandListGetNextCommandIdWithKernelsExp</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandsignaleventexp"><span class="std std-ref">zeCommandListUpdateMutableCommandSignalEventExp</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandwaiteventsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandWaitEventsExp</span></a></p></li>
+<li><p><a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandkernelsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandKernelsExp</span></a></p></li>
 </ul>
 </div></blockquote>
 </li>
@@ -509,12 +539,12 @@
 <section id="mutable-command-list">
 <h1>Mutable Command List<a class="headerlink" href="#mutable-command-list" title="Link to this heading">#</a></h1>
 <ul class="simple">
-<li><p>A mutable command list is created by supplying a <a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a> object via the <cite>pNext</cite> member of <a class="reference internal" href="api/apis/command_list-2.html#ze-command-list-desc-t"><span class="std std-ref">ze_command_list_desc_t</span></a>.</p></li>
+<li><p>A mutable command list is created by supplying a <a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a> object via the <cite>pNext</cite> member of <a class="reference internal" href="api/apis/command_list-2.html#ze-command-list-desc-t"><span class="std std-ref">ze_command_list_desc_t</span></a>.</p></li>
 <li><p>Mutable command lists support mutation to <strong>identified</strong> commands <em>after</em> being closed with <a class="reference internal" href="api/apis/command_list.html#zecommandlistclose"><span class="std std-ref">zeCommandListClose</span></a>.</p></li>
-<li><p>Implementation support for mutable commands may be discovered by providing a <a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a> object in the <cite>pNext</cite> member of <a class="reference internal" href="api/apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> in a call to <a class="reference internal" href="api/apis/device.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>.</p></li>
+<li><p>Implementation support for mutable commands may be discovered by providing a <a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a> object in the <cite>pNext</cite> member of <a class="reference internal" href="api/apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a> in a call to <a class="reference internal" href="api/apis/device.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>.</p></li>
 </ul>
 <pre class="literal-block">// Discover mutable command list properties
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a> mutCmdListProps = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a> mutCmdListProps = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIES</span></a>,      // stype
     nullptr,                                                    // pNext
     0,                                                          // mutableCommandListFlags
@@ -531,7 +561,7 @@ deviceProps.pNext = &amp;mutCmdListProps;
 // ...
 
 // Create a mutable command list
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a> mutCmdListDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a> mutCmdListDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_DESC</span></a>,
     nullptr,
     0 // flags
@@ -567,14 +597,14 @@ int defaultValue = 0;
 <a class="reference internal" href="api/apis/kernel.html#zekernelsetargumentvalue"><span class="std std-ref">zeKernelSetArgumentValue</span></a>(hKernel, 0, sizeof(int), &amp;defaultValue);
 
 // Get next command identifier
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a> cmdIdDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a> cmdIdDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC</span></a>,      // stype
     nullptr,                                            // pNext
     0                                                   // flags
 };
 
 uint64_t commandId = 0;
-<a class="reference internal" href="api/experimental/command_list.html#zecommandlistgetnextcommandidexp"><span class="std std-ref">zeCommandListGetNextCommandIdExp</span></a>(hCommandList, &amp;cmdIdDesc, &amp;commandId);
+<a class="reference internal" href="api/deprecated/command_list.html#zecommandlistgetnextcommandidexp"><span class="std std-ref">zeCommandListGetNextCommandIdExp</span></a>(hCommandList, &amp;cmdIdDesc, &amp;commandId);
 
 // Encode command into command list
 <a class="reference internal" href="api/apis/command_list.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(hCommandList, hKernel, &amp;groupSize, hSignalEvent, 1, &amp;hWaitEvent);
@@ -596,7 +626,7 @@ zeCommandQueueExecuteCommandLists(hCommandQueue, 1, &amp;hCommandList, hFence);
     1                                                       // groupCountZ
 };
 
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a> groupCountDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a> groupCountDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC</span></a>,         // stype
     nullptr,                                                // pNext
     commandId,                                              // commandId
@@ -606,7 +636,7 @@ zeCommandQueueExecuteCommandLists(hCommandQueue, 1, &amp;hCommandList, hFence);
 // Prepare to modify Kernel Argument
 int argValue = 1;
 
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a> krnlArgDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a> krnlArgDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC</span></a>,     // stype
     &amp;groupCountDesc,                                        // pNext
     commandId,                                              // commandId
@@ -616,7 +646,7 @@ int argValue = 1;
 };
 
 // Prepare to update mutable commands
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a> desc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a> desc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC</span></a>,            // stype
     &amp;krnlArgDesc,                                           // pNext
     0                                                       // flags
@@ -626,13 +656,13 @@ int argValue = 1;
 <a class="reference internal" href="api/apis/fence.html#zefencehostsynchronize"><span class="std std-ref">zeFenceHostSynchronize</span></a>(hFence, UINT64_MAX);
 
 // Update mutable commands
-<a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a>(hCommandList, &amp;desc);
+<a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a>(hCommandList, &amp;desc);
 
 // Update signal event for the launch kernel command
-<a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandsignaleventexp"><span class="std std-ref">zeCommandListUpdateMutableCommandSignalEventExp</span></a>(hCommandList, commandId, hNewLaunchKernelSignalEvent);
+<a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandsignaleventexp"><span class="std std-ref">zeCommandListUpdateMutableCommandSignalEventExp</span></a>(hCommandList, commandId, hNewLaunchKernelSignalEvent);
 
 // Update the wait events for the launch kernel command
-<a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandwaiteventsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandWaitEventsExp</span></a>(hCommandList, commandId, 1, &amp;hNewLaunchKernelWaitEvent);
+<a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandwaiteventsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandWaitEventsExp</span></a>(hCommandList, commandId, 1, &amp;hNewLaunchKernelWaitEvent);
 
 // Close the command list
 <a class="reference internal" href="api/apis/command_list.html#zecommandlistclose"><span class="std std-ref">zeCommandListClose</span></a>(hCommandList);
@@ -647,14 +677,14 @@ ze_kernel_handle_t mulKernel;
 ze_kernel_handle_t kernels[] = {addKernel, mulKernel};
 
 // when users want kernel mutation, they need to explicitly state this, as 0 does not include kernel instruction mutation by default
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ze_mutable_command_exp_flags_t</span></a> mutationFlags =
-    <a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTS</span></a> |
-    <a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNT</span></a> |
-    <a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZE</span></a> |
-    <a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION</span></a>;
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ze_mutable_command_exp_flags_t</span></a> mutationFlags =
+    <a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_ARGUMENTS</span></a> |
+    <a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_COUNT</span></a> |
+    <a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_GROUP_SIZE</span></a> |
+    <a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-exp-flags-t"><span class="std std-ref">ZE_MUTABLE_COMMAND_EXP_FLAG_KERNEL_INSTRUCTION</span></a>;
 
 // Get next command identifier
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a> cmdIdDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a> cmdIdDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC</span></a>,      // stype
     nullptr,                                            // pNext
     mutationFlags                                       // flags
@@ -662,7 +692,7 @@ ze_kernel_handle_t kernels[] = {addKernel, mulKernel};
 
 // retrieve id for the append operation and provide all possible kernels for this command
 uint64_t mutableKernelCommandId = 0;
-<a class="reference internal" href="api/experimental/command_list.html#zecommandlistgetnextcommandidwithkernelsexp"><span class="std std-ref">zeCommandListGetNextCommandIdWithKernelsExp</span></a>(hCommandList, &amp;cmdIdDesc, &amp;mutableKernelCommandId, 2, kernels);
+<a class="reference internal" href="api/deprecated/command_list.html#zecommandlistgetnextcommandidwithkernelsexp"><span class="std std-ref">zeCommandListGetNextCommandIdWithKernelsExp</span></a>(hCommandList, &amp;cmdIdDesc, &amp;mutableKernelCommandId, 2, kernels);
 
 // Encode command into command list
 <a class="reference internal" href="api/apis/command_list.html#zecommandlistappendlaunchkernel"><span class="std std-ref">zeCommandListAppendLaunchKernel</span></a>(hCommandList, addKernel, &amp;groupSize, nullptr, 0, nullptr);
@@ -673,7 +703,7 @@ uint64_t mutableKernelCommandId = 0;
 - kernel handle mutation function must be called as first for a given command id
 - kernel mutation invalidates all kernel arguments and dispatch parameters, these must be provided for the new kernel</p>
 <pre class="literal-block">// Update mutable kernel for the command, switch from <cite>addKernel</cite> to <cite>mulKernel</cite>
-<a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandkernelsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandKernelsExp</span></a>(hCommandList, 1, &amp;mutableKernelCommandId, &amp;mulKernel);
+<a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandkernelsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandKernelsExp</span></a>(hCommandList, 1, &amp;mutableKernelCommandId, &amp;mulKernel);
 
 // modify group count
 <a class="reference internal" href="api/apis/command_list-2.html#ze-group-count-t"><span class="std std-ref">ze_group_count_t</span></a> groupCount = {
@@ -682,14 +712,14 @@ uint64_t mutableKernelCommandId = 0;
     1                                                       // groupCountZ
 };
 
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a> groupCountDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a> groupCountDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC</span></a>,         // stype
     nullptr,                                                // pNext
     mutableKernelCommandId,                                 // commandId
     &amp;groupCount                                             // pGroupCount
 };
 
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-group-size-exp-desc-t"><span class="std std-ref">ze_mutable_group_size_exp_desc_t</span></a> groupSizeDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-group-size-exp-desc-t"><span class="std std-ref">ze_mutable_group_size_exp_desc_t</span></a> groupSizeDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESC</span></a>,          // stype
     &amp;groupCountDesc,                                        // pNext
     mutableKernelCommandId,                                 // commandId
@@ -702,7 +732,7 @@ uint64_t mutableKernelCommandId = 0;
 int argValue = 1;
 void <code class="docutils literal notranslate"><span class="pre">*</span></code>usmPointer;
 
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a> krnlArgMemoryDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a> krnlArgMemoryDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC</span></a>,     // stype
     &amp;groupSizeDesc,                                         // pNext
     mutableKernelCommandId,                                 // commandId
@@ -711,7 +741,7 @@ void <code class="docutils literal notranslate"><span class="pre">*</span></code
     &amp;usmPointer                                             // pArgValue
 };
 
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a> krnlArgScalarDesc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a> krnlArgScalarDesc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC</span></a>,     // stype
     &amp;krnlArgMemoryDesc,                                     // pNext
     mutableKernelCommandId,                                 // commandId
@@ -721,14 +751,14 @@ void <code class="docutils literal notranslate"><span class="pre">*</span></code
 };
 
 // Prepare to update mutable commands
-<a class="reference internal" href="api/experimental/command_list.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a> desc = {
+<a class="reference internal" href="api/deprecated/command_list.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a> desc = {
     <a class="reference internal" href="api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC</span></a>,            // stype
     &amp;krnlArgScalarDesc,                                     // pNext
     0                                                       // flags
 };
 
 // Update mutable kernel arguments and dispatch parameters for the command
-<a class="reference internal" href="api/experimental/command_list.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a>(hCommandList, &amp;desc);
+<a class="reference internal" href="api/deprecated/command_list.html#zecommandlistupdatemutablecommandsexp"><span class="std std-ref">zeCommandListUpdateMutableCommandsExp</span></a>(hCommandList, &amp;desc);
 
 // Close the command list
 <a class="reference internal" href="api/apis/command_list.html#zecommandlistclose"><span class="std std-ref">zeCommandListClose</span></a>(hCommandList);</pre>
@@ -764,7 +794,7 @@ void <code class="docutils literal notranslate"><span class="pre">*</span></code
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mutable Command List Extension</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mutable Command List Experimental Extension</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api">API</a></li>
 </ul>
 </li>

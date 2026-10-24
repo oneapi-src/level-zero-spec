@@ -20,7 +20,7 @@ The following environment variables are required to be enabled during :ref:`zeIn
 | Category        | Name                                | Values     | Description                                                                       |
 +=================+=====================================+============+===================================================================================+
 | Tools           | ZET_ENABLE_API_TRACING_EXP          | {**0**, 1} | Enables driver instrumentation for API tracing                                    |
-|                 |                                     |            | **Note**: This tracing environment variable is **deprecated**. Please use the     |
+|                 |                                     |            | **Note**: This tracing environment variable is deprecated. Please use the         |
 |                 |                                     |            | tracing loader layer instead.                                                     |
 |                 +-------------------------------------+------------+-----------------------------------------------------------------------------------+
 |                 | ZET_ENABLE_METRICS                  | {**0**, 1} | Enables driver instrumentation and dependencies for device metrics                |
@@ -221,6 +221,16 @@ There are two modes of metrics collection supported: :ref:`time-based<time-based
 
 - Time-based collection is using a timer as well as other events to store data samples. A metric streamer interface is the software interface for configuration and collection.
 - Event-based collection is based on a pair of Begin/End events appended to command lists. A metric query interface is the software interface for configuration and collection.
+
+Counter Based Events
+~~~~~~~~~~~~~~~~~~~~
+
+:ref:`Counter Based Events<counter-based-events>` are not supported by the Metrics APIs:
+
+- The notification event passed to :ref:`zetMetricStreamerOpen` and :ref:`zetMetricTracerCreateExp` must be a regular event created from a host visible event pool. It is signaled by the Driver from the host and reset by the application, and neither operation is allowed for a Counter Based Event.
+- The completion event passed to :ref:`zetCommandListAppendMetricQueryEnd` must be a regular event.
+
+Passing a Counter Based Event to any of these functions returns :ref:`ZE_RESULT_ERROR_INVALID_SYNCHRONIZATION_OBJECT <ze-result-t>`\.
 
 .. _Time-based:
 

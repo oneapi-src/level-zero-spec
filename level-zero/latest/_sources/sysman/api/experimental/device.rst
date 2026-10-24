@@ -1,7 +1,7 @@
 ============================================================
 Device - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Device - Experimental Functions
@@ -18,19 +18,6 @@ zesDeviceGetSubDevicePropertiesExp
 *Added in version 1.9*
 
 .. doxygenfunction:: zesDeviceGetSubDevicePropertiesExp
-    :project: LevelZero
-
-
-.. _zesDeviceEnumActiveVFExp:
-
-zesDeviceEnumActiveVFExp
-------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.9*
-
-.. doxygenfunction:: zesDeviceEnumActiveVFExp
     :project: LevelZero
 
 

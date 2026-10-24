@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Metric Programmable - Experimental &#8212; Level Zero Specification v1.19.12</title>
+    <title>Metric Programmable - Experimental &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Experimental" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -542,7 +571,7 @@
                   
   <section id="metric-programmable-experimental">
 <h1>Metric Programmable - Experimental<a class="headerlink" href="#metric-programmable-experimental" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="metric-programmable-experimental-functions">
 <h2>Metric Programmable - Experimental Functions<a class="headerlink" href="#metric-programmable-experimental-functions" title="Link to this heading">#</a></h2>
 <section id="zetmetricprogrammablegetexp">
@@ -550,7 +579,7 @@
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zetMetricProgrammableGetExp19zet_device_handle_tP8uint32_tP36zet_metric_programmable_exp_handle_t">
-<span id="_CPPv327zetMetricProgrammableGetExp19zet_device_handle_tP8uint32_tP36zet_metric_programmable_exp_handle_t"></span><span id="_CPPv227zetMetricProgrammableGetExp19zet_device_handle_tP8uint32_tP36zet_metric_programmable_exp_handle_t"></span><span id="zetMetricProgrammableGetExp__zet_device_handle_t.uint32_tP.zet_metric_programmable_exp_handle_tP"></span><span class="target" id="zet__api_8h_1a2506b2b7b6d1aef57db8da97f5997a11"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricProgrammables</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zetMetricProgrammableGetExp19zet_device_handle_tP8uint32_tP36zet_metric_programmable_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zetMetricProgrammableGetExp19zet_device_handle_tP8uint32_tP36zet_metric_programmable_exp_handle_t"></span><span id="_CPPv227zetMetricProgrammableGetExp19zet_device_handle_tP8uint32_tP36zet_metric_programmable_exp_handle_t"></span><span id="zetMetricProgrammableGetExp__zet_device_handle_t.uint32_tP.zet_metric_programmable_exp_handle_tP"></span><span class="target" id="zet__api_8h_1a2506b2b7b6d1aef57db8da97f5997a11"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricProgrammables</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zetMetricProgrammableGetExp19zet_device_handle_tP8uint32_tP36zet_metric_programmable_exp_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Query and get the available metric programmable handles. </p>
 <p><ul class="simple">
 <li><p>Query the available programmable handles using *pCount = 0.</p></li>
@@ -601,7 +630,7 @@
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv437zetMetricProgrammableGetPropertiesExp36zet_metric_programmable_exp_handle_tP40zet_metric_programmable_exp_properties_t">
-<span id="_CPPv337zetMetricProgrammableGetPropertiesExp36zet_metric_programmable_exp_handle_tP40zet_metric_programmable_exp_properties_t"></span><span id="_CPPv237zetMetricProgrammableGetPropertiesExp36zet_metric_programmable_exp_handle_tP40zet_metric_programmable_exp_properties_t"></span><span id="zetMetricProgrammableGetPropertiesExp__zet_metric_programmable_exp_handle_t.zet_metric_programmable_exp_properties_tP"></span><span class="target" id="zet__api_8h_1a05c751a7f15fcf8be2ecd7d72fdcc667"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricProgrammable</span></span>, <a class="reference internal" href="#_CPPv440zet_metric_programmable_exp_properties_t" title="zet_metric_programmable_exp_properties_t"><span class="n"><span class="pre">zet_metric_programmable_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zetMetricProgrammableGetPropertiesExp36zet_metric_programmable_exp_handle_tP40zet_metric_programmable_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv337zetMetricProgrammableGetPropertiesExp36zet_metric_programmable_exp_handle_tP40zet_metric_programmable_exp_properties_t"></span><span id="_CPPv237zetMetricProgrammableGetPropertiesExp36zet_metric_programmable_exp_handle_tP40zet_metric_programmable_exp_properties_t"></span><span id="zetMetricProgrammableGetPropertiesExp__zet_metric_programmable_exp_handle_t.zet_metric_programmable_exp_properties_tP"></span><span class="target" id="zet__api_8h_1a05c751a7f15fcf8be2ecd7d72fdcc667"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricProgrammable</span></span>, <a class="reference internal" href="#zet-metric-programmable-exp-properties-t" title="zet_metric_programmable_exp_properties_t"><span class="n"><span class="pre">zet_metric_programmable_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zetMetricProgrammableGetPropertiesExp36zet_metric_programmable_exp_handle_tP40zet_metric_programmable_exp_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the properties of the metric programmable. </p>
 <p><ul class="simple">
 <li><p>Returns the properties of the metric programmable.</p></li>
@@ -649,7 +678,7 @@
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv436zetMetricProgrammableGetParamInfoExp36zet_metric_programmable_exp_handle_tP8uint32_tP40zet_metric_programmable_param_info_exp_t">
-<span id="_CPPv336zetMetricProgrammableGetParamInfoExp36zet_metric_programmable_exp_handle_tP8uint32_tP40zet_metric_programmable_param_info_exp_t"></span><span id="_CPPv236zetMetricProgrammableGetParamInfoExp36zet_metric_programmable_exp_handle_tP8uint32_tP40zet_metric_programmable_param_info_exp_t"></span><span id="zetMetricProgrammableGetParamInfoExp__zet_metric_programmable_exp_handle_t.uint32_tP.zet_metric_programmable_param_info_exp_tP"></span><span class="target" id="zet__api_8h_1a222484299a3e1f972309fdc5b27d5d9e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetParamInfoExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricProgrammable</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pParameterCount</span></span>, <a class="reference internal" href="#_CPPv440zet_metric_programmable_param_info_exp_t" title="zet_metric_programmable_param_info_exp_t"><span class="n"><span class="pre">zet_metric_programmable_param_info_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pParameterInfo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zetMetricProgrammableGetParamInfoExp36zet_metric_programmable_exp_handle_tP8uint32_tP40zet_metric_programmable_param_info_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv336zetMetricProgrammableGetParamInfoExp36zet_metric_programmable_exp_handle_tP8uint32_tP40zet_metric_programmable_param_info_exp_t"></span><span id="_CPPv236zetMetricProgrammableGetParamInfoExp36zet_metric_programmable_exp_handle_tP8uint32_tP40zet_metric_programmable_param_info_exp_t"></span><span id="zetMetricProgrammableGetParamInfoExp__zet_metric_programmable_exp_handle_t.uint32_tP.zet_metric_programmable_param_info_exp_tP"></span><span class="target" id="zet__api_8h_1a222484299a3e1f972309fdc5b27d5d9e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetParamInfoExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricProgrammable</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pParameterCount</span></span>, <a class="reference internal" href="#zet-metric-programmable-param-info-exp-t" title="zet_metric_programmable_param_info_exp_t"><span class="n"><span class="pre">zet_metric_programmable_param_info_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pParameterInfo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zetMetricProgrammableGetParamInfoExp36zet_metric_programmable_exp_handle_tP8uint32_tP40zet_metric_programmable_param_info_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the information about the parameters of the metric programmable. </p>
 <p><ul class="simple">
 <li><p>Returns information about the parameters of the metric programmable handle.</p></li>
@@ -659,7 +688,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hMetricProgrammable</strong> – [in] handle of the metric programmable </p></li>
-<li><p><strong>pParameterCount</strong> – [in,out] count of the parameters to retrieve parameter info. if value pParameterCount is greater than count of parameters available, then pParameterCount will be updated with count of parameters available. The count of parameters available can be queried using <a class="reference internal" href="#zet__api_8h_1a05c751a7f15fcf8be2ecd7d72fdcc667"><span class="std std-ref">zetMetricProgrammableGetPropertiesExp</span></a>. </p></li>
+<li><p><strong>pParameterCount</strong> – [in,out] count of the parameters to retrieve parameter info. if value pParameterCount is greater than count of parameters available, then pParameterCount will be updated with count of parameters available. The count of parameters available can be queried using <a class="reference internal" href="#zetmetricprogrammablegetpropertiesexp"><span class="std std-ref">zetMetricProgrammableGetPropertiesExp</span></a>. </p></li>
 <li><p><strong>pParameterInfo</strong> – [in,out][range(1, *pParameterCount)] array of parameter info. if parameterCount is less than the number of parameters available, then driver shall only retrieve that number of parameter info. </p></li>
 </ul>
 </dd>
@@ -699,7 +728,7 @@
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv441zetMetricProgrammableGetParamValueInfoExp36zet_metric_programmable_exp_handle_t8uint32_tP8uint32_tP46zet_metric_programmable_param_value_info_exp_t">
-<span id="_CPPv341zetMetricProgrammableGetParamValueInfoExp36zet_metric_programmable_exp_handle_t8uint32_tP8uint32_tP46zet_metric_programmable_param_value_info_exp_t"></span><span id="_CPPv241zetMetricProgrammableGetParamValueInfoExp36zet_metric_programmable_exp_handle_t8uint32_tP8uint32_tP46zet_metric_programmable_param_value_info_exp_t"></span><span id="zetMetricProgrammableGetParamValueInfoExp__zet_metric_programmable_exp_handle_t.uint32_t.uint32_tP.zet_metric_programmable_param_value_info_exp_tP"></span><span class="target" id="zet__api_8h_1ad6604f3d35d40d9df54c3e88a5bb2a9d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetParamValueInfoExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricProgrammable</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">parameterOrdinal</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValueInfoCount</span></span>, <a class="reference internal" href="#_CPPv446zet_metric_programmable_param_value_info_exp_t" title="zet_metric_programmable_param_value_info_exp_t"><span class="n"><span class="pre">zet_metric_programmable_param_value_info_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValueInfo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv441zetMetricProgrammableGetParamValueInfoExp36zet_metric_programmable_exp_handle_t8uint32_tP8uint32_tP46zet_metric_programmable_param_value_info_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv341zetMetricProgrammableGetParamValueInfoExp36zet_metric_programmable_exp_handle_t8uint32_tP8uint32_tP46zet_metric_programmable_param_value_info_exp_t"></span><span id="_CPPv241zetMetricProgrammableGetParamValueInfoExp36zet_metric_programmable_exp_handle_t8uint32_tP8uint32_tP46zet_metric_programmable_param_value_info_exp_t"></span><span id="zetMetricProgrammableGetParamValueInfoExp__zet_metric_programmable_exp_handle_t.uint32_t.uint32_tP.zet_metric_programmable_param_value_info_exp_tP"></span><span class="target" id="zet__api_8h_1ad6604f3d35d40d9df54c3e88a5bb2a9d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricProgrammableGetParamValueInfoExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_programmable_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricProgrammable</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">parameterOrdinal</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValueInfoCount</span></span>, <a class="reference internal" href="#zet-metric-programmable-param-value-info-exp-t" title="zet_metric_programmable_param_value_info_exp_t"><span class="n"><span class="pre">zet_metric_programmable_param_value_info_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValueInfo</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv441zetMetricProgrammableGetParamValueInfoExp36zet_metric_programmable_exp_handle_t8uint32_tP8uint32_tP46zet_metric_programmable_param_value_info_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the information about the parameter value of the metric programmable. </p>
 <p><ul class="simple">
 <li><p>Returns the value-information about the parameter at the specific ordinal of the metric programmable handle.</p></li>
@@ -710,7 +739,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hMetricProgrammable</strong> – [in] handle of the metric programmable </p></li>
 <li><p><strong>parameterOrdinal</strong> – [in] ordinal of the parameter in the metric programmable </p></li>
-<li><p><strong>pValueInfoCount</strong> – [in,out] count of parameter value information to retrieve. if value at pValueInfoCount is greater than count of value info available, then pValueInfoCount will be updated with count of value info available. The count of parameter value info available can be queried using <a class="reference internal" href="#zet__api_8h_1a222484299a3e1f972309fdc5b27d5d9e"><span class="std std-ref">zetMetricProgrammableGetParamInfoExp</span></a>. </p></li>
+<li><p><strong>pValueInfoCount</strong> – [in,out] count of parameter value information to retrieve. if value at pValueInfoCount is greater than count of value info available, then pValueInfoCount will be updated with count of value info available. The count of parameter value info available can be queried using <a class="reference internal" href="#zetmetricprogrammablegetparaminfoexp"><span class="std std-ref">zetMetricProgrammableGetParamInfoExp</span></a>. </p></li>
 <li><p><strong>pValueInfo</strong> – [in,out][range(1, *pValueInfoCount)] array of parameter value info. if pValueInfoCount is less than the number of value info available, then driver shall only retrieve that number of value info. </p></li>
 </ul>
 </dd>
@@ -816,12 +845,12 @@
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv440zet_metric_programmable_exp_properties_t">
 <span id="_CPPv340zet_metric_programmable_exp_properties_t"></span><span id="_CPPv240zet_metric_programmable_exp_properties_t"></span><span id="zet_metric_programmable_exp_properties_t"></span><span class="target" id="structzet__metric__programmable__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_programmable_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv440zet_metric_programmable_exp_properties_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Metric Programmable properties queried using <a class="reference internal" href="#zet__api_8h_1a05c751a7f15fcf8be2ecd7d72fdcc667"><span class="std std-ref">zetMetricProgrammableGetPropertiesExp</span></a>. </p>
+<dd><p>Metric Programmable properties queried using <a class="reference internal" href="#zetmetricprogrammablegetpropertiesexp"><span class="std std-ref">zetMetricProgrammableGetPropertiesExp</span></a>. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zet_metric_programmable_exp_properties_t5stypeE">
-<span id="_CPPv3N40zet_metric_programmable_exp_properties_t5stypeE"></span><span id="_CPPv2N40zet_metric_programmable_exp_properties_t5stypeE"></span><span id="zet_metric_programmable_exp_properties_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__programmable__exp__properties__t_1ad90b53dd270eb0ef9d504321519c70b8"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zet_structure_type_t" title="zet_structure_type_t"><span class="n"><span class="pre">zet_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_exp_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N40zet_metric_programmable_exp_properties_t5stypeE"></span><span id="_CPPv2N40zet_metric_programmable_exp_properties_t5stypeE"></span><span id="zet_metric_programmable_exp_properties_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__programmable__exp__properties__t_1ad90b53dd270eb0ef9d504321519c70b8"></span><a class="reference internal" href="../apis/data_types.html#zet-structure-type-t" title="zet_structure_type_t"><span class="n"><span class="pre">zet_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_exp_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -870,7 +899,7 @@
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zet_metric_programmable_exp_properties_t12samplingTypeE">
 <span id="_CPPv3N40zet_metric_programmable_exp_properties_t12samplingTypeE"></span><span id="_CPPv2N40zet_metric_programmable_exp_properties_t12samplingTypeE"></span><span id="zet_metric_programmable_exp_properties_t::samplingType__zet_metric_group_sampling_type_flags_t"></span><span class="target" id="structzet__metric__programmable__exp__properties__t_1a321cc9eec1c27d56d6ab901b1018bd6c"></span><span class="n"><span class="pre">zet_metric_group_sampling_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingType</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_exp_properties_t12samplingTypeE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] metric sampling type. returns a combination of <a class="reference internal" href="../apis/metric_group.html#zet__api_8h_1a10adf37bcbb25251c36a0bcb805670c1"><span class="std std-ref">zet_metric_group_sampling_type_flag_t</span></a>. </p>
+<dd><p>[out] metric sampling type. returns a combination of <a class="reference internal" href="../apis/metric_group.html#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">zet_metric_group_sampling_type_flag_t</span></a>. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -894,7 +923,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zet_metric_programmable_param_info_exp_t5stypeE">
-<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t5stypeE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t5stypeE"></span><span id="zet_metric_programmable_param_info_exp_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1af64fd02aa6832d20318abbbca064b4f8"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zet_structure_type_t" title="zet_structure_type_t"><span class="n"><span class="pre">zet_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t5stypeE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t5stypeE"></span><span id="zet_metric_programmable_param_info_exp_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1af64fd02aa6832d20318abbbca064b4f8"></span><a class="reference internal" href="../apis/data_types.html#zet-structure-type-t" title="zet_structure_type_t"><span class="n"><span class="pre">zet_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -906,7 +935,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zet_metric_programmable_param_info_exp_t4typeE">
-<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t4typeE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t4typeE"></span><span id="zet_metric_programmable_param_info_exp_t::type__zet_metric_programmable_param_type_exp_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1a4690b37eab075f30714d82e2644f1e54"></span><a class="reference internal" href="#_CPPv440zet_metric_programmable_param_type_exp_t" title="zet_metric_programmable_param_type_exp_t"><span class="n"><span class="pre">zet_metric_programmable_param_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t4typeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t4typeE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t4typeE"></span><span id="zet_metric_programmable_param_info_exp_t::type__zet_metric_programmable_param_type_exp_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1a4690b37eab075f30714d82e2644f1e54"></span><a class="reference internal" href="#zet-metric-programmable-param-type-exp-t" title="zet_metric_programmable_param_type_exp_t"><span class="n"><span class="pre">zet_metric_programmable_param_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t4typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] programmable parameter type </p>
 </dd></dl>
 
@@ -918,20 +947,20 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zet_metric_programmable_param_info_exp_t13valueInfoTypeE">
-<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t13valueInfoTypeE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t13valueInfoTypeE"></span><span id="zet_metric_programmable_param_info_exp_t::valueInfoType__zet_value_info_type_exp_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1af1c1901dae108c7aa627583166cb7146"></span><a class="reference internal" href="data_types.html#_CPPv425zet_value_info_type_exp_t" title="zet_value_info_type_exp_t"><span class="n"><span class="pre">zet_value_info_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valueInfoType</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t13valueInfoTypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t13valueInfoTypeE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t13valueInfoTypeE"></span><span id="zet_metric_programmable_param_info_exp_t::valueInfoType__zet_value_info_type_exp_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1af1c1901dae108c7aa627583166cb7146"></span><a class="reference internal" href="data_types.html#zet-value-info-type-exp-t" title="zet_value_info_type_exp_t"><span class="n"><span class="pre">zet_value_info_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valueInfoType</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t13valueInfoTypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] value info type </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zet_metric_programmable_param_info_exp_t12defaultValueE">
-<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t12defaultValueE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t12defaultValueE"></span><span id="zet_metric_programmable_param_info_exp_t::defaultValue__zet_value_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1a3bcefa358f94513d6b09f5547ac6ddad"></span><a class="reference internal" href="../apis/data_types.html#_CPPv411zet_value_t" title="zet_value_t"><span class="n"><span class="pre">zet_value_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">defaultValue</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t12defaultValueE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N40zet_metric_programmable_param_info_exp_t12defaultValueE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t12defaultValueE"></span><span id="zet_metric_programmable_param_info_exp_t::defaultValue__zet_value_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1a3bcefa358f94513d6b09f5547ac6ddad"></span><a class="reference internal" href="../apis/data_types.html#zet-value-t" title="zet_value_t"><span class="n"><span class="pre">zet_value_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">defaultValue</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t12defaultValueE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] default value for the parameter </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zet_metric_programmable_param_info_exp_t14valueInfoCountE">
 <span id="_CPPv3N40zet_metric_programmable_param_info_exp_t14valueInfoCountE"></span><span id="_CPPv2N40zet_metric_programmable_param_info_exp_t14valueInfoCountE"></span><span id="zet_metric_programmable_param_info_exp_t::valueInfoCount__uint32_t"></span><span class="target" id="structzet__metric__programmable__param__info__exp__t_1ae6e1d3ea10c903f6e0e0f9ada9eee2b4"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valueInfoCount</span></span></span><a class="headerlink" href="#_CPPv4N40zet_metric_programmable_param_info_exp_t14valueInfoCountE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] count of <a class="reference internal" href="#structzet__metric__programmable__param__value__info__exp__t"><span class="std std-ref">zet_metric_programmable_param_value_info_exp_t</span></a></p>
+<dd><p>[out] count of <a class="reference internal" href="#zet-metric-programmable-param-value-info-exp-t"><span class="std std-ref">zet_metric_programmable_param_value_info_exp_t</span></a></p>
 </dd></dl>
 
 </div>
@@ -949,7 +978,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N46zet_metric_programmable_param_value_info_exp_t5stypeE">
-<span id="_CPPv3N46zet_metric_programmable_param_value_info_exp_t5stypeE"></span><span id="_CPPv2N46zet_metric_programmable_param_value_info_exp_t5stypeE"></span><span id="zet_metric_programmable_param_value_info_exp_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__programmable__param__value__info__exp__t_1a1a968a1d21e2da31351b0b328e3cd89f"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zet_structure_type_t" title="zet_structure_type_t"><span class="n"><span class="pre">zet_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N46zet_metric_programmable_param_value_info_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N46zet_metric_programmable_param_value_info_exp_t5stypeE"></span><span id="_CPPv2N46zet_metric_programmable_param_value_info_exp_t5stypeE"></span><span id="zet_metric_programmable_param_value_info_exp_t::stype__zet_structure_type_t"></span><span class="target" id="structzet__metric__programmable__param__value__info__exp__t_1a1a968a1d21e2da31351b0b328e3cd89f"></span><a class="reference internal" href="../apis/data_types.html#zet-structure-type-t" title="zet_structure_type_t"><span class="n"><span class="pre">zet_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N46zet_metric_programmable_param_value_info_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -961,7 +990,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N46zet_metric_programmable_param_value_info_exp_t9valueInfoE">
-<span id="_CPPv3N46zet_metric_programmable_param_value_info_exp_t9valueInfoE"></span><span id="_CPPv2N46zet_metric_programmable_param_value_info_exp_t9valueInfoE"></span><span id="zet_metric_programmable_param_value_info_exp_t::valueInfo__zet_value_info_exp_t"></span><span class="target" id="structzet__metric__programmable__param__value__info__exp__t_1a6cb213c3266b8439588e9b97317250ba"></span><a class="reference internal" href="data_types.html#_CPPv420zet_value_info_exp_t" title="zet_value_info_exp_t"><span class="n"><span class="pre">zet_value_info_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valueInfo</span></span></span><a class="headerlink" href="#_CPPv4N46zet_metric_programmable_param_value_info_exp_t9valueInfoE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N46zet_metric_programmable_param_value_info_exp_t9valueInfoE"></span><span id="_CPPv2N46zet_metric_programmable_param_value_info_exp_t9valueInfoE"></span><span id="zet_metric_programmable_param_value_info_exp_t::valueInfo__zet_value_info_exp_t"></span><span class="target" id="structzet__metric__programmable__param__value__info__exp__t_1a6cb213c3266b8439588e9b97317250ba"></span><a class="reference internal" href="data_types.html#zet-value-info-exp-t" title="zet_value_info_exp_t"><span class="n"><span class="pre">zet_value_info_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">valueInfo</span></span></span><a class="headerlink" href="#_CPPv4N46zet_metric_programmable_param_value_info_exp_t9valueInfoE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] information about the parameter value </p>
 </dd></dl>
 
@@ -986,7 +1015,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N41zet_metric_programmable_param_value_exp_t5valueE">
-<span id="_CPPv3N41zet_metric_programmable_param_value_exp_t5valueE"></span><span id="_CPPv2N41zet_metric_programmable_param_value_exp_t5valueE"></span><span id="zet_metric_programmable_param_value_exp_t::value__zet_value_t"></span><span class="target" id="structzet__metric__programmable__param__value__exp__t_1a0a3a220cb269fd7c34c962281db60035"></span><a class="reference internal" href="../apis/data_types.html#_CPPv411zet_value_t" title="zet_value_t"><span class="n"><span class="pre">zet_value_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N41zet_metric_programmable_param_value_exp_t5valueE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N41zet_metric_programmable_param_value_exp_t5valueE"></span><span id="_CPPv2N41zet_metric_programmable_param_value_exp_t5valueE"></span><span id="zet_metric_programmable_param_value_exp_t::value__zet_value_t"></span><span class="target" id="structzet__metric__programmable__param__value__exp__t_1a0a3a220cb269fd7c34c962281db60035"></span><a class="reference internal" href="../apis/data_types.html#zet-value-t" title="zet_value_t"><span class="n"><span class="pre">zet_value_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">value</span></span></span><a class="headerlink" href="#_CPPv4N41zet_metric_programmable_param_value_exp_t5valueE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] parameter value </p>
 </dd></dl>
 

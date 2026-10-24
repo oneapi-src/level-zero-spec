@@ -1,24 +1,11 @@
 ============================================================
 Metric - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Metric - Experimental Functions
 ===============================
-
-
-.. _zetMetricCreateFromProgrammableExp:
-
-zetMetricCreateFromProgrammableExp
-----------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.9*
-
-.. doxygenfunction:: zetMetricCreateFromProgrammableExp
-    :project: LevelZero
 
 
 .. _zetMetricDestroyExp:

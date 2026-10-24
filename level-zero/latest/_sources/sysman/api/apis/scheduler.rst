@@ -1,7 +1,7 @@
 ============================================================
 Scheduler
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Scheduler Functions
@@ -96,19 +96,6 @@ zesSchedulerSetExclusiveMode
 *Added in version 1.0*
 
 .. doxygenfunction:: zesSchedulerSetExclusiveMode
-    :project: LevelZero
-
-
-.. _zesSchedulerSetComputeUnitDebugMode:
-
-zesSchedulerSetComputeUnitDebugMode
------------------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zesSchedulerSetComputeUnitDebugMode
     :project: LevelZero
 
 

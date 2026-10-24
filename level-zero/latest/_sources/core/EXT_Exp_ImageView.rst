@@ -14,7 +14,9 @@
 
 *Introduced in Level Zero version 1.2*
 
-This experimental extension is deprecated and replaced by the :ref:`ZE_extension_image_view <ZE_extension_image_view>` standard extension.
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.5. Use :ref:`ZE_extension_image_view <ZE_extension_image_view>` instead.
 
 API
 ----

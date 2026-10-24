@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Ras - Experimental &#8212; Level Zero Specification v1.19.12</title>
+    <title>Ras - Experimental &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Driver - Experimental" href="driver.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -537,7 +566,7 @@
                   
   <section id="ras-experimental">
 <h1>Ras - Experimental<a class="headerlink" href="#ras-experimental" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="ras-experimental-functions">
 <h2>Ras - Experimental Functions<a class="headerlink" href="#ras-experimental-functions" title="Link to this heading">#</a></h2>
 <section id="zesrasgetstateexp">
@@ -545,7 +574,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zesRasGetStateExp16zes_ras_handle_tP8uint32_tP19zes_ras_state_exp_t">
-<span id="_CPPv317zesRasGetStateExp16zes_ras_handle_tP8uint32_tP19zes_ras_state_exp_t"></span><span id="_CPPv217zesRasGetStateExp16zes_ras_handle_tP8uint32_tP19zes_ras_state_exp_t"></span><span id="zesRasGetStateExp__zes_ras_handle_t.uint32_tP.zes_ras_state_exp_tP"></span><span class="target" id="zes__api_8h_1a167d67780597c6e578020fbed2631adb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetStateExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#_CPPv419zes_ras_state_exp_t" title="zes_ras_state_exp_t"><span class="n"><span class="pre">zes_ras_state_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesRasGetStateExp16zes_ras_handle_tP8uint32_tP19zes_ras_state_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zesRasGetStateExp16zes_ras_handle_tP8uint32_tP19zes_ras_state_exp_t"></span><span id="_CPPv217zesRasGetStateExp16zes_ras_handle_tP8uint32_tP19zes_ras_state_exp_t"></span><span id="zesRasGetStateExp__zes_ras_handle_t.uint32_tP.zes_ras_state_exp_tP"></span><span class="target" id="zes__api_8h_1a167d67780597c6e578020fbed2631adb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetStateExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-ras-state-exp-t" title="zes_ras_state_exp_t"><span class="n"><span class="pre">zes_ras_state_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesRasGetStateExp16zes_ras_handle_tP8uint32_tP19zes_ras_state_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Ras Get State. </p>
 <p><ul class="simple">
 <li><p>This function retrieves error counters for different RAS error categories.</p></li>
@@ -596,7 +625,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zesRasClearStateExp16zes_ras_handle_t28zes_ras_error_category_exp_t">
-<span id="_CPPv319zesRasClearStateExp16zes_ras_handle_t28zes_ras_error_category_exp_t"></span><span id="_CPPv219zesRasClearStateExp16zes_ras_handle_t28zes_ras_error_category_exp_t"></span><span id="zesRasClearStateExp__zes_ras_handle_t.zes_ras_error_category_exp_t"></span><span class="target" id="zes__api_8h_1ab0de576bab6f4355f0bfc290c313ee82"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasClearStateExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <a class="reference internal" href="#_CPPv428zes_ras_error_category_exp_t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">category</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesRasClearStateExp16zes_ras_handle_t28zes_ras_error_category_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zesRasClearStateExp16zes_ras_handle_t28zes_ras_error_category_exp_t"></span><span id="_CPPv219zesRasClearStateExp16zes_ras_handle_t28zes_ras_error_category_exp_t"></span><span id="zesRasClearStateExp__zes_ras_handle_t.zes_ras_error_category_exp_t"></span><span class="target" id="zes__api_8h_1ab0de576bab6f4355f0bfc290c313ee82"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasClearStateExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <a class="reference internal" href="#zes-ras-error-category-exp-t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">category</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesRasClearStateExp16zes_ras_handle_t28zes_ras_error_category_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Ras Clear State. </p>
 <p><ul class="simple">
 <li><p>This function clears error counters for a RAS error category.</p></li>
@@ -652,7 +681,7 @@
 <p class="api-version"><em>Added in version 1.16</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431zesRasGetSupportedCategoriesExp16zes_ras_handle_tP8uint32_tP28zes_ras_error_category_exp_t">
-<span id="_CPPv331zesRasGetSupportedCategoriesExp16zes_ras_handle_tP8uint32_tP28zes_ras_error_category_exp_t"></span><span id="_CPPv231zesRasGetSupportedCategoriesExp16zes_ras_handle_tP8uint32_tP28zes_ras_error_category_exp_t"></span><span id="zesRasGetSupportedCategoriesExp__zes_ras_handle_t.uint32_tP.zes_ras_error_category_exp_tP"></span><span class="target" id="zes__api_8h_1a8e0a98122f3ddd3cf1468c82280c0754"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetSupportedCategoriesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#_CPPv428zes_ras_error_category_exp_t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCategories</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zesRasGetSupportedCategoriesExp16zes_ras_handle_tP8uint32_tP28zes_ras_error_category_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv331zesRasGetSupportedCategoriesExp16zes_ras_handle_tP8uint32_tP28zes_ras_error_category_exp_t"></span><span id="_CPPv231zesRasGetSupportedCategoriesExp16zes_ras_handle_tP8uint32_tP28zes_ras_error_category_exp_t"></span><span id="zesRasGetSupportedCategoriesExp__zes_ras_handle_t.uint32_tP.zes_ras_error_category_exp_tP"></span><span class="target" id="zes__api_8h_1a8e0a98122f3ddd3cf1468c82280c0754"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetSupportedCategoriesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-ras-error-category-exp-t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCategories</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zesRasGetSupportedCategoriesExp16zes_ras_handle_tP8uint32_tP28zes_ras_error_category_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get supported RAS error categories. </p>
 <p><ul class="simple">
 <li><p>This function retrieves the supported RAS error categories for the given RAS handle.</p></li>
@@ -703,7 +732,7 @@
 <p class="api-version"><em>Added in version 1.16</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zesRasGetStateExp216zes_ras_handle_tK8uint32_tPK28zes_ras_error_category_exp_tP20zes_ras_state_exp2_t">
-<span id="_CPPv318zesRasGetStateExp216zes_ras_handle_tK8uint32_tPK28zes_ras_error_category_exp_tP20zes_ras_state_exp2_t"></span><span id="_CPPv218zesRasGetStateExp216zes_ras_handle_tK8uint32_tPK28zes_ras_error_category_exp_tP20zes_ras_state_exp2_t"></span><span id="zesRasGetStateExp2__zes_ras_handle_t.uint32_tC.zes_ras_error_category_exp_tCP.zes_ras_state_exp2_tP"></span><span class="target" id="zes__api_8h_1a28bd23ea8973cb63dee2ab444003dd62"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetStateExp2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv428zes_ras_error_category_exp_t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCategories</span></span>, <a class="reference internal" href="#_CPPv420zes_ras_state_exp2_t" title="zes_ras_state_exp2_t"><span class="n"><span class="pre">zes_ras_state_exp2_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zesRasGetStateExp216zes_ras_handle_tK8uint32_tPK28zes_ras_error_category_exp_tP20zes_ras_state_exp2_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zesRasGetStateExp216zes_ras_handle_tK8uint32_tPK28zes_ras_error_category_exp_tP20zes_ras_state_exp2_t"></span><span id="_CPPv218zesRasGetStateExp216zes_ras_handle_tK8uint32_tPK28zes_ras_error_category_exp_tP20zes_ras_state_exp2_t"></span><span id="zesRasGetStateExp2__zes_ras_handle_t.uint32_tC.zes_ras_error_category_exp_tCP.zes_ras_state_exp2_tP"></span><span class="target" id="zes__api_8h_1a28bd23ea8973cb63dee2ab444003dd62"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetStateExp2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-ras-error-category-exp-t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCategories</span></span>, <a class="reference internal" href="#zes-ras-state-exp2-t" title="zes_ras_state_exp2_t"><span class="n"><span class="pre">zes_ras_state_exp2_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zesRasGetStateExp216zes_ras_handle_tK8uint32_tPK28zes_ras_error_category_exp_tP20zes_ras_state_exp2_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get RAS error counters for different categories. </p>
 <p><ul class="simple">
 <li><p>This function retrieves error counters for different RAS error categories.</p></li>
@@ -764,7 +793,7 @@
 <p class="api-version"><em>Added in version 1.16</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zesRasGetConfigExp16zes_ras_handle_tK8uint32_tP20zes_ras_config_exp_t">
-<span id="_CPPv318zesRasGetConfigExp16zes_ras_handle_tK8uint32_tP20zes_ras_config_exp_t"></span><span id="_CPPv218zesRasGetConfigExp16zes_ras_handle_tK8uint32_tP20zes_ras_config_exp_t"></span><span id="zesRasGetConfigExp__zes_ras_handle_t.uint32_tC.zes_ras_config_exp_tP"></span><span class="target" id="zes__api_8h_1ae8b58d89abdcc54c9e37bd64af6797eb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetConfigExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <a class="reference internal" href="#_CPPv420zes_ras_config_exp_t" title="zes_ras_config_exp_t"><span class="n"><span class="pre">zes_ras_config_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zesRasGetConfigExp16zes_ras_handle_tK8uint32_tP20zes_ras_config_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zesRasGetConfigExp16zes_ras_handle_tK8uint32_tP20zes_ras_config_exp_t"></span><span id="_CPPv218zesRasGetConfigExp16zes_ras_handle_tK8uint32_tP20zes_ras_config_exp_t"></span><span id="zesRasGetConfigExp__zes_ras_handle_t.uint32_tC.zes_ras_config_exp_tP"></span><span class="target" id="zes__api_8h_1ae8b58d89abdcc54c9e37bd64af6797eb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasGetConfigExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <a class="reference internal" href="#zes-ras-config-exp-t" title="zes_ras_config_exp_t"><span class="n"><span class="pre">zes_ras_config_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zesRasGetConfigExp16zes_ras_handle_tK8uint32_tP20zes_ras_config_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get RAS error thresholds that control when RAS events are generated. </p>
 <p><ul class="simple">
 <li><p>This function retrieves the RAS error thresholds for the specified RAS error categories.</p></li>
@@ -818,7 +847,7 @@
 <p class="api-version"><em>Added in version 1.16</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zesRasSetConfigExp16zes_ras_handle_tK8uint32_tPK20zes_ras_config_exp_t">
-<span id="_CPPv318zesRasSetConfigExp16zes_ras_handle_tK8uint32_tPK20zes_ras_config_exp_t"></span><span id="_CPPv218zesRasSetConfigExp16zes_ras_handle_tK8uint32_tPK20zes_ras_config_exp_t"></span><span id="zesRasSetConfigExp__zes_ras_handle_t.uint32_tC.zes_ras_config_exp_tCP"></span><span class="target" id="zes__api_8h_1abcad7d0214e2da5049832af8c6ccc2f8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasSetConfigExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv420zes_ras_config_exp_t" title="zes_ras_config_exp_t"><span class="n"><span class="pre">zes_ras_config_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zesRasSetConfigExp16zes_ras_handle_tK8uint32_tPK20zes_ras_config_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zesRasSetConfigExp16zes_ras_handle_tK8uint32_tPK20zes_ras_config_exp_t"></span><span id="_CPPv218zesRasSetConfigExp16zes_ras_handle_tK8uint32_tPK20zes_ras_config_exp_t"></span><span id="zesRasSetConfigExp__zes_ras_handle_t.uint32_tC.zes_ras_config_exp_tCP"></span><span class="target" id="zes__api_8h_1abcad7d0214e2da5049832af8c6ccc2f8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesRasSetConfigExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_ras_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hRas</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-ras-config-exp-t" title="zes_ras_config_exp_t"><span class="n"><span class="pre">zes_ras_config_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zesRasSetConfigExp16zes_ras_handle_tK8uint32_tPK20zes_ras_config_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set RAS error thresholds that control when RAS events are generated. </p>
 <p><ul class="simple">
 <li><p>This function sets the RAS error thresholds for the specified RAS error categories.</p></li>
@@ -981,7 +1010,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19zes_ras_state_exp_t8categoryE">
-<span id="_CPPv3N19zes_ras_state_exp_t8categoryE"></span><span id="_CPPv2N19zes_ras_state_exp_t8categoryE"></span><span id="zes_ras_state_exp_t::category__zes_ras_error_category_exp_t"></span><span class="target" id="structzes__ras__state__exp__t_1a3e67c54210a43845775a68a9ed7a8394"></span><a class="reference internal" href="#_CPPv428zes_ras_error_category_exp_t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">category</span></span></span><a class="headerlink" href="#_CPPv4N19zes_ras_state_exp_t8categoryE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N19zes_ras_state_exp_t8categoryE"></span><span id="_CPPv2N19zes_ras_state_exp_t8categoryE"></span><span id="zes_ras_state_exp_t::category__zes_ras_error_category_exp_t"></span><span class="target" id="structzes__ras__state__exp__t_1a3e67c54210a43845775a68a9ed7a8394"></span><a class="reference internal" href="#zes-ras-error-category-exp-t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">category</span></span></span><a class="headerlink" href="#_CPPv4N19zes_ras_state_exp_t8categoryE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] category for which error counter is provided. </p>
 </dd></dl>
 
@@ -1006,7 +1035,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_ras_state_exp2_t5stypeE">
-<span id="_CPPv3N20zes_ras_state_exp2_t5stypeE"></span><span id="_CPPv2N20zes_ras_state_exp2_t5stypeE"></span><span id="zes_ras_state_exp2_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__ras__state__exp2__t_1adf3348b26907242d72228358fb149d31"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20zes_ras_state_exp2_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_ras_state_exp2_t5stypeE"></span><span id="_CPPv2N20zes_ras_state_exp2_t5stypeE"></span><span id="zes_ras_state_exp2_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__ras__state__exp2__t_1adf3348b26907242d72228358fb149d31"></span><a class="reference internal" href="../apis/data_types.html#zes-structure-type-t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20zes_ras_state_exp2_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -1037,7 +1066,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_ras_config_exp_t5stypeE">
-<span id="_CPPv3N20zes_ras_config_exp_t5stypeE"></span><span id="_CPPv2N20zes_ras_config_exp_t5stypeE"></span><span id="zes_ras_config_exp_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__ras__config__exp__t_1a654fb3917a96fa16dcc575d62f48c90c"></span><a class="reference internal" href="../apis/data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20zes_ras_config_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_ras_config_exp_t5stypeE"></span><span id="_CPPv2N20zes_ras_config_exp_t5stypeE"></span><span id="zes_ras_config_exp_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__ras__config__exp__t_1a654fb3917a96fa16dcc575d62f48c90c"></span><a class="reference internal" href="../apis/data_types.html#zes-structure-type-t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20zes_ras_config_exp_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -1049,7 +1078,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_ras_config_exp_t8categoryE">
-<span id="_CPPv3N20zes_ras_config_exp_t8categoryE"></span><span id="_CPPv2N20zes_ras_config_exp_t8categoryE"></span><span id="zes_ras_config_exp_t::category__zes_ras_error_category_exp_t"></span><span class="target" id="structzes__ras__config__exp__t_1a8bb6d916e21ce7b701f1f9231579ed90"></span><a class="reference internal" href="#_CPPv428zes_ras_error_category_exp_t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">category</span></span></span><a class="headerlink" href="#_CPPv4N20zes_ras_config_exp_t8categoryE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_ras_config_exp_t8categoryE"></span><span id="_CPPv2N20zes_ras_config_exp_t8categoryE"></span><span id="zes_ras_config_exp_t::category__zes_ras_error_category_exp_t"></span><span class="target" id="structzes__ras__config__exp__t_1a8bb6d916e21ce7b701f1f9231579ed90"></span><a class="reference internal" href="#zes-ras-error-category-exp-t" title="zes_ras_error_category_exp_t"><span class="n"><span class="pre">zes_ras_error_category_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">category</span></span></span><a class="headerlink" href="#_CPPv4N20zes_ras_config_exp_t8categoryE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] RAS error category for which threshold is being configured. </p>
 </dd></dl>
 

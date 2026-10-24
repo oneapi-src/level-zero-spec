@@ -1,24 +1,11 @@
 ============================================================
 Global
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 Global Functions
 ================
-
-
-.. _zeInit:
-
-zeInit
-------
-
-.. rst-class:: api-version
-
-*Added in version 1.0*
-
-.. doxygenfunction:: zeInit
-    :project: LevelZero
 
 
 .. _zeInitDrivers:

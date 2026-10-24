@@ -11,7 +11,9 @@
 
 *Introduced in Level Zero version 1.7*
 
-**DEPRECATION WARNING: The RTAS Builder Experimental Extension has been deprecated as of Level Zero Spec Release 1.13. Users should switch to the RTAS Standard Extension as soon as possible.** 
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.13. Use :ref:`ZE_extension_rtas <ZE_extension_rtas>` instead.
 
 API
 ----

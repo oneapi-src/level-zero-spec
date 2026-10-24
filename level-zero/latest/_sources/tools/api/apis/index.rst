@@ -1,7 +1,7 @@
 ============================================================
 APIs
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 .. toctree::
    :maxdepth: 1
@@ -17,5 +17,4 @@ oneAPI Level Zero Specification - Version 1.19.12
    Metric Streamer <metric_streamer>
    Metric Query Pool <metric_query_pool>
    Metric Query <metric_query>
-   Tracer Exp <tracer_exp>
    Data Types <data_types>

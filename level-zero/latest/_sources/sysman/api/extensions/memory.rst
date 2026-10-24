@@ -1,7 +1,7 @@
 ============================================================
 Memory - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.19.12
+oneAPI Level Zero Specification - Version 1.20.41
 
 
 
@@ -9,21 +9,6 @@ oneAPI Level Zero Specification - Version 1.19.12
  
 Memory - Extension Structures
 =============================
-
-
-.. _zes-mem-ext-bandwidth-t:
-
-zes_mem_ext_bandwidth_t
------------------------
-
-.. rst-class:: api-version
-
-*Added in version 1.7*
-
-.. doxygenstruct:: zes_mem_ext_bandwidth_t
-    :project: LevelZero
-    :members:
-    :undoc-members:
 
 
 .. _zes-memory-vendor-info-ext-properties-t:

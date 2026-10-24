@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Types &#8212; Level Zero Specification v1.19.12</title>
+    <title>Data Types &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Physical Mem" href="physical_mem.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -645,6 +674,19 @@
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESC</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_DESC</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_PROPERTIESE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_PROPERTIES</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_INIT_DRIVER_PROPERTIES_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_INIT_DRIVER_PROPERTIES_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t40ZE_STRUCTURE_TYPE_COMMAND_VISIT_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_VISIT_EXT_DESC</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_CONCRETE_VISITOR_EXT_DESCE"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_CONCRETE_VISITOR_EXT_DESC</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_STRUCTURE_TYPE_FORCE_UINT32</span></code></a></li>
 </ul>
 </li>
@@ -798,7 +840,7 @@
                   
   <section id="data-types">
 <h1>Data Types<a class="headerlink" href="#data-types" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="data-types-enums">
 <h2>Data Types Enums<a class="headerlink" href="#data-types-enums" title="Link to this heading">#</a></h2>
 <section id="ze-result-t">
@@ -1201,325 +1243,319 @@
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DRIVER_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DRIVER_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DRIVER_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da16b8dffd119e3a36d941c3e4e6f59c98"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DRIVER_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DRIVER_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="driver.html#structze__driver__properties__t"><span class="std std-ref">ze_driver_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="driver.html#ze-driver-properties-t"><span class="std std-ref">ze_driver_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dae142a797bb2a5da3765e87c94e1835f8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DRIVER_IPC_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="driver.html#structze__driver__ipc__properties__t"><span class="std std-ref">ze_driver_ipc_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="driver.html#ze-driver-ipc-properties-t"><span class="std std-ref">ze_driver_ipc_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DEVICE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DEVICE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DEVICE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf5a6dc6aa25291a292aed893c9000fe2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_DEVICE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__properties__t"><span class="std std-ref">ze_device_properties_t</span></a>. <dl>
-<dt class="sig sig-object cpp">
-<em><span class="pre">Deprecated:</span></em></dt>
-<dd><p>since 1.17: Use <a class="reference internal" href="#ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da433cd4e4d71182873b95d43ceb89f0df"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2</span></a> instead. </p>
-</dd></dl>
-
-</p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.17</span> <a class="reference internal" href="device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a>. Use <a class="reference internal" href="#ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da433cd4e4d71182873b95d43ceb89f0df"><span class="std std-ref">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2</span></a> instead. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daaac3c4e0a3fdb3db0e86bc7e6a095de9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__compute__properties__t"><span class="std std-ref">ze_device_compute_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-compute-properties-t"><span class="std std-ref">ze_device_compute_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daaf7f6473fd1232d32e3c6eefb6e6d93f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MODULE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__module__properties__t"><span class="std std-ref">ze_device_module_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-module-properties-t"><span class="std std-ref">ze_device_module_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t48ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t48ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da7870ab0a0bafdc22927586b12d6070ca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_COMMAND_QUEUE_GROUP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__command__queue__group__properties__t"><span class="std std-ref">ze_command_queue_group_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-command-queue-group-properties-t"><span class="std std-ref">ze_command_queue_group_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da3058ede5e4bb8a4af4fe1ee3467525b2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_DEVICE_MEMORY_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__memory__properties__t"><span class="std std-ref">ze_device_memory_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-memory-properties-t"><span class="std std-ref">ze_device_memory_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t49ZE_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t49ZE_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da11595a41f571acb1924ea33e3108a13c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_DEVICE_MEMORY_ACCESS_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__memory__access__properties__t"><span class="std std-ref">ze_device_memory_access_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-memory-access-properties-t"><span class="std std-ref">ze_device_memory_access_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da3cfdc725fad22a5356c5fbd80670f8e9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_CACHE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__cache__properties__t"><span class="std std-ref">ze_device_cache_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-cache-properties-t"><span class="std std-ref">ze_device_cache_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da4a2ab668d45e16e9825e9768f39a7e14"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_IMAGE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__image__properties__t"><span class="std std-ref">ze_device_image_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-image-properties-t"><span class="std std-ref">ze_device_image_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da8a9d7d8af95891773a4df6c6893e3b5a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_P2P_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__p2p__properties__t"><span class="std std-ref">ze_device_p2p_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-p2p-properties-t"><span class="std std-ref">ze_device_p2p_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DEVICE_EXTERNAL_MEMORY_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DEVICE_EXTERNAL_MEMORY_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DEVICE_EXTERNAL_MEMORY_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da7551ccc36bccb057ac6c372894f74bb3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_EXTERNAL_MEMORY_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DEVICE_EXTERNAL_MEMORY_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__external__memory__properties__t"><span class="std std-ref">ze_device_external_memory_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-external-memory-properties-t"><span class="std std-ref">ze_device_external_memory_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_CONTEXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t30ZE_STRUCTURE_TYPE_CONTEXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t30ZE_STRUCTURE_TYPE_CONTEXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dabaef680671f78e7a9c81f4ce60ba49c3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_CONTEXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_CONTEXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="context.html#structze__context__desc__t"><span class="std std-ref">ze_context_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="context.html#ze-context-desc-t"><span class="std std-ref">ze_context_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t36ZE_STRUCTURE_TYPE_COMMAND_QUEUE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t36ZE_STRUCTURE_TYPE_COMMAND_QUEUE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t36ZE_STRUCTURE_TYPE_COMMAND_QUEUE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dacaf215b9268de69b47796f57757cc31d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_QUEUE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t36ZE_STRUCTURE_TYPE_COMMAND_QUEUE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="command_queue.html#structze__command__queue__desc__t"><span class="std std-ref">ze_command_queue_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="command_queue.html#ze-command-queue-desc-t"><span class="std std-ref">ze_command_queue_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_COMMAND_LIST_DESCE">
 <span id="_CPPv3N19ze_structure_type_t35ZE_STRUCTURE_TYPE_COMMAND_LIST_DESCE"></span><span id="_CPPv2N19ze_structure_type_t35ZE_STRUCTURE_TYPE_COMMAND_LIST_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da358ab60c42265780fdd17280f8fd0681"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_LIST_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_COMMAND_LIST_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="command_list-2.html#structze__command__list__desc__t"><span class="std std-ref">ze_command_list_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="command_list-2.html#ze-command-list-desc-t"><span class="std std-ref">ze_command_list_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t33ZE_STRUCTURE_TYPE_EVENT_POOL_DESCE">
 <span id="_CPPv3N19ze_structure_type_t33ZE_STRUCTURE_TYPE_EVENT_POOL_DESCE"></span><span id="_CPPv2N19ze_structure_type_t33ZE_STRUCTURE_TYPE_EVENT_POOL_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab218288cf3b95dd806d440691bfc2fef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_POOL_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t33ZE_STRUCTURE_TYPE_EVENT_POOL_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="event_pool.html#structze__event__pool__desc__t"><span class="std std-ref">ze_event_pool_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="event_pool.html#ze-event-pool-desc-t"><span class="std std-ref">ze_event_pool_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_EVENT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t28ZE_STRUCTURE_TYPE_EVENT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t28ZE_STRUCTURE_TYPE_EVENT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab82b121ced1e645cf0cb9635e8a88bc2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_EVENT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="event.html#structze__event__desc__t"><span class="std std-ref">ze_event_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="event.html#ze-event-desc-t"><span class="std std-ref">ze_event_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_FENCE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t28ZE_STRUCTURE_TYPE_FENCE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t28ZE_STRUCTURE_TYPE_FENCE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da12d9fec2f3197b96219d1750f7da143d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_FENCE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_FENCE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="fence.html#structze__fence__desc__t"><span class="std std-ref">ze_fence_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="fence.html#ze-fence-desc-t"><span class="std std-ref">ze_fence_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_IMAGE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t28ZE_STRUCTURE_TYPE_IMAGE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t28ZE_STRUCTURE_TYPE_IMAGE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da7711431ca04eb19581ac528ee9c1f475"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IMAGE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t28ZE_STRUCTURE_TYPE_IMAGE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="image.html#structze__image__desc__t"><span class="std std-ref">ze_image_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="image.html#ze-image-desc-t"><span class="std std-ref">ze_image_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t34ZE_STRUCTURE_TYPE_IMAGE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t34ZE_STRUCTURE_TYPE_IMAGE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t34ZE_STRUCTURE_TYPE_IMAGE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da2d93e0aef728bad1556faeb146cd7846"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IMAGE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t34ZE_STRUCTURE_TYPE_IMAGE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="image.html#structze__image__properties__t"><span class="std std-ref">ze_image_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="image.html#ze-image-properties-t"><span class="std std-ref">ze_image_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESCE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESCE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da1541fdf1ebdfb1c36803dfe01d9f72c3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_MEM_ALLOC_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__device__mem__alloc__desc__t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="mem.html#ze-device-mem-alloc-desc-t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t37ZE_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESCE">
 <span id="_CPPv3N19ze_structure_type_t37ZE_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESCE"></span><span id="_CPPv2N19ze_structure_type_t37ZE_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dadbbd6171b251c1ad5bb6954df2933006"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t37ZE_STRUCTURE_TYPE_HOST_MEM_ALLOC_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__host__mem__alloc__desc__t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="mem.html#ze-host-mem-alloc-desc-t"><span class="std std-ref">ze_host_mem_alloc_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da6aa74deacdf7db2332154e0ec0f43988"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MEMORY_ALLOCATION_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__memory__allocation__properties__t"><span class="std std-ref">ze_memory_allocation_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="mem.html#ze-memory-allocation-properties-t"><span class="std std-ref">ze_memory_allocation_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dacb6708a4fa85fe434a1ea6e66af7a520"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__external__memory__export__desc__t"><span class="std std-ref">ze_external_memory_export_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="mem.html#ze-external-memory-export-desc-t"><span class="std std-ref">ze_external_memory_export_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FDE">
 <span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FDE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FDE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da2f60efcd9e84b7a66687c591d5c42780"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FD</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_FDE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__external__memory__import__fd__t"><span class="std std-ref">ze_external_memory_import_fd_t</span></a></p>
+<dd><p><a class="reference internal" href="mem.html#ze-external-memory-import-fd-t"><span class="std std-ref">ze_external_memory_import_fd_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FDE">
 <span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FDE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FDE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da8a0e0fb9b55b5c2af080f19973429267"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FD</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_FDE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__external__memory__export__fd__t"><span class="std std-ref">ze_external_memory_export_fd_t</span></a></p>
+<dd><p><a class="reference internal" href="mem.html#ze-external-memory-export-fd-t"><span class="std std-ref">ze_external_memory_export_fd_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t29ZE_STRUCTURE_TYPE_MODULE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t29ZE_STRUCTURE_TYPE_MODULE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t29ZE_STRUCTURE_TYPE_MODULE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da84717063cc19995576b86eabc4e0ae65"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MODULE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t29ZE_STRUCTURE_TYPE_MODULE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="module.html#structze__module__desc__t"><span class="std std-ref">ze_module_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="module.html#ze-module-desc-t"><span class="std std-ref">ze_module_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_MODULE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t35ZE_STRUCTURE_TYPE_MODULE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t35ZE_STRUCTURE_TYPE_MODULE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da7fdd631a9688ef165ba71a5d78f95cb6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MODULE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_MODULE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="module.html#structze__module__properties__t"><span class="std std-ref">ze_module_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="module.html#ze-module-properties-t"><span class="std std-ref">ze_module_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t29ZE_STRUCTURE_TYPE_KERNEL_DESCE">
 <span id="_CPPv3N19ze_structure_type_t29ZE_STRUCTURE_TYPE_KERNEL_DESCE"></span><span id="_CPPv2N19ze_structure_type_t29ZE_STRUCTURE_TYPE_KERNEL_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab44ab92e1382e000c275401d21775c64"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_KERNEL_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t29ZE_STRUCTURE_TYPE_KERNEL_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="kernel.html#structze__kernel__desc__t"><span class="std std-ref">ze_kernel_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="kernel.html#ze-kernel-desc-t"><span class="std std-ref">ze_kernel_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_KERNEL_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t35ZE_STRUCTURE_TYPE_KERNEL_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t35ZE_STRUCTURE_TYPE_KERNEL_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dac88877d43325d7053b4fbee761b7c6f8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_KERNEL_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_KERNEL_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="kernel.html#structze__kernel__properties__t"><span class="std std-ref">ze_kernel_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="kernel.html#ze-kernel-properties-t"><span class="std std-ref">ze_kernel_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_SAMPLER_DESCE">
 <span id="_CPPv3N19ze_structure_type_t30ZE_STRUCTURE_TYPE_SAMPLER_DESCE"></span><span id="_CPPv2N19ze_structure_type_t30ZE_STRUCTURE_TYPE_SAMPLER_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dae0d459db23e0e751051c3972617e171d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_SAMPLER_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_SAMPLER_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="sampler.html#structze__sampler__desc__t"><span class="std std-ref">ze_sampler_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="sampler.html#ze-sampler-desc-t"><span class="std std-ref">ze_sampler_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESCE">
 <span id="_CPPv3N19ze_structure_type_t35ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESCE"></span><span id="_CPPv2N19ze_structure_type_t35ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab6f72cdc12b4299c04ca44d0000e4376"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t35ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="physical_mem.html#structze__physical__mem__desc__t"><span class="std std-ref">ze_physical_mem_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="physical_mem.html#ze-physical-mem-desc-t"><span class="std std-ref">ze_physical_mem_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t56ZE_STRUCTURE_TYPE_KERNEL_PREFERRED_GROUP_SIZE_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t56ZE_STRUCTURE_TYPE_KERNEL_PREFERRED_GROUP_SIZE_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t56ZE_STRUCTURE_TYPE_KERNEL_PREFERRED_GROUP_SIZE_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab508177b88f1cf54941e0c03f5d2e7a4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_KERNEL_PREFERRED_GROUP_SIZE_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t56ZE_STRUCTURE_TYPE_KERNEL_PREFERRED_GROUP_SIZE_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="kernel.html#structze__kernel__preferred__group__size__properties__t"><span class="std std-ref">ze_kernel_preferred_group_size_properties_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="kernel.html#ze-kernel-preferred-group-size-properties-t"><span class="std std-ref">ze_kernel_preferred_group_size_properties_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_WIN32E">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_WIN32E"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_WIN32E"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da4cced36f2926b81771cf8460f5bca91c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_WIN32</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMPORT_WIN32E" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__external__memory__import__win32__handle__t"><span class="std std-ref">ze_external_memory_import_win32_handle_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="mem.html#ze-external-memory-import-win32-handle-t"><span class="std std-ref">ze_external_memory_import_win32_handle_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_WIN32E">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_WIN32E"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_WIN32E"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da5e335207c3735844d643d0f2522c4136"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_WIN32</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_EXTERNAL_MEMORY_EXPORT_WIN32E" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="mem.html#structze__external__memory__export__win32__handle__t"><span class="std std-ref">ze_external_memory_export_win32_handle_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="mem.html#ze-external-memory-export-win32-handle-t"><span class="std std-ref">ze_external_memory_export_win32_handle_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t50ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t50ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da09edbffe2b3ab0aa24b1139c18d7e492"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_DEVICE_RAYTRACING_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/context.html#structze__device__raytracing__ext__properties__t"><span class="std std-ref">ze_device_raytracing_ext_properties_t</span></a></p>
+<dd><p><a class="reference internal" href="../extensions/context.html#ze-device-raytracing-ext-properties-t"><span class="std std-ref">ze_device_raytracing_ext_properties_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_RAYTRACING_MEM_ALLOC_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t47ZE_STRUCTURE_TYPE_RAYTRACING_MEM_ALLOC_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t47ZE_STRUCTURE_TYPE_RAYTRACING_MEM_ALLOC_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daeb89af2602d2ac9d9472fed36ef16eb1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RAYTRACING_MEM_ALLOC_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_RAYTRACING_MEM_ALLOC_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/context.html#structze__raytracing__mem__alloc__ext__desc__t"><span class="std std-ref">ze_raytracing_mem_alloc_ext_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="../extensions/context.html#ze-raytracing-mem-alloc-ext-desc-t"><span class="std std-ref">ze_raytracing_mem_alloc_ext_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_FLOAT_ATOMIC_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_FLOAT_ATOMIC_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_FLOAT_ATOMIC_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da9488581ed9af8c36483d70b00c72e2eb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_FLOAT_ATOMIC_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_FLOAT_ATOMIC_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__float__atomic__ext__properties__t"><span class="std std-ref">ze_float_atomic_ext_properties_t</span></a><em class="since-note"> (since v1.1)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-float-atomic-ext-properties-t"><span class="std std-ref">ze_float_atomic_ext_properties_t</span></a><em class="since-note"> (since v1.1)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_CACHE_RESERVATION_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_CACHE_RESERVATION_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_CACHE_RESERVATION_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dad8547972d8eea53d63d891beaa04eae8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_CACHE_RESERVATION_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_CACHE_RESERVATION_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__cache__reservation__ext__desc__t"><span class="std std-ref">ze_cache_reservation_ext_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-cache-reservation-ext-desc-t"><span class="std std-ref">ze_cache_reservation_ext_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_EU_COUNT_EXTE">
 <span id="_CPPv3N19ze_structure_type_t30ZE_STRUCTURE_TYPE_EU_COUNT_EXTE"></span><span id="_CPPv2N19ze_structure_type_t30ZE_STRUCTURE_TYPE_EU_COUNT_EXTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da6524c877e65f74966ad21ff2e4e94231"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EU_COUNT_EXT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t30ZE_STRUCTURE_TYPE_EU_COUNT_EXTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__eu__count__ext__t"><span class="std std-ref">ze_eu_count_ext_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-eu-count-ext-t"><span class="std std-ref">ze_eu_count_ext_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t31ZE_STRUCTURE_TYPE_SRGB_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t31ZE_STRUCTURE_TYPE_SRGB_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t31ZE_STRUCTURE_TYPE_SRGB_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daa2c51d9018705759da8abb77610a2ea1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_SRGB_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t31ZE_STRUCTURE_TYPE_SRGB_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/image.html#structze__srgb__ext__desc__t"><span class="std std-ref">ze_srgb_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/image.html#ze-srgb-ext-desc-t"><span class="std std-ref">ze_srgb_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_LINKAGE_INSPECTION_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_LINKAGE_INSPECTION_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_LINKAGE_INSPECTION_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da23761a3c523ee2c372fbf39a4e88a1c5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_LINKAGE_INSPECTION_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_LINKAGE_INSPECTION_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/module.html#structze__linkage__inspection__ext__desc__t"><span class="std std-ref">ze_linkage_inspection_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/module.html#ze-linkage-inspection-ext-desc-t"><span class="std std-ref">ze_linkage_inspection_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t36ZE_STRUCTURE_TYPE_PCI_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t36ZE_STRUCTURE_TYPE_PCI_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t36ZE_STRUCTURE_TYPE_PCI_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daa4cdca03954a1734505fb7bc9bf94eb3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_PCI_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t36ZE_STRUCTURE_TYPE_PCI_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__pci__ext__properties__t"><span class="std std-ref">ze_pci_ext_properties_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-pci-ext-properties-t"><span class="std std-ref">ze_pci_ext_properties_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_MEMORY_FREE_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_MEMORY_FREE_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_MEMORY_FREE_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da56950fbcd40db8756569c172571ed343"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DRIVER_MEMORY_FREE_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_MEMORY_FREE_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/driver.html#structze__driver__memory__free__ext__properties__t"><span class="std std-ref">ze_driver_memory_free_ext_properties_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/driver.html#ze-driver-memory-free-ext-properties-t"><span class="std std-ref">ze_driver_memory_free_ext_properties_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_MEMORY_FREE_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t38ZE_STRUCTURE_TYPE_MEMORY_FREE_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t38ZE_STRUCTURE_TYPE_MEMORY_FREE_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daee955075140ad75baf2754f1ad65c078"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MEMORY_FREE_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_MEMORY_FREE_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/mem.html#structze__memory__free__ext__desc__t"><span class="std std-ref">ze_memory_free_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/mem.html#ze-memory-free-ext-desc-t"><span class="std std-ref">ze_memory_free_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_MEMORY_COMPRESSION_HINTS_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_MEMORY_COMPRESSION_HINTS_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_MEMORY_COMPRESSION_HINTS_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dadf54a52859e5856cd2ecdbb8f29a3461"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MEMORY_COMPRESSION_HINTS_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_MEMORY_COMPRESSION_HINTS_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/mem.html#structze__memory__compression__hints__ext__desc__t"><span class="std std-ref">ze_memory_compression_hints_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/mem.html#ze-memory-compression-hints-ext-desc-t"><span class="std std-ref">ze_memory_compression_hints_ext_desc_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_IMAGE_ALLOCATION_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t49ZE_STRUCTURE_TYPE_IMAGE_ALLOCATION_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t49ZE_STRUCTURE_TYPE_IMAGE_ALLOCATION_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da708aebf955fa23447438de982855f6cb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IMAGE_ALLOCATION_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_IMAGE_ALLOCATION_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/image.html#structze__image__allocation__ext__properties__t"><span class="std std-ref">ze_image_allocation_ext_properties_t</span></a><em class="since-note"> (since v1.3)</em></p>
+<dd><p><a class="reference internal" href="../extensions/image.html#ze-image-allocation-ext-properties-t"><span class="std std-ref">ze_image_allocation_ext_properties_t</span></a><em class="since-note"> (since v1.3)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_DEVICE_LUID_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_DEVICE_LUID_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_DEVICE_LUID_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab7264afaaa8df7d980e64dfa98de031f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_LUID_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_DEVICE_LUID_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__luid__ext__properties__t"><span class="std std-ref">ze_device_luid_ext_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-luid-ext-properties-t"><span class="std std-ref">ze_device_luid_ext_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_DEVICE_MEMORY_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_DEVICE_MEMORY_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_DEVICE_MEMORY_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf0c1983da2c155a1f72ceb914a2c1a15"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_MEMORY_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_DEVICE_MEMORY_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__memory__ext__properties__t"><span class="std std-ref">ze_device_memory_ext_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-memory-ext-properties-t"><span class="std std-ref">ze_device_memory_ext_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_IP_VERSION_EXTE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_IP_VERSION_EXTE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_IP_VERSION_EXTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daef04e52676118416d54d2f81e4c175cc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_IP_VERSION_EXT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_IP_VERSION_EXTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__ip__version__ext__t"><span class="std std-ref">ze_device_ip_version_ext_t</span></a><em class="since-note"> (since v1.5)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-ip-version-ext-t"><span class="std std-ref">ze_device_ip_version_ext_t</span></a><em class="since-note"> (since v1.5)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf6e1a9aee84b069dab58d6fcb019eae2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/image.html#structze__image__view__planar__ext__desc__t"><span class="std std-ref">ze_image_view_planar_ext_desc_t</span></a><em class="since-note"> (since v1.5)</em></p>
+<dd><p><a class="reference internal" href="../extensions/image.html#ze-image-view-planar-ext-desc-t"><span class="std std-ref">ze_image_view_planar_ext_desc_t</span></a><em class="since-note"> (since v1.5)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t62ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t62ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t62ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dae2855961ec7ab52d791ca0a5281ac043"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t62ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/data_types.html#structze__event__query__kernel__timestamps__ext__properties__t"><span class="std std-ref">ze_event_query_kernel_timestamps_ext_properties_t</span></a><em class="since-note"> (since v1.6)</em></p>
+<dd><p><a class="reference internal" href="../extensions/data_types.html#ze-event-query-kernel-timestamps-ext-properties-t"><span class="std std-ref">ze_event_query_kernel_timestamps_ext_properties_t</span></a><em class="since-note"> (since v1.6)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t70ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t70ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t70ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da796d7c7c53157fe37c8d3cd9400548cc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t70ZE_STRUCTURE_TYPE_EVENT_QUERY_KERNEL_TIMESTAMPS_RESULTS_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/data_types.html#structze__event__query__kernel__timestamps__results__ext__properties__t"><span class="std std-ref">ze_event_query_kernel_timestamps_results_ext_properties_t</span></a><em class="since-note"> (since v1.6)</em></p>
+<dd><p><a class="reference internal" href="../extensions/data_types.html#ze-event-query-kernel-timestamps-results-ext-properties-t"><span class="std std-ref">ze_event_query_kernel_timestamps_results_ext_properties_t</span></a><em class="since-note"> (since v1.6)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
@@ -1531,451 +1567,529 @@
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_IMAGE_FORMAT_SUPPORT_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t53ZE_STRUCTURE_TYPE_IMAGE_FORMAT_SUPPORT_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t53ZE_STRUCTURE_TYPE_IMAGE_FORMAT_SUPPORT_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da061a8d293f8fb1e78ab456a8b73f5ced"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IMAGE_FORMAT_SUPPORT_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_IMAGE_FORMAT_SUPPORT_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/image.html#structze__image__format__support__ext__properties__t"><span class="std std-ref">ze_image_format_support_ext_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="../extensions/image.html#ze-image-format-support-ext-properties-t"><span class="std std-ref">ze_image_format_support_ext_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t55ZE_STRUCTURE_TYPE_DEVICE_READONLY_MEMORY_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t55ZE_STRUCTURE_TYPE_DEVICE_READONLY_MEMORY_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t55ZE_STRUCTURE_TYPE_DEVICE_READONLY_MEMORY_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da67b31f86138adc8c295469f9a22c8047"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_READONLY_MEMORY_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t55ZE_STRUCTURE_TYPE_DEVICE_READONLY_MEMORY_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__readonly__memory__ext__properties__t"><span class="std std-ref">ze_device_readonly_memory_ext_properties_t</span></a><em class="since-note"> (since v1.17)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-readonly-memory-ext-properties-t"><span class="std std-ref">ze_device_readonly_memory_ext_properties_t</span></a><em class="since-note"> (since v1.17)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dabcdc12b1dcfe7f5e4e1dd23c9833cebb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/mem.html#structze__relaxed__allocation__limits__ext__desc__t"><span class="std std-ref">ze_relaxed_allocation_limits_ext_desc_t</span></a><em class="since-note"> (since v1.17)</em></p>
+<dd><p><a class="reference internal" href="../extensions/mem.html#ze-relaxed-allocation-limits-ext-desc-t"><span class="std std-ref">ze_relaxed_allocation_limits_ext_desc_t</span></a><em class="since-note"> (since v1.17)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da9047bbc34969f7e718eda12e4b0844b5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/context.html#structze__context__power__saving__hint__ext__desc__t"><span class="std std-ref">ze_context_power_saving_hint_ext_desc_t</span></a><em class="since-note"> (since v1.18)</em></p>
+<dd><p><a class="reference internal" href="../extensions/context.html#ze-context-power-saving-hint-ext-desc-t"><span class="std std-ref">ze_context_power_saving_hint_ext_desc_t</span></a><em class="since-note"> (since v1.18)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab3965d20d9ba77d9840218c93aabf13b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RELAXED_ALLOCATION_LIMITS_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/mem.html#structze__relaxed__allocation__limits__exp__desc__t"><span class="std std-ref">ze_relaxed_allocation_limits_exp_desc_t</span></a><em class="since-note"> (since v1.1)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/mem.html#ze-relaxed-allocation-limits-exp-desc-t"><span class="std std-ref">ze_relaxed_allocation_limits_exp_desc_t</span></a><em class="since-note"> (since v1.1)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_MODULE_PROGRAM_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t41ZE_STRUCTURE_TYPE_MODULE_PROGRAM_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t41ZE_STRUCTURE_TYPE_MODULE_PROGRAM_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dad1a6fb922a07067be69b594d510af4f8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MODULE_PROGRAM_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_MODULE_PROGRAM_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/module.html#structze__module__program__exp__desc__t"><span class="std std-ref">ze_module_program_exp_desc_t</span></a></p>
+<dd><p><a class="reference internal" href="../experimental/module.html#ze-module-program-exp-desc-t"><span class="std std-ref">ze_module_program_exp_desc_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t48ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t48ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da6440e6746b1599600dedeca46eead542"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/device.html#structze__scheduling__hint__exp__properties__t"><span class="std std-ref">ze_scheduling_hint_exp_properties_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="../experimental/device.html#ze-scheduling-hint-exp-properties-t"><span class="std std-ref">ze_scheduling_hint_exp_properties_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t42ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t42ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da1adeda8c1ddc1e63e3d88eaa0ac3cbbf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_SCHEDULING_HINT_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/kernel.html#structze__scheduling__hint__exp__desc__t"><span class="std std-ref">ze_scheduling_hint_exp_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="../experimental/kernel.html#ze-scheduling-hint-exp-desc-t"><span class="std std-ref">ze_scheduling_hint_exp_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dabf2786862957fa46e39e567c15b263e7"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_IMAGE_VIEW_PLANAR_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/image.html#structze__image__view__planar__exp__desc__t"><span class="std std-ref">ze_image_view_planar_exp_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/image.html#ze-image-view-planar-exp-desc-t"><span class="std std-ref">ze_image_view_planar_exp_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2E">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2E"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2E"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da433cd4e4d71182873b95d43ceb89f0df"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2E" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__device__properties__t"><span class="std std-ref">ze_device_properties_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_IMAGE_MEMORY_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_IMAGE_MEMORY_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_IMAGE_MEMORY_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dafa2856e546a23b516fbc524aa3bb4bca"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IMAGE_MEMORY_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_IMAGE_MEMORY_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/image.html#structze__image__memory__properties__exp__t"><span class="std std-ref">ze_image_memory_properties_exp_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="../experimental/image.html#ze-image-memory-properties-exp-t"><span class="std std-ref">ze_image_memory_properties_exp_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da9cb66d612e5f3560259c6659d0dc94a8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_POWER_SAVING_HINT_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/context.html#structze__context__power__saving__hint__exp__desc__t"><span class="std std-ref">ze_context_power_saving_hint_exp_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/context.html#ze-context-power-saving-hint-exp-desc-t"><span class="std std-ref">ze_context_power_saving_hint_exp_desc_t</span></a><em class="since-note"> (since v1.2)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t47ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t47ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da8080bea547d2541599f1bb35bed3db4e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_COPY_BANDWIDTH_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_queue.html#structze__copy__bandwidth__exp__properties__t"><span class="std std-ref">ze_copy_bandwidth_exp_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.14</span> <a class="reference internal" href="../deprecated/command_queue.html#ze-copy-bandwidth-exp-properties-t"><span class="std std-ref">ze_copy_bandwidth_exp_properties_t</span></a>. No replacement. <em class="since-note"> (since v1.4)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t53ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t53ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dac3ddc760b846028f11e60b667f533fe0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_DEVICE_P2P_BANDWIDTH_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/device.html#structze__device__p2p__bandwidth__exp__properties__t"><span class="std std-ref">ze_device_p2p_bandwidth_exp_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+<dd><p><a class="reference internal" href="../experimental/device.html#ze-device-p2p-bandwidth-exp-properties-t"><span class="std std-ref">ze_device_p2p_bandwidth_exp_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_FABRIC_VERTEX_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_FABRIC_VERTEX_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_FABRIC_VERTEX_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da49a1057c2cc4543d3b7da88508889fd6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_FABRIC_VERTEX_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_FABRIC_VERTEX_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/fabric_vertex.html#structze__fabric__vertex__exp__properties__t"><span class="std std-ref">ze_fabric_vertex_exp_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+<dd><p><a class="reference internal" href="../experimental/fabric_vertex.html#ze-fabric-vertex-exp-properties-t"><span class="std std-ref">ze_fabric_vertex_exp_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_FABRIC_EDGE_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_FABRIC_EDGE_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_FABRIC_EDGE_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da4532021ac6e4a54ec81478a5c808b066"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_FABRIC_EDGE_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_FABRIC_EDGE_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/fabric_edge.html#structze__fabric__edge__exp__properties__t"><span class="std std-ref">ze_fabric_edge_exp_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
+<dd><p><a class="reference internal" href="../experimental/fabric_edge.html#ze-fabric-edge-exp-properties-t"><span class="std std-ref">ze_fabric_edge_exp_properties_t</span></a><em class="since-note"> (since v1.4)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t55ZE_STRUCTURE_TYPE_MEMORY_SUB_ALLOCATIONS_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t55ZE_STRUCTURE_TYPE_MEMORY_SUB_ALLOCATIONS_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t55ZE_STRUCTURE_TYPE_MEMORY_SUB_ALLOCATIONS_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab3434f14b9538d53d31ffad8e30dac11"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MEMORY_SUB_ALLOCATIONS_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t55ZE_STRUCTURE_TYPE_MEMORY_SUB_ALLOCATIONS_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/mem.html#structze__memory__sub__allocations__exp__properties__t"><span class="std std-ref">ze_memory_sub_allocations_exp_properties_t</span></a><em class="since-note"> (since v1.5)</em></p>
+<dd><p><a class="reference internal" href="../experimental/mem.html#ze-memory-sub-allocations-exp-properties-t"><span class="std std-ref">ze_memory_sub_allocations_exp_properties_t</span></a><em class="since-note"> (since v1.5)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da8dfb77cf2409e18fdade8efb099b0ba8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/rtas_builder.html#structze__rtas__builder__exp__desc__t"><span class="std std-ref">ze_rtas_builder_exp_desc_t</span></a><em class="since-note"> (since v1.7)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/rtas_builder.html#ze-rtas-builder-exp-desc-t"><span class="std std-ref">ze_rtas_builder_exp_desc_t</span></a><em class="since-note"> (since v1.7)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da7df409c5b8218a2b3d6c8cfd6da5b25b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/rtas_builder.html#structze__rtas__builder__build__op__exp__desc__t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a><em class="since-note"> (since v1.7)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/rtas_builder.html#ze-rtas-builder-build-op-exp-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a><em class="since-note"> (since v1.7)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da884b530a46ba8b386377d29122438961"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/rtas_builder.html#structze__rtas__builder__exp__properties__t"><span class="std std-ref">ze_rtas_builder_exp_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/rtas_builder.html#ze-rtas-builder-exp-properties-t"><span class="std std-ref">ze_rtas_builder_exp_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da3b230bab9db2a8f3469520c5982b59ef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/rtas_parallel_operation.html#structze__rtas__parallel__operation__exp__properties__t"><span class="std std-ref">ze_rtas_parallel_operation_exp_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/rtas_parallel_operation.html#ze-rtas-parallel-operation-exp-properties-t"><span class="std std-ref">ze_rtas_parallel_operation_exp_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da48365434f2e350da5202c2dfdd06ec25"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/device.html#structze__rtas__device__exp__properties__t"><span class="std std-ref">ze_rtas_device_exp_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/device.html#ze-rtas-device-exp-properties-t"><span class="std std-ref">ze_rtas_device_exp_properties_t</span></a><em class="since-note"> (since v1.7)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXP_CB_PARAMSE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXP_CB_PARAMSE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXP_CB_PARAMSE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da5672b709c9e064e78aebdc8f26abd214"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXP_CB_PARAMS</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXP_CB_PARAMSE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/data_types.html#structze__rtas__geometry__aabbs__exp__cb__params__t"><span class="std std-ref">ze_rtas_geometry_aabbs_exp_cb_params_t</span></a><em class="since-note"> (since v1.7)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/data_types.html#ze-rtas-geometry-aabbs-exp-cb-params-t"><span class="std std-ref">ze_rtas_geometry_aabbs_exp_cb_params_t</span></a><em class="since-note"> (since v1.7)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da6865c67a7dbea5cb79b415e2f134a108"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_COUNTER_BASED_EVENT_POOL_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/event_pool.html#structze__event__pool__counter__based__exp__desc__t"><span class="std std-ref">ze_event_pool_counter_based_exp_desc_t</span></a><em class="since-note"> (since v1.8)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/event_pool.html#ze-event-pool-counter-based-exp-desc-t"><span class="std std-ref">ze_event_pool_counter_based_exp_desc_t</span></a><em class="since-note"> (since v1.8)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daaa60eeef03dc2a535c87c92edf0848fc"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__command__list__exp__properties__t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-command-list-exp-properties-t"><span class="std std-ref">ze_mutable_command_list_exp_properties_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da634bacd53e720449db41042f05adfaba"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__command__list__exp__desc__t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-command-list-exp-desc-t"><span class="std std-ref">ze_mutable_command_list_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da0c1798a542881ad33476cd8b8b0096a5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__command__id__exp__desc__t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-command-id-exp-desc-t"><span class="std std-ref">ze_mutable_command_id_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da111bdf37db65316e691ba5854af97b18"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__commands__exp__desc__t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-commands-exp-desc-t"><span class="std std-ref">ze_mutable_commands_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da4c482e9bfa3f5d09ae2a4576fcbd8650"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__kernel__argument__exp__desc__t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-kernel-argument-exp-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf58f5be8feb4d0668536aa82bac44c45"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__group__count__exp__desc__t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-group-count-exp-desc-t"><span class="std std-ref">ze_mutable_group_count_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dabbd7d2601210a679ee32665bff7756d3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__group__size__exp__desc__t"><span class="std std-ref">ze_mutable_group_size_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-group-size-exp-desc-t"><span class="std std-ref">ze_mutable_group_size_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da29ab63de4d964f4860191829f88976e2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__global__offset__exp__desc__t"><span class="std std-ref">ze_mutable_global_offset_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-global-offset-exp-desc-t"><span class="std std-ref">ze_mutable_global_offset_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_PITCHED_ALLOC_DEVICE_EXP_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t53ZE_STRUCTURE_TYPE_PITCHED_ALLOC_DEVICE_EXP_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t53ZE_STRUCTURE_TYPE_PITCHED_ALLOC_DEVICE_EXP_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da04a92d90bd5710464e2d362f4f19ba8b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_PITCHED_ALLOC_DEVICE_EXP_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_PITCHED_ALLOC_DEVICE_EXP_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/device.html#structze__device__pitched__alloc__exp__properties__t"><span class="std std-ref">ze_device_pitched_alloc_exp_properties_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../experimental/device.html#ze-device-pitched-alloc-exp-properties-t"><span class="std std-ref">ze_device_pitched_alloc_exp_properties_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t41ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t41ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da16d2d02ebe024996041d5c7f20bf0839"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_BINDLESS_IMAGE_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/image.html#structze__image__bindless__exp__desc__t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../experimental/image.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t40ZE_STRUCTURE_TYPE_PITCHED_IMAGE_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t40ZE_STRUCTURE_TYPE_PITCHED_IMAGE_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t40ZE_STRUCTURE_TYPE_PITCHED_IMAGE_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da43608006f0c33a2bb3f4c591720babb9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_PITCHED_IMAGE_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t40ZE_STRUCTURE_TYPE_PITCHED_IMAGE_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/image.html#structze__image__pitched__exp__desc__t"><span class="std std-ref">ze_image_pitched_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
+<dd><p><a class="reference internal" href="../experimental/image.html#ze-image-pitched-exp-desc-t"><span class="std std-ref">ze_image_pitched_exp_desc_t</span></a><em class="since-note"> (since v1.9)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dab5b85e16a0f958fb742c7af088be7b93"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/command_list.html#structze__mutable__graph__argument__exp__desc__t"><span class="std std-ref">ze_mutable_graph_argument_exp_desc_t</span></a><em class="since-note"> (since v1.10)</em></p>
+<dd><p><a class="reference internal" href="../deprecated/command_list.html#ze-mutable-graph-argument-exp-desc-t"><span class="std std-ref">ze_mutable_graph_argument_exp_desc_t</span></a><em class="since-note"> (since v1.10)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da4b4bcf263dcb8bfefbe5c352c56671de"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_INIT_DRIVER_TYPE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="global.html#structze__init__driver__type__desc__t"><span class="std std-ref">ze_init_driver_type_desc_t</span></a><em class="since-note"> (since v1.10)</em></p>
+<dd><p><a class="reference internal" href="global.html#ze-init-driver-type-desc-t"><span class="std std-ref">ze_init_driver_type_desc_t</span></a><em class="since-note"> (since v1.10)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dac518f30dc05268163e18cabdbc38e221"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#structze__external__semaphore__ext__desc__t"><span class="std std-ref">ze_external_semaphore_ext_desc_t</span></a><em class="since-note"> (since v1.12)</em></p>
+<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#ze-external-semaphore-ext-desc-t"><span class="std std-ref">ze_external_semaphore_ext_desc_t</span></a><em class="since-note"> (since v1.12)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WIN32_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WIN32_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WIN32_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da2931eece4d05593e7108ebfaa436fbfd"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WIN32_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WIN32_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#structze__external__semaphore__win32__ext__desc__t"><span class="std std-ref">ze_external_semaphore_win32_ext_desc_t</span></a><em class="since-note"> (since v1.12)</em></p>
+<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#ze-external-semaphore-win32-ext-desc-t"><span class="std std-ref">ze_external_semaphore_win32_ext_desc_t</span></a><em class="since-note"> (since v1.12)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_FD_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t48ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_FD_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t48ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_FD_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dae2c94b62adaa94110ab197098d3e0feb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_FD_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_FD_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#structze__external__semaphore__fd__ext__desc__t"><span class="std std-ref">ze_external_semaphore_fd_ext_desc_t</span></a><em class="since-note"> (since v1.12)</em></p>
+<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#ze-external-semaphore-fd-ext-desc-t"><span class="std std-ref">ze_external_semaphore_fd_ext_desc_t</span></a><em class="since-note"> (since v1.12)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t54ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_EXTE">
 <span id="_CPPv3N19ze_structure_type_t54ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_EXTE"></span><span id="_CPPv2N19ze_structure_type_t54ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_EXTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dae744fde67fa2f15f0cdc80a576d07f2f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_EXT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t54ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_SIGNAL_PARAMS_EXTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#structze__external__semaphore__signal__params__ext__t"><span class="std std-ref">ze_external_semaphore_signal_params_ext_t</span></a><em class="since-note"> (since v1.12)</em></p>
+<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#ze-external-semaphore-signal-params-ext-t"><span class="std std-ref">ze_external_semaphore_signal_params_ext_t</span></a><em class="since-note"> (since v1.12)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WAIT_PARAMS_EXTE">
 <span id="_CPPv3N19ze_structure_type_t52ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WAIT_PARAMS_EXTE"></span><span id="_CPPv2N19ze_structure_type_t52ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WAIT_PARAMS_EXTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daacdf03c0d035b26efb9893b7ffa949c3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WAIT_PARAMS_EXT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_WAIT_PARAMS_EXTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#structze__external__semaphore__wait__params__ext__t"><span class="std std-ref">ze_external_semaphore_wait_params_ext_t</span></a><em class="since-note"> (since v1.12)</em></p>
+<dd><p><a class="reference internal" href="../extensions/external_semaphore.html#ze-external-semaphore-wait-params-ext-t"><span class="std std-ref">ze_external_semaphore_wait_params_ext_t</span></a><em class="since-note"> (since v1.12)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_DDI_HANDLES_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_DDI_HANDLES_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_DDI_HANDLES_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da42c28ae2077b3d1c108e7160654a4050"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DRIVER_DDI_HANDLES_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_DRIVER_DDI_HANDLES_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/driver.html#structze__driver__ddi__handles__ext__properties__t"><span class="std std-ref">ze_driver_ddi_handles_ext_properties_t</span></a><em class="since-note"> (since v1.12)</em></p>
+<dd><p><a class="reference internal" href="../extensions/driver.html#ze-driver-ddi-handles-ext-properties-t"><span class="std std-ref">ze_driver_ddi_handles_ext_properties_t</span></a><em class="since-note"> (since v1.12)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXTE">
 <span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXTE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da92d5f0ec1ea0d9770e0748044cc1e911"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_CACHELINE_SIZE_EXTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__cache__line__size__ext__t"><span class="std std-ref">ze_device_cache_line_size_ext_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-cache-line-size-ext-t"><span class="std std-ref">ze_device_cache_line_size_ext_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_DEVICE_VECTOR_WIDTH_PROPERTIES_EXTE">
 <span id="_CPPv3N19ze_structure_type_t52ZE_STRUCTURE_TYPE_DEVICE_VECTOR_WIDTH_PROPERTIES_EXTE"></span><span id="_CPPv2N19ze_structure_type_t52ZE_STRUCTURE_TYPE_DEVICE_VECTOR_WIDTH_PROPERTIES_EXTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf79a08d50719ee5d44ed2f0810f69770"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_VECTOR_WIDTH_PROPERTIES_EXT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_DEVICE_VECTOR_WIDTH_PROPERTIES_EXTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__vector__width__properties__ext__t"><span class="std std-ref">ze_device_vector_width_properties_ext_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-vector-width-properties-ext-t"><span class="std std-ref">ze_device_vector_width_properties_ext_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dad254a57cf339e526cd3f4ea372a49937"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/rtas_builder.html#structze__rtas__builder__ext__desc__t"><span class="std std-ref">ze_rtas_builder_ext_desc_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-ext-desc-t"><span class="std std-ref">ze_rtas_builder_ext_desc_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dac49f4f7dd7ef3bb433db41318645c26e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_RTAS_BUILDER_BUILD_OP_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/rtas_builder.html#structze__rtas__builder__build__op__ext__desc__t"><span class="std std-ref">ze_rtas_builder_build_op_ext_desc_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-build-op-ext-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_ext_desc_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da58792c5dda604fdfb40d9a0067b376c1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RTAS_BUILDER_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/rtas_builder.html#structze__rtas__builder__ext__properties__t"><span class="std std-ref">ze_rtas_builder_ext_properties_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-ext-properties-t"><span class="std std-ref">ze_rtas_builder_ext_properties_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf01a18cd5b8976a2f6fde634c5631761"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t56ZE_STRUCTURE_TYPE_RTAS_PARALLEL_OPERATION_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/rtas_parallel_operation.html#structze__rtas__parallel__operation__ext__properties__t"><span class="std std-ref">ze_rtas_parallel_operation_ext_properties_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/rtas_parallel_operation.html#ze-rtas-parallel-operation-ext-properties-t"><span class="std std-ref">ze_rtas_parallel_operation_ext_properties_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da9d113623dd64e29856bb9758b861e9df"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_RTAS_DEVICE_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__rtas__device__ext__properties__t"><span class="std std-ref">ze_rtas_device_ext_properties_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-rtas-device-ext-properties-t"><span class="std std-ref">ze_rtas_device_ext_properties_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXT_CB_PARAMSE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXT_CB_PARAMSE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXT_CB_PARAMSE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf50f268c3cebefc3d4dcf742f701e763"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXT_CB_PARAMS</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RTAS_GEOMETRY_AABBS_EXT_CB_PARAMSE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/data_types.html#structze__rtas__geometry__aabbs__ext__cb__params__t"><span class="std std-ref">ze_rtas_geometry_aabbs_ext_cb_params_t</span></a><em class="since-note"> (since v1.13)</em></p>
+<dd><p><a class="reference internal" href="../extensions/data_types.html#ze-rtas-geometry-aabbs-ext-cb-params-t"><span class="std std-ref">ze_rtas_geometry_aabbs_ext_cb_params_t</span></a><em class="since-note"> (since v1.13)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t60ZE_STRUCTURE_TYPE_COMMAND_LIST_APPEND_PARAM_COOPERATIVE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t60ZE_STRUCTURE_TYPE_COMMAND_LIST_APPEND_PARAM_COOPERATIVE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t60ZE_STRUCTURE_TYPE_COMMAND_LIST_APPEND_PARAM_COOPERATIVE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da77bca9476c2a846a5abb1c1069d8909a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_LIST_APPEND_PARAM_COOPERATIVE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t60ZE_STRUCTURE_TYPE_COMMAND_LIST_APPEND_PARAM_COOPERATIVE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="command_list-2.html#structze__command__list__append__launch__kernel__param__cooperative__desc__t"><span class="std std-ref">ze_command_list_append_launch_kernel_param_cooperative_desc_t</span></a><em class="since-note"> (since v1.14)</em></p>
+<dd><p><a class="reference internal" href="command_list-2.html#ze-command-list-append-launch-kernel-param-cooperative-desc-t"><span class="std std-ref">ze_command_list_append_launch_kernel_param_cooperative_desc_t</span></a><em class="since-note"> (since v1.14)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_EXTERNAL_MEMMAP_SYSMEM_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t49ZE_STRUCTURE_TYPE_EXTERNAL_MEMMAP_SYSMEM_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t49ZE_STRUCTURE_TYPE_EXTERNAL_MEMMAP_SYSMEM_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf2762d7921ea6cf7619b76ab9f1e9664"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EXTERNAL_MEMMAP_SYSMEM_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_EXTERNAL_MEMMAP_SYSMEM_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/mem.html#structze__external__memmap__sysmem__ext__desc__t"><span class="std std-ref">ze_external_memmap_sysmem_ext_desc_t</span></a><em class="since-note"> (since v1.14)</em></p>
+<dd><p><a class="reference internal" href="../extensions/mem.html#ze-external-memmap-sysmem-ext-desc-t"><span class="std std-ref">ze_external_memmap_sysmem_ext_desc_t</span></a><em class="since-note"> (since v1.14)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t61ZE_STRUCTURE_TYPE_PITCHED_ALLOC_2DIMAGE_LINEAR_PITCH_EXP_INFOE">
 <span id="_CPPv3N19ze_structure_type_t61ZE_STRUCTURE_TYPE_PITCHED_ALLOC_2DIMAGE_LINEAR_PITCH_EXP_INFOE"></span><span id="_CPPv2N19ze_structure_type_t61ZE_STRUCTURE_TYPE_PITCHED_ALLOC_2DIMAGE_LINEAR_PITCH_EXP_INFOE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da69d0df843c588cd50e708f038b854001"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_PITCHED_ALLOC_2DIMAGE_LINEAR_PITCH_EXP_INFO</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t61ZE_STRUCTURE_TYPE_PITCHED_ALLOC_2DIMAGE_LINEAR_PITCH_EXP_INFOE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/device.html#structze__pitched__alloc__2dimage__linear__pitch__exp__info__t"><span class="std std-ref">ze_pitched_alloc_2dimage_linear_pitch_exp_info_t</span></a><em class="since-note"> (since v1.14)</em></p>
+<dd><p><a class="reference internal" href="../experimental/device.html#ze-pitched-alloc-2dimage-linear-pitch-exp-info-t"><span class="std std-ref">ze_pitched_alloc_2dimage_linear_pitch_exp_info_t</span></a><em class="since-note"> (since v1.14)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_KERNEL_ALLOCATION_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_KERNEL_ALLOCATION_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_KERNEL_ALLOCATION_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da7e119bbfcd89aae97deffa4a9b1d55fe"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_KERNEL_ALLOCATION_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_KERNEL_ALLOCATION_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/kernel.html#structze__kernel__allocation__exp__properties__t"><span class="std std-ref">ze_kernel_allocation_exp_properties_t</span></a><em class="since-note"> (since v1.14)</em></p>
+<dd><p><a class="reference internal" href="../experimental/kernel.html#ze-kernel-allocation-exp-properties-t"><span class="std std-ref">ze_kernel_allocation_exp_properties_t</span></a><em class="since-note"> (since v1.14)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_DESCE">
 <span id="_CPPv3N19ze_structure_type_t42ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_DESCE"></span><span id="_CPPv2N19ze_structure_type_t42ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da5530005428f8a5084beac13efe8b4c61"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t42ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="event.html#structze__event__counter__based__desc__t"><span class="std std-ref">ze_event_counter_based_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="event.html#ze-event-counter-based-desc-t"><span class="std std-ref">ze_event_counter_based_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t67ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESCE">
 <span id="_CPPv3N19ze_structure_type_t67ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESCE"></span><span id="_CPPv2N19ze_structure_type_t67ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dae39a43e15de156e3f43ec6f1289b5cd4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t67ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_SYNC_ALLOCATION_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="event.html#structze__event__counter__based__external__sync__allocation__desc__t"><span class="std std-ref">ze_event_counter_based_external_sync_allocation_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="event.html#ze-event-counter-based-external-sync-allocation-desc-t"><span class="std std-ref">ze_event_counter_based_external_sync_allocation_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_SYNC_MODE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_SYNC_MODE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_SYNC_MODE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dae6af93e3b08697ec1b296ed19b6201aa"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_SYNC_MODE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_SYNC_MODE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="event.html#structze__event__sync__mode__desc__t"><span class="std std-ref">ze_event_sync_mode_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="event.html#ze-event-sync-mode-desc-t"><span class="std std-ref">ze_event_sync_mode_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da30630e8825bec87eb1c8a5e69f2b465f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_IPC_MEM_HANDLE_TYPE_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/mem.html#structze__ipc__mem__handle__type__ext__desc__t"><span class="std std-ref">ze_ipc_mem_handle_type_ext_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="../extensions/mem.html#ze-ipc-mem-handle-type-ext-desc-t"><span class="std std-ref">ze_ipc_mem_handle_type_ext_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_EVENT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_EVENT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_EVENT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da38b269adddb73bf313a18b967cccb623"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_EVENT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_DEVICE_EVENT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="event.html#structze__device__event__properties__t"><span class="std std-ref">ze_device_event_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="event.html#ze-device-event-properties-t"><span class="std std-ref">ze_device_event_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t69ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t69ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t69ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daad0ec67b430cc308a6c85adb8666f7f5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t69ZE_STRUCTURE_TYPE_EVENT_COUNTER_BASED_EXTERNAL_AGGREGATE_STORAGE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="event.html#structze__event__counter__based__external__aggregate__storage__desc__t"><span class="std std-ref">ze_event_counter_based_external_aggregate_storage_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="event.html#ze-event-counter-based-external-aggregate-storage-desc-t"><span class="std std-ref">ze_event_counter_based_external_aggregate_storage_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t41ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t41ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da94250e028ea291369c5b0adaa344dccf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t41ZE_STRUCTURE_TYPE_PHYSICAL_MEM_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="physical_mem.html#structze__physical__mem__properties__t"><span class="std std-ref">ze_physical_mem_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="physical_mem.html#ze-physical-mem-properties-t"><span class="std std-ref">ze_physical_mem_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t54ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t54ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t54ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da04f4250213ac53a891c1378a41fca6c0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t54ZE_STRUCTURE_TYPE_DEVICE_USABLEMEM_SIZE_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__usablemem__size__ext__properties__t"><span class="std std-ref">ze_device_usablemem_size_ext_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-usablemem-size-ext-properties-t"><span class="std std-ref">ze_device_usablemem_size_ext_properties_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_CUSTOM_PITCH_EXP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t39ZE_STRUCTURE_TYPE_CUSTOM_PITCH_EXP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t39ZE_STRUCTURE_TYPE_CUSTOM_PITCH_EXP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daf0717abb5455135603dc6ac2354e6198"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_CUSTOM_PITCH_EXP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t39ZE_STRUCTURE_TYPE_CUSTOM_PITCH_EXP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../experimental/device.html#structze__custom__pitch__exp__desc__t"><span class="std std-ref">ze_custom_pitch_exp_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
+<dd><p><a class="reference internal" href="../experimental/device.html#ze-custom-pitch-exp-desc-t"><span class="std std-ref">ze_custom_pitch_exp_desc_t</span></a><em class="since-note"> (since v1.15)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t58ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_DOTPRODUCT_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t58ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_DOTPRODUCT_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t58ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_DOTPRODUCT_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dad7b7724f411278fbb23a17aa9e8b7d6f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_DOTPRODUCT_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t58ZE_STRUCTURE_TYPE_DEVICE_COMPUTE_DOTPRODUCT_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__compute__dotproduct__ext__properties__t"><span class="std std-ref">ze_device_compute_dotproduct_ext_properties_t</span></a><em class="since-note"> (since v1.16)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-compute-dotproduct-ext-properties-t"><span class="std std-ref">ze_device_compute_dotproduct_ext_properties_t</span></a><em class="since-note"> (since v1.16)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_MODULE_DESCE">
 <span id="_CPPv3N19ze_structure_type_t50ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_MODULE_DESCE"></span><span id="_CPPv2N19ze_structure_type_t50ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_MODULE_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da160a8056cbcf0e68bc7d5b8254ea1eef"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_MODULE_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_MODULE_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__runtime__requirements__module__desc__t"><span class="std std-ref">ze_runtime_requirements_module_desc_t</span></a><em class="since-note"> (since v1.16)</em></p>
+<dd><p><a class="reference internal" href="device.html#ze-runtime-requirements-module-desc-t"><span class="std std-ref">ze_runtime_requirements_module_desc_t</span></a><em class="since-note"> (since v1.16)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_GRAPH_DESCE">
 <span id="_CPPv3N19ze_structure_type_t49ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_GRAPH_DESCE"></span><span id="_CPPv2N19ze_structure_type_t49ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_GRAPH_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da57ebc901eb37b76b862e0f53827710f5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_GRAPH_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_GRAPH_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__runtime__requirements__graph__desc__t"><span class="std std-ref">ze_runtime_requirements_graph_desc_t</span></a><em class="since-note"> (since v1.16)</em></p>
+<dd><p><a class="reference internal" href="device.html#ze-runtime-requirements-graph-desc-t"><span class="std std-ref">ze_runtime_requirements_graph_desc_t</span></a><em class="since-note"> (since v1.16)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_OUTPUTE">
 <span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_OUTPUTE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_OUTPUTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da68b6c6d1774c398fe850b247aad4f03b"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_OUTPUT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_RUNTIME_REQUIREMENTS_OUTPUTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="device.html#structze__validate__runtime__requirements__output__t"><span class="std std-ref">ze_validate_runtime_requirements_output_t</span></a><em class="since-note"> (since v1.16)</em></p>
+<dd><p><a class="reference internal" href="device.html#ze-validate-runtime-requirements-output-t"><span class="std std-ref">ze_validate_runtime_requirements_output_t</span></a><em class="since-note"> (since v1.16)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da8530056703752c847881f28b3c52b053"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/data_types.html#structze__record__replay__graph__ext__properties__t"><span class="std std-ref">ze_record_replay_graph_ext_properties_t</span></a><em class="since-note"> (since v1.17)</em></p>
+<dd><p><a class="reference internal" href="../extensions/data_types.html#ze-record-replay-graph-ext-properties-t"><span class="std std-ref">ze_record_replay_graph_ext_properties_t</span></a><em class="since-note"> (since v1.17)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_DUMP_DESCE">
 <span id="_CPPv3N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_DUMP_DESCE"></span><span id="_CPPv2N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_DUMP_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dad5b17560707e39dec85b3f08101c5bac"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_DUMP_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t51ZE_STRUCTURE_TYPE_RECORD_REPLAY_GRAPH_EXT_DUMP_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/data_types.html#structze__record__replay__graph__ext__dump__desc__t"><span class="std std-ref">ze_record_replay_graph_ext_dump_desc_t</span></a><em class="since-note"> (since v1.17)</em></p>
+<dd><p><a class="reference internal" href="../extensions/data_types.html#ze-record-replay-graph-ext-dump-desc-t"><span class="std std-ref">ze_record_replay_graph_ext_dump_desc_t</span></a><em class="since-note"> (since v1.17)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_NPU_PROPERTIES_EXTE">
 <span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_NPU_PROPERTIES_EXTE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_NPU_PROPERTIES_EXTE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da3946f88888c3c570a82514d94627e303"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_DEVICE_NPU_PROPERTIES_EXT</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_DEVICE_NPU_PROPERTIES_EXTE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/device.html#structze__device__npu__properties__ext__t"><span class="std std-ref">ze_device_npu_properties_ext_t</span></a><em class="since-note"> (since v1.18)</em></p>
+<dd><p><a class="reference internal" href="../extensions/device.html#ze-device-npu-properties-ext-t"><span class="std std-ref">ze_device_npu_properties_ext_t</span></a><em class="since-note"> (since v1.18)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_INIT_DRIVER_APP_VERSION_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t50ZE_STRUCTURE_TYPE_INIT_DRIVER_APP_VERSION_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t50ZE_STRUCTURE_TYPE_INIT_DRIVER_APP_VERSION_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da0dacac0dcdd0be408add9c7e13f6285a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_INIT_DRIVER_APP_VERSION_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_INIT_DRIVER_APP_VERSION_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/global.html#structze__init__driver__app__version__ext__desc__t"><span class="std std-ref">ze_init_driver_app_version_ext_desc_t</span></a><em class="since-note"> (since v1.18)</em></p>
+<dd><p><a class="reference internal" href="../extensions/global.html#ze-init-driver-app-version-ext-desc-t"><span class="std std-ref">ze_init_driver_app_version_ext_desc_t</span></a><em class="since-note"> (since v1.18)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t52ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t52ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da5a23ffcb8e0e3deb072f72e4267683d9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t52ZE_STRUCTURE_TYPE_IPC_PHYS_MEM_HANDLE_RANGE_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/mem.html#structze__ipc__phys__mem__handle__range__ext__desc__t"><span class="std std-ref">ze_ipc_phys_mem_handle_range_ext_desc_t</span></a><em class="since-note"> (since v1.18)</em></p>
+<dd><p><a class="reference internal" href="../extensions/mem.html#ze-ipc-phys-mem-handle-range-ext-desc-t"><span class="std std-ref">ze_ipc_phys_mem_handle_range_ext_desc_t</span></a><em class="since-note"> (since v1.18)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_DESCE">
 <span id="_CPPv3N19ze_structure_type_t44ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t44ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da9a709f8ee154a1b0b87f32d55116a2a8"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t44ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/command_queue.html#structze__command__queue__qos__ext__desc__t"><span class="std std-ref">ze_command_queue_qos_ext_desc_t</span></a><em class="since-note"> (since v1.19)</em></p>
+<dd><p><a class="reference internal" href="../extensions/command_queue.html#ze-command-queue-qos-ext-desc-t"><span class="std std-ref">ze_command_queue_qos_ext_desc_t</span></a><em class="since-note"> (since v1.19)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_PROPERTIESE">
 <span id="_CPPv3N19ze_structure_type_t50ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t50ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da1f182e785a217f0a1f4eefdfd96ac33d"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_COMMAND_QUEUE_QOS_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
-<dd><p><a class="reference internal" href="../extensions/command_queue.html#structze__command__queue__qos__ext__properties__t"><span class="std std-ref">ze_command_queue_qos_ext_properties_t</span></a><em class="since-note"> (since v1.19)</em></p>
+<dd><p><a class="reference internal" href="../extensions/command_queue.html#ze-command-queue-qos-ext-properties-t"><span class="std std-ref">ze_command_queue_qos_ext_properties_t</span></a><em class="since-note"> (since v1.19)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_PROPERTIESE">
+<span id="_CPPv3N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_PROPERTIESE"></span><span id="_CPPv2N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_PROPERTIESE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da409c988c65cd8e7e58c80fb07f576788"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_PROPERTIES</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t53ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_PROPERTIESE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-command-list-ext-properties-t"><span class="std std-ref">ze_mutable_command_list_ext_properties_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da64c1a30db222ff3ae87f6c58efb26da6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t47ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_LIST_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-command-list-ext-desc-t"><span class="std std-ref">ze_mutable_command_list_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da0e3c35143ad4b4d80863bc53c22a0758"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_COMMAND_ID_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-command-id-ext-desc-t"><span class="std std-ref">ze_mutable_command_id_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da8b55ca0ab54291ffb628e8331238f2b5"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_MUTABLE_COMMANDS_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-commands-ext-desc-t"><span class="std std-ref">ze_mutable_commands_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dadf4e31044eccc668ca47e837230d227c"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t50ZE_STRUCTURE_TYPE_MUTABLE_KERNEL_ARGUMENT_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-kernel-argument-ext-desc-t"><span class="std std-ref">ze_mutable_kernel_argument_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dade53087a99a40ac5ef930fee1e4b6b12"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t46ZE_STRUCTURE_TYPE_MUTABLE_GROUP_COUNT_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-group-count-ext-desc-t"><span class="std std-ref">ze_mutable_group_count_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268daabeb742bc5134500d6adee4c993de5a3"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t45ZE_STRUCTURE_TYPE_MUTABLE_GROUP_SIZE_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-group-size-ext-desc-t"><span class="std std-ref">ze_mutable_group_size_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dad2a2a03cb9bbe8e5a6b75949830657bb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t48ZE_STRUCTURE_TYPE_MUTABLE_GLOBAL_OFFSET_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-global-offset-ext-desc-t"><span class="std std-ref">ze_mutable_global_offset_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268dadd442d42889b25ee3c3009c9f0177114"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/command_list.html#ze-mutable-graph-argument-ext-desc-t"><span class="std std-ref">ze_mutable_graph_argument_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESCE">
+<span id="_CPPv3N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESCE"></span><span id="_CPPv2N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da64068d9a3d20f4ebfb48a45761358bab"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t38ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/event.html#ze-event-ext-flags-desc-t"><span class="std std-ref">ze_event_ext_flags_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_INIT_DRIVER_PROPERTIES_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t49ZE_STRUCTURE_TYPE_INIT_DRIVER_PROPERTIES_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t49ZE_STRUCTURE_TYPE_INIT_DRIVER_PROPERTIES_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da96fded5f09b35fb7e12c0c3f78485fec"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_INIT_DRIVER_PROPERTIES_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t49ZE_STRUCTURE_TYPE_INIT_DRIVER_PROPERTIES_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/global.html#ze-init-driver-properties-ext-desc-t"><span class="std std-ref">ze_init_driver_properties_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t40ZE_STRUCTURE_TYPE_COMMAND_VISIT_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t40ZE_STRUCTURE_TYPE_COMMAND_VISIT_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t40ZE_STRUCTURE_TYPE_COMMAND_VISIT_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da2a97c9fc2062bed3a6428997a3cf5abe"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_COMMAND_VISIT_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t40ZE_STRUCTURE_TYPE_COMMAND_VISIT_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/data_types.html#ze-command-visit-ext-desc-t"><span class="std std-ref">ze_command_visit_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_CONCRETE_VISITOR_EXT_DESCE">
+<span id="_CPPv3N19ze_structure_type_t43ZE_STRUCTURE_TYPE_CONCRETE_VISITOR_EXT_DESCE"></span><span id="_CPPv2N19ze_structure_type_t43ZE_STRUCTURE_TYPE_CONCRETE_VISITOR_EXT_DESCE"></span><span class="target" id="ze__api_8h_1aafe420e71e3d0155572cb71a7a41268da53ad361aa1c77b15c2e1856419ce9e10"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_STRUCTURE_TYPE_CONCRETE_VISITOR_EXT_DESC</span></span></span><a class="headerlink" href="#_CPPv4N19ze_structure_type_t43ZE_STRUCTURE_TYPE_CONCRETE_VISITOR_EXT_DESCE" title="Link to this definition">#</a><br /></dt>
+<dd><p><a class="reference internal" href="../extensions/data_types.html#ze-concrete-visitor-ext-desc-t"><span class="std std-ref">ze_concrete_visitor_ext_desc_t</span></a><em class="since-note"> (since v1.20)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
@@ -2162,7 +2276,7 @@
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv425ze_device_compiler_info_t">
 <span id="_CPPv325ze_device_compiler_info_t"></span><span id="_CPPv225ze_device_compiler_info_t"></span><span class="target" id="ze__api_8h_1a1b7294340a8a2945be6e15ab120a569c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_compiler_info_t</span></span></span><a class="headerlink" href="#_CPPv425ze_device_compiler_info_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Compiler-info list selected by <a class="reference internal" href="device.html#ze__api_8h_1a79696a7d368ad1ef7317b0f28af56b05"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>. </p>
+<dd><p>Compiler-info list selected by <a class="reference internal" href="device.html#zedevicegetcompilerinfo"><span class="std std-ref">zeDeviceGetCompilerInfo</span></a>. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N25ze_device_compiler_info_t42ZE_DEVICE_COMPILER_INFO_SPIRV_CAPABILITIESE">
@@ -2268,7 +2382,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N19ze_base_cb_params_t5stypeE">
-<span id="_CPPv3N19ze_base_cb_params_t5stypeE"></span><span id="_CPPv2N19ze_base_cb_params_t5stypeE"></span><span id="ze_base_cb_params_t::stype__ze_structure_type_t"></span><span class="target" id="structze__base__cb__params__t_1a8e3d86629ec9497bbc0f3ec030c68b90"></span><a class="reference internal" href="#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N19ze_base_cb_params_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N19ze_base_cb_params_t5stypeE"></span><span id="_CPPv2N19ze_base_cb_params_t5stypeE"></span><span id="ze_base_cb_params_t::stype__ze_structure_type_t"></span><span class="target" id="structze__base__cb__params__t_1a8e3d86629ec9497bbc0f3ec030c68b90"></span><a class="reference internal" href="#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N19ze_base_cb_params_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -2293,7 +2407,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20ze_base_properties_t5stypeE">
-<span id="_CPPv3N20ze_base_properties_t5stypeE"></span><span id="_CPPv2N20ze_base_properties_t5stypeE"></span><span id="ze_base_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__base__properties__t_1a5d4274f98225d281153bb0ccdf633cbe"></span><a class="reference internal" href="#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20ze_base_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20ze_base_properties_t5stypeE"></span><span id="_CPPv2N20ze_base_properties_t5stypeE"></span><span id="ze_base_properties_t::stype__ze_structure_type_t"></span><span class="target" id="structze__base__properties__t_1a5d4274f98225d281153bb0ccdf633cbe"></span><a class="reference internal" href="#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N20ze_base_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 
@@ -2318,7 +2432,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N14ze_base_desc_t5stypeE">
-<span id="_CPPv3N14ze_base_desc_t5stypeE"></span><span id="_CPPv2N14ze_base_desc_t5stypeE"></span><span id="ze_base_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__base__desc__t_1a52e3249aeb4ef1f71c0b1c62a8195d02"></span><a class="reference internal" href="#_CPPv419ze_structure_type_t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N14ze_base_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N14ze_base_desc_t5stypeE"></span><span id="_CPPv2N14ze_base_desc_t5stypeE"></span><span id="ze_base_desc_t::stype__ze_structure_type_t"></span><span class="target" id="structze__base__desc__t_1a52e3249aeb4ef1f71c0b1c62a8195d02"></span><a class="reference internal" href="#ze-structure-type-t" title="ze_structure_type_t"><span class="n"><span class="pre">ze_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N14ze_base_desc_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 

@@ -11,8 +11,9 @@
 
 *Introduced in Level Zero version 1.9*
 
-This experimental extension is deprecated since version 1.16.
-Please use :ref:`zeCommandListImmediateAppendCommandListsWithParameters` instead.
+.. rst-class:: api-deprecated
+
+**Deprecated** since 1.16. Use :ref:`zeCommandListImmediateAppendCommandListsWithParameters` instead.
 
 API
 ----

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Virtual Mem &#8212; Level Zero Specification v1.19.12</title>
+    <title>Virtual Mem &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Sampler" href="sampler.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../sysman/deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -501,7 +530,7 @@
                   
   <section id="virtual-mem">
 <h1>Virtual Mem<a class="headerlink" href="#virtual-mem" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="virtual-mem-functions">
 <h2>Virtual Mem Functions<a class="headerlink" href="#virtual-mem-functions" title="Link to this heading">#</a></h2>
 <section id="zevirtualmemreserve">
@@ -509,11 +538,11 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zeVirtualMemReserve19ze_context_handle_tPKv6size_tPPv">
-<span id="_CPPv319zeVirtualMemReserve19ze_context_handle_tPKv6size_tPPv"></span><span id="_CPPv219zeVirtualMemReserve19ze_context_handle_tPKv6size_tPPv"></span><span id="zeVirtualMemReserve__ze_context_handle_t.voidCP.s.voidPP"></span><span class="target" id="ze__api_8h_1abd0939f7343afc0f34d59914e01ee08e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemReserve</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pStart</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeVirtualMemReserve19ze_context_handle_tPKv6size_tPPv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zeVirtualMemReserve19ze_context_handle_tPKv6size_tPPv"></span><span id="_CPPv219zeVirtualMemReserve19ze_context_handle_tPKv6size_tPPv"></span><span id="zeVirtualMemReserve__ze_context_handle_t.voidCP.s.voidPP"></span><span class="target" id="ze__api_8h_1abd0939f7343afc0f34d59914e01ee08e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemReserve</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pStart</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeVirtualMemReserve19ze_context_handle_tPKv6size_tPPv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Reserves pages in virtual address space. </p>
 <p><ul class="simple">
 <li><p>The application must only use the memory allocation on the context for which it was created.</p></li>
-<li><p>The starting address and size must be page aligned. See <a class="reference internal" href="#ze__api_8h_1afe411cceb631a3a176463ee05fda3dd7"><span class="std std-ref">zeVirtualMemQueryPageSize</span></a>.</p></li>
+<li><p>The starting address and size must be page aligned. See <a class="reference internal" href="#zevirtualmemquerypagesize"><span class="std std-ref">zeVirtualMemQueryPageSize</span></a>.</p></li>
 <li><p>If pStart is not null then implementation will attempt to reserve starting from that address. If not available then will find another suitable starting address.</p></li>
 <li><p>The application may call this function from simultaneous threads.</p></li>
 <li><p>The access attributes will default to none to indicate reservation is inaccessible.</p></li>
@@ -568,7 +597,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416zeVirtualMemFree19ze_context_handle_tPKv6size_t">
-<span id="_CPPv316zeVirtualMemFree19ze_context_handle_tPKv6size_t"></span><span id="_CPPv216zeVirtualMemFree19ze_context_handle_tPKv6size_t"></span><span id="zeVirtualMemFree__ze_context_handle_t.voidCP.s"></span><span class="target" id="ze__api_8h_1a82e9f3f7a30bc89199cbfdf407f48a22"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemFree</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeVirtualMemFree19ze_context_handle_tPKv6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv316zeVirtualMemFree19ze_context_handle_tPKv6size_t"></span><span id="_CPPv216zeVirtualMemFree19ze_context_handle_tPKv6size_t"></span><span id="zeVirtualMemFree__ze_context_handle_t.voidCP.s"></span><span class="target" id="ze__api_8h_1a82e9f3f7a30bc89199cbfdf407f48a22"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemFree</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeVirtualMemFree19ze_context_handle_tPKv6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Free pages in a reserved virtual address range. </p>
 <p><ul class="simple">
 <li><p>Any existing virtual mappings for the range will be unmapped.</p></li>
@@ -625,7 +654,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zeVirtualMemQueryPageSize19ze_context_handle_t18ze_device_handle_t6size_tP6size_t">
-<span id="_CPPv325zeVirtualMemQueryPageSize19ze_context_handle_t18ze_device_handle_t6size_tP6size_t"></span><span id="_CPPv225zeVirtualMemQueryPageSize19ze_context_handle_t18ze_device_handle_t6size_tP6size_t"></span><span id="zeVirtualMemQueryPageSize__ze_context_handle_t.ze_device_handle_t.s.sP"></span><span class="target" id="ze__api_8h_1afe411cceb631a3a176463ee05fda3dd7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemQueryPageSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pagesize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeVirtualMemQueryPageSize19ze_context_handle_t18ze_device_handle_t6size_tP6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zeVirtualMemQueryPageSize19ze_context_handle_t18ze_device_handle_t6size_tP6size_t"></span><span id="_CPPv225zeVirtualMemQueryPageSize19ze_context_handle_t18ze_device_handle_t6size_tP6size_t"></span><span id="zeVirtualMemQueryPageSize__ze_context_handle_t.ze_device_handle_t.s.sP"></span><span class="target" id="ze__api_8h_1afe411cceb631a3a176463ee05fda3dd7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemQueryPageSize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pagesize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeVirtualMemQueryPageSize19ze_context_handle_t18ze_device_handle_t6size_tP6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Queries page size to use for aligning virtual memory reservations and physical memory allocations. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -681,12 +710,12 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zeVirtualMemMap19ze_context_handle_tPKv6size_t24ze_physical_mem_handle_t6size_t28ze_memory_access_attribute_t">
-<span id="_CPPv315zeVirtualMemMap19ze_context_handle_tPKv6size_t24ze_physical_mem_handle_t6size_t28ze_memory_access_attribute_t"></span><span id="_CPPv215zeVirtualMemMap19ze_context_handle_tPKv6size_t24ze_physical_mem_handle_t6size_t28ze_memory_access_attribute_t"></span><span id="zeVirtualMemMap__ze_context_handle_t.voidCP.s.ze_physical_mem_handle_t.s.ze_memory_access_attribute_t"></span><span class="target" id="ze__api_8h_1a343f08ac7eab101fcb6f7303ded09370"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemMap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="n"><span class="pre">ze_physical_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPhysicalMemory</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <a class="reference internal" href="#_CPPv428ze_memory_access_attribute_t" title="ze_memory_access_attribute_t"><span class="n"><span class="pre">ze_memory_access_attribute_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">access</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeVirtualMemMap19ze_context_handle_tPKv6size_t24ze_physical_mem_handle_t6size_t28ze_memory_access_attribute_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zeVirtualMemMap19ze_context_handle_tPKv6size_t24ze_physical_mem_handle_t6size_t28ze_memory_access_attribute_t"></span><span id="_CPPv215zeVirtualMemMap19ze_context_handle_tPKv6size_t24ze_physical_mem_handle_t6size_t28ze_memory_access_attribute_t"></span><span id="zeVirtualMemMap__ze_context_handle_t.voidCP.s.ze_physical_mem_handle_t.s.ze_memory_access_attribute_t"></span><span class="target" id="ze__api_8h_1a343f08ac7eab101fcb6f7303ded09370"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemMap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="n"><span class="pre">ze_physical_mem_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPhysicalMemory</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <a class="reference internal" href="#ze-memory-access-attribute-t" title="ze_memory_access_attribute_t"><span class="n"><span class="pre">ze_memory_access_attribute_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">access</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeVirtualMemMap19ze_context_handle_tPKv6size_t24ze_physical_mem_handle_t6size_t28ze_memory_access_attribute_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Maps pages in virtual address space to pages from physical memory object. </p>
 <p><ul class="simple">
-<li><p>The virtual address range must have been reserved using <a class="reference internal" href="#ze__api_8h_1abd0939f7343afc0f34d59914e01ee08e"><span class="std std-ref">zeVirtualMemReserve</span></a>.</p></li>
+<li><p>The virtual address range must have been reserved using <a class="reference internal" href="#zevirtualmemreserve"><span class="std std-ref">zeVirtualMemReserve</span></a>.</p></li>
 <li><p>The application must only use the mapped memory allocation on the context for which it was created.</p></li>
-<li><p>The virtual start address and size must be page aligned. See <a class="reference internal" href="#ze__api_8h_1afe411cceb631a3a176463ee05fda3dd7"><span class="std std-ref">zeVirtualMemQueryPageSize</span></a>.</p></li>
+<li><p>The virtual start address and size must be page aligned. See <a class="reference internal" href="#zevirtualmemquerypagesize"><span class="std std-ref">zeVirtualMemQueryPageSize</span></a>.</p></li>
 <li><p>The application should use, for the starting address and size, the same size alignment used for the physical allocation.</p></li>
 <li><p>The application may call this function from simultaneous threads.</p></li>
 <li><p>The implementation of this function must be thread-safe.</p></li>
@@ -749,7 +778,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zeVirtualMemUnmap19ze_context_handle_tPKv6size_t">
-<span id="_CPPv317zeVirtualMemUnmap19ze_context_handle_tPKv6size_t"></span><span id="_CPPv217zeVirtualMemUnmap19ze_context_handle_tPKv6size_t"></span><span id="zeVirtualMemUnmap__ze_context_handle_t.voidCP.s"></span><span class="target" id="ze__api_8h_1aff903686b156ea4e98acce51e4e7d7c8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemUnmap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeVirtualMemUnmap19ze_context_handle_tPKv6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zeVirtualMemUnmap19ze_context_handle_tPKv6size_t"></span><span id="_CPPv217zeVirtualMemUnmap19ze_context_handle_tPKv6size_t"></span><span id="zeVirtualMemUnmap__ze_context_handle_t.voidCP.s"></span><span class="target" id="ze__api_8h_1aff903686b156ea4e98acce51e4e7d7c8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemUnmap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeVirtualMemUnmap19ze_context_handle_tPKv6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Unmaps pages in virtual address space from pages from a physical memory object. </p>
 <p><ul class="simple">
 <li><p>The page access attributes for virtual address range will revert back to none.</p></li>
@@ -809,7 +838,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv430zeVirtualMemSetAccessAttribute19ze_context_handle_tPKv6size_t28ze_memory_access_attribute_t">
-<span id="_CPPv330zeVirtualMemSetAccessAttribute19ze_context_handle_tPKv6size_t28ze_memory_access_attribute_t"></span><span id="_CPPv230zeVirtualMemSetAccessAttribute19ze_context_handle_tPKv6size_t28ze_memory_access_attribute_t"></span><span id="zeVirtualMemSetAccessAttribute__ze_context_handle_t.voidCP.s.ze_memory_access_attribute_t"></span><span class="target" id="ze__api_8h_1adb950c28418d555b0c94da53f6fb2e17"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemSetAccessAttribute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <a class="reference internal" href="#_CPPv428ze_memory_access_attribute_t" title="ze_memory_access_attribute_t"><span class="n"><span class="pre">ze_memory_access_attribute_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">access</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zeVirtualMemSetAccessAttribute19ze_context_handle_tPKv6size_t28ze_memory_access_attribute_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv330zeVirtualMemSetAccessAttribute19ze_context_handle_tPKv6size_t28ze_memory_access_attribute_t"></span><span id="_CPPv230zeVirtualMemSetAccessAttribute19ze_context_handle_tPKv6size_t28ze_memory_access_attribute_t"></span><span id="zeVirtualMemSetAccessAttribute__ze_context_handle_t.voidCP.s.ze_memory_access_attribute_t"></span><span class="target" id="ze__api_8h_1adb950c28418d555b0c94da53f6fb2e17"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemSetAccessAttribute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <a class="reference internal" href="#ze-memory-access-attribute-t" title="ze_memory_access_attribute_t"><span class="n"><span class="pre">ze_memory_access_attribute_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">access</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zeVirtualMemSetAccessAttribute19ze_context_handle_tPKv6size_t28ze_memory_access_attribute_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set memory access attributes for a virtual address range. </p>
 <p><ul class="simple">
 <li><p>This function may be called from simultaneous threads with the same function handle.</p></li>
@@ -874,7 +903,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv430zeVirtualMemGetAccessAttribute19ze_context_handle_tPKv6size_tP28ze_memory_access_attribute_tP6size_t">
-<span id="_CPPv330zeVirtualMemGetAccessAttribute19ze_context_handle_tPKv6size_tP28ze_memory_access_attribute_tP6size_t"></span><span id="_CPPv230zeVirtualMemGetAccessAttribute19ze_context_handle_tPKv6size_tP28ze_memory_access_attribute_tP6size_t"></span><span id="zeVirtualMemGetAccessAttribute__ze_context_handle_t.voidCP.s.ze_memory_access_attribute_tP.sP"></span><span class="target" id="ze__api_8h_1a61f16f89fbffac9076a58669e8c83ce3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemGetAccessAttribute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <a class="reference internal" href="#_CPPv428ze_memory_access_attribute_t" title="ze_memory_access_attribute_t"><span class="n"><span class="pre">ze_memory_access_attribute_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">access</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">outSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zeVirtualMemGetAccessAttribute19ze_context_handle_tPKv6size_tP28ze_memory_access_attribute_tP6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv330zeVirtualMemGetAccessAttribute19ze_context_handle_tPKv6size_tP28ze_memory_access_attribute_tP6size_t"></span><span id="_CPPv230zeVirtualMemGetAccessAttribute19ze_context_handle_tPKv6size_tP28ze_memory_access_attribute_tP6size_t"></span><span id="zeVirtualMemGetAccessAttribute__ze_context_handle_t.voidCP.s.ze_memory_access_attribute_tP.sP"></span><span class="target" id="ze__api_8h_1a61f16f89fbffac9076a58669e8c83ce3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeVirtualMemGetAccessAttribute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <a class="reference internal" href="#ze-memory-access-attribute-t" title="ze_memory_access_attribute_t"><span class="n"><span class="pre">ze_memory_access_attribute_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">access</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">outSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zeVirtualMemGetAccessAttribute19ze_context_handle_tPKv6size_tP28ze_memory_access_attribute_tP6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get memory access attribute for a virtual address range. </p>
 <p><ul class="simple">
 <li><p>If size and outSize are equal then the pages in the specified virtual address range have the same access attributes.</p></li>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Firmware &#8212; Level Zero Specification v1.19.12</title>
+    <title>Firmware &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Fan" href="fan.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 has-children"><a class="reference internal" href="../extensions/index.html">Extensions</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -492,7 +521,7 @@
                   
   <section id="firmware">
 <h1>Firmware<a class="headerlink" href="#firmware" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="firmware-functions">
 <h2>Firmware Functions<a class="headerlink" href="#firmware-functions" title="Link to this heading">#</a></h2>
 <section id="zesfirmwaregetproperties">
@@ -500,7 +529,7 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zesFirmwareGetProperties21zes_firmware_handle_tP25zes_firmware_properties_t">
-<span id="_CPPv324zesFirmwareGetProperties21zes_firmware_handle_tP25zes_firmware_properties_t"></span><span id="_CPPv224zesFirmwareGetProperties21zes_firmware_handle_tP25zes_firmware_properties_t"></span><span id="zesFirmwareGetProperties__zes_firmware_handle_t.zes_firmware_properties_tP"></span><span class="target" id="zes__api_8h_1af87793bad16978cdd22763d78c83c120"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <a class="reference internal" href="#_CPPv425zes_firmware_properties_t" title="zes_firmware_properties_t"><span class="n"><span class="pre">zes_firmware_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zesFirmwareGetProperties21zes_firmware_handle_tP25zes_firmware_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zesFirmwareGetProperties21zes_firmware_handle_tP25zes_firmware_properties_t"></span><span id="_CPPv224zesFirmwareGetProperties21zes_firmware_handle_tP25zes_firmware_properties_t"></span><span id="zesFirmwareGetProperties__zes_firmware_handle_t.zes_firmware_properties_tP"></span><span class="target" id="zes__api_8h_1af87793bad16978cdd22763d78c83c120"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <a class="reference internal" href="#zes-firmware-properties-t" title="zes_firmware_properties_t"><span class="n"><span class="pre">zes_firmware_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zesFirmwareGetProperties21zes_firmware_handle_tP25zes_firmware_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get firmware properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -549,13 +578,13 @@
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416zesFirmwareFlash21zes_firmware_handle_tPv8uint32_t">
-<span id="_CPPv316zesFirmwareFlash21zes_firmware_handle_tPv8uint32_t"></span><span id="_CPPv216zesFirmwareFlash21zes_firmware_handle_tPv8uint32_t"></span><span id="zesFirmwareFlash__zes_firmware_handle_t.voidP.uint32_t"></span><span class="target" id="zes__api_8h_1ade7baf6501f66081e013b28bb9734010"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareFlash</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pImage</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zesFirmwareFlash21zes_firmware_handle_tPv8uint32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv316zesFirmwareFlash21zes_firmware_handle_tPv8uint32_t"></span><span id="_CPPv216zesFirmwareFlash21zes_firmware_handle_tPv8uint32_t"></span><span id="zesFirmwareFlash__zes_firmware_handle_t.voidP.uint32_t"></span><span class="target" id="zes__api_8h_1ade7baf6501f66081e013b28bb9734010"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareFlash</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pImage</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zesFirmwareFlash21zes_firmware_handle_tPv8uint32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Flash a new firmware image. </p>
 <p><ul class="simple">
 <li><p>Any running workload must be gracefully closed before invoking this function.</p></li>
 <li><p>The application may call this function from simultaneous threads.</p></li>
 <li><p>The implementation of this function should be lock-free.</p></li>
-<li><p>This is a non-blocking call. Application may call <a class="reference internal" href="#zes__api_8h_1a4951a802a1083bccee124d6e2d560bad"><span class="std std-ref">zesFirmwareGetFlashProgress</span></a> to get completion status.</p></li>
+<li><p>This is a non-blocking call. Application may call <a class="reference internal" href="#zesfirmwaregetflashprogress"><span class="std std-ref">zesFirmwareGetFlashProgress</span></a> to get completion status.</p></li>
 </ul>
 </p>
 <dl class="field-list simple">
@@ -604,7 +633,7 @@
 <p class="api-version"><em>Added in version 1.8</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zesFirmwareGetFlashProgress21zes_firmware_handle_tP8uint32_t">
-<span id="_CPPv327zesFirmwareGetFlashProgress21zes_firmware_handle_tP8uint32_t"></span><span id="_CPPv227zesFirmwareGetFlashProgress21zes_firmware_handle_tP8uint32_t"></span><span id="zesFirmwareGetFlashProgress__zes_firmware_handle_t.uint32_tP"></span><span class="target" id="zes__api_8h_1a4951a802a1083bccee124d6e2d560bad"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareGetFlashProgress</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCompletionPercent</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesFirmwareGetFlashProgress21zes_firmware_handle_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zesFirmwareGetFlashProgress21zes_firmware_handle_tP8uint32_t"></span><span id="_CPPv227zesFirmwareGetFlashProgress21zes_firmware_handle_tP8uint32_t"></span><span id="zesFirmwareGetFlashProgress__zes_firmware_handle_t.uint32_tP"></span><span class="target" id="zes__api_8h_1a4951a802a1083bccee124d6e2d560bad"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareGetFlashProgress</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCompletionPercent</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesFirmwareGetFlashProgress21zes_firmware_handle_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get Firmware Flash Progress. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -653,7 +682,7 @@
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zesFirmwareGetConsoleLogs21zes_firmware_handle_tP6size_tPc">
-<span id="_CPPv325zesFirmwareGetConsoleLogs21zes_firmware_handle_tP6size_tPc"></span><span id="_CPPv225zesFirmwareGetConsoleLogs21zes_firmware_handle_tP6size_tPc"></span><span id="zesFirmwareGetConsoleLogs__zes_firmware_handle_t.sP.cP"></span><span class="target" id="zes__api_8h_1a1eaa48e7fe60425e93051718d758be06"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareGetConsoleLogs</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFirmwareLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesFirmwareGetConsoleLogs21zes_firmware_handle_tP6size_tPc" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zesFirmwareGetConsoleLogs21zes_firmware_handle_tP6size_tPc"></span><span id="_CPPv225zesFirmwareGetConsoleLogs21zes_firmware_handle_tP6size_tPc"></span><span id="zesFirmwareGetConsoleLogs__zes_firmware_handle_t.sP.cP"></span><span class="target" id="zes__api_8h_1a1eaa48e7fe60425e93051718d758be06"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFirmwareGetConsoleLogs</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_firmware_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFirmware</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFirmwareLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesFirmwareGetConsoleLogs21zes_firmware_handle_tP6size_tPc" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get Firmware Console Logs. </p>
 <p><ul class="simple">
 <li><p>The caller may pass nullptr for pFirmwareLog and set pSize to zero when querying only for size.</p></li>
@@ -714,7 +743,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25zes_firmware_properties_t5stypeE">
-<span id="_CPPv3N25zes_firmware_properties_t5stypeE"></span><span id="_CPPv2N25zes_firmware_properties_t5stypeE"></span><span id="zes_firmware_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__firmware__properties__t_1a99c4f769845143725c8155e40bb3b468"></span><a class="reference internal" href="data_types.html#_CPPv420zes_structure_type_t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N25zes_firmware_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N25zes_firmware_properties_t5stypeE"></span><span id="_CPPv2N25zes_firmware_properties_t5stypeE"></span><span id="zes_firmware_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__firmware__properties__t_1a99c4f769845143725c8155e40bb3b468"></span><a class="reference internal" href="data_types.html#zes-structure-type-t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N25zes_firmware_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] type of this structure </p>
 </dd></dl>
 

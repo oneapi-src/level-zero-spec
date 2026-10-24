@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Info Log Instance - Extensions &#8212; Level Zero Specification v1.19.12</title>
+    <title>Info Log Instance - Extensions &#8212; Level Zero Specification v1.20.41</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=25f55f25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Info Log - Extensions" href="info_log.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19.12" />
+  <meta name="docsearch:version" content="1.20.41" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.19.12</p>
+    <p class="title logo__title">Level Zero Specification v1.20.41</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -179,33 +179,41 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/image.html">Image</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/graph.html">Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/experimental/index.html">Experimental</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_builder.html">RTAS Builder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/device.html">Device</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/context.html">Context</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_queue.html">Command Queue</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_vertex.html">Fabric Vertex</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/fabric_edge.html">Fabric Edge</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../core/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/global.html">Global</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_builder.html">RTAS Builder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/rtas_parallel_operation.html">RTAS Parallel Operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/driver.html">Driver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/context.html">Context</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_queue.html">Command Queue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/command_list.html">Command List</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/image.html">Image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -223,7 +231,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -233,10 +240,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_decoder.html">Metric Decoder</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/tracer_exp.html">Tracer Exp</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/experimental/data_types.html">Data Types</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/tracer_exp.html">Tracer Exp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric.html">Metric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/metric_group.html">Metric Group</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/deprecated/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
 </ul>
@@ -268,9 +281,9 @@
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">Extensions</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
 <li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Info Log Instance</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
@@ -287,6 +300,16 @@
 <li class="toctree-l4"><a class="reference internal" href="../experimental/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../deprecated/index.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/power.html">Power</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../deprecated/vf_management.html">VF Management</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../runtime/api.html">Runtime</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -296,6 +319,12 @@
 </details></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../deprecated.html">Deprecated</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../core/deprecated.html">Core - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tools/deprecated.html">Tools - Deprecated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../deprecated.html">Sysman - Deprecated</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/latest/versions.html">Versions</a></li>
@@ -472,7 +501,7 @@
                   
   <section id="info-log-instance-extensions">
 <h1>Info Log Instance - Extensions<a class="headerlink" href="#info-log-instance-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.19.12</p>
+<p>oneAPI Level Zero Specification - Version 1.20.41</p>
 <section id="info-log-instance-extension-functions">
 <h2>Info Log Instance - Extension Functions<a class="headerlink" href="#info-log-instance-extension-functions" title="Link to this heading">#</a></h2>
 <section id="zesinfologinstancereadwithmetadataext">
@@ -480,15 +509,15 @@
 <p class="api-version"><em>Added in version 1.19</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv437zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t">
-<span id="_CPPv337zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="_CPPv237zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="zesInfoLogInstanceReadWithMetadataExt__zes_info_log_instance_handle_t.uint64_t.uint32_tP.uint8_tP.uint32_tP.zes_info_log_metadata_ext_tP.zes_info_log_read_status_ext_tP"></span><span class="target" id="zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstanceReadWithMetadataExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuffer</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRecordCount</span></span>, <a class="reference internal" href="info_log.html#_CPPv427zes_info_log_metadata_ext_t" title="zes_info_log_metadata_ext_t"><span class="n"><span class="pre">zes_info_log_metadata_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptors</span></span>, <a class="reference internal" href="info_log.html#_CPPv430zes_info_log_read_status_ext_t" title="zes_info_log_read_status_ext_t"><span class="n"><span class="pre">zes_info_log_read_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pReadStatus</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv337zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="_CPPv237zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="zesInfoLogInstanceReadWithMetadataExt__zes_info_log_instance_handle_t.uint64_t.uint32_tP.uint8_tP.uint32_tP.zes_info_log_metadata_ext_tP.zes_info_log_read_status_ext_tP"></span><span class="target" id="zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstanceReadWithMetadataExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuffer</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRecordCount</span></span>, <a class="reference internal" href="info_log.html#zes-info-log-metadata-ext-t" title="zes_info_log_metadata_ext_t"><span class="n"><span class="pre">zes_info_log_metadata_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptors</span></span>, <a class="reference internal" href="info_log.html#zes-info-log-read-status-ext-t" title="zes_info_log_read_status_ext_t"><span class="n"><span class="pre">zes_info_log_read_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pReadStatus</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zesInfoLogInstanceReadWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read collected info log records and their metadata. </p>
 <p><ul class="simple">
 <li><p>A call in which <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> is zero or <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> is zero on input is a query call. A query call reports the total size, in bytes, of the record data and the total number of records that were found, does not write to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> or <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>, and does not consume any record. <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> and <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code> may be nullptr on a query call and are otherwise ignored by it.</p></li>
 <li><p>The application can optionally make a query call first to determine the size of the buffer and the number of descriptors it must provide.</p></li>
 <li><p>Records are consumed as they are returned. A record returned by one call will not be returned again by a subsequent call.</p></li>
-<li><p><a class="reference internal" href="#zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a> returns the same records without consuming them.</p></li>
+<li><p><a class="reference internal" href="#zesinfologinstancepeekwithmetadataext"><span class="std std-ref">zesInfoLogInstancePeekWithMetadataExt</span></a> returns the same records without consuming them.</p></li>
 <li><p>This function searches the data held by the collection instance for records. The amount of data that must be searched is not related to the amount of record data returned, because the collection instance may hold a large amount of data that contains no record. <code class="docutils literal notranslate"><span class="pre">timeout</span></code> bounds the search and applies to the query call as well.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">hasDataToRead</span></code> in <a class="reference internal" href="info_log.html#structzes__info__log__read__status__ext__t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a> reports whether records remain, and is the value the application should use to decide whether to call this function again.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hasDataToRead</span></code> in <a class="reference internal" href="info_log.html#zes-info-log-read-status-ext-t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a> reports whether records remain, and is the value the application should use to decide whether to call this function again.</p></li>
 <li><p>The application must not call this function from simultaneous threads.</p></li>
 <li><p>The implementation of this function should be lock-free.</p></li>
 </ul>
@@ -529,7 +558,7 @@
 </ul>
 </p></li>
 <li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ab59771124b21914ac45ef9e2a50ed249"><span class="std std-ref">ZE_RESULT_WARNING_DROPPED_DATA</span></a><ul>
-<li><p>One or more records were dropped because the collection buffer overflowed. The number of records dropped is reported in <a class="reference internal" href="info_log.html#structzes__info__log__read__status__ext__t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a>.</p></li>
+<li><p>One or more records were dropped because the collection buffer overflowed. The number of records dropped is reported in <a class="reference internal" href="info_log.html#zes-info-log-read-status-ext-t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a>.</p></li>
 </ul>
 </p></li>
 <li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
@@ -548,15 +577,15 @@
 <p class="api-version"><em>Added in version 1.19</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv437zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t">
-<span id="_CPPv337zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="_CPPv237zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="zesInfoLogInstancePeekWithMetadataExt__zes_info_log_instance_handle_t.uint64_t.uint32_tP.uint8_tP.uint32_tP.zes_info_log_metadata_ext_tP.zes_info_log_read_status_ext_tP"></span><span class="target" id="zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstancePeekWithMetadataExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuffer</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRecordCount</span></span>, <a class="reference internal" href="info_log.html#_CPPv427zes_info_log_metadata_ext_t" title="zes_info_log_metadata_ext_t"><span class="n"><span class="pre">zes_info_log_metadata_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptors</span></span>, <a class="reference internal" href="info_log.html#_CPPv430zes_info_log_read_status_ext_t" title="zes_info_log_read_status_ext_t"><span class="n"><span class="pre">zes_info_log_read_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pReadStatus</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv337zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="_CPPv237zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t"></span><span id="zesInfoLogInstancePeekWithMetadataExt__zes_info_log_instance_handle_t.uint64_t.uint32_tP.uint8_tP.uint32_tP.zes_info_log_metadata_ext_tP.zes_info_log_read_status_ext_tP"></span><span class="target" id="zes__api_8h_1acc22f0149811f7d4d11214d0b915b377"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstancePeekWithMetadataExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuffer</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRecordCount</span></span>, <a class="reference internal" href="info_log.html#zes-info-log-metadata-ext-t" title="zes_info_log_metadata_ext_t"><span class="n"><span class="pre">zes_info_log_metadata_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptors</span></span>, <a class="reference internal" href="info_log.html#zes-info-log-read-status-ext-t" title="zes_info_log_read_status_ext_t"><span class="n"><span class="pre">zes_info_log_read_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pReadStatus</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv437zesInfoLogInstancePeekWithMetadataExt30zes_info_log_instance_handle_t8uint64_tP8uint32_tP7uint8_tP8uint32_tP27zes_info_log_metadata_ext_tP30zes_info_log_read_status_ext_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read collected info log records and their metadata without consuming them. </p>
 <p><ul class="simple">
-<li><p>This function is equivalent to <a class="reference internal" href="#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, except that the records it returns are not consumed and remain available to subsequent calls to either function.</p></li>
-<li><p>Reading records without consuming them is only supported when isPeekDataSupported of <a class="reference internal" href="info_log.html#structzes__info__log__ext__properties__t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is true.</p></li>
-<li><p>As with <a class="reference internal" href="#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, a call in which <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> is zero or <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> is zero on input is a query call, which reports the total size, in bytes, of the record data and the total number of records that were found without writing to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> or <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>.</p></li>
+<li><p>This function is equivalent to <a class="reference internal" href="#zesinfologinstancereadwithmetadataext"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, except that the records it returns are not consumed and remain available to subsequent calls to either function.</p></li>
+<li><p>Reading records without consuming them is only supported when isPeekDataSupported of <a class="reference internal" href="info_log.html#zes-info-log-ext-properties-t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is true.</p></li>
+<li><p>As with <a class="reference internal" href="#zesinfologinstancereadwithmetadataext"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a>, a call in which <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> is zero or <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> is zero on input is a query call, which reports the total size, in bytes, of the record data and the total number of records that were found without writing to <code class="docutils literal notranslate"><span class="pre">pBuffer</span></code> or <code class="docutils literal notranslate"><span class="pre">pDescriptors</span></code>.</p></li>
 <li><p>The application should then call this function with <code class="docutils literal notranslate"><span class="pre">*pSize</span></code> and <code class="docutils literal notranslate"><span class="pre">*pRecordCount</span></code> both non-zero to inspect the records that are available.</p></li>
 <li><p>The application must not call this function from simultaneous threads.</p></li>
-<li><p>The application must not call this function and <a class="reference internal" href="#zes__api_8h_1a4d53b30cc7d3b0a49ea1bae586aaea90"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> simultaneously with the same handle.</p></li>
+<li><p>The application must not call this function and <a class="reference internal" href="#zesinfologinstancereadwithmetadataext"><span class="std std-ref">zesInfoLogInstanceReadWithMetadataExt</span></a> simultaneously with the same handle.</p></li>
 </ul>
 </p>
 <dl class="field-list simple">
@@ -594,11 +623,11 @@
 </ul>
 </p></li>
 <li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a0a804d6947134bd553649e7787b72c14"><span class="std std-ref">ZE_RESULT_ERROR_UNSUPPORTED_FEATURE</span></a><ul>
-<li><p>isPeekDataSupported of <a class="reference internal" href="info_log.html#structzes__info__log__ext__properties__t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is false.</p></li>
+<li><p>isPeekDataSupported of <a class="reference internal" href="info_log.html#zes-info-log-ext-properties-t"><span class="std std-ref">zes_info_log_ext_properties_t</span></a> is false.</p></li>
 </ul>
 </p></li>
 <li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767ab59771124b21914ac45ef9e2a50ed249"><span class="std std-ref">ZE_RESULT_WARNING_DROPPED_DATA</span></a><ul>
-<li><p>One or more records were dropped because the collection buffer overflowed. The number of records dropped is reported in <a class="reference internal" href="info_log.html#structzes__info__log__read__status__ext__t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a>.</p></li>
+<li><p>One or more records were dropped because the collection buffer overflowed. The number of records dropped is reported in <a class="reference internal" href="info_log.html#zes-info-log-read-status-ext-t"><span class="std std-ref">zes_info_log_read_status_ext_t</span></a>.</p></li>
 </ul>
 </p></li>
 <li><p><a class="reference internal" href="../../../core/api/apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a1b995cf7bdf9294d54b496f4957dbf5c"><span class="std std-ref">ZE_RESULT_ERROR_INSUFFICIENT_PERMISSIONS</span></a><ul>
@@ -617,7 +646,7 @@
 <p class="api-version"><em>Added in version 1.19</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t">
-<span id="_CPPv327zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t"></span><span id="_CPPv227zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t"></span><span id="zesInfoLogInstanceDeleteExt__zes_info_log_instance_handle_t"></span><span class="target" id="zes__api_8h_1a53decc73912fed0c7832205f875c8bdc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#_CPPv411ze_result_t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstanceDeleteExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t"></span><span id="_CPPv227zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t"></span><span id="zesInfoLogInstanceDeleteExt__zes_info_log_instance_handle_t"></span><span class="target" id="zes__api_8h_1a53decc73912fed0c7832205f875c8bdc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesInfoLogInstanceDeleteExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_info_log_instance_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hInfoLogInstance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesInfoLogInstanceDeleteExt30zes_info_log_instance_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Delete a collection instance of an info log. </p>
 <p><ul class="simple">
 <li><p>Deleting a collection instance stops the collection of records into that instance and releases the resources used by the instance.</p></li>

@@ -162,6 +162,7 @@ List of Standard Core Extensions
     - :ref:`"ZE_extension_cache_reservation" <ZE_extension_cache_reservation>`
     - :ref:`"ZE_extension_command_queue_qos" <ZE_extension_command_queue_qos>`
     - :ref:`"ZE_extension_command_queue_set_priority" <ZE_extension_command_queue_set_priority>`
+    - :ref:`"ZE_extension_command_visit" <ZE_extension_command_visit>`
     - :ref:`"ZE_extension_device_compute_dotproduct_ext_properties" <ZE_extension_device_compute_dotproduct_ext_properties>`
     - :ref:`"ZE_extension_device_luid" <ZE_extension_device_luid>`
     - :ref:`"ZE_extension_device_vector_sizes" <ZE_extension_device_vector_sizes>`
@@ -178,6 +179,7 @@ List of Standard Core Extensions
     - :ref:`"ZE_extension_image_view" <ZE_extension_image_view>`
     - :ref:`"ZE_extension_image_view_planar" <ZE_extension_image_view_planar>`
     - :ref:`"ZE_extension_init_driver_app_version" <ZE_extension_init_driver_app_version>`
+    - :ref:`"ZE_extension_init_driver_properties" <ZE_extension_init_driver_properties>`
     - :ref:`"ZE_extension_ipc_mem_handle_type" <ZE_extension_ipc_mem_handle_type>`
     - :ref:`"ZE_extension_ipc_phys_mem_handle_range" <ZE_extension_ipc_phys_mem_handle_range>`
     - :ref:`"ZE_extension_kernel_max_group_size_properties" <ZE_extension_kernel_max_group_size_properties>`
@@ -186,6 +188,7 @@ List of Standard Core Extensions
     - :ref:`"ZE_extension_memory_compression_hints" <ZE_extension_memory_compression_hints>`
     - :ref:`"ZE_extension_memory_free_policies" <ZE_extension_memory_free_policies>`
     - :ref:`"ZE_extension_device_memory_properties" <ZE_extension_device_memory_properties>`
+    - :ref:`"ZE_extension_mutable_command_list" <ZE_extension_mutable_command_list>`
     - :ref:`"ZE_extension_device_npu_properties" <ZE_extension_device_npu_properties>`
     - :ref:`"ZE_extension_power_saving_hint" <ZE_extension_power_saving_hint>`
     - :ref:`"ZE_extension_raytracing" <ZE_extension_raytracing>`
@@ -198,6 +201,8 @@ List of Standard Tools Extensions
 
 List of Standard Sysman Extensions
 ==================================
+    - :ref:`"ZES_extension_device_index" <ZES_extension_device_index>`
+    - :ref:`"ZES_extension_device_gpu_topology" <ZES_extension_device_gpu_topology>`
     - :ref:`"ZES_extension_device_health" <ZES_extension_device_health>`
     - :ref:`"ZES_extension_device_ecc_default_properties" <ZES_extension_device_ecc_default_properties>`
     - :ref:`"ZES_extension_engine_activity" <ZES_extension_engine_activity>`
