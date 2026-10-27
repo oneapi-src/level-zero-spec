@@ -1,0 +1,38 @@
+name: Copyright Check
+
+# Fails a pull request if a file it changes still carries an old year in its
+# Intel copyright header. Only files changed by the PR are checked, so files
+# nobody touched are never flagged. To fix locally:
+#   python3 scripts/copyright_year.py update
+#
+# The generated headers get their year from scripts/templates/*.mako even when
+# no template changes; spec-validate.yml checks that output.
+#
+# Self-hosted runners: the intel-innersource IP allow list makes checkout 403 on
+# GitHub-hosted runners. The runners' python3 is enough; the script uses only
+# the standard library.
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+env:
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
+
+jobs:
+  copyright-check:
+    runs-on: [self-hosted, Linux]
+    if: github.repository_owner == 'intel-innersource'
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        # The merge base with the target branch is needed to find the changed files.
+        fetch-depth: 0
+    - name: Check copyright years of changed files
+      env:
+        BASE_REF: ${{ github.base_ref }}
+      run: python3 scripts/copyright_year.py --base "origin/$BASE_REF" check --github

@@ -215,3 +215,8 @@ jobs:
       - name: Fail if validation failed
         if: steps.generate.outcome == 'failure'
         run: exit 1
+
+      # The generated headers take their year from the templates even when no
+      # template changed. Fail here, not later in the loader, once the year rolls over.
+      - name: Check copyright years of generated output
+        run: python3 scripts/copyright_year.py check --generated --github
