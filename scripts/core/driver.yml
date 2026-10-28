@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -244,12 +244,16 @@ etors:
       value: "$X_MAKE_VERSION( 1, 20 )"
       desc: "version 1.20"
       version: "1.20"
+    - name: "1_21"
+      value: "$X_MAKE_VERSION( 1, 21 )"
+      desc: "version 1.21"
+      version: "1.21"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Current API version as a macro"
 version: "1.10"
 name: "$X_API_VERSION_CURRENT_M"
-value: "$X_MAKE_VERSION( 1, 20 )"
+value: "$X_MAKE_VERSION( 1, 21 )"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Returns the API version supported by the specified driver"
