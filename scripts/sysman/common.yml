@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -9,6 +9,24 @@
 type: header
 desc: "Intel $OneApi Level-Zero Sysman API common types"
 ordinal: "0"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Generates generic $OneApi Sysman API versions"
+version: "1.21"
+name: "$S_MAKE_VERSION( _major, _minor )"
+value: "(( _major << 16 )|( _minor & 0x0000ffff))"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Extracts $OneApi Sysman API major version"
+version: "1.21"
+name: "$S_MAJOR_VERSION( _ver )"
+value: "( _ver >> 16 )"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Extracts $OneApi Sysman API minor version"
+version: "1.21"
+name: "$S_MINOR_VERSION( _ver )"
+value: "( _ver & 0x0000ffff )"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle to a driver instance"

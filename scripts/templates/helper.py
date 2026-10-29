@@ -235,7 +235,7 @@ class type_traits:
     Extracts traits from a value name
 """
 class value_traits:
-    RE_VERSION  = r"\$X_MAKE_VERSION\(\s*(\d+)\s*\,\s*(\d+)\s*\)"
+    RE_VERSION  = r"\$[XTSR]_MAKE_VERSION\(\s*(\d+)\s*\,\s*(\d+)\s*\)"
     RE_BIT      = r".*BIT\(\s*(.*)\s*\)"
     RE_HEX      = r"0x\w+"
     RE_MACRO    = r"(\$\w+)\(.*\)"

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2022 Intel Corporation
+# Copyright (C) 2022-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -121,6 +121,124 @@ params:
     - type: "$s_driver_properties_t*"
       name: pDriverProperties
       desc: "[in,out] query result for sysman driver properties"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Supported sysman API versions"
+version: "1.21"
+class: $sDriver
+name: $s_api_version_t
+details:
+    - "API versions contain major and minor attributes, use $S_MAJOR_VERSION and $S_MINOR_VERSION"
+etors:
+    - name: "1_0"
+      value: "$S_MAKE_VERSION( 1, 0 )"
+      desc: "version 1.0"
+    - name: "1_1"
+      value: "$S_MAKE_VERSION( 1, 1 )"
+      desc: "version 1.1"
+      version: "1.1"
+    - name: "1_2"
+      value: "$S_MAKE_VERSION( 1, 2 )"
+      desc: "version 1.2"
+      version: "1.2"
+    - name: "1_3"
+      value: "$S_MAKE_VERSION( 1, 3 )"
+      desc: "version 1.3"
+      version: "1.3"
+    - name: "1_4"
+      value: "$S_MAKE_VERSION( 1, 4 )"
+      desc: "version 1.4"
+      version: "1.4"
+    - name: "1_5"
+      value: "$S_MAKE_VERSION( 1, 5 )"
+      desc: "version 1.5"
+      version: "1.5"
+    - name: "1_6"
+      value: "$S_MAKE_VERSION( 1, 6 )"
+      desc: "version 1.6"
+      version: "1.6"
+    - name: "1_7"
+      value: "$S_MAKE_VERSION( 1, 7 )"
+      desc: "version 1.7"
+      version: "1.7"
+    - name: "1_8"
+      value: "$S_MAKE_VERSION( 1, 8 )"
+      desc: "version 1.8"
+      version: "1.8"
+    - name: "1_9"
+      value: "$S_MAKE_VERSION( 1, 9 )"
+      desc: "version 1.9"
+      version: "1.9"
+    - name: "1_10"
+      value: "$S_MAKE_VERSION( 1, 10 )"
+      desc: "version 1.10"
+      version: "1.10"
+    - name: "1_11"
+      value: "$S_MAKE_VERSION( 1, 11 )"
+      desc: "version 1.11"
+      version: "1.11"
+    - name: "1_12"
+      value: "$S_MAKE_VERSION( 1, 12 )"
+      desc: "version 1.12"
+      version: "1.12"
+    - name: "1_13"
+      value: "$S_MAKE_VERSION( 1, 13 )"
+      desc: "version 1.13"
+      version: "1.13"
+    - name: "1_14"
+      value: "$S_MAKE_VERSION( 1, 14 )"
+      desc: "version 1.14"
+      version: "1.14"
+    - name: "1_15"
+      value: "$S_MAKE_VERSION( 1, 15 )"
+      desc: "version 1.15"
+      version: "1.15"
+    - name: "1_16"
+      value: "$S_MAKE_VERSION( 1, 16 )"
+      desc: "version 1.16"
+      version: "1.16"
+    - name: "1_17"
+      value: "$S_MAKE_VERSION( 1, 17 )"
+      desc: "version 1.17"
+      version: "1.17"
+    - name: "1_18"
+      value: "$S_MAKE_VERSION( 1, 18 )"
+      desc: "version 1.18"
+      version: "1.18"
+    - name: "1_19"
+      value: "$S_MAKE_VERSION( 1, 19 )"
+      desc: "version 1.19"
+      version: "1.19"
+    - name: "1_20"
+      value: "$S_MAKE_VERSION( 1, 20 )"
+      desc: "version 1.20"
+      version: "1.20"
+    - name: "1_21"
+      value: "$S_MAKE_VERSION( 1, 21 )"
+      desc: "version 1.21"
+      version: "1.21"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Current sysman API version as a macro"
+version: "1.21"
+name: "$S_API_VERSION_CURRENT_M"
+value: "$S_MAKE_VERSION( 1, 21 )"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Returns the API version supported by the specified sysman driver"
+version: "1.21"
+class: $sDriver
+name: GetApiVersion
+details:
+    - "The application may call this function from simultaneous threads."
+    - "The implementation of this function should be lock-free."
+params:
+    - type: $s_driver_handle_t
+      name: hDriver
+      desc: "[in] handle of the sysman driver instance"
+    - type: "$s_api_version_t*"
+      name: pVersion
+      desc: "[out] api version"
 --- #--------------------------------------------------------------------------
 type: macro
 desc: "Maximum extension name string size"
