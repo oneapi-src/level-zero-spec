@@ -1,0 +1,143 @@
+# Stand-alone Windows build of the spec: generate headers/sources with run.py, then
+# configure and build with CMake + MSVC. Trial job -- not yet part of normal PR CI.
+# The pull_request trigger only fires when this file changes, so the PR that adds it
+# can test itself.
+name: Build Windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch, tag, or SHA to build (empty = the branch you run from)'
+        required: false
+        default: ''
+      runner:
+        description: 'Runner pool'
+        type: choice
+        options: [self-hosted, github-hosted]
+        default: self-hosted
+      config:
+        description: 'CMake build config'
+        type: choice
+        options: [Release, Debug]
+        default: Release
+  pull_request:
+    branches: [master]
+    paths: ['.github/workflows/build-windows.yml']
+
+env:
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    runs-on: ${{ inputs.runner == 'github-hosted' && 'windows-latest' || fromJSON('["self-hosted","windows","large","x64"]') }}
+    if: github.repository_owner == 'intel-innersource' || github.event_name == 'workflow_dispatch'
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+    - name: Checkout
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        ref: ${{ inputs.ref }}
+        clean: true
+        # Full history + tags: the spec version is derived from the most recent tag.
+        fetch-depth: 0
+        fetch-tags: true
+
+    - name: Set up Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: '3.12'
+        cache: pip
+        cache-dependency-path: third_party/requirements.txt
+
+    - name: Install Python dependencies
+      run: | #pwsh
+        python -m pip install --upgrade pip
+        python -m pip install -r third_party/requirements.txt
+
+    - name: Set up MSVC x64 environment
+      if: inputs.runner == 'github-hosted'
+      run: | #pwsh
+        $ErrorActionPreference = 'Stop'
+        $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+        if (-not (Test-Path $vswhere)) { throw "vswhere.exe not found at '$vswhere'; install Visual Studio C++ Build Tools." }
+        $vs = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        if ($LASTEXITCODE -ne 0) { throw "vswhere.exe failed ($LASTEXITCODE)" }
+        if (-not $vs) { throw "No Visual Studio installation with MSVC x64 tools found." }
+        $bat = Join-Path "$vs" 'VC\Auxiliary\Build\vcvars64.bat'
+        if (-not (Test-Path $bat)) { throw "vcvars64.bat not found (VS: '$vs')" }
+
+        # Match the loader CI: export only variables added or changed by vcvars64.
+        $before = @{}
+        Get-ChildItem env: | ForEach-Object { $before[$_.Name] = $_.Value }
+        $after = cmd /c "`"$bat`" >nul && set"
+        if ($LASTEXITCODE -ne 0) { throw "vcvars64.bat failed ($LASTEXITCODE)" }
+        $after | ForEach-Object {
+          if ($_ -match '^([^=]+)=(.*)$' -and $before[$Matches[1]] -cne $Matches[2]) { "$($Matches[1])=$($Matches[2])" }
+        } | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+        Write-Host "Loaded MSVC x64 environment from $vs"
+
+    - name: Detect version from git tags
+      run: | #pwsh
+        $tag = git tag --sort=-version:refname | Where-Object { $_ -match '^v\d+\.\d+' } | Select-Object -First 1
+        if (-not $tag) { throw "No version tags matching v<MAJOR>.<MINOR>.* found" }
+        $ver = [regex]::Match($tag, '^v(\d+\.\d+)').Groups[1].Value
+        Write-Host "Detected version: $ver (from tag $tag) at $(git rev-parse HEAD)"
+        Add-Content -Path $env:GITHUB_ENV -Value "VER=$ver"
+
+    # Configure and build separately so workflow_dispatch can select Release or Debug.
+    - name: Generate spec headers and sources
+      working-directory: scripts
+      run: | #pwsh
+        python ./run.py '--!html' '--!rst' '--!build' --ver $env:VER
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    - name: Configure
+      if: inputs.runner == 'github-hosted'
+      run: | #pwsh
+        cmake -B build -S . -G Ninja -D CMAKE_BUILD_TYPE=${{ inputs.config || 'Release' }}
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    - name: Build
+      if: inputs.runner == 'github-hosted'
+      run: | #pwsh
+        cmake --build build --parallel
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    - name: Configure and build in Windows toolchain container
+      if: inputs.runner != 'github-hosted'
+      shell: bash
+      env:
+        WINDOWS_TOOLCHAIN_IMAGE: amr-registry.caas.intel.com/level-zero-linux-compute/windows-toolchain:windows-fix
+        BUILD_CONFIG: ${{ inputs.config || 'Release' }}
+      run: | #bash
+        if ! os_type=$(docker info --format '{{.OSType}}'); then
+          echo "::error::Cannot connect to Docker; the self-hosted runner requires a Windows container daemon." >&2
+          exit 1
+        fi
+        if [ "$os_type" != windows ]; then
+          echo "::error::Docker must be in Windows container mode (reported '$os_type')." >&2
+          exit 1
+        fi
+
+        if ! docker pull "$WINDOWS_TOOLCHAIN_IMAGE"; then
+          echo "::error::Failed to pull '$WINDOWS_TOOLCHAIN_IMAGE'; check registry access and Docker authentication on the runner." >&2
+          exit 1
+        fi
+
+        # Match promote-loader's stdin invocation to avoid batch-entrypoint quoting issues.
+        docker run --rm --interactive \
+          -v "$GITHUB_WORKSPACE":C:/project \
+          -w C:/project \
+          -e http_proxy -e https_proxy -e BUILD_CONFIG \
+          "$WINDOWS_TOOLCHAIN_IMAGE" \
+          bash -e <<'EOF'
+        cmake -B build -S . -G Ninja -D CMAKE_BUILD_TYPE="$BUILD_CONFIG"
+        cmake --build build --parallel
+        EOF

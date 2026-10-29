@@ -32,6 +32,22 @@ jobs:
       contents: read
       pull-requests: write
 
+  build-windows:
+    needs: attribution
+    runs-on: [self-hosted, windows, large, x64]
+    if: github.repository_owner == 'intel-innersource'
+    steps:
+    - name: Checkout spec-head
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        clean: true
+        fetch-depth: 0
+        fetch-tags: true
+    - name: Build and test spec-generated Windows loader
+      uses: ./.github/actions/build-windows-loader
+      with:
+        mode: dynamic
+
   build-linux:
     needs: attribution
     runs-on: [self-hosted, Linux]

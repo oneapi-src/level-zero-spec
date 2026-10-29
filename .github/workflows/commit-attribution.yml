@@ -9,14 +9,15 @@
 # The expensive PR workflows also call this file as their first job (gate: true) and
 # make every other job `needs:` it, so no build starts on a bad PR. A gate run checks
 # commits only and posts no comment: this standalone run owns the PR comment and the
-# PR title/description check (gate runs do not re-run on a title edit). On non-PR
+# PR title/description check. Metadata-only edits do not trigger this workflow;
+# PR text is checked when the PR opens, reopens, or receives a commit push. On non-PR
 # events (push, workflow_dispatch) the gate passes without checking anything.
 name: Commit Attribution
 
 on:
   pull_request:
     branches: [master]
-    types: [opened, synchronize, reopened, edited]
+    types: [opened, synchronize, reopened]
   workflow_call:
     inputs:
       gate:

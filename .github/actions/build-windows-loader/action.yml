@@ -1,0 +1,156 @@
+name: Build spec-generated Windows loader
+description: Generate loader sources from this spec and test them in the Windows toolchain container.
+inputs:
+  mode:
+    description: 'Loader test mode: dynamic or static'
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: '3.12'
+        cache: pip
+        cache-dependency-path: third_party/requirements.txt
+
+    - name: Validate test mode
+      shell: python
+      env:
+        LOADER_TEST_MODE: ${{ inputs.mode }}
+      run: |
+        import os
+        if os.environ["LOADER_TEST_MODE"] not in ("dynamic", "static"):
+            raise ValueError("Loader test mode must be dynamic or static")
+
+    - name: Install Python dependencies
+      shell: pwsh
+      run: |
+        python -m pip install -r third_party/requirements.txt
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    - name: Detect version from git tags
+      shell: pwsh
+      run: |
+        $tag = git tag --sort=-version:refname | Where-Object { $_ -match '^v\d+\.\d+' } | Select-Object -First 1
+        if (-not $tag) { throw "No version tags matching v<MAJOR>.<MINOR>.* found" }
+        $ver = [regex]::Match($tag, '^v(\d+\.\d+)').Groups[1].Value
+        Write-Host "Detected version: $ver (from tag $tag)"
+        Add-Content -Path $env:GITHUB_ENV -Value "VER=$ver"
+
+    - name: Generate spec headers and loader input
+      shell: pwsh
+      working-directory: scripts
+      run: |
+        python ./run.py --debug '--!html' '--!rst' '--!build' --ver $env:VER
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+    - name: Checkout loader-head
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        clean: true
+        repository: oneapi-src/level-zero
+        ref: refs/pull/552/head # Temporary: stdout-capture diagnostics; restore master before merge.
+        path: loader-head
+
+    - name: Generate loader sources and copy spec headers
+      shell: python
+      run: |
+        import json
+        import os
+        from pathlib import Path
+        import shutil
+        import subprocess
+        import sys
+
+        with Path("scripts/input.json").open("rb") as source:
+            subprocess.run(
+                [sys.executable, "scripts/json2src.py", "--ver", os.environ["VER"], "."],
+                cwd="loader-head", stdin=source, check=True,
+            )
+        with Path("scripts/generated.json").open() as manifest:
+            generated = {p.replace("\\", "/") for p in json.load(manifest)}
+        headers = sorted(p for p in generated if p.startswith("../include/"))
+        if not headers:
+            raise RuntimeError("No generated spec headers found in scripts/generated.json")
+        for header in headers:
+            relative = Path(header).relative_to("..")
+            destination = Path("loader-head") / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(relative, destination)
+            print(f"Copied {relative} to {destination}")
+
+    - name: Build and test Windows loader
+      id: build
+      shell: bash
+      env:
+        LOADER_TEST_MODE: ${{ inputs.mode }}
+        WINDOWS_TOOLCHAIN_IMAGE: amr-registry.caas.intel.com/level-zero-linux-compute/windows-toolchain:windows-fix
+      run: |
+        set -o pipefail
+        if ! os_type=$(docker info --format '{{.OSType}}'); then
+          echo "::error::Cannot connect to the Windows Docker daemon." >&2
+          exit 1
+        fi
+        if [ "$os_type" != windows ]; then
+          echo "::error::Docker must be in Windows container mode (reported '$os_type')." >&2
+          exit 1
+        fi
+        if ! docker pull "$WINDOWS_TOOLCHAIN_IMAGE"; then
+          echo "::error::Cannot pull '$WINDOWS_TOOLCHAIN_IMAGE'; check registry access and Docker authentication." >&2
+          exit 1
+        fi
+
+        # Preserve the MSVC entrypoint and use stdin, as in promote-loader.
+        docker run --rm --interactive \
+          -v "$GITHUB_WORKSPACE":C:/project \
+          -w C:/project/loader-head \
+          -e http_proxy -e https_proxy -e LOADER_TEST_MODE \
+          "$WINDOWS_TOOLCHAIN_IMAGE" \
+          bash -e <<'EOF' 2>&1 | tee windows-loader.log
+        if [ "$LOADER_TEST_MODE" = static ]; then
+          cmake -B build -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D BUILD_L0_LOADER_TESTS=1 -D BUILD_STATIC=1
+          cmake --build build --parallel
+          cmake -B dynamic_build -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D BUILD_L0_LOADER_TESTS=0 -D BUILD_STATIC=0
+          cmake --build dynamic_build --parallel
+          export ZEL_LIBRARY_PATH="$(cygpath -m "$PWD/dynamic_build/bin")"
+          ctest --test-dir build -V --no-tests=error
+        else
+          cmake -B build -S . -G Ninja -D CMAKE_BUILD_TYPE=Release -D BUILD_L0_LOADER_TESTS=1 -D BUILD_STATIC=0 -D INSTALL_NULL_DRIVER=1 -D CMAKE_INSTALL_PREFIX=C:/project/loader-install
+          cmake --build build --parallel
+          export ZEL_LIBRARY_PATH="$(cygpath -m "$PWD/build/bin")"
+          ctest --test-dir build -V --no-tests=error
+          cmake --install build
+          export ZE_ENABLE_NULL_DRIVER=1
+          export ZE_ENABLE_LOADER_DEBUG_TRACE=1
+          ./build/bin/zello_world.exe
+        fi
+        EOF
+
+    - name: Upload Windows loader test logs
+      if: always() && (steps.build.outcome == 'success' || steps.build.outcome == 'failure')
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      with:
+        name: windows-loader-${{ inputs.mode }}-logs
+        path: |
+          windows-loader.log
+          loader-head/build/Testing/Temporary/LastTest.log
+          loader-head/build/Testing/Temporary/LastTestsFailed.log
+        if-no-files-found: warn
+        retention-days: 14
+
+    - name: Post Windows build or test failures to job summary
+      if: failure() && steps.build.outcome == 'failure'
+      shell: bash
+      run: |
+        {
+          echo '## Windows loader build/test failed'
+          echo ''
+          echo '```'
+          if [ -f windows-loader.log ]; then
+            tail -n 300 windows-loader.log
+          else
+            echo 'No build log captured; see Docker diagnostics in the job log.'
+          fi
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
