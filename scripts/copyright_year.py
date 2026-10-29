@@ -17,6 +17,10 @@
    check    report stale years; exit 1 if any are found (used by CI)
    update   rewrite stale years in place (run locally before committing)
 
+ 'check --comment FILE' additionally writes the findings as plain text to FILE,
+ which CI wraps in a pull-request comment. The file is written only when stale
+ years are found.
+
  Which files are processed:
    * With no paths (the default), only files that git reports as changed are
      processed: everything changed since the merge base with --base (default
@@ -155,6 +159,13 @@ def fix_header(data, year):
     return b"".join(lines), findings
 
 
+def write_comment(path, findings):
+    """Write the plain-text findings to path; CI wraps them in a PR comment."""
+    with open(path, "w") as fout:
+        for rel, line, old, new, source in findings:
+            fout.write("%s:%d: %s -> %s%s\n" % (rel, line, old, new, source))
+
+
 def update_file(path, year):
     """Rewrite stale years in path; return the number of lines changed."""
     with open(path, "rb") as fin:
@@ -186,6 +197,7 @@ def run(args):
 
     stale = 0
     templates = set()
+    report = []
     for rel in sorted(set(paths)):
         path = os.path.join(repo_root, rel)
         if not os.path.isfile(path):
@@ -202,6 +214,7 @@ def run(args):
         source = " (generated from %s)" % template if template else ""
         for line, old, new in findings:
             stale += 1
+            report.append((rel, line, old, new, source))
             if args.github:
                 print("::error file=%s,line=%d::Stale copyright year%s: '%s' should be '%s'. "
                       "Run '%s'." % (rel, line, source, old, new, fix_cmd))
@@ -223,14 +236,29 @@ def run(args):
         print("Updated %d copyright line(s)." % stale if stale else "All copyright years are current.")
         return 0
     if stale:
-        sys.stdout.flush()
-        eprint("%d stale copyright line(s). Run '%s' to fix." % (stale, fix_cmd))
+        print("%d stale copyright line(s). Run '%s' to fix." % (stale, fix_cmd))
+        if args.comment:
+            write_comment(args.comment, report)
         return 1
     print("All copyright years are current.")
     return 0
 
 
 def main():
+    # A bare invocation gets a short recipe for the common PR workflow instead
+    # of argparse's terse "arguments are required: command" error.
+    if len(sys.argv) == 1:
+        prog = "python3 %s" % os.path.normpath(sys.argv[0])
+        lines = [
+            ("To check the files changed on your branch for stale copyright years:", "%s check" % prog),
+            ("To update any stale copyright years before committing:", "%s update" % prog),
+            ("For all options:", "%s --help" % prog),
+        ]
+        width = max(len(label) for label, _ in lines) + 2
+        for label, cmd in lines:
+            print("%-*s%s" % (width, label, cmd))
+        return 2
+
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -249,6 +277,9 @@ def main():
                     "only files git reports as changed since the merge base with --base are checked.")
     check.add_argument("--github", action="store_true",
                        help="emit GitHub Actions error annotations")
+    check.add_argument("--comment", metavar="FILE",
+                       help="write the findings as plain text to FILE, for CI to wrap in a "
+                            "pull-request comment; written only when stale years are found")
     update = subparsers.add_parser(
         "update", help="rewrite stale years in place",
         description="Rewrite stale copyright years in place. With no paths, only files git "
@@ -259,7 +290,7 @@ def main():
                               "update also fixes the source templates")
         sub.add_argument("paths", nargs="*",
                          help="files to process; if omitted, only the files git reports as changed")
-    update.set_defaults(github=False)
+    update.set_defaults(github=False, comment=None)
 
     args = parser.parse_args()
     if args.generated and args.paths:

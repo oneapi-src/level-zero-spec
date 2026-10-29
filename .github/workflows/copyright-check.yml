@@ -5,8 +5,15 @@ name: Copyright Check
 # nobody touched are never flagged. To fix locally:
 #   python3 scripts/copyright_year.py update
 #
+# Results are reported three ways: inline error annotations on the changed files,
+# a single PR comment that is updated in place, and a failed check so the problem
+# is not easy to miss.
+#
 # The generated headers get their year from scripts/templates/*.mako even when
 # no template changes; spec-validate.yml checks that output.
+#
+# This repo is internal and takes no fork PRs, so the pull_request token can be
+# granted pull-requests: write and comment directly.
 #
 # Self-hosted runners: the intel-innersource IP allow list makes checkout 403 on
 # GitHub-hosted runners. The runners' python3 is enough; the script uses only
@@ -18,6 +25,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 env:
   http_proxy: ${{ vars.CI_HTTP_PROXY }}
@@ -33,6 +41,66 @@ jobs:
         # The merge base with the target branch is needed to find the changed files.
         fetch-depth: 0
     - name: Check copyright years of changed files
+      # A stale year must not fail this step: the report has to be published to
+      # the PR first, and the final step decides the outcome. A broken
+      # environment must still fail, and must not be mistaken for a stale year
+      # -- hence the exit-code check (0 = clean, 1 = stale years found).
       env:
         BASE_REF: ${{ github.base_ref }}
-      run: python3 scripts/copyright_year.py --base "origin/$BASE_REF" check --github
+      run: | #bash
+        set +e
+        python3 scripts/copyright_year.py --base "origin/$BASE_REF" check --github --comment copyright-report.txt
+        rc=$?
+        if [ $rc -ne 0 ] && [ $rc -ne 1 ]; then
+          echo "::error::copyright_year.py could not run (exit $rc); see the log above."
+          exit 1
+        fi
+    - name: Post or update PR comment
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      with:
+        script: |
+          const fs = require('fs');
+          const marker = '<!-- copyright-check-report -->';
+          const { owner, repo } = context.repo;
+          const issue_number = context.issue.number;
+
+          const report = fs.existsSync('copyright-report.txt')
+            ? fs.readFileSync('copyright-report.txt', 'utf8').trim()
+            : '';
+
+          const comments = await github.paginate(github.rest.issues.listComments, {
+            owner, repo, issue_number, per_page: 100,
+          });
+          const existing = comments.find(c => c.body && c.body.includes(marker));
+
+          let body;
+          if (!report) {
+            if (!existing) return; // nothing to report and nothing to update
+            body = `${marker}\n:white_check_mark: **Copyright check** passed; all copyright years are current.`;
+          } else {
+            body = [
+              marker,
+              ':x: **Copyright check failed** -- files changed by this PR still carry '
+                + 'an old year in their Intel copyright header:',
+              '',
+              '```',
+              report,
+              '```',
+              '',
+              'To fix, run `python3 scripts/copyright_year.py update` from the repository '
+                + 'root and commit the result. For all options, run '
+                + '`python3 scripts/copyright_year.py --help`.',
+            ].join('\n');
+          }
+
+          if (existing) {
+            await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+          } else {
+            await github.rest.issues.createComment({ owner, repo, issue_number, body });
+          }
+    - name: Fail if stale copyright years were found
+      run: | #bash
+        if [ -s copyright-report.txt ]; then
+          echo "Stale copyright years found; see the annotations above and the PR comment."
+          exit 1
+        fi
