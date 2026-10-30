@@ -345,6 +345,10 @@ etors:
       value: "0x00020027"
       desc: $s_device_gpu_topology_ext_properties_t
       version: "1.20"
+    - name: DEVICE_SOC_UID_EXT_PROPERTIES
+      value: "0x00020028"
+      desc: $s_device_soc_uid_ext_properties_t
+      version: "1.21"
 --- #-------------------------------------------------------------------------
 type: struct
 desc: "Base for all properties types"
