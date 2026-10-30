@@ -72,7 +72,12 @@ members:
       desc: "[out] domain that the power limit belongs to."
     - type: $s_power_limit_ext_desc_t*
       name: defaultLimit
-      desc: "[out] the factory default limit of the part."
+      desc: |
+            [in,out][optional] pointer to a caller-allocated $s_power_limit_ext_desc_t
+            that the driver fills with the factory default limit of the part.
+            The application must allocate and initialize (including `stype`) the pointed-to
+            structure and assign its address before calling $sPowerGetProperties.
+            If this is null, the factory default limit will not be returned.
 details:
     - "This structure may be returned from $sPowerGetProperties via the `pNext` member of $s_power_properties_t."
     - "This structure may also be returned from $sPowerGetProperties via the `pNext` member of $s_power_ext_properties_t"
