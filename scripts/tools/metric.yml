@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -420,7 +420,7 @@ params:
       desc: "[in,out][optional][range(0, *pRawDataSize)] buffer containing streamer reports in raw format"
 returns:
     - $X_RESULT_WARNING_DROPPED_DATA:
-        - "Metric streamer data may have been dropped. Reduce sampling period."
+        - "Metric streamer data may have been dropped. Increase the streamer sampling period or read the streamer data more frequently."
 --- #--------------------------------------------------------------------------
 type: enum
 desc: "Metric query pool types"

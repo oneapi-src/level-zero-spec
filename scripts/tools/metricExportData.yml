@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023 Intel Corporation
+# Copyright (C) 2023-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -127,3 +127,6 @@ params:
       desc: |
             [in,out][optional][range(0, *pTotalMetricValueCount)] buffer of calculated metrics.
             if count is less than the number available in the raw data buffer, then driver shall only calculate that number of metric values.
+returns:
+    - $X_RESULT_WARNING_DROPPED_DATA:
+        - "Metric streamer data may have been dropped. Increase the streamer sampling period or read the streamer data more frequently."
