@@ -104,6 +104,12 @@ ${"-" * len(tname)}
 ${th.make_deprecated_rst(n, tags, obj, meta)}
 %endif
 
+%if th.type_traits.is_flags(obj['name']):
+## Declare the flags typedef so member types can link to it.
+.. doxygentypedef:: ${tname}
+    :project: LevelZero
+
+%endif
 .. doxygenenum:: ${th.make_enum_name(n, tags, obj)}
     :project: LevelZero
 
