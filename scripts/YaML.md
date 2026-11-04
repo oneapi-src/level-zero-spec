@@ -287,6 +287,9 @@ class ze_name_handle_t(c_void_p):
   - An etor may take the following optional scalar field: {`value`, `version`}
     + `value` must be an ISO-C standard identifier
     + `version` will be used to define the minimum API version in which the etor will appear; `default="1.0"` This will also affect the order in which the etor appears within the enum.
+  - Two etors of a non-flags enum must not share a value, except for a rename: the old etor has a `deprecated` mapping whose `use` names the new etor with the same value
+    + Give both etors an explicit `value`, so the order in the YAML does not change the values. Put the etors in the order that reads best.
+    + Range checks (`$X_RESULT_ERROR_INVALID_ENUMERATION`) name the kept etor with the largest value, never the deprecated one
 * An enum may take the following optional sequence of scalars or scalars to sequences: {`details`}
   - `detail` will be used as the enum's detailed comment
 

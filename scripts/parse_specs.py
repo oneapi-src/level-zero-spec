@@ -1,5 +1,5 @@
 """
- Copyright (C) 2019-2022 Intel Corporation
+ Copyright (C) 2019-2026 Intel Corporation
 
  SPDX-License-Identifier: MIT
 
@@ -82,6 +82,20 @@ def _get_etor_value(value, prev):
             return int(value)
     else:
         return prev+1
+
+"""
+    get the etor indexes that are aliases: deprecated, with 'use' naming a twin of the same value
+"""
+def _get_etor_aliases(d, values):
+    prefix = d['name'][:-1].upper()
+    full = lambda n: n if n.startswith('$') else prefix + n
+    by_name = {full(e['name']): v for e, v in zip(d['etors'], values)}
+    aliases = set()
+    for i, (e, v) in enumerate(zip(d['etors'], values)):
+        use = (e.get('deprecated') or {}).get('use')
+        if use and use != full(e['name']) and by_name.get(use) == v:
+            aliases.add(i)
+    return aliases
     
 """
     check if type is declares given requirement
@@ -280,6 +294,17 @@ def _validate_doc(f, d, tags, line_num):
             if _version_compare_less(ver, max_ver):
                 raise Exception(prefix+"'version' must be increasing: %s"%item['version'])
             max_ver = ver
+
+        # a reused value needs a reason; for now only a rename (see YaML.md)
+        if not type_traits.is_flags(d['name']):
+            values = []
+            for item in d['etors']:
+                values.append(_get_etor_value(item.get('value'), values[-1] if values else -1))
+            aliases = _get_etor_aliases(d, values)
+            for v in sorted(set(values)):
+                names = [e['name'] for i, e in enumerate(d['etors']) if values[i] == v and i not in aliases]
+                if len(names) > 1:
+                    raise Exception("'etors' %s share value %s; deprecate all but one with 'use' naming the one kept"%(names, v))
 
     def __validate_base(d):
         namespace = re.sub(r"(\$[a-z])\w+", r"\1", d['name'])
@@ -738,19 +763,19 @@ def _generate_meta(d, ordinal, meta):
 
         # add values to list
         if 'enum' == type:
-            value = -1
-            max_value = -1
+            values = []
             meta[type][name]['etors'] = []
-            for idx, etor in enumerate(d['etors']):
+            for etor in d['etors']:
                 meta[type][name]['etors'].append(etor['name'])
-                value = _get_etor_value(etor.get('value'), value)
-                if value > max_value:
-                    max_value = value
-                    max_index = idx
+                values.append(_get_etor_value(etor.get('value'), values[-1] if values else -1))
+            max_value = max(values)
             if type_traits.is_flags(name):
                 meta[type][name]['max'] = hex((max_value << 1)-1) if max_value else '0'
             else:
-                meta[type][name]['max'] = d['etors'][idx]['name']
+                # range checks name the kept etor, not an alias; YAML order does not matter
+                aliases = _get_etor_aliases(d, values)
+                keep = [i for i, v in enumerate(values) if v == max_value and i not in aliases]
+                meta[type][name]['max'] = d['etors'][keep[-1]]['name']
 
         elif 'macro' == type:
             meta[type][name]['values'] = []

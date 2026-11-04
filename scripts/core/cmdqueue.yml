@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -64,10 +64,26 @@ etors:
     - name: NORMAL
       value: "0"
       desc: "[default] normal priority"
-    - name: PRIORITY_LOW
+    - name: LOW
+      value: "1"
       desc: "lower priority than normal"
-    - name: PRIORITY_HIGH
+      version: "1.21"
+    - name: HIGH
+      value: "2"
       desc: "higher priority than normal"
+      version: "1.21"
+    - name: PRIORITY_LOW
+      value: "1"
+      desc: "lower priority than normal"
+      deprecated:
+          since: "1.21"
+          use: $X_COMMAND_QUEUE_PRIORITY_LOW
+    - name: PRIORITY_HIGH
+      value: "2"
+      desc: "higher priority than normal"
+      deprecated:
+          since: "1.21"
+          use: $X_COMMAND_QUEUE_PRIORITY_HIGH
 --- #--------------------------------------------------------------------------
 type: struct
 desc: "Command Queue descriptor"
