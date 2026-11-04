@@ -24,7 +24,7 @@ API
 sRGB
 ~~~~
 
-Device capabilities may include native support for sRGB image formats. sRGB images may benefit from hardware acceleration on devices that include native support for sRGB. The following psuedo-code demonstrates a sequence for creating an sRGB image:
+Device capabilities may include native support for sRGB image formats. sRGB images may benefit from hardware acceleration on devices that include native support for sRGB. The following pseudo-code demonstrates a sequence for creating an sRGB image:
 
 .. parsed-literal::
 

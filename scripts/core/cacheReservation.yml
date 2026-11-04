@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2022 Intel Corporation
+# Copyright (C) 2021-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -42,7 +42,7 @@ etors:
           since: "1.7"
           use: $X_CACHE_EXT_REGION_RESERVED
     - name: $X_CACHE_NON_RESERVED_REGION
-      desc: "utilize non-reserverd region"
+      desc: "utilize non-reserved region"
       deprecated:
           since: "1.7"
           use: $X_CACHE_EXT_REGION_NON_RESERVED
@@ -54,7 +54,7 @@ etors:
       desc: "utilize reserved region"
       version: "1.7"
     - name: NON_RESERVED
-      desc: "utilize non-reserverd region"
+      desc: "utilize non-reserved region"
       version: "1.7"
 --- #--------------------------------------------------------------------------
 type: struct

@@ -34,7 +34,7 @@ Extended Device Memory Properties
 
 Users may wish to build a cost model for computation on accelerators exposed through ${OneApi} Level-Zero. Such cost models require detailed information about the properties of the accelerator such as memory bandwidth. This extension provides extended information about the memories exposed as part of a device. The extension introduces the ${x}_device_memory_ext_properties_t struct which can be passed to ${x}DeviceGetMemoryProperties via the `pNext` member of ${x}_device_memory_properties_t.
 
-The following psuedo-code demonstrates a sequence for obtaining extended information about the memory properties of a memory module exposed as part of a device:
+The following pseudo-code demonstrates a sequence for obtaining extended information about the memory properties of a memory module exposed as part of a device:
 
 .. parsed-literal::
 

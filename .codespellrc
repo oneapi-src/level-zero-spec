@@ -19,3 +19,6 @@ skip = ./.git,./build,./docs,./include,./source/*.cpp,./third_party,*.json,*.svg
 #   nce      - Neural Compute Engine (core/npuProperties.yml)
 #   deviceC  - device identifier in the multi-device examples (core/PROG.rst)
 ignore-words-list = pevents,nce,deviceC
+# Split words at hyphens. The default regex keeps them, so typos inside
+# hyphenated words (e.g. "psuedo-code") are not found.
+regex = [\w']+

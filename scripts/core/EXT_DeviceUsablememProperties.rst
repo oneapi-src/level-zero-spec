@@ -33,7 +33,7 @@ Extended Device Properties
 
 Users may wish get the status of the available allocatable/usable memory. Since this is a transient information based on the overall state of the device usage, user would need to invoke the extension to obtain the information at each point of interest. This extension provides extended information about the usable memory size available as part of the device. The extension introduces the ${x}_device_usablemem_size_ext_properties_t struct which can be passed to ${x}DeviceGetProperties via the `pNext` member of ${x}_device_properties_t.
 
-The following psuedo-code demonstrates a sequence for obtaining extended information about the usable memory size:
+The following pseudo-code demonstrates a sequence for obtaining extended information about the usable memory size:
 
 .. parsed-literal::
 

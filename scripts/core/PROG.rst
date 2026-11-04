@@ -2607,7 +2607,7 @@ Affinity Mask
 
 The affinity mask allows an application or tool to restrict which devices, and sub-devices, are visible to 3rd-party libraries or applications in another process, respectively.
 The affinity mask affects the number of handles returned from ${x}DeviceGet and ${x}DeviceGetSubDevices.
-The affinity mask is specified via an environment variable as a comma-seperated list of device and/or subdevice ordinals.
+The affinity mask is specified via an environment variable as a comma-separated list of device and/or subdevice ordinals.
 The values are specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
 The values are specific to the order in which devices are reported by the driver; i.e., the first device maps to ordinal 0, the second device to ordinal 1, and so forth.
 If the affinity mask is not set, then all devices and sub-devices are reported; as is the default behavior.

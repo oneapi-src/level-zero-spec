@@ -44,7 +44,7 @@ Modules may require global variables & functions to be imported before all depen
 
 The ${x}_module_build_log_handle_t log object returned by the call to ${x}ModuleInspectLinkageExt will contain separate lists of the imports, un-resolvable imports, & exports requested via the appropriate combination of ${x}_linkage_inspection_ext_flags_t flags.
 
-The following psuedo-code demonstrates a sequence for inspecting the import dependencies, un-resolvable import dependencies, and exports of a set of modules:
+The following pseudo-code demonstrates a sequence for inspecting the import dependencies, un-resolvable import dependencies, and exports of a set of modules:
 
 .. parsed-literal::
 
