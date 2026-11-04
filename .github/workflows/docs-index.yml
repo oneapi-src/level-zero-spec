@@ -1,0 +1,205 @@
+# Rebuilds the root index.html of the internal preview site from the folders on
+# gh-pages. This is the only job that writes root files: PR and master deploys
+# write only their own folder. workflow_run always uses master's copy of this file,
+# so an old PR branch cannot bring back an old template.
+name: Update Docs Landing Page
+
+on:
+  workflow_run:
+    workflows: ["Deploy Documentation to GitHub Pages", "Cleanup PR Documentation"]
+    types: [completed]
+
+env:
+  http_proxy: ${{ vars.CI_HTTP_PROXY }}
+  https_proxy: ${{ vars.CI_HTTP_PROXY }}
+
+permissions:
+  contents: read
+
+# Each run rescans every folder, so only the newest run matters.
+concurrency:
+  group: "pages-index"
+  cancel-in-progress: true
+
+jobs:
+  update-index:
+    runs-on: [self-hosted, Linux]
+    permissions:
+      contents: write
+    # Run on every completion, even failed or cancelled: a newer run cancels an
+    # older one, so skipping here could leave the page stale.
+    if: github.repository_owner == 'intel-innersource'
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages-repo
+          clean: false
+
+      - name: Write landing page template
+        run: | #bash
+          cat > index.template.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Level Zero Specification Documentation</title>
+              <style>
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                      max-width: 900px;
+                      margin: 50px auto;
+                      padding: 20px;
+                      line-height: 1.6;
+                      color: #333;
+                  }
+                  h1 {
+                      color: #0066cc;
+                      border-bottom: 3px solid #0066cc;
+                      padding-bottom: 10px;
+                  }
+                  .version-card {
+                      background: #f5f5f5;
+                      border-left: 4px solid #0066cc;
+                      padding: 20px;
+                      margin: 20px 0;
+                      border-radius: 4px;
+                  }
+                  .version-card h2 {
+                      margin-top: 0;
+                      color: #0066cc;
+                  }
+                  .version-card a {
+                      display: inline-block;
+                      background: #0066cc;
+                      color: white;
+                      padding: 10px 20px;
+                      text-decoration: none;
+                      border-radius: 4px;
+                      margin-top: 10px;
+                  }
+                  .version-card a:hover {
+                      background: #0052a3;
+                  }
+                  .branch-name {
+                      font-family: 'Courier New', monospace;
+                      background: #e0e0e0;
+                      padding: 2px 6px;
+                      border-radius: 3px;
+                  }
+                  .updated {
+                      color: #666;
+                      font-size: 0.9em;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>Level Zero Specification Documentation</h1>
+              <p>Welcome to the Level Zero Specification documentation. Select a version below to view the documentation.</p>
+              
+              <div id="versions"></div>
+              
+              <script>
+                  // This will be populated by the deployment script
+                  const versions = VERSIONS_PLACEHOLDER;
+                  
+                  const container = document.getElementById('versions');
+                  versions.forEach(version => {
+                      const card = document.createElement('div');
+                      card.className = 'version-card';
+                      card.innerHTML = `
+                          <h2>${version.name}</h2>
+                          <p>Branch: <span class="branch-name">${version.branch}</span></p>
+                          <p class="updated">Last updated: ${version.updated}</p>
+                          <a href="${version.url}">View Documentation →</a>
+                      `;
+                      container.appendChild(card);
+                  });
+              </script>
+          </body>
+          </html>
+          EOF
+
+      - name: Update landing page
+        run: | #bash
+          cd gh-pages-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          python3 <<'PYTHON'
+          import os
+          import json
+          
+          versions = []
+          
+          # Scan for all directories
+          for item in os.listdir('.'):
+              if os.path.isdir(item) and item not in ['.git', '.github']:
+                  # Check if it has an index.html (valid documentation)
+                  if os.path.exists(os.path.join(item, 'index.html')):
+                      # Determine if it's a PR or branch
+                      if item.startswith('pr-'):
+                          pr_num = item[3:]
+                          name = f"PR #{pr_num}"
+                          sort_key = ('pr', int(pr_num))
+                      elif item == 'master':
+                          name = "Master Documentation"
+                          sort_key = ('master', 0)
+                      else:
+                          name = f"{item.replace('_', ' ').title()} Branch"
+                          sort_key = ('branch', item)
+                      
+                      # Builds deployed before the stamp file existed show "unknown"
+                      stamp = os.path.join(item, '.deployed')
+                      updated = open(stamp).read().strip() if os.path.exists(stamp) else 'unknown'
+
+                      versions.append({
+                          'name': name,
+                          'branch': item,
+                          'url': f'./{item}/index.html',
+                          'updated': updated,
+                          'sort_key': sort_key
+                      })
+          
+          # Sort versions: master first, then PRs (newest first), then branches alphabetically
+          versions.sort(key=lambda x: (
+              x['sort_key'][0] != 'master',
+              x['sort_key'][0] != 'pr',
+              -x['sort_key'][1] if isinstance(x['sort_key'][1], int) else x['sort_key'][1]
+          ))
+          
+          # Remove sort_key from output
+          for v in versions:
+              del v['sort_key']
+          
+          # Read the template index.html from staging
+          with open('../index.template.html', 'r') as f:
+              html = f.read()
+          
+          # Replace the placeholder with actual version data
+          versions_json = json.dumps(versions, indent=2)
+          html = html.replace('VERSIONS_PLACEHOLDER', versions_json)
+          
+          # Write the updated index.html
+          with open('index.html', 'w') as f:
+              f.write(html)
+          
+          print(f"Updated index with {len(versions)} version(s)")
+          PYTHON
+
+          # .nojekyll disables Jekyll processing of the site
+          touch .nojekyll
+          git add index.html .nojekyll
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update documentation landing page"
+          # Deploys push to gh-pages at the same time; their folders never overlap.
+          for i in 1 2 3 4 5; do
+            git push origin gh-pages && exit 0
+            git pull --rebase origin gh-pages || exit 1
+          done
+          exit 1
