@@ -1,5 +1,5 @@
 """
- Copyright (C) 2019-2022 Intel Corporation
+ Copyright (C) 2019-2026 Intel Corporation
 
  SPDX-License-Identifier: MIT
 
@@ -93,7 +93,7 @@ def removeFiles(path, pattern):
 """
 def textRead(path):
     try:
-        with open(path, "r") as fin:
+        with open(path, "r", encoding="utf-8-sig") as fin:
             return fin.readlines()
     except Exception as e:
         print(e)
@@ -117,7 +117,7 @@ def configRead(path):
 """
 def jsonRead(path):
     try:
-        with open(path, 'r') as fin:
+        with open(path, 'r', encoding='utf-8-sig') as fin:
             return json.loads(fin.read())
     except:
         print("error: unable to read %s"%path)
@@ -128,7 +128,7 @@ def jsonRead(path):
 """
 def jsonWrite(path, data):
     try:
-        with open(path, 'w') as fout:
+        with open(path, 'w', encoding='utf-8', newline='\n') as fout:
             fout.write(json.dumps(data, indent=4, sort_keys=True))
     except:
         print("error: unable to write %s"%path)
@@ -138,7 +138,7 @@ def jsonWrite(path, data):
 """
 def yamlRead(path):
     try:
-        with open(path, 'r') as fin:
+        with open(path, 'r', encoding='utf-8-sig') as fin:
             return yaml.load_all(fin.read(), Loader = Loader)
     except:
         print("error: unable to read %s"%path)
@@ -149,7 +149,7 @@ def yamlRead(path):
 """
 def yamlWrite(path, data):
     try:
-        with open(path, 'w') as fout:
+        with open(path, 'w', encoding='utf-8', newline='\n') as fout:
             yaml.dump(data, fout, default_flow_style=False)
     except:
         print("error: unable to write %s"%path)
@@ -165,7 +165,7 @@ def makoWrite(inpath, outpath, **args):
         rendered = template.render(**args)
         rendered = re.sub(r"\r\n", r"\n", rendered)
 
-        with open(outpath, 'w') as fout:
+        with open(outpath, 'w', encoding='utf-8', newline='\n') as fout:
             fout.write(rendered)
 
         makoFileList.append(outpath)
@@ -202,7 +202,7 @@ def writeAllErrors(outpath):
     # Persist the accumulated errors (one per line) so CI can quote just the
     # actionable lines into a PR comment, mirroring generate_common's
     # doxygen-warnings.log. Only called when there is at least one error.
-    with open(outpath, 'w') as fout:
+    with open(outpath, 'w', encoding='utf-8', newline='\n') as fout:
         for error in makoErrorList:
             fout.write(error + "\n")
 
@@ -211,7 +211,7 @@ def writeAllErrors(outpath):
 """
 def writelines(fout, lines):
     try:
-        with open(fout, "w") as f:
+        with open(fout, "w", encoding="utf-8", newline="\n") as f:
             f.writelines(lines)
             f.close()
     except:

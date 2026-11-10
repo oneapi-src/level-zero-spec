@@ -333,7 +333,7 @@ def _badge_deprecated_html(htmlpath):
         new = tag_re.sub(r'<span class="deprecated-badge">Deprecated since \1</span>', new)
         new = block_re.sub('', new)
         if new != data:
-            with open(fn, "w", encoding="utf-8") as f:
+            with open(fn, "w", encoding="utf-8", newline="\n") as f:
                 f.write(new)
 
 """
@@ -364,7 +364,7 @@ def _retarget_api_links_html(htmlpath):
             return '%s%s#%s"'%(m.group(1), m.group(2), sec) if sec else m.group(0)
         new = ref_re.sub(repl, data)
         if new != data:
-            with open(fn, "w", encoding="utf-8") as f:
+            with open(fn, "w", encoding="utf-8", newline="\n") as f:
                 f.write(new)
 
 """
@@ -784,7 +784,7 @@ def _inject_ext_version(fout, text, version, deprecated_rst=""):
     if deprecated_rst:
         note += "\n.. rst-class:: api-deprecated\n\n%s\n" % deprecated_rst
     text = text[:m.end()] + note + text[m.end():]
-    with open(fout, "w", encoding="utf-8") as f:
+    with open(fout, "w", encoding="utf-8", newline="\n") as f:
         f.write(text)
 
 """
@@ -972,7 +972,7 @@ def generate_common(dstpath, sections, ver, rev, versions_url, warnings_as_error
         # file, feed doxygen its config on stdin ('-') with an overriding line appended;
         # the last assignment wins, so warnings stay warnings.
         print("  WARNING: doc warnings-as-errors DISABLED (--!warnings_as_errors)")
-        with open("Doxyfile", "r") as fh:
+        with open("Doxyfile", "r", encoding="utf-8") as fh:
             config = fh.read() + "\nWARN_AS_ERROR = NO\n"
         argv = ["doxygen", "-"]
 
@@ -983,7 +983,7 @@ def generate_common(dstpath, sections, ver, rev, versions_url, warnings_as_error
     if diagnostics.strip():
         sys.stderr.write(diagnostics)
         sys.stderr.flush()
-        with open(warnlog, "w") as fh:
+        with open(warnlog, "w", encoding="utf-8") as fh:
             fh.write(diagnostics)
 
     if proc.returncode > 0:

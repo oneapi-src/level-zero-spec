@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
- Copyright (C) 2019-2022 Intel Corporation
+ Copyright (C) 2019-2026 Intel Corporation
 
  SPDX-License-Identifier: MIT
 
@@ -10,7 +10,7 @@ import util
 import parse_specs
 import generate_code
 import generate_docs
-import os, sys, platform
+import os, sys, platform, shutil
 import time
 import subprocess
 import warnings
@@ -43,7 +43,12 @@ def clean():
 """
 def build():
     if "Windows" == platform.system():
-        result = os.system('cmake -B ../build/ -S .. -G "Visual Studio 17 2022" -A x64')
+        # Match the loader CI: Ninja + MSVC Build Tools when run from a vcvars64
+        # environment; otherwise fall back to the default Visual Studio generator.
+        if os.environ.get("VCINSTALLDIR") and shutil.which("ninja"):
+            result = os.system('cmake -B ../build/ -S .. -G Ninja -D CMAKE_BUILD_TYPE=Release')
+        else:
+            result = os.system('cmake -B ../build/ -S .. -A x64')
     else:
         result = os.system('cmake -B ../build/ -S ..')
     if result == 0:
@@ -303,7 +308,7 @@ def main():
     if args['build']:
         if not build():
             print("\nBuild failed, stopping execution!")
-            return
+            sys.exit(1)
 
     # phase 5: prep for publication of html
     if args['html']:
