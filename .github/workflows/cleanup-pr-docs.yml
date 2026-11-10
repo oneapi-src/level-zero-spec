@@ -1,7 +1,9 @@
 name: Cleanup PR Documentation
 
+# pull_request_target also fires when the PR has merge conflicts, where pull_request
+# does not. Safe here: this workflow never checks out or runs PR code.
 on:
-  pull_request:
+  pull_request_target:
     types: [closed]
 
 env:
@@ -10,6 +12,11 @@ env:
 
 permissions:
   contents: read
+
+# Same group as this PR's deploy, so closing the PR cancels a deploy in progress.
+concurrency:
+  group: "pages-${{ github.event.pull_request.number }}"
+  cancel-in-progress: true
 
 jobs:
   cleanup-pr-docs:

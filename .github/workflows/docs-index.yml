@@ -26,6 +26,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     permissions:
       contents: write
+      pull-requests: read
     # Run on every completion, even failed or cancelled: a newer run cancels an
     # older one, so skipping here could leave the page stale.
     if: github.repository_owner == 'intel-innersource'
@@ -36,6 +37,35 @@ jobs:
           ref: gh-pages
           path: gh-pages-repo
           clean: false
+
+      - name: Remove previews of closed PRs
+        # Catch-all for previews that cleanup-pr-docs.yml missed. On an API error
+        # nothing is removed and the landing page still updates.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: | #bash
+          cd gh-pages-repo
+          python3 <<'PYTHON'
+          import json, os, subprocess, urllib.request
+
+          api = f"{os.environ['GITHUB_API_URL']}/repos/{os.environ['GITHUB_REPOSITORY']}/pulls"
+          headers = {'Authorization': f"Bearer {os.environ['GH_TOKEN']}",
+                     'Accept': 'application/vnd.github+json'}
+          open_prs, page = set(), 1
+          while True:
+              req = urllib.request.Request(f'{api}?state=open&per_page=100&page={page}', headers=headers)
+              batch = json.load(urllib.request.urlopen(req, timeout=30))
+              open_prs |= {f"pr-{p['number']}" for p in batch}
+              if len(batch) < 100:
+                  break
+              page += 1
+
+          for item in sorted(os.listdir('.')):
+              if item.startswith('pr-') and os.path.isdir(item) and item not in open_prs:
+                  print(f'Removing {item}: PR is not open')
+                  subprocess.run(['git', 'rm', '-rq', item], check=True)
+          PYTHON
 
       - name: Write landing page template
         run: | #bash
