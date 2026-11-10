@@ -142,10 +142,17 @@ jobs:
                       card.innerHTML = `
                           <h2>${version.name}</h2>
                           <p>Branch: <span class="branch-name">${version.branch}</span></p>
-                          <p class="updated">Last updated: ${version.updated}</p>
+                          <p class="updated">Last updated: <span>…</span></p>
                           <a href="${version.url}">View Documentation →</a>
                       `;
                       container.appendChild(card);
+                      // Read the deploy time here, not at build time, so a re-deploy
+                      // leaves index.html unchanged (no second gh-pages push).
+                      const stamp = card.querySelector('.updated span');
+                      fetch(`./${version.branch}/deployed.txt`, {cache: 'no-store'})
+                          .then(r => r.ok ? r.text() : fetch(`./${version.branch}/.deployed`).then(r2 => r2.ok ? r2.text() : 'unknown'))
+                          .then(t => { stamp.textContent = t.trim() || 'unknown'; })
+                          .catch(() => { stamp.textContent = 'unknown'; });
                   });
               </script>
           </body>
@@ -181,15 +188,10 @@ jobs:
                           name = f"{item.replace('_', ' ').title()} Branch"
                           sort_key = ('branch', item)
                       
-                      # Builds deployed before the stamp file existed show "unknown"
-                      stamp = os.path.join(item, '.deployed')
-                      updated = open(stamp).read().strip() if os.path.exists(stamp) else 'unknown'
-
                       versions.append({
                           'name': name,
                           'branch': item,
                           'url': f'./{item}/index.html',
-                          'updated': updated,
                           'sort_key': sort_key
                       })
           

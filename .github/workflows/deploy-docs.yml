@@ -236,8 +236,9 @@ jobs:
           
           # Copy new docs
           cp -r ../gh-pages-staging/${{ env.DIR_NAME }} .
-          # gh-pages is a shallow checkout, so git log cannot date each build
-          date -u '+%Y-%m-%d %H:%M:%S UTC' > "${{ env.DIR_NAME }}/.deployed"
+          # gh-pages is a shallow checkout, so git log cannot date each build.
+          # The landing page fetches this file when it loads.
+          date -u '+%Y-%m-%d %H:%M:%S UTC' > "${{ env.DIR_NAME }}/deployed.txt"
           
           # Stage only this build's folder; root files belong to docs-index.yml
           git add -A "${{ env.DIR_NAME }}"
