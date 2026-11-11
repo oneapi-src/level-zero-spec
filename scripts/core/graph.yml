@@ -450,7 +450,9 @@ params:
       desc: "[in] handle to the graph to pause capture"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "Graph is not in a recording state"
+        - "Capture into `hGraph` is already paused"
+    - $X_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
+        - "Capture into `hGraph` was never started or has already ended"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Resumes capturing commands to the graph after a pause."
@@ -463,7 +465,10 @@ params:
       desc: "[in] handle to the graph to resume capture"
 returns:
     - $X_RESULT_ERROR_INVALID_ARGUMENT:
-        - "Graph is not in a paused state"
+        - "Capture into `hGraph` is not paused"
+        - "The command list from which `hGraph` was recording is capturing into another graph"
+    - $X_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING:
+        - "Capture into `hGraph` was never started or has already ended"
 --- #--------------------------------------------------------------------------
 type: function
 desc: "Gets monotonically increasing, process-unique ID of the graph."
