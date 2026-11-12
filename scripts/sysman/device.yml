@@ -162,7 +162,7 @@ etors:
       desc: "Device supports on-demand page-faulting."
 --- #--------------------------------------------------------------------------
 type: struct
-desc: "Device properties. To get OEM Serial ID, pNext member of this structure should point to an instance of ${s}_oem_serial_id_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIES. To get Device Index, pNext member of this structure should point to an instance of ${s}_device_index_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_DEVICE_INDEX_EXT_PROPERTIES. To get the GPU topology of the device, pNext member of this structure should point to an instance of ${s}_device_gpu_topology_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_DEVICE_GPU_TOPOLOGY_EXT_PROPERTIES. To get the SOC unique ID of the device, pNext member of this structure should point to an instance of $s_device_soc_uid_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_DEVICE_SOC_UID_EXT_PROPERTIES."
+desc: "Device properties. To get OEM Serial ID, pNext member of this structure should point to an instance of ${s}_oem_serial_id_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_OEM_SERIAL_ID_EXT_PROPERTIES. To get Device Index, pNext member of this structure should point to an instance of ${s}_device_index_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_DEVICE_INDEX_EXT_PROPERTIES. To get the GPU topology of the device, pNext member of this structure should point to an instance of ${s}_device_gpu_topology_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_DEVICE_GPU_TOPOLOGY_EXT_PROPERTIES. To get the SOC unique ID of the device, pNext member of this structure should point to an instance of $s_device_soc_uid_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_DEVICE_SOC_UID_EXT_PROPERTIES. To get the UUID, type and flags of the device, pNext member of this structure should point to an instance of $s_device_ext_properties_t with its stype set to $S_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIES."
 class: $sDevice
 name: $s_device_properties_t
 base: $s_base_properties_t
@@ -172,6 +172,7 @@ members:
       desc: "[out] Core device properties"
       deprecated:
           since: "1.7"
+          reason: "Get the UUID, type and flags through pNext."
           use: $s_device_ext_properties_t
     - type: uint32_t
       name: "numSubdevices"

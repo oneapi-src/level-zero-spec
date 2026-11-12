@@ -477,11 +477,14 @@ device:
 .. parsed-literal::
 
   function ShowDeviceInfo(${s}_device_handle_t hSysmanDevice)
+      ${s}_device_ext_properties_t extProps {}
+      extProps.stype = ${S}_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIES
       ${s}_device_properties_t devProps {}
-      devProps.stype = ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2    // ${X}_STRUCTURE_TYPE_DEVICE_PROPERTIES deprecated since 1.17
+      devProps.stype = ${S}_STRUCTURE_TYPE_DEVICE_PROPERTIES
+      devProps.pNext = &extProps
       ${s}_device_state_t devState
       if (${s}DeviceGetProperties(hSysmanDevice, &devProps) == ${X}_RESULT_SUCCESS)
-          output("    UUID:           %s", devProps.core.uuid.id)
+          output("    UUID:           %s", extProps.uuid.id)
           output("    #subdevices:    %u", devProps.numSubdevices)
           output("    brand:          %s", devProps.brandName)
           output("    model:          %s", devProps.modelName)
