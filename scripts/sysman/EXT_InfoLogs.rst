@@ -24,11 +24,13 @@ API
     * ${s}_info_log_type_ext_t
     * ${s}_info_log_format_ext_t
     * ${s}_info_log_record_type_ext_t
+    * ${s}_info_log_field_type_ext_t
 
 * Handles
 
     * ${s}_info_log_handle_t
     * ${s}_info_log_instance_handle_t
+    * ${s}_info_log_decoder_context_handle_t
 
 * Structures
 
@@ -36,6 +38,7 @@ API
     * ${s}_info_log_instance_ext_desc_t
     * ${s}_info_log_metadata_ext_t
     * ${s}_info_log_read_status_ext_t
+    * ${s}_info_log_decodable_field_info_ext_t
 
 * Functions
 
@@ -45,10 +48,17 @@ API
     * ${s}InfoLogInstanceReadWithMetadataExt
     * ${s}InfoLogInstancePeekWithMetadataExt
     * ${s}InfoLogInstanceDeleteExt
+    * ${s}InfoLogDecoderContextCreateExt
+    * ${s}InfoLogDecoderContextGetFieldInfoExt
+    * ${s}InfoLogDecoderContextDecodeStartExt
+    * ${s}InfoLogDecoderContextReadFieldExt
+    * ${s}InfoLogDecoderContextDecodeStopExt
+    * ${s}InfoLogDecoderContextDeleteExt
 
 * Macros
 
     * ${S}_INFO_LOGS_EXT_NAME
+    * ${S}_INFO_LOG_FIELD_DESC_SIZE
 
 Info Logs Overview
 ~~~~~~~~~~~~~~~~~~
@@ -66,12 +76,15 @@ The format of the records is reported by ${s}InfoLogGetPropertiesExt. Records in
 extension returns them as opaque binary data and the application is responsible for
 decoding them.
 
+Where the driver can decode that format, an application can have it decode named fields
+out of those records instead of parsing the record format itself, as described in
+`Info Log Decoder Overview`_ below.
+
 Enumerating Info Logs and Querying Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. parsed-literal::
 
-    // Query the number of info logs supported by the driver
     uint32_t logCount = 0;
     ${s}DriverEnumInfoLogsExt(hDriver, &logCount, nullptr);
 
@@ -84,7 +97,6 @@ Enumerating Info Logs and Querying Properties
         allocate(logCount * sizeof(${s}_info_log_handle_t));
     ${s}DriverEnumInfoLogsExt(hDriver, &logCount, phInfoLogs);
 
-    // Query the properties of the first info log
     ${s}_info_log_ext_properties_t logProps = {};
     logProps.stype = ${S}_STRUCTURE_TYPE_INFO_LOG_EXT_PROPERTIES;
     logProps.pNext = nullptr;
@@ -103,7 +115,6 @@ Collecting and Reading Records
 
 .. parsed-literal::
 
-    // Request a 256 KB collection buffer
     uint32_t bufferSizeInKb = 256;
 
     ${s}_info_log_instance_ext_desc_t desc = {};
@@ -111,7 +122,6 @@ Collecting and Reading Records
     desc.pNext = nullptr;
     desc.pBufferSizeInKb = &bufferSizeInKb;
 
-    // Named instances require isNamedInstanceSupported == true
     const char* pInstanceName =
         logProps.isNamedInstanceSupported ? "my_collection" : nullptr;
 
@@ -124,10 +134,9 @@ Collecting and Reading Records
 
     // The driver may round the requested values; re-read what was applied
     output("Collecting into %u KB\\n", bufferSizeInKb);
-    
+
     const uint64_t timeoutInMs = 500;
 
-    // Size a working buffer once
     const uint32_t bufferSize = 64 * 1024;
     const uint32_t maxRecords = 64;
 
@@ -148,7 +157,7 @@ Collecting and Reading Records
         ${s}_info_log_read_status_ext_t readStatus = {};
         readStatus.stype = ${S}_STRUCTURE_TYPE_INFO_LOG_READ_STATUS_EXT;
         readStatus.pNext = nullptr;
-        
+
         ${x}_result_t result = ${s}InfoLogInstanceReadWithMetadataExt(
             hInstance, timeoutInMs, &size, pBuffer,
             &recordCount, pDescriptors, &readStatus);
@@ -162,11 +171,11 @@ Collecting and Reading Records
         if (result == ${X}_RESULT_WARNING_DROPPED_DATA) {
             // The collection buffer overflowed. Consider a larger pBufferSizeInKb
             // or reading more often.
-            if (readStatus.droppedRecordCount == UINT32_MAX) {
+            if (readStatus.droppedRecordCount == -1) {
                 output("Warning: records were dropped, count unknown\\n");
             } else {
-                output("Warning: %u records dropped\\n",
-                       readStatus.droppedRecordCount);
+                output("Warning: %lld records dropped\\n",
+                       (long long) readStatus.droppedRecordCount);
             }
         }
 
@@ -197,7 +206,145 @@ Collecting and Reading Records
 
     free(pDescriptors);
     free(pBuffer);
-
-    // Cleanup    
     ${s}InfoLogInstanceDeleteExt(hInstance);
     free(phInfoLogs);
+
+Info Log Decoder Overview
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The functions described above return records as opaque binary data: a record in
+${S}_INFO_LOG_FORMAT_EXT_CPER format is a UEFI Common Platform Error Record.
+
+A decoder context reports the fields it can decode from a record, and reads the value of
+one of those fields out of one record.
+
+Whether the decoder is available depends on the format of the info log:
+${s}InfoLogDecoderContextCreateExt returns ${X}_RESULT_ERROR_UNSUPPORTED_FEATURE for an
+info log whose format the driver cannot decode, so an application must check the result of
+that call rather than assume that every info log can be decoded.
+
+A decoder context is created from an info log handle. One context decodes records read
+from any collection instance of the info log, and records held in a buffer whose
+collection instance was already deleted.
+
+Fields are decoded on demand, so the context reads the record buffer and the descriptor
+array for as long as it is decoding. The application must keep both allocated, and must
+not modify either, until ${s}InfoLogDecoderContextDecodeStopExt returns.
+
+A record that carries no field is not an error: every field of such a record is reported as
+${X}_RESULT_ERROR_NOT_AVAILABLE, and the other records of the batch are unaffected.
+
+Decoding the Records
+~~~~~~~~~~~~~~~~~~~~
+
+.. parsed-literal::
+
+    // Runs inside the read loop above, after a read call returns and before the
+    // cleanup, so phInfoLogs, pBuffer, size, pDescriptors and recordCount are valid
+
+    ${s}_info_log_decoder_context_handle_t hDecoderContext = nullptr;
+    if (${s}InfoLogDecoderContextCreateExt(phInfoLogs[0], &hDecoderContext)
+            != ${X}_RESULT_SUCCESS) {
+        output("Records of this info log cannot be decoded\\n");
+        return;
+    }
+
+    // The fields follow the format of the info log, so query them once
+    uint32_t fieldCount = 0;
+    ${s}InfoLogDecoderContextGetFieldInfoExt(hDecoderContext, &fieldCount, nullptr);
+
+    ${s}_info_log_decodable_field_info_ext_t* pFields =
+        (${s}_info_log_decodable_field_info_ext_t*)
+            allocate(fieldCount * sizeof(${s}_info_log_decodable_field_info_ext_t));
+
+    for (uint32_t f = 0; f < fieldCount; f++) {
+        pFields[f].stype = ${S}_STRUCTURE_TYPE_INFO_LOG_DECODABLE_FIELD_INFO_EXT;
+        pFields[f].pNext = nullptr;
+    }
+
+    ${s}InfoLogDecoderContextGetFieldInfoExt(hDecoderContext, &fieldCount, pFields);
+
+    for (uint32_t f = 0; f < fieldCount; f++) {
+        output("Field '%s' (id %u, %zu byte(s), since version %s): %s\\n",
+               pFields[f].name, pFields[f].fieldId, pFields[f].requiredBytes,
+               pFields[f].versionString, pFields[f].desc);
+    }
+
+    if (${s}InfoLogDecoderContextDecodeStartExt(hDecoderContext, size, pBuffer,
+                                               recordCount, pDescriptors)
+            != ${X}_RESULT_SUCCESS) {
+        output("Could not start decoding this batch of records\\n");
+        free(pFields);
+        ${s}InfoLogDecoderContextDeleteExt(phInfoLogs[0], hDecoderContext);
+        return;
+    }
+
+    ${x}_bool_t failed = false;
+    for (uint32_t r = 0; r < recordCount && !failed; r++) {
+        for (uint32_t f = 0; f < fieldCount; f++) {
+            uint8_t* pValue = (uint8_t*) allocate(pFields[f].requiredBytes);
+            size_t bytesCopied = 0;
+
+            ${x}_result_t result = ${s}InfoLogDecoderContextReadFieldExt(
+                hDecoderContext, pFields[f].fieldId, r,
+                pValue, pFields[f].requiredBytes, &bytesCopied);
+
+            if (result == ${X}_RESULT_ERROR_NOT_AVAILABLE) {
+                // This record does not carry this field. Not a failure.
+                free(pValue);
+                continue;
+            }
+            if (result != ${X}_RESULT_SUCCESS) {
+                output("Could not read field '%s' of record %u\\n", pFields[f].name, r);
+                free(pValue);
+                failed = true;
+                break;
+            }
+
+            // A field may hold several elements; only bytesCopied bytes are valid
+            switch (pFields[f].type) {
+            case ${S}_INFO_LOG_FIELD_TYPE_EXT_UINT32:
+                for (size_t e = 0; e < bytesCopied / sizeof(uint32_t); e++) {
+                    uint32_t value;
+                    memcpy(&value, pValue + e * sizeof(value), sizeof(value));
+                    output("Record %u: %s[%zu] = %u\\n", r, pFields[f].name, e, value);
+                }
+                break;
+            case ${S}_INFO_LOG_FIELD_TYPE_EXT_INT64:
+                for (size_t e = 0; e < bytesCopied / sizeof(int64_t); e++) {
+                    int64_t value;
+                    memcpy(&value, pValue + e * sizeof(value), sizeof(value));
+                    output("Record %u: %s[%zu] = %lld\\n", r, pFields[f].name, e,
+                           (long long) value);
+                }
+                break;
+            case ${S}_INFO_LOG_FIELD_TYPE_EXT_DOUBLE:
+                for (size_t e = 0; e < bytesCopied / sizeof(double); e++) {
+                    double value;
+                    memcpy(&value, pValue + e * sizeof(value), sizeof(value));
+                    output("Record %u: %s[%zu] = %f\\n", r, pFields[f].name, e, value);
+                }
+                break;
+            case ${S}_INFO_LOG_FIELD_TYPE_EXT_STRING:
+                if (bytesCopied > 0) {
+                    output("Record %u: %s = %s\\n", r, pFields[f].name, (const char*) pValue);
+                }
+                break;
+            case ${S}_INFO_LOG_FIELD_TYPE_EXT_RAW_BYTES:
+                // For example a ${s}_uuid_t when requiredBytes is ${S}_MAX_UUID_SIZE
+                process(pValue, bytesCopied);
+                break;
+            default:
+                // Data types added by a later version of this extension
+                break;
+            }
+
+            free(pValue);
+        }
+    }
+
+    // pBuffer and pDescriptors may be reused after this returns
+    ${s}InfoLogDecoderContextDecodeStopExt(hDecoderContext);
+
+    free(pFields);
+    ${s}InfoLogDecoderContextDeleteExt(phInfoLogs[0], hDecoderContext);

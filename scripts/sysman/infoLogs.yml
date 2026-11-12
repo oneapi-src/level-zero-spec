@@ -25,6 +25,10 @@ etors:
       value: "$X_MAKE_VERSION( 1, 0 )"
       desc: "version 1.0"
       version: "1.19"
+    - name: "1_1"
+      value: "$X_MAKE_VERSION( 1, 1 )"
+      desc: "version 1.1"
+      version: "1.21"
 --- #--------------------------------------------------------------------------
 type: handle
 desc: "Handle for a Sysman info log"
@@ -437,3 +441,210 @@ members:
     - type: $s_info_log_instance_handle_t
       name: handle
       desc: "[in] handle of Sysman info log collection instance object"
+--- #--------------------------------------------------------------------------
+type: macro
+desc: "Maximum number of characters in the description of a decodable field, including the null terminator."
+version: "1.21"
+name: $S_INFO_LOG_FIELD_DESC_SIZE
+value: "256"
+--- #--------------------------------------------------------------------------
+type: handle
+desc: "Handle for a Sysman info log decoder context"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: "$s_info_log_decoder_context_handle_t"
+--- #--------------------------------------------------------------------------
+type: enum
+desc: "Data types of a field decoded from an info log record"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: $s_info_log_field_type_ext_t
+etors:
+    - name: UINT32
+      value: "0"
+      desc: "The value of the field is a `uint32_t`."
+      version: "1.21"
+    - name: INT64
+      desc: "The value of the field is an `int64_t`."
+      version: "1.21"
+    - name: DOUBLE
+      desc: "The value of the field is a `double`."
+      version: "1.21"
+    - name: STRING
+      desc: "The value of the field is a null terminated array of `char`."
+      version: "1.21"
+    - name: RAW_BYTES
+      desc: "The value of the field is an array of uninterpreted bytes."
+      version: "1.21"
+--- #--------------------------------------------------------------------------
+type: struct
+desc: "Description of one field that a decoder context can decode from an info log record"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: $s_info_log_decodable_field_info_ext_t
+base: $s_base_properties_t
+details:
+    - "An array of these structures is returned by $sInfoLogDecoderContextGetFieldInfoExt, one element per field."
+    - "The fields that are reported are a property of the format of the info log, reported in infoLogFormat of $s_info_log_ext_properties_t, and not of a batch of records. Whether a given record carries a given field is reported per record by $sInfoLogDecoderContextReadFieldExt."
+    - "The application must locate a field by `name`, and must then use the `fieldId`, `type` and `requiredBytes` that are reported for that name."
+members:
+    - type: char
+      name: "desc[$S_INFO_LOG_FIELD_DESC_SIZE]"
+      desc: "[out] human readable description of the field (NULL terminated string value)."
+    - type: char
+      name: "name[$S_STRING_PROPERTY_SIZE]"
+      desc: "[out] name of the field (NULL terminated string value)."
+    - type: uint32_t
+      name: fieldId
+      desc: "[out] identifier of the field, to be passed to $sInfoLogDecoderContextReadFieldExt."
+    - type: $s_info_log_field_type_ext_t
+      name: type
+      desc: "[out] data type of the value of the field."
+    - type: size_t
+      name: requiredBytes
+      desc: |
+            [out] number of bytes that the application must provide to $sInfoLogDecoderContextReadFieldExt to read this field.
+            For $S_INFO_LOG_FIELD_TYPE_EXT_STRING this value includes the null terminator.
+    - type: size_t
+      name: elementCount
+      desc: "[out] number of elements of the data type that the field holds."
+    - type: char
+      name: "versionString[$S_STRING_PROPERTY_SIZE]"
+      desc: "[out] version of this extension in which the field was first reported."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Create a decoder context for an info log"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: CreateExt
+details:
+    - "A decoder context decodes the records returned by $sInfoLogInstanceReadWithMetadataExt or by $sInfoLogInstancePeekWithMetadataExt into named fields, which the application reads one at a time using $sInfoLogDecoderContextReadFieldExt."
+    - "Any number of decoder contexts may exist for one info log."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $s_info_log_handle_t
+      name: hInfoLog
+      desc: "[in] handle of the info log that the records are read from"
+    - type: "$s_info_log_decoder_context_handle_t*"
+      name: phDecoderContext
+      desc: "[out] handle of the decoder context that was created."
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Get the fields that a decoder context can decode from an info log record"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: GetFieldInfoExt
+details:
+    - "The application should first call this function with `pCount` pointing to a value of zero to retrieve the number of fields that can be decoded."
+    - "A call in which `*pCount` is greater than zero and `pFieldInfos` is nullptr shall report the number of fields and shall not write any descriptor, as a call with a count of zero does."
+    - "The application may call this function from simultaneous threads."
+params:
+    - type: $s_info_log_decoder_context_handle_t
+      name: hDecoderContext
+      desc: "[in] handle of the decoder context"
+    - type: "uint32_t*"
+      name: pCount
+      desc: |
+            [in,out] pointer to the number of fields that can be decoded.
+            if count is zero, then the driver shall update the value with the total number of fields that can be decoded and shall not return any descriptor.
+            if count is greater than the number of fields that can be decoded, then the driver shall update the value with the correct number of fields.
+    - type: "$s_info_log_decodable_field_info_ext_t*"
+      name: pFieldInfos
+      desc: |
+            [in,out][optional][range(0, *pCount)] array of field descriptions, one element per field.
+            if count is less than the number of fields that can be decoded, then the driver shall only retrieve that number of descriptors.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Start decoding info log records in a decoder context"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: DecodeStartExt
+details:
+    - "The application must not call this function from simultaneous threads with the same decoder context handle."
+    - "The application may call this function from simultaneous threads with different decoder context handles."
+params:
+    - type: $s_info_log_decoder_context_handle_t
+      name: hDecoderContext
+      desc: "[in] handle of the decoder context"
+    - type: uint32_t
+      name: size
+      desc: "[in] size, in bytes, of the record data in `pBuffer`, as returned in `*pSize` by the read or peek call"
+    - type: "const uint8_t*"
+      name: pBuffer
+      desc: "[in][optional][range(0, size)] the record data, as returned in `pBuffer` by the read or peek call"
+    - type: uint32_t
+      name: recordCount
+      desc: "[in] number of records in the batch, as returned in `*pRecordCount` by the read or peek call"
+    - type: "const $s_info_log_metadata_ext_t*"
+      name: pDescriptors
+      desc: "[in][optional][range(0, recordCount)] array of metadata describing each record, as returned in `pDescriptors` by the read or peek call"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Read field values of one record that a decoder context is decoding"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: ReadFieldExt
+details:
+    - "The application must not call this function from simultaneous threads with the same decoder context handle."
+    - "The application may call this function from simultaneous threads with different decoder context handles."
+params:
+    - type: $s_info_log_decoder_context_handle_t
+      name: hDecoderContext
+      desc: "[in] handle of the decoder context, which must be decoding a batch"
+    - type: uint32_t
+      name: fieldId
+      desc: "[in] identifier of the field to read, as reported in `fieldId` of $s_info_log_decodable_field_info_ext_t"
+    - type: uint32_t
+      name: recordId
+      desc: "[in] index of the record in the `pDescriptors` that was passed to $sInfoLogDecoderContextDecodeStartExt"
+    - type: "void*"
+      name: pOutBuffer
+      desc: "[in,out][range(0, bufferLen)] buffer that will contain the value of the field"
+    - type: size_t
+      name: bufferLen
+      desc: "[in] size, in bytes, of `pOutBuffer`"
+    - type: "size_t*"
+      name: pBytesCopied
+      desc: |
+            [out] pointer to the number of bytes written to `pOutBuffer`.
+            the driver shall update the value with zero when the record does not carry the field.
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Stop decoding of info log records that a decoder context is decoding"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: DecodeStopExt
+details:
+    - "The application must not call this function from simultaneous threads with the same decoder context handle."
+    - "The application may call this function from simultaneous threads with different decoder context handles."
+params:
+    - type: $s_info_log_decoder_context_handle_t
+      name: hDecoderContext
+      desc: "[in] handle of the decoder context"
+--- #--------------------------------------------------------------------------
+type: function
+desc: "Delete a decoder context of an info log"
+version: "1.21"
+class: $sInfoLogDecoderContext
+name: DeleteExt
+details:
+    - "The application must ensure that no other function is using the handle when calling this function."
+    - "The application must not call this function from simultaneous threads with the same handle."
+    - "The implementation of this function must be thread-safe."
+params:
+    - type: $s_info_log_handle_t
+      name: hInfoLog
+      desc: "[in] handle of the info log that the decoder context was created from"
+    - type: $s_info_log_decoder_context_handle_t
+      name: hDecoderContext
+      desc: "[in][release] handle of the decoder context to delete"
+--- #--------------------------------------------------------------------------
+type: class
+desc: "C++ wrapper for a Sysman info log decoder context"
+version: "1.21"
+name: $sInfoLogDecoderContext
+owner: $sInfoLog
+members:
+    - type: $s_info_log_decoder_context_handle_t
+      name: handle
+      desc: "[in] handle of Sysman info log decoder context object"

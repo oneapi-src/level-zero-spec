@@ -90,5 +90,6 @@ classes:
         - { name: "$sVFManagement",          ordinal: 20 }
         - { name: "$sInfoLog",               ordinal: 21 }
         - { name: "$sInfoLogInstance",       ordinal: 22 }
+        - { name: "$sInfoLogDecoderContext",  ordinal: 23 }
     runtime:
         - { name: "$r",                      ordinal: 1 }
