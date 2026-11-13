@@ -290,7 +290,10 @@ def main():
             generate_code.generate_api(incpath, srcpath, config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
 
             if args['rst']:
-                generate_docs.generate_rst(docpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'])
+                # other built specs, for cross-spec "Used by (Tools)" links
+                others = [(c['name'], c['namespace'], c['tags'], input['specs'][i])
+                          for i, c in enumerate(input['configs']) if i != idx and args[c['name']]]
+                generate_docs.generate_rst(docpath, config['name'], config['namespace'], config['tags'], args['ver'], args['rev'], specs, input['meta'], others)
 
         if util.makeErrorCount():
             util.printAllErrors()

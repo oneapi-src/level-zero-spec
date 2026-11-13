@@ -463,7 +463,7 @@ params:
       name: hDriver
       desc: "[in] handle of the driver instance"
 returns:
-    type: "ze_context_handle_t"
+    type: "$x_context_handle_t"
     desc: "handle of the context"
     success: "handle of the default context"
     failure:

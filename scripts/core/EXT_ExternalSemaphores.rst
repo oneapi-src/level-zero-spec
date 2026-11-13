@@ -10,7 +10,7 @@ from templates import helper as th
 %>
 :orphan:
 
-.. _ZE_external_semaphores:
+.. _ZE_extension_external_semaphores:
 
 =============================================
  External Semaphores Extension Specification

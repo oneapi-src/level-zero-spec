@@ -41,19 +41,19 @@ members:
     - type: $s_limit_unit_t
       name: "limitUnit"
       desc: "[out] unit used for specifying limit, i.e. current units (milliamps) or power units (milliwatts)."
-    - type: ze_bool_t
+    - type: $x_bool_t
       name: enabledStateLocked
       desc: "[out] indicates if the power limit state (enabled/ignored) can be set (false) or is locked (true)."
-    - type: ze_bool_t
+    - type: $x_bool_t
       name: enabled
       desc: "[in,out] indicates if the limit is enabled (true) or ignored (false). If enabledStateIsLocked is True, this value is ignored."
-    - type: ze_bool_t
+    - type: $x_bool_t
       name: intervalValueLocked
       desc: "[out] indicates if the interval can be modified (false) or is fixed (true)."
     - type: int32_t
       name: interval
       desc: "[in,out] power averaging window in milliseconds. If intervalValueLocked is true, this value is ignored."
-    - type: ze_bool_t
+    - type: $x_bool_t
       name: limitValueLocked
       desc: "[out] indicates if the limit can be set (false) or if the limit is fixed (true)."
     - type: int32_t

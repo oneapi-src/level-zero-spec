@@ -11,7 +11,7 @@ import hashlib
 import json
 import yaml
 import copy
-from templates.helper import param_traits, type_traits, value_traits, get_tag, version_key
+from templates.helper import param_traits, type_traits, value_traits, get_tag, version_key, subt
 
 default_version = "1.0"
 
@@ -114,8 +114,15 @@ def _handle_members_allowed(parent_desc, member_desc, tags):
 """
     validate documents meet some basic (easily detectable) requirements of code generation
 """
+# a hard-coded API prefix in a param/member type; use the tag ($x_, $t_, $s_, $r_)
+RE_HARDCODED_TYPE_PREFIX = re.compile(r"\b(ze|zet|zes|zer)_\w+_t\b")
+
 def _validate_doc(f, d, tags, line_num):
     is_iso = lambda x : re.match(r"[_a-zA-Z][_a-zA-Z0-9]{0,30}", x)
+
+    def __validate_type_tag(item, prefix, key='type'):
+        if RE_HARDCODED_TYPE_PREFIX.search(item[key]):
+            raise Exception(prefix+"'%s' must use a tag ($x_, $t_, $s_, $r_), not a hard-coded prefix: %s"%(key, item[key]))
 
     def __validate_ordinal(d):
         if 'ordinal' in d:
@@ -351,6 +358,8 @@ def _validate_doc(f, d, tags, line_num):
             if item['type'].endswith("flag_t"):
                 raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
 
+            __validate_type_tag(item, prefix)
+
             ver = __validate_version(item, prefix=prefix, base_version=d_ver)
             __validate_deprecated(item, prefix=prefix, base_version=d_ver)
             if _version_compare_less(ver, max_ver):
@@ -399,6 +408,8 @@ def _validate_doc(f, d, tags, line_num):
 
             if item['type'].endswith("flag_t"):
                 raise Exception(prefix+"'type' must not be '*_flag_t': %s"%item['type'])
+
+            __validate_type_tag(item, prefix)
 
             ver = __validate_version(item, prefix=prefix, base_version=d_ver)
             if _version_compare_greater(ver, max_ver):
@@ -483,6 +494,8 @@ def _validate_doc(f, d, tags, line_num):
                 raise Exception("'%s' requires the following scalar fields: {`desc`, `name`}"%d['type'])
 
             __validate_name(d, 'name', tags)
+            if 'base' in d:
+                __validate_type_tag(d, "", key='base')
             __validate_members(d, tags)
             __validate_details(d)
             __validate_ordinal(d)
@@ -498,6 +511,8 @@ def _validate_doc(f, d, tags, line_num):
                 __validate_name(d, 'name', tags, case='camel')
 
             __validate_params(d, tags)
+            if isinstance(d.get('returns'), dict) and 'type' in d['returns']:
+                __validate_type_tag(d['returns'], "'returns': ")
             __validate_details(d)
             __validate_ordinal(d)
             __validate_version(d)
@@ -1333,6 +1348,18 @@ Entry-point:
     Reads each YML file and extracts data
     Returns list of data per file
 """
+"""
+    Replace tags in the type fields that templates print as-is (here and in the
+    loader, via input.json): a function's returns 'type' and a default_struct's
+    'base'. The YML uses tags like every other type; the output keeps real names.
+"""
+def _resolve_verbatim_types(d, tags):
+    if d.get('type') == 'function' and isinstance(d.get('returns'), dict) and 'type' in d['returns']:
+        d['returns']['type'] = subt(None, tags, d['returns']['type'])
+    if d.get('type') == 'default_struct' and 'base' in d:
+        d['base'] = subt(None, tags, d['base'])
+    return d
+
 def parse(section, version, tags, meta, ref):
     path = os.path.join("./", section)
     specs = []
@@ -1350,6 +1377,7 @@ def parse(section, version, tags, meta, ref):
             if not _validate_doc(f, d, tags, line_nums[i]):
                 successful = False
                 continue
+            d = _resolve_verbatim_types(d, tags)
             if 'version' not in d:
                 d['version'] = default_version
 

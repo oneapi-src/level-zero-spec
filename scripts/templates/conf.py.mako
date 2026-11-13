@@ -237,5 +237,12 @@ rst_prolog = """
 .. |l0_spec_version| replace:: ${ver}
 """
 
+# Inline HTML with no wrapper <span>; the stock raw role adds one, which
+# breaks markup split across two roles (usage-line fold in api_spec.mako).
+def _raw_html_role(name, rawtext, text, lineno, inliner, options=None, content=None):
+    from docutils import nodes
+    return [nodes.raw(rawtext, text, format='html')], []
+
 def setup(app):
     app.add_css_file('custom.css')
+    app.add_role('raw-html', _raw_html_role)

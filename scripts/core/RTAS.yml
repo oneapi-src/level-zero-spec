@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2025 Intel Corporation
+# Copyright (C) 2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -709,7 +709,7 @@ members:
       desc: "[in] 8-bit geometry mask for ray masking"
     - type: $x_rtas_builder_packed_input_data_format_ext_t
       name: transformFormat
-      desc: "[in] format of the specified transformation"
+      desc: "[in] format of the specified transformation, must be $X_RTAS_BUILDER_INPUT_DATA_FORMAT_EXT_FLOAT3X4_COLUMN_MAJOR, $X_RTAS_BUILDER_INPUT_DATA_FORMAT_EXT_FLOAT3X4_ALIGNED_COLUMN_MAJOR, or $X_RTAS_BUILDER_INPUT_DATA_FORMAT_EXT_FLOAT3X4_ROW_MAJOR"
     - type: uint32_t
       name: instanceUserID
       desc: "[in] user-specified identifier for the instance"

@@ -245,3 +245,61 @@ table.deprecated-table td {
    entries with a `.current-page` class (kept as a styling hook), but no bold /
    marker is applied -- the emphasis widened the text (extra wrapping) and the
    "you are here" cue read as odd emphasis rather than orientation. */
+
+/* "Used by / Member of / pNext may point to / ..." back-links under a
+   type heading (api_spec.mako, `.. container:: api-usage`). */
+.api-usage {
+    font-size: 0.85em;
+    margin: 0.2rem 0 0.8rem;
+}
+.api-usage .line-block {
+    margin: 0;
+}
+.api-usage .line {
+    margin-bottom: 0.15rem;
+}
+/* Long lines fold to one line ending in "Show all N"; the hidden checkbox
+   unfolds the same line in place (no JavaScript). */
+.api-usage .line:has(.api-usage-fold) {
+    display: flex;
+    gap: 0.3em;
+}
+.api-usage .line:has(.api-usage-fold) > strong {
+    flex-shrink: 0;
+}
+.api-usage-fold {
+    display: flex;
+    min-width: 0;
+}
+.api-usage-fold > input {
+    display: none;
+}
+.api-usage-links {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.api-usage-fold > label {
+    flex-shrink: 0;
+    margin: 0 0 0 0.5em;
+    cursor: pointer;
+    font-style: italic;
+    color: var(--pst-color-link, #0068b5);
+}
+.api-usage-fold > label .less,
+.api-usage-fold > input:checked ~ label .more {
+    display: none;
+}
+.api-usage-fold > input:checked ~ label .less {
+    display: inline;
+}
+/* unfolded: one inline flow, the toggle trails the last link */
+.api-usage .line:has(.api-usage-fold > input:checked) {
+    display: block;
+}
+.api-usage-fold:has(> input:checked),
+.api-usage-fold > input:checked ~ .api-usage-links {
+    display: inline;
+    white-space: normal;
+}

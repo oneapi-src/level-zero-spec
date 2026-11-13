@@ -69,7 +69,7 @@ def _find_enum_from_etor(etor, meta):
     make restructuredtext reference from symbol
 """
 def _make_ref(fin, iline, symbol, symbol_type, meta):
-    if not re.match(r"function|struct|union|enum|etor", symbol_type):
+    if not re.match(r"function|struct|union|enum|etor|handle|typedef", symbol_type):
         return ""
 
     ref = _fixup_tag(symbol)
@@ -183,8 +183,8 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                             newline += "\\"
                         line = tuple[2]
                     else:
-                        # ignore reference links for specific types that have no API documentation for them
-                        if not re.match(r"env|handle|typedef|macro", symbol_type):
+                        # env vars and macros have no API entry by design; others (e.g. callback) warn
+                        if not re.match(r"env|macro", symbol_type):
                             print("%s(%s) : warning : reference link %s (type=%s) not used."%(fin, iline+1, symbol, symbol_type))
                 else:
                     print("%s(%s) : warning : reference link %s not used."%(fin, iline+1, word))
@@ -202,7 +202,7 @@ def _generate_valid_rst(fin, fout, namespace, tags, ver, rev, meta):
                           meta=meta)
 
 # object types rendered on the API-reference pages by api_spec.mako
-RE_API_OBJ_TYPE = r"function|enum|struct|union"
+RE_API_OBJ_TYPE = r"function|enum|struct|union|handle|typedef"
 
 # synthetic bucket key for classless structs/enums -> the "Data Types" page
 _DATATYPES_KEY = "__datatypes__"
@@ -438,7 +438,7 @@ def _objs_have_api_content(objs):
         t = obj['type']
         if re.match(r"function", t) and ("condition" not in obj):
             return True
-        if re.match(r"enum|struct|union", t):
+        if re.match(r"enum|struct|union|handle|typedef", t):
             return True
     return False
 
@@ -479,8 +479,10 @@ def _paginator_html(slugs, current):
     it renders natively; anchors/display names mirror api_spec.mako exactly.
 """
 def _class_toc_html(class_pages, current_slug, namespace, tags):
-    groups = [("Functions", r"function"),
+    groups = [("Handles", r"handle"),
+              ("Functions", r"function"),
               ("Enumerations", r"enum"),
+              ("Typedefs", r"typedef"),
               ("Structures", r"struct|union")]
     # The current-page marker only means something when the class spans >1 page;
     # for a single-page class every entry is "on this page", so skip the marker.
@@ -499,6 +501,10 @@ def _class_toc_html(class_pages, current_slug, namespace, tags):
                 name, label = th.make_type_name(namespace, tags, obj), "Enumerations"
             elif re.match(r"struct|union", t):
                 name, label = th.make_type_name(namespace, tags, obj), "Structures"
+            elif re.match(r"handle", t):
+                name, label = th.make_type_name(namespace, tags, obj), "Handles"
+            elif re.match(r"typedef", t):
+                name, label = th.make_type_name(namespace, tags, obj), "Typedefs"
             else:
                 continue
             href = "%s.html#%s" % (pslug, _anchor_id(name))
@@ -571,11 +577,14 @@ def _class_pages(buckets, meta, namespace, tags, tier_title="", tier_adjective="
         funcs = sorted([o for o in objs if re.match(r"function", o['type'])], key=th.function_sort_key)
         enums = [o for o in objs if re.match(r"enum", o['type'])]
         structs = [o for o in objs if re.match(r"struct|union", o['type'])]
+        handles = [o for o in objs if re.match(r"handle", o['type'])]
+        typedefs = [o for o in objs if re.match(r"typedef", o['type'])]
 
-        # Paginate functions only; enums/structs land on the class's final page.
+        # Paginate functions only; handles open page 1, enums/structs land on the final page.
         groups = [funcs[i:i + _MAX_FUNCS_PER_PAGE]
                   for i in range(0, len(funcs), _MAX_FUNCS_PER_PAGE)] or [[]]
-        groups[-1] = groups[-1] + enums + structs
+        groups[0] = handles + groups[0]
+        groups[-1] = groups[-1] + enums + typedefs + structs
 
         slugs = [slug] + ["%s-%d" % (slug, i + 1) for i in range(1, len(groups))]
         for idx, group in enumerate(groups):
@@ -618,6 +627,380 @@ def _build_tiers(specs, meta, namespace, tags):
         if pages:
             tiers.append({'dir': tdir, 'title': ttitle, 'pages': pages})
     return tiers
+
+"""
+    Reverse "usage" index for the API reference (core, tools, sysman): for each
+    struct/union/enum/handle, the functions that take it, the structs that hold it,
+    the extra links from the _rule_* functions below, and for handles a link to the
+    guide section that explains the object.
+    Returns {raw obj name: rst container block}. Types used everywhere are skipped.
+"""
+_USAGE_NAMESPACES = ("ze", "zet", "zes")
+_USAGE_SKIP = ("$x_result_t", "$x_bool_t", "$x_structure_type_t", "$t_structure_type_t", "$s_structure_type_t")
+# Sysman handles may become their own types later, so do not show "Alias of"
+# (it would suggest zes and ze handles are interchangeable).
+_NO_ALIAS_NAMESPACES = ("zes",)
+# display order of the usage lines
+_USAGE_LABELS = ("Obtained from", "Used by", "Member of", "Variant of", "Variants", "Passed to callback in",
+                 "Format value", "Buffer data for", "Packed form of", "Packed as",
+                 "pNext may point to", "Goes in pNext of", "Alias of", "Extension", "See also")
+# labels that also get a line per other spec, e.g. "Used by (Tools)"
+_USAGE_CROSS_LABELS = ("Obtained from", "Used by", "Member of")
+# a line with more links than this folds to one line with a "Show all N" toggle
+_USAGE_SHOW = 10
+
+def _usage_line_rst(label, links, uid):
+    if len(links) <= _USAGE_SHOW:
+        return "   | **%s:** %s" % (label, ", ".join(links))
+    # CSS-only toggle (custom.css): the checkbox state unfolds the same line
+    return "   | **%s:** :raw-html:`%s` %s :raw-html:`%s`" % (label,
+        '<span class="api-usage-fold"><input type="checkbox" id="%s">'
+        '<span class="api-usage-links">' % uid,
+        ", ".join(links),
+        '</span><label for="%s"><span class="more">Show all %d</span>'
+        '<span class="less">Show less</span></label></span>' % (uid, len(links)))
+
+def _usage_base_type(t):
+    return re.sub(r"\b(const|struct|union)\b|\*|\[.*?\]", "", t).strip()
+
+_RST_UNDERLINE = re.compile(r"^([=\-~^\"'`#*+])\1+\s*$")
+
+def _read_text(path):
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+def _rst_headings(text):
+    """[(title, explicit label or None)] for each section heading in rst text."""
+    lines = text.splitlines()
+    out = []
+    for i in range(1, len(lines)):
+        t = lines[i - 1].strip()
+        if t and _RST_UNDERLINE.match(lines[i]) and not _RST_UNDERLINE.match(lines[i - 1]) \
+                and len(lines[i].strip()) >= len(t):
+            j = i - 2
+            while j >= 0 and not lines[j].strip():
+                j -= 1
+            m = re.match(r"^\.\. _([^:]+):\s*$", lines[j]) if j >= 0 else None
+            out.append((t, m.group(1) if m else None))
+    return out
+
+def _guide_pages(dstpath):
+    """Read once per section: PROG.rst headings and the EXT_*.rst pages (sorted)."""
+    prog = os.path.join(dstpath, "PROG.rst")
+    heads = _rst_headings(_read_text(prog)) if os.path.exists(prog) else []
+    exts = [(os.path.splitext(os.path.basename(f))[0], _read_text(f))
+            for f in sorted(glob.glob(os.path.join(dstpath, "EXT_*.rst")))]
+    return heads, exts
+
+def _guide_link(namespace, tags, obj, heads, exts):
+    """rst link to the guide section for a handle's class, or None.
+    Order: PROG section label equal to the class title (e.g. Performance-Factor),
+    PROG heading equal to the class title, PROG heading holding its words,
+    an exact match with the last word dropped (Event Pool -> Events), then the EXT_*
+    page that names the handle."""
+    from docutils.nodes import make_id
+    words = th.make_class_title(namespace, tags, obj['class']).lower().split()
+    titles = [t for t, _ in heads]
+
+    def word_hit(w, h):
+        return h == w or (len(w) >= 3 and h.startswith(w))
+    def exact(t, ws):
+        return t.lower() in (" ".join(ws), " ".join(ws) + "s", " ".join(ws) + "es")
+    def holds(t, ws):
+        return all(any(word_hit(w, h) for h in re.split(r"[\s/]+", t.lower())) for w in ws)
+    for t, label in heads:  # a section label equal to the class title is exact
+        if label and label.lower().replace("-", " ").replace("_", " ") in (" ".join(words), " ".join(words) + "s"):
+            return ":ref:`%s (Programming Guide) <%s>`" % (t, label)
+    tries = [(exact, words), (holds, words)]
+    if len(words) > 1:  # exact only: "holds" on fewer words matches unrelated headings
+        tries.append((exact, words[:-1]))
+    for test, ws in tries:
+        for t, label in heads:
+            if test(t, ws) and (label or titles.count(t) == 1):
+                if label:
+                    return ":ref:`%s (Programming Guide) <%s>`" % (t, label)
+                return "`%s (Programming Guide) <../../PROG.html#%s>`__" % (t, make_id(t))
+    name = th.make_type_name(namespace, tags, obj)
+    # plain name, or its :ref: label once the page links it
+    pat = re.compile(r"\b(%s|%s)\b" % (re.escape(name), re.escape(name.replace("_", "-"))))
+    for page, text in exts:
+        if pat.search(text):
+            return ":doc:`../../%s`" % page
+    return None
+
+# --- Link rules -------------------------------------------------------------
+# Each rule finds one kind of link that is not visible from param/member types.
+# Each returns (from raw name, to raw name) pairs, so a rule can be removed alone.
+# Rules A, B: exact, derived from types/members -- keep.
+# Rules C-G: TEMPORARY, they parse prose -- delete each once its YML field exists.
+
+def _rule_a_callback_params(objs):
+    """RULE A (callbacks): a struct passed to a callback is linked to the struct
+    that holds that callback, since callbacks have no API-page entry.
+    e.g. ze_rtas_geometry_aabbs_ext_cb_params_t -> ze_rtas_builder_procedural_geometry_info_ext_t"""
+    structs = [o for o in objs if o['type'] in ('struct', 'union')]
+    for cb in (o for o in objs if o['type'] == 'callback'):
+        holders = [o['name'] for o in structs
+                   if any(_usage_base_type(m['type']) == cb['name'] for m in o['members'])]
+        for p in cb['params']:
+            for h in holders:
+                yield _usage_base_type(p['type']), h
+
+def _rule_b_tagged_variants(objs):
+    """RULE B (tagged variants): struct T is a variant of struct B when T starts with
+    all of B's members and one of them says "must be $X_..." (a type tag).
+    e.g. ze_rtas_builder_procedural_geometry_info_ext_t -> ze_rtas_builder_geometry_info_ext_t
+    Skips *_base_* and stype/pNext structs, which every struct would match."""
+    structs = [o for o in objs if o['type'] in ('struct', 'union')]
+    for b in structs:
+        if b.get('base') or not b['members'] or "_base_" in b['name']:
+            continue
+        key = [(m['type'], m['name']) for m in b['members']]
+        for t in structs:
+            lead = t['members'][:len(key)]
+            if t is not b and len(t['members']) > len(key) \
+                    and [(m['type'], m['name']) for m in lead] == key \
+                    and any(re.search(r"must be \$[A-Z]+_\w+", m['desc']) for m in lead):
+                yield t['name'], b['name']
+
+def _rule_c_pnext_prose(objs, namespace, tags):
+    """RULE C (pNext prose): reads every desc/details sentence that says "pNext".
+    TEMPORARY: replace with the planned `extends` YML field, then delete this rule.
+    A named struct is the chain target; "this structure should point to X" or
+    "use X as pNext" reverses it; a sentence naming only a function targets that
+    function (if it has a pNext param) or its pNext-able struct params.
+    A member desc is about its own struct's pNext, so it always reverses.
+    Yields (ext struct, target struct or function); function targets end in "()"."""
+    rev = re.compile(r"this structure should point|use \S+ as pNext", re.I)
+    structs = {th.subt(namespace, tags, o['name']): o for o in objs if o['type'] in ('struct', 'union')}
+    funcs = {th.make_func_name(namespace, tags, o): o for o in objs if o['type'] == 'function'}
+    for sname, o in structs.items():
+        texts = [(o['desc'], False)] + [(str(x), False) for x in o.get('details', [])]
+        texts += [(m['desc'], True) for m in o['members']
+                  if m['name'] != "pNext" and isinstance(m.get('desc'), str)]
+        for text, member in texts:
+            for sent in re.split(r"(?<=\.)\s+", th.subt(namespace, tags, text)):
+                if "pNext" not in sent:
+                    continue
+                named = [x for x in dict.fromkeys(re.findall(r"\b\w+_t\b", sent))
+                         if x in structs and x != sname]
+                if member:
+                    for x in named:
+                        yield structs[x]['name'], o['name']
+                elif rev.search(sent):
+                    for x in named:
+                        yield structs[x]['name'], o['name']
+                elif named:
+                    for x in named:
+                        yield o['name'], structs[x]['name']
+                else:
+                    for f in dict.fromkeys(re.findall(r"\b[a-z]{2,3}[A-Z]\w+", sent)):
+                        if f not in funcs:
+                            continue
+                        params = funcs[f]['params']
+                        if any(p['name'] == "pNext" for p in params):
+                            yield o['name'], f + "()"
+                        for p in params:
+                            ps = structs.get(th.subt(namespace, tags, _usage_base_type(p['type'])))
+                            if ps and ps.get('base') and ps is not o:
+                                yield o['name'], ps['name']
+
+def _rule_d_buffer_format(objs, namespace, tags):
+    """RULE D (buffer data format): an enum value whose desc says "(see S)" names
+    struct S as the layout of a void* buffer; a member that says "must be <value>"
+    marks the struct holding that buffer.
+    e.g. ze_rtas_quad_indices_uint32_ext_t -> ..._QUAD_INDICES_UINT32 ->
+         quadFormat of ze_rtas_builder_quads_geometry_info_ext_t
+    TEMPORARY: replace with a planned YML field on the enum value naming its
+    struct (like `extends`), then delete this rule.
+    Yields ("format", S, (enum, etor)) and ("data", S, holder struct)."""
+    structs = {th.subt(namespace, tags, o['name']): o for o in objs if o['type'] in ('struct', 'union')}
+    for e in objs:
+        if e['type'] != 'enum' or "structure_type" in e['name']:
+            continue
+        for et in e['etors']:
+            m = re.search(r"\(see (\w+_t)\)", th.subt(namespace, tags, et['desc']))
+            if not m or m.group(1) not in structs:
+                continue
+            s = structs[m.group(1)]['name']
+            etor = th.subt(namespace, tags, et['name'])
+            yield "format", s, (e['name'], etor)
+            for o in structs.values():
+                if any(re.search(r"must be\b.*\b%s\b" % etor, th.subt(namespace, tags, mb['desc']))
+                       for mb in o['members']):
+                    yield "data", s, o['name']
+
+def _rule_e_packed_typedef(objs):
+    """RULE E (packed typedefs): a typedef whose desc says "(see E)" is the packed
+    storage form of enum E.
+    e.g. ze_rtas_builder_packed_input_data_format_ext_t -> ze_rtas_builder_input_data_format_ext_t
+    TEMPORARY: replace with a planned YML field on the typedef naming its enum,
+    then delete this rule."""
+    enums = {o['name'] for o in objs if o['type'] == 'enum'}
+    for o in objs:
+        if o['type'] == 'typedef':
+            m = re.search(r"\(see (\$\w+_t)\)", o['desc'])
+            if m and m.group(1) in enums:
+                yield o['name'], m.group(1)
+
+def _rule_f_void_param(objs):
+    """RULE F (void* params): a struct that a void* param's text says it points to
+    is used by that function, though the param type hides it.
+    e.g. ze_runtime_requirements_graph_desc_t -> zeDeviceGetRuntimeRequirements (pObjDesc)
+    Reads the param desc and the details that name the param; needs "point(er) to".
+    TEMPORARY: replace with a planned YML field on the param naming its types,
+    then delete this rule."""
+    structs = {o['name'] for o in objs if o['type'] in ('struct', 'union')}
+    for o in (o for o in objs if o['type'] == 'function'):
+        for p in o['params']:
+            if p['name'] == "pNext" or not re.fullmatch(r"(const )?void\*", p['type'].strip()):
+                continue
+            texts = [p['desc']] + [str(x) for x in o.get('details', [])
+                                   if re.search(r"\b%s\b" % re.escape(p['name']), str(x))]
+            for t in texts:
+                if re.search(r"\bpoint(?:s|ing|er)? to\b", t):
+                    for x in dict.fromkeys(re.findall(r"\$\w+_t\b", t)):
+                        if x in structs:
+                            yield x, o
+
+def _rule_g_form_of(objs):
+    """RULE G (form of): a function whose details say it takes parameters
+    "in the form of S" uses struct S, e.g. ze_base_desc_t.
+    TEMPORARY: replace with a planned YML field, then delete this rule."""
+    structs = {o['name'] for o in objs if o['type'] in ('struct', 'union')}
+    for o in (o for o in objs if o['type'] == 'function'):
+        for t in (str(x) for x in o.get('details', [])):
+            for x in re.findall(r"in the form of (\$\w+_t)\b", t):
+                if x in structs:
+                    yield x, o
+
+def _build_usage_rst(specs, namespace, tags, dstpath, others=()):
+    if namespace not in _USAGE_NAMESPACES:
+        return {}
+    objs = [o for s in specs for o in s['objects'] if "condition" not in o]
+    types = {o['name']: o for o in objs if re.match(r"struct|union|enum|handle|typedef", o['type'])}
+    tables = {}
+
+    # match hard-coded prefixes too (zet_metric_handle_t == $t_metric_handle_t)
+    by_cname = {th.subt(namespace, tags, n): n for n in types}
+
+    def add(label, key, val):
+        key = key if key in types else by_cname.get(th.subt(namespace, tags, key), key)
+        if key in types and key not in _USAGE_SKIP and val not in tables.setdefault(label, {}).setdefault(key, []):
+            tables[label][key].append(val)
+
+    def ref(name):
+        if name.endswith("()"):  # function target from rule C
+            return ":ref:`%s`" % name[:-2]
+        return ":ref:`%s`" % th.subt(namespace, tags, name).replace("_", "-")
+
+    # "[out]" handle pointer params: the function gives out that handle
+    # (listed under "Obtained from" instead of "Used by"). IPC handles are
+    # structs, so match on the *_handle_t name too.
+    def param_label(p, key):
+        out = re.match(r"\[(out|in,out)\]", p.get('desc', ''))
+        if out and "*" in p['type'] and "const" not in p['type'] \
+                and (types.get(key, {}).get('type') == 'handle' or key.endswith("_handle_t")):
+            return "Obtained from"
+        return "Used by"
+
+    # Direct links from param, return and member types: first this spec, then
+    # the other specs built in this run, e.g. "Used by (Tools)" for a tools API
+    # taking a core type. others: [(section, namespace, tags, specs)].
+    sources = [("", namespace, tags, objs)]
+    for section, other_ns, other_tags, other_specs in others:
+        if other_ns in _USAGE_NAMESPACES:
+            sources.append((" (%s)" % section.capitalize(), other_ns, other_tags,
+                            [o for s in other_specs for o in s['objects'] if "condition" not in o]))
+    cross = [sfx for sfx, _, _, _ in sources[1:]]
+    for sfx, ns, tg, src in sources:
+        key_of = lambda t: by_cname.get(th.subt(ns, tg, _usage_base_type(t)))
+        for o in src:
+            if o['type'] == 'function':
+                fref = ":ref:`%s`" % th.make_func_name(ns, tg, o)
+                for p in o['params']:
+                    key = key_of(p['type'])
+                    if key:
+                        add(param_label(p, key) + sfx, key, fref)
+                # a function that returns a handle (e.g. zeDriverGetDefaultContext)
+                key = key_of(o.get('return_type', ""))
+                if key and key.endswith("_handle_t"):
+                    add("Obtained from" + sfx, key, fref)
+            elif o['type'] in ('struct', 'union'):
+                for m in o['members']:
+                    key = key_of(m['type'])
+                    if key and key != o['name']:
+                        add("Member of" + sfx, key, ":ref:`%s`" % th.subt(ns, tg, o['name']).replace("_", "-"))
+
+    for frm, to in _rule_a_callback_params(objs):
+        add("Passed to callback in", frm, ref(to))
+    for frm, to in _rule_b_tagged_variants(objs):
+        add("Variant of", frm, ref(to))
+        add("Variants", to, ref(frm))
+    for frm, to in _rule_c_pnext_prose(objs, namespace, tags):
+        add("Goes in pNext of", frm, ref(to))
+        add("pNext may point to", to, ref(frm))
+    for kind, frm, to in _rule_d_buffer_format(objs, namespace, tags):
+        if kind == "format":
+            enum, etor = to
+            add("Format value", frm, ":ref:`%s <%s>`" % (etor, th.subt(namespace, tags, enum).replace("_", "-")))
+        else:
+            add("Buffer data for", frm, ref(to))
+
+    for frm, to in _rule_e_packed_typedef(objs):
+        add("Packed form of", frm, ref(to))
+        add("Packed as", to, ref(frm))
+    for frm, fn in _rule_g_form_of(objs):
+        add("Used by", frm, ":ref:`%s`" % th.make_func_name(namespace, tags, fn))
+    for frm, fn in _rule_f_void_param(objs):
+        add("Used by", frm, ":ref:`%s`" % th.make_func_name(namespace, tags, fn))
+
+    # extension version enums: link the EXT page whose label is the extension name
+    ext_of = _extension_name_map(specs, namespace, tags)
+    heads, exts = _guide_pages(dstpath)
+    ext_labels = set()
+    for _, text in exts:
+        m = re.search(r"^\.\. _(\S+):\s*$", text, re.M)
+        if m:
+            ext_labels.add(m.group(1))
+    for name, o in types.items():
+        full = th.subt(namespace, tags, name)
+        if o['type'] != 'enum' or not re.search(r"_(?:ext_|exp_)?version(?:_ext|_exp)?_t$", full) \
+                or full not in ext_of:
+            continue
+        if ext_of[full] in ext_labels:
+            add("Extension", name, ":ref:`%s`" % ext_of[full])
+            continue
+        # guard: a page names this enum but its first label is not the extension name
+        pat = re.compile(r"\b(%s|%s)\b" % (re.escape(full), re.escape(full.replace("_", "-"))))
+        for page, text in exts:
+            if pat.search(text):
+                msg = "%s.rst : error : first label must be '.. _%s:' (the extension name) so %s can link to it" % (
+                    page, ext_of[full], full)
+                print(msg)
+                util.makeError(msg)
+
+    for name, o in types.items():
+        if o['type'] == 'typedef' and o.get('value') in types:
+            add("Alias of", name, ref(o['value']))
+        if o['type'] == 'handle':
+            if o.get('alias') and namespace not in _NO_ALIAS_NAMESPACES:
+                add("Alias of", name, ref(o['alias']))
+            else:
+                link = _guide_link(namespace, tags, o, heads, exts)
+                if link:
+                    add("See also", name, link)
+
+    labels = [l for base in _USAGE_LABELS
+              for l in [base] + ([base + sfx for sfx in cross] if base in _USAGE_CROSS_LABELS else [])]
+    rst = {}
+    for name in types:
+        lines = [_usage_line_rst(label, tables[label][name], "usage-%s-%d" % (
+                     th.subt(namespace, tags, name).replace("_", "-"), i))
+                 for i, label in enumerate(labels) if tables.get(label, {}).get(name)]
+        if lines:
+            rst[name] = ".. container:: api-usage\n\n" + "\n".join(lines)
+    return rst
 
 """
     Build version lookup maps for extension doc pages, keyed by the SUBSTITUTED
@@ -791,7 +1174,7 @@ def _inject_ext_version(fout, text, version, deprecated_rst=""):
 Entry-point:
     generate restructuredtext documents from templates
 """
-def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta):
+def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta, others=()):
     srcpath = os.path.join("./", section)
     dstpath = os.path.join(docpath, "source", section)
 
@@ -845,6 +1228,7 @@ def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta):
         util.removePath(apipath)
         util.makePath(apipath)
 
+        usage = _build_usage_rst(specs, namespace, tags, dstpath, others)
         tier_entries = []
         for tier in _build_tiers(specs, meta, namespace, tags):
             tierpath = os.path.join(apipath, tier['dir'])
@@ -862,7 +1246,8 @@ def generate_rst(docpath, section, namespace, tags, ver, rev, specs, meta):
                     heading_prefix=page['heading_prefix'],
                     objects=page['objects'],
                     paginator=page['paginator'],
-                    hidden_toctree=page['hidden_toctree'])
+                    hidden_toctree=page['hidden_toctree'],
+                    usage=usage)
             # Build the "In this class" sidebar TOC for EVERY class (keyed by Sphinx
             # pagename): the full function/enum/struct index for the class. For
             # paginated classes it spans all pages with cross-page links; for

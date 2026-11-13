@@ -15,7 +15,7 @@ type: default_struct
 desc: "Immediate Command List default descriptor for GPU devices"
 class: $r
 name: $xDefaultGPUImmediateCommandQueueDesc
-base: ze_command_queue_desc_t
+base: $x_command_queue_desc_t
 version: "1.14"
 members:
     - type: $x_structure_type_t
@@ -56,7 +56,7 @@ type: default_struct
 desc: "Device Unified Shared Memory Allocation default descriptor for GPU devices"
 class: $r
 name: $xDefaultGPUDeviceMemAllocDesc
-base: ze_device_mem_alloc_desc_t
+base: $x_device_mem_alloc_desc_t
 version: "1.14"
 members:
     - type: $x_structure_type_t
@@ -85,7 +85,7 @@ type: default_struct
 desc: "Host Unified Shared Memory Allocation default descriptor for GPU devices"
 class: $r
 name: $xDefaultGPUHostMemAllocDesc
-base: ze_host_mem_alloc_desc_t
+base: $x_host_mem_alloc_desc_t
 version: "1.14"
 members:
     - type: $x_structure_type_t
@@ -156,7 +156,7 @@ params:
       name: identifier
       desc: "[in] integer identifier of the device"
 returns:
-    type: "ze_device_handle_t"
+    type: "$x_device_handle_t"
     desc: "handle of the device"
     success: "handle of the device with the given identifier"
     failure:
@@ -176,7 +176,7 @@ details:
     - "Details on the error can be retrieved using $rGetLastErrorDescription function."
 params: []
 returns:
-    type: "ze_context_handle_t"
+    type: "$x_context_handle_t"
     desc: "handle of the context"
     success: "handle of the default context"
     failure:

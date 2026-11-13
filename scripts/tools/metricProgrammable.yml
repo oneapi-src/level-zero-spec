@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2023-2024 Intel Corporation
+# Copyright (C) 2023-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -461,9 +461,9 @@ params:
     - type: uint32_t
       name: metricCount
       desc: "[in] number of metric handles."
-    - type: "zet_metric_handle_t *"
+    - type: "$t_metric_handle_t*"
       name: phMetrics
-      desc: "[in] metric handles to be added to the metric groups."
+      desc: "[in][range(0, metricCount)] array of metric handles to be added to the metric groups."
     - type: "const char *"
       name: pMetricGroupNamePrefix
       desc: "[in] prefix to the name created for the metric groups. Must point to a null-terminated character array no longer than $T_MAX_METRIC_GROUP_NAME_PREFIX_EXP."

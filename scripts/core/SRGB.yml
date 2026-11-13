@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2022 Intel Corporation
+# Copyright (C) 2021-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -32,7 +32,7 @@ class: $xImage
 name: $x_srgb_ext_desc_t
 base: $x_base_desc_t
 members:
-    - type: ze_bool_t
+    - type: $x_bool_t
       name: sRGB
       desc: "[in] Is sRGB."
 details:

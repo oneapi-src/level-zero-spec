@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 import re
 from templates import helper as th
-%><%page args="paginator='', hidden_toctree=None, heading_prefix=None"/>\
+%><%page args="paginator='', hidden_toctree=None, heading_prefix=None, usage=None"/>\
 <%
     # `title` and `objects` are passed in by generate_rst (one call per class/family page).
     # `title` is the page H1 (tier-qualified for ext/exp, e.g. "External Semaphore - Extensions");
@@ -17,6 +17,8 @@ from templates import helper as th
         heading_prefix = title
     if hidden_toctree is None:
         hidden_toctree = []
+    if usage is None:
+        usage = {}
     title_bar = "=" * max(60, len(title))
 %>\
 ${title_bar}
@@ -38,6 +40,50 @@ oneAPI Level Zero Specification - Version ${rev}
 ## Generate API documentation
 ## (The old in-page links table was removed -- the "In this class"
 ##  right sidebar now provides the full per-class index.)
+#################################################################
+## -------------------------
+## Handles
+## -------------------------
+<%isempty = True%>
+%for obj in objects:
+%if re.match(r"handle", obj['type']):
+%if isempty: # only display section title if there is content.
+<%heading = heading_prefix + " Handles"%>\
+${heading}
+${"=" * len(heading)}
+<%isempty = False%>
+%endif
+<%tname = th.make_type_name(n, tags, obj)%>\
+
+.. _${tname.replace("_", "-")}:
+
+${tname}
+${"-" * len(tname)}
+
+.. rst-class:: api-version
+
+*Added in version ${obj.get('version', '1.0')}*
+%if obj.get('deprecated'):
+
+.. rst-class:: api-deprecated
+
+${th.make_deprecated_rst(n, tags, obj, meta)}
+%endif
+%if obj['name'] in usage:
+
+${usage[obj['name']]}
+%endif
+
+## Opaque declaration: hides the "struct _x *" / alias typedef (not useful to
+## readers) and keeps the link target for signatures.
+<%hdesc = th.subt(n, tags, obj['desc']).rstrip()%>\
+.. cpp:type:: ${tname}
+
+    ${hdesc if hdesc.endswith('.') else hdesc + '.'}
+
+%endif
+%endfor # obj in objects
+
 #################################################################
 ## -------------------------
 ## Functions
@@ -103,6 +149,10 @@ ${"-" * len(tname)}
 
 ${th.make_deprecated_rst(n, tags, obj, meta)}
 %endif
+%if obj['name'] in usage:
+
+${usage[obj['name']]}
+%endif
 
 %if th.type_traits.is_flags(obj['name']):
 ## Declare the flags typedef so member types can link to it.
@@ -111,6 +161,45 @@ ${th.make_deprecated_rst(n, tags, obj, meta)}
 
 %endif
 .. doxygenenum:: ${th.make_enum_name(n, tags, obj)}
+    :project: LevelZero
+
+%endif
+%endfor # obj in objects
+#################################################################
+## -------------------------
+## Typedefs
+## -------------------------
+<%isempty = True%>
+%for obj in objects:
+%if re.match(r"typedef", obj['type']):
+%if isempty: # only display section title if there is content.
+<%heading = heading_prefix + " Typedefs"%>\
+${heading}
+${"=" * len(heading)}
+<%isempty = False%>
+%endif
+<%tname = th.make_type_name(n, tags, obj)%>\
+
+.. _${tname.replace("_", "-")}:
+
+${tname}
+${"-" * len(tname)}
+
+.. rst-class:: api-version
+
+*Added in version ${obj.get('version', '1.0')}*
+%if obj.get('deprecated'):
+
+.. rst-class:: api-deprecated
+
+${th.make_deprecated_rst(n, tags, obj, meta)}
+%endif
+%if obj['name'] in usage:
+
+${usage[obj['name']]}
+%endif
+
+.. doxygentypedef:: ${tname}
     :project: LevelZero
 
 %endif
@@ -143,6 +232,10 @@ ${"-" * len(tname)}
 .. rst-class:: api-deprecated
 
 ${th.make_deprecated_rst(n, tags, obj, meta)}
+%endif
+%if obj['name'] in usage:
+
+${usage[obj['name']]}
 %endif
 
 %if re.match(r"struct", obj['type']):

@@ -120,7 +120,7 @@ class: $sDevice
 name: $s_reset_properties_t
 base: $s_base_properties_t
 members:
-    - type: ze_bool_t
+    - type: $x_bool_t
       name: force
       desc: |
             [in] If set to true, all applications that are currently using the device will be forcibly killed.
