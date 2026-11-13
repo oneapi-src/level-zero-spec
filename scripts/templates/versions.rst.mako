@@ -25,6 +25,9 @@ Level Zero
   * - Version
     - Date
     - View
+  * - `Level Zero v1.21.26`_
+    - 2026-11-12
+    - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.21.26/index.html>`__
   * - `Level Zero v1.20.41`_
     - 2026-10-23
     - `HTML <https://oneapi-src.github.io/level-zero-spec/level-zero/1.20.41/index.html>`__
@@ -133,6 +136,41 @@ Level Zero
 
 Release Notes
 -------------
+
+Level Zero v1.21.26
+~~~~~~~~~~~~~~~~~~~
+
+* New Features in v1.21
+
+    - Add Sysman API version query
+
+      - zesDriverGetApiVersion, zes_api_version_t, ZES_MAKE_VERSION, ZES_MAJOR_VERSION and ZES_MINOR_VERSION
+
+    - Add Sysman Device SOC Unique ID extension (zes_device_soc_uid_ext_properties_t)
+    - Add version 1.1 of the Sysman Info Logs extension, with an info log decoder
+
+      - zesInfoLogDecoderContextCreateExt, zesInfoLogDecoderContextGetFieldInfoExt, zesInfoLogDecoderContextDecodeStartExt
+      - zesInfoLogDecoderContextReadFieldExt, zesInfoLogDecoderContextDecodeStopExt, zesInfoLogDecoderContextDeleteExt
+
+    - Add ZE_COMMAND_QUEUE_PRIORITY_LOW and ZE_COMMAND_QUEUE_PRIORITY_HIGH
+
+      - Deprecate ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOW and ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGH
+
+    - Add usage links to the API reference: each handle, struct, enum and typedef lists the APIs and types that use it ("Obtained from", "Used by", "Member of", pNext and "Extension" links)
+    - Link handle, typedef and flags types in the API reference and the Programming Guides
+
+* Patches since v1.20.41 release
+
+    - zeGraphPauseCaptureExt and zeGraphResumeCaptureExt return ZE_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING when capture was never started or has already ended
+    - zetMetricGroupCalculateMultipleMetricValuesExp and zetMetricGroupCalculateMetricExportDataExp may return ZE_RESULT_WARNING_DROPPED_DATA
+    - Deprecate zet_tracer_exp_handle_t
+    - Clarify zeCommandListHostSynchronize for immediate command lists on the same ordinal
+    - Clarify defaultLimit in zes_power_ext_properties_t
+    - Point zes_device_properties_t users to pNext for the device extension properties
+    - Clean up the documentation of the device compute dot-product extension
+    - List the allowed transformFormat values for ray tracing acceleration structure instances
+    - Document the range of phMetrics in zetDeviceCreateMetricGroupsFromMetricsExp
+
 
 Level Zero v1.20.41
 ~~~~~~~~~~~~~~~~~~~

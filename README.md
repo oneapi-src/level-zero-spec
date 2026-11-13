@@ -1,20 +1,24 @@
 # Contents
 This repo contains the following:
 - API specification in YaML
-- API programming guide in Markdown
-- API C/C++ header files (generated)
-- API Python module (generated)
-- Sample C++ wrapper (generated)
-- Sample C/C++ import library (generated)
+- API programming guides in reStructuredText
+- API C header files (generated)
+- API Python modules (generated)
+- API C++ stub sources (generated), built as a static library to check that the headers compile
+
+The published specification is at https://oneapi-src.github.io/level-zero-spec/.
 
 # Source Code Generation
-Code is generated using included [Python scripts](/scripts/README.md).  
+Code and documentation are generated using the included [Python scripts](/scripts/README.md).
+That README lists the requirements and the steps to run them.
 
 # Documentation
-Documentation is generated from source code using Doxygen.
+Documentation is generated from the YaML and the programming guides using Doxygen, Breathe and Sphinx.
+The HTML output is in **docs/html**.
 
 # Third-Party Tools
-Contains requirements for building spec. Compiler tools for building need to be manually installed for Windows.
+[third_party/requirements.txt](/third_party/requirements.txt) is the single list of Python packages
+for building the spec. Compiler tools for building need to be manually installed for Windows.
 
 # Building
 Project is defined using [CMake](https://cmake.org/).
@@ -34,7 +38,8 @@ Use `-D CMAKE_BUILD_TYPE=Debug` at configure time for a Debug build. Use a fresh
 build directory when switching from a Visual Studio or NMake generator to Ninja.
 
 **Linux**:
-Executable and binaries will be in **build/bin**
+Generate the source files first using the [Python scripts](scripts/README.md); by default
+`run.py` also runs this build. Static libraries will be in **build/lib**.
 ~~~~
 mkdir build
 cd build
