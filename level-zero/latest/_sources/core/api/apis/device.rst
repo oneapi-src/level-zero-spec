@@ -1,7 +1,32 @@
 ============================================================
 Device
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Device Handles
+==============
+
+
+.. _ze-device-handle-t:
+
+ze_device_handle_t
+------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zeDeviceGet`, :ref:`zeDeviceGetRootDevice`, :ref:`zeDeviceGetSubDevices`, :ref:`zeCommandListGetDeviceHandle`, :ref:`zeMemGetAllocProperties`, :ref:`zeModuleGetDeviceHandle`, :ref:`zeFabricVertexGetDeviceExp`
+   | **Used by:** :raw-html:`<span class="api-usage-fold"><input type="checkbox" id="usage-ze-device-handle-t-3"><span class="api-usage-links">` :ref:`zeDeviceGetRootDevice`, :ref:`zeDeviceGetSubDevices`, :ref:`zeDeviceGetProperties`, :ref:`zeDeviceGetComputeProperties`, :ref:`zeDeviceGetModuleProperties`, :ref:`zeDeviceGetCommandQueueGroupProperties`, :ref:`zeDeviceGetMemoryProperties`, :ref:`zeDeviceGetMemoryAccessProperties`, :ref:`zeDeviceGetCacheProperties`, :ref:`zeDeviceGetImageProperties`, :ref:`zeDeviceGetExternalMemoryProperties`, :ref:`zeDeviceGetP2PProperties`, :ref:`zeDeviceCanAccessPeer`, :ref:`zeDeviceGetStatus`, :ref:`zeDeviceGetGlobalTimestamps`, :ref:`zeDeviceSynchronize`, :ref:`zeDeviceGetAggregatedCopyOffloadIncrementValue`, :ref:`zeDeviceGetCounterBasedEventMaxValue`, :ref:`zeDeviceGetRuntimeRequirements`, :ref:`zeDeviceGetRuntimeRequirementsKey`, :ref:`zeDeviceValidateRuntimeRequirements`, :ref:`zeContextCreateEx`, :ref:`zeCommandQueueCreate`, :ref:`zeCommandListCreate`, :ref:`zeCommandListCreateImmediate`, :ref:`zeContextSystemBarrier`, :ref:`zeCommandListAppendMemAdvise`, :ref:`zeEventPoolCreate`, :ref:`zeEventCounterBasedCreate`, :ref:`zeImageGetProperties`, :ref:`zeImageCreate`, :ref:`zeMemAllocShared`, :ref:`zeMemAllocDevice`, :ref:`zeMemOpenIpcHandle`, :ref:`zeMemSetAtomicAccessAttributeExp`, :ref:`zeMemGetAtomicAccessAttributeExp`, :ref:`zeModuleCreate`, :ref:`zeContextMakeMemoryResident`, :ref:`zeContextEvictMemory`, :ref:`zeContextMakeImageResident`, :ref:`zeContextEvictImage`, :ref:`zeSamplerCreate`, :ref:`zeVirtualMemQueryPageSize`, :ref:`zePhysicalMemCreate`, :ref:`zeDeviceReserveCacheExt`, :ref:`zeDeviceSetCacheAdviceExt`, :ref:`zeEventQueryTimestampsExp`, :ref:`zeImageViewCreateExt`, :ref:`zeImageViewCreateExp`, :ref:`zeDevicePciGetPropertiesExt`, :ref:`zeDeviceGetFabricVertexExp`, :ref:`zeEventQueryKernelTimestampsExt`, :ref:`zeMemGetPitchFor2dImage`, :ref:`zeDeviceImportExternalSemaphoreExt`, :ref:`zeDeviceGetVectorWidthPropertiesExt`, :ref:`zeDeviceGetCompilerInfo`, :ref:`zeDeviceGetCompilerInfoSupported` :raw-html:`</span><label for="usage-ze-device-handle-t-3"><span class="more">Show all 57</span><span class="less">Show less</span></label></span>`
+   | **See also:** `Device (Programming Guide) <../../PROG.html#device>`__
+
+.. cpp:type:: ze_device_handle_t
+
+    Handle of driver's device object.
+
 
 
 Device Functions
@@ -334,6 +359,10 @@ ze_device_type_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-properties-t`
+
 .. doxygenenum:: ze_device_type_t
     :project: LevelZero
 
@@ -346,6 +375,13 @@ ze_device_property_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-properties-t`
+
+.. doxygentypedef:: ze_device_property_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_device_property_flag_t
     :project: LevelZero
@@ -360,6 +396,13 @@ ze_device_dp_capability_flags_t
 
 *Added in version 1.16*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-compute-dotproduct-ext-properties-t`
+
+.. doxygentypedef:: ze_device_dp_capability_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_dp_capability_flag_t
     :project: LevelZero
 
@@ -372,6 +415,13 @@ ze_device_input_data_type_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.16*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-compute-dotproduct-ext-properties-t`
+
+.. doxygentypedef:: ze_device_input_data_type_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_device_input_data_type_flag_t
     :project: LevelZero
@@ -386,6 +436,13 @@ ze_device_output_data_type_flags_t
 
 *Added in version 1.16*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-compute-dotproduct-ext-properties-t`
+
+.. doxygentypedef:: ze_device_output_data_type_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_output_data_type_flag_t
     :project: LevelZero
 
@@ -398,6 +455,13 @@ ze_device_module_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-module-properties-t`
+
+.. doxygentypedef:: ze_device_module_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_device_module_flag_t
     :project: LevelZero
@@ -412,6 +476,13 @@ ze_device_fp_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-module-properties-t`
+
+.. doxygentypedef:: ze_device_fp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_fp_flag_t
     :project: LevelZero
 
@@ -424,6 +495,13 @@ ze_command_queue_group_property_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-command-queue-group-properties-t`
+
+.. doxygentypedef:: ze_command_queue_group_property_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_command_queue_group_property_flag_t
     :project: LevelZero
@@ -438,6 +516,13 @@ ze_device_memory_property_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-memory-properties-t`
+
+.. doxygentypedef:: ze_device_memory_property_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_memory_property_flag_t
     :project: LevelZero
 
@@ -450,6 +535,13 @@ ze_memory_access_cap_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-memory-access-properties-t`
+
+.. doxygentypedef:: ze_memory_access_cap_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_memory_access_cap_flag_t
     :project: LevelZero
@@ -464,6 +556,13 @@ ze_device_cache_property_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-cache-properties-t`
+
+.. doxygentypedef:: ze_device_cache_property_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_cache_property_flag_t
     :project: LevelZero
 
@@ -476,6 +575,13 @@ ze_device_p2p_property_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-p2p-properties-t`
+
+.. doxygentypedef:: ze_device_p2p_property_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_device_p2p_property_flag_t
     :project: LevelZero
@@ -490,6 +596,13 @@ ze_device_event_properties_flags_t
 
 *Added in version 1.15*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-event-properties-t`
+
+.. doxygentypedef:: ze_device_event_properties_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_event_properties_flag_t
     :project: LevelZero
 
@@ -502,6 +615,10 @@ ze_validate_runtime_requirements_result_t
 .. rst-class:: api-version
 
 *Added in version 1.16*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-validate-runtime-requirements-output-t`
 
 .. doxygenenum:: ze_validate_runtime_requirements_result_t
     :project: LevelZero
@@ -516,8 +633,13 @@ ze_device_readonly_memory_capability_t
 
 *Added in version 1.17*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-readonly-memory-ext-properties-t`
+
 .. doxygenenum:: ze_device_readonly_memory_capability_t
     :project: LevelZero
+
 
  
 Device Structures
@@ -532,6 +654,12 @@ ze_device_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetProperties`
+   | **Member of (Sysman):** :ref:`zes-device-properties-t`
+   | **pNext may point to:** :raw-html:`<span class="api-usage-fold"><input type="checkbox" id="usage-ze-device-properties-t-16"><span class="api-usage-links">` :ref:`ze-device-event-properties-t`, :ref:`ze-eu-count-ext-t`, :ref:`ze-device-luid-ext-properties-t`, :ref:`ze-device-ip-version-ext-t`, :ref:`ze-event-query-kernel-timestamps-ext-properties-t`, :ref:`ze-rtas-device-exp-properties-t`, :ref:`ze-rtas-device-ext-properties-t`, :ref:`ze-device-usablemem-size-ext-properties-t`, :ref:`ze-record-replay-graph-ext-properties-t`, :ref:`ze-device-readonly-memory-ext-properties-t`, :ref:`ze-device-npu-properties-ext-t` :raw-html:`</span><label for="usage-ze-device-properties-t-16"><span class="more">Show all 11</span><span class="less">Show less</span></label></span>`
 
 .. doxygenstruct:: ze_device_properties_t
     :project: LevelZero
@@ -548,6 +676,11 @@ ze_device_thread_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by (Tools):** :ref:`zetDebugInterrupt`, :ref:`zetDebugResume`, :ref:`zetDebugReadMemory`, :ref:`zetDebugWriteMemory`, :ref:`zetDebugGetThreadRegisterSetProperties`, :ref:`zetDebugReadRegisters`, :ref:`zetDebugWriteRegisters`
+   | **Member of (Tools):** :ref:`zet-debug-event-info-thread-stopped-t`
+
 .. doxygenstruct:: ze_device_thread_t
     :project: LevelZero
     :members:
@@ -562,6 +695,10 @@ ze_device_compute_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetComputeProperties`
 
 .. doxygenstruct:: ze_device_compute_properties_t
     :project: LevelZero
@@ -578,6 +715,10 @@ ze_native_kernel_uuid_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-module-properties-t`
+
 .. doxygenstruct:: ze_native_kernel_uuid_t
     :project: LevelZero
     :members:
@@ -592,6 +733,11 @@ ze_device_module_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetModuleProperties`
+   | **pNext may point to:** :ref:`ze-device-raytracing-ext-properties-t`, :ref:`ze-float-atomic-ext-properties-t`, :ref:`ze-scheduling-hint-exp-properties-t`
 
 .. doxygenstruct:: ze_device_module_properties_t
     :project: LevelZero
@@ -608,6 +754,11 @@ ze_command_queue_group_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetCommandQueueGroupProperties`
+   | **pNext may point to:** :ref:`ze-copy-bandwidth-exp-properties-t`
+
 .. doxygenstruct:: ze_command_queue_group_properties_t
     :project: LevelZero
     :members:
@@ -622,6 +773,11 @@ ze_device_memory_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetMemoryProperties`
+   | **pNext may point to:** :ref:`ze-device-memory-ext-properties-t`
 
 .. doxygenstruct:: ze_device_memory_properties_t
     :project: LevelZero
@@ -638,6 +794,10 @@ ze_device_memory_access_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetMemoryAccessProperties`
+
 .. doxygenstruct:: ze_device_memory_access_properties_t
     :project: LevelZero
     :members:
@@ -652,6 +812,11 @@ ze_device_cache_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetCacheProperties`
+   | **pNext may point to:** :ref:`ze-cache-reservation-ext-desc-t`, :ref:`ze-device-cache-line-size-ext-t`
 
 .. doxygenstruct:: ze_device_cache_properties_t
     :project: LevelZero
@@ -668,6 +833,11 @@ ze_device_image_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetImageProperties`
+   | **pNext may point to:** :ref:`ze-device-pitched-alloc-exp-properties-t`
+
 .. doxygenstruct:: ze_device_image_properties_t
     :project: LevelZero
     :members:
@@ -682,6 +852,10 @@ ze_device_external_memory_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetExternalMemoryProperties`
 
 .. doxygenstruct:: ze_device_external_memory_properties_t
     :project: LevelZero
@@ -698,6 +872,11 @@ ze_device_p2p_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetP2PProperties`
+   | **pNext may point to:** :ref:`ze-device-p2p-bandwidth-exp-properties-t`
+
 .. doxygenstruct:: ze_device_p2p_properties_t
     :project: LevelZero
     :members:
@@ -712,6 +891,10 @@ ze_runtime_requirements_module_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.16*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetRuntimeRequirements`
 
 .. doxygenstruct:: ze_runtime_requirements_module_desc_t
     :project: LevelZero
@@ -728,6 +911,10 @@ ze_runtime_requirements_graph_desc_t
 
 *Added in version 1.16*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetRuntimeRequirements`
+
 .. doxygenstruct:: ze_runtime_requirements_graph_desc_t
     :project: LevelZero
     :members:
@@ -742,6 +929,10 @@ ze_validate_runtime_requirements_output_t
 .. rst-class:: api-version
 
 *Added in version 1.16*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceValidateRuntimeRequirements`
 
 .. doxygenstruct:: ze_validate_runtime_requirements_output_t
     :project: LevelZero

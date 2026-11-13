@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Module Build Log &#8212; Level Zero Specification v1.20.41</title>
+    <title>Module Build Log &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Module" href="module.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-build-log-handles">Module Build Log Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-build-log-handle-t">ze_module_build_log_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv428ze_module_build_log_handle_t"><code class="docutils literal notranslate"><span class="pre">ze_module_build_log_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-build-log-functions">Module Build Log Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulebuildlogdestroy">zeModuleBuildLogDestroy</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zeModuleBuildLogDestroy28ze_module_build_log_handle_t"><code class="docutils literal notranslate"><span class="pre">zeModuleBuildLogDestroy()</span></code></a></li>
@@ -497,15 +514,35 @@
                   
   <section id="module-build-log">
 <h1>Module Build Log<a class="headerlink" href="#module-build-log" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="module-build-log-handles">
+<h2>Module Build Log Handles<a class="headerlink" href="#module-build-log-handles" title="Link to this heading">#</a></h2>
+<section id="ze-module-build-log-handle-t">
+<span id="id1"></span><h3>ze_module_build_log_handle_t<a class="headerlink" href="#ze-module-build-log-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="module.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a>, <a class="reference internal" href="module.html#zemoduledynamiclink"><span class="std std-ref">zeModuleDynamicLink</span></a>, <a class="reference internal" href="../extensions/module.html#zemoduleinspectlinkageext"><span class="std std-ref">zeModuleInspectLinkageExt</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zemodulebuildlogdestroy"><span class="std std-ref">zeModuleBuildLogDestroy</span></a>, <a class="reference internal" href="#zemodulebuildloggetstring"><span class="std std-ref">zeModuleBuildLogGetString</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference external" href="../../PROG.html#module-build-log">Module Build Log (Programming Guide)</a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv428ze_module_build_log_handle_t">
+<span id="_CPPv328ze_module_build_log_handle_t"></span><span id="_CPPv228ze_module_build_log_handle_t"></span><span id="ze_module_build_log_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_build_log_handle_t</span></span></span><a class="headerlink" href="#_CPPv428ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of module’s build log object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="module-build-log-functions">
 <h2>Module Build Log Functions<a class="headerlink" href="#module-build-log-functions" title="Link to this heading">#</a></h2>
 <section id="zemodulebuildlogdestroy">
-<span id="id1"></span><h3>zeModuleBuildLogDestroy<a class="headerlink" href="#zemodulebuildlogdestroy" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeModuleBuildLogDestroy<a class="headerlink" href="#zemodulebuildlogdestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeModuleBuildLogDestroy28ze_module_build_log_handle_t">
-<span id="_CPPv323zeModuleBuildLogDestroy28ze_module_build_log_handle_t"></span><span id="_CPPv223zeModuleBuildLogDestroy28ze_module_build_log_handle_t"></span><span id="zeModuleBuildLogDestroy__ze_module_build_log_handle_t"></span><span class="target" id="ze__api_8h_1a0d0a5fd06cd8c14e220958fb6d74ec4b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleBuildLogDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_build_log_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModuleBuildLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleBuildLogDestroy28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeModuleBuildLogDestroy28ze_module_build_log_handle_t"></span><span id="_CPPv223zeModuleBuildLogDestroy28ze_module_build_log_handle_t"></span><span id="zeModuleBuildLogDestroy__ze_module_build_log_handle_t"></span><span class="target" id="ze__api_8h_1a0d0a5fd06cd8c14e220958fb6d74ec4b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleBuildLogDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-build-log-handle-t" title="ze_module_build_log_handle_t"><span class="n"><span class="pre">ze_module_build_log_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModuleBuildLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleBuildLogDestroy28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys module build log object. </p>
 <p><ul class="simple">
 <li><p>The implementation of this function may immediately free all Host allocations associated with this object.</p></li>
@@ -546,11 +583,11 @@
 
 </section>
 <section id="zemodulebuildloggetstring">
-<span id="id2"></span><h3>zeModuleBuildLogGetString<a class="headerlink" href="#zemodulebuildloggetstring" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zeModuleBuildLogGetString<a class="headerlink" href="#zemodulebuildloggetstring" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc">
-<span id="_CPPv325zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc"></span><span id="_CPPv225zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc"></span><span id="zeModuleBuildLogGetString__ze_module_build_log_handle_t.sP.cP"></span><span class="target" id="ze__api_8h_1acffeda63d338af9b67f569edaa139d1e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleBuildLogGetString</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_build_log_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModuleBuildLog</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc"></span><span id="_CPPv225zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc"></span><span id="zeModuleBuildLogGetString__ze_module_build_log_handle_t.sP.cP"></span><span class="target" id="ze__api_8h_1acffeda63d338af9b67f569edaa139d1e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleBuildLogGetString</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-build-log-handle-t" title="ze_module_build_log_handle_t"><span class="n"><span class="pre">ze_module_build_log_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModuleBuildLog</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeModuleBuildLogGetString28ze_module_build_log_handle_tP6size_tPc" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieves text string for build log. </p>
 <p><ul class="simple">
 <li><p>The caller can pass nullptr for pBuildLog when querying only for size.</p></li>
@@ -645,7 +682,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zeModuleBuildLog</div><ul class="ctoc-list"><li><a href="module_build_log.html#zemodulebuildlogdestroy">&hellip;Destroy</a></li><li><a href="module_build_log.html#zemodulebuildloggetstring">&hellip;GetString</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="module_build_log.html#ze-module-build-log-handle-t">ze_module_build_log_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zeModuleBuildLog</div><ul class="ctoc-list"><li><a href="module_build_log.html#zemodulebuildlogdestroy">&hellip;Destroy</a></li><li><a href="module_build_log.html#zemodulebuildloggetstring">&hellip;GetString</a></li></ul></details>
   </nav></div>
 
 </div></div>

@@ -1,7 +1,9 @@
 ============================================================
 Command List
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Command List Functions
@@ -269,6 +271,14 @@ ze_command_list_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListGetFlags`
+   | **Member of:** :ref:`ze-command-list-desc-t`
+
+.. doxygentypedef:: ze_command_list_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_command_list_flag_t
     :project: LevelZero
 
@@ -282,8 +292,13 @@ ze_memory_advice_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListAppendMemAdvise`
+
 .. doxygenenum:: ze_memory_advice_t
     :project: LevelZero
+
 
  
 Command List Structures
@@ -298,6 +313,10 @@ ze_command_list_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListCreate`
 
 .. doxygenstruct:: ze_command_list_desc_t
     :project: LevelZero
@@ -314,6 +333,10 @@ ze_copy_region_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListAppendMemoryCopyRegion`
+
 .. doxygenstruct:: ze_copy_region_t
     :project: LevelZero
     :members:
@@ -328,6 +351,10 @@ ze_image_region_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListAppendImageCopyRegion`, :ref:`zeCommandListAppendImageCopyToMemory`, :ref:`zeCommandListAppendImageCopyFromMemory`, :ref:`zeCommandListAppendImageCopyToMemoryExt`, :ref:`zeCommandListAppendImageCopyFromMemoryExt`
 
 .. doxygenstruct:: ze_image_region_t
     :project: LevelZero
@@ -359,6 +386,11 @@ ze_group_count_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListAppendLaunchKernel`, :ref:`zeCommandListAppendLaunchKernelWithParameters`, :ref:`zeCommandListAppendLaunchKernelWithArguments`, :ref:`zeCommandListAppendLaunchCooperativeKernel`, :ref:`zeCommandListAppendLaunchKernelIndirect`, :ref:`zeCommandListAppendLaunchMultipleKernelsIndirect`
+   | **Member of:** :ref:`ze-mutable-group-count-exp-desc-t`, :ref:`ze-mutable-group-count-ext-desc-t`
+
 .. doxygenstruct:: ze_group_count_t
     :project: LevelZero
     :members:
@@ -373,6 +405,10 @@ ze_group_size_t
 .. rst-class:: api-version
 
 *Added in version 1.14*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListAppendLaunchKernelWithArguments`
 
 .. doxygenstruct:: ze_group_size_t
     :project: LevelZero

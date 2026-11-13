@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>RTAS Builder - Deprecated &#8212; Level Zero Specification v1.20.41</title>
+    <title>RTAS Builder - Deprecated &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Global - Deprecated" href="global.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rtas-builder-deprecated-handles">RTAS Builder - Deprecated Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-exp-handle-t">ze_rtas_builder_exp_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv428ze_rtas_builder_exp_handle_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_exp_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rtas-builder-deprecated-functions">RTAS Builder - Deprecated Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zertasbuildercreateexp">zeRTASBuilderCreateExp</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t"><code class="docutils literal notranslate"><span class="pre">zeRTASBuilderCreateExp()</span></code></a></li>
@@ -494,6 +511,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rtas-builder-deprecated-enums">RTAS Builder - Deprecated Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-exp-flags-t">ze_rtas_builder_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427ze_rtas_builder_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_exp_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426ze_rtas_builder_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26ze_rtas_builder_exp_flag_t33ZE_RTAS_BUILDER_EXP_FLAG_RESERVEDE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_EXP_FLAG_RESERVED</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N26ze_rtas_builder_exp_flag_t37ZE_RTAS_BUILDER_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_EXP_FLAG_FORCE_UINT32</span></code></a></li>
@@ -502,6 +520,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-geometry-exp-flags-t">ze_rtas_builder_geometry_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436ze_rtas_builder_geometry_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_geometry_exp_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435ze_rtas_builder_geometry_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_geometry_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_rtas_builder_geometry_exp_flag_t44ZE_RTAS_BUILDER_GEOMETRY_EXP_FLAG_NON_OPAQUEE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_GEOMETRY_EXP_FLAG_NON_OPAQUE</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_rtas_builder_geometry_exp_flag_t46ZE_RTAS_BUILDER_GEOMETRY_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_GEOMETRY_EXP_FLAG_FORCE_UINT32</span></code></a></li>
@@ -510,6 +529,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-instance-exp-flags-t">ze_rtas_builder_instance_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436ze_rtas_builder_instance_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_instance_exp_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435ze_rtas_builder_instance_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_instance_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_rtas_builder_instance_exp_flag_t55ZE_RTAS_BUILDER_INSTANCE_EXP_FLAG_TRIANGLE_CULL_DISABLEE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_INSTANCE_EXP_FLAG_TRIANGLE_CULL_DISABLE</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_rtas_builder_instance_exp_flag_t65ZE_RTAS_BUILDER_INSTANCE_EXP_FLAG_TRIANGLE_FRONT_COUNTERCLOCKWISEE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_INSTANCE_EXP_FLAG_TRIANGLE_FRONT_COUNTERCLOCKWISE</span></code></a></li>
@@ -521,6 +541,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-build-op-exp-flags-t">ze_rtas_builder_build_op_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv436ze_rtas_builder_build_op_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_build_op_exp_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435ze_rtas_builder_build_op_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_build_op_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_rtas_builder_build_op_exp_flag_t41ZE_RTAS_BUILDER_BUILD_OP_EXP_FLAG_COMPACTE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_BUILD_OP_EXP_FLAG_COMPACT</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35ze_rtas_builder_build_op_exp_flag_t64ZE_RTAS_BUILDER_BUILD_OP_EXP_FLAG_NO_DUPLICATE_ANYHIT_INVOCATIONE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_BUILD_OP_EXP_FLAG_NO_DUPLICATE_ANYHIT_INVOCATION</span></code></a></li>
@@ -562,6 +583,25 @@
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N39ze_rtas_builder_input_data_format_exp_t50ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FORCE_UINT32</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rtas-builder-deprecated-typedefs">RTAS Builder - Deprecated Typedefs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-packed-geometry-exp-flags-t">ze_rtas_builder_packed_geometry_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv443ze_rtas_builder_packed_geometry_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-packed-instance-exp-flags-t">ze_rtas_builder_packed_instance_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv443ze_rtas_builder_packed_instance_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_packed_instance_exp_flags_t</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-packed-geometry-type-exp-t">ze_rtas_builder_packed_geometry_type_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv442ze_rtas_builder_packed_geometry_type_exp_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-builder-packed-input-data-format-exp-t">ze_rtas_builder_packed_input_data_format_exp_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv446ze_rtas_builder_packed_input_data_format_exp_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -684,16 +724,37 @@
                   
   <section id="rtas-builder-deprecated">
 <h1>RTAS Builder - Deprecated<a class="headerlink" href="#rtas-builder-deprecated" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="rtas-builder-deprecated-handles">
+<h2>RTAS Builder - Deprecated Handles<a class="headerlink" href="#rtas-builder-deprecated-handles" title="Link to this heading">#</a></h2>
+<section id="ze-rtas-builder-exp-handle-t">
+<span id="id1"></span><h3>ze_rtas_builder_exp_handle_t<a class="headerlink" href="#ze-rtas-builder-exp-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../../EXT_RTAS.html#ze-extension-rtas"><span class="std std-ref">ZE_extension_rtas</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zertasbuildercreateexp"><span class="std std-ref">zeRTASBuilderCreateExp</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zertasbuildergetbuildpropertiesexp"><span class="std std-ref">zeRTASBuilderGetBuildPropertiesExp</span></a>, <a class="reference internal" href="#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a>, <a class="reference internal" href="#zertasbuilderdestroyexp"><span class="std std-ref">zeRTASBuilderDestroyExp</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../EXT_Exp_RTASBuilder.html"><span class="doc">Ray Tracing Acceleration Structure Builder Extension</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv428ze_rtas_builder_exp_handle_t">
+<span id="_CPPv328ze_rtas_builder_exp_handle_t"></span><span id="_CPPv228ze_rtas_builder_exp_handle_t"></span><span id="ze_rtas_builder_exp_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span></span><a class="headerlink" href="#_CPPv428ze_rtas_builder_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of ray tracing acceleration structure builder object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="rtas-builder-deprecated-functions">
 <h2>RTAS Builder - Deprecated Functions<a class="headerlink" href="#rtas-builder-deprecated-functions" title="Link to this heading">#</a></h2>
 <section id="zertasbuildercreateexp">
-<span id="id1"></span><h3>zeRTASBuilderCreateExp<a class="headerlink" href="#zertasbuildercreateexp" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeRTASBuilderCreateExp<a class="headerlink" href="#zertasbuildercreateexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#zertasbuildercreateext"><span class="std std-ref">zeRTASBuilderCreateExt</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t">
-<span id="_CPPv322zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t"></span><span id="_CPPv222zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t"></span><span id="zeRTASBuilderCreateExp__ze_driver_handle_t.ze_rtas_builder_exp_desc_tCP.ze_rtas_builder_exp_handle_tP"></span><span class="target" id="ze__api_8h_1a1e054d9c401a0abe12c544e20e1ab6c5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderCreateExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-rtas-builder-exp-desc-t" title="ze_rtas_builder_exp_desc_t"><span class="n"><span class="pre">ze_rtas_builder_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptor</span></span>, <span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phBuilder</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t"></span><span id="_CPPv222zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t"></span><span id="zeRTASBuilderCreateExp__ze_driver_handle_t.ze_rtas_builder_exp_desc_tCP.ze_rtas_builder_exp_handle_tP"></span><span class="target" id="ze__api_8h_1a1e054d9c401a0abe12c544e20e1ab6c5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderCreateExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/driver.html#ze-driver-handle-t" title="ze_driver_handle_t"><span class="n"><span class="pre">ze_driver_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-rtas-builder-exp-desc-t" title="ze_rtas_builder_exp_desc_t"><span class="n"><span class="pre">ze_rtas_builder_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDescriptor</span></span>, <a class="reference internal" href="#ze-rtas-builder-exp-handle-t" title="ze_rtas_builder_exp_handle_t"><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phBuilder</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeRTASBuilderCreateExp18ze_driver_handle_tPK26ze_rtas_builder_exp_desc_tP28ze_rtas_builder_exp_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a ray tracing acceleration structure builder object </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -746,12 +807,12 @@
 
 </section>
 <section id="zertasbuildergetbuildpropertiesexp">
-<span id="id2"></span><h3>zeRTASBuilderGetBuildPropertiesExp<a class="headerlink" href="#zertasbuildergetbuildpropertiesexp" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zeRTASBuilderGetBuildPropertiesExp<a class="headerlink" href="#zertasbuildergetbuildpropertiesexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#zertasbuildergetbuildpropertiesext"><span class="std std-ref">zeRTASBuilderGetBuildPropertiesExt</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv434zeRTASBuilderGetBuildPropertiesExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tP32ze_rtas_builder_exp_properties_t">
-<span id="_CPPv334zeRTASBuilderGetBuildPropertiesExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tP32ze_rtas_builder_exp_properties_t"></span><span id="_CPPv234zeRTASBuilderGetBuildPropertiesExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tP32ze_rtas_builder_exp_properties_t"></span><span id="zeRTASBuilderGetBuildPropertiesExp__ze_rtas_builder_exp_handle_t.ze_rtas_builder_build_op_exp_desc_tCP.ze_rtas_builder_exp_properties_tP"></span><span class="target" id="ze__api_8h_1a7969e46633987bb4ba417209a7629b25"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderGetBuildPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hBuilder</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-rtas-builder-build-op-exp-desc-t" title="ze_rtas_builder_build_op_exp_desc_t"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildOpDescriptor</span></span>, <a class="reference internal" href="#ze-rtas-builder-exp-properties-t" title="ze_rtas_builder_exp_properties_t"><span class="n"><span class="pre">ze_rtas_builder_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zeRTASBuilderGetBuildPropertiesExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tP32ze_rtas_builder_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv334zeRTASBuilderGetBuildPropertiesExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tP32ze_rtas_builder_exp_properties_t"></span><span id="_CPPv234zeRTASBuilderGetBuildPropertiesExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tP32ze_rtas_builder_exp_properties_t"></span><span id="zeRTASBuilderGetBuildPropertiesExp__ze_rtas_builder_exp_handle_t.ze_rtas_builder_build_op_exp_desc_tCP.ze_rtas_builder_exp_properties_tP"></span><span class="target" id="ze__api_8h_1a7969e46633987bb4ba417209a7629b25"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderGetBuildPropertiesExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-rtas-builder-exp-handle-t" title="ze_rtas_builder_exp_handle_t"><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hBuilder</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-rtas-builder-build-op-exp-desc-t" title="ze_rtas_builder_build_op_exp_desc_t"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildOpDescriptor</span></span>, <a class="reference internal" href="#ze-rtas-builder-exp-properties-t" title="ze_rtas_builder_exp_properties_t"><span class="n"><span class="pre">ze_rtas_builder_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zeRTASBuilderGetBuildPropertiesExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tP32ze_rtas_builder_exp_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieves ray tracing acceleration structure builder properties </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -805,12 +866,12 @@
 
 </section>
 <section id="zertasbuilderbuildexp">
-<span id="id3"></span><h3>zeRTASBuilderBuildExp<a class="headerlink" href="#zertasbuilderbuildexp" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zeRTASBuilderBuildExp<a class="headerlink" href="#zertasbuilderbuildexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#zertasbuilderbuildext"><span class="std std-ref">zeRTASBuilderBuildExt</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zeRTASBuilderBuildExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tPv6size_tPv6size_t39ze_rtas_parallel_operation_exp_handle_tPvP18ze_rtas_aabb_exp_tP6size_t">
-<span id="_CPPv321zeRTASBuilderBuildExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tPv6size_tPv6size_t39ze_rtas_parallel_operation_exp_handle_tPvP18ze_rtas_aabb_exp_tP6size_t"></span><span id="_CPPv221zeRTASBuilderBuildExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tPv6size_tPv6size_t39ze_rtas_parallel_operation_exp_handle_tPvP18ze_rtas_aabb_exp_tP6size_t"></span><span id="zeRTASBuilderBuildExp__ze_rtas_builder_exp_handle_t.ze_rtas_builder_build_op_exp_desc_tCP.voidP.s.voidP.s.ze_rtas_parallel_operation_exp_handle_t.voidP.ze_rtas_aabb_exp_tP.sP"></span><span class="target" id="ze__api_8h_1a486f4cce5ab8274be2101fb883486701"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderBuildExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hBuilder</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-rtas-builder-build-op-exp-desc-t" title="ze_rtas_builder_build_op_exp_desc_t"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildOpDescriptor</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pScratchBuffer</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scratchBufferSizeBytes</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRtasBuffer</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rtasBufferSizeBytes</span></span>, <span class="n"><span class="pre">ze_rtas_parallel_operation_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hParallelOperation</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildUserPtr</span></span>, <a class="reference internal" href="data_types.html#ze-rtas-aabb-exp-t" title="ze_rtas_aabb_exp_t"><span class="n"><span class="pre">ze_rtas_aabb_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBounds</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRtasBufferSizeBytes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeRTASBuilderBuildExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tPv6size_tPv6size_t39ze_rtas_parallel_operation_exp_handle_tPvP18ze_rtas_aabb_exp_tP6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zeRTASBuilderBuildExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tPv6size_tPv6size_t39ze_rtas_parallel_operation_exp_handle_tPvP18ze_rtas_aabb_exp_tP6size_t"></span><span id="_CPPv221zeRTASBuilderBuildExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tPv6size_tPv6size_t39ze_rtas_parallel_operation_exp_handle_tPvP18ze_rtas_aabb_exp_tP6size_t"></span><span id="zeRTASBuilderBuildExp__ze_rtas_builder_exp_handle_t.ze_rtas_builder_build_op_exp_desc_tCP.voidP.s.voidP.s.ze_rtas_parallel_operation_exp_handle_t.voidP.ze_rtas_aabb_exp_tP.sP"></span><span class="target" id="ze__api_8h_1a486f4cce5ab8274be2101fb883486701"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderBuildExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-rtas-builder-exp-handle-t" title="ze_rtas_builder_exp_handle_t"><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hBuilder</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-rtas-builder-build-op-exp-desc-t" title="ze_rtas_builder_build_op_exp_desc_t"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildOpDescriptor</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pScratchBuffer</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scratchBufferSizeBytes</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRtasBuffer</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rtasBufferSizeBytes</span></span>, <a class="reference internal" href="rtas_parallel_operation.html#ze-rtas-parallel-operation-exp-handle-t" title="ze_rtas_parallel_operation_exp_handle_t"><span class="n"><span class="pre">ze_rtas_parallel_operation_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hParallelOperation</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBuildUserPtr</span></span>, <a class="reference internal" href="data_types.html#ze-rtas-aabb-exp-t" title="ze_rtas_aabb_exp_t"><span class="n"><span class="pre">ze_rtas_aabb_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pBounds</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRtasBufferSizeBytes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeRTASBuilderBuildExp28ze_rtas_builder_exp_handle_tPK35ze_rtas_builder_build_op_exp_desc_tPv6size_tPv6size_t39ze_rtas_parallel_operation_exp_handle_tPvP18ze_rtas_aabb_exp_tP6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Build ray tracing acceleration structure </p>
 <p><ul class="simple">
 <li><p>This function builds an acceleration structure of the scene consisting of the specified geometry information and writes the acceleration structure to the provided destination buffer. All types of geometries can get freely mixed inside a scene.</p></li>
@@ -908,12 +969,12 @@
 
 </section>
 <section id="zertasbuilderdestroyexp">
-<span id="id4"></span><h3>zeRTASBuilderDestroyExp<a class="headerlink" href="#zertasbuilderdestroyexp" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zeRTASBuilderDestroyExp<a class="headerlink" href="#zertasbuilderdestroyexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#zertasbuilderdestroyext"><span class="std std-ref">zeRTASBuilderDestroyExt</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeRTASBuilderDestroyExp28ze_rtas_builder_exp_handle_t">
-<span id="_CPPv323zeRTASBuilderDestroyExp28ze_rtas_builder_exp_handle_t"></span><span id="_CPPv223zeRTASBuilderDestroyExp28ze_rtas_builder_exp_handle_t"></span><span id="zeRTASBuilderDestroyExp__ze_rtas_builder_exp_handle_t"></span><span class="target" id="ze__api_8h_1abeb910be2f9f2082adac78ee1857a510"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderDestroyExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hBuilder</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeRTASBuilderDestroyExp28ze_rtas_builder_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeRTASBuilderDestroyExp28ze_rtas_builder_exp_handle_t"></span><span id="_CPPv223zeRTASBuilderDestroyExp28ze_rtas_builder_exp_handle_t"></span><span id="zeRTASBuilderDestroyExp__ze_rtas_builder_exp_handle_t"></span><span class="target" id="ze__api_8h_1abeb910be2f9f2082adac78ee1857a510"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeRTASBuilderDestroyExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-rtas-builder-exp-handle-t" title="ze_rtas_builder_exp_handle_t"><span class="n"><span class="pre">ze_rtas_builder_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hBuilder</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeRTASBuilderDestroyExp28ze_rtas_builder_exp_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys a ray tracing acceleration structure builder object </p>
 <p><ul class="simple">
 <li><p>The implementation of this function may immediately release any internal Host and Device resources associated with this builder.</p></li>
@@ -956,9 +1017,20 @@
 <section id="rtas-builder-deprecated-enums">
 <h2>RTAS Builder - Deprecated Enums<a class="headerlink" href="#rtas-builder-deprecated-enums" title="Link to this heading">#</a></h2>
 <section id="ze-rtas-builder-exp-flags-t">
-<span id="id5"></span><h3>ze_rtas_builder_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-exp-flags-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>ze_rtas_builder_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-ext-flags-t"><span class="std std-ref">ze_rtas_builder_ext_flags_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-exp-properties-t"><span class="std std-ref">ze_rtas_builder_exp_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv427ze_rtas_builder_exp_flags_t">
+<span id="_CPPv327ze_rtas_builder_exp_flags_t"></span><span id="_CPPv227ze_rtas_builder_exp_flags_t"></span><span id="ze_rtas_builder_exp_flags_t"></span><span class="target" id="ze__api_8h_1a9a74bb29e4a9eae55737a3baecdc222c"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv427ze_rtas_builder_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder flags </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv426ze_rtas_builder_exp_flag_t">
 <span id="_CPPv326ze_rtas_builder_exp_flag_t"></span><span id="_CPPv226ze_rtas_builder_exp_flag_t"></span><span class="target" id="ze__api_8h_1a4148b7c9434560e9c2ffb2e1a6b773f5"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv426ze_rtas_builder_exp_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -979,9 +1051,20 @@
 
 </section>
 <section id="ze-rtas-builder-geometry-exp-flags-t">
-<span id="id6"></span><h3>ze_rtas_builder_geometry_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-geometry-exp-flags-t" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>ze_rtas_builder_geometry_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-geometry-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-geometry-ext-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_ext_flags_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Packed as:</strong> <a class="reference internal" href="#ze-rtas-builder-packed-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_packed_geometry_exp_flags_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv436ze_rtas_builder_geometry_exp_flags_t">
+<span id="_CPPv336ze_rtas_builder_geometry_exp_flags_t"></span><span id="_CPPv236ze_rtas_builder_geometry_exp_flags_t"></span><span id="ze_rtas_builder_geometry_exp_flags_t"></span><span class="target" id="ze__api_8h_1aa9afafe3cfc757db00404e9827dac4fa"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_geometry_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv436ze_rtas_builder_geometry_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder geometry flags </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv435ze_rtas_builder_geometry_exp_flag_t">
 <span id="_CPPv335ze_rtas_builder_geometry_exp_flag_t"></span><span id="_CPPv235ze_rtas_builder_geometry_exp_flag_t"></span><span class="target" id="ze__api_8h_1adbd7df91e944433451f067629f765ad4"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_geometry_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv435ze_rtas_builder_geometry_exp_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1002,9 +1085,20 @@
 
 </section>
 <section id="ze-rtas-builder-instance-exp-flags-t">
-<span id="id7"></span><h3>ze_rtas_builder_instance_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-instance-exp-flags-t" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>ze_rtas_builder_instance_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-instance-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-instance-ext-flags-t"><span class="std std-ref">ze_rtas_builder_instance_ext_flags_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Packed as:</strong> <a class="reference internal" href="#ze-rtas-builder-packed-instance-exp-flags-t"><span class="std std-ref">ze_rtas_builder_packed_instance_exp_flags_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv436ze_rtas_builder_instance_exp_flags_t">
+<span id="_CPPv336ze_rtas_builder_instance_exp_flags_t"></span><span id="_CPPv236ze_rtas_builder_instance_exp_flags_t"></span><span id="ze_rtas_builder_instance_exp_flags_t"></span><span class="target" id="ze__api_8h_1a0e28d78bf5ccad89f14dc29dff847019"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_instance_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv436ze_rtas_builder_instance_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder instance flags </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv435ze_rtas_builder_instance_exp_flag_t">
 <span id="_CPPv335ze_rtas_builder_instance_exp_flag_t"></span><span id="_CPPv235ze_rtas_builder_instance_exp_flag_t"></span><span class="target" id="ze__api_8h_1a1b4be19000952dc2390e297a56494923"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_instance_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv435ze_rtas_builder_instance_exp_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1043,9 +1137,26 @@
 
 </section>
 <section id="ze-rtas-builder-build-op-exp-flags-t">
-<span id="id8"></span><h3>ze_rtas_builder_build_op_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-build-op-exp-flags-t" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>ze_rtas_builder_build_op_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-build-op-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-build-op-ext-flags-t"><span class="std std-ref">ze_rtas_builder_build_op_ext_flags_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-build-op-exp-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv436ze_rtas_builder_build_op_exp_flags_t">
+<span id="_CPPv336ze_rtas_builder_build_op_exp_flags_t"></span><span id="_CPPv236ze_rtas_builder_build_op_exp_flags_t"></span><span id="ze_rtas_builder_build_op_exp_flags_t"></span><span class="target" id="ze__api_8h_1a7506041eaabb02ce0180bd771762b925"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv436ze_rtas_builder_build_op_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder build operation flags </p>
+<p><ul class="simple">
+<li><p>These flags allow the application to tune the acceleration structure build operation.</p></li>
+<li><p>The acceleration structure builder implementation might choose to use spatial splitting to split large or long primitives into smaller pieces. This may result in any-hit shaders being invoked multiple times for non-opaque primitives, unless <a class="reference internal" href="#ze__api_8h_1af1dbb3398ec1b0d5f206195c33d4200aa396b753bf8f43749572a24fb1b49db76"><span class="std std-ref">ZE_RTAS_BUILDER_BUILD_OP_EXP_FLAG_NO_DUPLICATE_ANYHIT_INVOCATION</span></a> is specified.</p></li>
+<li><p>Usage of any of these flags may reduce ray tracing performance.</p></li>
+</ul>
+</p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv435ze_rtas_builder_build_op_exp_flag_t">
 <span id="_CPPv335ze_rtas_builder_build_op_exp_flag_t"></span><span id="_CPPv235ze_rtas_builder_build_op_exp_flag_t"></span><span class="target" id="ze__api_8h_1af1dbb3398ec1b0d5f206195c33d4200a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv435ze_rtas_builder_build_op_exp_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1072,13 +1183,18 @@
 
 </section>
 <section id="ze-rtas-builder-build-quality-hint-exp-t">
-<span id="id9"></span><h3>ze_rtas_builder_build_quality_hint_exp_t<a class="headerlink" href="#ze-rtas-builder-build-quality-hint-exp-t" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>ze_rtas_builder_build_quality_hint_exp_t<a class="headerlink" href="#ze-rtas-builder-build-quality-hint-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-build-quality-hint-ext-t"><span class="std std-ref">ze_rtas_builder_build_quality_hint_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-build-op-exp-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv440ze_rtas_builder_build_quality_hint_exp_t">
 <span id="_CPPv340ze_rtas_builder_build_quality_hint_exp_t"></span><span id="_CPPv240ze_rtas_builder_build_quality_hint_exp_t"></span><span class="target" id="ze__api_8h_1a0c6eb119d99dc2bd8be1f0c0e17bd9f5"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_build_quality_hint_exp_t</span></span></span><a class="headerlink" href="#_CPPv440ze_rtas_builder_build_quality_hint_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder build quality hint </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder build quality hint </p>
 <p><ul class="simple">
 <li><p>Depending on use case different quality modes for acceleration structure build are supported.</p></li>
 <li><p>A low-quality build builds an acceleration structure fast, but at the cost of some reduction in ray tracing performance. This mode is recommended for dynamic content, such as animated characters.</p></li>
@@ -1115,13 +1231,18 @@
 
 </section>
 <section id="ze-rtas-builder-geometry-type-exp-t">
-<span id="id10"></span><h3>ze_rtas_builder_geometry_type_exp_t<a class="headerlink" href="#ze-rtas-builder-geometry-type-exp-t" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>ze_rtas_builder_geometry_type_exp_t<a class="headerlink" href="#ze-rtas-builder-geometry-type-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-geometry-type-ext-t"><span class="std std-ref">ze_rtas_builder_geometry_type_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Packed as:</strong> <a class="reference internal" href="#ze-rtas-builder-packed-geometry-type-exp-t"><span class="std std-ref">ze_rtas_builder_packed_geometry_type_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv435ze_rtas_builder_geometry_type_exp_t">
 <span id="_CPPv335ze_rtas_builder_geometry_type_exp_t"></span><span id="_CPPv235ze_rtas_builder_geometry_type_exp_t"></span><span class="target" id="ze__api_8h_1ab5377df3970e9bde091d39c73c7b9c75"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_geometry_type_exp_t</span></span></span><a class="headerlink" href="#_CPPv435ze_rtas_builder_geometry_type_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder geometry type </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder geometry type </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N35ze_rtas_builder_geometry_type_exp_t43ZE_RTAS_BUILDER_GEOMETRY_TYPE_EXP_TRIANGLESE">
@@ -1157,13 +1278,18 @@
 
 </section>
 <section id="ze-rtas-builder-input-data-format-exp-t">
-<span id="id11"></span><h3>ze_rtas_builder_input_data_format_exp_t<a class="headerlink" href="#ze-rtas-builder-input-data-format-exp-t" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>ze_rtas_builder_input_data_format_exp_t<a class="headerlink" href="#ze-rtas-builder-input-data-format-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-input-data-format-ext-t"><span class="std std-ref">ze_rtas_builder_input_data_format_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Packed as:</strong> <a class="reference internal" href="#ze-rtas-builder-packed-input-data-format-exp-t"><span class="std std-ref">ze_rtas_builder_packed_input_data_format_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv439ze_rtas_builder_input_data_format_exp_t">
 <span id="_CPPv339ze_rtas_builder_input_data_format_exp_t"></span><span id="_CPPv239ze_rtas_builder_input_data_format_exp_t"></span><span class="target" id="ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_input_data_format_exp_t</span></span></span><a class="headerlink" href="#_CPPv439ze_rtas_builder_input_data_format_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure data buffer element format </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure data buffer element format </p>
 <p><ul class="simple">
 <li><p>Specifies the format of data buffer elements.</p></li>
 <li><p>Data buffers may contain instancing transform matrices, triangle/quad vertex indices, etc…</p></li>
@@ -1222,16 +1348,92 @@
 
 </section>
 </section>
+<section id="rtas-builder-deprecated-typedefs">
+<h2>RTAS Builder - Deprecated Typedefs<a class="headerlink" href="#rtas-builder-deprecated-typedefs" title="Link to this heading">#</a></h2>
+<section id="ze-rtas-builder-packed-geometry-exp-flags-t">
+<span id="id13"></span><h3>ze_rtas_builder_packed_geometry_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-packed-geometry-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../../EXT_RTAS.html#ze-extension-rtas"><span class="std std-ref">ZE_extension_rtas</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-procedural-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_procedural_geometry_info_exp_t</span></a></div>
+<div class="line"><strong>Packed form of:</strong> <a class="reference internal" href="#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_exp_flags_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv443ze_rtas_builder_packed_geometry_exp_flags_t">
+<span id="_CPPv343ze_rtas_builder_packed_geometry_exp_flags_t"></span><span id="_CPPv243ze_rtas_builder_packed_geometry_exp_flags_t"></span><span id="ze_rtas_builder_packed_geometry_exp_flags_t"></span><span class="target" id="ze__api_8h_1a4d292f87f744f0eef7aa4f9092d76515"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv443ze_rtas_builder_packed_geometry_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Packed ray tracing acceleration structure builder geometry flags (see <a class="reference internal" href="#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_exp_flags_t</span></a>) </p>
+</dd></dl>
+
+</section>
+<section id="ze-rtas-builder-packed-instance-exp-flags-t">
+<span id="id14"></span><h3>ze_rtas_builder_packed_instance_exp_flags_t<a class="headerlink" href="#ze-rtas-builder-packed-instance-exp-flags-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../../EXT_RTAS.html#ze-extension-rtas"><span class="std std-ref">ZE_extension_rtas</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+<div class="line"><strong>Packed form of:</strong> <a class="reference internal" href="#ze-rtas-builder-instance-exp-flags-t"><span class="std std-ref">ze_rtas_builder_instance_exp_flags_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv443ze_rtas_builder_packed_instance_exp_flags_t">
+<span id="_CPPv343ze_rtas_builder_packed_instance_exp_flags_t"></span><span id="_CPPv243ze_rtas_builder_packed_instance_exp_flags_t"></span><span id="ze_rtas_builder_packed_instance_exp_flags_t"></span><span class="target" id="ze__api_8h_1acfc53ea89251718c4845e44a751a580f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_packed_instance_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv443ze_rtas_builder_packed_instance_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Packed ray tracing acceleration structure builder instance flags (see <a class="reference internal" href="#ze-rtas-builder-instance-exp-flags-t"><span class="std std-ref">ze_rtas_builder_instance_exp_flags_t</span></a>) </p>
+</dd></dl>
+
+</section>
+<section id="ze-rtas-builder-packed-geometry-type-exp-t">
+<span id="id15"></span><h3>ze_rtas_builder_packed_geometry_type_exp_t<a class="headerlink" href="#ze-rtas-builder-packed-geometry-type-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../../EXT_RTAS.html#ze-extension-rtas"><span class="std std-ref">ZE_extension_rtas</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-procedural-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_procedural_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+<div class="line"><strong>Packed form of:</strong> <a class="reference internal" href="#ze-rtas-builder-geometry-type-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_type_exp_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv442ze_rtas_builder_packed_geometry_type_exp_t">
+<span id="_CPPv342ze_rtas_builder_packed_geometry_type_exp_t"></span><span id="_CPPv242ze_rtas_builder_packed_geometry_type_exp_t"></span><span id="ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="ze__api_8h_1a30c4b36951f8a94776eebd8bf6dccc41"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span></span><a class="headerlink" href="#_CPPv442ze_rtas_builder_packed_geometry_type_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Packed ray tracing acceleration structure builder geometry type (see <a class="reference internal" href="#ze-rtas-builder-geometry-type-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_type_exp_t</span></a>) </p>
+</dd></dl>
+
+</section>
+<section id="ze-rtas-builder-packed-input-data-format-exp-t">
+<span id="id16"></span><h3>ze_rtas_builder_packed_input_data_format_exp_t<a class="headerlink" href="#ze-rtas-builder-packed-input-data-format-exp-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.7</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../../EXT_RTAS.html#ze-extension-rtas"><span class="std std-ref">ZE_extension_rtas</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+<div class="line"><strong>Packed form of:</strong> <a class="reference internal" href="#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ze_rtas_builder_input_data_format_exp_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv446ze_rtas_builder_packed_input_data_format_exp_t">
+<span id="_CPPv346ze_rtas_builder_packed_input_data_format_exp_t"></span><span id="_CPPv246ze_rtas_builder_packed_input_data_format_exp_t"></span><span id="ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="ze__api_8h_1aeb0cef2315716460de5936c99905c673"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span></span><a class="headerlink" href="#_CPPv446ze_rtas_builder_packed_input_data_format_exp_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Packed ray tracing acceleration structure data buffer element format (see <a class="reference internal" href="#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ze_rtas_builder_input_data_format_exp_t</span></a>) </p>
+</dd></dl>
+
+</section>
+</section>
 <section id="rtas-builder-deprecated-structures">
 <h2>RTAS Builder - Deprecated Structures<a class="headerlink" href="#rtas-builder-deprecated-structures" title="Link to this heading">#</a></h2>
 <section id="ze-rtas-builder-exp-desc-t">
-<span id="id12"></span><h3>ze_rtas_builder_exp_desc_t<a class="headerlink" href="#ze-rtas-builder-exp-desc-t" title="Link to this heading">#</a></h3>
+<span id="id17"></span><h3>ze_rtas_builder_exp_desc_t<a class="headerlink" href="#ze-rtas-builder-exp-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-ext-desc-t"><span class="std std-ref">ze_rtas_builder_ext_desc_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zertasbuildercreateexp"><span class="std std-ref">zeRTASBuilderCreateExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv426ze_rtas_builder_exp_desc_t">
 <span id="_CPPv326ze_rtas_builder_exp_desc_t"></span><span id="_CPPv226ze_rtas_builder_exp_desc_t"></span><span id="ze_rtas_builder_exp_desc_t"></span><span class="target" id="structze__rtas__builder__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv426ze_rtas_builder_exp_desc_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder descriptor </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder descriptor </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -1257,13 +1459,18 @@
 
 </section>
 <section id="ze-rtas-builder-exp-properties-t">
-<span id="id13"></span><h3>ze_rtas_builder_exp_properties_t<a class="headerlink" href="#ze-rtas-builder-exp-properties-t" title="Link to this heading">#</a></h3>
+<span id="id18"></span><h3>ze_rtas_builder_exp_properties_t<a class="headerlink" href="#ze-rtas-builder-exp-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-ext-properties-t"><span class="std std-ref">ze_rtas_builder_ext_properties_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zertasbuildergetbuildpropertiesexp"><span class="std std-ref">zeRTASBuilderGetBuildPropertiesExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv432ze_rtas_builder_exp_properties_t">
 <span id="_CPPv332ze_rtas_builder_exp_properties_t"></span><span id="_CPPv232ze_rtas_builder_exp_properties_t"></span><span id="ze_rtas_builder_exp_properties_t"></span><span class="target" id="structze__rtas__builder__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv432ze_rtas_builder_exp_properties_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder properties </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder properties </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -1280,7 +1487,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N32ze_rtas_builder_exp_properties_t5flagsE">
-<span id="_CPPv3N32ze_rtas_builder_exp_properties_t5flagsE"></span><span id="_CPPv2N32ze_rtas_builder_exp_properties_t5flagsE"></span><span id="ze_rtas_builder_exp_properties_t::flags__ze_rtas_builder_exp_flags_t"></span><span class="target" id="structze__rtas__builder__exp__properties__t_1a001cd3344c36d9de385d6d517b98b0b5"></span><span class="n"><span class="pre">ze_rtas_builder_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_rtas_builder_exp_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N32ze_rtas_builder_exp_properties_t5flagsE"></span><span id="_CPPv2N32ze_rtas_builder_exp_properties_t5flagsE"></span><span id="ze_rtas_builder_exp_properties_t::flags__ze_rtas_builder_exp_flags_t"></span><span class="target" id="structze__rtas__builder__exp__properties__t_1a001cd3344c36d9de385d6d517b98b0b5"></span><a class="reference internal" href="#ze-rtas-builder-exp-flags-t" title="ze_rtas_builder_exp_flags_t"><span class="n"><span class="pre">ze_rtas_builder_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_rtas_builder_exp_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] ray tracing acceleration structure builder flags </p>
 </dd></dl>
 
@@ -1313,18 +1520,24 @@
 
 </section>
 <section id="ze-rtas-builder-geometry-info-exp-t">
-<span id="id14"></span><h3>ze_rtas_builder_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-geometry-info-exp-t" title="Link to this heading">#</a></h3>
+<span id="id19"></span><h3>ze_rtas_builder_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-geometry-info-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-geometry-info-ext-t"><span class="std std-ref">ze_rtas_builder_geometry_info_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-builder-build-op-exp-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a></div>
+<div class="line"><strong>Variants:</strong> <a class="reference internal" href="#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-procedural-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_procedural_geometry_info_exp_t</span></a>, <a class="reference internal" href="#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv435ze_rtas_builder_geometry_info_exp_t">
 <span id="_CPPv335ze_rtas_builder_geometry_info_exp_t"></span><span id="_CPPv235ze_rtas_builder_geometry_info_exp_t"></span><span id="ze_rtas_builder_geometry_info_exp_t"></span><span class="target" id="structze__rtas__builder__geometry__info__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_geometry_info_exp_t</span></span></span><a class="headerlink" href="#_CPPv435ze_rtas_builder_geometry_info_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder geometry info </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder geometry info </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N35ze_rtas_builder_geometry_info_exp_t12geometryTypeE">
-<span id="_CPPv3N35ze_rtas_builder_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N35ze_rtas_builder_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__geometry__info__exp__t_1aa66fd003bca9cc7b654c658cb16fe5f0"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N35ze_rtas_builder_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N35ze_rtas_builder_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N35ze_rtas_builder_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__geometry__info__exp__t_1aa66fd003bca9cc7b654c658cb16fe5f0"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-type-exp-t" title="ze_rtas_builder_packed_geometry_type_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N35ze_rtas_builder_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] geometry type </p>
 </dd></dl>
 
@@ -1333,13 +1546,18 @@
 
 </section>
 <section id="ze-rtas-builder-triangles-geometry-info-exp-t">
-<span id="id15"></span><h3>ze_rtas_builder_triangles_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-triangles-geometry-info-exp-t" title="Link to this heading">#</a></h3>
+<span id="id20"></span><h3>ze_rtas_builder_triangles_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-triangles-geometry-info-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-triangles-geometry-info-ext-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Variant of:</strong> <a class="reference internal" href="#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv445ze_rtas_builder_triangles_geometry_info_exp_t">
 <span id="_CPPv345ze_rtas_builder_triangles_geometry_info_exp_t"></span><span id="_CPPv245ze_rtas_builder_triangles_geometry_info_exp_t"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_triangles_geometry_info_exp_t</span></span></span><a class="headerlink" href="#_CPPv445ze_rtas_builder_triangles_geometry_info_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder triangle mesh geometry info </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder triangle mesh geometry info </p>
 <p><ul class="simple">
 <li><p>The linear barycentric u/v parametrization of the triangle is defined as:<ul>
 <li><p>(u=0, v=0) at v0,</p></li>
@@ -1353,14 +1571,14 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t12geometryTypeE">
-<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a08ffaaa0e5fb48312b3714fc51e1aa97"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a08ffaaa0e5fb48312b3714fc51e1aa97"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-type-exp-t" title="ze_rtas_builder_packed_geometry_type_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] geometry type, must be <a class="reference internal" href="#ze__api_8h_1ab5377df3970e9bde091d39c73c7b9c75afe1625bf5ece3f5bccc0b3524ebf6ae6"><span class="std std-ref">ZE_RTAS_BUILDER_GEOMETRY_TYPE_EXP_TRIANGLES</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t13geometryFlagsE">
-<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t13geometryFlagsE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t13geometryFlagsE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::geometryFlags__ze_rtas_builder_packed_geometry_exp_flags_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a2c9d08286ba844226ec814deed2e668e"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryFlags</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t13geometryFlagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
+<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t13geometryFlagsE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t13geometryFlagsE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::geometryFlags__ze_rtas_builder_packed_geometry_exp_flags_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a2c9d08286ba844226ec814deed2e668e"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-exp-flags-t" title="ze_rtas_builder_packed_geometry_exp_flags_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryFlags</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t13geometryFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze__api_8h_1adbd7df91e944433451f067629f765ad4"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1371,13 +1589,13 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t14triangleFormatE">
-<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t14triangleFormatE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t14triangleFormatE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::triangleFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a7810e7fbf6908ec19ea94f51dcc06132"></span><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">triangleFormat</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t14triangleFormatE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t14triangleFormatE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t14triangleFormatE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::triangleFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a7810e7fbf6908ec19ea94f51dcc06132"></span><a class="reference internal" href="#ze-rtas-builder-packed-input-data-format-exp-t" title="ze_rtas_builder_packed_input_data_format_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">triangleFormat</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t14triangleFormatE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] format of triangle buffer data, must be <a class="reference internal" href="#ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128a5b754a10e6d29164d3564b3fef5e045d"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_TRIANGLE_INDICES_UINT32</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t12vertexFormatE">
-<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t12vertexFormatE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t12vertexFormatE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::vertexFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a307281875485c2d5854c9f4421efe3ba"></span><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertexFormat</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t12vertexFormatE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N45ze_rtas_builder_triangles_geometry_info_exp_t12vertexFormatE"></span><span id="_CPPv2N45ze_rtas_builder_triangles_geometry_info_exp_t12vertexFormatE"></span><span id="ze_rtas_builder_triangles_geometry_info_exp_t::vertexFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__triangles__geometry__info__exp__t_1a307281875485c2d5854c9f4421efe3ba"></span><a class="reference internal" href="#ze-rtas-builder-packed-input-data-format-exp-t" title="ze_rtas_builder_packed_input_data_format_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertexFormat</span></span></span><a class="headerlink" href="#_CPPv4N45ze_rtas_builder_triangles_geometry_info_exp_t12vertexFormatE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] format of vertex buffer data, must be <a class="reference internal" href="#ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128a6cfcfc41421ce2c1d84d638cc24cc280"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3</span></a></p>
 </dd></dl>
 
@@ -1422,13 +1640,18 @@
 
 </section>
 <section id="ze-rtas-builder-quads-geometry-info-exp-t">
-<span id="id16"></span><h3>ze_rtas_builder_quads_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-quads-geometry-info-exp-t" title="Link to this heading">#</a></h3>
+<span id="id21"></span><h3>ze_rtas_builder_quads_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-quads-geometry-info-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-quads-geometry-info-ext-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Variant of:</strong> <a class="reference internal" href="#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv441ze_rtas_builder_quads_geometry_info_exp_t">
 <span id="_CPPv341ze_rtas_builder_quads_geometry_info_exp_t"></span><span id="_CPPv241ze_rtas_builder_quads_geometry_info_exp_t"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_quads_geometry_info_exp_t</span></span></span><a class="headerlink" href="#_CPPv441ze_rtas_builder_quads_geometry_info_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder quad mesh geometry info </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder quad mesh geometry info </p>
 <p><ul class="simple">
 <li><p>A quad is a triangle pair represented using 4 vertex indices v0, v1, v2, v3. The first triangle is made out of indices v0, v1, v3 and the second triangle from indices v2, v3, v1. The piecewise linear barycentric u/v parametrization of the quad is defined as:<ul>
 <li><p>(u=0, v=0) at v0,</p></li>
@@ -1443,14 +1666,14 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t12geometryTypeE">
-<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1a2cd4d3901eccd63b50c04e12e474471b"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1a2cd4d3901eccd63b50c04e12e474471b"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-type-exp-t" title="ze_rtas_builder_packed_geometry_type_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] geometry type, must be <a class="reference internal" href="#ze__api_8h_1ab5377df3970e9bde091d39c73c7b9c75a5c12238622e6a7cc06be3149566b1bcb"><span class="std std-ref">ZE_RTAS_BUILDER_GEOMETRY_TYPE_EXP_QUADS</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t13geometryFlagsE">
-<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t13geometryFlagsE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t13geometryFlagsE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::geometryFlags__ze_rtas_builder_packed_geometry_exp_flags_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1ae902ef2bca273f3a3f0b65af92dc807c"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryFlags</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t13geometryFlagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
+<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t13geometryFlagsE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t13geometryFlagsE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::geometryFlags__ze_rtas_builder_packed_geometry_exp_flags_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1ae902ef2bca273f3a3f0b65af92dc807c"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-exp-flags-t" title="ze_rtas_builder_packed_geometry_exp_flags_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryFlags</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t13geometryFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze__api_8h_1adbd7df91e944433451f067629f765ad4"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1461,13 +1684,13 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t10quadFormatE">
-<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t10quadFormatE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t10quadFormatE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::quadFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1a0e8a6ce033c1d75e9ea25401083ccf6d"></span><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">quadFormat</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t10quadFormatE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t10quadFormatE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t10quadFormatE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::quadFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1a0e8a6ce033c1d75e9ea25401083ccf6d"></span><a class="reference internal" href="#ze-rtas-builder-packed-input-data-format-exp-t" title="ze_rtas_builder_packed_input_data_format_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">quadFormat</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t10quadFormatE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] format of quad buffer data, must be <a class="reference internal" href="#ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128a3bfcc045a31f410b31b2365323648b9b"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_QUAD_INDICES_UINT32</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t12vertexFormatE">
-<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t12vertexFormatE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t12vertexFormatE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::vertexFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1a6854bde72b60c663deb31f20fe2fc58a"></span><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertexFormat</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t12vertexFormatE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N41ze_rtas_builder_quads_geometry_info_exp_t12vertexFormatE"></span><span id="_CPPv2N41ze_rtas_builder_quads_geometry_info_exp_t12vertexFormatE"></span><span id="ze_rtas_builder_quads_geometry_info_exp_t::vertexFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__quads__geometry__info__exp__t_1a6854bde72b60c663deb31f20fe2fc58a"></span><a class="reference internal" href="#ze-rtas-builder-packed-input-data-format-exp-t" title="ze_rtas_builder_packed_input_data_format_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertexFormat</span></span></span><a class="headerlink" href="#_CPPv4N41ze_rtas_builder_quads_geometry_info_exp_t12vertexFormatE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] format of vertex buffer data, must be <a class="reference internal" href="#ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128a6cfcfc41421ce2c1d84d638cc24cc280"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3</span></a></p>
 </dd></dl>
 
@@ -1512,13 +1735,18 @@
 
 </section>
 <section id="ze-rtas-builder-procedural-geometry-info-exp-t">
-<span id="id17"></span><h3>ze_rtas_builder_procedural_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-procedural-geometry-info-exp-t" title="Link to this heading">#</a></h3>
+<span id="id22"></span><h3>ze_rtas_builder_procedural_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-procedural-geometry-info-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-procedural-geometry-info-ext-t"><span class="std std-ref">ze_rtas_builder_procedural_geometry_info_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Variant of:</strong> <a class="reference internal" href="#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv446ze_rtas_builder_procedural_geometry_info_exp_t">
 <span id="_CPPv346ze_rtas_builder_procedural_geometry_info_exp_t"></span><span id="_CPPv246ze_rtas_builder_procedural_geometry_info_exp_t"></span><span id="ze_rtas_builder_procedural_geometry_info_exp_t"></span><span class="target" id="structze__rtas__builder__procedural__geometry__info__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_procedural_geometry_info_exp_t</span></span></span><a class="headerlink" href="#_CPPv446ze_rtas_builder_procedural_geometry_info_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder procedural primitives geometry info </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder procedural primitives geometry info </p>
 <p><ul class="simple">
 <li><p>A host-side bounds callback function is invoked by the acceleration structure builder to query the bounds of procedural primitives on demand. The callback is passed some <code class="docutils literal notranslate"><span class="pre">pGeomUserPtr</span></code> that can point to an application-side representation of the procedural primitives. Further, a second <code class="docutils literal notranslate"><span class="pre">pBuildUserPtr</span></code>, which is set by a parameter to <a class="reference internal" href="#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a>, is passed to the callback. This allows the build to change the bounds of the procedural geometry, for example, to build a BVH only over a short time range to implement multi-segment motion blur.</p></li>
 </ul>
@@ -1527,14 +1755,14 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N46ze_rtas_builder_procedural_geometry_info_exp_t12geometryTypeE">
-<span id="_CPPv3N46ze_rtas_builder_procedural_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N46ze_rtas_builder_procedural_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_procedural_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__procedural__geometry__info__exp__t_1a0138755b4538b0101726beb7e67dd439"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N46ze_rtas_builder_procedural_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N46ze_rtas_builder_procedural_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N46ze_rtas_builder_procedural_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_procedural_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__procedural__geometry__info__exp__t_1a0138755b4538b0101726beb7e67dd439"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-type-exp-t" title="ze_rtas_builder_packed_geometry_type_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N46ze_rtas_builder_procedural_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] geometry type, must be <a class="reference internal" href="#ze__api_8h_1ab5377df3970e9bde091d39c73c7b9c75a81117383aa9b00fdddf7edbacb607fef"><span class="std std-ref">ZE_RTAS_BUILDER_GEOMETRY_TYPE_EXP_PROCEDURAL</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N46ze_rtas_builder_procedural_geometry_info_exp_t13geometryFlagsE">
-<span id="_CPPv3N46ze_rtas_builder_procedural_geometry_info_exp_t13geometryFlagsE"></span><span id="_CPPv2N46ze_rtas_builder_procedural_geometry_info_exp_t13geometryFlagsE"></span><span id="ze_rtas_builder_procedural_geometry_info_exp_t::geometryFlags__ze_rtas_builder_packed_geometry_exp_flags_t"></span><span class="target" id="structze__rtas__builder__procedural__geometry__info__exp__t_1a27c269997396b8f950c072998c1d615b"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryFlags</span></span></span><a class="headerlink" href="#_CPPv4N46ze_rtas_builder_procedural_geometry_info_exp_t13geometryFlagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
+<span id="_CPPv3N46ze_rtas_builder_procedural_geometry_info_exp_t13geometryFlagsE"></span><span id="_CPPv2N46ze_rtas_builder_procedural_geometry_info_exp_t13geometryFlagsE"></span><span id="ze_rtas_builder_procedural_geometry_info_exp_t::geometryFlags__ze_rtas_builder_packed_geometry_exp_flags_t"></span><span class="target" id="structze__rtas__builder__procedural__geometry__info__exp__t_1a27c269997396b8f950c072998c1d615b"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-exp-flags-t" title="ze_rtas_builder_packed_geometry_exp_flags_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryFlags</span></span></span><a class="headerlink" href="#_CPPv4N46ze_rtas_builder_procedural_geometry_info_exp_t13geometryFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze__api_8h_1adbd7df91e944433451f067629f765ad4"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1572,25 +1800,30 @@
 
 </section>
 <section id="ze-rtas-builder-instance-geometry-info-exp-t">
-<span id="id18"></span><h3>ze_rtas_builder_instance_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-instance-geometry-info-exp-t" title="Link to this heading">#</a></h3>
+<span id="id23"></span><h3>ze_rtas_builder_instance_geometry_info_exp_t<a class="headerlink" href="#ze-rtas-builder-instance-geometry-info-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-instance-geometry-info-ext-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Variant of:</strong> <a class="reference internal" href="#ze-rtas-builder-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv444ze_rtas_builder_instance_geometry_info_exp_t">
 <span id="_CPPv344ze_rtas_builder_instance_geometry_info_exp_t"></span><span id="_CPPv244ze_rtas_builder_instance_geometry_info_exp_t"></span><span id="ze_rtas_builder_instance_geometry_info_exp_t"></span><span class="target" id="structze__rtas__builder__instance__geometry__info__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_instance_geometry_info_exp_t</span></span></span><a class="headerlink" href="#_CPPv444ze_rtas_builder_instance_geometry_info_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure builder instance geometry info </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure builder instance geometry info </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t12geometryTypeE">
-<span id="_CPPv3N44ze_rtas_builder_instance_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N44ze_rtas_builder_instance_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_instance_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__instance__geometry__info__exp__t_1adb3c0878f35acd4965045b9a801a75f8"></span><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N44ze_rtas_builder_instance_geometry_info_exp_t12geometryTypeE"></span><span id="_CPPv2N44ze_rtas_builder_instance_geometry_info_exp_t12geometryTypeE"></span><span id="ze_rtas_builder_instance_geometry_info_exp_t::geometryType__ze_rtas_builder_packed_geometry_type_exp_t"></span><span class="target" id="structze__rtas__builder__instance__geometry__info__exp__t_1adb3c0878f35acd4965045b9a801a75f8"></span><a class="reference internal" href="#ze-rtas-builder-packed-geometry-type-exp-t" title="ze_rtas_builder_packed_geometry_type_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_geometry_type_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">geometryType</span></span></span><a class="headerlink" href="#_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t12geometryTypeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] geometry type, must be <a class="reference internal" href="#ze__api_8h_1ab5377df3970e9bde091d39c73c7b9c75a8963cf1d6863f9f90b8d091e3f981351"><span class="std std-ref">ZE_RTAS_BUILDER_GEOMETRY_TYPE_EXP_INSTANCE</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t13instanceFlagsE">
-<span id="_CPPv3N44ze_rtas_builder_instance_geometry_info_exp_t13instanceFlagsE"></span><span id="_CPPv2N44ze_rtas_builder_instance_geometry_info_exp_t13instanceFlagsE"></span><span id="ze_rtas_builder_instance_geometry_info_exp_t::instanceFlags__ze_rtas_builder_packed_instance_exp_flags_t"></span><span class="target" id="structze__rtas__builder__instance__geometry__info__exp__t_1ae0a3bc53460f3ca72bde17cdb6e7a675"></span><span class="n"><span class="pre">ze_rtas_builder_packed_instance_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">instanceFlags</span></span></span><a class="headerlink" href="#_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t13instanceFlagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze-rtas-builder-geometry-exp-flags-t"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
+<span id="_CPPv3N44ze_rtas_builder_instance_geometry_info_exp_t13instanceFlagsE"></span><span id="_CPPv2N44ze_rtas_builder_instance_geometry_info_exp_t13instanceFlagsE"></span><span id="ze_rtas_builder_instance_geometry_info_exp_t::instanceFlags__ze_rtas_builder_packed_instance_exp_flags_t"></span><span class="target" id="structze__rtas__builder__instance__geometry__info__exp__t_1ae0a3bc53460f3ca72bde17cdb6e7a675"></span><a class="reference internal" href="#ze-rtas-builder-packed-instance-exp-flags-t" title="ze_rtas_builder_packed_instance_exp_flags_t"><span class="n"><span class="pre">ze_rtas_builder_packed_instance_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">instanceFlags</span></span></span><a class="headerlink" href="#_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t13instanceFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze__api_8h_1adbd7df91e944433451f067629f765ad4"><span class="std std-ref">ze_rtas_builder_geometry_exp_flag_t</span></a> bits representing the geometry flags for all primitives of this geometry </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1601,8 +1834,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t15transformFormatE">
-<span id="_CPPv3N44ze_rtas_builder_instance_geometry_info_exp_t15transformFormatE"></span><span id="_CPPv2N44ze_rtas_builder_instance_geometry_info_exp_t15transformFormatE"></span><span id="ze_rtas_builder_instance_geometry_info_exp_t::transformFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__instance__geometry__info__exp__t_1af02ed3e844fb3e5e0ac527e58ce71bde"></span><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transformFormat</span></span></span><a class="headerlink" href="#_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t15transformFormatE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] format of the specified transformation </p>
+<span id="_CPPv3N44ze_rtas_builder_instance_geometry_info_exp_t15transformFormatE"></span><span id="_CPPv2N44ze_rtas_builder_instance_geometry_info_exp_t15transformFormatE"></span><span id="ze_rtas_builder_instance_geometry_info_exp_t::transformFormat__ze_rtas_builder_packed_input_data_format_exp_t"></span><span class="target" id="structze__rtas__builder__instance__geometry__info__exp__t_1af02ed3e844fb3e5e0ac527e58ce71bde"></span><a class="reference internal" href="#ze-rtas-builder-packed-input-data-format-exp-t" title="ze_rtas_builder_packed_input_data_format_exp_t"><span class="n"><span class="pre">ze_rtas_builder_packed_input_data_format_exp_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">transformFormat</span></span></span><a class="headerlink" href="#_CPPv4N44ze_rtas_builder_instance_geometry_info_exp_t15transformFormatE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] format of the specified transformation, must be <a class="reference internal" href="#ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128ae9e7d501357ac6dde7da2727b4908b6e"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3X4_COLUMN_MAJOR</span></a>, <a class="reference internal" href="#ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128adb8afa57aa59826f3995eda3161553f2"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3X4_ALIGNED_COLUMN_MAJOR</span></a>, or <a class="reference internal" href="#ze__api_8h_1ab2038bf3870e52733d1de318b9c0c128a1a52c28b061f810c21386b8641e3587d"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3X4_ROW_MAJOR</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1634,13 +1867,18 @@
 
 </section>
 <section id="ze-rtas-builder-build-op-exp-desc-t">
-<span id="id19"></span><h3>ze_rtas_builder_build_op_exp_desc_t<a class="headerlink" href="#ze-rtas-builder-build-op-exp-desc-t" title="Link to this heading">#</a></h3>
+<span id="id24"></span><h3>ze_rtas_builder_build_op_exp_desc_t<a class="headerlink" href="#ze-rtas-builder-build-op-exp-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/rtas_builder.html#ze-rtas-builder-build-op-ext-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_ext_desc_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zertasbuildergetbuildpropertiesexp"><span class="std std-ref">zeRTASBuilderGetBuildPropertiesExp</span></a>, <a class="reference internal" href="#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv435ze_rtas_builder_build_op_exp_desc_t">
 <span id="_CPPv335ze_rtas_builder_build_op_exp_desc_t"></span><span id="_CPPv235ze_rtas_builder_build_op_exp_desc_t"></span><span id="ze_rtas_builder_build_op_exp_desc_t"></span><span class="target" id="structze__rtas__builder__build__op__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv435ze_rtas_builder_build_op_exp_desc_t" title="Link to this definition">#</a><br /></dt>
-<dd><p></p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -1669,8 +1907,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N35ze_rtas_builder_build_op_exp_desc_t10buildFlagsE">
-<span id="_CPPv3N35ze_rtas_builder_build_op_exp_desc_t10buildFlagsE"></span><span id="_CPPv2N35ze_rtas_builder_build_op_exp_desc_t10buildFlagsE"></span><span id="ze_rtas_builder_build_op_exp_desc_t::buildFlags__ze_rtas_builder_build_op_exp_flags_t"></span><span class="target" id="structze__rtas__builder__build__op__exp__desc__t_1a0e47dff0f0ab2260aa9f8cf7a9e3d812"></span><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buildFlags</span></span></span><a class="headerlink" href="#_CPPv4N35ze_rtas_builder_build_op_exp_desc_t10buildFlagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze-rtas-builder-build-op-exp-flags-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_flag_t</span></a> flags </p>
+<span id="_CPPv3N35ze_rtas_builder_build_op_exp_desc_t10buildFlagsE"></span><span id="_CPPv2N35ze_rtas_builder_build_op_exp_desc_t10buildFlagsE"></span><span id="ze_rtas_builder_build_op_exp_desc_t::buildFlags__ze_rtas_builder_build_op_exp_flags_t"></span><span class="target" id="structze__rtas__builder__build__op__exp__desc__t_1a0e47dff0f0ab2260aa9f8cf7a9e3d812"></span><a class="reference internal" href="#ze-rtas-builder-build-op-exp-flags-t" title="ze_rtas_builder_build_op_exp_flags_t"><span class="n"><span class="pre">ze_rtas_builder_build_op_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buildFlags</span></span></span><a class="headerlink" href="#_CPPv4N35ze_rtas_builder_build_op_exp_desc_t10buildFlagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] 0 or some combination of <a class="reference internal" href="#ze__api_8h_1af1dbb3398ec1b0d5f206195c33d4200a"><span class="std std-ref">ze_rtas_builder_build_op_exp_flag_t</span></a> flags </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1737,7 +1975,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zeRTASBuilder</div><ul class="ctoc-list"><li><a href="rtas_builder.html#zertasbuildercreateexp">&hellip;CreateExp</a></li><li><a href="rtas_builder.html#zertasbuildergetbuildpropertiesexp">&hellip;GetBuildPropertiesExp</a></li><li><a href="rtas_builder.html#zertasbuilderbuildexp">&hellip;BuildExp</a></li><li><a href="rtas_builder.html#zertasbuilderdestroyexp">&hellip;DestroyExp</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">7</span></summary><ul class="ctoc-list"><li><a href="rtas_builder.html#ze-rtas-builder-exp-flags-t">ze_rtas_builder_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-geometry-exp-flags-t">ze_rtas_builder_geometry_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-instance-exp-flags-t">ze_rtas_builder_instance_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-build-op-exp-flags-t">ze_rtas_builder_build_op_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-build-quality-hint-exp-t">ze_rtas_builder_build_quality_hint_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-geometry-type-exp-t">ze_rtas_builder_geometry_type_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t">ze_rtas_builder_input_data_format_exp_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">8</span></summary><ul class="ctoc-list"><li><a href="rtas_builder.html#ze-rtas-builder-exp-desc-t">ze_rtas_builder_exp_desc_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-exp-properties-t">ze_rtas_builder_exp_properties_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-geometry-info-exp-t">ze_rtas_builder_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-triangles-geometry-info-exp-t">ze_rtas_builder_triangles_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-quads-geometry-info-exp-t">ze_rtas_builder_quads_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-procedural-geometry-info-exp-t">ze_rtas_builder_procedural_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-instance-geometry-info-exp-t">ze_rtas_builder_instance_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-build-op-exp-desc-t">ze_rtas_builder_build_op_exp_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="rtas_builder.html#ze-rtas-builder-exp-handle-t">ze_rtas_builder_exp_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zeRTASBuilder</div><ul class="ctoc-list"><li><a href="rtas_builder.html#zertasbuildercreateexp">&hellip;CreateExp</a></li><li><a href="rtas_builder.html#zertasbuildergetbuildpropertiesexp">&hellip;GetBuildPropertiesExp</a></li><li><a href="rtas_builder.html#zertasbuilderbuildexp">&hellip;BuildExp</a></li><li><a href="rtas_builder.html#zertasbuilderdestroyexp">&hellip;DestroyExp</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">7</span></summary><ul class="ctoc-list"><li><a href="rtas_builder.html#ze-rtas-builder-exp-flags-t">ze_rtas_builder_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-geometry-exp-flags-t">ze_rtas_builder_geometry_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-instance-exp-flags-t">ze_rtas_builder_instance_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-build-op-exp-flags-t">ze_rtas_builder_build_op_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-build-quality-hint-exp-t">ze_rtas_builder_build_quality_hint_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-geometry-type-exp-t">ze_rtas_builder_geometry_type_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t">ze_rtas_builder_input_data_format_exp_t</a></li></ul></details><details class="ctoc-group" open><summary>Typedefs <span class="ctoc-count">4</span></summary><ul class="ctoc-list"><li><a href="rtas_builder.html#ze-rtas-builder-packed-geometry-exp-flags-t">ze_rtas_builder_packed_geometry_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-packed-instance-exp-flags-t">ze_rtas_builder_packed_instance_exp_flags_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-packed-geometry-type-exp-t">ze_rtas_builder_packed_geometry_type_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-packed-input-data-format-exp-t">ze_rtas_builder_packed_input_data_format_exp_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">8</span></summary><ul class="ctoc-list"><li><a href="rtas_builder.html#ze-rtas-builder-exp-desc-t">ze_rtas_builder_exp_desc_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-exp-properties-t">ze_rtas_builder_exp_properties_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-geometry-info-exp-t">ze_rtas_builder_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-triangles-geometry-info-exp-t">ze_rtas_builder_triangles_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-quads-geometry-info-exp-t">ze_rtas_builder_quads_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-procedural-geometry-info-exp-t">ze_rtas_builder_procedural_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-instance-geometry-info-exp-t">ze_rtas_builder_instance_geometry_info_exp_t</a></li><li><a href="rtas_builder.html#ze-rtas-builder-build-op-exp-desc-t">ze_rtas_builder_build_op_exp_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

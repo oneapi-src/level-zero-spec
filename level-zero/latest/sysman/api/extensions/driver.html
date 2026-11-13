@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Driver - Extensions &#8212; Level Zero Specification v1.20.41</title>
+    <title>Driver - Extensions &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Device - Extensions" href="device.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -501,7 +511,7 @@
                   
   <section id="driver-extensions">
 <h1>Driver - Extensions<a class="headerlink" href="#driver-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="driver-extension-functions">
 <h2>Driver - Extension Functions<a class="headerlink" href="#driver-extension-functions" title="Link to this heading">#</a></h2>
 <section id="zesdrivereventregisterext">
@@ -509,7 +519,7 @@
 <p class="api-version"><em>Added in version 1.19</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zesDriverEventRegisterExt19zes_driver_handle_t22zes_event_type_flags_t">
-<span id="_CPPv325zesDriverEventRegisterExt19zes_driver_handle_t22zes_event_type_flags_t"></span><span id="_CPPv225zesDriverEventRegisterExt19zes_driver_handle_t22zes_event_type_flags_t"></span><span id="zesDriverEventRegisterExt__zes_driver_handle_t.zes_event_type_flags_t"></span><span class="target" id="zes__api_8h_1a5548f908d21fdcd89378bc0eba3bbf4f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDriverEventRegisterExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="n"><span class="pre">zes_event_type_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">events</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesDriverEventRegisterExt19zes_driver_handle_t22zes_event_type_flags_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zesDriverEventRegisterExt19zes_driver_handle_t22zes_event_type_flags_t"></span><span id="_CPPv225zesDriverEventRegisterExt19zes_driver_handle_t22zes_event_type_flags_t"></span><span id="zesDriverEventRegisterExt__zes_driver_handle_t.zes_event_type_flags_t"></span><span class="target" id="zes__api_8h_1a5548f908d21fdcd89378bc0eba3bbf4f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDriverEventRegisterExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/driver.html#zes-driver-handle-t" title="zes_driver_handle_t"><span class="n"><span class="pre">zes_driver_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <a class="reference internal" href="../apis/driver.html#zes-event-type-flags-t" title="zes_event_type_flags_t"><span class="n"><span class="pre">zes_event_type_flags_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">events</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesDriverEventRegisterExt19zes_driver_handle_t22zes_event_type_flags_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Specify the list of driver scoped events to listen to for a given driver. </p>
 <p><ul class="simple">
 <li><p>This function registers the driver scoped events the application wants to be notified about. Unlike <a class="reference internal" href="../apis/device.html#zesdeviceeventregister"><span class="std std-ref">zesDeviceEventRegister</span></a> the registration is not tied to a device: the underlying event source is shared by all devices of the driver.</p></li>
@@ -522,7 +532,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hDriver</strong> – [in] handle of the driver instance </p></li>
-<li><p><strong>events</strong> – [in] List of driver scoped events to listen to. Must be 0 or a combination of the driver scoped zes_event_type_flags_t values. </p></li>
+<li><p><strong>events</strong> – [in] List of driver scoped events to listen to. Must be 0 or a combination of the driver scoped <a class="reference internal" href="../apis/driver.html#zes-event-type-flags-t"><span class="std std-ref">zes_event_type_flags_t</span></a> values. </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -565,13 +575,13 @@
 <p class="api-version"><em>Added in version 1.19</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zesDriverEventListenExt19zes_driver_handle_t8uint64_t8uint32_tP19zes_device_handle_tP8uint32_tP22zes_event_type_flags_tP22zes_event_type_flags_t">
-<span id="_CPPv323zesDriverEventListenExt19zes_driver_handle_t8uint64_t8uint32_tP19zes_device_handle_tP8uint32_tP22zes_event_type_flags_tP22zes_event_type_flags_t"></span><span id="_CPPv223zesDriverEventListenExt19zes_driver_handle_t8uint64_t8uint32_tP19zes_device_handle_tP8uint32_tP22zes_event_type_flags_tP22zes_event_type_flags_t"></span><span id="zesDriverEventListenExt__zes_driver_handle_t.uint64_t.uint32_t.zes_device_handle_tP.uint32_tP.zes_event_type_flags_tP.zes_event_type_flags_tP"></span><span class="target" id="zes__api_8h_1aaaff5760d1795820d5e0b9b3a6eb0a9c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDriverEventListenExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="n"><span class="pre">zes_device_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevices</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNumDeviceEvents</span></span>, <span class="n"><span class="pre">zes_event_type_flags_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pEvents</span></span>, <span class="n"><span class="pre">zes_event_type_flags_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDriverEvents</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesDriverEventListenExt19zes_driver_handle_t8uint64_t8uint32_tP19zes_device_handle_tP8uint32_tP22zes_event_type_flags_tP22zes_event_type_flags_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zesDriverEventListenExt19zes_driver_handle_t8uint64_t8uint32_tP19zes_device_handle_tP8uint32_tP22zes_event_type_flags_tP22zes_event_type_flags_t"></span><span id="_CPPv223zesDriverEventListenExt19zes_driver_handle_t8uint64_t8uint32_tP19zes_device_handle_tP8uint32_tP22zes_event_type_flags_tP22zes_event_type_flags_t"></span><span id="zesDriverEventListenExt__zes_driver_handle_t.uint64_t.uint32_t.zes_device_handle_tP.uint32_tP.zes_event_type_flags_tP.zes_event_type_flags_tP"></span><span class="target" id="zes__api_8h_1aaaff5760d1795820d5e0b9b3a6eb0a9c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDriverEventListenExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/driver.html#zes-driver-handle-t" title="zes_driver_handle_t"><span class="n"><span class="pre">zes_driver_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <a class="reference internal" href="../apis/device.html#zes-device-handle-t" title="zes_device_handle_t"><span class="n"><span class="pre">zes_device_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevices</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNumDeviceEvents</span></span>, <a class="reference internal" href="../apis/driver.html#zes-event-type-flags-t" title="zes_event_type_flags_t"><span class="n"><span class="pre">zes_event_type_flags_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pEvents</span></span>, <a class="reference internal" href="../apis/driver.html#zes-event-type-flags-t" title="zes_event_type_flags_t"><span class="n"><span class="pre">zes_event_type_flags_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDriverEvents</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesDriverEventListenExt19zes_driver_handle_t8uint64_t8uint32_tP19zes_device_handle_tP8uint32_tP22zes_event_type_flags_tP22zes_event_type_flags_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Wait for device scoped and driver scoped events to be received from one or more devices. </p>
 <p><ul class="simple">
 <li><p>This function extends <a class="reference internal" href="../apis/driver.html#zesdrivereventlistenex"><span class="std std-ref">zesDriverEventListenEx</span></a> with the ability to report the driver scoped events registered with <a class="reference internal" href="#zesdrivereventregisterext"><span class="std std-ref">zesDriverEventRegisterExt</span></a>.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">hDriver</span></code>, <code class="docutils literal notranslate"><span class="pre">timeout</span></code>, <code class="docutils literal notranslate"><span class="pre">count</span></code>, <code class="docutils literal notranslate"><span class="pre">phDevices</span></code>, <code class="docutils literal notranslate"><span class="pre">pNumDeviceEvents</span></code> and <code class="docutils literal notranslate"><span class="pre">pEvents</span></code> arguments behave exactly as in <a class="reference internal" href="../apis/driver.html#zesdrivereventlistenex"><span class="std std-ref">zesDriverEventListenEx</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">pDriverEvents</span></code> is optional. When it is <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> this function behaves exactly like <a class="reference internal" href="../apis/driver.html#zesdrivereventlistenex"><span class="std std-ref">zesDriverEventListenEx</span></a> and no driver scoped event source is listened to.</p></li>
-<li><p>When <code class="docutils literal notranslate"><span class="pre">pDriverEvents</span></code> is not <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> it is cleared on entry and, on return, contains the driver scoped events which have been registered and occurred, i.e. 0 or a combination of the driver scoped zes_event_type_flags_t values.</p></li>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">pDriverEvents</span></code> is not <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> it is cleared on entry and, on return, contains the driver scoped events which have been registered and occurred, i.e. 0 or a combination of the driver scoped <a class="reference internal" href="../apis/driver.html#zes-event-type-flags-t"><span class="std std-ref">zes_event_type_flags_t</span></a> values.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">*pNumDeviceEvents</span></code> accounts for device scoped events only. A driver scoped event which occurs without any device scoped event therefore returns <code class="docutils literal notranslate"><span class="pre">*pNumDeviceEvents</span></code> set to 0 and <code class="docutils literal notranslate"><span class="pre">*pDriverEvents</span></code> set to the events which occurred, so an application must check both values.</p></li>
 <li><p>The application should not call this function from simultaneous threads with the same driver handle.</p></li>
 </ul>
@@ -585,7 +595,7 @@
 <li><p><strong>phDevices</strong> – [in][range(0, count)] Device handles to listen to for events. Only devices from the provided driver handle can be specified in this list. </p></li>
 <li><p><strong>pNumDeviceEvents</strong> – [in,out] Will contain the actual number of devices in phDevices that generated device scoped events. If non-zero, check pEvents to determine the devices and events that were received. </p></li>
 <li><p><strong>pEvents</strong> – [in,out] An array that will contain the list of device scoped events for each device listened in phDevices. This array must be at least as big as count. For every device handle in phDevices, this will provide the events that occurred for that device at the same position in this array. If no event was received for a given device, the corresponding array entry will be zero. </p></li>
-<li><p><strong>pDriverEvents</strong> – [in,out][optional] Returns the driver scoped events which occurred, i.e. 0 or a combination of the driver scoped zes_event_type_flags_t values. When <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, driver scoped events are not listened to. </p></li>
+<li><p><strong>pDriverEvents</strong> – [in,out][optional] Returns the driver scoped events which occurred, i.e. 0 or a combination of the driver scoped <a class="reference internal" href="../apis/driver.html#zes-event-type-flags-t"><span class="std std-ref">zes_event_type_flags_t</span></a> values. When <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, driver scoped events are not listened to. </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -631,7 +641,7 @@
 <p class="api-version"><em>Added in version 1.19</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zesDriverEnumInfoLogsExt19zes_driver_handle_tP8uint32_tP21zes_info_log_handle_t">
-<span id="_CPPv324zesDriverEnumInfoLogsExt19zes_driver_handle_tP8uint32_tP21zes_info_log_handle_t"></span><span id="_CPPv224zesDriverEnumInfoLogsExt19zes_driver_handle_tP8uint32_tP21zes_info_log_handle_t"></span><span id="zesDriverEnumInfoLogsExt__zes_driver_handle_t.uint32_tP.zes_info_log_handle_tP"></span><span class="target" id="zes__api_8h_1a54ecb71e4de3199beaf1c8e23e47a8d8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDriverEnumInfoLogsExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="n"><span class="pre">zes_info_log_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phInfoLogs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zesDriverEnumInfoLogsExt19zes_driver_handle_tP8uint32_tP21zes_info_log_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zesDriverEnumInfoLogsExt19zes_driver_handle_tP8uint32_tP21zes_info_log_handle_t"></span><span id="_CPPv224zesDriverEnumInfoLogsExt19zes_driver_handle_tP8uint32_tP21zes_info_log_handle_t"></span><span id="zesDriverEnumInfoLogsExt__zes_driver_handle_t.uint32_tP.zes_info_log_handle_tP"></span><span class="target" id="zes__api_8h_1a54ecb71e4de3199beaf1c8e23e47a8d8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDriverEnumInfoLogsExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/driver.html#zes-driver-handle-t" title="zes_driver_handle_t"><span class="n"><span class="pre">zes_driver_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="../apis/info_log.html#zes-info-log-handle-t" title="zes_info_log_handle_t"><span class="n"><span class="pre">zes_info_log_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phInfoLogs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zesDriverEnumInfoLogsExt19zes_driver_handle_tP8uint32_tP21zes_info_log_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get handles to the info logs supported by the driver. </p>
 <p><ul class="simple">
 <li><p>An info log is a driver scoped object. Records collected from an info log may originate from any of the devices managed by the driver, and the originating device is reported in the metadata of each record.</p></li>

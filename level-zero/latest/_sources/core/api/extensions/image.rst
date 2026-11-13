@@ -1,7 +1,9 @@
 ============================================================
 Image - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Image - Extension Functions
@@ -35,6 +37,7 @@ zeImageViewCreateExt
 
 
 
+
  
 Image - Extension Structures
 ============================
@@ -64,6 +67,10 @@ ze_srgb_ext_desc_t
 
 *Added in version 1.3*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-image-desc-t`
+
 .. doxygenstruct:: ze_srgb_ext_desc_t
     :project: LevelZero
     :members:
@@ -79,6 +86,11 @@ ze_image_allocation_ext_properties_t
 
 *Added in version 1.3*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeImageGetAllocPropertiesExt`
+   | **pNext may point to:** :ref:`ze-external-memory-export-fd-t`, :ref:`ze-external-memory-export-win32-handle-t`
+
 .. doxygenstruct:: ze_image_allocation_ext_properties_t
     :project: LevelZero
     :members:
@@ -93,6 +105,10 @@ ze_image_format_support_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.15*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-image-properties-t`
 
 .. doxygenstruct:: ze_image_format_support_ext_properties_t
     :project: LevelZero

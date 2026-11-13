@@ -1,7 +1,9 @@
 ============================================================
 Device
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Device Functions
@@ -152,6 +154,13 @@ zes_engine_type_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-process-state-t`, :ref:`zes-perf-properties-t`, :ref:`zes-sched-properties-t`
+
+.. doxygentypedef:: zes_engine_type_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_engine_type_flag_t
     :project: LevelZero
 
@@ -164,6 +173,10 @@ zes_repair_status_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-device-state-t`
 
 .. doxygenenum:: zes_repair_status_t
     :project: LevelZero
@@ -178,6 +191,13 @@ zes_reset_reason_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-device-state-t`
+
+.. doxygentypedef:: zes_reset_reason_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_reset_reason_flag_t
     :project: LevelZero
 
@@ -190,6 +210,10 @@ zes_reset_type_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-reset-properties-t`
 
 .. doxygenenum:: zes_reset_type_t
     :project: LevelZero
@@ -204,6 +228,10 @@ zes_device_type_t
 
 *Added in version 1.7*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-device-ext-properties-t`
+
 .. doxygenenum:: zes_device_type_t
     :project: LevelZero
 
@@ -216,6 +244,13 @@ zes_device_property_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-device-ext-properties-t`
+
+.. doxygentypedef:: zes_device_property_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: zes_device_property_flag_t
     :project: LevelZero
@@ -230,6 +265,10 @@ zes_pci_link_status_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-pci-state-t`, :ref:`zes-driver-pci-device-properties-t`
+
 .. doxygenenum:: zes_pci_link_status_t
     :project: LevelZero
 
@@ -242,6 +281,13 @@ zes_pci_link_qual_issue_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-pci-state-t`
+
+.. doxygentypedef:: zes_pci_link_qual_issue_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: zes_pci_link_qual_issue_flag_t
     :project: LevelZero
@@ -256,6 +302,13 @@ zes_pci_link_stab_issue_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-pci-state-t`
+
+.. doxygentypedef:: zes_pci_link_stab_issue_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_pci_link_stab_issue_flag_t
     :project: LevelZero
 
@@ -268,6 +321,10 @@ zes_pci_bar_type_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-pci-bar-properties-t`, :ref:`zes-pci-bar-properties-1-2-t`
 
 .. doxygenenum:: zes_pci_bar_type_t
     :project: LevelZero
@@ -282,6 +339,11 @@ zes_overclock_domain_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceGetOverclockControls`
+   | **Member of:** :ref:`zes-overclock-properties-t`
+
 .. doxygenenum:: zes_overclock_domain_t
     :project: LevelZero
 
@@ -294,6 +356,10 @@ zes_device_ecc_state_t
 .. rst-class:: api-version
 
 *Added in version 1.4*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-device-ecc-desc-t`, :ref:`zes-device-ecc-properties-t`, :ref:`zes-device-ecc-default-properties-ext-t`
 
 .. doxygenenum:: zes_device_ecc_state_t
     :project: LevelZero
@@ -308,6 +374,11 @@ zes_device_action_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDevicePciLinkSpeedUpdateExt`
+   | **Member of:** :ref:`zes-device-ecc-properties-t`
+
 .. doxygenenum:: zes_device_action_t
     :project: LevelZero
 
@@ -320,6 +391,10 @@ zes_freq_domain_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-freq-properties-t`
 
 .. doxygenenum:: zes_freq_domain_t
     :project: LevelZero
@@ -334,6 +409,10 @@ zes_sched_mode_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesSchedulerGetCurrentMode`
+
 .. doxygenenum:: zes_sched_mode_t
     :project: LevelZero
 
@@ -347,8 +426,16 @@ zes_pci_link_speed_flags_t
 
 *Added in version 1.20*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-pci-config-properties-t`
+
+.. doxygentypedef:: zes_pci_link_speed_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_pci_link_speed_flag_t
     :project: LevelZero
+
 
  
 Device Structures
@@ -363,6 +450,11 @@ zes_uuid_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDriverGetDeviceByUuidExp`
+   | **Member of:** :ref:`zes-driver-properties-t`, :ref:`zes-device-ext-properties-t`, :ref:`zes-subdevice-exp-properties-t`, :ref:`zes-vf-exp-properties-t`, :ref:`zes-info-log-metadata-ext-t`, :ref:`zes-device-soc-uid-ext-properties-t`
 
 .. doxygenstruct:: zes_uuid_t
     :project: LevelZero
@@ -379,6 +471,11 @@ zes_device_state_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceGetState`
+   | **pNext may point to:** :ref:`zes-device-ext-state-t`
+
 .. doxygenstruct:: zes_device_state_t
     :project: LevelZero
     :members:
@@ -393,6 +490,10 @@ zes_reset_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceResetExt`
 
 .. doxygenstruct:: zes_reset_properties_t
     :project: LevelZero
@@ -409,6 +510,11 @@ zes_device_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceGetProperties`
+   | **pNext may point to:** :ref:`zes-device-soc-uid-ext-properties-t`, :ref:`zes-device-ext-properties-t`, :ref:`zes-device-index-ext-properties-t`, :ref:`zes-oem-serial-id-ext-properties-t`, :ref:`zes-device-gpu-topology-ext-properties-t`
+
 .. doxygenstruct:: zes_device_properties_t
     :project: LevelZero
     :members:
@@ -423,6 +529,10 @@ zes_process_state_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceProcessesGetState`
 
 .. doxygenstruct:: zes_process_state_t
     :project: LevelZero
@@ -439,6 +549,10 @@ zes_pci_address_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-pci-properties-t`, :ref:`zes-vf-exp-properties-t`, :ref:`zes-vf-exp-capabilities-t`, :ref:`zes-vf-exp2-capabilities-t`, :ref:`zes-info-log-metadata-ext-t`, :ref:`zes-driver-pci-device-properties-t`
+
 .. doxygenstruct:: zes_pci_address_t
     :project: LevelZero
     :members:
@@ -453,6 +567,10 @@ zes_pci_speed_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-pci-properties-t`, :ref:`zes-pci-state-t`, :ref:`zes-pci-stats-t`, :ref:`zes-driver-pci-device-properties-t`
 
 .. doxygenstruct:: zes_pci_speed_t
     :project: LevelZero
@@ -469,6 +587,11 @@ zes_pci_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDevicePciGetProperties`
+   | **pNext may point to:** :ref:`zes-pci-link-speed-downgrade-ext-properties-t`, :ref:`zes-pci-config-properties-t`
+
 .. doxygenstruct:: zes_pci_properties_t
     :project: LevelZero
     :members:
@@ -484,6 +607,11 @@ zes_pci_state_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDevicePciGetState`
+   | **pNext may point to:** :ref:`zes-pci-link-speed-downgrade-ext-state-t`
+
 .. doxygenstruct:: zes_pci_state_t
     :project: LevelZero
     :members:
@@ -498,6 +626,10 @@ zes_pci_bar_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDevicePciGetBars`
 
 .. doxygenstruct:: zes_pci_bar_properties_t
     :project: LevelZero
@@ -529,6 +661,10 @@ zes_pci_stats_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDevicePciGetStats`
+
 .. doxygenstruct:: zes_pci_stats_t
     :project: LevelZero
     :members:
@@ -543,6 +679,10 @@ zes_device_ecc_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.4*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceSetEccState`
 
 .. doxygenstruct:: zes_device_ecc_desc_t
     :project: LevelZero
@@ -559,6 +699,11 @@ zes_device_ecc_properties_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceGetEccState`, :ref:`zesDeviceSetEccState`
+   | **pNext may point to:** :ref:`zes-device-ecc-default-properties-ext-t`
+
 .. doxygenstruct:: zes_device_ecc_properties_t
     :project: LevelZero
     :members:
@@ -573,6 +718,10 @@ zes_sched_timeout_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesSchedulerGetTimeoutModeProperties`, :ref:`zesSchedulerSetTimeoutMode`
 
 .. doxygenstruct:: zes_sched_timeout_properties_t
     :project: LevelZero
@@ -589,6 +738,10 @@ zes_sched_timeslice_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesSchedulerGetTimesliceModeProperties`, :ref:`zesSchedulerSetTimesliceMode`
+
 .. doxygenstruct:: zes_sched_timeslice_properties_t
     :project: LevelZero
     :members:
@@ -603,6 +756,11 @@ zes_pci_config_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.20*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-driver-pci-device-properties-t`
+   | **Goes in pNext of:** :ref:`zes-pci-properties-t`
 
 .. doxygenstruct:: zes_pci_config_properties_t
     :project: LevelZero

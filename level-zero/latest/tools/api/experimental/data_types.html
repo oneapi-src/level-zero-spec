@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Types - Experimental &#8212; Level Zero Specification v1.20.41</title>
+    <title>Data Types - Experimental &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Metric - Experimental" href="metric.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -641,12 +651,17 @@
                   
   <section id="data-types-experimental">
 <h1>Data Types - Experimental<a class="headerlink" href="#data-types-experimental" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="data-types-experimental-enums">
 <h2>Data Types - Experimental Enums<a class="headerlink" href="#data-types-experimental-enums" title="Link to this heading">#</a></h2>
 <section id="ze-calculate-multiple-metrics-exp-version-t">
 <span id="id1"></span><h3>ze_calculate_multiple_metrics_exp_version_t<a class="headerlink" href="#ze-calculate-multiple-metrics-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MultiMetricValues.html#zet-experimental-calculate-multiple-metrics"><span class="std std-ref">Calculating Multiple Metrics Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv443ze_calculate_multiple_metrics_exp_version_t">
 <span id="_CPPv343ze_calculate_multiple_metrics_exp_version_t"></span><span id="_CPPv243ze_calculate_multiple_metrics_exp_version_t"></span><span class="target" id="zet__api_8h_1a5163fc1d334b00243b080aea05de2a65"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_calculate_multiple_metrics_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv443ze_calculate_multiple_metrics_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -682,6 +697,11 @@
 <section id="ze-metric-global-timestamps-exp-version-t">
 <span id="id2"></span><h3>ze_metric_global_timestamps_exp_version_t<a class="headerlink" href="#ze-metric-global-timestamps-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_GlobalTimestamps.html#zet-experimental-global-metric-timestamps"><span class="std std-ref">Global Metrics Timestamps Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv441ze_metric_global_timestamps_exp_version_t">
 <span id="_CPPv341ze_metric_global_timestamps_exp_version_t"></span><span id="_CPPv241ze_metric_global_timestamps_exp_version_t"></span><span class="target" id="zet__api_8h_1a163c45f1b429feee42382acbd9912df2"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_metric_global_timestamps_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv441ze_metric_global_timestamps_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -711,6 +731,11 @@
 <section id="zet-export-metric-data-exp-version-t">
 <span id="id3"></span><h3>zet_export_metric_data_exp_version_t<a class="headerlink" href="#zet-export-metric-data-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.6</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MetricExportData.html#zet-experimental-metric-export-data"><span class="std std-ref">Metrics Export Data Experimental Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv436zet_export_metric_data_exp_version_t">
 <span id="_CPPv336zet_export_metric_data_exp_version_t"></span><span id="_CPPv236zet_export_metric_data_exp_version_t"></span><span class="target" id="zet__api_8h_1a40ce0636de79f7b2977a2e666d60be6b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_export_metric_data_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv436zet_export_metric_data_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -740,6 +765,11 @@
 <section id="zet-metric-programmable-exp-version-t">
 <span id="id4"></span><h3>zet_metric_programmable_exp_version_t<a class="headerlink" href="#zet-metric-programmable-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MetricProgrammable.html#zet-experimental-programmable-metrics"><span class="std std-ref">Metric Programmable Experimental Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv437zet_metric_programmable_exp_version_t">
 <span id="_CPPv337zet_metric_programmable_exp_version_t"></span><span id="_CPPv237zet_metric_programmable_exp_version_t"></span><span class="target" id="zet__api_8h_1ac8b69f82702e0dc3c01b07dac6fc0d04"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_programmable_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv437zet_metric_programmable_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -769,6 +799,11 @@
 <section id="zet-value-info-type-exp-t">
 <span id="id5"></span><h3>zet_value_info_type_exp_t<a class="headerlink" href="#zet-value-info-type-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="metric_programmable.html#zet-metric-programmable-param-info-exp-t"><span class="std std-ref">zet_metric_programmable_param_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv425zet_value_info_type_exp_t">
 <span id="_CPPv325zet_value_info_type_exp_t"></span><span id="_CPPv225zet_value_info_type_exp_t"></span><span class="target" id="zet__api_8h_1a71d15b9f957e7ef045f91daa7187e598"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_info_type_exp_t</span></span></span><a class="headerlink" href="#_CPPv425zet_value_info_type_exp_t" title="Link to this definition">#</a><br /></dt>
@@ -840,6 +875,11 @@
 <section id="zet-concurrent-metric-groups-exp-version-t">
 <span id="id6"></span><h3>zet_concurrent_metric_groups_exp_version_t<a class="headerlink" href="#zet-concurrent-metric-groups-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_ConcurrentMetricGroup.html#zet-experimental-concurrent-metric-groups"><span class="std std-ref">Concurrent Metric Groups Experimental Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv442zet_concurrent_metric_groups_exp_version_t">
 <span id="_CPPv342zet_concurrent_metric_groups_exp_version_t"></span><span id="_CPPv242zet_concurrent_metric_groups_exp_version_t"></span><span class="target" id="zet__api_8h_1ab3bf0f254b26f590058eea63aafadb4a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_concurrent_metric_groups_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv442zet_concurrent_metric_groups_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -869,6 +909,11 @@
 <section id="zet-metric-tracer-exp-version-t">
 <span id="id7"></span><h3>zet_metric_tracer_exp_version_t<a class="headerlink" href="#zet-metric-tracer-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MetricTracer.html#zet-experimental-metric-tracer"><span class="std std-ref">Metric Tracer Experimental Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv431zet_metric_tracer_exp_version_t">
 <span id="_CPPv331zet_metric_tracer_exp_version_t"></span><span id="_CPPv231zet_metric_tracer_exp_version_t"></span><span class="target" id="zet__api_8h_1ae206f4ac34a7470c41d68affb7c10bd8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_tracer_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv431zet_metric_tracer_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -898,6 +943,11 @@
 <section id="zet-metric-export-memory-exp-version-t">
 <span id="id8"></span><h3>zet_metric_export_memory_exp_version_t<a class="headerlink" href="#zet-metric-export-memory-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.11</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MetricExportMemory.html#zet-experimental-metric-export-memory"><span class="std std-ref">MetricGroup and Metric Export Memory Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv438zet_metric_export_memory_exp_version_t">
 <span id="_CPPv338zet_metric_export_memory_exp_version_t"></span><span id="_CPPv238zet_metric_export_memory_exp_version_t"></span><span class="target" id="zet__api_8h_1a996ad2136ea0c58643525523104ce5d4"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_export_memory_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv438zet_metric_export_memory_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -927,6 +977,11 @@
 <section id="zet-metric-group-marker-exp-version-t">
 <span id="id9"></span><h3>zet_metric_group_marker_exp_version_t<a class="headerlink" href="#zet-metric-group-marker-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MetricGroupMarker.html#zet-experimental-metric-group-marker"><span class="std std-ref">MetricGroup Marker Support Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv437zet_metric_group_marker_exp_version_t">
 <span id="_CPPv337zet_metric_group_marker_exp_version_t"></span><span id="_CPPv237zet_metric_group_marker_exp_version_t"></span><span class="target" id="zet__api_8h_1a7cc3fc713eade5e1cb599fb8cdbbd1da"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_group_marker_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv437zet_metric_group_marker_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -956,6 +1011,11 @@
 <section id="zet-metrics-runtime-enable-disable-exp-version-t">
 <span id="id10"></span><h3>zet_metrics_runtime_enable_disable_exp_version_t<a class="headerlink" href="#zet-metrics-runtime-enable-disable-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MetricsRuntimeEnableDisable.html#zet-experimental-metrics-runtime-enable-disable"><span class="std std-ref">Metrics Runtime Enable and Disable Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv448zet_metrics_runtime_enable_disable_exp_version_t">
 <span id="_CPPv348zet_metrics_runtime_enable_disable_exp_version_t"></span><span id="_CPPv248zet_metrics_runtime_enable_disable_exp_version_t"></span><span class="target" id="zet__api_8h_1ad413cda478a44de5a1702ec902fae8a8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metrics_runtime_enable_disable_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv448zet_metrics_runtime_enable_disable_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -985,6 +1045,11 @@
 <section id="zet-metric-source-id-exp-version-t">
 <span id="id11"></span><h3>zet_metric_source_id_exp_version_t<a class="headerlink" href="#zet-metric-source-id-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MetricSourceId.html#zet-experimental-metric-source-id"><span class="std std-ref">Metric Source ID Support Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv434zet_metric_source_id_exp_version_t">
 <span id="_CPPv334zet_metric_source_id_exp_version_t"></span><span id="_CPPv234zet_metric_source_id_exp_version_t"></span><span class="target" id="zet__api_8h_1aa46e039061f1eb95f98d549447fbfae0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_source_id_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv434zet_metric_source_id_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -1017,6 +1082,11 @@
 <section id="zet-value-uint64-range-exp-t">
 <span id="id12"></span><h3>zet_value_uint64_range_exp_t<a class="headerlink" href="#zet-value-uint64-range-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-value-info-exp-t"><span class="std std-ref">zet_value_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv428zet_value_uint64_range_exp_t">
 <span id="_CPPv328zet_value_uint64_range_exp_t"></span><span id="_CPPv228zet_value_uint64_range_exp_t"></span><span id="zet_value_uint64_range_exp_t"></span><span class="target" id="structzet__value__uint64__range__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_uint64_range_exp_t</span></span></span><a class="headerlink" href="#_CPPv428zet_value_uint64_range_exp_t" title="Link to this definition">#</a><br /></dt>
@@ -1042,6 +1112,11 @@
 <section id="zet-value-fp64-range-exp-t">
 <span id="id13"></span><h3>zet_value_fp64_range_exp_t<a class="headerlink" href="#zet-value-fp64-range-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-value-info-exp-t"><span class="std std-ref">zet_value_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv426zet_value_fp64_range_exp_t">
 <span id="_CPPv326zet_value_fp64_range_exp_t"></span><span id="_CPPv226zet_value_fp64_range_exp_t"></span><span id="zet_value_fp64_range_exp_t"></span><span class="target" id="structzet__value__fp64__range__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_fp64_range_exp_t</span></span></span><a class="headerlink" href="#_CPPv426zet_value_fp64_range_exp_t" title="Link to this definition">#</a><br /></dt>
@@ -1067,6 +1142,11 @@
 <section id="zet-value-info-exp-t">
 <span id="id14"></span><h3>zet_value_info_exp_t<a class="headerlink" href="#zet-value-info-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="metric_programmable.html#zet-metric-programmable-param-value-info-exp-t"><span class="std std-ref">zet_metric_programmable_param_value_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp union">
 <dt class="sig sig-object cpp" id="_CPPv420zet_value_info_exp_t">
 <span id="_CPPv320zet_value_info_exp_t"></span><span id="_CPPv220zet_value_info_exp_t"></span><span class="target" id="unionzet__value__info__exp__t"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_value_info_exp_t</span></span></span><a class="headerlink" href="#_CPPv420zet_value_info_exp_t" title="Link to this definition">#</a><br /></dt>
@@ -1101,7 +1181,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zet_value_info_exp_t2b8E">
-<span id="_CPPv3N20zet_value_info_exp_t2b8E"></span><span id="_CPPv2N20zet_value_info_exp_t2b8E"></span><span id="zet_value_info_exp_t::b8__ze_bool_t"></span><span class="target" id="unionzet__value__info__exp__t_1a29c82f35d85ff81c70ce5f6da6e0e8d9"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b8</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t2b8E" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zet_value_info_exp_t2b8E"></span><span id="_CPPv2N20zet_value_info_exp_t2b8E"></span><span id="zet_value_info_exp_t::b8__ze_bool_t"></span><span class="target" id="unionzet__value__info__exp__t_1a29c82f35d85ff81c70ce5f6da6e0e8d9"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b8</span></span></span><a class="headerlink" href="#_CPPv4N20zet_value_info_exp_t2b8E" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] 8-bit boolean </p>
 </dd></dl>
 
@@ -1136,6 +1216,11 @@
 <section id="zet-metric-entry-exp-t">
 <span id="id15"></span><h3>zet_metric_entry_exp_t<a class="headerlink" href="#zet-metric-entry-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="metric_tracer.html#zetmetrictracerdecodeexp"><span class="std std-ref">zetMetricTracerDecodeExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv422zet_metric_entry_exp_t">
 <span id="_CPPv322zet_metric_entry_exp_t"></span><span id="_CPPv222zet_metric_entry_exp_t"></span><span id="zet_metric_entry_exp_t"></span><span class="target" id="structzet__metric__entry__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_entry_exp_t</span></span></span><a class="headerlink" href="#_CPPv422zet_metric_entry_exp_t" title="Link to this definition">#</a><br /></dt>
@@ -1162,7 +1247,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22zet_metric_entry_exp_t11onSubdeviceE">
-<span id="_CPPv3N22zet_metric_entry_exp_t11onSubdeviceE"></span><span id="_CPPv2N22zet_metric_entry_exp_t11onSubdeviceE"></span><span id="zet_metric_entry_exp_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzet__metric__entry__exp__t_1a6c746f729641938edd0493edf2115b71"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N22zet_metric_entry_exp_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N22zet_metric_entry_exp_t11onSubdeviceE"></span><span id="_CPPv2N22zet_metric_entry_exp_t11onSubdeviceE"></span><span id="zet_metric_entry_exp_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzet__metric__entry__exp__t_1a6c746f729641938edd0493edf2115b71"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N22zet_metric_entry_exp_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if the event occurred on a sub-device; false means the device on which the metric tracer was opened does not have sub-devices. </p>
 </dd></dl>
 

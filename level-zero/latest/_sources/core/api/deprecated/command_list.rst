@@ -1,7 +1,9 @@
 ============================================================
 Command List - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Command List - Deprecated Functions
@@ -179,6 +181,13 @@ ze_mutable_command_exp_flags_t
 
 **Deprecated** since 1.20. Use :ref:`ze-mutable-command-ext-flags-t` instead.
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-mutable-command-id-exp-desc-t`, :ref:`ze-mutable-command-list-exp-properties-t`
+
+.. doxygentypedef:: ze_mutable_command_exp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_mutable_command_exp_flag_t
     :project: LevelZero
 
@@ -196,8 +205,16 @@ ze_mutable_command_list_exp_flags_t
 
 **Deprecated** since 1.20. Use :ref:`ze-mutable-command-list-ext-flags-t` instead.
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-mutable-command-list-exp-properties-t`, :ref:`ze-mutable-command-list-exp-desc-t`
+
+.. doxygentypedef:: ze_mutable_command_list_exp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_mutable_command_list_exp_flag_t
     :project: LevelZero
+
 
  
 Command List - Deprecated Structures
@@ -216,6 +233,10 @@ ze_mutable_command_id_exp_desc_t
 .. rst-class:: api-deprecated
 
 **Deprecated** since 1.20. Use :ref:`ze-mutable-command-id-ext-desc-t` instead.
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListGetNextCommandIdExp`, :ref:`zeCommandListGetNextCommandIdWithKernelsExp`
 
 .. doxygenstruct:: ze_mutable_command_id_exp_desc_t
     :project: LevelZero
@@ -273,6 +294,10 @@ ze_mutable_commands_exp_desc_t
 .. rst-class:: api-deprecated
 
 **Deprecated** since 1.20. Use :ref:`ze-mutable-commands-ext-desc-t` instead.
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListUpdateMutableCommandsExp`
 
 .. doxygenstruct:: ze_mutable_commands_exp_desc_t
     :project: LevelZero

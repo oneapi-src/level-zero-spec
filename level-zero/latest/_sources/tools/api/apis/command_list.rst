@@ -1,7 +1,31 @@
 ============================================================
 Command List
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Command List Handles
+====================
+
+
+.. _zet-command-list-handle-t:
+
+zet_command_list_handle_t
+-------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zetCommandListAppendMetricStreamerMarker`, :ref:`zetCommandListAppendMetricQueryBegin`, :ref:`zetCommandListAppendMetricQueryEnd`, :ref:`zetCommandListAppendMetricMemoryBarrier`, :ref:`zetCommandListAppendMarkerExp`
+   | **Alias of:** :ref:`ze-command-list-handle-t`
+
+.. cpp:type:: zet_command_list_handle_t
+
+    Handle of command list object.
+
 
 
 Command List Functions
@@ -58,6 +82,7 @@ zetCommandListAppendMetricMemoryBarrier
 
 .. doxygenfunction:: zetCommandListAppendMetricMemoryBarrier
     :project: LevelZero
+
 
 
 

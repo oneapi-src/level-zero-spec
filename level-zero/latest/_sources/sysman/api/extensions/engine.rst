@@ -1,7 +1,9 @@
 ============================================================
 Engine - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Engine - Extension Functions
@@ -22,6 +24,7 @@ zesEngineGetActivityExt
 
 
 
+
  
 Engine - Extension Structures
 =============================
@@ -35,6 +38,10 @@ zes_engine_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-engine-properties-t`
 
 .. doxygenstruct:: zes_engine_ext_properties_t
     :project: LevelZero

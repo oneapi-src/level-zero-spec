@@ -65,7 +65,7 @@ The following code demonstrates how to calculate and process multiple metric val
        uint32_t metricCount = 0;
        :ref:`zetMetricGet`\(hMetricGroup, &metricCount, nullptr);
 
-       zet_metric_handle_t* phMetrics = malloc(metricCount * sizeof(zet_metric_handle_t));
+       :ref:`zet-metric-handle-t`\* phMetrics = malloc(metricCount * sizeof(:ref:`zet-metric-handle-t`\));
        :ref:`zetMetricGet`\(hMetricGroup, &metricCount, phMetrics);
 
        // This loop over metric data is new for this extension

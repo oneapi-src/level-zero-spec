@@ -96,12 +96,12 @@ Assuming that the application is using a graph API to construct a graph, the fol
        // Create graph object
 
        // Find all fabric vertices & the edges connecting them
-       ze_fabric_vertex_handle_t* vertices = nullptr;
+       :ref:`ze-fabric-vertex-handle-t`\* vertices = nullptr;
 
        uint32_t vertexCount = 0;
        :ref:`zeFabricVertexGetExp`\(drivers[0], &vertexCount, nullptr);
 
-       vertices = allocate(vertexCount * sizeof(ze_fabric_vertex_handle_t));
+       vertices = allocate(vertexCount * sizeof(:ref:`ze-fabric-vertex-handle-t`\));
 
        :ref:`zeFabricVertexGetExp`\(drivers[0], &vertexCount, vertices);
 
@@ -114,9 +114,9 @@ Assuming that the application is using a graph API to construct a graph, the fol
 
                  :ref:`zeFabricEdgeGetExp`\(vertices[u], vertices[v], &edgeCount, nullptr);
 
-                 ze_fabric_edge_handle_t* edges = nullptr;
+                 :ref:`ze-fabric-edge-handle-t`\* edges = nullptr;
 
-                 edges = allocate(edgeCount * sizeof(ze_fabric_edge_handle_t));
+                 edges = allocate(edgeCount * sizeof(:ref:`ze-fabric-edge-handle-t`\));
 
                  :ref:`zeFabricEdgeGetExp`\(vertices[u], vertices[v], &edgeCount, edges);
 

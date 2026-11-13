@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Fence &#8212; Level Zero Specification v1.20.41</title>
+    <title>Fence &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/apis/fence';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Image" href="image.html" />
-    <link rel="prev" title="Event Pool" href="event_pool.html" />
+    <link rel="next" title="Event Pool" href="event_pool.html" />
+    <link rel="prev" title="Command List" href="command_list-2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fence-handles">Fence Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-fence-handle-t">ze_fence_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417ze_fence_handle_t"><code class="docutils literal notranslate"><span class="pre">ze_fence_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fence-functions">Fence Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zefencecreate">zeFenceCreate</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv413zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t"><code class="docutils literal notranslate"><span class="pre">zeFenceCreate()</span></code></a></li>
@@ -498,6 +515,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fence-enums">Fence Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-fence-flags-t">ze_fence_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416ze_fence_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_fence_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415ze_fence_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_fence_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_fence_flag_t22ZE_FENCE_FLAG_SIGNALEDE"><code class="docutils literal notranslate"><span class="pre">ZE_FENCE_FLAG_SIGNALED</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N15ze_fence_flag_t26ZE_FENCE_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_FENCE_FLAG_FORCE_UINT32</span></code></a></li>
@@ -532,15 +550,35 @@
                   
   <section id="fence">
 <h1>Fence<a class="headerlink" href="#fence" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="fence-handles">
+<h2>Fence Handles<a class="headerlink" href="#fence-handles" title="Link to this heading">#</a></h2>
+<section id="ze-fence-handle-t">
+<span id="id1"></span><h3>ze_fence_handle_t<a class="headerlink" href="#ze-fence-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zefencecreate"><span class="std std-ref">zeFenceCreate</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="command_queue.html#zecommandqueueexecutecommandlists"><span class="std std-ref">zeCommandQueueExecuteCommandLists</span></a>, <a class="reference internal" href="#zefencedestroy"><span class="std std-ref">zeFenceDestroy</span></a>, <a class="reference internal" href="#zefencehostsynchronize"><span class="std std-ref">zeFenceHostSynchronize</span></a>, <a class="reference internal" href="#zefencequerystatus"><span class="std std-ref">zeFenceQueryStatus</span></a>, <a class="reference internal" href="#zefencereset"><span class="std std-ref">zeFenceReset</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#fences"><span class="std std-ref">Fences (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv417ze_fence_handle_t">
+<span id="_CPPv317ze_fence_handle_t"></span><span id="_CPPv217ze_fence_handle_t"></span><span id="ze_fence_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fence_handle_t</span></span></span><a class="headerlink" href="#_CPPv417ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of driver’s fence object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="fence-functions">
 <h2>Fence Functions<a class="headerlink" href="#fence-functions" title="Link to this heading">#</a></h2>
 <section id="zefencecreate">
-<span id="id1"></span><h3>zeFenceCreate<a class="headerlink" href="#zefencecreate" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeFenceCreate<a class="headerlink" href="#zefencecreate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv413zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t">
-<span id="_CPPv313zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t"></span><span id="_CPPv213zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t"></span><span id="zeFenceCreate__ze_command_queue_handle_t.ze_fence_desc_tCP.ze_fence_handle_tP"></span><span class="target" id="ze__api_8h_1a0795b00df7cd2b5924a986a473cf89e8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_command_queue_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandQueue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-fence-desc-t" title="ze_fence_desc_t"><span class="n"><span class="pre">ze_fence_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_fence_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv313zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t"></span><span id="_CPPv213zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t"></span><span id="zeFenceCreate__ze_command_queue_handle_t.ze_fence_desc_tCP.ze_fence_handle_tP"></span><span class="target" id="ze__api_8h_1a0795b00df7cd2b5924a986a473cf89e8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="command_queue.html#ze-command-queue-handle-t" title="ze_command_queue_handle_t"><span class="n"><span class="pre">ze_command_queue_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hCommandQueue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-fence-desc-t" title="ze_fence_desc_t"><span class="n"><span class="pre">ze_fence_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="#ze-fence-handle-t" title="ze_fence_handle_t"><span class="n"><span class="pre">ze_fence_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413zeFenceCreate25ze_command_queue_handle_tPK15ze_fence_desc_tP17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a fence for the command queue. </p>
 <p><ul class="simple">
 <li><p>A fence is a heavyweight synchronization primitive used to communicate to the host that command list execution has completed.</p></li>
@@ -602,11 +640,11 @@
 
 </section>
 <section id="zefencedestroy">
-<span id="id2"></span><h3>zeFenceDestroy<a class="headerlink" href="#zefencedestroy" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zeFenceDestroy<a class="headerlink" href="#zefencedestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zeFenceDestroy17ze_fence_handle_t">
-<span id="_CPPv314zeFenceDestroy17ze_fence_handle_t"></span><span id="_CPPv214zeFenceDestroy17ze_fence_handle_t"></span><span id="zeFenceDestroy__ze_fence_handle_t"></span><span class="target" id="ze__api_8h_1a5291621c46a993f2b31984b70f4b891d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_fence_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeFenceDestroy17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zeFenceDestroy17ze_fence_handle_t"></span><span id="_CPPv214zeFenceDestroy17ze_fence_handle_t"></span><span id="zeFenceDestroy__ze_fence_handle_t"></span><span class="target" id="ze__api_8h_1a5291621c46a993f2b31984b70f4b891d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-fence-handle-t" title="ze_fence_handle_t"><span class="n"><span class="pre">ze_fence_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeFenceDestroy17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Deletes a fence object. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the device is not currently referencing the fence before it is deleted.</p></li>
@@ -655,11 +693,11 @@
 
 </section>
 <section id="zefencehostsynchronize">
-<span id="id3"></span><h3>zeFenceHostSynchronize<a class="headerlink" href="#zefencehostsynchronize" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zeFenceHostSynchronize<a class="headerlink" href="#zefencehostsynchronize" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zeFenceHostSynchronize17ze_fence_handle_t8uint64_t">
-<span id="_CPPv322zeFenceHostSynchronize17ze_fence_handle_t8uint64_t"></span><span id="_CPPv222zeFenceHostSynchronize17ze_fence_handle_t8uint64_t"></span><span id="zeFenceHostSynchronize__ze_fence_handle_t.uint64_t"></span><span class="target" id="ze__api_8h_1aeb7dcf202fde864e6deeb22fbdc60c78"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceHostSynchronize</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_fence_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeFenceHostSynchronize17ze_fence_handle_t8uint64_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zeFenceHostSynchronize17ze_fence_handle_t8uint64_t"></span><span id="_CPPv222zeFenceHostSynchronize17ze_fence_handle_t8uint64_t"></span><span id="zeFenceHostSynchronize__ze_fence_handle_t.uint64_t"></span><span class="target" id="ze__api_8h_1aeb7dcf202fde864e6deeb22fbdc60c78"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceHostSynchronize</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-fence-handle-t" title="ze_fence_handle_t"><span class="n"><span class="pre">ze_fence_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeFenceHostSynchronize17ze_fence_handle_t8uint64_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>The current host thread waits on a fence to be signaled. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -713,11 +751,11 @@
 
 </section>
 <section id="zefencequerystatus">
-<span id="id4"></span><h3>zeFenceQueryStatus<a class="headerlink" href="#zefencequerystatus" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zeFenceQueryStatus<a class="headerlink" href="#zefencequerystatus" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zeFenceQueryStatus17ze_fence_handle_t">
-<span id="_CPPv318zeFenceQueryStatus17ze_fence_handle_t"></span><span id="_CPPv218zeFenceQueryStatus17ze_fence_handle_t"></span><span id="zeFenceQueryStatus__ze_fence_handle_t"></span><span class="target" id="ze__api_8h_1a909ad8eb8fd0423f0f381543bba3b0f5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceQueryStatus</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_fence_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zeFenceQueryStatus17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zeFenceQueryStatus17ze_fence_handle_t"></span><span id="_CPPv218zeFenceQueryStatus17ze_fence_handle_t"></span><span id="zeFenceQueryStatus__ze_fence_handle_t"></span><span class="target" id="ze__api_8h_1a909ad8eb8fd0423f0f381543bba3b0f5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceQueryStatus</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-fence-handle-t" title="ze_fence_handle_t"><span class="n"><span class="pre">ze_fence_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zeFenceQueryStatus17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Queries a fence object’s status. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -768,11 +806,11 @@
 
 </section>
 <section id="zefencereset">
-<span id="id5"></span><h3>zeFenceReset<a class="headerlink" href="#zefencereset" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zeFenceReset<a class="headerlink" href="#zefencereset" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv412zeFenceReset17ze_fence_handle_t">
-<span id="_CPPv312zeFenceReset17ze_fence_handle_t"></span><span id="_CPPv212zeFenceReset17ze_fence_handle_t"></span><span id="zeFenceReset__ze_fence_handle_t"></span><span class="target" id="ze__api_8h_1a3e8e5bcce504e81fa7a26f18331e0a71"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceReset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_fence_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412zeFenceReset17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv312zeFenceReset17ze_fence_handle_t"></span><span id="_CPPv212zeFenceReset17ze_fence_handle_t"></span><span id="zeFenceReset__ze_fence_handle_t"></span><span class="target" id="ze__api_8h_1a3e8e5bcce504e81fa7a26f18331e0a71"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeFenceReset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-fence-handle-t" title="ze_fence_handle_t"><span class="n"><span class="pre">ze_fence_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFence</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412zeFenceReset17ze_fence_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Reset a fence back to the not signaled state. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -821,8 +859,19 @@
 <section id="fence-enums">
 <h2>Fence Enums<a class="headerlink" href="#fence-enums" title="Link to this heading">#</a></h2>
 <section id="ze-fence-flags-t">
-<span id="id6"></span><h3>ze_fence_flags_t<a class="headerlink" href="#ze-fence-flags-t" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>ze_fence_flags_t<a class="headerlink" href="#ze-fence-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-fence-desc-t"><span class="std std-ref">ze_fence_desc_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416ze_fence_flags_t">
+<span id="_CPPv316ze_fence_flags_t"></span><span id="_CPPv216ze_fence_flags_t"></span><span id="ze_fence_flags_t"></span><span class="target" id="ze__api_8h_1ac1c8e097e22183d737dc50ab3604335d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fence_flags_t</span></span></span><a class="headerlink" href="#_CPPv416ze_fence_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported fence creation flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv415ze_fence_flag_t">
 <span id="_CPPv315ze_fence_flag_t"></span><span id="_CPPv215ze_fence_flag_t"></span><span class="target" id="ze__api_8h_1ac30c9d0e70e22c774d63bf1b8bdeff99"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fence_flag_t</span></span></span><a class="headerlink" href="#_CPPv415ze_fence_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -846,8 +895,13 @@
 <section id="fence-structures">
 <h2>Fence Structures<a class="headerlink" href="#fence-structures" title="Link to this heading">#</a></h2>
 <section id="ze-fence-desc-t">
-<span id="id7"></span><h3>ze_fence_desc_t<a class="headerlink" href="#ze-fence-desc-t" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>ze_fence_desc_t<a class="headerlink" href="#ze-fence-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zefencecreate"><span class="std std-ref">zeFenceCreate</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv415ze_fence_desc_t">
 <span id="_CPPv315ze_fence_desc_t"></span><span id="_CPPv215ze_fence_desc_t"></span><span id="ze_fence_desc_t"></span><span class="target" id="structze__fence__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fence_desc_t</span></span></span><a class="headerlink" href="#_CPPv415ze_fence_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -868,8 +922,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15ze_fence_desc_t5flagsE">
-<span id="_CPPv3N15ze_fence_desc_t5flagsE"></span><span id="_CPPv2N15ze_fence_desc_t5flagsE"></span><span id="ze_fence_desc_t::flags__ze_fence_flags_t"></span><span class="target" id="structze__fence__desc__t_1a2dd5b4c41f22992de4be496a487163fb"></span><span class="n"><span class="pre">ze_fence_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N15ze_fence_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze-fence-flags-t"><span class="std std-ref">ze_fence_flag_t</span></a>. </p>
+<span id="_CPPv3N15ze_fence_desc_t5flagsE"></span><span id="_CPPv2N15ze_fence_desc_t5flagsE"></span><span id="ze_fence_desc_t::flags__ze_fence_flags_t"></span><span class="target" id="structze__fence__desc__t_1a2dd5b4c41f22992de4be496a487163fb"></span><a class="reference internal" href="#ze-fence-flags-t" title="ze_fence_flags_t"><span class="n"><span class="pre">ze_fence_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N15ze_fence_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1ac30c9d0e70e22c774d63bf1b8bdeff99"><span class="std std-ref">ze_fence_flag_t</span></a>. </p>
 </dd></dl>
 
 </div>
@@ -891,20 +945,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="event_pool.html"
+       href="command_list-2.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Event Pool</p>
+        <p class="prev-next-title">Command List</p>
       </div>
     </a>
     <a class="right-next"
-       href="image.html"
+       href="event_pool.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Image</p>
+        <p class="prev-next-title">Event Pool</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -924,7 +978,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">5</span></summary><div class="ctoc-prefix">zeFence</div><ul class="ctoc-list"><li><a href="fence.html#zefencecreate">&hellip;Create</a></li><li><a href="fence.html#zefencedestroy">&hellip;Destroy</a></li><li><a href="fence.html#zefencehostsynchronize">&hellip;HostSynchronize</a></li><li><a href="fence.html#zefencequerystatus">&hellip;QueryStatus</a></li><li><a href="fence.html#zefencereset">&hellip;Reset</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="fence.html#ze-fence-flags-t">ze_fence_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="fence.html#ze-fence-desc-t">ze_fence_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="fence.html#ze-fence-handle-t">ze_fence_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">5</span></summary><div class="ctoc-prefix">zeFence</div><ul class="ctoc-list"><li><a href="fence.html#zefencecreate">&hellip;Create</a></li><li><a href="fence.html#zefencedestroy">&hellip;Destroy</a></li><li><a href="fence.html#zefencehostsynchronize">&hellip;HostSynchronize</a></li><li><a href="fence.html#zefencequerystatus">&hellip;QueryStatus</a></li><li><a href="fence.html#zefencereset">&hellip;Reset</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="fence.html#ze-fence-flags-t">ze_fence_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="fence.html#ze-fence-desc-t">ze_fence_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

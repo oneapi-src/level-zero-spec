@@ -1,7 +1,9 @@
 ============================================================
 Metric Group - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Metric Group - Deprecated Functions
@@ -23,6 +25,7 @@ zetMetricGroupCreateExp
 
 .. doxygenfunction:: zetMetricGroupCreateExp
     :project: LevelZero
+
 
 
 

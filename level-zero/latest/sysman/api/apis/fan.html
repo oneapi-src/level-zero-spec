@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Fan &#8212; Level Zero Specification v1.20.41</title>
+    <title>Fan &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/fan';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Firmware" href="firmware.html" />
-    <link rel="prev" title="Fabric Port" href="fabric_port.html" />
+    <link rel="next" title="Led" href="led.html" />
+    <link rel="prev" title="Psu" href="psu.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fan-handles">Fan Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-fan-handle-t">zes_fan_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416zes_fan_handle_t"><code class="docutils literal notranslate"><span class="pre">zes_fan_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fan-functions">Fan Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfangetproperties">zesFanGetProperties</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t"><code class="docutils literal notranslate"><span class="pre">zesFanGetProperties()</span></code></a></li>
@@ -588,15 +605,35 @@
                   
   <section id="fan">
 <h1>Fan<a class="headerlink" href="#fan" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="fan-handles">
+<h2>Fan Handles<a class="headerlink" href="#fan-handles" title="Link to this heading">#</a></h2>
+<section id="zes-fan-handle-t">
+<span id="id1"></span><h3>zes_fan_handle_t<a class="headerlink" href="#zes-fan-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="device.html#zesdeviceenumfans"><span class="std std-ref">zesDeviceEnumFans</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfangetproperties"><span class="std std-ref">zesFanGetProperties</span></a>, <a class="reference internal" href="#zesfangetconfig"><span class="std std-ref">zesFanGetConfig</span></a>, <a class="reference internal" href="#zesfansetdefaultmode"><span class="std std-ref">zesFanSetDefaultMode</span></a>, <a class="reference internal" href="#zesfansetfixedspeedmode"><span class="std std-ref">zesFanSetFixedSpeedMode</span></a>, <a class="reference internal" href="#zesfansetspeedtablemode"><span class="std std-ref">zesFanSetSpeedTableMode</span></a>, <a class="reference internal" href="#zesfangetstate"><span class="std std-ref">zesFanGetState</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#fan"><span class="std std-ref">Operations on fans (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416zes_fan_handle_t">
+<span id="_CPPv316zes_fan_handle_t"></span><span id="_CPPv216zes_fan_handle_t"></span><span id="zes_fan_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_handle_t</span></span></span><a class="headerlink" href="#_CPPv416zes_fan_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle for a Sysman device fan.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="fan-functions">
 <h2>Fan Functions<a class="headerlink" href="#fan-functions" title="Link to this heading">#</a></h2>
 <section id="zesfangetproperties">
-<span id="id1"></span><h3>zesFanGetProperties<a class="headerlink" href="#zesfangetproperties" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zesFanGetProperties<a class="headerlink" href="#zesfangetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t">
-<span id="_CPPv319zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t"></span><span id="_CPPv219zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t"></span><span id="zesFanGetProperties__zes_fan_handle_t.zes_fan_properties_tP"></span><span class="target" id="zes__api_8h_1a3fd10bce1d6156804e501cf529c5acdb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fan_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <a class="reference internal" href="#zes-fan-properties-t" title="zes_fan_properties_t"><span class="n"><span class="pre">zes_fan_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t"></span><span id="_CPPv219zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t"></span><span id="zesFanGetProperties__zes_fan_handle_t.zes_fan_properties_tP"></span><span class="target" id="zes__api_8h_1a3fd10bce1d6156804e501cf529c5acdb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-fan-handle-t" title="zes_fan_handle_t"><span class="n"><span class="pre">zes_fan_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <a class="reference internal" href="#zes-fan-properties-t" title="zes_fan_properties_t"><span class="n"><span class="pre">zes_fan_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesFanGetProperties16zes_fan_handle_tP20zes_fan_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get fan properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -641,11 +678,11 @@
 
 </section>
 <section id="zesfangetconfig">
-<span id="id2"></span><h3>zesFanGetConfig<a class="headerlink" href="#zesfangetconfig" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zesFanGetConfig<a class="headerlink" href="#zesfangetconfig" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zesFanGetConfig16zes_fan_handle_tP16zes_fan_config_t">
-<span id="_CPPv315zesFanGetConfig16zes_fan_handle_tP16zes_fan_config_t"></span><span id="_CPPv215zesFanGetConfig16zes_fan_handle_tP16zes_fan_config_t"></span><span id="zesFanGetConfig__zes_fan_handle_t.zes_fan_config_tP"></span><span class="target" id="zes__api_8h_1a5aa68abbd2ff160bb14d17183c15022b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanGetConfig</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fan_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <a class="reference internal" href="#zes-fan-config-t" title="zes_fan_config_t"><span class="n"><span class="pre">zes_fan_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zesFanGetConfig16zes_fan_handle_tP16zes_fan_config_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zesFanGetConfig16zes_fan_handle_tP16zes_fan_config_t"></span><span id="_CPPv215zesFanGetConfig16zes_fan_handle_tP16zes_fan_config_t"></span><span id="zesFanGetConfig__zes_fan_handle_t.zes_fan_config_tP"></span><span class="target" id="zes__api_8h_1a5aa68abbd2ff160bb14d17183c15022b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanGetConfig</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-fan-handle-t" title="zes_fan_handle_t"><span class="n"><span class="pre">zes_fan_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <a class="reference internal" href="#zes-fan-config-t" title="zes_fan_config_t"><span class="n"><span class="pre">zes_fan_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zesFanGetConfig16zes_fan_handle_tP16zes_fan_config_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get fan configurations and the current fan speed mode (default, fixed, temp-speed table) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -690,11 +727,11 @@
 
 </section>
 <section id="zesfansetdefaultmode">
-<span id="id3"></span><h3>zesFanSetDefaultMode<a class="headerlink" href="#zesfansetdefaultmode" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zesFanSetDefaultMode<a class="headerlink" href="#zesfansetdefaultmode" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420zesFanSetDefaultMode16zes_fan_handle_t">
-<span id="_CPPv320zesFanSetDefaultMode16zes_fan_handle_t"></span><span id="_CPPv220zesFanSetDefaultMode16zes_fan_handle_t"></span><span id="zesFanSetDefaultMode__zes_fan_handle_t"></span><span class="target" id="zes__api_8h_1a2cebbe2d6d039d5993ef7da17264d118"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanSetDefaultMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fan_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFanSetDefaultMode16zes_fan_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv320zesFanSetDefaultMode16zes_fan_handle_t"></span><span id="_CPPv220zesFanSetDefaultMode16zes_fan_handle_t"></span><span id="zesFanSetDefaultMode__zes_fan_handle_t"></span><span class="target" id="zes__api_8h_1a2cebbe2d6d039d5993ef7da17264d118"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanSetDefaultMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-fan-handle-t" title="zes_fan_handle_t"><span class="n"><span class="pre">zes_fan_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFanSetDefaultMode16zes_fan_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Configure the fan to run with hardware factory settings (set mode to <a class="reference internal" href="#zes__api_8h_1ab4f57baa72515f8cd22c0de1d006d146a70bccf59e10295a409ffc632a6373d70"><span class="std std-ref">ZES_FAN_SPEED_MODE_DEFAULT</span></a>) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -735,11 +772,11 @@
 
 </section>
 <section id="zesfansetfixedspeedmode">
-<span id="id4"></span><h3>zesFanSetFixedSpeedMode<a class="headerlink" href="#zesfansetfixedspeedmode" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zesFanSetFixedSpeedMode<a class="headerlink" href="#zesfansetfixedspeedmode" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zesFanSetFixedSpeedMode16zes_fan_handle_tPK15zes_fan_speed_t">
-<span id="_CPPv323zesFanSetFixedSpeedMode16zes_fan_handle_tPK15zes_fan_speed_t"></span><span id="_CPPv223zesFanSetFixedSpeedMode16zes_fan_handle_tPK15zes_fan_speed_t"></span><span id="zesFanSetFixedSpeedMode__zes_fan_handle_t.zes_fan_speed_tCP"></span><span class="target" id="zes__api_8h_1a98dd99a7cc354a1ea54deaf25bfb2722"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanSetFixedSpeedMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fan_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-fan-speed-t" title="zes_fan_speed_t"><span class="n"><span class="pre">zes_fan_speed_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">speed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFanSetFixedSpeedMode16zes_fan_handle_tPK15zes_fan_speed_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zesFanSetFixedSpeedMode16zes_fan_handle_tPK15zes_fan_speed_t"></span><span id="_CPPv223zesFanSetFixedSpeedMode16zes_fan_handle_tPK15zes_fan_speed_t"></span><span id="zesFanSetFixedSpeedMode__zes_fan_handle_t.zes_fan_speed_tCP"></span><span class="target" id="zes__api_8h_1a98dd99a7cc354a1ea54deaf25bfb2722"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanSetFixedSpeedMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-fan-handle-t" title="zes_fan_handle_t"><span class="n"><span class="pre">zes_fan_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-fan-speed-t" title="zes_fan_speed_t"><span class="n"><span class="pre">zes_fan_speed_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">speed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFanSetFixedSpeedMode16zes_fan_handle_tPK15zes_fan_speed_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Configure the fan to rotate at a fixed speed (set mode to <a class="reference internal" href="#zes__api_8h_1ab4f57baa72515f8cd22c0de1d006d146ae684b7ecf87a6602f7bc4292919abdec"><span class="std std-ref">ZES_FAN_SPEED_MODE_FIXED</span></a>) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -790,11 +827,11 @@
 
 </section>
 <section id="zesfansetspeedtablemode">
-<span id="id5"></span><h3>zesFanSetSpeedTableMode<a class="headerlink" href="#zesfansetspeedtablemode" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zesFanSetSpeedTableMode<a class="headerlink" href="#zesfansetspeedtablemode" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zesFanSetSpeedTableMode16zes_fan_handle_tPK21zes_fan_speed_table_t">
-<span id="_CPPv323zesFanSetSpeedTableMode16zes_fan_handle_tPK21zes_fan_speed_table_t"></span><span id="_CPPv223zesFanSetSpeedTableMode16zes_fan_handle_tPK21zes_fan_speed_table_t"></span><span id="zesFanSetSpeedTableMode__zes_fan_handle_t.zes_fan_speed_table_tCP"></span><span class="target" id="zes__api_8h_1a46a5cc6ca09f2b30c36446cc9a5c593b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanSetSpeedTableMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fan_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-fan-speed-table-t" title="zes_fan_speed_table_t"><span class="n"><span class="pre">zes_fan_speed_table_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">speedTable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFanSetSpeedTableMode16zes_fan_handle_tPK21zes_fan_speed_table_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zesFanSetSpeedTableMode16zes_fan_handle_tPK21zes_fan_speed_table_t"></span><span id="_CPPv223zesFanSetSpeedTableMode16zes_fan_handle_tPK21zes_fan_speed_table_t"></span><span id="zesFanSetSpeedTableMode__zes_fan_handle_t.zes_fan_speed_table_tCP"></span><span class="target" id="zes__api_8h_1a46a5cc6ca09f2b30c36446cc9a5c593b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanSetSpeedTableMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-fan-handle-t" title="zes_fan_handle_t"><span class="n"><span class="pre">zes_fan_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-fan-speed-table-t" title="zes_fan_speed_table_t"><span class="n"><span class="pre">zes_fan_speed_table_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">speedTable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFanSetSpeedTableMode16zes_fan_handle_tPK21zes_fan_speed_table_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Configure the fan to adjust speed based on a temperature/speed table (set mode to <a class="reference internal" href="#zes__api_8h_1ab4f57baa72515f8cd22c0de1d006d146ac4eb13013afc3f72f6d2993e639b5e8c"><span class="std std-ref">ZES_FAN_SPEED_MODE_TABLE</span></a>) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -848,11 +885,11 @@
 
 </section>
 <section id="zesfangetstate">
-<span id="id6"></span><h3>zesFanGetState<a class="headerlink" href="#zesfangetstate" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zesFanGetState<a class="headerlink" href="#zesfangetstate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zesFanGetState16zes_fan_handle_t21zes_fan_speed_units_tP7int32_t">
-<span id="_CPPv314zesFanGetState16zes_fan_handle_t21zes_fan_speed_units_tP7int32_t"></span><span id="_CPPv214zesFanGetState16zes_fan_handle_t21zes_fan_speed_units_tP7int32_t"></span><span id="zesFanGetState__zes_fan_handle_t.zes_fan_speed_units_t.int32_tP"></span><span class="target" id="zes__api_8h_1a9a39ed4b3052400942ba2dbbe5320fa8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_fan_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <a class="reference internal" href="#zes-fan-speed-units-t" title="zes_fan_speed_units_t"><span class="n"><span class="pre">zes_fan_speed_units_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">units</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSpeed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesFanGetState16zes_fan_handle_t21zes_fan_speed_units_tP7int32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zesFanGetState16zes_fan_handle_t21zes_fan_speed_units_tP7int32_t"></span><span id="_CPPv214zesFanGetState16zes_fan_handle_t21zes_fan_speed_units_tP7int32_t"></span><span id="zesFanGetState__zes_fan_handle_t.zes_fan_speed_units_t.int32_tP"></span><span class="target" id="zes__api_8h_1a9a39ed4b3052400942ba2dbbe5320fa8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFanGetState</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-fan-handle-t" title="zes_fan_handle_t"><span class="n"><span class="pre">zes_fan_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFan</span></span>, <a class="reference internal" href="#zes-fan-speed-units-t" title="zes_fan_speed_units_t"><span class="n"><span class="pre">zes_fan_speed_units_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">units</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSpeed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesFanGetState16zes_fan_handle_t21zes_fan_speed_units_tP7int32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get current state of a fan - current mode and speed. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -909,8 +946,13 @@
 <section id="fan-enums">
 <h2>Fan Enums<a class="headerlink" href="#fan-enums" title="Link to this heading">#</a></h2>
 <section id="zes-fan-speed-mode-t">
-<span id="id7"></span><h3>zes_fan_speed_mode_t<a class="headerlink" href="#zes-fan-speed-mode-t" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zes_fan_speed_mode_t<a class="headerlink" href="#zes-fan-speed-mode-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-fan-config-t"><span class="std std-ref">zes_fan_config_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420zes_fan_speed_mode_t">
 <span id="_CPPv320zes_fan_speed_mode_t"></span><span id="_CPPv220zes_fan_speed_mode_t"></span><span class="target" id="zes__api_8h_1ab4f57baa72515f8cd22c0de1d006d146"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_speed_mode_t</span></span></span><a class="headerlink" href="#_CPPv420zes_fan_speed_mode_t" title="Link to this definition">#</a><br /></dt>
@@ -944,8 +986,14 @@
 
 </section>
 <section id="zes-fan-speed-units-t">
-<span id="id8"></span><h3>zes_fan_speed_units_t<a class="headerlink" href="#zes-fan-speed-units-t" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zes_fan_speed_units_t<a class="headerlink" href="#zes-fan-speed-units-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfangetstate"><span class="std std-ref">zesFanGetState</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-fan-speed-t"><span class="std std-ref">zes_fan_speed_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv421zes_fan_speed_units_t">
 <span id="_CPPv321zes_fan_speed_units_t"></span><span id="_CPPv221zes_fan_speed_units_t"></span><span class="target" id="zes__api_8h_1af1219bf1ae72cfebbf42445d4e87f12a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_speed_units_t</span></span></span><a class="headerlink" href="#_CPPv421zes_fan_speed_units_t" title="Link to this definition">#</a><br /></dt>
@@ -976,8 +1024,14 @@
 <section id="fan-structures">
 <h2>Fan Structures<a class="headerlink" href="#fan-structures" title="Link to this heading">#</a></h2>
 <section id="zes-fan-speed-t">
-<span id="id9"></span><h3>zes_fan_speed_t<a class="headerlink" href="#zes-fan-speed-t" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>zes_fan_speed_t<a class="headerlink" href="#zes-fan-speed-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfansetfixedspeedmode"><span class="std std-ref">zesFanSetFixedSpeedMode</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-fan-temp-speed-t"><span class="std std-ref">zes_fan_temp_speed_t</span></a>, <a class="reference internal" href="#zes-fan-config-t"><span class="std std-ref">zes_fan_config_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv415zes_fan_speed_t">
 <span id="_CPPv315zes_fan_speed_t"></span><span id="_CPPv215zes_fan_speed_t"></span><span id="zes_fan_speed_t"></span><span class="target" id="structzes__fan__speed__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_speed_t</span></span></span><a class="headerlink" href="#_CPPv415zes_fan_speed_t" title="Link to this definition">#</a><br /></dt>
@@ -1001,8 +1055,13 @@
 
 </section>
 <section id="zes-fan-temp-speed-t">
-<span id="id10"></span><h3>zes_fan_temp_speed_t<a class="headerlink" href="#zes-fan-temp-speed-t" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>zes_fan_temp_speed_t<a class="headerlink" href="#zes-fan-temp-speed-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-fan-speed-table-t"><span class="std std-ref">zes_fan_speed_table_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420zes_fan_temp_speed_t">
 <span id="_CPPv320zes_fan_temp_speed_t"></span><span id="_CPPv220zes_fan_temp_speed_t"></span><span id="zes_fan_temp_speed_t"></span><span class="target" id="structzes__fan__temp__speed__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_temp_speed_t</span></span></span><a class="headerlink" href="#_CPPv420zes_fan_temp_speed_t" title="Link to this definition">#</a><br /></dt>
@@ -1026,8 +1085,14 @@
 
 </section>
 <section id="zes-fan-speed-table-t">
-<span id="id11"></span><h3>zes_fan_speed_table_t<a class="headerlink" href="#zes-fan-speed-table-t" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>zes_fan_speed_table_t<a class="headerlink" href="#zes-fan-speed-table-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfansetspeedtablemode"><span class="std std-ref">zesFanSetSpeedTableMode</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-fan-config-t"><span class="std std-ref">zes_fan_config_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv421zes_fan_speed_table_t">
 <span id="_CPPv321zes_fan_speed_table_t"></span><span id="_CPPv221zes_fan_speed_table_t"></span><span id="zes_fan_speed_table_t"></span><span class="target" id="structzes__fan__speed__table__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_speed_table_t</span></span></span><a class="headerlink" href="#_CPPv421zes_fan_speed_table_t" title="Link to this definition">#</a><br /></dt>
@@ -1051,8 +1116,13 @@
 
 </section>
 <section id="zes-fan-properties-t">
-<span id="id12"></span><h3>zes_fan_properties_t<a class="headerlink" href="#zes-fan-properties-t" title="Link to this heading">#</a></h3>
+<span id="id13"></span><h3>zes_fan_properties_t<a class="headerlink" href="#zes-fan-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfangetproperties"><span class="std std-ref">zesFanGetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420zes_fan_properties_t">
 <span id="_CPPv320zes_fan_properties_t"></span><span id="_CPPv220zes_fan_properties_t"></span><span id="zes_fan_properties_t"></span><span class="target" id="structzes__fan__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_properties_t</span></span></span><a class="headerlink" href="#_CPPv420zes_fan_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1073,7 +1143,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_fan_properties_t11onSubdeviceE">
-<span id="_CPPv3N20zes_fan_properties_t11onSubdeviceE"></span><span id="_CPPv2N20zes_fan_properties_t11onSubdeviceE"></span><span id="zes_fan_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__fan__properties__t_1a535d6c98403e371d0c7f7936f6444d65"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N20zes_fan_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_fan_properties_t11onSubdeviceE"></span><span id="_CPPv2N20zes_fan_properties_t11onSubdeviceE"></span><span id="zes_fan_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__fan__properties__t_1a535d6c98403e371d0c7f7936f6444d65"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N20zes_fan_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
 </dd></dl>
 
@@ -1085,7 +1155,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_fan_properties_t10canControlE">
-<span id="_CPPv3N20zes_fan_properties_t10canControlE"></span><span id="_CPPv2N20zes_fan_properties_t10canControlE"></span><span id="zes_fan_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__fan__properties__t_1a880c9ae92b12c0636050e0912012d6ac"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N20zes_fan_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_fan_properties_t10canControlE"></span><span id="_CPPv2N20zes_fan_properties_t10canControlE"></span><span id="zes_fan_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__fan__properties__t_1a880c9ae92b12c0636050e0912012d6ac"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N20zes_fan_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if software can control the fan speed assuming the user has permissions </p>
 </dd></dl>
 
@@ -1118,8 +1188,13 @@
 
 </section>
 <section id="zes-fan-config-t">
-<span id="id13"></span><h3>zes_fan_config_t<a class="headerlink" href="#zes-fan-config-t" title="Link to this heading">#</a></h3>
+<span id="id14"></span><h3>zes_fan_config_t<a class="headerlink" href="#zes-fan-config-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfangetconfig"><span class="std std-ref">zesFanGetConfig</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416zes_fan_config_t">
 <span id="_CPPv316zes_fan_config_t"></span><span id="_CPPv216zes_fan_config_t"></span><span id="zes_fan_config_t"></span><span class="target" id="structzes__fan__config__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_fan_config_t</span></span></span><a class="headerlink" href="#_CPPv416zes_fan_config_t" title="Link to this definition">#</a><br /></dt>
@@ -1175,20 +1250,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="fabric_port.html"
+       href="psu.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Fabric Port</p>
+        <p class="prev-next-title">Psu</p>
       </div>
     </a>
     <a class="right-next"
-       href="firmware.html"
+       href="led.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Firmware</p>
+        <p class="prev-next-title">Led</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1208,7 +1283,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">6</span></summary><div class="ctoc-prefix">zesFan</div><ul class="ctoc-list"><li><a href="fan.html#zesfangetproperties">&hellip;GetProperties</a></li><li><a href="fan.html#zesfangetconfig">&hellip;GetConfig</a></li><li><a href="fan.html#zesfansetdefaultmode">&hellip;SetDefaultMode</a></li><li><a href="fan.html#zesfansetfixedspeedmode">&hellip;SetFixedSpeedMode</a></li><li><a href="fan.html#zesfansetspeedtablemode">&hellip;SetSpeedTableMode</a></li><li><a href="fan.html#zesfangetstate">&hellip;GetState</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="fan.html#zes-fan-speed-mode-t">zes_fan_speed_mode_t</a></li><li><a href="fan.html#zes-fan-speed-units-t">zes_fan_speed_units_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">5</span></summary><ul class="ctoc-list"><li><a href="fan.html#zes-fan-speed-t">zes_fan_speed_t</a></li><li><a href="fan.html#zes-fan-temp-speed-t">zes_fan_temp_speed_t</a></li><li><a href="fan.html#zes-fan-speed-table-t">zes_fan_speed_table_t</a></li><li><a href="fan.html#zes-fan-properties-t">zes_fan_properties_t</a></li><li><a href="fan.html#zes-fan-config-t">zes_fan_config_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="fan.html#zes-fan-handle-t">zes_fan_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">6</span></summary><div class="ctoc-prefix">zesFan</div><ul class="ctoc-list"><li><a href="fan.html#zesfangetproperties">&hellip;GetProperties</a></li><li><a href="fan.html#zesfangetconfig">&hellip;GetConfig</a></li><li><a href="fan.html#zesfansetdefaultmode">&hellip;SetDefaultMode</a></li><li><a href="fan.html#zesfansetfixedspeedmode">&hellip;SetFixedSpeedMode</a></li><li><a href="fan.html#zesfansetspeedtablemode">&hellip;SetSpeedTableMode</a></li><li><a href="fan.html#zesfangetstate">&hellip;GetState</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="fan.html#zes-fan-speed-mode-t">zes_fan_speed_mode_t</a></li><li><a href="fan.html#zes-fan-speed-units-t">zes_fan_speed_units_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">5</span></summary><ul class="ctoc-list"><li><a href="fan.html#zes-fan-speed-t">zes_fan_speed_t</a></li><li><a href="fan.html#zes-fan-temp-speed-t">zes_fan_temp_speed_t</a></li><li><a href="fan.html#zes-fan-speed-table-t">zes_fan_speed_table_t</a></li><li><a href="fan.html#zes-fan-properties-t">zes_fan_properties_t</a></li><li><a href="fan.html#zes-fan-config-t">zes_fan_config_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

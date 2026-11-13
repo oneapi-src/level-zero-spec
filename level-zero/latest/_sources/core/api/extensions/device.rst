@@ -1,7 +1,9 @@
 ============================================================
 Device - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Device - Extension Functions
@@ -100,6 +102,13 @@ ze_device_fp_atomic_ext_flags_t
 
 *Added in version 1.1*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-float-atomic-ext-properties-t`
+
+.. doxygentypedef:: ze_device_fp_atomic_ext_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_fp_atomic_ext_flag_t
     :project: LevelZero
 
@@ -112,6 +121,10 @@ ze_cache_ext_region_t
 .. rst-class:: api-version
 
 *Added in version 1.2*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceSetCacheAdviceExt`
 
 .. doxygenenum:: ze_cache_ext_region_t
     :project: LevelZero
@@ -126,6 +139,10 @@ ze_device_memory_ext_type_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-memory-ext-properties-t`
+
 .. doxygenenum:: ze_device_memory_ext_type_t
     :project: LevelZero
 
@@ -138,6 +155,13 @@ ze_rtas_device_ext_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.13*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-rtas-device-ext-properties-t`
+
+.. doxygentypedef:: ze_rtas_device_ext_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_rtas_device_ext_flag_t
     :project: LevelZero
@@ -152,8 +176,14 @@ ze_rtas_format_ext_t
 
 *Added in version 1.13*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDriverRTASFormatCompatibilityCheckExt`
+   | **Member of:** :ref:`ze-rtas-device-ext-properties-t`, :ref:`ze-rtas-builder-build-op-ext-desc-t`
+
 .. doxygenenum:: ze_rtas_format_ext_t
     :project: LevelZero
+
 
  
 Device - Extension Structures
@@ -184,6 +214,10 @@ ze_float_atomic_ext_properties_t
 
 *Added in version 1.1*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-module-properties-t`
+
 .. doxygenstruct:: ze_float_atomic_ext_properties_t
     :project: LevelZero
     :members:
@@ -198,6 +232,10 @@ ze_cache_reservation_ext_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.2*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-cache-properties-t`
 
 .. doxygenstruct:: ze_cache_reservation_ext_desc_t
     :project: LevelZero
@@ -214,6 +252,10 @@ ze_eu_count_ext_t
 
 *Added in version 1.3*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-properties-t`
+
 .. doxygenstruct:: ze_eu_count_ext_t
     :project: LevelZero
     :members:
@@ -228,6 +270,10 @@ ze_pci_address_ext_t
 .. rst-class:: api-version
 
 *Added in version 1.3*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-pci-ext-properties-t`
 
 .. doxygenstruct:: ze_pci_address_ext_t
     :project: LevelZero
@@ -244,6 +290,10 @@ ze_pci_speed_ext_t
 
 *Added in version 1.3*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-pci-ext-properties-t`
+
 .. doxygenstruct:: ze_pci_speed_ext_t
     :project: LevelZero
     :members:
@@ -258,6 +308,10 @@ ze_pci_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDevicePciGetPropertiesExt`
 
 .. doxygenstruct:: ze_pci_ext_properties_t
     :project: LevelZero
@@ -274,6 +328,10 @@ ze_device_luid_ext_properties_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-properties-t`
+
 .. doxygenstruct:: ze_device_luid_ext_properties_t
     :project: LevelZero
     :members:
@@ -288,6 +346,10 @@ ze_device_memory_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.4*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-memory-properties-t`
 
 .. doxygenstruct:: ze_device_memory_ext_properties_t
     :project: LevelZero
@@ -304,6 +366,10 @@ ze_device_ip_version_ext_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-properties-t`
+
 .. doxygenstruct:: ze_device_ip_version_ext_t
     :project: LevelZero
     :members:
@@ -318,6 +384,10 @@ ze_device_cache_line_size_ext_t
 .. rst-class:: api-version
 
 *Added in version 1.13*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-cache-properties-t`
 
 .. doxygenstruct:: ze_device_cache_line_size_ext_t
     :project: LevelZero
@@ -334,6 +404,10 @@ ze_rtas_device_ext_properties_t
 
 *Added in version 1.13*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-properties-t`
+
 .. doxygenstruct:: ze_rtas_device_ext_properties_t
     :project: LevelZero
     :members:
@@ -348,6 +422,10 @@ ze_device_vector_width_properties_ext_t
 .. rst-class:: api-version
 
 *Added in version 1.13*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeDeviceGetVectorWidthPropertiesExt`
 
 .. doxygenstruct:: ze_device_vector_width_properties_ext_t
     :project: LevelZero
@@ -364,6 +442,10 @@ ze_device_usablemem_size_ext_properties_t
 
 *Added in version 1.15*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-properties-t`
+
 .. doxygenstruct:: ze_device_usablemem_size_ext_properties_t
     :project: LevelZero
     :members:
@@ -379,6 +461,10 @@ ze_device_readonly_memory_ext_properties_t
 
 *Added in version 1.17*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-properties-t`
+
 .. doxygenstruct:: ze_device_readonly_memory_ext_properties_t
     :project: LevelZero
     :members:
@@ -393,6 +479,10 @@ ze_device_npu_properties_ext_t
 .. rst-class:: api-version
 
 *Added in version 1.18*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-properties-t`
 
 .. doxygenstruct:: ze_device_npu_properties_ext_t
     :project: LevelZero

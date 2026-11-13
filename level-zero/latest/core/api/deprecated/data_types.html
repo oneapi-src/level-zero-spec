@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Types - Deprecated &#8212; Level Zero Specification v1.20.41</title>
+    <title>Data Types - Deprecated &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Event Pool - Deprecated" href="event_pool.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -681,17 +691,22 @@
                   
   <section id="data-types-deprecated">
 <h1>Data Types - Deprecated<a class="headerlink" href="#data-types-deprecated" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="data-types-deprecated-enums">
 <h2>Data Types - Deprecated Enums<a class="headerlink" href="#data-types-deprecated-enums" title="Link to this heading">#</a></h2>
 <section id="ze-relaxed-allocation-limits-exp-version-t">
 <span id="id1"></span><h3>ze_relaxed_allocation_limits_exp_version_t<a class="headerlink" href="#ze-relaxed-allocation-limits-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.1</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.17. Use <a class="reference internal" href="../../EXT_RelaxedAllocLimits.html#ze-extension-relaxed-allocation-limits"><span class="std std-ref">ZE_extension_relaxed_allocation_limits</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_RelaxedAllocLimits.html#ze-experimental-relaxed-allocation-limits"><span class="std std-ref">Relaxed Allocation Limits Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv442ze_relaxed_allocation_limits_exp_version_t">
 <span id="_CPPv342ze_relaxed_allocation_limits_exp_version_t"></span><span id="_CPPv242ze_relaxed_allocation_limits_exp_version_t"></span><span class="target" id="ze__api_8h_1abbb52ebdf6314cb31f2a654648d40acb"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_relaxed_allocation_limits_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv442ze_relaxed_allocation_limits_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Relaxed Allocation Limits Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.17</span> Relaxed Allocation Limits Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N42ze_relaxed_allocation_limits_exp_version_t44ZE_RELAXED_ALLOCATION_LIMITS_EXP_VERSION_1_0E">
@@ -718,10 +733,15 @@
 <span id="id2"></span><h3>ze_image_view_exp_version_t<a class="headerlink" href="#ze-image-view-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.5. Use <a class="reference internal" href="../../EXT_ImageView.html#ze-extension-image-view"><span class="std std-ref">ZE_extension_image_view</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_ImageView.html#ze-experimental-image-view"><span class="std std-ref">Image View Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv427ze_image_view_exp_version_t">
 <span id="_CPPv327ze_image_view_exp_version_t"></span><span id="_CPPv227ze_image_view_exp_version_t"></span><span class="target" id="ze__api_8h_1a2b2b4f5b3c95cb3b9d093b2a0479c7f9"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_view_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv427ze_image_view_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Image View Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.5</span> Image View Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N27ze_image_view_exp_version_t29ZE_IMAGE_VIEW_EXP_VERSION_1_0E">
@@ -748,10 +768,15 @@
 <span id="id3"></span><h3>ze_image_view_planar_exp_version_t<a class="headerlink" href="#ze-image-view-planar-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.5. Use <a class="reference internal" href="../../EXT_ImageViewPlanar.html#ze-extension-image-view-planar"><span class="std std-ref">ZE_extension_image_view_planar</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_ImageViewPlanar.html#ze-experimental-image-view-planar"><span class="std std-ref">Image View Planar Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv434ze_image_view_planar_exp_version_t">
 <span id="_CPPv334ze_image_view_planar_exp_version_t"></span><span id="_CPPv234ze_image_view_planar_exp_version_t"></span><span class="target" id="ze__api_8h_1ae64ea6fadcf02776d251923357b7db9c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_view_planar_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv434ze_image_view_planar_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Image View Planar Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.5</span> Image View Planar Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N34ze_image_view_planar_exp_version_t36ZE_IMAGE_VIEW_PLANAR_EXP_VERSION_1_0E">
@@ -778,10 +803,16 @@
 <span id="id4"></span><h3>ze_rtas_builder_exp_version_t<a class="headerlink" href="#ze-rtas-builder-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../../EXT_RTAS.html#ze-extension-rtas"><span class="std std-ref">ZE_extension_rtas</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-exp-desc-t"><span class="std std-ref">ze_rtas_builder_exp_desc_t</span></a></div>
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_RTASBuilder.html#ze-experimental-rtas-builder"><span class="std std-ref">Ray Tracing Acceleration Structure Builder Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv429ze_rtas_builder_exp_version_t">
 <span id="_CPPv329ze_rtas_builder_exp_version_t"></span><span id="_CPPv229ze_rtas_builder_exp_version_t"></span><span class="target" id="ze__api_8h_1a21597d46c0f84c2cb9774266d9f10fe8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_builder_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv429ze_rtas_builder_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray Tracing Acceleration Structure Builder Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray Tracing Acceleration Structure Builder Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N29ze_rtas_builder_exp_version_t31ZE_RTAS_BUILDER_EXP_VERSION_1_0E">
@@ -808,10 +839,15 @@
 <span id="id5"></span><h3>ze_event_pool_counter_based_exp_version_t<a class="headerlink" href="#ze-event-pool-counter-based-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.8</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.15. Use <a class="reference internal" href="../apis/event.html#zeeventcounterbasedcreate"><span class="std std-ref">zeEventCounterBasedCreate</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_CounterBasedEventPools.html#ze-experimental-event-pool-counter-based"><span class="std std-ref">Counter-Based Event Pools Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv441ze_event_pool_counter_based_exp_version_t">
 <span id="_CPPv341ze_event_pool_counter_based_exp_version_t"></span><span id="_CPPv241ze_event_pool_counter_based_exp_version_t"></span><span class="target" id="ze__api_8h_1a063b03c63f9628a0d65114de986c6381"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_pool_counter_based_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv441ze_event_pool_counter_based_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Counter-based Event Pools Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.15</span> Counter-based Event Pools Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N41ze_event_pool_counter_based_exp_version_t43ZE_EVENT_POOL_COUNTER_BASED_EXP_VERSION_1_0E">
@@ -838,10 +874,15 @@
 <span id="id6"></span><h3>ze_command_list_clone_exp_version_t<a class="headerlink" href="#ze-command-list-clone-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.17. Mutable command lists replace command list cloning. Use <a class="reference internal" href="../../EXT_MutableCommandList.html#ze-extension-mutable-command-list"><span class="std std-ref">ZE_extension_mutable_command_list</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_CommandListClone.html#ze-experimental-command-list-clone"><span class="std std-ref">Command List Clone Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv435ze_command_list_clone_exp_version_t">
 <span id="_CPPv335ze_command_list_clone_exp_version_t"></span><span id="_CPPv235ze_command_list_clone_exp_version_t"></span><span class="target" id="ze__api_8h_1aae2d42f29417ffee5aa81b697fc13aef"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_command_list_clone_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv435ze_command_list_clone_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Command List Clone Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.17</span> Command List Clone Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N35ze_command_list_clone_exp_version_t37ZE_COMMAND_LIST_CLONE_EXP_VERSION_1_0E">
@@ -868,10 +909,15 @@
 <span id="id7"></span><h3>ze_immediate_command_list_append_exp_version_t<a class="headerlink" href="#ze-immediate-command-list-append-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.16. Use <a class="reference internal" href="../apis/command_list-2.html#zecommandlistimmediateappendcommandlistswithparameters"><span class="std std-ref">zeCommandListImmediateAppendCommandListsWithParameters</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_ImmediateCommandListAppend.html#ze-experimental-immediate-command-list-append"><span class="std std-ref">Immediate Command List Append Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv446ze_immediate_command_list_append_exp_version_t">
 <span id="_CPPv346ze_immediate_command_list_append_exp_version_t"></span><span id="_CPPv246ze_immediate_command_list_append_exp_version_t"></span><span class="target" id="ze__api_8h_1aba3ea1058541f41431b2fa267c38f965"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_immediate_command_list_append_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv446ze_immediate_command_list_append_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Immediate Command List Append Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.16</span> Immediate Command List Append Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N46ze_immediate_command_list_append_exp_version_t48ZE_IMMEDIATE_COMMAND_LIST_APPEND_EXP_VERSION_1_0E">
@@ -898,10 +944,15 @@
 <span id="id8"></span><h3>ze_mutable_command_list_exp_version_t<a class="headerlink" href="#ze-mutable-command-list-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.20. Use <a class="reference internal" href="../../EXT_MutableCommandList.html#ze-extension-mutable-command-list"><span class="std std-ref">ZE_extension_mutable_command_list</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_MutableCommandList.html#ze-experimental-mutable-command-list"><span class="std std-ref">Mutable Command List Experimental Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv437ze_mutable_command_list_exp_version_t">
 <span id="_CPPv337ze_mutable_command_list_exp_version_t"></span><span id="_CPPv237ze_mutable_command_list_exp_version_t"></span><span class="target" id="ze__api_8h_1aab433369b2b30e72a59c5305af755d4b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_mutable_command_list_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv437ze_mutable_command_list_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Mutable Command List Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.20</span> Mutable Command List Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N37ze_mutable_command_list_exp_version_t39ZE_MUTABLE_COMMAND_LIST_EXP_VERSION_1_0E">
@@ -934,10 +985,15 @@
 <span id="id9"></span><h3>ze_power_saving_hint_exp_version_t<a class="headerlink" href="#ze-power-saving-hint-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.18. Use <a class="reference internal" href="../../EXT_PowerSavingHint.html#ze-extension-power-saving-hint"><span class="std std-ref">ZE_extension_power_saving_hint</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_PowerSavingHint.html#ze-experimental-power-saving-hint"><span class="std std-ref">Power Saving Hint Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv434ze_power_saving_hint_exp_version_t">
 <span id="_CPPv334ze_power_saving_hint_exp_version_t"></span><span id="_CPPv234ze_power_saving_hint_exp_version_t"></span><span class="target" id="ze__api_8h_1a46712355cd3950b6b31a822b23351dc5"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_power_saving_hint_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv434ze_power_saving_hint_exp_version_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Power Saving Hint Extension Version(s) </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.18</span> Power Saving Hint Extension Version(s) </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N34ze_power_saving_hint_exp_version_t36ZE_POWER_SAVING_HINT_EXP_VERSION_1_0E">
@@ -967,10 +1023,17 @@
 <span id="id10"></span><h3>ze_rtas_float3_exp_t<a class="headerlink" href="#ze-rtas-float3-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-float3-ext-t"><span class="std std-ref">ze_rtas_float3_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-aabb-exp-t"><span class="std std-ref">ze_rtas_aabb_exp_t</span></a></div>
+<div class="line"><strong>Format value:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3</span></a></div>
+<div class="line"><strong>Buffer data for:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a>, <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420ze_rtas_float3_exp_t">
 <span id="_CPPv320ze_rtas_float3_exp_t"></span><span id="_CPPv220ze_rtas_float3_exp_t"></span><span id="ze_rtas_float3_exp_t"></span><span class="target" id="structze__rtas__float3__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_float3_exp_t</span></span></span><a class="headerlink" href="#_CPPv420ze_rtas_float3_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>A 3-component vector type </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> A 3-component vector type </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -999,10 +1062,16 @@
 <span id="id11"></span><h3>ze_rtas_transform_float3x4_column_major_exp_t<a class="headerlink" href="#ze-rtas-transform-float3x4-column-major-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-transform-float3x4-column-major-ext-t"><span class="std std-ref">ze_rtas_transform_float3x4_column_major_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Format value:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3X4_COLUMN_MAJOR</span></a></div>
+<div class="line"><strong>Buffer data for:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv445ze_rtas_transform_float3x4_column_major_exp_t">
 <span id="_CPPv345ze_rtas_transform_float3x4_column_major_exp_t"></span><span id="_CPPv245ze_rtas_transform_float3x4_column_major_exp_t"></span><span id="ze_rtas_transform_float3x4_column_major_exp_t"></span><span class="target" id="structze__rtas__transform__float3x4__column__major__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_transform_float3x4_column_major_exp_t</span></span></span><a class="headerlink" href="#_CPPv445ze_rtas_transform_float3x4_column_major_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>3x4 affine transformation in column-major layout </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> 3x4 affine transformation in column-major layout </p>
 <p><ul class="simple">
 <li><p>A 3x4 affine transformation in column major layout, consisting of vectors<ul>
 <li><p>vx=(vx_x, vx_y, vx_z),</p></li>
@@ -1096,10 +1165,16 @@
 <span id="id12"></span><h3>ze_rtas_transform_float3x4_aligned_column_major_exp_t<a class="headerlink" href="#ze-rtas-transform-float3x4-aligned-column-major-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-transform-float3x4-aligned-column-major-ext-t"><span class="std std-ref">ze_rtas_transform_float3x4_aligned_column_major_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Format value:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3X4_ALIGNED_COLUMN_MAJOR</span></a></div>
+<div class="line"><strong>Buffer data for:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv453ze_rtas_transform_float3x4_aligned_column_major_exp_t">
 <span id="_CPPv353ze_rtas_transform_float3x4_aligned_column_major_exp_t"></span><span id="_CPPv253ze_rtas_transform_float3x4_aligned_column_major_exp_t"></span><span id="ze_rtas_transform_float3x4_aligned_column_major_exp_t"></span><span class="target" id="structze__rtas__transform__float3x4__aligned__column__major__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_transform_float3x4_aligned_column_major_exp_t</span></span></span><a class="headerlink" href="#_CPPv453ze_rtas_transform_float3x4_aligned_column_major_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>3x4 affine transformation in column-major layout with aligned column vectors </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> 3x4 affine transformation in column-major layout with aligned column vectors </p>
 <p><ul class="simple">
 <li><p>A 3x4 affine transformation in column major layout, consisting of vectors<ul>
 <li><p>vx=(vx_x, vx_y, vx_z),</p></li>
@@ -1218,10 +1293,16 @@
 <span id="id13"></span><h3>ze_rtas_transform_float3x4_row_major_exp_t<a class="headerlink" href="#ze-rtas-transform-float3x4-row-major-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-transform-float3x4-row-major-ext-t"><span class="std std-ref">ze_rtas_transform_float3x4_row_major_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Format value:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_FLOAT3X4_ROW_MAJOR</span></a></div>
+<div class="line"><strong>Buffer data for:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv442ze_rtas_transform_float3x4_row_major_exp_t">
 <span id="_CPPv342ze_rtas_transform_float3x4_row_major_exp_t"></span><span id="_CPPv242ze_rtas_transform_float3x4_row_major_exp_t"></span><span id="ze_rtas_transform_float3x4_row_major_exp_t"></span><span class="target" id="structze__rtas__transform__float3x4__row__major__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_transform_float3x4_row_major_exp_t</span></span></span><a class="headerlink" href="#_CPPv442ze_rtas_transform_float3x4_row_major_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>3x4 affine transformation in row-major layout </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> 3x4 affine transformation in row-major layout </p>
 <p><ul class="simple">
 <li><p>A 3x4 affine transformation in row-major layout, consisting of vectors<ul>
 <li><p>vx=(vx_x, vx_y, vx_z),</p></li>
@@ -1315,10 +1396,17 @@
 <span id="id14"></span><h3>ze_rtas_aabb_exp_t<a class="headerlink" href="#ze-rtas-aabb-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-aabb-ext-t"><span class="std std-ref">ze_rtas_aabb_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="rtas_builder.html#zertasbuilderbuildexp"><span class="std std-ref">zeRTASBuilderBuildExp</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-geometry-aabbs-exp-cb-params-t"><span class="std std-ref">ze_rtas_geometry_aabbs_exp_cb_params_t</span></a>, <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-instance-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_instance_geometry_info_exp_t</span></a></div>
+<div class="line"><strong>Format value:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_AABB</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv418ze_rtas_aabb_exp_t">
 <span id="_CPPv318ze_rtas_aabb_exp_t"></span><span id="_CPPv218ze_rtas_aabb_exp_t"></span><span id="ze_rtas_aabb_exp_t"></span><span class="target" id="structze__rtas__aabb__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_aabb_exp_t</span></span></span><a class="headerlink" href="#_CPPv418ze_rtas_aabb_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>A 3-dimensional axis-aligned bounding-box with lower and upper bounds in each dimension </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> A 3-dimensional axis-aligned bounding-box with lower and upper bounds in each dimension </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -1341,10 +1429,16 @@
 <span id="id15"></span><h3>ze_rtas_triangle_indices_uint32_exp_t<a class="headerlink" href="#ze-rtas-triangle-indices-uint32-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-triangle-indices-uint32-ext-t"><span class="std std-ref">ze_rtas_triangle_indices_uint32_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Format value:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_TRIANGLE_INDICES_UINT32</span></a></div>
+<div class="line"><strong>Buffer data for:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-triangles-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_triangles_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv437ze_rtas_triangle_indices_uint32_exp_t">
 <span id="_CPPv337ze_rtas_triangle_indices_uint32_exp_t"></span><span id="_CPPv237ze_rtas_triangle_indices_uint32_exp_t"></span><span id="ze_rtas_triangle_indices_uint32_exp_t"></span><span class="target" id="structze__rtas__triangle__indices__uint32__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_triangle_indices_uint32_exp_t</span></span></span><a class="headerlink" href="#_CPPv437ze_rtas_triangle_indices_uint32_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Triangle represented using 3 vertex indices </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Triangle represented using 3 vertex indices </p>
 <p><ul class="simple">
 <li><p>Represents a triangle using 3 vertex indices that index into a vertex array that needs to be provided together with the index array.</p></li>
 <li><p>The linear barycentric u/v parametrization of the triangle is defined as:<ul>
@@ -1383,10 +1477,16 @@
 <span id="id16"></span><h3>ze_rtas_quad_indices_uint32_exp_t<a class="headerlink" href="#ze-rtas-quad-indices-uint32-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-quad-indices-uint32-ext-t"><span class="std std-ref">ze_rtas_quad_indices_uint32_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Format value:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-input-data-format-exp-t"><span class="std std-ref">ZE_RTAS_BUILDER_INPUT_DATA_FORMAT_EXP_QUAD_INDICES_UINT32</span></a></div>
+<div class="line"><strong>Buffer data for:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-quads-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_quads_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv433ze_rtas_quad_indices_uint32_exp_t">
 <span id="_CPPv333ze_rtas_quad_indices_uint32_exp_t"></span><span id="_CPPv233ze_rtas_quad_indices_uint32_exp_t"></span><span id="ze_rtas_quad_indices_uint32_exp_t"></span><span class="target" id="structze__rtas__quad__indices__uint32__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_quad_indices_uint32_exp_t</span></span></span><a class="headerlink" href="#_CPPv433ze_rtas_quad_indices_uint32_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Quad represented using 4 vertex indices </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Quad represented using 4 vertex indices </p>
 <p><ul class="simple">
 <li><p>Represents a quad composed of 4 indices that index into a vertex array that needs to be provided together with the index array.</p></li>
 <li><p>A quad is a triangle pair represented using 4 vertex indices v0, v1, v2, v3. The first triangle is made out of indices v0, v1, v3 and the second triangle from indices v2, v3, v1. The piecewise linear barycentric u/v parametrization of the quad is defined as:<ul>
@@ -1432,10 +1532,15 @@
 <span id="id17"></span><h3>ze_rtas_geometry_aabbs_exp_cb_params_t<a class="headerlink" href="#ze-rtas-geometry-aabbs-exp-cb-params-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/data_types.html#ze-rtas-geometry-aabbs-ext-cb-params-t"><span class="std std-ref">ze_rtas_geometry_aabbs_ext_cb_params_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Passed to callback in:</strong> <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-procedural-geometry-info-exp-t"><span class="std std-ref">ze_rtas_builder_procedural_geometry_info_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv438ze_rtas_geometry_aabbs_exp_cb_params_t">
 <span id="_CPPv338ze_rtas_geometry_aabbs_exp_cb_params_t"></span><span id="_CPPv238ze_rtas_geometry_aabbs_exp_cb_params_t"></span><span id="ze_rtas_geometry_aabbs_exp_cb_params_t"></span><span class="target" id="structze__rtas__geometry__aabbs__exp__cb__params__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_geometry_aabbs_exp_cb_params_t</span></span></span><a class="headerlink" href="#_CPPv438ze_rtas_geometry_aabbs_exp_cb_params_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>AABB callback function parameters </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> AABB callback function parameters </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">

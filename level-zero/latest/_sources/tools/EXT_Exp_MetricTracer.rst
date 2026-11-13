@@ -91,14 +91,14 @@ The following pseudo-code demonstrates how to enumerate Tracer based metric grou
 .. parsed-literal::
 
 
-    zet_metric_group_handle_t     hMetricGroup           = nullptr;
-    ze_event_handle_t            hNotificationEvent     = nullptr;
-    ze_event_pool_handle_t       hEventPool             = nullptr;
+    :ref:`zet-metric-group-handle-t`     hMetricGroup           = nullptr;
+    :ref:`ze-event-handle-t`            hNotificationEvent     = nullptr;
+    :ref:`ze-event-pool-handle-t`       hEventPool             = nullptr;
     :ref:`ze-event-pool-desc-t`         eventPoolDesc          = {:ref:`ZE_STRUCTURE_TYPE_EVENT_POOL_DESC <ze-structure-type-t>`\, nullptr, 0, 1};
     :ref:`ze-event-desc-t`              eventDesc              = {:ref:`ZE_STRUCTURE_TYPE_EVENT_DESC <ze-structure-type-t>`\};
-    zet_metric_tracer_exp_handle_t hMetricTracer         = nullptr;
+    :ref:`zet-metric-tracer-exp-handle-t` hMetricTracer         = nullptr;
     :ref:`zet-metric-tracer-exp-desc-t` tracerDescriptor = { :ref:`ZET_STRUCTURE_TYPE_METRIC_TRACER_EXP_DESC <zet-structure-type-t>`\, nullptr, 1024};
-    zet_metric_decoder_exp_handle_t hMetricDecoder       = nullptr;
+    :ref:`zet-metric-decoder-exp-handle-t` hMetricDecoder       = nullptr;
 
     // Find the first metric group suitable for Tracer Based collection
     FindMetricGroup(hDevice,  :ref:`ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EXP_TRACER_BASED <zet-metric-group-sampling-type-flags-t>`\, &hMetricGroup );

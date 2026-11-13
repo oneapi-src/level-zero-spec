@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Context &#8212; Level Zero Specification v1.20.41</title>
+    <title>Context &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Device" href="device.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context-handles">Context Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-context-handle-t">ze_context_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419ze_context_handle_t"><code class="docutils literal notranslate"><span class="pre">ze_context_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context-functions">Context Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zecontextcreate">zeContextCreate</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t"><code class="docutils literal notranslate"><span class="pre">zeContextCreate()</span></code></a></li>
@@ -514,6 +531,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context-enums">Context Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-context-flags-t">ze_context_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418ze_context_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_context_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417ze_context_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_context_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_context_flag_t31ZE_CONTEXT_FLAG_OPTIMIZE_MEMORYE"><code class="docutils literal notranslate"><span class="pre">ZE_CONTEXT_FLAG_OPTIMIZE_MEMORY</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N17ze_context_flag_t36ZE_CONTEXT_FLAG_OPTIMIZE_PERFORMANCEE"><code class="docutils literal notranslate"><span class="pre">ZE_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE</span></code></a></li>
@@ -549,15 +567,35 @@
                   
   <section id="context">
 <h1>Context<a class="headerlink" href="#context" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="context-handles">
+<h2>Context Handles<a class="headerlink" href="#context-handles" title="Link to this heading">#</a></h2>
+<section id="ze-context-handle-t">
+<span id="id1"></span><h3>ze_context_handle_t<a class="headerlink" href="#ze-context-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="driver.html#zedrivergetdefaultcontext"><span class="std std-ref">zeDriverGetDefaultContext</span></a>, <a class="reference internal" href="#zecontextcreate"><span class="std std-ref">zeContextCreate</span></a>, <a class="reference internal" href="#zecontextcreateex"><span class="std std-ref">zeContextCreateEx</span></a>, <a class="reference internal" href="command_list-2.html#zecommandlistgetcontexthandle"><span class="std std-ref">zeCommandListGetContextHandle</span></a>, <a class="reference internal" href="event_pool.html#zeeventpoolgetcontexthandle"><span class="std std-ref">zeEventPoolGetContextHandle</span></a></div>
+<div class="line"><strong>Used by:</strong> <span class="api-usage-fold"><input type="checkbox" id="usage-ze-context-handle-t-3"><span class="api-usage-links"> <a class="reference internal" href="#zecontextdestroy"><span class="std std-ref">zeContextDestroy</span></a>, <a class="reference internal" href="#zecontextgetstatus"><span class="std std-ref">zeContextGetStatus</span></a>, <a class="reference internal" href="command_queue.html#zecommandqueuecreate"><span class="std std-ref">zeCommandQueueCreate</span></a>, <a class="reference internal" href="command_list.html#zecommandlistcreate"><span class="std std-ref">zeCommandListCreate</span></a>, <a class="reference internal" href="command_list.html#zecommandlistcreateimmediate"><span class="std std-ref">zeCommandListCreateImmediate</span></a>, <a class="reference internal" href="#zecontextsystembarrier"><span class="std std-ref">zeContextSystemBarrier</span></a>, <a class="reference internal" href="command_list.html#zecommandlistappendmemorycopyfromcontext"><span class="std std-ref">zeCommandListAppendMemoryCopyFromContext</span></a>, <a class="reference internal" href="event_pool.html#zeeventpoolcreate"><span class="std std-ref">zeEventPoolCreate</span></a>, <a class="reference internal" href="event.html#zeeventcounterbasedcreate"><span class="std std-ref">zeEventCounterBasedCreate</span></a>, <a class="reference internal" href="event_pool.html#zeeventpoolputipchandle"><span class="std std-ref">zeEventPoolPutIpcHandle</span></a>, <a class="reference internal" href="event_pool.html#zeeventpoolopenipchandle"><span class="std std-ref">zeEventPoolOpenIpcHandle</span></a>, <a class="reference internal" href="event.html#zeeventcounterbasedopenipchandle"><span class="std std-ref">zeEventCounterBasedOpenIpcHandle</span></a>, <a class="reference internal" href="image.html#zeimagecreate"><span class="std std-ref">zeImageCreate</span></a>, <a class="reference internal" href="mem.html#zememallocshared"><span class="std std-ref">zeMemAllocShared</span></a>, <a class="reference internal" href="mem.html#zememallocdevice"><span class="std std-ref">zeMemAllocDevice</span></a>, <a class="reference internal" href="mem.html#zememallochost"><span class="std std-ref">zeMemAllocHost</span></a>, <a class="reference internal" href="mem.html#zememfree"><span class="std std-ref">zeMemFree</span></a>, <a class="reference internal" href="mem.html#zememgetallocproperties"><span class="std std-ref">zeMemGetAllocProperties</span></a>, <a class="reference internal" href="mem.html#zememgetaddressrange"><span class="std std-ref">zeMemGetAddressRange</span></a>, <a class="reference internal" href="mem.html#zememgetipchandle"><span class="std std-ref">zeMemGetIpcHandle</span></a>, <a class="reference internal" href="../experimental/mem.html#zememgetipchandlefromfiledescriptorexp"><span class="std std-ref">zeMemGetIpcHandleFromFileDescriptorExp</span></a>, <a class="reference internal" href="../experimental/mem.html#zememgetfiledescriptorfromipchandleexp"><span class="std std-ref">zeMemGetFileDescriptorFromIpcHandleExp</span></a>, <a class="reference internal" href="mem.html#zememputipchandle"><span class="std std-ref">zeMemPutIpcHandle</span></a>, <a class="reference internal" href="mem.html#zememopenipchandle"><span class="std std-ref">zeMemOpenIpcHandle</span></a>, <a class="reference internal" href="mem.html#zememcloseipchandle"><span class="std std-ref">zeMemCloseIpcHandle</span></a>, <a class="reference internal" href="../experimental/mem.html#zememsetatomicaccessattributeexp"><span class="std std-ref">zeMemSetAtomicAccessAttributeExp</span></a>, <a class="reference internal" href="../experimental/mem.html#zememgetatomicaccessattributeexp"><span class="std std-ref">zeMemGetAtomicAccessAttributeExp</span></a>, <a class="reference internal" href="module.html#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a>, <a class="reference internal" href="#zecontextmakememoryresident"><span class="std std-ref">zeContextMakeMemoryResident</span></a>, <a class="reference internal" href="#zecontextevictmemory"><span class="std std-ref">zeContextEvictMemory</span></a>, <a class="reference internal" href="#zecontextmakeimageresident"><span class="std std-ref">zeContextMakeImageResident</span></a>, <a class="reference internal" href="#zecontextevictimage"><span class="std std-ref">zeContextEvictImage</span></a>, <a class="reference internal" href="sampler.html#zesamplercreate"><span class="std std-ref">zeSamplerCreate</span></a>, <a class="reference internal" href="virtual_mem.html#zevirtualmemreserve"><span class="std std-ref">zeVirtualMemReserve</span></a>, <a class="reference internal" href="virtual_mem.html#zevirtualmemfree"><span class="std std-ref">zeVirtualMemFree</span></a>, <a class="reference internal" href="virtual_mem.html#zevirtualmemquerypagesize"><span class="std std-ref">zeVirtualMemQueryPageSize</span></a>, <a class="reference internal" href="physical_mem.html#zephysicalmemgetproperties"><span class="std std-ref">zePhysicalMemGetProperties</span></a>, <a class="reference internal" href="physical_mem.html#zephysicalmemcreate"><span class="std std-ref">zePhysicalMemCreate</span></a>, <a class="reference internal" href="physical_mem.html#zephysicalmemdestroy"><span class="std std-ref">zePhysicalMemDestroy</span></a>, <a class="reference internal" href="virtual_mem.html#zevirtualmemmap"><span class="std std-ref">zeVirtualMemMap</span></a>, <a class="reference internal" href="virtual_mem.html#zevirtualmemunmap"><span class="std std-ref">zeVirtualMemUnmap</span></a>, <a class="reference internal" href="virtual_mem.html#zevirtualmemsetaccessattribute"><span class="std std-ref">zeVirtualMemSetAccessAttribute</span></a>, <a class="reference internal" href="virtual_mem.html#zevirtualmemgetaccessattribute"><span class="std std-ref">zeVirtualMemGetAccessAttribute</span></a>, <a class="reference internal" href="../extensions/image.html#zeimageviewcreateext"><span class="std std-ref">zeImageViewCreateExt</span></a>, <a class="reference internal" href="../deprecated/image.html#zeimageviewcreateexp"><span class="std std-ref">zeImageViewCreateExp</span></a>, <a class="reference internal" href="../extensions/image.html#zeimagegetallocpropertiesext"><span class="std std-ref">zeImageGetAllocPropertiesExt</span></a>, <a class="reference internal" href="../extensions/mem.html#zememfreeext"><span class="std std-ref">zeMemFreeExt</span></a>, <a class="reference internal" href="mem.html#zememgetpitchfor2dimage"><span class="std std-ref">zeMemGetPitchFor2dImage</span></a>, <a class="reference internal" href="mem.html#zememgetipchandlewithproperties"><span class="std std-ref">zeMemGetIpcHandleWithProperties</span></a>, <a class="reference internal" href="../extensions/graph.html#zegraphcreateext"><span class="std std-ref">zeGraphCreateExt</span></a> </span><label for="usage-ze-context-handle-t-3"><span class="more">Show all 50</span><span class="less">Show less</span></label></span></div>
+<div class="line"><strong>See also:</strong> <a class="reference external" href="../../PROG.html#contexts">Contexts (Programming Guide)</a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv419ze_context_handle_t">
+<span id="_CPPv319ze_context_handle_t"></span><span id="_CPPv219ze_context_handle_t"></span><span id="ze_context_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_context_handle_t</span></span></span><a class="headerlink" href="#_CPPv419ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of driver’s context object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="context-functions">
 <h2>Context Functions<a class="headerlink" href="#context-functions" title="Link to this heading">#</a></h2>
 <section id="zecontextcreate">
-<span id="id1"></span><h3>zeContextCreate<a class="headerlink" href="#zecontextcreate" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeContextCreate<a class="headerlink" href="#zecontextcreate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t">
-<span id="_CPPv315zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t"></span><span id="_CPPv215zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t"></span><span id="zeContextCreate__ze_driver_handle_t.ze_context_desc_tCP.ze_context_handle_tP"></span><span class="target" id="ze__api_8h_1ac57ce92f147d6e337c21ac2523bda893"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-context-desc-t" title="ze_context_desc_t"><span class="n"><span class="pre">ze_context_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t"></span><span id="_CPPv215zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t"></span><span id="zeContextCreate__ze_driver_handle_t.ze_context_desc_tCP.ze_context_handle_tP"></span><span class="target" id="ze__api_8h_1ac57ce92f147d6e337c21ac2523bda893"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="driver.html#ze-driver-handle-t" title="ze_driver_handle_t"><span class="n"><span class="pre">ze_driver_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-context-desc-t" title="ze_context_desc_t"><span class="n"><span class="pre">ze_context_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeContextCreate18ze_driver_handle_tPK17ze_context_desc_tP19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a context for the driver. </p>
 <p><ul class="simple">
 <li><p>The application must only use the context for the driver which was provided during creation.</p></li>
@@ -613,11 +651,11 @@
 
 </section>
 <section id="zecontextdestroy">
-<span id="id2"></span><h3>zeContextDestroy<a class="headerlink" href="#zecontextdestroy" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zeContextDestroy<a class="headerlink" href="#zecontextdestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416zeContextDestroy19ze_context_handle_t">
-<span id="_CPPv316zeContextDestroy19ze_context_handle_t"></span><span id="_CPPv216zeContextDestroy19ze_context_handle_t"></span><span id="zeContextDestroy__ze_context_handle_t"></span><span class="target" id="ze__api_8h_1aa480a46571d604b6432ae7c0f2d980e3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeContextDestroy19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv316zeContextDestroy19ze_context_handle_t"></span><span id="_CPPv216zeContextDestroy19ze_context_handle_t"></span><span id="zeContextDestroy__ze_context_handle_t"></span><span class="target" id="ze__api_8h_1aa480a46571d604b6432ae7c0f2d980e3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeContextDestroy19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys a context. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the device is not currently referencing the context before it is deleted.</p></li>
@@ -658,11 +696,11 @@
 
 </section>
 <section id="zecontextgetstatus">
-<span id="id3"></span><h3>zeContextGetStatus<a class="headerlink" href="#zecontextgetstatus" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zeContextGetStatus<a class="headerlink" href="#zecontextgetstatus" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zeContextGetStatus19ze_context_handle_t">
-<span id="_CPPv318zeContextGetStatus19ze_context_handle_t"></span><span id="_CPPv218zeContextGetStatus19ze_context_handle_t"></span><span id="zeContextGetStatus__ze_context_handle_t"></span><span class="target" id="ze__api_8h_1a081977496b4d9fcf1a407a60f3f66393"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextGetStatus</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zeContextGetStatus19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zeContextGetStatus19ze_context_handle_t"></span><span id="_CPPv218zeContextGetStatus19ze_context_handle_t"></span><span id="zeContextGetStatus__ze_context_handle_t"></span><span class="target" id="ze__api_8h_1a081977496b4d9fcf1a407a60f3f66393"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextGetStatus</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zeContextGetStatus19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns current status of the context. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads with the same context handle.</p></li>
@@ -706,11 +744,11 @@
 
 </section>
 <section id="zecontextsystembarrier">
-<span id="id4"></span><h3>zeContextSystemBarrier<a class="headerlink" href="#zecontextsystembarrier" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zeContextSystemBarrier<a class="headerlink" href="#zecontextsystembarrier" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zeContextSystemBarrier19ze_context_handle_t18ze_device_handle_t">
-<span id="_CPPv322zeContextSystemBarrier19ze_context_handle_t18ze_device_handle_t"></span><span id="_CPPv222zeContextSystemBarrier19ze_context_handle_t18ze_device_handle_t"></span><span id="zeContextSystemBarrier__ze_context_handle_t.ze_device_handle_t"></span><span class="target" id="ze__api_8h_1a665de26ae432260460c84dbe7007bdc0"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextSystemBarrier</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeContextSystemBarrier19ze_context_handle_t18ze_device_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zeContextSystemBarrier19ze_context_handle_t18ze_device_handle_t"></span><span id="_CPPv222zeContextSystemBarrier19ze_context_handle_t18ze_device_handle_t"></span><span id="zeContextSystemBarrier__ze_context_handle_t.ze_device_handle_t"></span><span class="target" id="ze__api_8h_1a665de26ae432260460c84dbe7007bdc0"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextSystemBarrier</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeContextSystemBarrier19ze_context_handle_t18ze_device_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Ensures in-bound writes to the device are globally observable. </p>
 <p><ul class="simple">
 <li><p>This is a special-case system level barrier that can be used to ensure global observability of writes; typically needed after a producer (e.g., NIC) performs direct writes to the device’s memory (e.g., Direct RDMA writes). This is typically required when the memory corresponding to the writes is subsequently accessed from a remote device.</p></li>
@@ -753,11 +791,11 @@
 
 </section>
 <section id="zecontextmakememoryresident">
-<span id="id5"></span><h3>zeContextMakeMemoryResident<a class="headerlink" href="#zecontextmakememoryresident" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zeContextMakeMemoryResident<a class="headerlink" href="#zecontextmakememoryresident" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zeContextMakeMemoryResident19ze_context_handle_t18ze_device_handle_tPv6size_t">
-<span id="_CPPv327zeContextMakeMemoryResident19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="_CPPv227zeContextMakeMemoryResident19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="zeContextMakeMemoryResident__ze_context_handle_t.ze_device_handle_t.voidP.s"></span><span class="target" id="ze__api_8h_1adf44b1fb70beca241345cf685db73ac6"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextMakeMemoryResident</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeContextMakeMemoryResident19ze_context_handle_t18ze_device_handle_tPv6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zeContextMakeMemoryResident19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="_CPPv227zeContextMakeMemoryResident19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="zeContextMakeMemoryResident__ze_context_handle_t.ze_device_handle_t.voidP.s"></span><span class="target" id="ze__api_8h_1adf44b1fb70beca241345cf685db73ac6"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextMakeMemoryResident</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeContextMakeMemoryResident19ze_context_handle_t18ze_device_handle_tPv6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Makes memory resident for the device. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the memory is resident before being referenced by the device</p></li>
@@ -809,11 +847,11 @@
 
 </section>
 <section id="zecontextevictmemory">
-<span id="id6"></span><h3>zeContextEvictMemory<a class="headerlink" href="#zecontextevictmemory" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zeContextEvictMemory<a class="headerlink" href="#zecontextevictmemory" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420zeContextEvictMemory19ze_context_handle_t18ze_device_handle_tPv6size_t">
-<span id="_CPPv320zeContextEvictMemory19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="_CPPv220zeContextEvictMemory19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="zeContextEvictMemory__ze_context_handle_t.ze_device_handle_t.voidP.s"></span><span class="target" id="ze__api_8h_1a909bca36efb11331540b80a792425c7e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextEvictMemory</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeContextEvictMemory19ze_context_handle_t18ze_device_handle_tPv6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv320zeContextEvictMemory19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="_CPPv220zeContextEvictMemory19ze_context_handle_t18ze_device_handle_tPv6size_t"></span><span id="zeContextEvictMemory__ze_context_handle_t.ze_device_handle_t.voidP.s"></span><span class="target" id="ze__api_8h_1a909bca36efb11331540b80a792425c7e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextEvictMemory</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zeContextEvictMemory19ze_context_handle_t18ze_device_handle_tPv6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Allows memory to be evicted from the device. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the device is not currently referencing the memory before it is evicted</p></li>
@@ -863,11 +901,11 @@
 
 </section>
 <section id="zecontextmakeimageresident">
-<span id="id7"></span><h3>zeContextMakeImageResident<a class="headerlink" href="#zecontextmakeimageresident" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zeContextMakeImageResident<a class="headerlink" href="#zecontextmakeimageresident" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426zeContextMakeImageResident19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t">
-<span id="_CPPv326zeContextMakeImageResident19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="_CPPv226zeContextMakeImageResident19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="zeContextMakeImageResident__ze_context_handle_t.ze_device_handle_t.ze_image_handle_t"></span><span class="target" id="ze__api_8h_1a0beea1ce9fbe808e0bf63fa5515c78be"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextMakeImageResident</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zeContextMakeImageResident19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv326zeContextMakeImageResident19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="_CPPv226zeContextMakeImageResident19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="zeContextMakeImageResident__ze_context_handle_t.ze_device_handle_t.ze_image_handle_t"></span><span class="target" id="ze__api_8h_1a0beea1ce9fbe808e0bf63fa5515c78be"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextMakeImageResident</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="image.html#ze-image-handle-t" title="ze_image_handle_t"><span class="n"><span class="pre">ze_image_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zeContextMakeImageResident19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Makes image resident for the device. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the image is resident before being referenced by the device</p></li>
@@ -912,11 +950,11 @@
 
 </section>
 <section id="zecontextevictimage">
-<span id="id8"></span><h3>zeContextEvictImage<a class="headerlink" href="#zecontextevictimage" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zeContextEvictImage<a class="headerlink" href="#zecontextevictimage" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zeContextEvictImage19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t">
-<span id="_CPPv319zeContextEvictImage19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="_CPPv219zeContextEvictImage19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="zeContextEvictImage__ze_context_handle_t.ze_device_handle_t.ze_image_handle_t"></span><span class="target" id="ze__api_8h_1a785aeb07a7b1bd09832fad35dbbc9072"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextEvictImage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">ze_image_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeContextEvictImage19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zeContextEvictImage19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="_CPPv219zeContextEvictImage19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t"></span><span id="zeContextEvictImage__ze_context_handle_t.ze_device_handle_t.ze_image_handle_t"></span><span class="target" id="ze__api_8h_1a785aeb07a7b1bd09832fad35dbbc9072"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextEvictImage</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="image.html#ze-image-handle-t" title="ze_image_handle_t"><span class="n"><span class="pre">ze_image_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hImage</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeContextEvictImage19ze_context_handle_t18ze_device_handle_t17ze_image_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Allows image to be evicted from the device. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the device is not currently referencing the image before it is evicted</p></li>
@@ -962,11 +1000,11 @@
 
 </section>
 <section id="zecontextcreateex">
-<span id="id9"></span><h3>zeContextCreateEx<a class="headerlink" href="#zecontextcreateex" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>zeContextCreateEx<a class="headerlink" href="#zecontextcreateex" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.1</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zeContextCreateEx18ze_driver_handle_tPK17ze_context_desc_t8uint32_tP18ze_device_handle_tP19ze_context_handle_t">
-<span id="_CPPv317zeContextCreateEx18ze_driver_handle_tPK17ze_context_desc_t8uint32_tP18ze_device_handle_tP19ze_context_handle_t"></span><span id="_CPPv217zeContextCreateEx18ze_driver_handle_tPK17ze_context_desc_t8uint32_tP18ze_device_handle_tP19ze_context_handle_t"></span><span id="zeContextCreateEx__ze_driver_handle_t.ze_context_desc_tCP.uint32_t.ze_device_handle_tP.ze_context_handle_tP"></span><span class="target" id="ze__api_8h_1a4a7aa752c22a0a16c562a471b8ce10dc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextCreateEx</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_driver_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-context-desc-t" title="ze_context_desc_t"><span class="n"><span class="pre">ze_context_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numDevices</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevices</span></span>, <span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeContextCreateEx18ze_driver_handle_tPK17ze_context_desc_t8uint32_tP18ze_device_handle_tP19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zeContextCreateEx18ze_driver_handle_tPK17ze_context_desc_t8uint32_tP18ze_device_handle_tP19ze_context_handle_t"></span><span id="_CPPv217zeContextCreateEx18ze_driver_handle_tPK17ze_context_desc_t8uint32_tP18ze_device_handle_tP19ze_context_handle_t"></span><span id="zeContextCreateEx__ze_driver_handle_t.ze_context_desc_tCP.uint32_t.ze_device_handle_tP.ze_context_handle_tP"></span><span class="target" id="ze__api_8h_1a4a7aa752c22a0a16c562a471b8ce10dc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeContextCreateEx</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="driver.html#ze-driver-handle-t" title="ze_driver_handle_t"><span class="n"><span class="pre">ze_driver_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDriver</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-context-desc-t" title="ze_context_desc_t"><span class="n"><span class="pre">ze_context_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numDevices</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevices</span></span>, <a class="reference internal" href="#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeContextCreateEx18ze_driver_handle_tPK17ze_context_desc_t8uint32_tP18ze_device_handle_tP19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a context for the driver. </p>
 <p><ul class="simple">
 <li><p>The application must only use the context for the driver which was provided during creation.</p></li>
@@ -1031,8 +1069,19 @@
 <section id="context-enums">
 <h2>Context Enums<a class="headerlink" href="#context-enums" title="Link to this heading">#</a></h2>
 <section id="ze-context-flags-t">
-<span id="id10"></span><h3>ze_context_flags_t<a class="headerlink" href="#ze-context-flags-t" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>ze_context_flags_t<a class="headerlink" href="#ze-context-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-context-desc-t"><span class="std std-ref">ze_context_desc_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv418ze_context_flags_t">
+<span id="_CPPv318ze_context_flags_t"></span><span id="_CPPv218ze_context_flags_t"></span><span id="ze_context_flags_t"></span><span class="target" id="ze__api_8h_1a19d9df8a90c4673f6be5405fe0eea449"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_context_flags_t</span></span></span><a class="headerlink" href="#_CPPv418ze_context_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported context creation flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv417ze_context_flag_t">
 <span id="_CPPv317ze_context_flag_t"></span><span id="_CPPv217ze_context_flag_t"></span><span class="target" id="ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefe"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_context_flag_t</span></span></span><a class="headerlink" href="#_CPPv417ze_context_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1062,8 +1111,13 @@
 <section id="context-structures">
 <h2>Context Structures<a class="headerlink" href="#context-structures" title="Link to this heading">#</a></h2>
 <section id="ze-context-desc-t">
-<span id="id11"></span><h3>ze_context_desc_t<a class="headerlink" href="#ze-context-desc-t" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>ze_context_desc_t<a class="headerlink" href="#ze-context-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zecontextcreate"><span class="std std-ref">zeContextCreate</span></a>, <a class="reference internal" href="#zecontextcreateex"><span class="std std-ref">zeContextCreateEx</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv417ze_context_desc_t">
 <span id="_CPPv317ze_context_desc_t"></span><span id="_CPPv217ze_context_desc_t"></span><span id="ze_context_desc_t"></span><span class="target" id="structze__context__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_context_desc_t</span></span></span><a class="headerlink" href="#_CPPv417ze_context_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -1084,8 +1138,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17ze_context_desc_t5flagsE">
-<span id="_CPPv3N17ze_context_desc_t5flagsE"></span><span id="_CPPv2N17ze_context_desc_t5flagsE"></span><span id="ze_context_desc_t::flags__ze_context_flags_t"></span><span class="target" id="structze__context__desc__t_1a4092a0c74f5a05aec2ae5c9bce329ea9"></span><span class="n"><span class="pre">ze_context_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N17ze_context_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze-context-flags-t"><span class="std std-ref">ze_context_flag_t</span></a>; default behavior may use implicit driver-based heuristics. </p>
+<span id="_CPPv3N17ze_context_desc_t5flagsE"></span><span id="_CPPv2N17ze_context_desc_t5flagsE"></span><span id="ze_context_desc_t::flags__ze_context_flags_t"></span><span class="target" id="structze__context__desc__t_1a4092a0c74f5a05aec2ae5c9bce329ea9"></span><a class="reference internal" href="#ze-context-flags-t" title="ze_context_flags_t"><span class="n"><span class="pre">ze_context_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N17ze_context_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefe"><span class="std std-ref">ze_context_flag_t</span></a>; default behavior may use implicit driver-based heuristics. </p>
 </dd></dl>
 
 </div>
@@ -1140,7 +1194,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zeContext</div><ul class="ctoc-list"><li><a href="context.html#zecontextcreate">&hellip;Create</a></li><li><a href="context.html#zecontextdestroy">&hellip;Destroy</a></li><li><a href="context.html#zecontextgetstatus">&hellip;GetStatus</a></li><li><a href="context.html#zecontextsystembarrier">&hellip;SystemBarrier</a></li><li><a href="context.html#zecontextmakememoryresident">&hellip;MakeMemoryResident</a></li><li><a href="context.html#zecontextevictmemory">&hellip;EvictMemory</a></li><li><a href="context.html#zecontextmakeimageresident">&hellip;MakeImageResident</a></li><li><a href="context.html#zecontextevictimage">&hellip;EvictImage</a></li><li><a href="context.html#zecontextcreateex">&hellip;CreateEx</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="context.html#ze-context-flags-t">ze_context_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="context.html#ze-context-desc-t">ze_context_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="context.html#ze-context-handle-t">ze_context_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zeContext</div><ul class="ctoc-list"><li><a href="context.html#zecontextcreate">&hellip;Create</a></li><li><a href="context.html#zecontextdestroy">&hellip;Destroy</a></li><li><a href="context.html#zecontextgetstatus">&hellip;GetStatus</a></li><li><a href="context.html#zecontextsystembarrier">&hellip;SystemBarrier</a></li><li><a href="context.html#zecontextmakememoryresident">&hellip;MakeMemoryResident</a></li><li><a href="context.html#zecontextevictmemory">&hellip;EvictMemory</a></li><li><a href="context.html#zecontextmakeimageresident">&hellip;MakeImageResident</a></li><li><a href="context.html#zecontextevictimage">&hellip;EvictImage</a></li><li><a href="context.html#zecontextcreateex">&hellip;CreateEx</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="context.html#ze-context-flags-t">ze_context_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="context.html#ze-context-desc-t">ze_context_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

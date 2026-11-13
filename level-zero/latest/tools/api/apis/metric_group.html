@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Metric Group &#8212; Level Zero Specification v1.20.41</title>
+    <title>Metric Group &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -48,10 +48,10 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Metric" href="metric.html" />
-    <link rel="prev" title="Debug" href="debug.html" />
+    <link rel="prev" title="Kernel" href="kernel.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="debug.html">Debug</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-group-handles">Metric Group Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-group-handle-t">zet_metric_group_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zet_metric_group_handle_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_group_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-group-functions">Metric Group Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zetmetricgroupget">zetMetricGroupGet</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t"><code class="docutils literal notranslate"><span class="pre">zetMetricGroupGet()</span></code></a></li>
@@ -490,6 +507,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-group-enums">Metric Group Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-group-sampling-type-flags-t">zet_metric_group_sampling_type_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv438zet_metric_group_sampling_type_flags_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_group_sampling_type_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv437zet_metric_group_sampling_type_flag_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_group_sampling_type_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_group_sampling_type_flag_t47ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASEDE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_EVENT_BASED</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N37zet_metric_group_sampling_type_flag_t46ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASEDE"><code class="docutils literal notranslate"><span class="pre">ZET_METRIC_GROUP_SAMPLING_TYPE_FLAG_TIME_BASED</span></code></a></li>
@@ -539,15 +557,35 @@
                   
   <section id="metric-group">
 <h1>Metric Group<a class="headerlink" href="#metric-group" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="metric-group-handles">
+<h2>Metric Group Handles<a class="headerlink" href="#metric-group-handles" title="Link to this heading">#</a></h2>
+<section id="zet-metric-group-handle-t">
+<span id="id1"></span><h3>zet_metric_group_handle_t<a class="headerlink" href="#zet-metric-group-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a>, <a class="reference internal" href="../experimental/device.html#zetdevicecreatemetricgroupsfrommetricsexp"><span class="std std-ref">zetDeviceCreateMetricGroupsFromMetricsExp</span></a>, <a class="reference internal" href="../deprecated/metric_group.html#zetmetricgroupcreateexp"><span class="std std-ref">zetMetricGroupCreateExp</span></a>, <a class="reference internal" href="../experimental/device.html#zetdevicegetconcurrentmetricgroupsexp"><span class="std std-ref">zetDeviceGetConcurrentMetricGroupsExp</span></a></div>
+<div class="line"><strong>Used by:</strong> <span class="api-usage-fold"><input type="checkbox" id="usage-zet-metric-group-handle-t-3"><span class="api-usage-links"> <a class="reference internal" href="#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a>, <a class="reference internal" href="#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>, <a class="reference internal" href="metric.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a>, <a class="reference internal" href="context.html#zetcontextactivatemetricgroups"><span class="std std-ref">zetContextActivateMetricGroups</span></a>, <a class="reference internal" href="metric_streamer.html#zetmetricstreameropen"><span class="std std-ref">zetMetricStreamerOpen</span></a>, <a class="reference internal" href="metric_query_pool.html#zetmetricquerypoolcreate"><span class="std std-ref">zetMetricQueryPoolCreate</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupcalculatemultiplemetricvaluesexp"><span class="std std-ref">zetMetricGroupCalculateMultipleMetricValuesExp</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupgetglobaltimestampsexp"><span class="std std-ref">zetMetricGroupGetGlobalTimestampsExp</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupgetexportdataexp"><span class="std std-ref">zetMetricGroupGetExportDataExp</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupaddmetricexp"><span class="std std-ref">zetMetricGroupAddMetricExp</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupremovemetricexp"><span class="std std-ref">zetMetricGroupRemoveMetricExp</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupcloseexp"><span class="std std-ref">zetMetricGroupCloseExp</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupdestroyexp"><span class="std std-ref">zetMetricGroupDestroyExp</span></a>, <a class="reference internal" href="../experimental/metric_tracer.html#zetmetrictracercreateexp"><span class="std std-ref">zetMetricTracerCreateExp</span></a>, <a class="reference internal" href="../experimental/command_list.html#zetcommandlistappendmarkerexp"><span class="std std-ref">zetCommandListAppendMarkerExp</span></a> </span><label for="usage-zet-metric-group-handle-t-3"><span class="more">Show all 15</span><span class="less">Show less</span></label></span></div>
+<div class="line"><strong>See also:</strong> <a class="reference external" href="../../PROG.html#metric-groups">Metric Groups (Programming Guide)</a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv425zet_metric_group_handle_t">
+<span id="_CPPv325zet_metric_group_handle_t"></span><span id="_CPPv225zet_metric_group_handle_t"></span><span id="zet_metric_group_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_group_handle_t</span></span></span><a class="headerlink" href="#_CPPv425zet_metric_group_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of metric group’s object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="metric-group-functions">
 <h2>Metric Group Functions<a class="headerlink" href="#metric-group-functions" title="Link to this heading">#</a></h2>
 <section id="zetmetricgroupget">
-<span id="id1"></span><h3>zetMetricGroupGet<a class="headerlink" href="#zetmetricgroupget" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zetMetricGroupGet<a class="headerlink" href="#zetmetricgroupget" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t">
-<span id="_CPPv317zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t"></span><span id="_CPPv217zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t"></span><span id="zetMetricGroupGet__zet_device_handle_t.uint32_tP.zet_metric_group_handle_tP"></span><span class="target" id="zet__api_8h_1ab81c4184e7dd6b0cab59807d5c5d25c2"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGroupGet</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="n"><span class="pre">zet_metric_group_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricGroups</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t"></span><span id="_CPPv217zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t"></span><span id="zetMetricGroupGet__zet_device_handle_t.uint32_tP.zet_metric_group_handle_tP"></span><span class="target" id="zet__api_8h_1ab81c4184e7dd6b0cab59807d5c5d25c2"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGroupGet</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="device.html#zet-device-handle-t" title="zet_device_handle_t"><span class="n"><span class="pre">zet_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zet-metric-group-handle-t" title="zet_metric_group_handle_t"><span class="n"><span class="pre">zet_metric_group_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricGroups</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zetMetricGroupGet19zet_device_handle_tP8uint32_tP25zet_metric_group_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieves metric group for a device. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -592,11 +630,11 @@
 
 </section>
 <section id="zetmetricgroupgetproperties">
-<span id="id2"></span><h3>zetMetricGroupGetProperties<a class="headerlink" href="#zetmetricgroupgetproperties" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zetMetricGroupGetProperties<a class="headerlink" href="#zetmetricgroupgetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t">
-<span id="_CPPv327zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t"></span><span id="_CPPv227zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t"></span><span id="zetMetricGroupGetProperties__zet_metric_group_handle_t.zet_metric_group_properties_tP"></span><span class="target" id="zet__api_8h_1a33f410d437e39b1624f3d625a9f2bf22"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGroupGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_group_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricGroup</span></span>, <a class="reference internal" href="#zet-metric-group-properties-t" title="zet_metric_group_properties_t"><span class="n"><span class="pre">zet_metric_group_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t"></span><span id="_CPPv227zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t"></span><span id="zetMetricGroupGetProperties__zet_metric_group_handle_t.zet_metric_group_properties_tP"></span><span class="target" id="zet__api_8h_1a33f410d437e39b1624f3d625a9f2bf22"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGroupGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-metric-group-handle-t" title="zet_metric_group_handle_t"><span class="n"><span class="pre">zet_metric_group_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricGroup</span></span>, <a class="reference internal" href="#zet-metric-group-properties-t" title="zet_metric_group_properties_t"><span class="n"><span class="pre">zet_metric_group_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zetMetricGroupGetProperties25zet_metric_group_handle_tP29zet_metric_group_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieves attributes of a metric group. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -640,11 +678,11 @@
 
 </section>
 <section id="zetmetricgroupcalculatemetricvalues">
-<span id="id3"></span><h3>zetMetricGroupCalculateMetricValues<a class="headerlink" href="#zetmetricgroupcalculatemetricvalues" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zetMetricGroupCalculateMetricValues<a class="headerlink" href="#zetmetricgroupcalculatemetricvalues" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv435zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t35zet_metric_group_calculation_type_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t">
-<span id="_CPPv335zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t35zet_metric_group_calculation_type_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t"></span><span id="_CPPv235zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t35zet_metric_group_calculation_type_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t"></span><span id="zetMetricGroupCalculateMetricValues__zet_metric_group_handle_t.zet_metric_group_calculation_type_t.s.uint8_tCP.uint32_tP.zet_typed_value_tP"></span><span class="target" id="zet__api_8h_1a45c4f2e26cc4f36b822b4b21061aa8df"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGroupCalculateMetricValues</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_group_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricGroup</span></span>, <a class="reference internal" href="#zet-metric-group-calculation-type-t" title="zet_metric_group_calculation_type_t"><span class="n"><span class="pre">zet_metric_group_calculation_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rawDataSize</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawData</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricValueCount</span></span>, <a class="reference internal" href="data_types.html#zet-typed-value-t" title="zet_typed_value_t"><span class="n"><span class="pre">zet_typed_value_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricValues</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t35zet_metric_group_calculation_type_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv335zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t35zet_metric_group_calculation_type_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t"></span><span id="_CPPv235zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t35zet_metric_group_calculation_type_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t"></span><span id="zetMetricGroupCalculateMetricValues__zet_metric_group_handle_t.zet_metric_group_calculation_type_t.s.uint8_tCP.uint32_tP.zet_typed_value_tP"></span><span class="target" id="zet__api_8h_1a45c4f2e26cc4f36b822b4b21061aa8df"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricGroupCalculateMetricValues</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-metric-group-handle-t" title="zet_metric_group_handle_t"><span class="n"><span class="pre">zet_metric_group_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricGroup</span></span>, <a class="reference internal" href="#zet-metric-group-calculation-type-t" title="zet_metric_group_calculation_type_t"><span class="n"><span class="pre">zet_metric_group_calculation_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rawDataSize</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawData</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricValueCount</span></span>, <a class="reference internal" href="data_types.html#zet-typed-value-t" title="zet_typed_value_t"><span class="n"><span class="pre">zet_typed_value_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricValues</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zetMetricGroupCalculateMetricValues25zet_metric_group_handle_t35zet_metric_group_calculation_type_t6size_tPK7uint8_tP8uint32_tP17zet_typed_value_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Calculates metric values from raw data. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -701,8 +739,20 @@
 <section id="metric-group-enums">
 <h2>Metric Group Enums<a class="headerlink" href="#metric-group-enums" title="Link to this heading">#</a></h2>
 <section id="zet-metric-group-sampling-type-flags-t">
-<span id="id4"></span><h3>zet_metric_group_sampling_type_flags_t<a class="headerlink" href="#zet-metric-group-sampling-type-flags-t" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zet_metric_group_sampling_type_flags_t<a class="headerlink" href="#zet-metric-group-sampling-type-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="../deprecated/metric_group.html#zetmetricgroupcreateexp"><span class="std std-ref">zetMetricGroupCreateExp</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>, <a class="reference internal" href="../experimental/metric_programmable.html#zet-metric-programmable-exp-properties-t"><span class="std std-ref">zet_metric_programmable_exp_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv438zet_metric_group_sampling_type_flags_t">
+<span id="_CPPv338zet_metric_group_sampling_type_flags_t"></span><span id="_CPPv238zet_metric_group_sampling_type_flags_t"></span><span id="zet_metric_group_sampling_type_flags_t"></span><span class="target" id="zet__api_8h_1ace479471a7f61135ebb6286efd4707c6"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_group_sampling_type_flags_t</span></span></span><a class="headerlink" href="#_CPPv438zet_metric_group_sampling_type_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Metric group sampling type. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv437zet_metric_group_sampling_type_flag_t">
 <span id="_CPPv337zet_metric_group_sampling_type_flag_t"></span><span id="_CPPv237zet_metric_group_sampling_type_flag_t"></span><span class="target" id="zet__api_8h_1a10adf37bcbb25251c36a0bcb805670c1"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_group_sampling_type_flag_t</span></span></span><a class="headerlink" href="#_CPPv437zet_metric_group_sampling_type_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -735,8 +785,13 @@
 
 </section>
 <section id="zet-metric-group-calculation-type-t">
-<span id="id5"></span><h3>zet_metric_group_calculation_type_t<a class="headerlink" href="#zet-metric-group-calculation-type-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zet_metric_group_calculation_type_t<a class="headerlink" href="#zet-metric-group-calculation-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupcalculatemultiplemetricvaluesexp"><span class="std std-ref">zetMetricGroupCalculateMultipleMetricValuesExp</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zetmetricgroupcalculatemetricexportdataexp"><span class="std std-ref">zetMetricGroupCalculateMetricExportDataExp</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv435zet_metric_group_calculation_type_t">
 <span id="_CPPv335zet_metric_group_calculation_type_t"></span><span id="_CPPv235zet_metric_group_calculation_type_t"></span><span class="target" id="zet__api_8h_1a48f4fd639c64c1155d4dce6495a0081a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_group_calculation_type_t</span></span></span><a class="headerlink" href="#_CPPv435zet_metric_group_calculation_type_t" title="Link to this definition">#</a><br /></dt>
@@ -767,8 +822,14 @@
 <section id="metric-group-structures">
 <h2>Metric Group Structures<a class="headerlink" href="#metric-group-structures" title="Link to this heading">#</a></h2>
 <section id="zet-metric-group-properties-t">
-<span id="id6"></span><h3>zet_metric_group_properties_t<a class="headerlink" href="#zet-metric-group-properties-t" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zet_metric_group_properties_t<a class="headerlink" href="#zet-metric-group-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a></div>
+<div class="line"><strong>pNext may point to:</strong> <a class="reference internal" href="../experimental/metric.html#zet-metric-global-timestamps-resolution-exp-t"><span class="std std-ref">zet_metric_global_timestamps_resolution_exp_t</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zet-metric-group-type-exp-t"><span class="std std-ref">zet_metric_group_type_exp_t</span></a>, <a class="reference internal" href="../experimental/metric.html#zet-export-dma-buf-exp-properties-t"><span class="std std-ref">zet_export_dma_buf_exp_properties_t</span></a>, <a class="reference internal" href="../experimental/metric_group.html#zet-metric-source-id-exp-t"><span class="std std-ref">zet_metric_source_id_exp_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv429zet_metric_group_properties_t">
 <span id="_CPPv329zet_metric_group_properties_t"></span><span id="_CPPv229zet_metric_group_properties_t"></span><span id="zet_metric_group_properties_t"></span><span class="target" id="structzet__metric__group__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_group_properties_t</span></span></span><a class="headerlink" href="#_CPPv429zet_metric_group_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -801,8 +862,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N29zet_metric_group_properties_t12samplingTypeE">
-<span id="_CPPv3N29zet_metric_group_properties_t12samplingTypeE"></span><span id="_CPPv2N29zet_metric_group_properties_t12samplingTypeE"></span><span id="zet_metric_group_properties_t::samplingType__zet_metric_group_sampling_type_flags_t"></span><span class="target" id="structzet__metric__group__properties__t_1a7a5e28efff7c6365e27b2eae9f5f03a0"></span><span class="n"><span class="pre">zet_metric_group_sampling_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingType</span></span></span><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t12samplingTypeE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] metric group sampling type. returns a combination of <a class="reference internal" href="#zet-metric-group-sampling-type-flags-t"><span class="std std-ref">zet_metric_group_sampling_type_flag_t</span></a>. </p>
+<span id="_CPPv3N29zet_metric_group_properties_t12samplingTypeE"></span><span id="_CPPv2N29zet_metric_group_properties_t12samplingTypeE"></span><span id="zet_metric_group_properties_t::samplingType__zet_metric_group_sampling_type_flags_t"></span><span class="target" id="structzet__metric__group__properties__t_1a7a5e28efff7c6365e27b2eae9f5f03a0"></span><a class="reference internal" href="#zet-metric-group-sampling-type-flags-t" title="zet_metric_group_sampling_type_flags_t"><span class="n"><span class="pre">zet_metric_group_sampling_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">samplingType</span></span></span><a class="headerlink" href="#_CPPv4N29zet_metric_group_properties_t12samplingTypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] metric group sampling type. returns a combination of <a class="reference internal" href="#zet__api_8h_1a10adf37bcbb25251c36a0bcb805670c1"><span class="std std-ref">zet_metric_group_sampling_type_flag_t</span></a>. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -836,12 +897,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="debug.html"
+       href="kernel.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Debug</p>
+        <p class="prev-next-title">Kernel</p>
       </div>
     </a>
     <a class="right-next"
@@ -869,7 +930,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">3</span></summary><div class="ctoc-prefix">zetMetricGroup</div><ul class="ctoc-list"><li><a href="metric_group.html#zetmetricgroupget">&hellip;Get</a></li><li><a href="metric_group.html#zetmetricgroupgetproperties">&hellip;GetProperties</a></li><li><a href="metric_group.html#zetmetricgroupcalculatemetricvalues">&hellip;CalculateMetricValues</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="metric_group.html#zet-metric-group-sampling-type-flags-t">zet_metric_group_sampling_type_flags_t</a></li><li><a href="metric_group.html#zet-metric-group-calculation-type-t">zet_metric_group_calculation_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_group.html#zet-metric-group-properties-t">zet_metric_group_properties_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_group.html#zet-metric-group-handle-t">zet_metric_group_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">3</span></summary><div class="ctoc-prefix">zetMetricGroup</div><ul class="ctoc-list"><li><a href="metric_group.html#zetmetricgroupget">&hellip;Get</a></li><li><a href="metric_group.html#zetmetricgroupgetproperties">&hellip;GetProperties</a></li><li><a href="metric_group.html#zetmetricgroupcalculatemetricvalues">&hellip;CalculateMetricValues</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="metric_group.html#zet-metric-group-sampling-type-flags-t">zet_metric_group_sampling_type_flags_t</a></li><li><a href="metric_group.html#zet-metric-group-calculation-type-t">zet_metric_group_calculation_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_group.html#zet-metric-group-properties-t">zet_metric_group_properties_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

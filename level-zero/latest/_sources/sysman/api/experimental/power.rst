@@ -1,7 +1,10 @@
 ============================================================
 Power - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+
 
 
 
@@ -19,6 +22,10 @@ zes_power_domain_exp_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.8*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-power-properties-t`
 
 .. doxygenstruct:: zes_power_domain_exp_properties_t
     :project: LevelZero

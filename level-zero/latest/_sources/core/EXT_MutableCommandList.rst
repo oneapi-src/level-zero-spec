@@ -84,7 +84,7 @@ API
         0 // flags
     };
 
-    ze_command_list_handle_t hCommandList = nullptr;
+    :ref:`ze-command-list-handle-t` hCommandList = nullptr;
     :ref:`zeCommandListCreate`\(hContext, hDevice, &commandListDesc, &hCommandList);
 
     // [ ...create fence, signal event and wait event objects... ]
@@ -96,7 +96,7 @@ API
         0,
         "example"
     };
-    ze_kernel_handle_t hKernel = nullptr;
+    :ref:`ze-kernel-handle-t` hKernel = nullptr;
     :ref:`ze-result-t` result = :ref:`zeKernelCreate`\(hModule, &kernelDesc, &hKernel);
 
     // Set the kernel arguments
@@ -191,10 +191,10 @@ In preparation for kernel mutation user must provide all possible kernels for th
 .. parsed-literal::
 
     // define all possible kernels
-    ze_kernel_handle_t addKernel;
-    ze_kernel_handle_t mulKernel;
+    :ref:`ze-kernel-handle-t` addKernel;
+    :ref:`ze-kernel-handle-t` mulKernel;
 
-    ze_kernel_handle_t kernels[] = {addKernel, mulKernel};
+    :ref:`ze-kernel-handle-t` kernels[] = {addKernel, mulKernel};
 
     // when users want kernel mutation, they need to explicitly state this, as 0 does not include kernel instruction mutation by default
     :ref:`ze-mutable-command-ext-flags-t` mutationFlags =

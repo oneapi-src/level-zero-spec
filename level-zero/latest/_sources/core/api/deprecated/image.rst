@@ -1,7 +1,9 @@
 ============================================================
 Image - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Image - Deprecated Functions
@@ -23,6 +25,7 @@ zeImageViewCreateExp
 
 .. doxygenfunction:: zeImageViewCreateExp
     :project: LevelZero
+
 
 
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Led &#8212; Level Zero Specification v1.20.41</title>
+    <title>Led &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/led';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Memory" href="memory.html" />
-    <link rel="prev" title="Frequency" href="frequency.html" />
+    <link rel="next" title="Ras" href="ras.html" />
+    <link rel="prev" title="Fan" href="fan.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#led-handles">Led Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-led-handle-t">zes_led_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416zes_led_handle_t"><code class="docutils literal notranslate"><span class="pre">zes_led_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#led-functions">Led Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesledgetproperties">zesLedGetProperties</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t"><code class="docutils literal notranslate"><span class="pre">zesLedGetProperties()</span></code></a></li>
@@ -539,15 +556,35 @@
                   
   <section id="led">
 <h1>Led<a class="headerlink" href="#led" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="led-handles">
+<h2>Led Handles<a class="headerlink" href="#led-handles" title="Link to this heading">#</a></h2>
+<section id="zes-led-handle-t">
+<span id="id1"></span><h3>zes_led_handle_t<a class="headerlink" href="#zes-led-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="device.html#zesdeviceenumleds"><span class="std std-ref">zesDeviceEnumLeds</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesledgetproperties"><span class="std std-ref">zesLedGetProperties</span></a>, <a class="reference internal" href="#zesledgetstate"><span class="std std-ref">zesLedGetState</span></a>, <a class="reference internal" href="#zesledsetstate"><span class="std std-ref">zesLedSetState</span></a>, <a class="reference internal" href="#zesledsetcolor"><span class="std std-ref">zesLedSetColor</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#led"><span class="std std-ref">Operations on LEDs (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416zes_led_handle_t">
+<span id="_CPPv316zes_led_handle_t"></span><span id="_CPPv216zes_led_handle_t"></span><span id="zes_led_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_led_handle_t</span></span></span><a class="headerlink" href="#_CPPv416zes_led_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle for a Sysman device LED.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="led-functions">
 <h2>Led Functions<a class="headerlink" href="#led-functions" title="Link to this heading">#</a></h2>
 <section id="zesledgetproperties">
-<span id="id1"></span><h3>zesLedGetProperties<a class="headerlink" href="#zesledgetproperties" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zesLedGetProperties<a class="headerlink" href="#zesledgetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t">
-<span id="_CPPv319zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t"></span><span id="_CPPv219zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t"></span><span id="zesLedGetProperties__zes_led_handle_t.zes_led_properties_tP"></span><span class="target" id="zes__api_8h_1ad275ca3d898feb351f7688a6dd2f1e04"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_led_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <a class="reference internal" href="#zes-led-properties-t" title="zes_led_properties_t"><span class="n"><span class="pre">zes_led_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t"></span><span id="_CPPv219zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t"></span><span id="zesLedGetProperties__zes_led_handle_t.zes_led_properties_tP"></span><span class="target" id="zes__api_8h_1ad275ca3d898feb351f7688a6dd2f1e04"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-led-handle-t" title="zes_led_handle_t"><span class="n"><span class="pre">zes_led_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <a class="reference internal" href="#zes-led-properties-t" title="zes_led_properties_t"><span class="n"><span class="pre">zes_led_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesLedGetProperties16zes_led_handle_tP20zes_led_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get LED properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -592,11 +629,11 @@
 
 </section>
 <section id="zesledgetstate">
-<span id="id2"></span><h3>zesLedGetState<a class="headerlink" href="#zesledgetstate" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zesLedGetState<a class="headerlink" href="#zesledgetstate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zesLedGetState16zes_led_handle_tP15zes_led_state_t">
-<span id="_CPPv314zesLedGetState16zes_led_handle_tP15zes_led_state_t"></span><span id="_CPPv214zesLedGetState16zes_led_handle_tP15zes_led_state_t"></span><span id="zesLedGetState__zes_led_handle_t.zes_led_state_tP"></span><span class="target" id="zes__api_8h_1a0bb971430db3ff110fc80766a0ec6d59"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_led_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <a class="reference internal" href="#zes-led-state-t" title="zes_led_state_t"><span class="n"><span class="pre">zes_led_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesLedGetState16zes_led_handle_tP15zes_led_state_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zesLedGetState16zes_led_handle_tP15zes_led_state_t"></span><span id="_CPPv214zesLedGetState16zes_led_handle_tP15zes_led_state_t"></span><span id="zesLedGetState__zes_led_handle_t.zes_led_state_tP"></span><span class="target" id="zes__api_8h_1a0bb971430db3ff110fc80766a0ec6d59"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedGetState</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-led-handle-t" title="zes_led_handle_t"><span class="n"><span class="pre">zes_led_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <a class="reference internal" href="#zes-led-state-t" title="zes_led_state_t"><span class="n"><span class="pre">zes_led_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesLedGetState16zes_led_handle_tP15zes_led_state_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get current state of a LED - on/off, color. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -641,11 +678,11 @@
 
 </section>
 <section id="zesledsetstate">
-<span id="id3"></span><h3>zesLedSetState<a class="headerlink" href="#zesledsetstate" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zesLedSetState<a class="headerlink" href="#zesledsetstate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zesLedSetState16zes_led_handle_t9ze_bool_t">
-<span id="_CPPv314zesLedSetState16zes_led_handle_t9ze_bool_t"></span><span id="_CPPv214zesLedSetState16zes_led_handle_t9ze_bool_t"></span><span id="zesLedSetState__zes_led_handle_t.ze_bool_t"></span><span class="target" id="zes__api_8h_1a446b431b70b999f4fade5093b1963489"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedSetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_led_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesLedSetState16zes_led_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zesLedSetState16zes_led_handle_t9ze_bool_t"></span><span id="_CPPv214zesLedSetState16zes_led_handle_t9ze_bool_t"></span><span id="zesLedSetState__zes_led_handle_t.ze_bool_t"></span><span class="target" id="zes__api_8h_1a446b431b70b999f4fade5093b1963489"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedSetState</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-led-handle-t" title="zes_led_handle_t"><span class="n"><span class="pre">zes_led_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesLedSetState16zes_led_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Turn the LED on/off. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -689,11 +726,11 @@
 
 </section>
 <section id="zesledsetcolor">
-<span id="id4"></span><h3>zesLedSetColor<a class="headerlink" href="#zesledsetcolor" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zesLedSetColor<a class="headerlink" href="#zesledsetcolor" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zesLedSetColor16zes_led_handle_tPK15zes_led_color_t">
-<span id="_CPPv314zesLedSetColor16zes_led_handle_tPK15zes_led_color_t"></span><span id="_CPPv214zesLedSetColor16zes_led_handle_tPK15zes_led_color_t"></span><span id="zesLedSetColor__zes_led_handle_t.zes_led_color_tCP"></span><span class="target" id="zes__api_8h_1ac4da5e71fff4bbb549282efd8e80d9ac"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedSetColor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_led_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-led-color-t" title="zes_led_color_t"><span class="n"><span class="pre">zes_led_color_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pColor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesLedSetColor16zes_led_handle_tPK15zes_led_color_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zesLedSetColor16zes_led_handle_tPK15zes_led_color_t"></span><span id="_CPPv214zesLedSetColor16zes_led_handle_tPK15zes_led_color_t"></span><span id="zesLedSetColor__zes_led_handle_t.zes_led_color_tCP"></span><span class="target" id="zes__api_8h_1ac4da5e71fff4bbb549282efd8e80d9ac"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesLedSetColor</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-led-handle-t" title="zes_led_handle_t"><span class="n"><span class="pre">zes_led_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hLed</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-led-color-t" title="zes_led_color_t"><span class="n"><span class="pre">zes_led_color_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pColor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesLedSetColor16zes_led_handle_tPK15zes_led_color_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the color of the LED. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -747,8 +784,13 @@
 <section id="led-structures">
 <h2>Led Structures<a class="headerlink" href="#led-structures" title="Link to this heading">#</a></h2>
 <section id="zes-led-properties-t">
-<span id="id5"></span><h3>zes_led_properties_t<a class="headerlink" href="#zes-led-properties-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zes_led_properties_t<a class="headerlink" href="#zes-led-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesledgetproperties"><span class="std std-ref">zesLedGetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420zes_led_properties_t">
 <span id="_CPPv320zes_led_properties_t"></span><span id="_CPPv220zes_led_properties_t"></span><span id="zes_led_properties_t"></span><span class="target" id="structzes__led__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_led_properties_t</span></span></span><a class="headerlink" href="#_CPPv420zes_led_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -769,7 +811,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_led_properties_t11onSubdeviceE">
-<span id="_CPPv3N20zes_led_properties_t11onSubdeviceE"></span><span id="_CPPv2N20zes_led_properties_t11onSubdeviceE"></span><span id="zes_led_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__led__properties__t_1abbfafb3a616469a455a905c66f4fb644"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N20zes_led_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_led_properties_t11onSubdeviceE"></span><span id="_CPPv2N20zes_led_properties_t11onSubdeviceE"></span><span id="zes_led_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__led__properties__t_1abbfafb3a616469a455a905c66f4fb644"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N20zes_led_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
 </dd></dl>
 
@@ -781,13 +823,13 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_led_properties_t10canControlE">
-<span id="_CPPv3N20zes_led_properties_t10canControlE"></span><span id="_CPPv2N20zes_led_properties_t10canControlE"></span><span id="zes_led_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__led__properties__t_1a6682dc973c412a318f3e6c2f9e7bc1a4"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N20zes_led_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_led_properties_t10canControlE"></span><span id="_CPPv2N20zes_led_properties_t10canControlE"></span><span id="zes_led_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__led__properties__t_1a6682dc973c412a318f3e6c2f9e7bc1a4"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N20zes_led_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if software can control the LED assuming the user has permissions </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_led_properties_t7haveRGBE">
-<span id="_CPPv3N20zes_led_properties_t7haveRGBE"></span><span id="_CPPv2N20zes_led_properties_t7haveRGBE"></span><span id="zes_led_properties_t::haveRGB__ze_bool_t"></span><span class="target" id="structzes__led__properties__t_1a956cc6585ca430df17193fe3faaf16b1"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">haveRGB</span></span></span><a class="headerlink" href="#_CPPv4N20zes_led_properties_t7haveRGBE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_led_properties_t7haveRGBE"></span><span id="_CPPv2N20zes_led_properties_t7haveRGBE"></span><span id="zes_led_properties_t::haveRGB__ze_bool_t"></span><span class="target" id="structzes__led__properties__t_1a956cc6585ca430df17193fe3faaf16b1"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">haveRGB</span></span></span><a class="headerlink" href="#_CPPv4N20zes_led_properties_t7haveRGBE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if the LED is RGB capable </p>
 </dd></dl>
 
@@ -796,8 +838,14 @@
 
 </section>
 <section id="zes-led-color-t">
-<span id="id6"></span><h3>zes_led_color_t<a class="headerlink" href="#zes-led-color-t" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zes_led_color_t<a class="headerlink" href="#zes-led-color-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesledsetcolor"><span class="std std-ref">zesLedSetColor</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-led-state-t"><span class="std std-ref">zes_led_state_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv415zes_led_color_t">
 <span id="_CPPv315zes_led_color_t"></span><span id="_CPPv215zes_led_color_t"></span><span id="zes_led_color_t"></span><span class="target" id="structzes__led__color__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_led_color_t</span></span></span><a class="headerlink" href="#_CPPv415zes_led_color_t" title="Link to this definition">#</a><br /></dt>
@@ -827,8 +875,13 @@
 
 </section>
 <section id="zes-led-state-t">
-<span id="id7"></span><h3>zes_led_state_t<a class="headerlink" href="#zes-led-state-t" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zes_led_state_t<a class="headerlink" href="#zes-led-state-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesledgetstate"><span class="std std-ref">zesLedGetState</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv415zes_led_state_t">
 <span id="_CPPv315zes_led_state_t"></span><span id="_CPPv215zes_led_state_t"></span><span id="zes_led_state_t"></span><span class="target" id="structzes__led__state__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_led_state_t</span></span></span><a class="headerlink" href="#_CPPv415zes_led_state_t" title="Link to this definition">#</a><br /></dt>
@@ -849,7 +902,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15zes_led_state_t4isOnE">
-<span id="_CPPv3N15zes_led_state_t4isOnE"></span><span id="_CPPv2N15zes_led_state_t4isOnE"></span><span id="zes_led_state_t::isOn__ze_bool_t"></span><span class="target" id="structzes__led__state__t_1a7d08d8fa392630e5e5ebb17498580ced"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isOn</span></span></span><a class="headerlink" href="#_CPPv4N15zes_led_state_t4isOnE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N15zes_led_state_t4isOnE"></span><span id="_CPPv2N15zes_led_state_t4isOnE"></span><span id="zes_led_state_t::isOn__ze_bool_t"></span><span class="target" id="structzes__led__state__t_1a7d08d8fa392630e5e5ebb17498580ced"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isOn</span></span></span><a class="headerlink" href="#_CPPv4N15zes_led_state_t4isOnE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if the LED is on or off </p>
 </dd></dl>
 
@@ -878,20 +931,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="frequency.html"
+       href="fan.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Frequency</p>
+        <p class="prev-next-title">Fan</p>
       </div>
     </a>
     <a class="right-next"
-       href="memory.html"
+       href="ras.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Memory</p>
+        <p class="prev-next-title">Ras</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -911,7 +964,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zesLed</div><ul class="ctoc-list"><li><a href="led.html#zesledgetproperties">&hellip;GetProperties</a></li><li><a href="led.html#zesledgetstate">&hellip;GetState</a></li><li><a href="led.html#zesledsetstate">&hellip;SetState</a></li><li><a href="led.html#zesledsetcolor">&hellip;SetColor</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="led.html#zes-led-properties-t">zes_led_properties_t</a></li><li><a href="led.html#zes-led-color-t">zes_led_color_t</a></li><li><a href="led.html#zes-led-state-t">zes_led_state_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="led.html#zes-led-handle-t">zes_led_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zesLed</div><ul class="ctoc-list"><li><a href="led.html#zesledgetproperties">&hellip;GetProperties</a></li><li><a href="led.html#zesledgetstate">&hellip;GetState</a></li><li><a href="led.html#zesledsetstate">&hellip;SetState</a></li><li><a href="led.html#zesledsetcolor">&hellip;SetColor</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="led.html#zes-led-properties-t">zes_led_properties_t</a></li><li><a href="led.html#zes-led-color-t">zes_led_color_t</a></li><li><a href="led.html#zes-led-state-t">zes_led_state_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

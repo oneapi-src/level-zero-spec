@@ -40,7 +40,7 @@ Accelerator devices connected to the host CPU over a PCI root complex can be loc
 
 The choice of the optimal algorithm to use for a given computation may be dependent on the access speed, i.e., bandwidth at which data can be transferred over PCI to the device. The :ref:`ze-pci-speed-ext-t` struct returned via :ref:`ze-pci-ext-properties-t` by the call to :ref:`zeDevicePciGetPropertiesExt` contains the theoretical PCI BW for accessing the device.
 
-The following psuedo-code demonstrates a sequence for obtaining the BDF address & PCI BW of a device:
+The following pseudo-code demonstrates a sequence for obtaining the BDF address & PCI BW of a device:
 
 .. parsed-literal::
 

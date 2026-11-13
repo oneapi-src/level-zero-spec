@@ -1,7 +1,9 @@
 ============================================================
 Mem - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Mem - Experimental Functions
@@ -74,8 +76,16 @@ ze_memory_atomic_attr_exp_flags_t
 
 *Added in version 1.7*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeMemSetAtomicAccessAttributeExp`, :ref:`zeMemGetAtomicAccessAttributeExp`
+
+.. doxygentypedef:: ze_memory_atomic_attr_exp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_memory_atomic_attr_exp_flag_t
     :project: LevelZero
+
 
  
 Mem - Experimental Structures
@@ -90,6 +100,10 @@ ze_memory_sub_allocations_exp_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-memory-allocation-properties-t`
 
 .. doxygenstruct:: ze_memory_sub_allocations_exp_properties_t
     :project: LevelZero

@@ -1,7 +1,9 @@
 ============================================================
 Fabric Vertex - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Fabric Vertex - Experimental Functions
@@ -74,8 +76,13 @@ ze_fabric_vertex_exp_type_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-fabric-vertex-exp-properties-t`
+
 .. doxygenenum:: ze_fabric_vertex_exp_type_t
     :project: LevelZero
+
 
  
 Fabric Vertex - Experimental Structures
@@ -91,6 +98,10 @@ ze_fabric_vertex_pci_exp_address_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-fabric-vertex-exp-properties-t`
+
 .. doxygenstruct:: ze_fabric_vertex_pci_exp_address_t
     :project: LevelZero
     :members:
@@ -105,6 +116,10 @@ ze_fabric_vertex_exp_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.4*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeFabricVertexGetPropertiesExp`
 
 .. doxygenstruct:: ze_fabric_vertex_exp_properties_t
     :project: LevelZero

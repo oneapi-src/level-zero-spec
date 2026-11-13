@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Device - Extensions &#8212; Level Zero Specification v1.20.41</title>
+    <title>Device - Extensions &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Extensions" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -494,6 +504,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-extension-enums">Device - Extension Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-device-state-ext-flags-t">zes_device_state_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv428zes_device_state_ext_flags_t"><code class="docutils literal notranslate"><span class="pre">zes_device_state_ext_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zes_device_state_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_device_state_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_device_state_ext_flag_t32ZES_DEVICE_STATE_EXT_FLAG_NORMALE"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_STATE_EXT_FLAG_NORMAL</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_device_state_ext_flag_t32ZES_DEVICE_STATE_EXT_FLAG_WEDGEDE"><code class="docutils literal notranslate"><span class="pre">ZES_DEVICE_STATE_EXT_FLAG_WEDGED</span></code></a></li>
@@ -601,6 +612,15 @@
 </li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-device-soc-uid-ext-properties-t">zes_device_soc_uid_ext_properties_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435zes_device_soc_uid_ext_properties_t"><code class="docutils literal notranslate"><span class="pre">zes_device_soc_uid_ext_properties_t</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35zes_device_soc_uid_ext_properties_t5stypeE"><code class="docutils literal notranslate"><span class="pre">stype</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35zes_device_soc_uid_ext_properties_t5pNextE"><code class="docutils literal notranslate"><span class="pre">pNext</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N35zes_device_soc_uid_ext_properties_t6socUidE"><code class="docutils literal notranslate"><span class="pre">socUid</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -616,7 +636,7 @@
                   
   <section id="device-extensions">
 <h1>Device - Extensions<a class="headerlink" href="#device-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="device-extension-functions">
 <h2>Device - Extension Functions<a class="headerlink" href="#device-extension-functions" title="Link to this heading">#</a></h2>
 <section id="zesdeviceresetext">
@@ -624,7 +644,7 @@
 <p class="api-version"><em>Added in version 1.7</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zesDeviceResetExt19zes_device_handle_tP22zes_reset_properties_t">
-<span id="_CPPv317zesDeviceResetExt19zes_device_handle_tP22zes_reset_properties_t"></span><span id="_CPPv217zesDeviceResetExt19zes_device_handle_tP22zes_reset_properties_t"></span><span id="zesDeviceResetExt__zes_device_handle_t.zes_reset_properties_tP"></span><span class="target" id="zes__api_8h_1a7be2fae26774c2629b466c313e0b831c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDeviceResetExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="../apis/device-2.html#zes-reset-properties-t" title="zes_reset_properties_t"><span class="n"><span class="pre">zes_reset_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesDeviceResetExt19zes_device_handle_tP22zes_reset_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zesDeviceResetExt19zes_device_handle_tP22zes_reset_properties_t"></span><span id="_CPPv217zesDeviceResetExt19zes_device_handle_tP22zes_reset_properties_t"></span><span id="zesDeviceResetExt__zes_device_handle_t.zes_reset_properties_tP"></span><span class="target" id="zes__api_8h_1a7be2fae26774c2629b466c313e0b831c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDeviceResetExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#zes-device-handle-t" title="zes_device_handle_t"><span class="n"><span class="pre">zes_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="../apis/device-2.html#zes-reset-properties-t" title="zes_reset_properties_t"><span class="n"><span class="pre">zes_reset_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zesDeviceResetExt19zes_device_handle_tP22zes_reset_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Reset device extension. </p>
 <p><ul class="simple">
 <li><p>Performs a PCI bus reset of the device. This will result in all current device state being lost.</p></li>
@@ -685,7 +705,7 @@
 <p class="api-version"><em>Added in version 1.15</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv430zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t">
-<span id="_CPPv330zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t"></span><span id="_CPPv230zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t"></span><span id="zesDevicePciLinkSpeedUpdateExt__zes_device_handle_t.ze_bool_t.zes_device_action_tP"></span><span class="target" id="zes__api_8h_1ab8f381885746e940e83d2ebf4937dedb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDevicePciLinkSpeedUpdateExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">shouldDowngrade</span></span>, <a class="reference internal" href="../apis/device-2.html#zes-device-action-t" title="zes_device_action_t"><span class="n"><span class="pre">zes_device_action_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pendingAction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv330zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t"></span><span id="_CPPv230zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t"></span><span id="zesDevicePciLinkSpeedUpdateExt__zes_device_handle_t.ze_bool_t.zes_device_action_tP"></span><span class="target" id="zes__api_8h_1ab8f381885746e940e83d2ebf4937dedb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDevicePciLinkSpeedUpdateExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#zes-device-handle-t" title="zes_device_handle_t"><span class="n"><span class="pre">zes_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">shouldDowngrade</span></span>, <a class="reference internal" href="../apis/device-2.html#zes-device-action-t" title="zes_device_action_t"><span class="n"><span class="pre">zes_device_action_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pendingAction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesDevicePciLinkSpeedUpdateExt19zes_device_handle_t9ze_bool_tP19zes_device_action_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Update PCI Link Speed (Downgrade or Upgrade (restore to its default speed)) </p>
 <p><ul class="simple">
 <li><p>This function allows updating the PCI link speed to downgrade or upgrade (restore to its default speed) the connection.</p></li>
@@ -737,7 +757,7 @@
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zesDeviceGetHealthStatusExt19zes_device_handle_tP30zes_device_health_status_ext_t">
-<span id="_CPPv327zesDeviceGetHealthStatusExt19zes_device_handle_tP30zes_device_health_status_ext_t"></span><span id="_CPPv227zesDeviceGetHealthStatusExt19zes_device_handle_tP30zes_device_health_status_ext_t"></span><span id="zesDeviceGetHealthStatusExt__zes_device_handle_t.zes_device_health_status_ext_tP"></span><span class="target" id="zes__api_8h_1a6590ffa7b5582e8e53957c0767a51631"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDeviceGetHealthStatusExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="#zes-device-health-status-ext-t" title="zes_device_health_status_ext_t"><span class="n"><span class="pre">zes_device_health_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pHealth</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesDeviceGetHealthStatusExt19zes_device_handle_tP30zes_device_health_status_ext_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zesDeviceGetHealthStatusExt19zes_device_handle_tP30zes_device_health_status_ext_t"></span><span id="_CPPv227zesDeviceGetHealthStatusExt19zes_device_handle_tP30zes_device_health_status_ext_t"></span><span id="zesDeviceGetHealthStatusExt__zes_device_handle_t.zes_device_health_status_ext_tP"></span><span class="target" id="zes__api_8h_1a6590ffa7b5582e8e53957c0767a51631"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDeviceGetHealthStatusExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#zes-device-handle-t" title="zes_device_handle_t"><span class="n"><span class="pre">zes_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="#zes-device-health-status-ext-t" title="zes_device_health_status_ext_t"><span class="n"><span class="pre">zes_device_health_status_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pHealth</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesDeviceGetHealthStatusExt19zes_device_handle_tP30zes_device_health_status_ext_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get device health status. </p>
 <p><ul class="simple">
 <li><p>This function retrieves the current health status of the device.</p></li>
@@ -789,7 +809,7 @@
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zesDeviceSetHealthStatusExt19zes_device_handle_t30zes_device_health_status_ext_t">
-<span id="_CPPv327zesDeviceSetHealthStatusExt19zes_device_handle_t30zes_device_health_status_ext_t"></span><span id="_CPPv227zesDeviceSetHealthStatusExt19zes_device_handle_t30zes_device_health_status_ext_t"></span><span id="zesDeviceSetHealthStatusExt__zes_device_handle_t.zes_device_health_status_ext_t"></span><span class="target" id="zes__api_8h_1ad981eafabb1a9d9da0a7b16dd07c0f4e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDeviceSetHealthStatusExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="#zes-device-health-status-ext-t" title="zes_device_health_status_ext_t"><span class="n"><span class="pre">zes_device_health_status_ext_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">health</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesDeviceSetHealthStatusExt19zes_device_handle_t30zes_device_health_status_ext_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zesDeviceSetHealthStatusExt19zes_device_handle_t30zes_device_health_status_ext_t"></span><span id="_CPPv227zesDeviceSetHealthStatusExt19zes_device_handle_t30zes_device_health_status_ext_t"></span><span id="zesDeviceSetHealthStatusExt__zes_device_handle_t.zes_device_health_status_ext_t"></span><span class="target" id="zes__api_8h_1ad981eafabb1a9d9da0a7b16dd07c0f4e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDeviceSetHealthStatusExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#zes-device-handle-t" title="zes_device_handle_t"><span class="n"><span class="pre">zes_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="#zes-device-health-status-ext-t" title="zes_device_health_status_ext_t"><span class="n"><span class="pre">zes_device_health_status_ext_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">health</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesDeviceSetHealthStatusExt19zes_device_handle_t30zes_device_health_status_ext_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set device health status. </p>
 <p><ul class="simple">
 <li><p>This function sets the health status of the device.</p></li>
@@ -846,6 +866,17 @@
 <section id="zes-device-state-ext-flags-t">
 <span id="id5"></span><h3>zes_device_state_ext_flags_t<a class="headerlink" href="#zes-device-state-ext-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.17</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-device-ext-state-t"><span class="std std-ref">zes_device_ext_state_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv428zes_device_state_ext_flags_t">
+<span id="_CPPv328zes_device_state_ext_flags_t"></span><span id="_CPPv228zes_device_state_ext_flags_t"></span><span id="zes_device_state_ext_flags_t"></span><span class="target" id="zes__api_8h_1a34fb9dfb6d8d48923fa0516a185900f1"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_state_ext_flags_t</span></span></span><a class="headerlink" href="#_CPPv428zes_device_state_ext_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device state flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv427zes_device_state_ext_flag_t">
 <span id="_CPPv327zes_device_state_ext_flag_t"></span><span id="_CPPv227zes_device_state_ext_flag_t"></span><span class="target" id="zes__api_8h_1ad807e6d38c25074dac222597edb612ff"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_state_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv427zes_device_state_ext_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -898,6 +929,11 @@
 <section id="zes-device-health-status-ext-t">
 <span id="id6"></span><h3>zes_device_health_status_ext_t<a class="headerlink" href="#zes-device-health-status-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.18</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesdevicegethealthstatusext"><span class="std std-ref">zesDeviceGetHealthStatusExt</span></a>, <a class="reference internal" href="#zesdevicesethealthstatusext"><span class="std std-ref">zesDeviceSetHealthStatusExt</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv430zes_device_health_status_ext_t">
 <span id="_CPPv330zes_device_health_status_ext_t"></span><span id="_CPPv230zes_device_health_status_ext_t"></span><span class="target" id="zes__api_8h_1a1932bea2ba281b5b31214e846c2e9f68"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_health_status_ext_t</span></span></span><a class="headerlink" href="#_CPPv430zes_device_health_status_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -947,6 +983,11 @@
 <section id="zes-device-ext-properties-t">
 <span id="id7"></span><h3>zes_device_ext_properties_t<a class="headerlink" href="#zes-device-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-device-properties-t"><span class="std std-ref">zes_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv427zes_device_ext_properties_t">
 <span id="_CPPv327zes_device_ext_properties_t"></span><span id="_CPPv227zes_device_ext_properties_t"></span><span id="zes_device_ext_properties_t"></span><span class="target" id="structzes__device__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv427zes_device_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -979,8 +1020,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N27zes_device_ext_properties_t5flagsE">
-<span id="_CPPv3N27zes_device_ext_properties_t5flagsE"></span><span id="_CPPv2N27zes_device_ext_properties_t5flagsE"></span><span id="zes_device_ext_properties_t::flags__zes_device_property_flags_t"></span><span class="target" id="structzes__device__ext__properties__t_1aeec85b95d9962c8de09b9c4cab3e38b9"></span><span class="n"><span class="pre">zes_device_property_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N27zes_device_ext_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] 0 (none) or a valid combination of <a class="reference internal" href="../apis/device-2.html#zes-device-property-flags-t"><span class="std std-ref">zes_device_property_flag_t</span></a></p>
+<span id="_CPPv3N27zes_device_ext_properties_t5flagsE"></span><span id="_CPPv2N27zes_device_ext_properties_t5flagsE"></span><span id="zes_device_ext_properties_t::flags__zes_device_property_flags_t"></span><span class="target" id="structzes__device__ext__properties__t_1aeec85b95d9962c8de09b9c4cab3e38b9"></span><a class="reference internal" href="../apis/device-2.html#zes-device-property-flags-t" title="zes_device_property_flags_t"><span class="n"><span class="pre">zes_device_property_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N27zes_device_ext_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 0 (none) or a valid combination of <a class="reference internal" href="../apis/device-2.html#zes__api_8h_1afbc471d7820f076035d101b7db3bdb37"><span class="std std-ref">zes_device_property_flag_t</span></a></p>
 </dd></dl>
 
 </div>
@@ -990,6 +1031,11 @@
 <section id="zes-device-index-ext-properties-t">
 <span id="id8"></span><h3>zes_device_index_ext_properties_t<a class="headerlink" href="#zes-device-index-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.20</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-device-properties-t"><span class="std std-ref">zes_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv433zes_device_index_ext_properties_t">
 <span id="_CPPv333zes_device_index_ext_properties_t"></span><span id="_CPPv233zes_device_index_ext_properties_t"></span><span id="zes_device_index_ext_properties_t"></span><span class="target" id="structzes__device__index__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_index_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv433zes_device_index_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1028,6 +1074,11 @@
 <section id="zes-device-ecc-default-properties-ext-t">
 <span id="id9"></span><h3>zes_device_ecc_default_properties_ext_t<a class="headerlink" href="#zes-device-ecc-default-properties-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-device-ecc-properties-t"><span class="std std-ref">zes_device_ecc_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv439zes_device_ecc_default_properties_ext_t">
 <span id="_CPPv339zes_device_ecc_default_properties_ext_t"></span><span id="_CPPv239zes_device_ecc_default_properties_ext_t"></span><span id="zes_device_ecc_default_properties_ext_t"></span><span class="target" id="structzes__device__ecc__default__properties__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_ecc_default_properties_ext_t</span></span></span><a class="headerlink" href="#_CPPv439zes_device_ecc_default_properties_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -1059,6 +1110,11 @@
 <section id="zes-pci-link-speed-downgrade-ext-state-t">
 <span id="id10"></span><h3>zes_pci_link_speed_downgrade_ext_state_t<a class="headerlink" href="#zes-pci-link-speed-downgrade-ext-state-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.15</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-pci-state-t"><span class="std std-ref">zes_pci_state_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv440zes_pci_link_speed_downgrade_ext_state_t">
 <span id="_CPPv340zes_pci_link_speed_downgrade_ext_state_t"></span><span id="_CPPv240zes_pci_link_speed_downgrade_ext_state_t"></span><span id="zes_pci_link_speed_downgrade_ext_state_t"></span><span class="target" id="structzes__pci__link__speed__downgrade__ext__state__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_pci_link_speed_downgrade_ext_state_t</span></span></span><a class="headerlink" href="#_CPPv440zes_pci_link_speed_downgrade_ext_state_t" title="Link to this definition">#</a><br /></dt>
@@ -1083,7 +1139,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE">
-<span id="_CPPv3N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE"></span><span id="_CPPv2N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE"></span><span id="zes_pci_link_speed_downgrade_ext_state_t::pciLinkSpeedDowngradeStatus__ze_bool_t"></span><span class="target" id="structzes__pci__link__speed__downgrade__ext__state__t_1a4791117d3ec36991e60fda1dc56f243f"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pciLinkSpeedDowngradeStatus</span></span></span><a class="headerlink" href="#_CPPv4N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE"></span><span id="_CPPv2N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE"></span><span id="zes_pci_link_speed_downgrade_ext_state_t::pciLinkSpeedDowngradeStatus__ze_bool_t"></span><span class="target" id="structzes__pci__link__speed__downgrade__ext__state__t_1a4791117d3ec36991e60fda1dc56f243f"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pciLinkSpeedDowngradeStatus</span></span></span><a class="headerlink" href="#_CPPv4N40zes_pci_link_speed_downgrade_ext_state_t27pciLinkSpeedDowngradeStatusE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Returns the current PCIe downgrade status. </p>
 </dd></dl>
 
@@ -1094,6 +1150,11 @@
 <section id="zes-pci-link-speed-downgrade-ext-properties-t">
 <span id="id11"></span><h3>zes_pci_link_speed_downgrade_ext_properties_t<a class="headerlink" href="#zes-pci-link-speed-downgrade-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.15</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-pci-properties-t"><span class="std std-ref">zes_pci_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv445zes_pci_link_speed_downgrade_ext_properties_t">
 <span id="_CPPv345zes_pci_link_speed_downgrade_ext_properties_t"></span><span id="_CPPv245zes_pci_link_speed_downgrade_ext_properties_t"></span><span id="zes_pci_link_speed_downgrade_ext_properties_t"></span><span class="target" id="structzes__pci__link__speed__downgrade__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_pci_link_speed_downgrade_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv445zes_pci_link_speed_downgrade_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1118,7 +1179,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE">
-<span id="_CPPv3N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE"></span><span id="_CPPv2N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE"></span><span id="zes_pci_link_speed_downgrade_ext_properties_t::pciLinkSpeedUpdateCapable__ze_bool_t"></span><span class="target" id="structzes__pci__link__speed__downgrade__ext__properties__t_1aeaab14f0eb1cd37e75279651f56ddbc9"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pciLinkSpeedUpdateCapable</span></span></span><a class="headerlink" href="#_CPPv4N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE"></span><span id="_CPPv2N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE"></span><span id="zes_pci_link_speed_downgrade_ext_properties_t::pciLinkSpeedUpdateCapable__ze_bool_t"></span><span class="target" id="structzes__pci__link__speed__downgrade__ext__properties__t_1aeaab14f0eb1cd37e75279651f56ddbc9"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pciLinkSpeedUpdateCapable</span></span></span><a class="headerlink" href="#_CPPv4N45zes_pci_link_speed_downgrade_ext_properties_t25pciLinkSpeedUpdateCapableE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Returns if PCIe downgrade capability is available. </p>
 </dd></dl>
 
@@ -1135,6 +1196,11 @@
 <section id="zes-device-ext-state-t">
 <span id="id12"></span><h3>zes_device_ext_state_t<a class="headerlink" href="#zes-device-ext-state-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.17</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-device-state-t"><span class="std std-ref">zes_device_state_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv422zes_device_ext_state_t">
 <span id="_CPPv322zes_device_ext_state_t"></span><span id="_CPPv222zes_device_ext_state_t"></span><span id="zes_device_ext_state_t"></span><span class="target" id="structzes__device__ext__state__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_ext_state_t</span></span></span><a class="headerlink" href="#_CPPv422zes_device_ext_state_t" title="Link to this definition">#</a><br /></dt>
@@ -1160,8 +1226,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22zes_device_ext_state_t5flagsE">
-<span id="_CPPv3N22zes_device_ext_state_t5flagsE"></span><span id="_CPPv2N22zes_device_ext_state_t5flagsE"></span><span id="zes_device_ext_state_t::flags__zes_device_state_ext_flags_t"></span><span class="target" id="structzes__device__ext__state__t_1adb04de3535f6271ca68c812827902c80"></span><span class="n"><span class="pre">zes_device_state_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N22zes_device_ext_state_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Device state flags. Returns 0 (if state cannot be determined) or a combination of zes_device_state_ext_flags_t</p>
+<span id="_CPPv3N22zes_device_ext_state_t5flagsE"></span><span id="_CPPv2N22zes_device_ext_state_t5flagsE"></span><span id="zes_device_ext_state_t::flags__zes_device_state_ext_flags_t"></span><span class="target" id="structzes__device__ext__state__t_1adb04de3535f6271ca68c812827902c80"></span><a class="reference internal" href="#zes-device-state-ext-flags-t" title="zes_device_state_ext_flags_t"><span class="n"><span class="pre">zes_device_state_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N22zes_device_ext_state_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Device state flags. Returns 0 (if state cannot be determined) or a combination of <a class="reference internal" href="#zes-device-state-ext-flags-t"><span class="std std-ref">zes_device_state_ext_flags_t</span></a></p>
 </dd></dl>
 
 </div>
@@ -1171,6 +1237,11 @@
 <section id="zes-oem-serial-id-ext-properties-t">
 <span id="id13"></span><h3>zes_oem_serial_id_ext_properties_t<a class="headerlink" href="#zes-oem-serial-id-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.17</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-device-properties-t"><span class="std std-ref">zes_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv434zes_oem_serial_id_ext_properties_t">
 <span id="_CPPv334zes_oem_serial_id_ext_properties_t"></span><span id="_CPPv234zes_oem_serial_id_ext_properties_t"></span><span id="zes_oem_serial_id_ext_properties_t"></span><span class="target" id="structzes__oem__serial__id__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_oem_serial_id_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv434zes_oem_serial_id_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1213,6 +1284,11 @@
 <section id="zes-device-gpu-topology-ext-properties-t">
 <span id="id14"></span><h3>zes_device_gpu_topology_ext_properties_t<a class="headerlink" href="#zes-device-gpu-topology-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.20</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-device-properties-t"><span class="std std-ref">zes_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv440zes_device_gpu_topology_ext_properties_t">
 <span id="_CPPv340zes_device_gpu_topology_ext_properties_t"></span><span id="_CPPv240zes_device_gpu_topology_ext_properties_t"></span><span id="zes_device_gpu_topology_ext_properties_t"></span><span class="target" id="structzes__device__gpu__topology__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_gpu_topology_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv440zes_device_gpu_topology_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1276,6 +1352,48 @@
 </dd></dl>
 
 </section>
+<section id="zes-device-soc-uid-ext-properties-t">
+<span id="id15"></span><h3>zes_device_soc_uid_ext_properties_t<a class="headerlink" href="#zes-device-soc-uid-ext-properties-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.21</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device-2.html#zes-device-properties-t"><span class="std std-ref">zes_device_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv435zes_device_soc_uid_ext_properties_t">
+<span id="_CPPv335zes_device_soc_uid_ext_properties_t"></span><span id="_CPPv235zes_device_soc_uid_ext_properties_t"></span><span id="zes_device_soc_uid_ext_properties_t"></span><span class="target" id="structzes__device__soc__uid__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_device_soc_uid_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv435zes_device_soc_uid_ext_properties_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Device SOC Unique ID Extension structure. </p>
+<p><ul class="simple">
+<li><p>This structure can be passed as an extension structure to <a class="reference internal" href="../apis/device.html#zesdevicegetproperties"><span class="std std-ref">zesDeviceGetProperties</span></a> via pNext member</p></li>
+<li><p>Returns the unique ID of the SOC on which the device resides</p></li>
+<li><p>Applications must treat an all-zero socUid as unavailable rather than as a valid identifier </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35zes_device_soc_uid_ext_properties_t5stypeE">
+<span id="_CPPv3N35zes_device_soc_uid_ext_properties_t5stypeE"></span><span id="_CPPv2N35zes_device_soc_uid_ext_properties_t5stypeE"></span><span id="zes_device_soc_uid_ext_properties_t::stype__zes_structure_type_t"></span><span class="target" id="structzes__device__soc__uid__ext__properties__t_1add4e6b2929daf88845c760bdadc2fc52"></span><a class="reference internal" href="../apis/data_types.html#zes-structure-type-t" title="zes_structure_type_t"><span class="n"><span class="pre">zes_structure_type_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stype</span></span></span><a class="headerlink" href="#_CPPv4N35zes_device_soc_uid_ext_properties_t5stypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] type of this structure </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35zes_device_soc_uid_ext_properties_t5pNextE">
+<span id="_CPPv3N35zes_device_soc_uid_ext_properties_t5pNextE"></span><span id="_CPPv2N35zes_device_soc_uid_ext_properties_t5pNextE"></span><span id="zes_device_soc_uid_ext_properties_t::pNext__voidP"></span><span class="target" id="structzes__device__soc__uid__ext__properties__t_1ac97b93cb80c150c17fc4e252e2e7e2b1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">pNext</span></span></span><a class="headerlink" href="#_CPPv4N35zes_device_soc_uid_ext_properties_t5pNextE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in,out][optional] must be null or a pointer to an extension-specific structure (i.e. contains stype and pNext). </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N35zes_device_soc_uid_ext_properties_t6socUidE">
+<span id="_CPPv3N35zes_device_soc_uid_ext_properties_t6socUidE"></span><span id="_CPPv2N35zes_device_soc_uid_ext_properties_t6socUidE"></span><span id="zes_device_soc_uid_ext_properties_t::socUid__zes_uuid_t"></span><span class="target" id="structzes__device__soc__uid__ext__properties__t_1acc3f4c3770014aed2c1faf5eea99a1ed"></span><a class="reference internal" href="../apis/device-2.html#zes-uuid-t" title="zes_uuid_t"><span class="n"><span class="pre">zes_uuid_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">socUid</span></span></span><a class="headerlink" href="#_CPPv4N35zes_device_soc_uid_ext_properties_t6socUidE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] unique identifier of the SOC, most significant byte first. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
 </section>
 </section>
 
@@ -1324,7 +1442,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zesDevice</div><ul class="ctoc-list"><li><a href="device.html#zesdeviceresetext">&hellip;ResetExt</a></li><li><a href="device.html#zesdevicepcilinkspeedupdateext">&hellip;PciLinkSpeedUpdateExt</a></li><li><a href="device.html#zesdevicegethealthstatusext">&hellip;GetHealthStatusExt</a></li><li><a href="device.html#zesdevicesethealthstatusext">&hellip;SetHealthStatusExt</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="device.html#zes-device-state-ext-flags-t">zes_device_state_ext_flags_t</a></li><li><a href="device.html#zes-device-health-status-ext-t">zes_device_health_status_ext_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">8</span></summary><ul class="ctoc-list"><li><a href="device.html#zes-device-ext-properties-t">zes_device_ext_properties_t</a></li><li><a href="device.html#zes-device-index-ext-properties-t">zes_device_index_ext_properties_t</a></li><li><a href="device.html#zes-device-ecc-default-properties-ext-t">zes_device_ecc_default_properties_ext_t</a></li><li><a href="device.html#zes-pci-link-speed-downgrade-ext-state-t">zes_pci_link_speed_downgrade_ext_state_t</a></li><li><a href="device.html#zes-pci-link-speed-downgrade-ext-properties-t">zes_pci_link_speed_downgrade_ext_properties_t</a></li><li><a href="device.html#zes-device-ext-state-t">zes_device_ext_state_t</a></li><li><a href="device.html#zes-oem-serial-id-ext-properties-t">zes_oem_serial_id_ext_properties_t</a></li><li><a href="device.html#zes-device-gpu-topology-ext-properties-t">zes_device_gpu_topology_ext_properties_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">4</span></summary><div class="ctoc-prefix">zesDevice</div><ul class="ctoc-list"><li><a href="device.html#zesdeviceresetext">&hellip;ResetExt</a></li><li><a href="device.html#zesdevicepcilinkspeedupdateext">&hellip;PciLinkSpeedUpdateExt</a></li><li><a href="device.html#zesdevicegethealthstatusext">&hellip;GetHealthStatusExt</a></li><li><a href="device.html#zesdevicesethealthstatusext">&hellip;SetHealthStatusExt</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="device.html#zes-device-state-ext-flags-t">zes_device_state_ext_flags_t</a></li><li><a href="device.html#zes-device-health-status-ext-t">zes_device_health_status_ext_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">9</span></summary><ul class="ctoc-list"><li><a href="device.html#zes-device-ext-properties-t">zes_device_ext_properties_t</a></li><li><a href="device.html#zes-device-index-ext-properties-t">zes_device_index_ext_properties_t</a></li><li><a href="device.html#zes-device-ecc-default-properties-ext-t">zes_device_ecc_default_properties_ext_t</a></li><li><a href="device.html#zes-pci-link-speed-downgrade-ext-state-t">zes_pci_link_speed_downgrade_ext_state_t</a></li><li><a href="device.html#zes-pci-link-speed-downgrade-ext-properties-t">zes_pci_link_speed_downgrade_ext_properties_t</a></li><li><a href="device.html#zes-device-ext-state-t">zes_device_ext_state_t</a></li><li><a href="device.html#zes-oem-serial-id-ext-properties-t">zes_oem_serial_id_ext_properties_t</a></li><li><a href="device.html#zes-device-gpu-topology-ext-properties-t">zes_device_gpu_topology_ext_properties_t</a></li><li><a href="device.html#zes-device-soc-uid-ext-properties-t">zes_device_soc_uid_ext_properties_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

@@ -1,7 +1,9 @@
 ============================================================
 Virtual Mem
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Virtual Mem Functions
@@ -113,7 +115,12 @@ ze_memory_access_attribute_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeVirtualMemMap`, :ref:`zeVirtualMemSetAccessAttribute`, :ref:`zeVirtualMemGetAccessAttribute`
+
 .. doxygenenum:: ze_memory_access_attribute_t
     :project: LevelZero
+
 
  

@@ -1,7 +1,32 @@
 ============================================================
 Fan
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Fan Handles
+===========
+
+
+.. _zes-fan-handle-t:
+
+zes_fan_handle_t
+----------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumFans`
+   | **Used by:** :ref:`zesFanGetProperties`, :ref:`zesFanGetConfig`, :ref:`zesFanSetDefaultMode`, :ref:`zesFanSetFixedSpeedMode`, :ref:`zesFanSetSpeedTableMode`, :ref:`zesFanGetState`
+   | **See also:** :ref:`Operations on fans (Programming Guide) <Fan>`
+
+.. cpp:type:: zes_fan_handle_t
+
+    Handle for a Sysman device fan.
+
 
 
 Fan Functions
@@ -100,6 +125,10 @@ zes_fan_speed_mode_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-fan-config-t`
+
 .. doxygenenum:: zes_fan_speed_mode_t
     :project: LevelZero
 
@@ -113,8 +142,14 @@ zes_fan_speed_units_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFanGetState`
+   | **Member of:** :ref:`zes-fan-speed-t`
+
 .. doxygenenum:: zes_fan_speed_units_t
     :project: LevelZero
+
 
  
 Fan Structures
@@ -129,6 +164,11 @@ zes_fan_speed_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFanSetFixedSpeedMode`
+   | **Member of:** :ref:`zes-fan-temp-speed-t`, :ref:`zes-fan-config-t`
 
 .. doxygenstruct:: zes_fan_speed_t
     :project: LevelZero
@@ -145,6 +185,10 @@ zes_fan_temp_speed_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-fan-speed-table-t`
+
 .. doxygenstruct:: zes_fan_temp_speed_t
     :project: LevelZero
     :members:
@@ -159,6 +203,11 @@ zes_fan_speed_table_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFanSetSpeedTableMode`
+   | **Member of:** :ref:`zes-fan-config-t`
 
 .. doxygenstruct:: zes_fan_speed_table_t
     :project: LevelZero
@@ -175,6 +224,10 @@ zes_fan_properties_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFanGetProperties`
+
 .. doxygenstruct:: zes_fan_properties_t
     :project: LevelZero
     :members:
@@ -189,6 +242,10 @@ zes_fan_config_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFanGetConfig`
 
 .. doxygenstruct:: zes_fan_config_t
     :project: LevelZero

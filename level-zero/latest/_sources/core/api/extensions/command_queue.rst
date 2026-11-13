@@ -1,7 +1,9 @@
 ============================================================
 Command Queue - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Command Queue - Extension Functions
@@ -87,8 +89,13 @@ ze_command_queue_qos_ext_t
 
 *Added in version 1.19*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-command-queue-qos-ext-desc-t`, :ref:`ze-command-queue-qos-ext-properties-t`
+
 .. doxygenenum:: ze_command_queue_qos_ext_t
     :project: LevelZero
+
 
  
 Command Queue - Extension Structures
@@ -104,6 +111,11 @@ ze_command_queue_qos_ext_desc_t
 
 *Added in version 1.19*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandQueueSetQosExt`
+   | **Goes in pNext of:** :ref:`ze-command-queue-desc-t`
+
 .. doxygenstruct:: ze_command_queue_qos_ext_desc_t
     :project: LevelZero
     :members:
@@ -118,6 +130,10 @@ ze_command_queue_qos_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.19*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandQueueGetQosExt`
 
 .. doxygenstruct:: ze_command_queue_qos_ext_properties_t
     :project: LevelZero

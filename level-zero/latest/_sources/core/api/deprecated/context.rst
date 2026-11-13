@@ -1,7 +1,9 @@
 ============================================================
 Context - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 
@@ -25,6 +27,7 @@ ze_power_saving_hint_type_t
 
 .. doxygenenum:: ze_power_saving_hint_type_t
     :project: LevelZero
+
 
  
 Context - Deprecated Structures

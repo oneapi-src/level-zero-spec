@@ -7,7 +7,32 @@ Device
 
    device-2
 
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Device Handles
+==============
+
+
+.. _zes-device-handle-t:
+
+zes_device_handle_t
+-------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceGet`, :ref:`zesDriverGetDeviceByUuidExp`
+   | **Used by:** :raw-html:`<span class="api-usage-fold"><input type="checkbox" id="usage-zes-device-handle-t-3"><span class="api-usage-links">` :ref:`zesDeviceGetProperties`, :ref:`zesDeviceGetState`, :ref:`zesDeviceReset`, :ref:`zesDeviceResetExt`, :ref:`zesDeviceProcessesGetState`, :ref:`zesDevicePciGetProperties`, :ref:`zesDevicePciGetState`, :ref:`zesDevicePciGetBars`, :ref:`zesDevicePciGetStats`, :ref:`zesDeviceSetOverclockWaiver`, :ref:`zesDeviceGetOverclockDomains`, :ref:`zesDeviceGetOverclockControls`, :ref:`zesDeviceResetOverclockSettings`, :ref:`zesDeviceReadOverclockState`, :ref:`zesDeviceEnumOverclockDomains`, :ref:`zesDeviceEnumDiagnosticTestSuites`, :ref:`zesDeviceEccAvailable`, :ref:`zesDeviceEccConfigurable`, :ref:`zesDeviceGetEccState`, :ref:`zesDeviceSetEccState`, :ref:`zesDeviceEnumEngineGroups`, :ref:`zesDeviceEventRegister`, :ref:`zesDriverEventListen`, :ref:`zesDriverEventListenEx`, :ref:`zesDriverEventListenExt`, :ref:`zesDeviceEnumFabricPorts`, :ref:`zesFabricPortGetMultiPortThroughput`, :ref:`zesDeviceEnumFans`, :ref:`zesDeviceEnumFirmwares`, :ref:`zesDeviceEnumFrequencyDomains`, :ref:`zesDeviceEnumLeds`, :ref:`zesDeviceEnumMemoryModules`, :ref:`zesDeviceEnumPerformanceFactorDomains`, :ref:`zesDeviceEnumPowerDomains`, :ref:`zesDeviceGetCardPowerDomain`, :ref:`zesDeviceEnumPsus`, :ref:`zesDeviceEnumRasErrorSets`, :ref:`zesDeviceEnumSchedulers`, :ref:`zesDeviceEnumStandbyDomains`, :ref:`zesDeviceEnumTemperatureSensors`, :ref:`zesDeviceGetSubDevicePropertiesExp`, :ref:`zesDeviceEnumActiveVFExp`, :ref:`zesDeviceEnumEnabledVFExp`, :ref:`zesDevicePciLinkSpeedUpdateExt`, :ref:`zesDeviceGetHealthStatusExt`, :ref:`zesDeviceSetHealthStatusExt` :raw-html:`</span><label for="usage-zes-device-handle-t-3"><span class="more">Show all 46</span><span class="less">Show less</span></label></span>`
+   | **See also:** `Global device management (Programming Guide) <../../PROG.html#global-device-management>`__
+
+.. cpp:type:: zes_device_handle_t
+
+    Handle of device object.
+
 
 
 Device Functions
@@ -337,6 +362,7 @@ zesDeviceEccAvailable
 
 .. doxygenfunction:: zesDeviceEccAvailable
     :project: LevelZero
+
 
 
 

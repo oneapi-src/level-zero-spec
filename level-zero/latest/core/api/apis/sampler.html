@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Sampler &#8212; Level Zero Specification v1.20.41</title>
+    <title>Sampler &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/apis/sampler';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Virtual Mem" href="virtual_mem.html" />
+    <link rel="next" title="Physical Mem" href="physical_mem.html" />
     <link rel="prev" title="Kernel" href="kernel.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampler-handles">Sampler Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-sampler-handle-t">ze_sampler_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419ze_sampler_handle_t"><code class="docutils literal notranslate"><span class="pre">ze_sampler_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sampler-functions">Sampler Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesamplercreate">zeSamplerCreate</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv415zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t"><code class="docutils literal notranslate"><span class="pre">zeSamplerCreate()</span></code></a></li>
@@ -535,15 +552,35 @@
                   
   <section id="sampler">
 <h1>Sampler<a class="headerlink" href="#sampler" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="sampler-handles">
+<h2>Sampler Handles<a class="headerlink" href="#sampler-handles" title="Link to this heading">#</a></h2>
+<section id="ze-sampler-handle-t">
+<span id="id1"></span><h3>ze_sampler_handle_t<a class="headerlink" href="#ze-sampler-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zesamplercreate"><span class="std std-ref">zeSamplerCreate</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesamplerdestroy"><span class="std std-ref">zeSamplerDestroy</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference external" href="../../PROG.html#sampler">Sampler (Programming Guide)</a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv419ze_sampler_handle_t">
+<span id="_CPPv319ze_sampler_handle_t"></span><span id="_CPPv219ze_sampler_handle_t"></span><span id="ze_sampler_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_sampler_handle_t</span></span></span><a class="headerlink" href="#_CPPv419ze_sampler_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of driver’s sampler object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="sampler-functions">
 <h2>Sampler Functions<a class="headerlink" href="#sampler-functions" title="Link to this heading">#</a></h2>
 <section id="zesamplercreate">
-<span id="id1"></span><h3>zeSamplerCreate<a class="headerlink" href="#zesamplercreate" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeSamplerCreate<a class="headerlink" href="#zesamplercreate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t">
-<span id="_CPPv315zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t"></span><span id="_CPPv215zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t"></span><span id="zeSamplerCreate__ze_context_handle_t.ze_device_handle_t.ze_sampler_desc_tCP.ze_sampler_handle_tP"></span><span class="target" id="ze__api_8h_1a3c067f0ccc026a15ea8ffba420a66493"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeSamplerCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-sampler-desc-t" title="ze_sampler_desc_t"><span class="n"><span class="pre">ze_sampler_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_sampler_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phSampler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t"></span><span id="_CPPv215zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t"></span><span id="zeSamplerCreate__ze_context_handle_t.ze_device_handle_t.ze_sampler_desc_tCP.ze_sampler_handle_tP"></span><span class="target" id="ze__api_8h_1a3c067f0ccc026a15ea8ffba420a66493"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeSamplerCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-sampler-desc-t" title="ze_sampler_desc_t"><span class="n"><span class="pre">ze_sampler_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="#ze-sampler-handle-t" title="ze_sampler_handle_t"><span class="n"><span class="pre">ze_sampler_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phSampler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeSamplerCreate19ze_context_handle_t18ze_device_handle_tPK17ze_sampler_desc_tP19ze_sampler_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates sampler on the context. </p>
 <p><ul class="simple">
 <li><p>The application must only use the sampler for the device, or its sub-devices, which was provided during creation.</p></li>
@@ -599,11 +636,11 @@
 
 </section>
 <section id="zesamplerdestroy">
-<span id="id2"></span><h3>zeSamplerDestroy<a class="headerlink" href="#zesamplerdestroy" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zeSamplerDestroy<a class="headerlink" href="#zesamplerdestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv416zeSamplerDestroy19ze_sampler_handle_t">
-<span id="_CPPv316zeSamplerDestroy19ze_sampler_handle_t"></span><span id="_CPPv216zeSamplerDestroy19ze_sampler_handle_t"></span><span id="zeSamplerDestroy__ze_sampler_handle_t"></span><span class="target" id="ze__api_8h_1a83b367deeb2dd77ff3c8df9d81dd8e58"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeSamplerDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_sampler_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hSampler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeSamplerDestroy19ze_sampler_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv316zeSamplerDestroy19ze_sampler_handle_t"></span><span id="_CPPv216zeSamplerDestroy19ze_sampler_handle_t"></span><span id="zeSamplerDestroy__ze_sampler_handle_t"></span><span class="target" id="ze__api_8h_1a83b367deeb2dd77ff3c8df9d81dd8e58"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeSamplerDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-sampler-handle-t" title="ze_sampler_handle_t"><span class="n"><span class="pre">ze_sampler_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hSampler</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416zeSamplerDestroy19ze_sampler_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys sampler object. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the device is not currently referencing the sampler before it is deleted.</p></li>
@@ -647,8 +684,13 @@
 <section id="sampler-enums">
 <h2>Sampler Enums<a class="headerlink" href="#sampler-enums" title="Link to this heading">#</a></h2>
 <section id="ze-sampler-address-mode-t">
-<span id="id3"></span><h3>ze_sampler_address_mode_t<a class="headerlink" href="#ze-sampler-address-mode-t" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>ze_sampler_address_mode_t<a class="headerlink" href="#ze-sampler-address-mode-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-sampler-desc-t"><span class="std std-ref">ze_sampler_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv425ze_sampler_address_mode_t">
 <span id="_CPPv325ze_sampler_address_mode_t"></span><span id="_CPPv225ze_sampler_address_mode_t"></span><span class="target" id="ze__api_8h_1a098177362a877b4c15e22e10b065dc26"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_sampler_address_mode_t</span></span></span><a class="headerlink" href="#_CPPv425ze_sampler_address_mode_t" title="Link to this definition">#</a><br /></dt>
@@ -694,8 +736,13 @@
 
 </section>
 <section id="ze-sampler-filter-mode-t">
-<span id="id4"></span><h3>ze_sampler_filter_mode_t<a class="headerlink" href="#ze-sampler-filter-mode-t" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>ze_sampler_filter_mode_t<a class="headerlink" href="#ze-sampler-filter-mode-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-sampler-desc-t"><span class="std std-ref">ze_sampler_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv424ze_sampler_filter_mode_t">
 <span id="_CPPv324ze_sampler_filter_mode_t"></span><span id="_CPPv224ze_sampler_filter_mode_t"></span><span class="target" id="ze__api_8h_1a2bc102fb288fcb90fe1d236dbeb2f059"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_sampler_filter_mode_t</span></span></span><a class="headerlink" href="#_CPPv424ze_sampler_filter_mode_t" title="Link to this definition">#</a><br /></dt>
@@ -726,8 +773,14 @@
 <section id="sampler-structures">
 <h2>Sampler Structures<a class="headerlink" href="#sampler-structures" title="Link to this heading">#</a></h2>
 <section id="ze-sampler-desc-t">
-<span id="id5"></span><h3>ze_sampler_desc_t<a class="headerlink" href="#ze-sampler-desc-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>ze_sampler_desc_t<a class="headerlink" href="#ze-sampler-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesamplercreate"><span class="std std-ref">zeSamplerCreate</span></a></div>
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../experimental/image.html#ze-image-bindless-exp-desc-t"><span class="std std-ref">ze_image_bindless_exp_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv417ze_sampler_desc_t">
 <span id="_CPPv317ze_sampler_desc_t"></span><span id="_CPPv217ze_sampler_desc_t"></span><span id="ze_sampler_desc_t"></span><span class="target" id="structze__sampler__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_sampler_desc_t</span></span></span><a class="headerlink" href="#_CPPv417ze_sampler_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -760,7 +813,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17ze_sampler_desc_t12isNormalizedE">
-<span id="_CPPv3N17ze_sampler_desc_t12isNormalizedE"></span><span id="_CPPv2N17ze_sampler_desc_t12isNormalizedE"></span><span id="ze_sampler_desc_t::isNormalized__ze_bool_t"></span><span class="target" id="structze__sampler__desc__t_1a13cf63045eb85c908d75104cf6cb54ee"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isNormalized</span></span></span><a class="headerlink" href="#_CPPv4N17ze_sampler_desc_t12isNormalizedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N17ze_sampler_desc_t12isNormalizedE"></span><span id="_CPPv2N17ze_sampler_desc_t12isNormalizedE"></span><span id="ze_sampler_desc_t::isNormalized__ze_bool_t"></span><span class="target" id="structze__sampler__desc__t_1a13cf63045eb85c908d75104cf6cb54ee"></span><a class="reference internal" href="data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isNormalized</span></span></span><a class="headerlink" href="#_CPPv4N17ze_sampler_desc_t12isNormalizedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[in] Are coordinates normalized [0, 1] or not. </p>
 </dd></dl>
 
@@ -792,11 +845,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="virtual_mem.html"
+       href="physical_mem.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Virtual Mem</p>
+        <p class="prev-next-title">Physical Mem</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -816,7 +869,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zeSampler</div><ul class="ctoc-list"><li><a href="sampler.html#zesamplercreate">&hellip;Create</a></li><li><a href="sampler.html#zesamplerdestroy">&hellip;Destroy</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="sampler.html#ze-sampler-address-mode-t">ze_sampler_address_mode_t</a></li><li><a href="sampler.html#ze-sampler-filter-mode-t">ze_sampler_filter_mode_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="sampler.html#ze-sampler-desc-t">ze_sampler_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="sampler.html#ze-sampler-handle-t">ze_sampler_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zeSampler</div><ul class="ctoc-list"><li><a href="sampler.html#zesamplercreate">&hellip;Create</a></li><li><a href="sampler.html#zesamplerdestroy">&hellip;Destroy</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="sampler.html#ze-sampler-address-mode-t">ze_sampler_address_mode_t</a></li><li><a href="sampler.html#ze-sampler-filter-mode-t">ze_sampler_filter_mode_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="sampler.html#ze-sampler-desc-t">ze_sampler_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

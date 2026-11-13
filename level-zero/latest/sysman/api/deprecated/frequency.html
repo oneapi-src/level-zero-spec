@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Frequency - Deprecated &#8212; Level Zero Specification v1.20.41</title>
+    <title>Frequency - Deprecated &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Device - Deprecated" href="device.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -571,7 +581,7 @@
                   
   <section id="frequency-deprecated">
 <h1>Frequency - Deprecated<a class="headerlink" href="#frequency-deprecated" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="frequency-deprecated-functions">
 <h2>Frequency - Deprecated Functions<a class="headerlink" href="#frequency-deprecated-functions" title="Link to this heading">#</a></h2>
 <section id="zesfrequencyocgetcapabilities">
@@ -580,7 +590,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclockgetdomainproperties"><span class="std std-ref">zesOverclockGetDomainProperties</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv429zesFrequencyOcGetCapabilities17zes_freq_handle_tP21zes_oc_capabilities_t">
-<span id="_CPPv329zesFrequencyOcGetCapabilities17zes_freq_handle_tP21zes_oc_capabilities_t"></span><span id="_CPPv229zesFrequencyOcGetCapabilities17zes_freq_handle_tP21zes_oc_capabilities_t"></span><span id="zesFrequencyOcGetCapabilities__zes_freq_handle_t.zes_oc_capabilities_tP"></span><span class="target" id="zes__api_8h_1a40d72abc012515778078a30e56ba13bc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetCapabilities</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-oc-capabilities-t" title="zes_oc_capabilities_t"><span class="n"><span class="pre">zes_oc_capabilities_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pOcCapabilities</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429zesFrequencyOcGetCapabilities17zes_freq_handle_tP21zes_oc_capabilities_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv329zesFrequencyOcGetCapabilities17zes_freq_handle_tP21zes_oc_capabilities_t"></span><span id="_CPPv229zesFrequencyOcGetCapabilities17zes_freq_handle_tP21zes_oc_capabilities_t"></span><span id="zesFrequencyOcGetCapabilities__zes_freq_handle_t.zes_oc_capabilities_tP"></span><span class="target" id="zes__api_8h_1a40d72abc012515778078a30e56ba13bc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetCapabilities</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-oc-capabilities-t" title="zes_oc_capabilities_t"><span class="n"><span class="pre">zes_oc_capabilities_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pOcCapabilities</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv429zesFrequencyOcGetCapabilities17zes_freq_handle_tP21zes_oc_capabilities_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the overclocking capabilities. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -630,7 +640,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclockgetcontrolcurrentvalue"><span class="std std-ref">zesOverclockGetControlCurrentValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432zesFrequencyOcGetFrequencyTarget17zes_freq_handle_tPd">
-<span id="_CPPv332zesFrequencyOcGetFrequencyTarget17zes_freq_handle_tPd"></span><span id="_CPPv232zesFrequencyOcGetFrequencyTarget17zes_freq_handle_tPd"></span><span id="zesFrequencyOcGetFrequencyTarget__zes_freq_handle_t.doubleP"></span><span class="target" id="zes__api_8h_1a6e5332190e480fac24f4be51536dc572"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetFrequencyTarget</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentOcFrequency</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zesFrequencyOcGetFrequencyTarget17zes_freq_handle_tPd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv332zesFrequencyOcGetFrequencyTarget17zes_freq_handle_tPd"></span><span id="_CPPv232zesFrequencyOcGetFrequencyTarget17zes_freq_handle_tPd"></span><span id="zesFrequencyOcGetFrequencyTarget__zes_freq_handle_t.doubleP"></span><span class="target" id="zes__api_8h_1a6e5332190e480fac24f4be51536dc572"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetFrequencyTarget</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentOcFrequency</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zesFrequencyOcGetFrequencyTarget17zes_freq_handle_tPd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the current overclocking frequency target, if extended moded is supported, will returned in 1 Mhz granularity. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -691,7 +701,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432zesFrequencyOcSetFrequencyTarget17zes_freq_handle_td">
-<span id="_CPPv332zesFrequencyOcSetFrequencyTarget17zes_freq_handle_td"></span><span id="_CPPv232zesFrequencyOcSetFrequencyTarget17zes_freq_handle_td"></span><span id="zesFrequencyOcSetFrequencyTarget__zes_freq_handle_t.double"></span><span class="target" id="zes__api_8h_1ae2cf7554deeec134cae06e87a5dc02c2"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetFrequencyTarget</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentOcFrequency</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zesFrequencyOcSetFrequencyTarget17zes_freq_handle_td" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv332zesFrequencyOcSetFrequencyTarget17zes_freq_handle_td"></span><span id="_CPPv232zesFrequencyOcSetFrequencyTarget17zes_freq_handle_td"></span><span id="zesFrequencyOcSetFrequencyTarget__zes_freq_handle_t.double"></span><span class="target" id="zes__api_8h_1ae2cf7554deeec134cae06e87a5dc02c2"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetFrequencyTarget</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentOcFrequency</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zesFrequencyOcSetFrequencyTarget17zes_freq_handle_td" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the current overclocking frequency target, if extended moded is supported, can be set in 1 Mhz granularity. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -748,7 +758,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclockgetcontrolcurrentvalue"><span class="std std-ref">zesOverclockGetControlCurrentValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv430zesFrequencyOcGetVoltageTarget17zes_freq_handle_tPdPd">
-<span id="_CPPv330zesFrequencyOcGetVoltageTarget17zes_freq_handle_tPdPd"></span><span id="_CPPv230zesFrequencyOcGetVoltageTarget17zes_freq_handle_tPdPd"></span><span id="zesFrequencyOcGetVoltageTarget__zes_freq_handle_t.doubleP.doubleP"></span><span class="target" id="zes__api_8h_1ab582ed07fbabfba78f98b0d7ccc94dd5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetVoltageTarget</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentVoltageTarget</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentVoltageOffset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesFrequencyOcGetVoltageTarget17zes_freq_handle_tPdPd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv330zesFrequencyOcGetVoltageTarget17zes_freq_handle_tPdPd"></span><span id="_CPPv230zesFrequencyOcGetVoltageTarget17zes_freq_handle_tPdPd"></span><span id="zesFrequencyOcGetVoltageTarget__zes_freq_handle_t.doubleP.doubleP"></span><span class="target" id="zes__api_8h_1ab582ed07fbabfba78f98b0d7ccc94dd5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetVoltageTarget</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentVoltageTarget</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentVoltageOffset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesFrequencyOcGetVoltageTarget17zes_freq_handle_tPdPd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the current overclocking voltage settings. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -811,7 +821,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv430zesFrequencyOcSetVoltageTarget17zes_freq_handle_tdd">
-<span id="_CPPv330zesFrequencyOcSetVoltageTarget17zes_freq_handle_tdd"></span><span id="_CPPv230zesFrequencyOcSetVoltageTarget17zes_freq_handle_tdd"></span><span id="zesFrequencyOcSetVoltageTarget__zes_freq_handle_t.double.double"></span><span class="target" id="zes__api_8h_1a648befc7981b476cf0cf7c5c042ca5dc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetVoltageTarget</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentVoltageTarget</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentVoltageOffset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesFrequencyOcSetVoltageTarget17zes_freq_handle_tdd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv330zesFrequencyOcSetVoltageTarget17zes_freq_handle_tdd"></span><span id="_CPPv230zesFrequencyOcSetVoltageTarget17zes_freq_handle_tdd"></span><span id="zesFrequencyOcSetVoltageTarget__zes_freq_handle_t.double.double"></span><span class="target" id="zes__api_8h_1a648befc7981b476cf0cf7c5c042ca5dc"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetVoltageTarget</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentVoltageTarget</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentVoltageOffset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesFrequencyOcSetVoltageTarget17zes_freq_handle_tdd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the current overclocking voltage settings. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -869,7 +879,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zesFrequencyOcSetMode17zes_freq_handle_t13zes_oc_mode_t">
-<span id="_CPPv321zesFrequencyOcSetMode17zes_freq_handle_t13zes_oc_mode_t"></span><span id="_CPPv221zesFrequencyOcSetMode17zes_freq_handle_t13zes_oc_mode_t"></span><span id="zesFrequencyOcSetMode__zes_freq_handle_t.zes_oc_mode_t"></span><span class="target" id="zes__api_8h_1a947fe29bb9fbc2229d797498f33e0b00"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-oc-mode-t" title="zes_oc_mode_t"><span class="n"><span class="pre">zes_oc_mode_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentOcMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesFrequencyOcSetMode17zes_freq_handle_t13zes_oc_mode_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zesFrequencyOcSetMode17zes_freq_handle_t13zes_oc_mode_t"></span><span id="_CPPv221zesFrequencyOcSetMode17zes_freq_handle_t13zes_oc_mode_t"></span><span id="zesFrequencyOcSetMode__zes_freq_handle_t.zes_oc_mode_t"></span><span class="target" id="zes__api_8h_1a947fe29bb9fbc2229d797498f33e0b00"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-oc-mode-t" title="zes_oc_mode_t"><span class="n"><span class="pre">zes_oc_mode_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">CurrentOcMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesFrequencyOcSetMode17zes_freq_handle_t13zes_oc_mode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the current overclocking mode. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -931,7 +941,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclockgetcontrolcurrentvalue"><span class="std std-ref">zesOverclockGetControlCurrentValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zesFrequencyOcGetMode17zes_freq_handle_tP13zes_oc_mode_t">
-<span id="_CPPv321zesFrequencyOcGetMode17zes_freq_handle_tP13zes_oc_mode_t"></span><span id="_CPPv221zesFrequencyOcGetMode17zes_freq_handle_tP13zes_oc_mode_t"></span><span id="zesFrequencyOcGetMode__zes_freq_handle_t.zes_oc_mode_tP"></span><span class="target" id="zes__api_8h_1ad52e45d4ef702109daa6aa562e4e2823"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-oc-mode-t" title="zes_oc_mode_t"><span class="n"><span class="pre">zes_oc_mode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentOcMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesFrequencyOcGetMode17zes_freq_handle_tP13zes_oc_mode_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zesFrequencyOcGetMode17zes_freq_handle_tP13zes_oc_mode_t"></span><span id="_CPPv221zesFrequencyOcGetMode17zes_freq_handle_tP13zes_oc_mode_t"></span><span id="zesFrequencyOcGetMode__zes_freq_handle_t.zes_oc_mode_tP"></span><span class="target" id="zes__api_8h_1ad52e45d4ef702109daa6aa562e4e2823"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-oc-mode-t" title="zes_oc_mode_t"><span class="n"><span class="pre">zes_oc_mode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCurrentOcMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zesFrequencyOcGetMode17zes_freq_handle_tP13zes_oc_mode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the current overclocking mode. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -992,7 +1002,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclockgetcontrolcurrentvalue"><span class="std std-ref">zesOverclockGetControlCurrentValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zesFrequencyOcGetIccMax17zes_freq_handle_tPd">
-<span id="_CPPv323zesFrequencyOcGetIccMax17zes_freq_handle_tPd"></span><span id="_CPPv223zesFrequencyOcGetIccMax17zes_freq_handle_tPd"></span><span id="zesFrequencyOcGetIccMax__zes_freq_handle_t.doubleP"></span><span class="target" id="zes__api_8h_1ad0c4d0c523ee87b1494081c12f9b56c1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetIccMax</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pOcIccMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFrequencyOcGetIccMax17zes_freq_handle_tPd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zesFrequencyOcGetIccMax17zes_freq_handle_tPd"></span><span id="_CPPv223zesFrequencyOcGetIccMax17zes_freq_handle_tPd"></span><span id="zesFrequencyOcGetIccMax__zes_freq_handle_t.doubleP"></span><span class="target" id="zes__api_8h_1ad0c4d0c523ee87b1494081c12f9b56c1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetIccMax</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pOcIccMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFrequencyOcGetIccMax17zes_freq_handle_tPd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the maximum current limit setting. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1046,7 +1056,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zesFrequencyOcSetIccMax17zes_freq_handle_td">
-<span id="_CPPv323zesFrequencyOcSetIccMax17zes_freq_handle_td"></span><span id="_CPPv223zesFrequencyOcSetIccMax17zes_freq_handle_td"></span><span id="zesFrequencyOcSetIccMax__zes_freq_handle_t.double"></span><span class="target" id="zes__api_8h_1a5f6a59c1cf784c6b0a150d4038a7a149"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetIccMax</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ocIccMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFrequencyOcSetIccMax17zes_freq_handle_td" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zesFrequencyOcSetIccMax17zes_freq_handle_td"></span><span id="_CPPv223zesFrequencyOcSetIccMax17zes_freq_handle_td"></span><span id="zesFrequencyOcSetIccMax__zes_freq_handle_t.double"></span><span class="target" id="zes__api_8h_1a5f6a59c1cf784c6b0a150d4038a7a149"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetIccMax</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ocIccMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zesFrequencyOcSetIccMax17zes_freq_handle_td" title="Link to this definition">#</a><br /></dt>
 <dd><p>Change the maximum current limit setting. </p>
 <p><ul class="simple">
 <li><p>Setting ocIccMax to 0.0 will return the value to the factory default.</p></li>
@@ -1106,7 +1116,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclockgetcontrolcurrentvalue"><span class="std std-ref">zesOverclockGetControlCurrentValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zesFrequencyOcGetTjMax17zes_freq_handle_tPd">
-<span id="_CPPv322zesFrequencyOcGetTjMax17zes_freq_handle_tPd"></span><span id="_CPPv222zesFrequencyOcGetTjMax17zes_freq_handle_tPd"></span><span id="zesFrequencyOcGetTjMax__zes_freq_handle_t.doubleP"></span><span class="target" id="zes__api_8h_1a90068cf4edd8fb8a3dc1fba7f412edd1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetTjMax</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pOcTjMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesFrequencyOcGetTjMax17zes_freq_handle_tPd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zesFrequencyOcGetTjMax17zes_freq_handle_tPd"></span><span id="_CPPv222zesFrequencyOcGetTjMax17zes_freq_handle_tPd"></span><span id="zesFrequencyOcGetTjMax__zes_freq_handle_t.doubleP"></span><span class="target" id="zes__api_8h_1a90068cf4edd8fb8a3dc1fba7f412edd1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcGetTjMax</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pOcTjMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesFrequencyOcGetTjMax17zes_freq_handle_tPd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get the maximum temperature limit setting. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1159,7 +1169,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zesFrequencyOcSetTjMax17zes_freq_handle_td">
-<span id="_CPPv322zesFrequencyOcSetTjMax17zes_freq_handle_td"></span><span id="_CPPv222zesFrequencyOcSetTjMax17zes_freq_handle_td"></span><span id="zesFrequencyOcSetTjMax__zes_freq_handle_t.double"></span><span class="target" id="zes__api_8h_1a2bfbf49d8a37e4526d2b0bc64b7de377"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetTjMax</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ocTjMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesFrequencyOcSetTjMax17zes_freq_handle_td" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zesFrequencyOcSetTjMax17zes_freq_handle_td"></span><span id="_CPPv222zesFrequencyOcSetTjMax17zes_freq_handle_td"></span><span id="zesFrequencyOcSetTjMax__zes_freq_handle_t.double"></span><span class="target" id="zes__api_8h_1a2bfbf49d8a37e4526d2b0bc64b7de377"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyOcSetTjMax</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/frequency.html#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ocTjMax</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesFrequencyOcSetTjMax17zes_freq_handle_td" title="Link to this definition">#</a><br /></dt>
 <dd><p>Change the maximum temperature limit setting. </p>
 <p><ul class="simple">
 <li><p>Setting ocTjMax to 0.0 will return the value to the factory default.</p></li>
@@ -1220,10 +1230,15 @@
 <span id="id12"></span><h3>zes_oc_mode_t<a class="headerlink" href="#zes-oc-mode-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zes-overclock-mode-t"><span class="std std-ref">zes_overclock_mode_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfrequencyocsetmode"><span class="std std-ref">zesFrequencyOcSetMode</span></a>, <a class="reference internal" href="#zesfrequencyocgetmode"><span class="std std-ref">zesFrequencyOcGetMode</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv413zes_oc_mode_t">
 <span id="_CPPv313zes_oc_mode_t"></span><span id="_CPPv213zes_oc_mode_t"></span><span class="target" id="zes__api_8h_1a903c3b11f6f2dc1483a7f8c446232541"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_oc_mode_t</span></span></span><a class="headerlink" href="#_CPPv413zes_oc_mode_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Overclocking modes </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.8</span> Overclocking modes </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N13zes_oc_mode_t15ZES_OC_MODE_OFFE">
@@ -1265,10 +1280,15 @@
 <span id="id13"></span><h3>zes_oc_capabilities_t<a class="headerlink" href="#zes-oc-capabilities-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.8. Overclocking moved to the Overclock API. Use <a class="reference internal" href="../apis/overclock.html#zes-overclock-properties-t"><span class="std std-ref">zes_overclock_properties_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfrequencyocgetcapabilities"><span class="std std-ref">zesFrequencyOcGetCapabilities</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv421zes_oc_capabilities_t">
 <span id="_CPPv321zes_oc_capabilities_t"></span><span id="_CPPv221zes_oc_capabilities_t"></span><span id="zes_oc_capabilities_t"></span><span class="target" id="structzes__oc__capabilities__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_oc_capabilities_t</span></span></span><a class="headerlink" href="#_CPPv421zes_oc_capabilities_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Overclocking properties </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.8</span> Overclocking properties </p>
 <p><ul class="simple">
 <li><p>Provides all the overclocking capabilities and properties supported by the device for the frequency domain.</p></li>
 </ul>
@@ -1289,7 +1309,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_oc_capabilities_t13isOcSupportedE">
-<span id="_CPPv3N21zes_oc_capabilities_t13isOcSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t13isOcSupportedE"></span><span id="zes_oc_capabilities_t::isOcSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1a8a064907d2bfa9a7f276da66f0e2e8e6"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isOcSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t13isOcSupportedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_oc_capabilities_t13isOcSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t13isOcSupportedE"></span><span id="zes_oc_capabilities_t::isOcSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1a8a064907d2bfa9a7f276da66f0e2e8e6"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isOcSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t13isOcSupportedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if any overclocking features are supported on this frequency domain. </p>
 </dd></dl>
 
@@ -1331,37 +1351,37 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_oc_capabilities_t16isTjMaxSupportedE">
-<span id="_CPPv3N21zes_oc_capabilities_t16isTjMaxSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t16isTjMaxSupportedE"></span><span id="zes_oc_capabilities_t::isTjMaxSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1af167dc23a624a0bfe691c2967e7f6859"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isTjMaxSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t16isTjMaxSupportedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_oc_capabilities_t16isTjMaxSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t16isTjMaxSupportedE"></span><span id="zes_oc_capabilities_t::isTjMaxSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1af167dc23a624a0bfe691c2967e7f6859"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isTjMaxSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t16isTjMaxSupportedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if the maximum temperature limit (TjMax) can be changed for this frequency domain. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_oc_capabilities_t17isIccMaxSupportedE">
-<span id="_CPPv3N21zes_oc_capabilities_t17isIccMaxSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t17isIccMaxSupportedE"></span><span id="zes_oc_capabilities_t::isIccMaxSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1ad7440819f14b183388dc270a2e32fff2"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isIccMaxSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t17isIccMaxSupportedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_oc_capabilities_t17isIccMaxSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t17isIccMaxSupportedE"></span><span id="zes_oc_capabilities_t::isIccMaxSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1ad7440819f14b183388dc270a2e32fff2"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isIccMaxSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t17isIccMaxSupportedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if the maximum current (IccMax) can be changed for this frequency domain. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_oc_capabilities_t21isHighVoltModeCapableE">
-<span id="_CPPv3N21zes_oc_capabilities_t21isHighVoltModeCapableE"></span><span id="_CPPv2N21zes_oc_capabilities_t21isHighVoltModeCapableE"></span><span id="zes_oc_capabilities_t::isHighVoltModeCapable__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1ab11655b05bbcdf8315c5e511aba5e3e6"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isHighVoltModeCapable</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t21isHighVoltModeCapableE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_oc_capabilities_t21isHighVoltModeCapableE"></span><span id="_CPPv2N21zes_oc_capabilities_t21isHighVoltModeCapableE"></span><span id="zes_oc_capabilities_t::isHighVoltModeCapable__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1ab11655b05bbcdf8315c5e511aba5e3e6"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isHighVoltModeCapable</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t21isHighVoltModeCapableE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if this frequency domains supports a feature to set very high voltages. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_oc_capabilities_t21isHighVoltModeEnabledE">
-<span id="_CPPv3N21zes_oc_capabilities_t21isHighVoltModeEnabledE"></span><span id="_CPPv2N21zes_oc_capabilities_t21isHighVoltModeEnabledE"></span><span id="zes_oc_capabilities_t::isHighVoltModeEnabled__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1aaf5d618c157c28854777f85e7ac152dd"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isHighVoltModeEnabled</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t21isHighVoltModeEnabledE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_oc_capabilities_t21isHighVoltModeEnabledE"></span><span id="_CPPv2N21zes_oc_capabilities_t21isHighVoltModeEnabledE"></span><span id="zes_oc_capabilities_t::isHighVoltModeEnabled__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1aaf5d618c157c28854777f85e7ac152dd"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isHighVoltModeEnabled</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t21isHighVoltModeEnabledE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if very high voltages are permitted on this frequency domain. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_oc_capabilities_t23isExtendedModeSupportedE">
-<span id="_CPPv3N21zes_oc_capabilities_t23isExtendedModeSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t23isExtendedModeSupportedE"></span><span id="zes_oc_capabilities_t::isExtendedModeSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1a25584cfdcb7d054f11ed6b4f00b8c77c"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isExtendedModeSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t23isExtendedModeSupportedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_oc_capabilities_t23isExtendedModeSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t23isExtendedModeSupportedE"></span><span id="zes_oc_capabilities_t::isExtendedModeSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1a25584cfdcb7d054f11ed6b4f00b8c77c"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isExtendedModeSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t23isExtendedModeSupportedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if the extended overclocking features are supported. If this is supported, increments are on 1 Mhz basis. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_oc_capabilities_t20isFixedModeSupportedE">
-<span id="_CPPv3N21zes_oc_capabilities_t20isFixedModeSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t20isFixedModeSupportedE"></span><span id="zes_oc_capabilities_t::isFixedModeSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1a559270b6c491fb75b808c4bb1cec722f"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isFixedModeSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t20isFixedModeSupportedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_oc_capabilities_t20isFixedModeSupportedE"></span><span id="_CPPv2N21zes_oc_capabilities_t20isFixedModeSupportedE"></span><span id="zes_oc_capabilities_t::isFixedModeSupported__ze_bool_t"></span><span class="target" id="structzes__oc__capabilities__t_1a559270b6c491fb75b808c4bb1cec722f"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isFixedModeSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_oc_capabilities_t20isFixedModeSupportedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if the fixed mode is supported. In this mode, hardware will disable most frequency throttling and lock the frequency and voltage at the specified overclock values. </p>
 </dd></dl>
 

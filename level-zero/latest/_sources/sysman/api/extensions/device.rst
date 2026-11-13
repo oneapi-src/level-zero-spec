@@ -1,7 +1,9 @@
 ============================================================
 Device - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Device - Extension Functions
@@ -74,6 +76,13 @@ zes_device_state_ext_flags_t
 
 *Added in version 1.17*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-device-ext-state-t`
+
+.. doxygentypedef:: zes_device_state_ext_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_device_state_ext_flag_t
     :project: LevelZero
 
@@ -87,8 +96,13 @@ zes_device_health_status_ext_t
 
 *Added in version 1.18*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceGetHealthStatusExt`, :ref:`zesDeviceSetHealthStatusExt`
+
 .. doxygenenum:: zes_device_health_status_ext_t
     :project: LevelZero
+
 
  
 Device - Extension Structures
@@ -103,6 +117,10 @@ zes_device_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-device-properties-t`
 
 .. doxygenstruct:: zes_device_ext_properties_t
     :project: LevelZero
@@ -119,6 +137,10 @@ zes_device_index_ext_properties_t
 
 *Added in version 1.20*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-device-properties-t`
+
 .. doxygenstruct:: zes_device_index_ext_properties_t
     :project: LevelZero
     :members:
@@ -133,6 +155,10 @@ zes_device_ecc_default_properties_ext_t
 .. rst-class:: api-version
 
 *Added in version 1.13*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-device-ecc-properties-t`
 
 .. doxygenstruct:: zes_device_ecc_default_properties_ext_t
     :project: LevelZero
@@ -149,6 +175,10 @@ zes_pci_link_speed_downgrade_ext_state_t
 
 *Added in version 1.15*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-pci-state-t`
+
 .. doxygenstruct:: zes_pci_link_speed_downgrade_ext_state_t
     :project: LevelZero
     :members:
@@ -163,6 +193,10 @@ zes_pci_link_speed_downgrade_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.15*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-pci-properties-t`
 
 .. doxygenstruct:: zes_pci_link_speed_downgrade_ext_properties_t
     :project: LevelZero
@@ -179,6 +213,10 @@ zes_device_ext_state_t
 
 *Added in version 1.17*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-device-state-t`
+
 .. doxygenstruct:: zes_device_ext_state_t
     :project: LevelZero
     :members:
@@ -193,6 +231,10 @@ zes_oem_serial_id_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.17*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-device-properties-t`
 
 .. doxygenstruct:: zes_oem_serial_id_ext_properties_t
     :project: LevelZero
@@ -209,7 +251,30 @@ zes_device_gpu_topology_ext_properties_t
 
 *Added in version 1.20*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-device-properties-t`
+
 .. doxygenstruct:: zes_device_gpu_topology_ext_properties_t
+    :project: LevelZero
+    :members:
+    :undoc-members:
+
+
+.. _zes-device-soc-uid-ext-properties-t:
+
+zes_device_soc_uid_ext_properties_t
+-----------------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.21*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-device-properties-t`
+
+.. doxygenstruct:: zes_device_soc_uid_ext_properties_t
     :project: LevelZero
     :members:
     :undoc-members:

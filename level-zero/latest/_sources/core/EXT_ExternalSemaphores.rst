@@ -1,7 +1,7 @@
 
 :orphan:
 
-.. _ZE_external_semaphores:
+.. _ZE_extension_external_semaphores:
 
 =============================================
  External Semaphores Extension Specification
@@ -68,12 +68,12 @@ Following pseudo-code demonstrates a sequence for importing external semaphore f
     win32Desc.handle = vkSemHandle;
     :ref:`ze-external-semaphore-ext-desc-t` desc = {:ref:`ZE_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_EXT_DESC <ze-structure-type-t>`\, &win32Desc, :ref:`ZE_EXTERNAL_SEMAPHORE_EXT_FLAG_OPAQUE_WIN32 <ze-external-semaphore-ext-flags-t>`\};
 
-    ze_external_semaphore_ext_handle_t semaphore0 = nullptr;
+    :ref:`ze-external-semaphore-ext-handle-t` semaphore0 = nullptr;
     :ref:`zeDeviceImportExternalSemaphoreExt`\(device, &semaphore0, &desc);
 
     // Create command list and command queue
-    ze_command_list_handle_t commandList = ...;
-    ze_command_queue_handle_t commandQueue = ...;
+    :ref:`ze-command-list-handle-t` commandList = ...;
+    :ref:`ze-command-queue-handle-t` commandQueue = ...;
 
     // Append wait on external semaphore in the command list and then launch kernel
     :ref:`ze-external-semaphore-wait-params-ext-t` waitParams = {};
@@ -105,11 +105,11 @@ signalling it once that command list completes:
 
 .. parsed-literal::
     // Import the external semaphore as above
-    ze_external_semaphore_ext_handle_t semaphore0 = nullptr;
+    :ref:`ze-external-semaphore-ext-handle-t` semaphore0 = nullptr;
     :ref:`zeDeviceImportExternalSemaphoreExt`\(device, &desc, &semaphore0);
 
     // Record the command list once, up front
-    ze_command_list_handle_t commandList = ...;
+    :ref:`ze-command-list-handle-t` commandList = ...;
     :ref:`zeCommandListAppendLaunchKernel`\(commandList, kernel, ..., nullptr, 0, nullptr);
     :ref:`zeCommandListClose`\(commandList);
 

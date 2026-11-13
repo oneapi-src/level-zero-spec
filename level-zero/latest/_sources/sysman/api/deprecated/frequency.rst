@@ -1,7 +1,9 @@
 ============================================================
 Frequency - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Frequency - Deprecated Functions
@@ -213,8 +215,13 @@ zes_oc_mode_t
 
 **Deprecated** since 1.8. Overclocking moved to the Overclock API. Use :ref:`zes-overclock-mode-t` instead.
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFrequencyOcSetMode`, :ref:`zesFrequencyOcGetMode`
+
 .. doxygenenum:: zes_oc_mode_t
     :project: LevelZero
+
 
  
 Frequency - Deprecated Structures
@@ -233,6 +240,10 @@ zes_oc_capabilities_t
 .. rst-class:: api-deprecated
 
 **Deprecated** since 1.8. Overclocking moved to the Overclock API. Use :ref:`zes-overclock-properties-t` instead.
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFrequencyOcGetCapabilities`
 
 .. doxygenstruct:: zes_oc_capabilities_t
     :project: LevelZero

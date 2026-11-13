@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Global - Extensions &#8212; Level Zero Specification v1.20.41</title>
+    <title>Global - Extensions &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="RTAS Parallel Operation - Extensions" href="rtas_parallel_operation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -507,12 +517,17 @@
                   
   <section id="global-extensions">
 <h1>Global - Extensions<a class="headerlink" href="#global-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="global-extension-structures">
 <h2>Global - Extension Structures<a class="headerlink" href="#global-extension-structures" title="Link to this heading">#</a></h2>
 <section id="ze-init-driver-app-version-ext-desc-t">
 <span id="id1"></span><h3>ze_init_driver_app_version_ext_desc_t<a class="headerlink" href="#ze-init-driver-app-version-ext-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.18</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/global.html#ze-init-driver-type-desc-t"><span class="std std-ref">ze_init_driver_type_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv437ze_init_driver_app_version_ext_desc_t">
 <span id="_CPPv337ze_init_driver_app_version_ext_desc_t"></span><span id="_CPPv237ze_init_driver_app_version_ext_desc_t"></span><span id="ze_init_driver_app_version_ext_desc_t"></span><span class="target" id="structze__init__driver__app__version__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_init_driver_app_version_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv437ze_init_driver_app_version_ext_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -551,16 +566,21 @@
 <section id="ze-init-driver-properties-ext-desc-t">
 <span id="id2"></span><h3>ze_init_driver_properties_ext_desc_t<a class="headerlink" href="#ze-init-driver-properties-ext-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.20</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/global.html#ze-init-driver-type-desc-t"><span class="std std-ref">ze_init_driver_type_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv436ze_init_driver_properties_ext_desc_t">
 <span id="_CPPv336ze_init_driver_properties_ext_desc_t"></span><span id="_CPPv236ze_init_driver_properties_ext_desc_t"></span><span id="ze_init_driver_properties_ext_desc_t"></span><span class="target" id="structze__init__driver__properties__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_init_driver_properties_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv436ze_init_driver_properties_ext_desc_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Init Driver Properties descriptor. </p>
 <p><ul class="simple">
-<li><p>This structure may be passed to <a class="reference internal" href="../apis/global.html#zeinitdrivers"><span class="std std-ref">zeInitDrivers</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/global.html#ze-init-driver-type-desc-t"><span class="std std-ref">ze_init_driver_type_desc_t</span></a>, to declare driver-wide properties for the driver(s) being initialized. It is a general-purpose extension point; additional flags may be added to ze_init_driver_properties_ext_flags_t in the future without requiring a new structure or a new <a class="reference internal" href="../apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ze_structure_type_t</span></a> value.</p></li>
-<li><p>OPTIMIZE_MEMORY requests that the driver(s) being initialized reduce their memory footprint, mirroring <a class="reference internal" href="../apis/context.html#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefea6ef8d30e431adb8c3686c902f4ee5af6"><span class="std std-ref">ZE_CONTEXT_FLAG_OPTIMIZE_MEMORY</span></a> but applied at driver initialization instead of per-context. When set, it establishes the default memory-optimization behavior for the driver(s) initialized by this call; contexts subsequently created via <a class="reference internal" href="../apis/context.html#zecontextcreate"><span class="std std-ref">zeContextCreate</span></a> or <a class="reference internal" href="../apis/context.html#zecontextcreateex"><span class="std std-ref">zeContextCreateEx</span></a> without an explicit <a class="reference internal" href="../apis/context.html#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefea6ef8d30e431adb8c3686c902f4ee5af6"><span class="std std-ref">ZE_CONTEXT_FLAG_OPTIMIZE_MEMORY</span></a> or <a class="reference internal" href="../apis/context.html#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefeadae60f04dfb7ca4251763a5ecca074e7"><span class="std std-ref">ZE_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE</span></a> flag inherit this default. A context that explicitly sets its own ze_context_flags_t flags overrides the driver-level default for that context.</p></li>
+<li><p>This structure may be passed to <a class="reference internal" href="../apis/global.html#zeinitdrivers"><span class="std std-ref">zeInitDrivers</span></a>, via the <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/global.html#ze-init-driver-type-desc-t"><span class="std std-ref">ze_init_driver_type_desc_t</span></a>, to declare driver-wide properties for the driver(s) being initialized. It is a general-purpose extension point; additional flags may be added to <a class="reference internal" href="data_types.html#ze-init-driver-properties-ext-flags-t"><span class="std std-ref">ze_init_driver_properties_ext_flags_t</span></a> in the future without requiring a new structure or a new <a class="reference internal" href="../apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ze_structure_type_t</span></a> value.</p></li>
+<li><p>OPTIMIZE_MEMORY requests that the driver(s) being initialized reduce their memory footprint, mirroring <a class="reference internal" href="../apis/context.html#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefea6ef8d30e431adb8c3686c902f4ee5af6"><span class="std std-ref">ZE_CONTEXT_FLAG_OPTIMIZE_MEMORY</span></a> but applied at driver initialization instead of per-context. When set, it establishes the default memory-optimization behavior for the driver(s) initialized by this call; contexts subsequently created via <a class="reference internal" href="../apis/context.html#zecontextcreate"><span class="std std-ref">zeContextCreate</span></a> or <a class="reference internal" href="../apis/context.html#zecontextcreateex"><span class="std std-ref">zeContextCreateEx</span></a> without an explicit <a class="reference internal" href="../apis/context.html#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefea6ef8d30e431adb8c3686c902f4ee5af6"><span class="std std-ref">ZE_CONTEXT_FLAG_OPTIMIZE_MEMORY</span></a> or <a class="reference internal" href="../apis/context.html#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefeadae60f04dfb7ca4251763a5ecca074e7"><span class="std std-ref">ZE_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE</span></a> flag inherit this default. A context that explicitly sets its own <a class="reference internal" href="../apis/context.html#ze-context-flags-t"><span class="std std-ref">ze_context_flags_t</span></a> flags overrides the driver-level default for that context.</p></li>
 <li><p>OPTIMIZE_PERFORMANCE explicitly requests that the driver(s) being initialized optimize for performance, mirroring <a class="reference internal" href="../apis/context.html#ze__api_8h_1abd3f9f97915d14f442911b2d9a66eefeadae60f04dfb7ca4251763a5ecca074e7"><span class="std std-ref">ZE_CONTEXT_FLAG_OPTIMIZE_PERFORMANCE</span></a> but applied at driver initialization instead of per-context. When set, it establishes the default performance-optimization behavior for the driver(s) initialized by this call in the same way that setting OPTIMIZE_MEMORY establishes the opposite default. OPTIMIZE_MEMORY and OPTIMIZE_PERFORMANCE are mutually exclusive; if both are set, <a class="reference internal" href="../apis/global.html#zeinitdrivers"><span class="std std-ref">zeInitDrivers</span></a> returns <a class="reference internal" href="../apis/data_types.html#ze__api_8h_1a3ea791bcf22ddfc1d413579b12c22767a8cd1b74592e87a5e23410e3424de7f05"><span class="std std-ref">ZE_RESULT_ERROR_INVALID_ARGUMENT</span></a>.</p></li>
 <li><p>If neither OPTIMIZE_MEMORY nor OPTIMIZE_PERFORMANCE is set, the memory/performance trade-off for the driver(s) initialized by this call is driver implementation specific.</p></li>
-<li><p>The default context returned by <a class="reference internal" href="../apis/driver.html#zedrivergetdefaultcontext"><span class="std std-ref">zeDriverGetDefaultContext</span></a> is created by the driver itself, not via <a class="reference internal" href="../apis/context.html#zecontextcreate"><span class="std std-ref">zeContextCreate</span></a> or <a class="reference internal" href="../apis/context.html#zecontextcreateex"><span class="std std-ref">zeContextCreateEx</span></a>, so the application cannot supply ze_context_flags_t for it. The default context follows the driver-level default established by this structure, if one was established; otherwise its memory/performance trade-off is driver implementation specific.</p></li>
+<li><p>The default context returned by <a class="reference internal" href="../apis/driver.html#zedrivergetdefaultcontext"><span class="std std-ref">zeDriverGetDefaultContext</span></a> is created by the driver itself, not via <a class="reference internal" href="../apis/context.html#zecontextcreate"><span class="std std-ref">zeContextCreate</span></a> or <a class="reference internal" href="../apis/context.html#zecontextcreateex"><span class="std std-ref">zeContextCreateEx</span></a>, so the application cannot supply <a class="reference internal" href="../apis/context.html#ze-context-flags-t"><span class="std std-ref">ze_context_flags_t</span></a> for it. The default context follows the driver-level default established by this structure, if one was established; otherwise its memory/performance trade-off is driver implementation specific.</p></li>
 <li><p>If this structure is not provided, the driver must assume no driver-wide properties were requested and fall back to its standard default behavior for each unset flag.</p></li>
 <li><p>This structure has no effect on drivers already initialized by a prior call to <a class="reference internal" href="../apis/global.html#zeinitdrivers"><span class="std std-ref">zeInitDrivers</span></a> or <a class="reference internal" href="../deprecated/global.html#zeinit"><span class="std std-ref">zeInit</span></a>; those drivers keep whatever behavior was in effect when they were first initialized. </p></li>
 </ul>
@@ -581,8 +601,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N36ze_init_driver_properties_ext_desc_t5flagsE">
-<span id="_CPPv3N36ze_init_driver_properties_ext_desc_t5flagsE"></span><span id="_CPPv2N36ze_init_driver_properties_ext_desc_t5flagsE"></span><span id="ze_init_driver_properties_ext_desc_t::flags__ze_init_driver_properties_ext_flags_t"></span><span class="target" id="structze__init__driver__properties__ext__desc__t_1a9c05884c0382b4734d5ca8938f567abc"></span><span class="n"><span class="pre">ze_init_driver_properties_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N36ze_init_driver_properties_ext_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] driver property flags. must be 0 (default) or a valid combination of <a class="reference internal" href="data_types.html#ze-init-driver-properties-ext-flags-t"><span class="std std-ref">ze_init_driver_properties_ext_flag_t</span></a>. </p>
+<span id="_CPPv3N36ze_init_driver_properties_ext_desc_t5flagsE"></span><span id="_CPPv2N36ze_init_driver_properties_ext_desc_t5flagsE"></span><span id="ze_init_driver_properties_ext_desc_t::flags__ze_init_driver_properties_ext_flags_t"></span><span class="target" id="structze__init__driver__properties__ext__desc__t_1a9c05884c0382b4734d5ca8938f567abc"></span><a class="reference internal" href="data_types.html#ze-init-driver-properties-ext-flags-t" title="ze_init_driver_properties_ext_flags_t"><span class="n"><span class="pre">ze_init_driver_properties_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N36ze_init_driver_properties_ext_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] driver property flags. must be 0 (default) or a valid combination of <a class="reference internal" href="data_types.html#ze__api_8h_1a5a15f09e4bd5bfadf0e1cff3568f2e4f"><span class="std std-ref">ze_init_driver_properties_ext_flag_t</span></a>. </p>
 </dd></dl>
 
 </div>

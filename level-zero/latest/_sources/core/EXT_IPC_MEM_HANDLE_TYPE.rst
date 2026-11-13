@@ -36,7 +36,7 @@ When users are requesting IPC handles for L0 memory, there may be requirements f
 
 To facilitate this, the IPC Memory Handle Type Extension provides a mechanism to specify the type of IPC handle to be created during memory allocation or when obtaining an IPC handle for existing memory.
 
-Physical memory handles (``ze_physical_mem_handle_t``) may be used as a source for IPC handles via
+Physical memory handles (``:ref:`ze-physical-mem-handle-t`\``) may be used as a source for IPC handles via
 :ref:`zeMemGetIpcHandleWithProperties`\. The ``ptr`` argument may be either:
 
 - A virtual address that was mapped to a physical memory object via :ref:`zeVirtualMemMap`\, or

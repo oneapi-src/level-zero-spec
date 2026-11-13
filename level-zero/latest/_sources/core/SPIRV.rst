@@ -683,7 +683,7 @@ declare the **GlobalVariableHostAccessINTEL** SPIR-V capability:
 
 The function :ref:`zeModuleGetGlobalPointer` can be used to retrieve a pointer to a global variable.
 
-:ref:`zeModuleGetGlobalPointer` takes a ``pGlobalName`` parameter which identifies the variable. For a ``ze_module_handle_t`` created
+:ref:`zeModuleGetGlobalPointer` takes a ``pGlobalName`` parameter which identifies the variable. For a ``:ref:`ze-module-handle-t`\`` created
 from SPIR-V this parameter is interpreted as follows:
 
 - The implementation first looks for an **OpVariable** that is decorated with **HostAccessINTEL** where

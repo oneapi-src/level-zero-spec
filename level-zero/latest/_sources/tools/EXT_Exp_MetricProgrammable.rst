@@ -56,19 +56,19 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
 
 .. parsed-literal::
 
-    zet_metric_handle_t * metricHandles = null_ptr;
+    :ref:`zet-metric-handle-t` * metricHandles = null_ptr;
     uint32_t metricHandleCount = 0;
 
     // Query and Get metric programmable handles
     uint32_t programmableCount = 0;
     :ref:`zetMetricProgrammableGetExp`\(device, &programmableCount, nullptr);
-    zet_metric_programmable_exp_handle_t * metricProgrammableHandles = allocate(sizeof(zet_metric_programmable_exp_handle_t) * programmableCount);
+    :ref:`zet-metric-programmable-exp-handle-t` * metricProgrammableHandles = allocate(sizeof(:ref:`zet-metric-programmable-exp-handle-t`\) * programmableCount);
     :ref:`zetMetricProgrammableGetExp`\(device, &programmableCount, metricProgrammableHandles);
 
     // Create metrics from metric programmable handles
     for(uint32_t i = 0; i < programmableCount; i++){
 
-        zet_metric_programmable_exp_handle_t programmableHandle = metricProgrammableHandles[i];
+        :ref:`zet-metric-programmable-exp-handle-t` programmableHandle = metricProgrammableHandles[i];
         :ref:`zet-metric-programmable-exp-properties-t` programmableProperties{};
         :ref:`zetMetricProgrammableGetPropertiesExp`\(programmableHandle, &programmableProperties);
 
@@ -91,7 +91,7 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
             char metricName[ZET_MAX_METRIC_NAME] = "eu_active_minimum";
             char metricDescription[ZET_MAX_METRIC_DESCRIPTION] = "eu_active_minimum_desc";
             :ref:`zetMetricCreateFromProgrammableExp2`\(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, nullptr);
-            zet_metric_handle_t * metricHandles = allocate(sizeof(zet_metric_handle_t) * metricHandleCount);
+            :ref:`zet-metric-handle-t` * metricHandles = allocate(sizeof(:ref:`zet-metric-handle-t`\) * metricHandleCount);
             :ref:`zetMetricCreateFromProgrammableExp2`\(programmableHandle, &parameterValue, 1, metricName, metricDescription, &metricHandleCount, metricHandles);
         }
     }
@@ -101,7 +101,7 @@ The following pseudo-code demonstrates how programmable metrics could be enumera
     char metricGroupDescription[ZET_MAX_METRIC_GROUP_DESCRIPTION] = "eu_active_desc";
     uint32_t metricGroupCount = 0;
     :ref:`zetDeviceCreateMetricGroupsFromMetricsExp`\(device, 1, &metricHandles[0], metricGroupNamePrefix, metricGroupDescription, &metricGroupCount, nullptr);
-    zet_metric_group_handle_t * metricGroupHandles = allocate(sizeof(zet_metric_group_handle_t) * metricGroupCount);
+    :ref:`zet-metric-group-handle-t` * metricGroupHandles = allocate(sizeof(:ref:`zet-metric-group-handle-t`\) * metricGroupCount);
     :ref:`zetDeviceCreateMetricGroupsFromMetricsExp`\(device, 1, &metricHandles[0], metricGroupNamePrefix, metricGroupDescription, &metricGroupCount, metricGroupHandles);
     :ref:`zetMetricGroupAddMetricExp`\(metricGroupHandles[0], &metricHandles[1], nullptr, nullptr);
     :ref:`zetMetricGroupCloseExp`\(metricGroupHandles[0]);

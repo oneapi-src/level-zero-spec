@@ -1,7 +1,9 @@
 ============================================================
 Info Log Instance - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Info Log Instance - Extension Functions
@@ -45,6 +47,7 @@ zesInfoLogInstanceDeleteExt
 
 .. doxygenfunction:: zesInfoLogInstanceDeleteExt
     :project: LevelZero
+
 
 
 

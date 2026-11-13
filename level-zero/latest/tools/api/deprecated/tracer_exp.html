@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Tracer Exp - Deprecated &#8212; Level Zero Specification v1.20.41</title>
+    <title>Tracer Exp - Deprecated &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Deprecated" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tracer-exp-deprecated-handles">Tracer Exp - Deprecated Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-tracer-exp-handle-t">zet_tracer_exp_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zet_tracer_exp_handle_t"><code class="docutils literal notranslate"><span class="pre">zet_tracer_exp_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tracer-exp-deprecated-functions">Tracer Exp - Deprecated Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zettracerexpcreate">zetTracerExpCreate</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t"><code class="docutils literal notranslate"><span class="pre">zetTracerExpCreate()</span></code></a></li>
@@ -492,6 +509,13 @@
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zettracerexpsetenabled">zetTracerExpSetEnabled</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t"><code class="docutils literal notranslate"><span class="pre">zetTracerExpSetEnabled()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tracer-exp-deprecated-typedefs">Tracer Exp - Deprecated Typedefs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-core-callbacks-t">zet_core_callbacks_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420zet_core_callbacks_t"><code class="docutils literal notranslate"><span class="pre">zet_core_callbacks_t</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -521,16 +545,36 @@
                   
   <section id="tracer-exp-deprecated">
 <h1>Tracer Exp - Deprecated<a class="headerlink" href="#tracer-exp-deprecated" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="tracer-exp-deprecated-handles">
+<h2>Tracer Exp - Deprecated Handles<a class="headerlink" href="#tracer-exp-deprecated-handles" title="Link to this heading">#</a></h2>
+<section id="zet-tracer-exp-handle-t">
+<span id="id1"></span><h3>zet_tracer_exp_handle_t<a class="headerlink" href="#zet-tracer-exp-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Only used by the deprecated API Tracing extension. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zettracerexpcreate"><span class="std std-ref">zetTracerExpCreate</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zettracerexpdestroy"><span class="std std-ref">zetTracerExpDestroy</span></a>, <a class="reference internal" href="#zettracerexpsetprologues"><span class="std std-ref">zetTracerExpSetPrologues</span></a>, <a class="reference internal" href="#zettracerexpsetepilogues"><span class="std std-ref">zetTracerExpSetEpilogues</span></a>, <a class="reference internal" href="#zettracerexpsetenabled"><span class="std std-ref">zetTracerExpSetEnabled</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv423zet_tracer_exp_handle_t">
+<span id="_CPPv323zet_tracer_exp_handle_t"></span><span id="_CPPv223zet_tracer_exp_handle_t"></span><span id="zet_tracer_exp_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span></span><a class="headerlink" href="#_CPPv423zet_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of tracer object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="tracer-exp-deprecated-functions">
 <h2>Tracer Exp - Deprecated Functions<a class="headerlink" href="#tracer-exp-deprecated-functions" title="Link to this heading">#</a></h2>
 <section id="zettracerexpcreate">
-<span id="id1"></span><h3>zetTracerExpCreate<a class="headerlink" href="#zettracerexpcreate" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zetTracerExpCreate<a class="headerlink" href="#zettracerexpcreate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t">
-<span id="_CPPv318zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t"></span><span id="_CPPv218zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t"></span><span id="zetTracerExpCreate__zet_context_handle_t.zet_tracer_exp_desc_tCP.zet_tracer_exp_handle_tP"></span><span class="target" id="zet__api_8h_1a178b7d84290cfdd6cc3373086806214f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-tracer-exp-desc-t" title="zet_tracer_exp_desc_t"><span class="n"><span class="pre">zet_tracer_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t"></span><span id="_CPPv218zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t"></span><span id="zetTracerExpCreate__zet_context_handle_t.zet_tracer_exp_desc_tCP.zet_tracer_exp_handle_tP"></span><span class="target" id="zet__api_8h_1a178b7d84290cfdd6cc3373086806214f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/context.html#zet-context-handle-t" title="zet_context_handle_t"><span class="n"><span class="pre">zet_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-tracer-exp-desc-t" title="zet_tracer_exp_desc_t"><span class="n"><span class="pre">zet_tracer_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="#zet-tracer-exp-handle-t" title="zet_tracer_exp_handle_t"><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zetTracerExpCreate20zet_context_handle_tPK21zet_tracer_exp_desc_tP23zet_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a tracer on the context. </p>
 <p><ul class="simple">
 <li><p>The application must only use the tracer for the context which was provided during creation.</p></li>
@@ -580,12 +624,12 @@
 
 </section>
 <section id="zettracerexpdestroy">
-<span id="id2"></span><h3>zetTracerExpDestroy<a class="headerlink" href="#zettracerexpdestroy" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zetTracerExpDestroy<a class="headerlink" href="#zettracerexpdestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zetTracerExpDestroy23zet_tracer_exp_handle_t">
-<span id="_CPPv319zetTracerExpDestroy23zet_tracer_exp_handle_t"></span><span id="_CPPv219zetTracerExpDestroy23zet_tracer_exp_handle_t"></span><span id="zetTracerExpDestroy__zet_tracer_exp_handle_t"></span><span class="target" id="zet__api_8h_1a951597752de09d5087e2b93351eae6ec"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zetTracerExpDestroy23zet_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zetTracerExpDestroy23zet_tracer_exp_handle_t"></span><span id="_CPPv219zetTracerExpDestroy23zet_tracer_exp_handle_t"></span><span id="zetTracerExpDestroy__zet_tracer_exp_handle_t"></span><span class="target" id="zet__api_8h_1a951597752de09d5087e2b93351eae6ec"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-tracer-exp-handle-t" title="zet_tracer_exp_handle_t"><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zetTracerExpDestroy23zet_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys a tracer. </p>
 <p><ul class="simple">
 <li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same tracer handle.</p></li>
@@ -625,12 +669,12 @@
 
 </section>
 <section id="zettracerexpsetprologues">
-<span id="id3"></span><h3>zetTracerExpSetPrologues<a class="headerlink" href="#zettracerexpsetprologues" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zetTracerExpSetPrologues<a class="headerlink" href="#zettracerexpsetprologues" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zetTracerExpSetPrologues23zet_tracer_exp_handle_tP20zet_core_callbacks_t">
-<span id="_CPPv324zetTracerExpSetPrologues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="_CPPv224zetTracerExpSetPrologues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="zetTracerExpSetPrologues__zet_tracer_exp_handle_t.zet_core_callbacks_tP"></span><span class="target" id="zet__api_8h_1a8b102ad43adfe07a7e0e386882faa54f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpSetPrologues</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span>, <span class="n"><span class="pre">zet_core_callbacks_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCoreCbs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetTracerExpSetPrologues23zet_tracer_exp_handle_tP20zet_core_callbacks_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zetTracerExpSetPrologues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="_CPPv224zetTracerExpSetPrologues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="zetTracerExpSetPrologues__zet_tracer_exp_handle_t.zet_core_callbacks_tP"></span><span class="target" id="zet__api_8h_1a8b102ad43adfe07a7e0e386882faa54f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpSetPrologues</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-tracer-exp-handle-t" title="zet_tracer_exp_handle_t"><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span>, <a class="reference internal" href="#zet-core-callbacks-t" title="zet_core_callbacks_t"><span class="n"><span class="pre">zet_core_callbacks_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCoreCbs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetTracerExpSetPrologues23zet_tracer_exp_handle_tP20zet_core_callbacks_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Sets the collection of callbacks to be executed <strong>before</strong> driver execution. </p>
 <p><ul class="simple">
 <li><p>The application only needs to set the function pointers it is interested in receiving; all others should be ‘nullptr’</p></li>
@@ -676,12 +720,12 @@
 
 </section>
 <section id="zettracerexpsetepilogues">
-<span id="id4"></span><h3>zetTracerExpSetEpilogues<a class="headerlink" href="#zettracerexpsetepilogues" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zetTracerExpSetEpilogues<a class="headerlink" href="#zettracerexpsetepilogues" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zetTracerExpSetEpilogues23zet_tracer_exp_handle_tP20zet_core_callbacks_t">
-<span id="_CPPv324zetTracerExpSetEpilogues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="_CPPv224zetTracerExpSetEpilogues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="zetTracerExpSetEpilogues__zet_tracer_exp_handle_t.zet_core_callbacks_tP"></span><span class="target" id="zet__api_8h_1a9c795083eb009ad4f17908854b0acf1c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpSetEpilogues</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span>, <span class="n"><span class="pre">zet_core_callbacks_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCoreCbs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetTracerExpSetEpilogues23zet_tracer_exp_handle_tP20zet_core_callbacks_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zetTracerExpSetEpilogues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="_CPPv224zetTracerExpSetEpilogues23zet_tracer_exp_handle_tP20zet_core_callbacks_t"></span><span id="zetTracerExpSetEpilogues__zet_tracer_exp_handle_t.zet_core_callbacks_tP"></span><span class="target" id="zet__api_8h_1a9c795083eb009ad4f17908854b0acf1c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpSetEpilogues</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-tracer-exp-handle-t" title="zet_tracer_exp_handle_t"><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span>, <a class="reference internal" href="#zet-core-callbacks-t" title="zet_core_callbacks_t"><span class="n"><span class="pre">zet_core_callbacks_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCoreCbs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetTracerExpSetEpilogues23zet_tracer_exp_handle_tP20zet_core_callbacks_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Sets the collection of callbacks to be executed <strong>after</strong> driver execution. </p>
 <p><ul class="simple">
 <li><p>The application only needs to set the function pointers it is interested in receiving; all others should be ‘nullptr’</p></li>
@@ -727,12 +771,12 @@
 
 </section>
 <section id="zettracerexpsetenabled">
-<span id="id5"></span><h3>zetTracerExpSetEnabled<a class="headerlink" href="#zettracerexpsetenabled" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zetTracerExpSetEnabled<a class="headerlink" href="#zettracerexpsetenabled" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t">
-<span id="_CPPv322zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t"></span><span id="_CPPv222zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t"></span><span id="zetTracerExpSetEnabled__zet_tracer_exp_handle_t.ze_bool_t"></span><span class="target" id="zet__api_8h_1a5bf056e5613d5f9e0c1a423d42f2e96b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpSetEnabled</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t"></span><span id="_CPPv222zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t"></span><span id="zetTracerExpSetEnabled__zet_tracer_exp_handle_t.ze_bool_t"></span><span class="target" id="zet__api_8h_1a5bf056e5613d5f9e0c1a423d42f2e96b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetTracerExpSetEnabled</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-tracer-exp-handle-t" title="zet_tracer_exp_handle_t"><span class="n"><span class="pre">zet_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hTracer</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zetTracerExpSetEnabled23zet_tracer_exp_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Enables (or disables) the tracer </p>
 <p><ul class="simple">
 <li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same tracer handle.</p></li>
@@ -772,16 +816,40 @@
 
 </section>
 </section>
+<section id="tracer-exp-deprecated-typedefs">
+<h2>Tracer Exp - Deprecated Typedefs<a class="headerlink" href="#tracer-exp-deprecated-typedefs" title="Link to this heading">#</a></h2>
+<section id="zet-core-callbacks-t">
+<span id="id7"></span><h3>zet_core_callbacks_t<a class="headerlink" href="#zet-core-callbacks-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zettracerexpsetprologues"><span class="std std-ref">zetTracerExpSetPrologues</span></a>, <a class="reference internal" href="#zettracerexpsetepilogues"><span class="std std-ref">zetTracerExpSetEpilogues</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv420zet_core_callbacks_t">
+<span id="_CPPv320zet_core_callbacks_t"></span><span id="_CPPv220zet_core_callbacks_t"></span><span id="zet_core_callbacks_t"></span><span class="target" id="zet__api_8h_1a1c7fdb6915c8369a791d4826116484fb"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">ze_callbacks_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_core_callbacks_t</span></span></span><a class="headerlink" href="#_CPPv420zet_core_callbacks_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.14</span> Alias the existing callbacks definition for ‘core’ callbacks </p>
+</dd></dl>
+
+</section>
+</section>
 <section id="tracer-exp-deprecated-structures">
 <h2>Tracer Exp - Deprecated Structures<a class="headerlink" href="#tracer-exp-deprecated-structures" title="Link to this heading">#</a></h2>
 <section id="zet-tracer-exp-desc-t">
-<span id="id6"></span><h3>zet_tracer_exp_desc_t<a class="headerlink" href="#zet-tracer-exp-desc-t" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zet_tracer_exp_desc_t<a class="headerlink" href="#zet-tracer-exp-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use <a class="reference external" href="https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing">L0 Loader API Tracing</a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zettracerexpcreate"><span class="std std-ref">zetTracerExpCreate</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv421zet_tracer_exp_desc_t">
 <span id="_CPPv321zet_tracer_exp_desc_t"></span><span id="_CPPv221zet_tracer_exp_desc_t"></span><span id="zet_tracer_exp_desc_t"></span><span class="target" id="structzet__tracer__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_tracer_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv421zet_tracer_exp_desc_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Tracer descriptor </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.14</span> Tracer descriptor </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -854,7 +922,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">5</span></summary><div class="ctoc-prefix">zetTracerExp</div><ul class="ctoc-list"><li><a href="tracer_exp.html#zettracerexpcreate">&hellip;Create</a></li><li><a href="tracer_exp.html#zettracerexpdestroy">&hellip;Destroy</a></li><li><a href="tracer_exp.html#zettracerexpsetprologues">&hellip;SetPrologues</a></li><li><a href="tracer_exp.html#zettracerexpsetepilogues">&hellip;SetEpilogues</a></li><li><a href="tracer_exp.html#zettracerexpsetenabled">&hellip;SetEnabled</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="tracer_exp.html#zet-tracer-exp-desc-t">zet_tracer_exp_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="tracer_exp.html#zet-tracer-exp-handle-t">zet_tracer_exp_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">5</span></summary><div class="ctoc-prefix">zetTracerExp</div><ul class="ctoc-list"><li><a href="tracer_exp.html#zettracerexpcreate">&hellip;Create</a></li><li><a href="tracer_exp.html#zettracerexpdestroy">&hellip;Destroy</a></li><li><a href="tracer_exp.html#zettracerexpsetprologues">&hellip;SetPrologues</a></li><li><a href="tracer_exp.html#zettracerexpsetepilogues">&hellip;SetEpilogues</a></li><li><a href="tracer_exp.html#zettracerexpsetenabled">&hellip;SetEnabled</a></li></ul></details><details class="ctoc-group" open><summary>Typedefs <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="tracer_exp.html#zet-core-callbacks-t">zet_core_callbacks_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="tracer_exp.html#zet-tracer-exp-desc-t">zet_tracer_exp_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

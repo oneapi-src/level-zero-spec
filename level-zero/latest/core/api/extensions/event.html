@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Event - Extensions &#8212; Level Zero Specification v1.20.41</title>
+    <title>Event - Extensions &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Command List - Extensions" href="command_list.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -482,6 +492,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event-extension-enums">Event - Extension Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-event-ext-flags-t">ze_event_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420ze_event_ext_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_event_ext_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419ze_event_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_event_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_event_ext_flag_t39ZE_EVENT_EXT_FLAG_APPEND_GRAPH_EXTERNALE"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_EXT_FLAG_APPEND_GRAPH_EXTERNAL</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N19ze_event_ext_flag_t30ZE_EVENT_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_EXT_FLAG_FORCE_UINT32</span></code></a></li>
@@ -490,6 +501,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-event-query-kernel-timestamps-ext-flags-t">ze_event_query_kernel_timestamps_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv444ze_event_query_kernel_timestamps_ext_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_event_query_kernel_timestamps_ext_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv443ze_event_query_kernel_timestamps_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_event_query_kernel_timestamps_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N43ze_event_query_kernel_timestamps_ext_flag_t48ZE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_KERNELE"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_KERNEL</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N43ze_event_query_kernel_timestamps_ext_flag_t54ZE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_SYNCHRONIZEDE"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_QUERY_KERNEL_TIMESTAMPS_EXT_FLAG_SYNCHRONIZED</span></code></a></li>
@@ -541,7 +553,7 @@
                   
   <section id="event-extensions">
 <h1>Event - Extensions<a class="headerlink" href="#event-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="event-extension-functions">
 <h2>Event - Extension Functions<a class="headerlink" href="#event-extension-functions" title="Link to this heading">#</a></h2>
 <section id="zeeventquerykerneltimestampsext">
@@ -549,7 +561,7 @@
 <p class="api-version"><em>Added in version 1.6</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431zeEventQueryKernelTimestampsExt17ze_event_handle_t18ze_device_handle_tP8uint32_tP57ze_event_query_kernel_timestamps_results_ext_properties_t">
-<span id="_CPPv331zeEventQueryKernelTimestampsExt17ze_event_handle_t18ze_device_handle_tP8uint32_tP57ze_event_query_kernel_timestamps_results_ext_properties_t"></span><span id="_CPPv231zeEventQueryKernelTimestampsExt17ze_event_handle_t18ze_device_handle_tP8uint32_tP57ze_event_query_kernel_timestamps_results_ext_properties_t"></span><span id="zeEventQueryKernelTimestampsExt__ze_event_handle_t.ze_device_handle_t.uint32_tP.ze_event_query_kernel_timestamps_results_ext_properties_tP"></span><span class="target" id="ze__api_8h_1a9b169eb9778c61e2b4f1b099b0788a18"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventQueryKernelTimestampsExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_event_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hEvent</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="data_types.html#ze-event-query-kernel-timestamps-results-ext-properties-t" title="ze_event_query_kernel_timestamps_results_ext_properties_t"><span class="n"><span class="pre">ze_event_query_kernel_timestamps_results_ext_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pResults</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zeEventQueryKernelTimestampsExt17ze_event_handle_t18ze_device_handle_tP8uint32_tP57ze_event_query_kernel_timestamps_results_ext_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv331zeEventQueryKernelTimestampsExt17ze_event_handle_t18ze_device_handle_tP8uint32_tP57ze_event_query_kernel_timestamps_results_ext_properties_t"></span><span id="_CPPv231zeEventQueryKernelTimestampsExt17ze_event_handle_t18ze_device_handle_tP8uint32_tP57ze_event_query_kernel_timestamps_results_ext_properties_t"></span><span id="zeEventQueryKernelTimestampsExt__ze_event_handle_t.ze_device_handle_t.uint32_tP.ze_event_query_kernel_timestamps_results_ext_properties_tP"></span><span class="target" id="ze__api_8h_1a9b169eb9778c61e2b4f1b099b0788a18"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventQueryKernelTimestampsExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/event.html#ze-event-handle-t" title="ze_event_handle_t"><span class="n"><span class="pre">ze_event_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hEvent</span></span>, <a class="reference internal" href="../apis/device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="data_types.html#ze-event-query-kernel-timestamps-results-ext-properties-t" title="ze_event_query_kernel_timestamps_results_ext_properties_t"><span class="n"><span class="pre">ze_event_query_kernel_timestamps_results_ext_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pResults</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zeEventQueryKernelTimestampsExt17ze_event_handle_t18ze_device_handle_tP8uint32_tP57ze_event_query_kernel_timestamps_results_ext_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Query an event’s timestamp value on the host, with domain preference. </p>
 <p><ul class="simple">
 <li><p>For collecting <em>only</em> kernel timestamps, the application must ensure the event was created from an event pool that was created using <a class="reference internal" href="../apis/event_pool.html#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11af1bab0559057f7ec51e2c77a1746894f"><span class="std std-ref">ZE_EVENT_POOL_FLAG_KERNEL_TIMESTAMP</span></a> flag.</p></li>
@@ -620,6 +632,17 @@
 <section id="ze-event-ext-flags-t">
 <span id="id2"></span><h3>ze_event_ext_flags_t<a class="headerlink" href="#ze-event-ext-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.20</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-event-ext-flags-desc-t"><span class="std std-ref">ze_event_ext_flags_desc_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv420ze_event_ext_flags_t">
+<span id="_CPPv320ze_event_ext_flags_t"></span><span id="_CPPv220ze_event_ext_flags_t"></span><span id="ze_event_ext_flags_t"></span><span class="target" id="ze__api_8h_1a476e0812225415dd0b923d1c068eaddb"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_ext_flags_t</span></span></span><a class="headerlink" href="#_CPPv420ze_event_ext_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Event extension flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv419ze_event_ext_flag_t">
 <span id="_CPPv319ze_event_ext_flag_t"></span><span id="_CPPv219ze_event_ext_flag_t"></span><span class="target" id="ze__api_8h_1acc63f2748202d168c26ac8bf76c3eb1a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv419ze_event_ext_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -642,6 +665,17 @@
 <section id="ze-event-query-kernel-timestamps-ext-flags-t">
 <span id="id3"></span><h3>ze_event_query_kernel_timestamps_ext_flags_t<a class="headerlink" href="#ze-event-query-kernel-timestamps-ext-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.6</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="data_types.html#ze-event-query-kernel-timestamps-ext-properties-t"><span class="std std-ref">ze_event_query_kernel_timestamps_ext_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv444ze_event_query_kernel_timestamps_ext_flags_t">
+<span id="_CPPv344ze_event_query_kernel_timestamps_ext_flags_t"></span><span id="_CPPv244ze_event_query_kernel_timestamps_ext_flags_t"></span><span id="ze_event_query_kernel_timestamps_ext_flags_t"></span><span class="target" id="ze__api_8h_1a61280415f77bbd6a286a301e1e5091b6"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_query_kernel_timestamps_ext_flags_t</span></span></span><a class="headerlink" href="#_CPPv444ze_event_query_kernel_timestamps_ext_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Event query kernel timestamps flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv443ze_event_query_kernel_timestamps_ext_flag_t">
 <span id="_CPPv343ze_event_query_kernel_timestamps_ext_flag_t"></span><span id="_CPPv243ze_event_query_kernel_timestamps_ext_flag_t"></span><span class="target" id="ze__api_8h_1a14315d984fa91437b9dd5028965b1549"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_query_kernel_timestamps_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv443ze_event_query_kernel_timestamps_ext_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -693,8 +727,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N25ze_event_ext_flags_desc_t5flagsE">
-<span id="_CPPv3N25ze_event_ext_flags_desc_t5flagsE"></span><span id="_CPPv2N25ze_event_ext_flags_desc_t5flagsE"></span><span id="ze_event_ext_flags_desc_t::flags__ze_event_ext_flags_t"></span><span class="target" id="structze__event__ext__flags__desc__t_1a3bf206e9832d432ae9f22ad783199076"></span><span class="n"><span class="pre">ze_event_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N25ze_event_ext_flags_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] event extension flags. must be 0 (default) or a valid combination of ze_event_ext_flags_t</p>
+<span id="_CPPv3N25ze_event_ext_flags_desc_t5flagsE"></span><span id="_CPPv2N25ze_event_ext_flags_desc_t5flagsE"></span><span id="ze_event_ext_flags_desc_t::flags__ze_event_ext_flags_t"></span><span class="target" id="structze__event__ext__flags__desc__t_1a3bf206e9832d432ae9f22ad783199076"></span><a class="reference internal" href="#ze-event-ext-flags-t" title="ze_event_ext_flags_t"><span class="n"><span class="pre">ze_event_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N25ze_event_ext_flags_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] event extension flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze-event-ext-flags-t"><span class="std std-ref">ze_event_ext_flags_t</span></a></p>
 </dd></dl>
 
 </div>
@@ -704,6 +738,11 @@
 <section id="ze-synchronized-timestamp-data-ext-t">
 <span id="id5"></span><h3>ze_synchronized_timestamp_data_ext_t<a class="headerlink" href="#ze-synchronized-timestamp-data-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.6</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-synchronized-timestamp-result-ext-t"><span class="std std-ref">ze_synchronized_timestamp_result_ext_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv436ze_synchronized_timestamp_data_ext_t">
 <span id="_CPPv336ze_synchronized_timestamp_data_ext_t"></span><span id="_CPPv236ze_synchronized_timestamp_data_ext_t"></span><span id="ze_synchronized_timestamp_data_ext_t"></span><span class="target" id="structze__synchronized__timestamp__data__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_synchronized_timestamp_data_ext_t</span></span></span><a class="headerlink" href="#_CPPv436ze_synchronized_timestamp_data_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -729,6 +768,11 @@
 <section id="ze-synchronized-timestamp-result-ext-t">
 <span id="id6"></span><h3>ze_synchronized_timestamp_result_ext_t<a class="headerlink" href="#ze-synchronized-timestamp-result-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.6</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="data_types.html#ze-event-query-kernel-timestamps-results-ext-properties-t"><span class="std std-ref">ze_event_query_kernel_timestamps_results_ext_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv438ze_synchronized_timestamp_result_ext_t">
 <span id="_CPPv338ze_synchronized_timestamp_result_ext_t"></span><span id="_CPPv238ze_synchronized_timestamp_result_ext_t"></span><span id="ze_synchronized_timestamp_result_ext_t"></span><span class="target" id="structze__synchronized__timestamp__result__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_synchronized_timestamp_result_ext_t</span></span></span><a class="headerlink" href="#_CPPv438ze_synchronized_timestamp_result_ext_t" title="Link to this definition">#</a><br /></dt>

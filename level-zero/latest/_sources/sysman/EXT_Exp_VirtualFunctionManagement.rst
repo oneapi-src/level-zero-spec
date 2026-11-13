@@ -60,7 +60,7 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
     :ref:`zesDeviceEnumEnabledVFExp`\(hDevice, &numVf, nullptr);
 
     // Allocate memory for vf handles and call back in to gather handles
-    std::vector<zes_vf_handle_t> vfs(numVf, nullptr);
+    std::vector<:ref:`zes-vf-handle-t`\> vfs(numVf, nullptr);
     :ref:`zesDeviceEnumEnabledVFExp`\(hDevice, &numVf, vfs.data());
 
     // Gather VF capabilities
@@ -72,7 +72,7 @@ The following pseudo-code demonstrates a sequence for obtaining the engine activ
     // Detect the info types a particular VF supports
 
     // Using VF# 0 to demonstrate how to detect engine info type and query engine util info
-    zes_vf_handle_t activeVf = vfs[0];
+    :ref:`zes-vf-handle-t` activeVf = vfs[0];
     uint32_t engineStatCount = 0;
     
     :ref:`zesVFManagementGetVFEngineUtilizationExp2`\(activeVf, &engineStatCount, nullptr);

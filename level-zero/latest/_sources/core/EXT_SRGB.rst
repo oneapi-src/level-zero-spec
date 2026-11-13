@@ -21,7 +21,7 @@ API
 sRGB
 ~~~~
 
-Device capabilities may include native support for sRGB image formats. sRGB images may benefit from hardware acceleration on devices that include native support for sRGB. The following psuedo-code demonstrates a sequence for creating an sRGB image:
+Device capabilities may include native support for sRGB image formats. sRGB images may benefit from hardware acceleration on devices that include native support for sRGB. The following pseudo-code demonstrates a sequence for creating an sRGB image:
 
 .. parsed-literal::
 
@@ -46,7 +46,7 @@ Device capabilities may include native support for sRGB image formats. sRGB imag
            format,
            128, 128, 0, 0, 0
        };
-       ze_image_handle_t hImage;
+       :ref:`ze-image-handle-t` hImage;
        :ref:`zeImageCreate`\(hContext, hDevice, &imageDesc, &hImage);
 
        // upload contents from host pointer

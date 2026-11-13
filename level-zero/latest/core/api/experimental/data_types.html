@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data Types - Experimental &#8212; Level Zero Specification v1.20.41</title>
+    <title>Data Types - Experimental &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Fabric Edge - Experimental" href="fabric_edge.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -588,12 +598,17 @@
                   
   <section id="data-types-experimental">
 <h1>Data Types - Experimental<a class="headerlink" href="#data-types-experimental" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="data-types-experimental-enums">
 <h2>Data Types - Experimental Enums<a class="headerlink" href="#data-types-experimental-enums" title="Link to this heading">#</a></h2>
 <section id="ze-module-program-exp-version-t">
 <span id="id1"></span><h3>ze_module_program_exp_version_t<a class="headerlink" href="#ze-module-program-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_ModuleProgram.html#ze-experimental-module-program"><span class="std std-ref">Module Program Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv431ze_module_program_exp_version_t">
 <span id="_CPPv331ze_module_program_exp_version_t"></span><span id="_CPPv231ze_module_program_exp_version_t"></span><span class="target" id="ze__api_8h_1a8874ddae5a61025499bd6c6ea6e38085"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_program_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv431ze_module_program_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -623,6 +638,11 @@
 <section id="ze-global-offset-exp-version-t">
 <span id="id2"></span><h3>ze_global_offset_exp_version_t<a class="headerlink" href="#ze-global-offset-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.1</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_GlobalOffset.html#ze-experimental-global-offset"><span class="std std-ref">Global Offset Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv430ze_global_offset_exp_version_t">
 <span id="_CPPv330ze_global_offset_exp_version_t"></span><span id="_CPPv230ze_global_offset_exp_version_t"></span><span class="target" id="ze__api_8h_1a0feeae3ae38908c69fb26c266111f0fb"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_global_offset_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv430ze_global_offset_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -652,6 +672,11 @@
 <section id="ze-event-query-timestamps-exp-version-t">
 <span id="id3"></span><h3>ze_event_query_timestamps_exp_version_t<a class="headerlink" href="#ze-event-query-timestamps-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_EventQueryTimestamps.html#ze-experimental-event-query-timestamps"><span class="std std-ref">Event Query Timestamps Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv439ze_event_query_timestamps_exp_version_t">
 <span id="_CPPv339ze_event_query_timestamps_exp_version_t"></span><span id="_CPPv239ze_event_query_timestamps_exp_version_t"></span><span class="target" id="ze__api_8h_1a8b94ed2890594ad1ad87acbd968b0ba1"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_query_timestamps_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv439ze_event_query_timestamps_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -681,6 +706,11 @@
 <section id="ze-image-memory-properties-exp-version-t">
 <span id="id4"></span><h3>ze_image_memory_properties_exp_version_t<a class="headerlink" href="#ze-image-memory-properties-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_ImageMemoryProperties.html#ze-experimental-image-memory-properties"><span class="std std-ref">Image Memory Properties Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv440ze_image_memory_properties_exp_version_t">
 <span id="_CPPv340ze_image_memory_properties_exp_version_t"></span><span id="_CPPv240ze_image_memory_properties_exp_version_t"></span><span class="target" id="ze__api_8h_1a7c1e3d6acaab3a9796bf1ec107d731db"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_image_memory_properties_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv440ze_image_memory_properties_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -710,6 +740,11 @@
 <section id="ze-scheduling-hints-exp-version-t">
 <span id="id5"></span><h3>ze_scheduling_hints_exp_version_t<a class="headerlink" href="#ze-scheduling-hints-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_SchedulingHints.html#ze-experimental-scheduling-hints"><span class="std std-ref">Kernel Scheduling Hints Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv433ze_scheduling_hints_exp_version_t">
 <span id="_CPPv333ze_scheduling_hints_exp_version_t"></span><span id="_CPPv233ze_scheduling_hints_exp_version_t"></span><span class="target" id="ze__api_8h_1a22e47937bfc717ca5be005ff815fd3d8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_scheduling_hints_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv433ze_scheduling_hints_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -739,6 +774,11 @@
 <section id="ze-bandwidth-properties-exp-version-t">
 <span id="id6"></span><h3>ze_bandwidth_properties_exp_version_t<a class="headerlink" href="#ze-bandwidth-properties-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.4</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_BandwidthProperties.html#ze-experimental-bandwidth-properties"><span class="std std-ref">Bandwidth Extension Properties</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv437ze_bandwidth_properties_exp_version_t">
 <span id="_CPPv337ze_bandwidth_properties_exp_version_t"></span><span id="_CPPv237ze_bandwidth_properties_exp_version_t"></span><span class="target" id="ze__api_8h_1acb16aad852deeb5ce37f39d65a37973b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_bandwidth_properties_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv437ze_bandwidth_properties_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -768,6 +808,11 @@
 <section id="ze-fabric-exp-version-t">
 <span id="id7"></span><h3>ze_fabric_exp_version_t<a class="headerlink" href="#ze-fabric-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.4</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_Fabric.html#ze-experimental-fabric"><span class="std std-ref">Fabric Topology Discovery Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv423ze_fabric_exp_version_t">
 <span id="_CPPv323ze_fabric_exp_version_t"></span><span id="_CPPv223ze_fabric_exp_version_t"></span><span class="target" id="ze__api_8h_1a33ed1785677adab4f336d563f5609892"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_fabric_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv423ze_fabric_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -797,6 +842,11 @@
 <section id="ze-sub-allocations-exp-version-t">
 <span id="id8"></span><h3>ze_sub_allocations_exp_version_t<a class="headerlink" href="#ze-sub-allocations-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_SubAllocationProperties.html#ze-experimental-sub-allocations"><span class="std std-ref">Sub-Allocation Properties Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv432ze_sub_allocations_exp_version_t">
 <span id="_CPPv332ze_sub_allocations_exp_version_t"></span><span id="_CPPv232ze_sub_allocations_exp_version_t"></span><span class="target" id="ze__api_8h_1a0951bd525620eb8657d248c69c60e228"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_sub_allocations_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv432ze_sub_allocations_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -826,6 +876,11 @@
 <section id="ze-bindless-image-exp-version-t">
 <span id="id9"></span><h3>ze_bindless_image_exp_version_t<a class="headerlink" href="#ze-bindless-image-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_EXP_BindlessImages.html#ze-experimental-bindless-image"><span class="std std-ref">Bindless Image Experimental Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv431ze_bindless_image_exp_version_t">
 <span id="_CPPv331ze_bindless_image_exp_version_t"></span><span id="_CPPv231ze_bindless_image_exp_version_t"></span><span class="target" id="ze__api_8h_1a87620de241e3734d0ac6ed65b2769507"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_bindless_image_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv431ze_bindless_image_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -855,6 +910,11 @@
 <section id="ze-kernel-get-binary-exp-version-t">
 <span id="id10"></span><h3>ze_kernel_get_binary_exp_version_t<a class="headerlink" href="#ze-kernel-get-binary-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.11</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_KernelBinary.html#ze-extension-kernel-binary-exp"><span class="std std-ref">Get Kernel Binary Program Data Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv434ze_kernel_get_binary_exp_version_t">
 <span id="_CPPv334ze_kernel_get_binary_exp_version_t"></span><span id="_CPPv234ze_kernel_get_binary_exp_version_t"></span><span class="target" id="ze__api_8h_1ac54c4679cb7b4658ff998c5ec3a034bb"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_kernel_get_binary_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv434ze_kernel_get_binary_exp_version_t" title="Link to this definition">#</a><br /></dt>
@@ -884,6 +944,11 @@
 <section id="ze-kernel-get-allocation-properties-exp-version-t">
 <span id="id11"></span><h3>ze_kernel_get_allocation_properties_exp_version_t<a class="headerlink" href="#ze-kernel-get-allocation-properties-exp-version-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.14</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Extension:</strong> <a class="reference internal" href="../../EXT_Exp_KernelAllocationProperties.html#ze-experimental-kernel-allocation-properties"><span class="std std-ref">Get Kernel Allocation Properties Extension</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv449ze_kernel_get_allocation_properties_exp_version_t">
 <span id="_CPPv349ze_kernel_get_allocation_properties_exp_version_t"></span><span id="_CPPv249ze_kernel_get_allocation_properties_exp_version_t"></span><span class="target" id="ze__api_8h_1ab971923158b9d200cfb7da0efba5d2a6"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_kernel_get_allocation_properties_exp_version_t</span></span></span><a class="headerlink" href="#_CPPv449ze_kernel_get_allocation_properties_exp_version_t" title="Link to this definition">#</a><br /></dt>

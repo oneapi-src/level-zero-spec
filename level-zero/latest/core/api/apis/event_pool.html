@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Event Pool &#8212; Level Zero Specification v1.20.41</title>
+    <title>Event Pool &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'core/api/apis/event_pool';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Fence" href="fence.html" />
-    <link rel="prev" title="Event" href="event.html" />
+    <link rel="next" title="Event" href="event.html" />
+    <link rel="prev" title="Fence" href="fence.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event-pool-handles">Event Pool Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-event-pool-handle-t">ze_event_pool_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422ze_event_pool_handle_t"><code class="docutils literal notranslate"><span class="pre">ze_event_pool_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event-pool-functions">Event Pool Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zeeventpoolcreate">zeEventPoolCreate</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t"><code class="docutils literal notranslate"><span class="pre">zeEventPoolCreate()</span></code></a></li>
@@ -510,6 +527,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#event-pool-enums">Event Pool Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-event-pool-flags-t">ze_event_pool_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv421ze_event_pool_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_event_pool_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv420ze_event_pool_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_event_pool_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20ze_event_pool_flag_t31ZE_EVENT_POOL_FLAG_HOST_VISIBLEE"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_POOL_FLAG_HOST_VISIBLE</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N20ze_event_pool_flag_t22ZE_EVENT_POOL_FLAG_IPCE"><code class="docutils literal notranslate"><span class="pre">ZE_EVENT_POOL_FLAG_IPC</span></code></a></li>
@@ -548,15 +566,35 @@
                   
   <section id="event-pool">
 <h1>Event Pool<a class="headerlink" href="#event-pool" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="event-pool-handles">
+<h2>Event Pool Handles<a class="headerlink" href="#event-pool-handles" title="Link to this heading">#</a></h2>
+<section id="ze-event-pool-handle-t">
+<span id="id1"></span><h3>ze_event_pool_handle_t<a class="headerlink" href="#ze-event-pool-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zeeventpoolcreate"><span class="std std-ref">zeEventPoolCreate</span></a>, <a class="reference internal" href="#zeeventpoolopenipchandle"><span class="std std-ref">zeEventPoolOpenIpcHandle</span></a>, <a class="reference internal" href="event.html#zeeventgeteventpool"><span class="std std-ref">zeEventGetEventPool</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zeeventpooldestroy"><span class="std std-ref">zeEventPoolDestroy</span></a>, <a class="reference internal" href="event.html#zeeventcreate"><span class="std std-ref">zeEventCreate</span></a>, <a class="reference internal" href="#zeeventpoolgetipchandle"><span class="std std-ref">zeEventPoolGetIpcHandle</span></a>, <a class="reference internal" href="#zeeventpoolcloseipchandle"><span class="std std-ref">zeEventPoolCloseIpcHandle</span></a>, <a class="reference internal" href="#zeeventpoolgetcontexthandle"><span class="std std-ref">zeEventPoolGetContextHandle</span></a>, <a class="reference internal" href="#zeeventpoolgetflags"><span class="std std-ref">zeEventPoolGetFlags</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#events"><span class="std std-ref">Events (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv422ze_event_pool_handle_t">
+<span id="_CPPv322ze_event_pool_handle_t"></span><span id="_CPPv222ze_event_pool_handle_t"></span><span id="ze_event_pool_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></span><a class="headerlink" href="#_CPPv422ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of driver’s event pool object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="event-pool-functions">
 <h2>Event Pool Functions<a class="headerlink" href="#event-pool-functions" title="Link to this heading">#</a></h2>
 <section id="zeeventpoolcreate">
-<span id="id1"></span><h3>zeEventPoolCreate<a class="headerlink" href="#zeeventpoolcreate" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeEventPoolCreate<a class="headerlink" href="#zeeventpoolcreate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t">
-<span id="_CPPv317zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t"></span><span id="_CPPv217zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t"></span><span id="zeEventPoolCreate__ze_context_handle_t.ze_event_pool_desc_tCP.uint32_t.ze_device_handle_tP.ze_event_pool_handle_tP"></span><span class="target" id="ze__api_8h_1a785396a468910de3d806dfa65d82ffda"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-event-pool-desc-t" title="ze_event_pool_desc_t"><span class="n"><span class="pre">ze_event_pool_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numDevices</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevices</span></span>, <span class="n"><span class="pre">ze_event_pool_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t"></span><span id="_CPPv217zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t"></span><span id="zeEventPoolCreate__ze_context_handle_t.ze_event_pool_desc_tCP.uint32_t.ze_device_handle_tP.ze_event_pool_handle_tP"></span><span class="target" id="ze__api_8h_1a785396a468910de3d806dfa65d82ffda"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-event-pool-desc-t" title="ze_event_pool_desc_t"><span class="n"><span class="pre">ze_event_pool_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numDevices</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevices</span></span>, <a class="reference internal" href="#ze-event-pool-handle-t" title="ze_event_pool_handle_t"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zeEventPoolCreate19ze_context_handle_tPK20ze_event_pool_desc_t8uint32_tP18ze_device_handle_tP22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a pool of events on the context. </p>
 <p><ul class="simple">
 <li><p>The application must only use events within the pool for the device(s), or their sub-devices, which were provided during creation.</p></li>
@@ -616,11 +654,11 @@
 
 </section>
 <section id="zeeventpooldestroy">
-<span id="id2"></span><h3>zeEventPoolDestroy<a class="headerlink" href="#zeeventpooldestroy" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zeEventPoolDestroy<a class="headerlink" href="#zeeventpooldestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zeEventPoolDestroy22ze_event_pool_handle_t">
-<span id="_CPPv318zeEventPoolDestroy22ze_event_pool_handle_t"></span><span id="_CPPv218zeEventPoolDestroy22ze_event_pool_handle_t"></span><span id="zeEventPoolDestroy__ze_event_pool_handle_t"></span><span class="target" id="ze__api_8h_1a7630979f25e639b0a0d8bcb945d38a9e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_event_pool_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zeEventPoolDestroy22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zeEventPoolDestroy22ze_event_pool_handle_t"></span><span id="_CPPv218zeEventPoolDestroy22ze_event_pool_handle_t"></span><span id="zeEventPoolDestroy__ze_event_pool_handle_t"></span><span class="target" id="ze__api_8h_1a7630979f25e639b0a0d8bcb945d38a9e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-event-pool-handle-t" title="ze_event_pool_handle_t"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zeEventPoolDestroy22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Deletes an event pool object. </p>
 <p><ul class="simple">
 <li><p>The application must destroy all event handles created from the pool before destroying the pool itself.</p></li>
@@ -662,11 +700,11 @@
 
 </section>
 <section id="zeeventpoolgetipchandle">
-<span id="id3"></span><h3>zeEventPoolGetIpcHandle<a class="headerlink" href="#zeeventpoolgetipchandle" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zeEventPoolGetIpcHandle<a class="headerlink" href="#zeeventpoolgetipchandle" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t">
-<span id="_CPPv323zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t"></span><span id="_CPPv223zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t"></span><span id="zeEventPoolGetIpcHandle__ze_event_pool_handle_t.ze_ipc_event_pool_handle_tP"></span><span class="target" id="ze__api_8h_1a74714460957c95364e850f55b99d4ad8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolGetIpcHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_event_pool_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span>, <a class="reference internal" href="data_types.html#ze-ipc-event-pool-handle-t" title="ze_ipc_event_pool_handle_t"><span class="n"><span class="pre">ze_ipc_event_pool_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phIpc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t"></span><span id="_CPPv223zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t"></span><span id="zeEventPoolGetIpcHandle__ze_event_pool_handle_t.ze_ipc_event_pool_handle_tP"></span><span class="target" id="ze__api_8h_1a74714460957c95364e850f55b99d4ad8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolGetIpcHandle</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-event-pool-handle-t" title="ze_event_pool_handle_t"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span>, <a class="reference internal" href="data_types.html#ze-ipc-event-pool-handle-t" title="ze_ipc_event_pool_handle_t"><span class="n"><span class="pre">ze_ipc_event_pool_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phIpc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeEventPoolGetIpcHandle22ze_event_pool_handle_tP26ze_ipc_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Gets an IPC event pool handle for the specified event handle that can be shared with another process. </p>
 <p><ul class="simple">
 <li><p>Event pool must have been created with <a class="reference internal" href="#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11ab2ec212f1e1e04dd20d028d11bef7f04"><span class="std std-ref">ZE_EVENT_POOL_FLAG_IPC</span></a>.</p></li>
@@ -712,11 +750,11 @@
 
 </section>
 <section id="zeeventpoolopenipchandle">
-<span id="id4"></span><h3>zeEventPoolOpenIpcHandle<a class="headerlink" href="#zeeventpoolopenipchandle" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zeEventPoolOpenIpcHandle<a class="headerlink" href="#zeeventpoolopenipchandle" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zeEventPoolOpenIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t">
-<span id="_CPPv324zeEventPoolOpenIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t"></span><span id="_CPPv224zeEventPoolOpenIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t"></span><span id="zeEventPoolOpenIpcHandle__ze_context_handle_t.ze_ipc_event_pool_handle_t.ze_event_pool_handle_tP"></span><span class="target" id="ze__api_8h_1a5255170848b949f1f49906b73f5faf3a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolOpenIpcHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="data_types.html#ze-ipc-event-pool-handle-t" title="ze_ipc_event_pool_handle_t"><span class="n"><span class="pre">ze_ipc_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hIpc</span></span>, <span class="n"><span class="pre">ze_event_pool_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeEventPoolOpenIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zeEventPoolOpenIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t"></span><span id="_CPPv224zeEventPoolOpenIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t"></span><span id="zeEventPoolOpenIpcHandle__ze_context_handle_t.ze_ipc_event_pool_handle_t.ze_event_pool_handle_tP"></span><span class="target" id="ze__api_8h_1a5255170848b949f1f49906b73f5faf3a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolOpenIpcHandle</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="data_types.html#ze-ipc-event-pool-handle-t" title="ze_ipc_event_pool_handle_t"><span class="n"><span class="pre">ze_ipc_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hIpc</span></span>, <a class="reference internal" href="#ze-event-pool-handle-t" title="ze_event_pool_handle_t"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeEventPoolOpenIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_tP22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Opens an IPC event pool handle to retrieve an event pool handle from another process. </p>
 <p><ul class="simple">
 <li><p>Multiple calls to this function with the same IPC handle will return unique event pool handles.</p></li>
@@ -765,11 +803,11 @@
 
 </section>
 <section id="zeeventpoolcloseipchandle">
-<span id="id5"></span><h3>zeEventPoolCloseIpcHandle<a class="headerlink" href="#zeeventpoolcloseipchandle" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zeEventPoolCloseIpcHandle<a class="headerlink" href="#zeeventpoolcloseipchandle" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zeEventPoolCloseIpcHandle22ze_event_pool_handle_t">
-<span id="_CPPv325zeEventPoolCloseIpcHandle22ze_event_pool_handle_t"></span><span id="_CPPv225zeEventPoolCloseIpcHandle22ze_event_pool_handle_t"></span><span id="zeEventPoolCloseIpcHandle__ze_event_pool_handle_t"></span><span class="target" id="ze__api_8h_1a07371829b8cfe26b0235a783056eb442"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolCloseIpcHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_event_pool_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeEventPoolCloseIpcHandle22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zeEventPoolCloseIpcHandle22ze_event_pool_handle_t"></span><span id="_CPPv225zeEventPoolCloseIpcHandle22ze_event_pool_handle_t"></span><span id="zeEventPoolCloseIpcHandle__ze_event_pool_handle_t"></span><span class="target" id="ze__api_8h_1a07371829b8cfe26b0235a783056eb442"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolCloseIpcHandle</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-event-pool-handle-t" title="ze_event_pool_handle_t"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeEventPoolCloseIpcHandle22ze_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Closes an IPC event handle in the current process. </p>
 <p><ul class="simple">
 <li><p>Closes an IPC event handle by destroying events that were opened in this process using <a class="reference internal" href="#zeeventpoolopenipchandle"><span class="std std-ref">zeEventPoolOpenIpcHandle</span></a>.</p></li>
@@ -807,11 +845,11 @@
 
 </section>
 <section id="zeeventpoolputipchandle">
-<span id="id6"></span><h3>zeEventPoolPutIpcHandle<a class="headerlink" href="#zeeventpoolputipchandle" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zeEventPoolPutIpcHandle<a class="headerlink" href="#zeeventpoolputipchandle" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.6</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeEventPoolPutIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_t">
-<span id="_CPPv323zeEventPoolPutIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_t"></span><span id="_CPPv223zeEventPoolPutIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_t"></span><span id="zeEventPoolPutIpcHandle__ze_context_handle_t.ze_ipc_event_pool_handle_t"></span><span class="target" id="ze__api_8h_1a07eb1b819f2e282ae74f924d54cafd88"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolPutIpcHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="data_types.html#ze-ipc-event-pool-handle-t" title="ze_ipc_event_pool_handle_t"><span class="n"><span class="pre">ze_ipc_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hIpc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeEventPoolPutIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeEventPoolPutIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_t"></span><span id="_CPPv223zeEventPoolPutIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_t"></span><span id="zeEventPoolPutIpcHandle__ze_context_handle_t.ze_ipc_event_pool_handle_t"></span><span class="target" id="ze__api_8h_1a07eb1b819f2e282ae74f924d54cafd88"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolPutIpcHandle</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="data_types.html#ze-ipc-event-pool-handle-t" title="ze_ipc_event_pool_handle_t"><span class="n"><span class="pre">ze_ipc_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hIpc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeEventPoolPutIpcHandle19ze_context_handle_t26ze_ipc_event_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns an IPC event pool handle to the driver. </p>
 <p><ul class="simple">
 <li><p>This call must be used for IPC handles previously obtained with <a class="reference internal" href="#zeeventpoolgetipchandle"><span class="std std-ref">zeEventPoolGetIpcHandle</span></a>.</p></li>
@@ -855,11 +893,11 @@
 
 </section>
 <section id="zeeventpoolgetcontexthandle">
-<span id="id7"></span><h3>zeEventPoolGetContextHandle<a class="headerlink" href="#zeeventpoolgetcontexthandle" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zeEventPoolGetContextHandle<a class="headerlink" href="#zeeventpoolgetcontexthandle" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zeEventPoolGetContextHandle22ze_event_pool_handle_tP19ze_context_handle_t">
-<span id="_CPPv327zeEventPoolGetContextHandle22ze_event_pool_handle_tP19ze_context_handle_t"></span><span id="_CPPv227zeEventPoolGetContextHandle22ze_event_pool_handle_tP19ze_context_handle_t"></span><span id="zeEventPoolGetContextHandle__ze_event_pool_handle_t.ze_context_handle_tP"></span><span class="target" id="ze__api_8h_1a90f10b5c596a2d93f424f4f07947b7c7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolGetContextHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_event_pool_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span>, <span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeEventPoolGetContextHandle22ze_event_pool_handle_tP19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zeEventPoolGetContextHandle22ze_event_pool_handle_tP19ze_context_handle_t"></span><span id="_CPPv227zeEventPoolGetContextHandle22ze_event_pool_handle_tP19ze_context_handle_t"></span><span id="zeEventPoolGetContextHandle__ze_event_pool_handle_t.ze_context_handle_tP"></span><span class="target" id="ze__api_8h_1a90f10b5c596a2d93f424f4f07947b7c7"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolGetContextHandle</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-event-pool-handle-t" title="ze_event_pool_handle_t"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span>, <a class="reference internal" href="context.html#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phContext</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeEventPoolGetContextHandle22ze_event_pool_handle_tP19ze_context_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Gets the handle of the context on which the event pool was created. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -904,11 +942,11 @@
 
 </section>
 <section id="zeeventpoolgetflags">
-<span id="id8"></span><h3>zeEventPoolGetFlags<a class="headerlink" href="#zeeventpoolgetflags" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zeEventPoolGetFlags<a class="headerlink" href="#zeeventpoolgetflags" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zeEventPoolGetFlags22ze_event_pool_handle_tP21ze_event_pool_flags_t">
-<span id="_CPPv319zeEventPoolGetFlags22ze_event_pool_handle_tP21ze_event_pool_flags_t"></span><span id="_CPPv219zeEventPoolGetFlags22ze_event_pool_handle_tP21ze_event_pool_flags_t"></span><span id="zeEventPoolGetFlags__ze_event_pool_handle_t.ze_event_pool_flags_tP"></span><span class="target" id="ze__api_8h_1a1f4933ec72a6b327ce0b14d863064274"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolGetFlags</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_event_pool_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span>, <span class="n"><span class="pre">ze_event_pool_flags_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFlags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeEventPoolGetFlags22ze_event_pool_handle_tP21ze_event_pool_flags_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zeEventPoolGetFlags22ze_event_pool_handle_tP21ze_event_pool_flags_t"></span><span id="_CPPv219zeEventPoolGetFlags22ze_event_pool_handle_tP21ze_event_pool_flags_t"></span><span id="zeEventPoolGetFlags__ze_event_pool_handle_t.ze_event_pool_flags_tP"></span><span class="target" id="ze__api_8h_1a1f4933ec72a6b327ce0b14d863064274"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeEventPoolGetFlags</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-event-pool-handle-t" title="ze_event_pool_handle_t"><span class="n"><span class="pre">ze_event_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hEventPool</span></span>, <a class="reference internal" href="#ze-event-pool-flags-t" title="ze_event_pool_flags_t"><span class="n"><span class="pre">ze_event_pool_flags_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFlags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeEventPoolGetFlags22ze_event_pool_handle_tP21ze_event_pool_flags_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Gets the creation flags used to create the event pool. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -919,7 +957,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hEventPool</strong> – [in] handle of the event pool </p></li>
-<li><p><strong>pFlags</strong> – [out] creation flags used to create the event pool; may be 0 or a valid combination of <a class="reference internal" href="#ze-event-pool-flags-t"><span class="std std-ref">ze_event_pool_flag_t</span></a></p></li>
+<li><p><strong>pFlags</strong> – [out] creation flags used to create the event pool; may be 0 or a valid combination of <a class="reference internal" href="#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11"><span class="std std-ref">ze_event_pool_flag_t</span></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -956,8 +994,20 @@
 <section id="event-pool-enums">
 <h2>Event Pool Enums<a class="headerlink" href="#event-pool-enums" title="Link to this heading">#</a></h2>
 <section id="ze-event-pool-flags-t">
-<span id="id9"></span><h3>ze_event_pool_flags_t<a class="headerlink" href="#ze-event-pool-flags-t" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>ze_event_pool_flags_t<a class="headerlink" href="#ze-event-pool-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zeeventpoolgetflags"><span class="std std-ref">zeEventPoolGetFlags</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-event-pool-desc-t"><span class="std std-ref">ze_event_pool_desc_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv421ze_event_pool_flags_t">
+<span id="_CPPv321ze_event_pool_flags_t"></span><span id="_CPPv221ze_event_pool_flags_t"></span><span id="ze_event_pool_flags_t"></span><span class="target" id="ze__api_8h_1a6fc5cc779fd3f6c8f7639038c97c2f75"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_pool_flags_t</span></span></span><a class="headerlink" href="#_CPPv421ze_event_pool_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported event pool creation flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420ze_event_pool_flag_t">
 <span id="_CPPv320ze_event_pool_flag_t"></span><span id="_CPPv220ze_event_pool_flag_t"></span><span class="target" id="ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_pool_flag_t</span></span></span><a class="headerlink" href="#_CPPv420ze_event_pool_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -999,8 +1049,14 @@
 <section id="event-pool-structures">
 <h2>Event Pool Structures<a class="headerlink" href="#event-pool-structures" title="Link to this heading">#</a></h2>
 <section id="ze-event-pool-desc-t">
-<span id="id10"></span><h3>ze_event_pool_desc_t<a class="headerlink" href="#ze-event-pool-desc-t" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>ze_event_pool_desc_t<a class="headerlink" href="#ze-event-pool-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zeeventpoolcreate"><span class="std std-ref">zeEventPoolCreate</span></a></div>
+<div class="line"><strong>pNext may point to:</strong> <a class="reference internal" href="../deprecated/event_pool.html#ze-event-pool-counter-based-exp-desc-t"><span class="std std-ref">ze_event_pool_counter_based_exp_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420ze_event_pool_desc_t">
 <span id="_CPPv320ze_event_pool_desc_t"></span><span id="_CPPv220ze_event_pool_desc_t"></span><span id="ze_event_pool_desc_t"></span><span class="target" id="structze__event__pool__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_event_pool_desc_t</span></span></span><a class="headerlink" href="#_CPPv420ze_event_pool_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -1021,8 +1077,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20ze_event_pool_desc_t5flagsE">
-<span id="_CPPv3N20ze_event_pool_desc_t5flagsE"></span><span id="_CPPv2N20ze_event_pool_desc_t5flagsE"></span><span id="ze_event_pool_desc_t::flags__ze_event_pool_flags_t"></span><span class="target" id="structze__event__pool__desc__t_1af5d2530071d81b06b4b12772f95b30b9"></span><span class="n"><span class="pre">ze_event_pool_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N20ze_event_pool_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze-event-pool-flags-t"><span class="std std-ref">ze_event_pool_flag_t</span></a>; default behavior is signals and waits are visible to the entire device and peer devices. </p>
+<span id="_CPPv3N20ze_event_pool_desc_t5flagsE"></span><span id="_CPPv2N20ze_event_pool_desc_t5flagsE"></span><span id="ze_event_pool_desc_t::flags__ze_event_pool_flags_t"></span><span class="target" id="structze__event__pool__desc__t_1af5d2530071d81b06b4b12772f95b30b9"></span><a class="reference internal" href="#ze-event-pool-flags-t" title="ze_event_pool_flags_t"><span class="n"><span class="pre">ze_event_pool_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N20ze_event_pool_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] creation flags. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11"><span class="std std-ref">ze_event_pool_flag_t</span></a>; default behavior is signals and waits are visible to the entire device and peer devices. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1050,20 +1106,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="event.html"
+       href="fence.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Event</p>
+        <p class="prev-next-title">Fence</p>
       </div>
     </a>
     <a class="right-next"
-       href="fence.html"
+       href="event.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Fence</p>
+        <p class="prev-next-title">Event</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1083,7 +1139,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">8</span></summary><div class="ctoc-prefix">zeEventPool</div><ul class="ctoc-list"><li><a href="event_pool.html#zeeventpoolcreate">&hellip;Create</a></li><li><a href="event_pool.html#zeeventpooldestroy">&hellip;Destroy</a></li><li><a href="event_pool.html#zeeventpoolgetipchandle">&hellip;GetIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolopenipchandle">&hellip;OpenIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolcloseipchandle">&hellip;CloseIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolputipchandle">&hellip;PutIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolgetcontexthandle">&hellip;GetContextHandle</a></li><li><a href="event_pool.html#zeeventpoolgetflags">&hellip;GetFlags</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="event_pool.html#ze-event-pool-flags-t">ze_event_pool_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="event_pool.html#ze-event-pool-desc-t">ze_event_pool_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="event_pool.html#ze-event-pool-handle-t">ze_event_pool_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">8</span></summary><div class="ctoc-prefix">zeEventPool</div><ul class="ctoc-list"><li><a href="event_pool.html#zeeventpoolcreate">&hellip;Create</a></li><li><a href="event_pool.html#zeeventpooldestroy">&hellip;Destroy</a></li><li><a href="event_pool.html#zeeventpoolgetipchandle">&hellip;GetIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolopenipchandle">&hellip;OpenIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolcloseipchandle">&hellip;CloseIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolputipchandle">&hellip;PutIpcHandle</a></li><li><a href="event_pool.html#zeeventpoolgetcontexthandle">&hellip;GetContextHandle</a></li><li><a href="event_pool.html#zeeventpoolgetflags">&hellip;GetFlags</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="event_pool.html#ze-event-pool-flags-t">ze_event_pool_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="event_pool.html#ze-event-pool-desc-t">ze_event_pool_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

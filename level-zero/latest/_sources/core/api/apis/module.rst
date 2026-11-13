@@ -1,7 +1,33 @@
 ============================================================
 Module
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Module Handles
+==============
+
+
+.. _ze-module-handle-t:
+
+ze_module_handle_t
+------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zeModuleCreate`, :ref:`zeKernelGetModuleHandle`
+   | **Used by:** :ref:`zeModuleDestroy`, :ref:`zeModuleDynamicLink`, :ref:`zeModuleGetNativeBinary`, :ref:`zeModuleGetGlobalPointer`, :ref:`zeModuleGetKernelNames`, :ref:`zeModuleGetProperties`, :ref:`zeModuleGetDeviceHandle`, :ref:`zeKernelCreate`, :ref:`zeModuleGetFunctionPointer`, :ref:`zeModuleInspectLinkageExt`
+   | **Member of:** :ref:`ze-runtime-requirements-module-desc-t`
+   | **See also:** :ref:`Modules (Programming Guide) <Modules>`
+
+.. cpp:type:: ze_module_handle_t
+
+    Handle of driver's module object.
+
 
 
 Module Functions
@@ -139,6 +165,10 @@ ze_module_format_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-module-desc-t`
+
 .. doxygenenum:: ze_module_format_t
     :project: LevelZero
 
@@ -152,8 +182,16 @@ ze_module_property_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-module-properties-t`
+
+.. doxygentypedef:: ze_module_property_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_module_property_flag_t
     :project: LevelZero
+
 
  
 Module Structures
@@ -168,6 +206,10 @@ ze_module_constants_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-module-desc-t`, :ref:`ze-module-program-exp-desc-t`
 
 .. doxygenstruct:: ze_module_constants_t
     :project: LevelZero
@@ -184,6 +226,10 @@ ze_module_desc_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeModuleCreate`
+
 .. doxygenstruct:: ze_module_desc_t
     :project: LevelZero
     :members:
@@ -198,6 +244,10 @@ ze_module_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeModuleGetProperties`
 
 .. doxygenstruct:: ze_module_properties_t
     :project: LevelZero

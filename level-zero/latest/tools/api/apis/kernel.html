@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Kernel &#8212; Level Zero Specification v1.20.41</title>
+    <title>Kernel &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'tools/api/apis/kernel';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Debug" href="debug.html" />
+    <link rel="next" title="Metric Group" href="metric_group.html" />
     <link rel="prev" title="Module" href="module.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-handles">Kernel Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-kernel-handle-t">zet_kernel_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419zet_kernel_handle_t"><code class="docutils literal notranslate"><span class="pre">zet_kernel_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-functions">Kernel Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zetkernelgetprofileinfo">zetKernelGetProfileInfo</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t"><code class="docutils literal notranslate"><span class="pre">zetKernelGetProfileInfo()</span></code></a></li>
@@ -482,6 +499,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-enums">Kernel Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-profile-flags-t">zet_profile_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419zet_profile_flags_t"><code class="docutils literal notranslate"><span class="pre">zet_profile_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418zet_profile_flag_t"><code class="docutils literal notranslate"><span class="pre">zet_profile_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zet_profile_flag_t38ZET_PROFILE_FLAG_REGISTER_REALLOCATIONE"><code class="docutils literal notranslate"><span class="pre">ZET_PROFILE_FLAG_REGISTER_REALLOCATION</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N18zet_profile_flag_t35ZET_PROFILE_FLAG_FREE_REGISTER_INFOE"><code class="docutils literal notranslate"><span class="pre">ZET_PROFILE_FLAG_FREE_REGISTER_INFO</span></code></a></li>
@@ -543,20 +561,39 @@
                   
   <section id="kernel">
 <h1>Kernel<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="kernel-handles">
+<h2>Kernel Handles<a class="headerlink" href="#kernel-handles" title="Link to this heading">#</a></h2>
+<section id="zet-kernel-handle-t">
+<span id="id1"></span><h3>zet_kernel_handle_t<a class="headerlink" href="#zet-kernel-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetkernelgetprofileinfo"><span class="std std-ref">zetKernelGetProfileInfo</span></a></div>
+<div class="line"><strong>Alias of:</strong> <a class="reference internal" href="../../../core/api/apis/kernel.html#ze-kernel-handle-t"><span class="std std-ref">ze_kernel_handle_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv419zet_kernel_handle_t">
+<span id="_CPPv319zet_kernel_handle_t"></span><span id="_CPPv219zet_kernel_handle_t"></span><span id="zet_kernel_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_kernel_handle_t</span></span></span><a class="headerlink" href="#_CPPv419zet_kernel_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of function object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="kernel-functions">
 <h2>Kernel Functions<a class="headerlink" href="#kernel-functions" title="Link to this heading">#</a></h2>
 <section id="zetkernelgetprofileinfo">
-<span id="id1"></span><h3>zetKernelGetProfileInfo<a class="headerlink" href="#zetkernelgetprofileinfo" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zetKernelGetProfileInfo<a class="headerlink" href="#zetkernelgetprofileinfo" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t">
-<span id="_CPPv323zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t"></span><span id="_CPPv223zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t"></span><span id="zetKernelGetProfileInfo__zet_kernel_handle_t.zet_profile_properties_tP"></span><span class="target" id="zet__api_8h_1a74ec6332c39714b20296c3809adb71b3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetKernelGetProfileInfo</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_kernel_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <a class="reference internal" href="#zet-profile-properties-t" title="zet_profile_properties_t"><span class="n"><span class="pre">zet_profile_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProfileProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t"></span><span id="_CPPv223zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t"></span><span id="zetKernelGetProfileInfo__zet_kernel_handle_t.zet_profile_properties_tP"></span><span class="target" id="zet__api_8h_1a74ec6332c39714b20296c3809adb71b3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetKernelGetProfileInfo</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-kernel-handle-t" title="zet_kernel_handle_t"><span class="n"><span class="pre">zet_kernel_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hKernel</span></span>, <a class="reference internal" href="#zet-profile-properties-t" title="zet_profile_properties_t"><span class="n"><span class="pre">zet_profile_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProfileProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zetKernelGetProfileInfo19zet_kernel_handle_tP24zet_profile_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve profiling information generated for the kernel. </p>
 <p><ul class="simple">
 <li><p>Module must be created using the following build option:<ul>
 <li><p>”-zet-profile-flags &lt;n&gt;” - enable generation of profile information</p></li>
-<li><p>”&lt;n&gt;” must be a combination of <a class="reference internal" href="#zet-profile-flags-t"><span class="std std-ref">zet_profile_flag_t</span></a>, in hex</p></li>
+<li><p>”&lt;n&gt;” must be a combination of <a class="reference internal" href="#zet__api_8h_1ad843252507862f8ef02fd0dad5d82949"><span class="std std-ref">zet_profile_flag_t</span></a>, in hex</p></li>
 </ul>
 </p></li>
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -604,8 +641,19 @@
 <section id="kernel-enums">
 <h2>Kernel Enums<a class="headerlink" href="#kernel-enums" title="Link to this heading">#</a></h2>
 <section id="zet-profile-flags-t">
-<span id="id2"></span><h3>zet_profile_flags_t<a class="headerlink" href="#zet-profile-flags-t" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zet_profile_flags_t<a class="headerlink" href="#zet-profile-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-profile-properties-t"><span class="std std-ref">zet_profile_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv419zet_profile_flags_t">
+<span id="_CPPv319zet_profile_flags_t"></span><span id="_CPPv219zet_profile_flags_t"></span><span id="zet_profile_flags_t"></span><span class="target" id="zet__api_8h_1af480e938832a94f403ae6cb5cb2bb0d3"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_profile_flags_t</span></span></span><a class="headerlink" href="#_CPPv419zet_profile_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported profile features. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv418zet_profile_flag_t">
 <span id="_CPPv318zet_profile_flag_t"></span><span id="_CPPv218zet_profile_flag_t"></span><span class="target" id="zet__api_8h_1ad843252507862f8ef02fd0dad5d82949"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_profile_flag_t</span></span></span><a class="headerlink" href="#_CPPv418zet_profile_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -632,8 +680,13 @@
 
 </section>
 <section id="zet-profile-token-type-t">
-<span id="id3"></span><h3>zet_profile_token_type_t<a class="headerlink" href="#zet-profile-token-type-t" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zet_profile_token_type_t<a class="headerlink" href="#zet-profile-token-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-profile-free-register-token-t"><span class="std std-ref">zet_profile_free_register_token_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv424zet_profile_token_type_t">
 <span id="_CPPv324zet_profile_token_type_t"></span><span id="_CPPv224zet_profile_token_type_t"></span><span class="target" id="zet__api_8h_1a0badc391a7cb6b5f8075392fd7093d27"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_profile_token_type_t</span></span></span><a class="headerlink" href="#_CPPv424zet_profile_token_type_t" title="Link to this definition">#</a><br /></dt>
@@ -658,8 +711,13 @@
 <section id="kernel-structures">
 <h2>Kernel Structures<a class="headerlink" href="#kernel-structures" title="Link to this heading">#</a></h2>
 <section id="zet-profile-properties-t">
-<span id="id4"></span><h3>zet_profile_properties_t<a class="headerlink" href="#zet-profile-properties-t" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zet_profile_properties_t<a class="headerlink" href="#zet-profile-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetkernelgetprofileinfo"><span class="std std-ref">zetKernelGetProfileInfo</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv424zet_profile_properties_t">
 <span id="_CPPv324zet_profile_properties_t"></span><span id="_CPPv224zet_profile_properties_t"></span><span id="zet_profile_properties_t"></span><span class="target" id="structzet__profile__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_profile_properties_t</span></span></span><a class="headerlink" href="#_CPPv424zet_profile_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -680,8 +738,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N24zet_profile_properties_t5flagsE">
-<span id="_CPPv3N24zet_profile_properties_t5flagsE"></span><span id="_CPPv2N24zet_profile_properties_t5flagsE"></span><span id="zet_profile_properties_t::flags__zet_profile_flags_t"></span><span class="target" id="structzet__profile__properties__t_1a206f1d1ff57a97c463bcf03c1a21c93f"></span><span class="n"><span class="pre">zet_profile_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N24zet_profile_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] indicates which flags were enabled during compilation. returns 0 (none) or a combination of <a class="reference internal" href="#zet-profile-flags-t"><span class="std std-ref">zet_profile_flag_t</span></a></p>
+<span id="_CPPv3N24zet_profile_properties_t5flagsE"></span><span id="_CPPv2N24zet_profile_properties_t5flagsE"></span><span id="zet_profile_properties_t::flags__zet_profile_flags_t"></span><span class="target" id="structzet__profile__properties__t_1a206f1d1ff57a97c463bcf03c1a21c93f"></span><a class="reference internal" href="#zet-profile-flags-t" title="zet_profile_flags_t"><span class="n"><span class="pre">zet_profile_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N24zet_profile_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] indicates which flags were enabled during compilation. returns 0 (none) or a combination of <a class="reference internal" href="#zet__api_8h_1ad843252507862f8ef02fd0dad5d82949"><span class="std std-ref">zet_profile_flag_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -695,7 +753,7 @@
 
 </section>
 <section id="zet-profile-free-register-token-t">
-<span id="id5"></span><h3>zet_profile_free_register_token_t<a class="headerlink" href="#zet-profile-free-register-token-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zet_profile_free_register_token_t<a class="headerlink" href="#zet-profile-free-register-token-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv433zet_profile_free_register_token_t">
@@ -726,7 +784,7 @@
 
 </section>
 <section id="zet-profile-register-sequence-t">
-<span id="id6"></span><h3>zet_profile_register_sequence_t<a class="headerlink" href="#zet-profile-register-sequence-t" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zet_profile_register_sequence_t<a class="headerlink" href="#zet-profile-register-sequence-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv431zet_profile_register_sequence_t">
@@ -774,11 +832,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="debug.html"
+       href="metric_group.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Debug</p>
+        <p class="prev-next-title">Metric Group</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -798,7 +856,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="kernel.html#zetkernelgetprofileinfo">zetKernelGetProfileInfo</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="kernel.html#zet-profile-flags-t">zet_profile_flags_t</a></li><li><a href="kernel.html#zet-profile-token-type-t">zet_profile_token_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="kernel.html#zet-profile-properties-t">zet_profile_properties_t</a></li><li><a href="kernel.html#zet-profile-free-register-token-t">zet_profile_free_register_token_t</a></li><li><a href="kernel.html#zet-profile-register-sequence-t">zet_profile_register_sequence_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="kernel.html#zet-kernel-handle-t">zet_kernel_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="kernel.html#zetkernelgetprofileinfo">zetKernelGetProfileInfo</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="kernel.html#zet-profile-flags-t">zet_profile_flags_t</a></li><li><a href="kernel.html#zet-profile-token-type-t">zet_profile_token_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="kernel.html#zet-profile-properties-t">zet_profile_properties_t</a></li><li><a href="kernel.html#zet-profile-free-register-token-t">zet_profile_free_register_token_t</a></li><li><a href="kernel.html#zet-profile-register-sequence-t">zet_profile_register_sequence_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

@@ -1,7 +1,9 @@
 ============================================================
 Ras - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Ras - Deprecated Functions
@@ -40,6 +42,7 @@ zesRasSetConfig
 
 .. doxygenfunction:: zesRasSetConfig
     :project: LevelZero
+
 
 
 

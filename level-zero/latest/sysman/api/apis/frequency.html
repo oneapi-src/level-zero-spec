@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Frequency &#8212; Level Zero Specification v1.20.41</title>
+    <title>Frequency &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/frequency';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Led" href="led.html" />
-    <link rel="prev" title="Firmware" href="firmware.html" />
+    <link rel="next" title="Engine" href="engine.html" />
+    <link rel="prev" title="Power" href="power.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#frequency-handles">Frequency Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-freq-handle-t">zes_freq_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zes_freq_handle_t"><code class="docutils literal notranslate"><span class="pre">zes_freq_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#frequency-functions">Frequency Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesfrequencygetproperties">zesFrequencyGetProperties</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t"><code class="docutils literal notranslate"><span class="pre">zesFrequencyGetProperties()</span></code></a></li>
@@ -502,6 +519,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#frequency-enums">Frequency Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-freq-throttle-reason-flags-t">zes_freq_throttle_reason_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432zes_freq_throttle_reason_flags_t"><code class="docutils literal notranslate"><span class="pre">zes_freq_throttle_reason_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zes_freq_throttle_reason_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_freq_throttle_reason_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_freq_throttle_reason_flag_t41ZES_FREQ_THROTTLE_REASON_FLAG_AVE_PWR_CAPE"><code class="docutils literal notranslate"><span class="pre">ZES_FREQ_THROTTLE_REASON_FLAG_AVE_PWR_CAP</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_freq_throttle_reason_flag_t43ZES_FREQ_THROTTLE_REASON_FLAG_BURST_PWR_CAPE"><code class="docutils literal notranslate"><span class="pre">ZES_FREQ_THROTTLE_REASON_FLAG_BURST_PWR_CAP</span></code></a></li>
@@ -581,15 +599,35 @@
                   
   <section id="frequency">
 <h1>Frequency<a class="headerlink" href="#frequency" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="frequency-handles">
+<h2>Frequency Handles<a class="headerlink" href="#frequency-handles" title="Link to this heading">#</a></h2>
+<section id="zes-freq-handle-t">
+<span id="id1"></span><h3>zes_freq_handle_t<a class="headerlink" href="#zes-freq-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="device.html#zesdeviceenumfrequencydomains"><span class="std std-ref">zesDeviceEnumFrequencyDomains</span></a></div>
+<div class="line"><strong>Used by:</strong> <span class="api-usage-fold"><input type="checkbox" id="usage-zes-freq-handle-t-3"><span class="api-usage-links"> <a class="reference internal" href="#zesfrequencygetproperties"><span class="std std-ref">zesFrequencyGetProperties</span></a>, <a class="reference internal" href="#zesfrequencygetavailableclocks"><span class="std std-ref">zesFrequencyGetAvailableClocks</span></a>, <a class="reference internal" href="#zesfrequencygetrange"><span class="std std-ref">zesFrequencyGetRange</span></a>, <a class="reference internal" href="#zesfrequencysetrange"><span class="std std-ref">zesFrequencySetRange</span></a>, <a class="reference internal" href="#zesfrequencygetstate"><span class="std std-ref">zesFrequencyGetState</span></a>, <a class="reference internal" href="#zesfrequencygetthrottletime"><span class="std std-ref">zesFrequencyGetThrottleTime</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocgetcapabilities"><span class="std std-ref">zesFrequencyOcGetCapabilities</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocgetfrequencytarget"><span class="std std-ref">zesFrequencyOcGetFrequencyTarget</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocsetfrequencytarget"><span class="std std-ref">zesFrequencyOcSetFrequencyTarget</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocgetvoltagetarget"><span class="std std-ref">zesFrequencyOcGetVoltageTarget</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocsetvoltagetarget"><span class="std std-ref">zesFrequencyOcSetVoltageTarget</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocsetmode"><span class="std std-ref">zesFrequencyOcSetMode</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocgetmode"><span class="std std-ref">zesFrequencyOcGetMode</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocgeticcmax"><span class="std std-ref">zesFrequencyOcGetIccMax</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocseticcmax"><span class="std std-ref">zesFrequencyOcSetIccMax</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocgettjmax"><span class="std std-ref">zesFrequencyOcGetTjMax</span></a>, <a class="reference internal" href="../deprecated/frequency.html#zesfrequencyocsettjmax"><span class="std std-ref">zesFrequencyOcSetTjMax</span></a> </span><label for="usage-zes-freq-handle-t-3"><span class="more">Show all 17</span><span class="less">Show less</span></label></span></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#frequency"><span class="std std-ref">Operations on frequency domains (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv417zes_freq_handle_t">
+<span id="_CPPv317zes_freq_handle_t"></span><span id="_CPPv217zes_freq_handle_t"></span><span id="zes_freq_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_freq_handle_t</span></span></span><a class="headerlink" href="#_CPPv417zes_freq_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle for a Sysman device frequency domain.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="frequency-functions">
 <h2>Frequency Functions<a class="headerlink" href="#frequency-functions" title="Link to this heading">#</a></h2>
 <section id="zesfrequencygetproperties">
-<span id="id1"></span><h3>zesFrequencyGetProperties<a class="headerlink" href="#zesfrequencygetproperties" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zesFrequencyGetProperties<a class="headerlink" href="#zesfrequencygetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t">
-<span id="_CPPv325zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t"></span><span id="_CPPv225zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t"></span><span id="zesFrequencyGetProperties__zes_freq_handle_t.zes_freq_properties_tP"></span><span class="target" id="zes__api_8h_1a2b364f24f32502b4ad283547dc3cf058"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-properties-t" title="zes_freq_properties_t"><span class="n"><span class="pre">zes_freq_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t"></span><span id="_CPPv225zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t"></span><span id="zesFrequencyGetProperties__zes_freq_handle_t.zes_freq_properties_tP"></span><span class="target" id="zes__api_8h_1a2b364f24f32502b4ad283547dc3cf058"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-properties-t" title="zes_freq_properties_t"><span class="n"><span class="pre">zes_freq_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesFrequencyGetProperties17zes_freq_handle_tP21zes_freq_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get frequency properties - available frequencies. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -634,11 +672,11 @@
 
 </section>
 <section id="zesfrequencygetavailableclocks">
-<span id="id2"></span><h3>zesFrequencyGetAvailableClocks<a class="headerlink" href="#zesfrequencygetavailableclocks" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zesFrequencyGetAvailableClocks<a class="headerlink" href="#zesfrequencygetavailableclocks" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv430zesFrequencyGetAvailableClocks17zes_freq_handle_tP8uint32_tPd">
-<span id="_CPPv330zesFrequencyGetAvailableClocks17zes_freq_handle_tP8uint32_tPd"></span><span id="_CPPv230zesFrequencyGetAvailableClocks17zes_freq_handle_tP8uint32_tPd"></span><span id="zesFrequencyGetAvailableClocks__zes_freq_handle_t.uint32_tP.doubleP"></span><span class="target" id="zes__api_8h_1abca756ce5a2be13335be3f0b6f3c99c3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetAvailableClocks</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phFrequency</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesFrequencyGetAvailableClocks17zes_freq_handle_tP8uint32_tPd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv330zesFrequencyGetAvailableClocks17zes_freq_handle_tP8uint32_tPd"></span><span id="_CPPv230zesFrequencyGetAvailableClocks17zes_freq_handle_tP8uint32_tPd"></span><span id="zesFrequencyGetAvailableClocks__zes_freq_handle_t.uint32_tP.doubleP"></span><span class="target" id="zes__api_8h_1abca756ce5a2be13335be3f0b6f3c99c3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetAvailableClocks</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phFrequency</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430zesFrequencyGetAvailableClocks17zes_freq_handle_tP8uint32_tPd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get available non-overclocked hardware clock frequencies for the frequency domain. </p>
 <p><ul class="simple">
 <li><p>The list of available frequencies is returned in order of slowest to fastest.</p></li>
@@ -685,11 +723,11 @@
 
 </section>
 <section id="zesfrequencygetrange">
-<span id="id3"></span><h3>zesFrequencyGetRange<a class="headerlink" href="#zesfrequencygetrange" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zesFrequencyGetRange<a class="headerlink" href="#zesfrequencygetrange" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420zesFrequencyGetRange17zes_freq_handle_tP16zes_freq_range_t">
-<span id="_CPPv320zesFrequencyGetRange17zes_freq_handle_tP16zes_freq_range_t"></span><span id="_CPPv220zesFrequencyGetRange17zes_freq_handle_tP16zes_freq_range_t"></span><span id="zesFrequencyGetRange__zes_freq_handle_t.zes_freq_range_tP"></span><span class="target" id="zes__api_8h_1ae0fb520f76969a870089ab2ccd58dbdf"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetRange</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-range-t" title="zes_freq_range_t"><span class="n"><span class="pre">zes_freq_range_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pLimits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFrequencyGetRange17zes_freq_handle_tP16zes_freq_range_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv320zesFrequencyGetRange17zes_freq_handle_tP16zes_freq_range_t"></span><span id="_CPPv220zesFrequencyGetRange17zes_freq_handle_tP16zes_freq_range_t"></span><span id="zesFrequencyGetRange__zes_freq_handle_t.zes_freq_range_tP"></span><span class="target" id="zes__api_8h_1ae0fb520f76969a870089ab2ccd58dbdf"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetRange</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-range-t" title="zes_freq_range_t"><span class="n"><span class="pre">zes_freq_range_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pLimits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFrequencyGetRange17zes_freq_handle_tP16zes_freq_range_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get current frequency limits. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -734,11 +772,11 @@
 
 </section>
 <section id="zesfrequencysetrange">
-<span id="id4"></span><h3>zesFrequencySetRange<a class="headerlink" href="#zesfrequencysetrange" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zesFrequencySetRange<a class="headerlink" href="#zesfrequencysetrange" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420zesFrequencySetRange17zes_freq_handle_tPK16zes_freq_range_t">
-<span id="_CPPv320zesFrequencySetRange17zes_freq_handle_tPK16zes_freq_range_t"></span><span id="_CPPv220zesFrequencySetRange17zes_freq_handle_tPK16zes_freq_range_t"></span><span id="zesFrequencySetRange__zes_freq_handle_t.zes_freq_range_tCP"></span><span class="target" id="zes__api_8h_1a6a157a67ab4cc3f5fcabb7fed936277d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencySetRange</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-freq-range-t" title="zes_freq_range_t"><span class="n"><span class="pre">zes_freq_range_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pLimits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFrequencySetRange17zes_freq_handle_tPK16zes_freq_range_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv320zesFrequencySetRange17zes_freq_handle_tPK16zes_freq_range_t"></span><span id="_CPPv220zesFrequencySetRange17zes_freq_handle_tPK16zes_freq_range_t"></span><span id="zesFrequencySetRange__zes_freq_handle_t.zes_freq_range_tCP"></span><span class="target" id="zes__api_8h_1a6a157a67ab4cc3f5fcabb7fed936277d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencySetRange</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zes-freq-range-t" title="zes_freq_range_t"><span class="n"><span class="pre">zes_freq_range_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pLimits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFrequencySetRange17zes_freq_handle_tPK16zes_freq_range_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set frequency range between which the hardware can operate. </p>
 <p><ul class="simple">
 <li><p>The application may call this function with the frequency range min and max values set to <code class="docutils literal notranslate"><span class="pre">-1</span></code> to request the frequency be (re)set to the default values.</p></li>
@@ -787,11 +825,11 @@
 
 </section>
 <section id="zesfrequencygetstate">
-<span id="id5"></span><h3>zesFrequencyGetState<a class="headerlink" href="#zesfrequencygetstate" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zesFrequencyGetState<a class="headerlink" href="#zesfrequencygetstate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420zesFrequencyGetState17zes_freq_handle_tP16zes_freq_state_t">
-<span id="_CPPv320zesFrequencyGetState17zes_freq_handle_tP16zes_freq_state_t"></span><span id="_CPPv220zesFrequencyGetState17zes_freq_handle_tP16zes_freq_state_t"></span><span id="zesFrequencyGetState__zes_freq_handle_t.zes_freq_state_tP"></span><span class="target" id="zes__api_8h_1af398b1d798f7dce15184b9b31fbd0a16"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-state-t" title="zes_freq_state_t"><span class="n"><span class="pre">zes_freq_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFrequencyGetState17zes_freq_handle_tP16zes_freq_state_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv320zesFrequencyGetState17zes_freq_handle_tP16zes_freq_state_t"></span><span id="_CPPv220zesFrequencyGetState17zes_freq_handle_tP16zes_freq_state_t"></span><span id="zesFrequencyGetState__zes_freq_handle_t.zes_freq_state_tP"></span><span class="target" id="zes__api_8h_1af398b1d798f7dce15184b9b31fbd0a16"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetState</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-state-t" title="zes_freq_state_t"><span class="n"><span class="pre">zes_freq_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420zesFrequencyGetState17zes_freq_handle_tP16zes_freq_state_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get current frequency state - frequency request, actual frequency, TDP limits. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -836,11 +874,11 @@
 
 </section>
 <section id="zesfrequencygetthrottletime">
-<span id="id6"></span><h3>zesFrequencyGetThrottleTime<a class="headerlink" href="#zesfrequencygetthrottletime" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zesFrequencyGetThrottleTime<a class="headerlink" href="#zesfrequencygetthrottletime" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zesFrequencyGetThrottleTime17zes_freq_handle_tP24zes_freq_throttle_time_t">
-<span id="_CPPv327zesFrequencyGetThrottleTime17zes_freq_handle_tP24zes_freq_throttle_time_t"></span><span id="_CPPv227zesFrequencyGetThrottleTime17zes_freq_handle_tP24zes_freq_throttle_time_t"></span><span id="zesFrequencyGetThrottleTime__zes_freq_handle_t.zes_freq_throttle_time_tP"></span><span class="target" id="zes__api_8h_1a516a549d5fac443e6e78460dbbd179f9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetThrottleTime</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_freq_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-throttle-time-t" title="zes_freq_throttle_time_t"><span class="n"><span class="pre">zes_freq_throttle_time_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pThrottleTime</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesFrequencyGetThrottleTime17zes_freq_handle_tP24zes_freq_throttle_time_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zesFrequencyGetThrottleTime17zes_freq_handle_tP24zes_freq_throttle_time_t"></span><span id="_CPPv227zesFrequencyGetThrottleTime17zes_freq_handle_tP24zes_freq_throttle_time_t"></span><span id="zesFrequencyGetThrottleTime__zes_freq_handle_t.zes_freq_throttle_time_tP"></span><span class="target" id="zes__api_8h_1a516a549d5fac443e6e78460dbbd179f9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesFrequencyGetThrottleTime</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-freq-handle-t" title="zes_freq_handle_t"><span class="n"><span class="pre">zes_freq_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hFrequency</span></span>, <a class="reference internal" href="#zes-freq-throttle-time-t" title="zes_freq_throttle_time_t"><span class="n"><span class="pre">zes_freq_throttle_time_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pThrottleTime</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesFrequencyGetThrottleTime17zes_freq_handle_tP24zes_freq_throttle_time_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get frequency throttle time. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -888,8 +926,19 @@
 <section id="frequency-enums">
 <h2>Frequency Enums<a class="headerlink" href="#frequency-enums" title="Link to this heading">#</a></h2>
 <section id="zes-freq-throttle-reason-flags-t">
-<span id="id7"></span><h3>zes_freq_throttle_reason_flags_t<a class="headerlink" href="#zes-freq-throttle-reason-flags-t" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zes_freq_throttle_reason_flags_t<a class="headerlink" href="#zes-freq-throttle-reason-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-freq-state-t"><span class="std std-ref">zes_freq_state_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv432zes_freq_throttle_reason_flags_t">
+<span id="_CPPv332zes_freq_throttle_reason_flags_t"></span><span id="_CPPv232zes_freq_throttle_reason_flags_t"></span><span id="zes_freq_throttle_reason_flags_t"></span><span class="target" id="zes__api_8h_1a7f067c25e19dd1b8f104e70524d597bb"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_freq_throttle_reason_flags_t</span></span></span><a class="headerlink" href="#_CPPv432zes_freq_throttle_reason_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Frequency throttle reasons. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv431zes_freq_throttle_reason_flag_t">
 <span id="_CPPv331zes_freq_throttle_reason_flag_t"></span><span id="_CPPv231zes_freq_throttle_reason_flag_t"></span><span class="target" id="zes__api_8h_1a03134de1353e4ecaa94d5ec76db12651"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_freq_throttle_reason_flag_t</span></span></span><a class="headerlink" href="#_CPPv431zes_freq_throttle_reason_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -967,8 +1016,13 @@
 <section id="frequency-structures">
 <h2>Frequency Structures<a class="headerlink" href="#frequency-structures" title="Link to this heading">#</a></h2>
 <section id="zes-freq-properties-t">
-<span id="id8"></span><h3>zes_freq_properties_t<a class="headerlink" href="#zes-freq-properties-t" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zes_freq_properties_t<a class="headerlink" href="#zes-freq-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfrequencygetproperties"><span class="std std-ref">zesFrequencyGetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv421zes_freq_properties_t">
 <span id="_CPPv321zes_freq_properties_t"></span><span id="_CPPv221zes_freq_properties_t"></span><span id="zes_freq_properties_t"></span><span class="target" id="structzes__freq__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_freq_properties_t</span></span></span><a class="headerlink" href="#_CPPv421zes_freq_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1000,7 +1054,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_freq_properties_t11onSubdeviceE">
-<span id="_CPPv3N21zes_freq_properties_t11onSubdeviceE"></span><span id="_CPPv2N21zes_freq_properties_t11onSubdeviceE"></span><span id="zes_freq_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__freq__properties__t_1ace2b2078269d92cac3627c4fa73b284b"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N21zes_freq_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_freq_properties_t11onSubdeviceE"></span><span id="_CPPv2N21zes_freq_properties_t11onSubdeviceE"></span><span id="zes_freq_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__freq__properties__t_1ace2b2078269d92cac3627c4fa73b284b"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N21zes_freq_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
 </dd></dl>
 
@@ -1012,13 +1066,13 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_freq_properties_t10canControlE">
-<span id="_CPPv3N21zes_freq_properties_t10canControlE"></span><span id="_CPPv2N21zes_freq_properties_t10canControlE"></span><span id="zes_freq_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__freq__properties__t_1a0227dc45b9dd4aff074dfe73c33a126e"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N21zes_freq_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_freq_properties_t10canControlE"></span><span id="_CPPv2N21zes_freq_properties_t10canControlE"></span><span id="zes_freq_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__freq__properties__t_1a0227dc45b9dd4aff074dfe73c33a126e"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N21zes_freq_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if software can control the frequency of this domain assuming the user has permissions </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_freq_properties_t24isThrottleEventSupportedE">
-<span id="_CPPv3N21zes_freq_properties_t24isThrottleEventSupportedE"></span><span id="_CPPv2N21zes_freq_properties_t24isThrottleEventSupportedE"></span><span id="zes_freq_properties_t::isThrottleEventSupported__ze_bool_t"></span><span class="target" id="structzes__freq__properties__t_1aeff148cfc743a474311192535d70b198"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isThrottleEventSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_freq_properties_t24isThrottleEventSupportedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_freq_properties_t24isThrottleEventSupportedE"></span><span id="_CPPv2N21zes_freq_properties_t24isThrottleEventSupportedE"></span><span id="zes_freq_properties_t::isThrottleEventSupported__ze_bool_t"></span><span class="target" id="structzes__freq__properties__t_1aeff148cfc743a474311192535d70b198"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isThrottleEventSupported</span></span></span><a class="headerlink" href="#_CPPv4N21zes_freq_properties_t24isThrottleEventSupportedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if software can register to receive event <a class="reference internal" href="driver.html#zes__api_8h_1a6863b58c061827c6fdf294839b332604a76419915f5a074f13ac7e7e16edce6fa"><span class="std std-ref">ZES_EVENT_TYPE_FLAG_FREQ_THROTTLED</span></a></p>
 </dd></dl>
 
@@ -1039,8 +1093,13 @@
 
 </section>
 <section id="zes-freq-range-t">
-<span id="id9"></span><h3>zes_freq_range_t<a class="headerlink" href="#zes-freq-range-t" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>zes_freq_range_t<a class="headerlink" href="#zes-freq-range-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfrequencygetrange"><span class="std std-ref">zesFrequencyGetRange</span></a>, <a class="reference internal" href="#zesfrequencysetrange"><span class="std std-ref">zesFrequencySetRange</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416zes_freq_range_t">
 <span id="_CPPv316zes_freq_range_t"></span><span id="_CPPv216zes_freq_range_t"></span><span id="zes_freq_range_t"></span><span class="target" id="structzes__freq__range__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_freq_range_t</span></span></span><a class="headerlink" href="#_CPPv416zes_freq_range_t" title="Link to this definition">#</a><br /></dt>
@@ -1070,8 +1129,13 @@
 
 </section>
 <section id="zes-freq-state-t">
-<span id="id10"></span><h3>zes_freq_state_t<a class="headerlink" href="#zes-freq-state-t" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>zes_freq_state_t<a class="headerlink" href="#zes-freq-state-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfrequencygetstate"><span class="std std-ref">zesFrequencyGetState</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416zes_freq_state_t">
 <span id="_CPPv316zes_freq_state_t"></span><span id="_CPPv216zes_freq_state_t"></span><span id="zes_freq_state_t"></span><span class="target" id="structzes__freq__state__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_freq_state_t</span></span></span><a class="headerlink" href="#_CPPv416zes_freq_state_t" title="Link to this definition">#</a><br /></dt>
@@ -1122,8 +1186,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16zes_freq_state_t15throttleReasonsE">
-<span id="_CPPv3N16zes_freq_state_t15throttleReasonsE"></span><span id="_CPPv2N16zes_freq_state_t15throttleReasonsE"></span><span id="zes_freq_state_t::throttleReasons__zes_freq_throttle_reason_flags_t"></span><span class="target" id="structzes__freq__state__t_1aee5219f9cfcbe83f72e796ea3cc03b8f"></span><span class="n"><span class="pre">zes_freq_throttle_reason_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">throttleReasons</span></span></span><a class="headerlink" href="#_CPPv4N16zes_freq_state_t15throttleReasonsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] The reasons that the frequency is being limited by the hardware. Returns 0 (frequency not throttled) or a combination of <a class="reference internal" href="#zes-freq-throttle-reason-flags-t"><span class="std std-ref">zes_freq_throttle_reason_flag_t</span></a>. </p>
+<span id="_CPPv3N16zes_freq_state_t15throttleReasonsE"></span><span id="_CPPv2N16zes_freq_state_t15throttleReasonsE"></span><span id="zes_freq_state_t::throttleReasons__zes_freq_throttle_reason_flags_t"></span><span class="target" id="structzes__freq__state__t_1aee5219f9cfcbe83f72e796ea3cc03b8f"></span><a class="reference internal" href="#zes-freq-throttle-reason-flags-t" title="zes_freq_throttle_reason_flags_t"><span class="n"><span class="pre">zes_freq_throttle_reason_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">throttleReasons</span></span></span><a class="headerlink" href="#_CPPv4N16zes_freq_state_t15throttleReasonsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] The reasons that the frequency is being limited by the hardware. Returns 0 (frequency not throttled) or a combination of <a class="reference internal" href="#zes__api_8h_1a03134de1353e4ecaa94d5ec76db12651"><span class="std std-ref">zes_freq_throttle_reason_flag_t</span></a>. </p>
 </dd></dl>
 
 </div>
@@ -1131,8 +1195,13 @@
 
 </section>
 <section id="zes-freq-throttle-time-t">
-<span id="id11"></span><h3>zes_freq_throttle_time_t<a class="headerlink" href="#zes-freq-throttle-time-t" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>zes_freq_throttle_time_t<a class="headerlink" href="#zes-freq-throttle-time-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesfrequencygetthrottletime"><span class="std std-ref">zesFrequencyGetThrottleTime</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv424zes_freq_throttle_time_t">
 <span id="_CPPv324zes_freq_throttle_time_t"></span><span id="_CPPv224zes_freq_throttle_time_t"></span><span id="zes_freq_throttle_time_t"></span><span class="target" id="structzes__freq__throttle__time__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_freq_throttle_time_t</span></span></span><a class="headerlink" href="#_CPPv424zes_freq_throttle_time_t" title="Link to this definition">#</a><br /></dt>
@@ -1174,20 +1243,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="firmware.html"
+       href="power.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Firmware</p>
+        <p class="prev-next-title">Power</p>
       </div>
     </a>
     <a class="right-next"
-       href="led.html"
+       href="engine.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Led</p>
+        <p class="prev-next-title">Engine</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1207,7 +1276,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">6</span></summary><div class="ctoc-prefix">zesFrequency</div><ul class="ctoc-list"><li><a href="frequency.html#zesfrequencygetproperties">&hellip;GetProperties</a></li><li><a href="frequency.html#zesfrequencygetavailableclocks">&hellip;GetAvailableClocks</a></li><li><a href="frequency.html#zesfrequencygetrange">&hellip;GetRange</a></li><li><a href="frequency.html#zesfrequencysetrange">&hellip;SetRange</a></li><li><a href="frequency.html#zesfrequencygetstate">&hellip;GetState</a></li><li><a href="frequency.html#zesfrequencygetthrottletime">&hellip;GetThrottleTime</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="frequency.html#zes-freq-throttle-reason-flags-t">zes_freq_throttle_reason_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">4</span></summary><ul class="ctoc-list"><li><a href="frequency.html#zes-freq-properties-t">zes_freq_properties_t</a></li><li><a href="frequency.html#zes-freq-range-t">zes_freq_range_t</a></li><li><a href="frequency.html#zes-freq-state-t">zes_freq_state_t</a></li><li><a href="frequency.html#zes-freq-throttle-time-t">zes_freq_throttle_time_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="frequency.html#zes-freq-handle-t">zes_freq_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">6</span></summary><div class="ctoc-prefix">zesFrequency</div><ul class="ctoc-list"><li><a href="frequency.html#zesfrequencygetproperties">&hellip;GetProperties</a></li><li><a href="frequency.html#zesfrequencygetavailableclocks">&hellip;GetAvailableClocks</a></li><li><a href="frequency.html#zesfrequencygetrange">&hellip;GetRange</a></li><li><a href="frequency.html#zesfrequencysetrange">&hellip;SetRange</a></li><li><a href="frequency.html#zesfrequencygetstate">&hellip;GetState</a></li><li><a href="frequency.html#zesfrequencygetthrottletime">&hellip;GetThrottleTime</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="frequency.html#zes-freq-throttle-reason-flags-t">zes_freq_throttle_reason_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">4</span></summary><ul class="ctoc-list"><li><a href="frequency.html#zes-freq-properties-t">zes_freq_properties_t</a></li><li><a href="frequency.html#zes-freq-range-t">zes_freq_range_t</a></li><li><a href="frequency.html#zes-freq-state-t">zes_freq_state_t</a></li><li><a href="frequency.html#zes-freq-throttle-time-t">zes_freq_throttle_time_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Psu &#8212; Level Zero Specification v1.20.41</title>
+    <title>Psu &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/psu';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Ras" href="ras.html" />
-    <link rel="prev" title="Power" href="power.html" />
+    <link rel="next" title="Fan" href="fan.html" />
+    <link rel="prev" title="Temperature" href="temperature.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#psu-handles">Psu Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-psu-handle-t">zes_psu_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv416zes_psu_handle_t"><code class="docutils literal notranslate"><span class="pre">zes_psu_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#psu-functions">Psu Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zespsugetproperties">zesPsuGetProperties</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv419zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t"><code class="docutils literal notranslate"><span class="pre">zesPsuGetProperties()</span></code></a></li>
@@ -538,15 +555,35 @@
                   
   <section id="psu">
 <h1>Psu<a class="headerlink" href="#psu" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="psu-handles">
+<h2>Psu Handles<a class="headerlink" href="#psu-handles" title="Link to this heading">#</a></h2>
+<section id="zes-psu-handle-t">
+<span id="id1"></span><h3>zes_psu_handle_t<a class="headerlink" href="#zes-psu-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="device.html#zesdeviceenumpsus"><span class="std std-ref">zesDeviceEnumPsus</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zespsugetproperties"><span class="std std-ref">zesPsuGetProperties</span></a>, <a class="reference internal" href="#zespsugetstate"><span class="std std-ref">zesPsuGetState</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#psu"><span class="std std-ref">Operations on power supplies (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416zes_psu_handle_t">
+<span id="_CPPv316zes_psu_handle_t"></span><span id="_CPPv216zes_psu_handle_t"></span><span id="zes_psu_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_psu_handle_t</span></span></span><a class="headerlink" href="#_CPPv416zes_psu_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle for a Sysman device power supply.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="psu-functions">
 <h2>Psu Functions<a class="headerlink" href="#psu-functions" title="Link to this heading">#</a></h2>
 <section id="zespsugetproperties">
-<span id="id1"></span><h3>zesPsuGetProperties<a class="headerlink" href="#zespsugetproperties" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zesPsuGetProperties<a class="headerlink" href="#zespsugetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t">
-<span id="_CPPv319zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t"></span><span id="_CPPv219zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t"></span><span id="zesPsuGetProperties__zes_psu_handle_t.zes_psu_properties_tP"></span><span class="target" id="zes__api_8h_1ae4ddf405fc7d05e6d860431dc791a195"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPsuGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_psu_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPsu</span></span>, <a class="reference internal" href="#zes-psu-properties-t" title="zes_psu_properties_t"><span class="n"><span class="pre">zes_psu_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t"></span><span id="_CPPv219zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t"></span><span id="zesPsuGetProperties__zes_psu_handle_t.zes_psu_properties_tP"></span><span class="target" id="zes__api_8h_1ae4ddf405fc7d05e6d860431dc791a195"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPsuGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-psu-handle-t" title="zes_psu_handle_t"><span class="n"><span class="pre">zes_psu_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hPsu</span></span>, <a class="reference internal" href="#zes-psu-properties-t" title="zes_psu_properties_t"><span class="n"><span class="pre">zes_psu_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zesPsuGetProperties16zes_psu_handle_tP20zes_psu_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get power supply properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -591,11 +628,11 @@
 
 </section>
 <section id="zespsugetstate">
-<span id="id2"></span><h3>zesPsuGetState<a class="headerlink" href="#zespsugetstate" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zesPsuGetState<a class="headerlink" href="#zespsugetstate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zesPsuGetState16zes_psu_handle_tP15zes_psu_state_t">
-<span id="_CPPv314zesPsuGetState16zes_psu_handle_tP15zes_psu_state_t"></span><span id="_CPPv214zesPsuGetState16zes_psu_handle_tP15zes_psu_state_t"></span><span id="zesPsuGetState__zes_psu_handle_t.zes_psu_state_tP"></span><span class="target" id="zes__api_8h_1aa1981e017e12847d8e413a45c17063e4"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPsuGetState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_psu_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hPsu</span></span>, <a class="reference internal" href="#zes-psu-state-t" title="zes_psu_state_t"><span class="n"><span class="pre">zes_psu_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesPsuGetState16zes_psu_handle_tP15zes_psu_state_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zesPsuGetState16zes_psu_handle_tP15zes_psu_state_t"></span><span id="_CPPv214zesPsuGetState16zes_psu_handle_tP15zes_psu_state_t"></span><span id="zesPsuGetState__zes_psu_handle_t.zes_psu_state_tP"></span><span class="target" id="zes__api_8h_1aa1981e017e12847d8e413a45c17063e4"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesPsuGetState</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-psu-handle-t" title="zes_psu_handle_t"><span class="n"><span class="pre">zes_psu_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hPsu</span></span>, <a class="reference internal" href="#zes-psu-state-t" title="zes_psu_state_t"><span class="n"><span class="pre">zes_psu_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pState</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zesPsuGetState16zes_psu_handle_tP15zes_psu_state_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get current power supply state. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -643,8 +680,13 @@
 <section id="psu-enums">
 <h2>Psu Enums<a class="headerlink" href="#psu-enums" title="Link to this heading">#</a></h2>
 <section id="zes-psu-voltage-status-t">
-<span id="id3"></span><h3>zes_psu_voltage_status_t<a class="headerlink" href="#zes-psu-voltage-status-t" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zes_psu_voltage_status_t<a class="headerlink" href="#zes-psu-voltage-status-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-psu-state-t"><span class="std std-ref">zes_psu_state_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv424zes_psu_voltage_status_t">
 <span id="_CPPv324zes_psu_voltage_status_t"></span><span id="_CPPv224zes_psu_voltage_status_t"></span><span class="target" id="zes__api_8h_1a6fe0c6d65cbccfda2a8c859e55309916"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_psu_voltage_status_t</span></span></span><a class="headerlink" href="#_CPPv424zes_psu_voltage_status_t" title="Link to this definition">#</a><br /></dt>
@@ -687,8 +729,13 @@
 <section id="psu-structures">
 <h2>Psu Structures<a class="headerlink" href="#psu-structures" title="Link to this heading">#</a></h2>
 <section id="zes-psu-properties-t">
-<span id="id4"></span><h3>zes_psu_properties_t<a class="headerlink" href="#zes-psu-properties-t" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zes_psu_properties_t<a class="headerlink" href="#zes-psu-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zespsugetproperties"><span class="std std-ref">zesPsuGetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420zes_psu_properties_t">
 <span id="_CPPv320zes_psu_properties_t"></span><span id="_CPPv220zes_psu_properties_t"></span><span id="zes_psu_properties_t"></span><span class="target" id="structzes__psu__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_psu_properties_t</span></span></span><a class="headerlink" href="#_CPPv420zes_psu_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -709,7 +756,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_psu_properties_t11onSubdeviceE">
-<span id="_CPPv3N20zes_psu_properties_t11onSubdeviceE"></span><span id="_CPPv2N20zes_psu_properties_t11onSubdeviceE"></span><span id="zes_psu_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__psu__properties__t_1a498afcd421ca5e70160a0915a8796d66"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N20zes_psu_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_psu_properties_t11onSubdeviceE"></span><span id="_CPPv2N20zes_psu_properties_t11onSubdeviceE"></span><span id="zes_psu_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__psu__properties__t_1a498afcd421ca5e70160a0915a8796d66"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N20zes_psu_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
 </dd></dl>
 
@@ -721,7 +768,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N20zes_psu_properties_t7haveFanE">
-<span id="_CPPv3N20zes_psu_properties_t7haveFanE"></span><span id="_CPPv2N20zes_psu_properties_t7haveFanE"></span><span id="zes_psu_properties_t::haveFan__ze_bool_t"></span><span class="target" id="structzes__psu__properties__t_1a2373558b497b640ca708596fb7180261"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">haveFan</span></span></span><a class="headerlink" href="#_CPPv4N20zes_psu_properties_t7haveFanE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N20zes_psu_properties_t7haveFanE"></span><span id="_CPPv2N20zes_psu_properties_t7haveFanE"></span><span id="zes_psu_properties_t::haveFan__ze_bool_t"></span><span class="target" id="structzes__psu__properties__t_1a2373558b497b640ca708596fb7180261"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">haveFan</span></span></span><a class="headerlink" href="#_CPPv4N20zes_psu_properties_t7haveFanE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if the power supply has a fan </p>
 </dd></dl>
 
@@ -736,8 +783,13 @@
 
 </section>
 <section id="zes-psu-state-t">
-<span id="id5"></span><h3>zes_psu_state_t<a class="headerlink" href="#zes-psu-state-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zes_psu_state_t<a class="headerlink" href="#zes-psu-state-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zespsugetstate"><span class="std std-ref">zesPsuGetState</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv415zes_psu_state_t">
 <span id="_CPPv315zes_psu_state_t"></span><span id="_CPPv215zes_psu_state_t"></span><span id="zes_psu_state_t"></span><span class="target" id="structzes__psu__state__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_psu_state_t</span></span></span><a class="headerlink" href="#_CPPv415zes_psu_state_t" title="Link to this definition">#</a><br /></dt>
@@ -764,7 +816,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N15zes_psu_state_t9fanFailedE">
-<span id="_CPPv3N15zes_psu_state_t9fanFailedE"></span><span id="_CPPv2N15zes_psu_state_t9fanFailedE"></span><span id="zes_psu_state_t::fanFailed__ze_bool_t"></span><span class="target" id="structzes__psu__state__t_1a76cc65920dd56f2084a70c198986ca08"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fanFailed</span></span></span><a class="headerlink" href="#_CPPv4N15zes_psu_state_t9fanFailedE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N15zes_psu_state_t9fanFailedE"></span><span id="_CPPv2N15zes_psu_state_t9fanFailedE"></span><span id="zes_psu_state_t::fanFailed__ze_bool_t"></span><span class="target" id="structzes__psu__state__t_1a76cc65920dd56f2084a70c198986ca08"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fanFailed</span></span></span><a class="headerlink" href="#_CPPv4N15zes_psu_state_t9fanFailedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if the fan has failed </p>
 </dd></dl>
 
@@ -799,20 +851,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="power.html"
+       href="temperature.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Power</p>
+        <p class="prev-next-title">Temperature</p>
       </div>
     </a>
     <a class="right-next"
-       href="ras.html"
+       href="fan.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Ras</p>
+        <p class="prev-next-title">Fan</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -832,7 +884,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zesPsuGet</div><ul class="ctoc-list"><li><a href="psu.html#zespsugetproperties">&hellip;Properties</a></li><li><a href="psu.html#zespsugetstate">&hellip;State</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="psu.html#zes-psu-voltage-status-t">zes_psu_voltage_status_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="psu.html#zes-psu-properties-t">zes_psu_properties_t</a></li><li><a href="psu.html#zes-psu-state-t">zes_psu_state_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="psu.html#zes-psu-handle-t">zes_psu_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zesPsuGet</div><ul class="ctoc-list"><li><a href="psu.html#zespsugetproperties">&hellip;Properties</a></li><li><a href="psu.html#zespsugetstate">&hellip;State</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="psu.html#zes-psu-voltage-status-t">zes_psu_voltage_status_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="psu.html#zes-psu-properties-t">zes_psu_properties_t</a></li><li><a href="psu.html#zes-psu-state-t">zes_psu_state_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

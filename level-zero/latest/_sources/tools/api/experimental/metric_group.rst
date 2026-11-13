@@ -1,7 +1,9 @@
 ============================================================
 Metric Group - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Metric Group - Experimental Functions
@@ -126,8 +128,16 @@ zet_metric_group_type_exp_flags_t
 
 *Added in version 1.13*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-metric-group-type-exp-t`
+
+.. doxygentypedef:: zet_metric_group_type_exp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zet_metric_group_type_exp_flag_t
     :project: LevelZero
+
 
  
 Metric Group - Experimental Structures
@@ -143,6 +153,10 @@ zet_metric_group_type_exp_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zet-metric-group-properties-t`
+
 .. doxygenstruct:: zet_metric_group_type_exp_t
     :project: LevelZero
     :members:
@@ -157,6 +171,10 @@ zet_metric_source_id_exp_t
 .. rst-class:: api-version
 
 *Added in version 1.13*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zet-metric-group-properties-t`
 
 .. doxygenstruct:: zet_metric_source_id_exp_t
     :project: LevelZero

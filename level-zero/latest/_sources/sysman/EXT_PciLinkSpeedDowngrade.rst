@@ -75,7 +75,7 @@ To downgrade or set to the default PCIe link speed, use :ref:`zesDevicePciLinkSp
 .. parsed-literal::
 
     :ref:`zes-device-action-t` pendingAction;
-    ze_bool_t shouldDowngrade = true;  // true for downgrade
+    :ref:`ze-bool-t` shouldDowngrade = true;  // true for downgrade
     
     :ref:`ze-result-t` result = :ref:`zesDevicePciLinkSpeedUpdateExt`\(hDevice, shouldDowngrade, &pendingAction);
 

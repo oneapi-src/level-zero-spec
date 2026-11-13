@@ -1,7 +1,9 @@
 ============================================================
 Data Types
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 
@@ -32,8 +34,13 @@ zet_value_type_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-typed-value-t`, :ref:`zet-metric-properties-t`
+
 .. doxygenenum:: zet_value_type_t
     :project: LevelZero
+
 
  
 Data Types Structures
@@ -79,6 +86,10 @@ zet_value_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-typed-value-t`, :ref:`zet-metric-programmable-param-info-exp-t`, :ref:`zet-metric-programmable-param-value-exp-t`, :ref:`zet-metric-entry-exp-t`
+
 .. doxygenunion:: zet_value_t
     :project: LevelZero
 
@@ -91,6 +102,10 @@ zet_typed_value_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zetMetricGroupCalculateMetricValues`, :ref:`zetMetricGroupCalculateMultipleMetricValuesExp`, :ref:`zetMetricGroupCalculateMetricExportDataExp`
 
 .. doxygenstruct:: zet_typed_value_t
     :project: LevelZero

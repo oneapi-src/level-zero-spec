@@ -1,7 +1,9 @@
 ============================================================
 VF Management - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 VF Management - Experimental Functions
@@ -48,6 +50,7 @@ zesVFManagementGetVFCapabilitiesExp2
 
 
 
+
  
 VF Management - Experimental Structures
 =======================================
@@ -61,6 +64,10 @@ zes_vf_exp2_capabilities_t
 .. rst-class:: api-version
 
 *Added in version 1.12*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementGetVFCapabilitiesExp2`
 
 .. doxygenstruct:: zes_vf_exp2_capabilities_t
     :project: LevelZero
@@ -77,6 +84,10 @@ zes_vf_util_mem_exp2_t
 
 *Added in version 1.10*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementGetVFMemoryUtilizationExp2`
+
 .. doxygenstruct:: zes_vf_util_mem_exp2_t
     :project: LevelZero
     :members:
@@ -91,6 +102,10 @@ zes_vf_util_engine_exp2_t
 .. rst-class:: api-version
 
 *Added in version 1.10*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementGetVFEngineUtilizationExp2`
 
 .. doxygenstruct:: zes_vf_util_engine_exp2_t
     :project: LevelZero

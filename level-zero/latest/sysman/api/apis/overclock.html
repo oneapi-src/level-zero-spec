@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Overclock &#8212; Level Zero Specification v1.20.41</title>
+    <title>Overclock &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/overclock';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Diagnostics" href="diagnostics.html" />
-    <link rel="prev" title="Driver" href="driver.html" />
+    <link rel="next" title="VF Management" href="vf_management.html" />
+    <link rel="prev" title="Diagnostics" href="diagnostics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overclock-handles">Overclock Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-overclock-handle-t">zes_overclock_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zes_overclock_handle_t"><code class="docutils literal notranslate"><span class="pre">zes_overclock_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overclock-functions">Overclock Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesoverclockgetdomainproperties">zesOverclockGetDomainProperties</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t"><code class="docutils literal notranslate"><span class="pre">zesOverclockGetDomainProperties()</span></code></a></li>
@@ -647,15 +664,35 @@
                   
   <section id="overclock">
 <h1>Overclock<a class="headerlink" href="#overclock" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="overclock-handles">
+<h2>Overclock Handles<a class="headerlink" href="#overclock-handles" title="Link to this heading">#</a></h2>
+<section id="zes-overclock-handle-t">
+<span id="id1"></span><h3>zes_overclock_handle_t<a class="headerlink" href="#zes-overclock-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="device-2.html#zesdeviceenumoverclockdomains"><span class="std std-ref">zesDeviceEnumOverclockDomains</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetdomainproperties"><span class="std std-ref">zesOverclockGetDomainProperties</span></a>, <a class="reference internal" href="#zesoverclockgetdomainvfproperties"><span class="std std-ref">zesOverclockGetDomainVFProperties</span></a>, <a class="reference internal" href="#zesoverclockgetdomaincontrolproperties"><span class="std std-ref">zesOverclockGetDomainControlProperties</span></a>, <a class="reference internal" href="#zesoverclockgetcontrolcurrentvalue"><span class="std std-ref">zesOverclockGetControlCurrentValue</span></a>, <a class="reference internal" href="#zesoverclockgetcontrolpendingvalue"><span class="std std-ref">zesOverclockGetControlPendingValue</span></a>, <a class="reference internal" href="#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a>, <a class="reference internal" href="#zesoverclockgetcontrolstate"><span class="std std-ref">zesOverclockGetControlState</span></a>, <a class="reference internal" href="#zesoverclockgetvfpointvalues"><span class="std std-ref">zesOverclockGetVFPointValues</span></a>, <a class="reference internal" href="#zesoverclocksetvfpointvalues"><span class="std std-ref">zesOverclockSetVFPointValues</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference external" href="../../PROG.html#frequency-voltage-overclocking">Frequency/Voltage overclocking (Programming Guide)</a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv422zes_overclock_handle_t">
+<span id="_CPPv322zes_overclock_handle_t"></span><span id="_CPPv222zes_overclock_handle_t"></span><span id="zes_overclock_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></span><a class="headerlink" href="#_CPPv422zes_overclock_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle for a Sysman device overclock domain.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="overclock-functions">
 <h2>Overclock Functions<a class="headerlink" href="#overclock-functions" title="Link to this heading">#</a></h2>
 <section id="zesoverclockgetdomainproperties">
-<span id="id1"></span><h3>zesOverclockGetDomainProperties<a class="headerlink" href="#zesoverclockgetdomainproperties" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zesOverclockGetDomainProperties<a class="headerlink" href="#zesoverclockgetdomainproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t">
-<span id="_CPPv331zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t"></span><span id="_CPPv231zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t"></span><span id="zesOverclockGetDomainProperties__zes_overclock_handle_t.zes_overclock_properties_tP"></span><span class="target" id="zes__api_8h_1a8b30a925c4175a8771398d32140acc7f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetDomainProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-properties-t" title="zes_overclock_properties_t"><span class="n"><span class="pre">zes_overclock_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDomainProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv331zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t"></span><span id="_CPPv231zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t"></span><span id="zesOverclockGetDomainProperties__zes_overclock_handle_t.zes_overclock_properties_tP"></span><span class="target" id="zes__api_8h_1a8b30a925c4175a8771398d32140acc7f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetDomainProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-properties-t" title="zes_overclock_properties_t"><span class="n"><span class="pre">zes_overclock_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pDomainProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zesOverclockGetDomainProperties22zes_overclock_handle_tP26zes_overclock_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get overclock domain control properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -703,11 +740,11 @@
 
 </section>
 <section id="zesoverclockgetdomainvfproperties">
-<span id="id2"></span><h3>zesOverclockGetDomainVFProperties<a class="headerlink" href="#zesoverclockgetdomainvfproperties" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zesOverclockGetDomainVFProperties<a class="headerlink" href="#zesoverclockgetdomainvfproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv433zesOverclockGetDomainVFProperties22zes_overclock_handle_tP17zes_vf_property_t">
-<span id="_CPPv333zesOverclockGetDomainVFProperties22zes_overclock_handle_tP17zes_vf_property_t"></span><span id="_CPPv233zesOverclockGetDomainVFProperties22zes_overclock_handle_tP17zes_vf_property_t"></span><span id="zesOverclockGetDomainVFProperties__zes_overclock_handle_t.zes_vf_property_tP"></span><span class="target" id="zes__api_8h_1a74ca9ad75769c15633be5fa8d0030515"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetDomainVFProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-vf-property-t" title="zes_vf_property_t"><span class="n"><span class="pre">zes_vf_property_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pVFProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433zesOverclockGetDomainVFProperties22zes_overclock_handle_tP17zes_vf_property_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv333zesOverclockGetDomainVFProperties22zes_overclock_handle_tP17zes_vf_property_t"></span><span id="_CPPv233zesOverclockGetDomainVFProperties22zes_overclock_handle_tP17zes_vf_property_t"></span><span id="zesOverclockGetDomainVFProperties__zes_overclock_handle_t.zes_vf_property_tP"></span><span class="target" id="zes__api_8h_1a74ca9ad75769c15633be5fa8d0030515"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetDomainVFProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-vf-property-t" title="zes_vf_property_t"><span class="n"><span class="pre">zes_vf_property_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pVFProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433zesOverclockGetDomainVFProperties22zes_overclock_handle_tP17zes_vf_property_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read overclock VF min,max and step values. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -755,11 +792,11 @@
 
 </section>
 <section id="zesoverclockgetdomaincontrolproperties">
-<span id="id3"></span><h3>zesOverclockGetDomainControlProperties<a class="headerlink" href="#zesoverclockgetdomaincontrolproperties" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zesOverclockGetDomainControlProperties<a class="headerlink" href="#zesoverclockgetdomaincontrolproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv438zesOverclockGetDomainControlProperties22zes_overclock_handle_t23zes_overclock_control_tP22zes_control_property_t">
-<span id="_CPPv338zesOverclockGetDomainControlProperties22zes_overclock_handle_t23zes_overclock_control_tP22zes_control_property_t"></span><span id="_CPPv238zesOverclockGetDomainControlProperties22zes_overclock_handle_t23zes_overclock_control_tP22zes_control_property_t"></span><span id="zesOverclockGetDomainControlProperties__zes_overclock_handle_t.zes_overclock_control_t.zes_control_property_tP"></span><span class="target" id="zes__api_8h_1ace3f78251d6be6a48c3b2ce70cdd60c9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetDomainControlProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <a class="reference internal" href="#zes-control-property-t" title="zes_control_property_t"><span class="n"><span class="pre">zes_control_property_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pControlProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zesOverclockGetDomainControlProperties22zes_overclock_handle_t23zes_overclock_control_tP22zes_control_property_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv338zesOverclockGetDomainControlProperties22zes_overclock_handle_t23zes_overclock_control_tP22zes_control_property_t"></span><span id="_CPPv238zesOverclockGetDomainControlProperties22zes_overclock_handle_t23zes_overclock_control_tP22zes_control_property_t"></span><span id="zesOverclockGetDomainControlProperties__zes_overclock_handle_t.zes_overclock_control_t.zes_control_property_tP"></span><span class="target" id="zes__api_8h_1ace3f78251d6be6a48c3b2ce70cdd60c9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetDomainControlProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <a class="reference internal" href="#zes-control-property-t" title="zes_control_property_t"><span class="n"><span class="pre">zes_control_property_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pControlProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zesOverclockGetDomainControlProperties22zes_overclock_handle_t23zes_overclock_control_tP22zes_control_property_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read overclock control values - min/max/step/default/ref. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -813,11 +850,11 @@
 
 </section>
 <section id="zesoverclockgetcontrolcurrentvalue">
-<span id="id4"></span><h3>zesOverclockGetControlCurrentValue<a class="headerlink" href="#zesoverclockgetcontrolcurrentvalue" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zesOverclockGetControlCurrentValue<a class="headerlink" href="#zesoverclockgetcontrolcurrentvalue" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv434zesOverclockGetControlCurrentValue22zes_overclock_handle_t23zes_overclock_control_tPd">
-<span id="_CPPv334zesOverclockGetControlCurrentValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="_CPPv234zesOverclockGetControlCurrentValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="zesOverclockGetControlCurrentValue__zes_overclock_handle_t.zes_overclock_control_t.doubleP"></span><span class="target" id="zes__api_8h_1abd4d803be2d79c5c5dad89e0ab691ae2"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetControlCurrentValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zesOverclockGetControlCurrentValue22zes_overclock_handle_t23zes_overclock_control_tPd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv334zesOverclockGetControlCurrentValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="_CPPv234zesOverclockGetControlCurrentValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="zesOverclockGetControlCurrentValue__zes_overclock_handle_t.zes_overclock_control_t.doubleP"></span><span class="target" id="zes__api_8h_1abd4d803be2d79c5c5dad89e0ab691ae2"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetControlCurrentValue</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zesOverclockGetControlCurrentValue22zes_overclock_handle_t23zes_overclock_control_tPd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read the current value for a given overclock control. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -871,11 +908,11 @@
 
 </section>
 <section id="zesoverclockgetcontrolpendingvalue">
-<span id="id5"></span><h3>zesOverclockGetControlPendingValue<a class="headerlink" href="#zesoverclockgetcontrolpendingvalue" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zesOverclockGetControlPendingValue<a class="headerlink" href="#zesoverclockgetcontrolpendingvalue" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv434zesOverclockGetControlPendingValue22zes_overclock_handle_t23zes_overclock_control_tPd">
-<span id="_CPPv334zesOverclockGetControlPendingValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="_CPPv234zesOverclockGetControlPendingValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="zesOverclockGetControlPendingValue__zes_overclock_handle_t.zes_overclock_control_t.doubleP"></span><span class="target" id="zes__api_8h_1a556bbfa01bb11b553538f50f0ed89573"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetControlPendingValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zesOverclockGetControlPendingValue22zes_overclock_handle_t23zes_overclock_control_tPd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv334zesOverclockGetControlPendingValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="_CPPv234zesOverclockGetControlPendingValue22zes_overclock_handle_t23zes_overclock_control_tPd"></span><span id="zesOverclockGetControlPendingValue__zes_overclock_handle_t.zes_overclock_control_t.doubleP"></span><span class="target" id="zes__api_8h_1a556bbfa01bb11b553538f50f0ed89573"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetControlPendingValue</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zesOverclockGetControlPendingValue22zes_overclock_handle_t23zes_overclock_control_tPd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read the the reset pending value for a given overclock control. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -929,11 +966,11 @@
 
 </section>
 <section id="zesoverclocksetcontroluservalue">
-<span id="id6"></span><h3>zesOverclockSetControlUserValue<a class="headerlink" href="#zesoverclocksetcontroluservalue" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zesOverclockSetControlUserValue<a class="headerlink" href="#zesoverclocksetcontroluservalue" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv431zesOverclockSetControlUserValue22zes_overclock_handle_t23zes_overclock_control_tdP20zes_pending_action_t">
-<span id="_CPPv331zesOverclockSetControlUserValue22zes_overclock_handle_t23zes_overclock_control_tdP20zes_pending_action_t"></span><span id="_CPPv231zesOverclockSetControlUserValue22zes_overclock_handle_t23zes_overclock_control_tdP20zes_pending_action_t"></span><span id="zesOverclockSetControlUserValue__zes_overclock_handle_t.zes_overclock_control_t.double.zes_pending_action_tP"></span><span class="target" id="zes__api_8h_1a2de15213a8e4b7ab0ab8e72a680357a3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockSetControlUserValue</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pValue</span></span>, <a class="reference internal" href="#zes-pending-action-t" title="zes_pending_action_t"><span class="n"><span class="pre">zes_pending_action_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPendingAction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zesOverclockSetControlUserValue22zes_overclock_handle_t23zes_overclock_control_tdP20zes_pending_action_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv331zesOverclockSetControlUserValue22zes_overclock_handle_t23zes_overclock_control_tdP20zes_pending_action_t"></span><span id="_CPPv231zesOverclockSetControlUserValue22zes_overclock_handle_t23zes_overclock_control_tdP20zes_pending_action_t"></span><span id="zesOverclockSetControlUserValue__zes_overclock_handle_t.zes_overclock_control_t.double.zes_pending_action_tP"></span><span class="target" id="zes__api_8h_1a2de15213a8e4b7ab0ab8e72a680357a3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockSetControlUserValue</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pValue</span></span>, <a class="reference internal" href="#zes-pending-action-t" title="zes_pending_action_t"><span class="n"><span class="pre">zes_pending_action_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPendingAction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv431zesOverclockSetControlUserValue22zes_overclock_handle_t23zes_overclock_control_tdP20zes_pending_action_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set the value for a given overclock control. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -988,11 +1025,11 @@
 
 </section>
 <section id="zesoverclockgetcontrolstate">
-<span id="id7"></span><h3>zesOverclockGetControlState<a class="headerlink" href="#zesoverclockgetcontrolstate" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zesOverclockGetControlState<a class="headerlink" href="#zesoverclockgetcontrolstate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zesOverclockGetControlState22zes_overclock_handle_t23zes_overclock_control_tP19zes_control_state_tP20zes_pending_action_t">
-<span id="_CPPv327zesOverclockGetControlState22zes_overclock_handle_t23zes_overclock_control_tP19zes_control_state_tP20zes_pending_action_t"></span><span id="_CPPv227zesOverclockGetControlState22zes_overclock_handle_t23zes_overclock_control_tP19zes_control_state_tP20zes_pending_action_t"></span><span id="zesOverclockGetControlState__zes_overclock_handle_t.zes_overclock_control_t.zes_control_state_tP.zes_pending_action_tP"></span><span class="target" id="zes__api_8h_1a065dc2e8816f2f401520474b1c891ac8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetControlState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <a class="reference internal" href="#zes-control-state-t" title="zes_control_state_t"><span class="n"><span class="pre">zes_control_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pControlState</span></span>, <a class="reference internal" href="#zes-pending-action-t" title="zes_pending_action_t"><span class="n"><span class="pre">zes_pending_action_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPendingAction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesOverclockGetControlState22zes_overclock_handle_t23zes_overclock_control_tP19zes_control_state_tP20zes_pending_action_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zesOverclockGetControlState22zes_overclock_handle_t23zes_overclock_control_tP19zes_control_state_tP20zes_pending_action_t"></span><span id="_CPPv227zesOverclockGetControlState22zes_overclock_handle_t23zes_overclock_control_tP19zes_control_state_tP20zes_pending_action_t"></span><span id="zesOverclockGetControlState__zes_overclock_handle_t.zes_overclock_control_t.zes_control_state_tP.zes_pending_action_tP"></span><span class="target" id="zes__api_8h_1a065dc2e8816f2f401520474b1c891ac8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetControlState</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-overclock-control-t" title="zes_overclock_control_t"><span class="n"><span class="pre">zes_overclock_control_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">DomainControl</span></span>, <a class="reference internal" href="#zes-control-state-t" title="zes_control_state_t"><span class="n"><span class="pre">zes_control_state_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pControlState</span></span>, <a class="reference internal" href="#zes-pending-action-t" title="zes_pending_action_t"><span class="n"><span class="pre">zes_pending_action_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPendingAction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesOverclockGetControlState22zes_overclock_handle_t23zes_overclock_control_tP19zes_control_state_tP20zes_pending_action_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Determine the state of an overclock control. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1048,11 +1085,11 @@
 
 </section>
 <section id="zesoverclockgetvfpointvalues">
-<span id="id8"></span><h3>zesOverclockGetVFPointValues<a class="headerlink" href="#zesoverclockgetvfpointvalues" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zesOverclockGetVFPointValues<a class="headerlink" href="#zesoverclockgetvfpointvalues" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428zesOverclockGetVFPointValues22zes_overclock_handle_t13zes_vf_type_t19zes_vf_array_type_t8uint32_tP8uint32_t">
-<span id="_CPPv328zesOverclockGetVFPointValues22zes_overclock_handle_t13zes_vf_type_t19zes_vf_array_type_t8uint32_tP8uint32_t"></span><span id="_CPPv228zesOverclockGetVFPointValues22zes_overclock_handle_t13zes_vf_type_t19zes_vf_array_type_t8uint32_tP8uint32_t"></span><span id="zesOverclockGetVFPointValues__zes_overclock_handle_t.zes_vf_type_t.zes_vf_array_type_t.uint32_t.uint32_tP"></span><span class="target" id="zes__api_8h_1a905c8b2ab5f2eaad9b2a72fdf502cdcd"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetVFPointValues</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-vf-type-t" title="zes_vf_type_t"><span class="n"><span class="pre">zes_vf_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">VFType</span></span>, <a class="reference internal" href="#zes-vf-array-type-t" title="zes_vf_array_type_t"><span class="n"><span class="pre">zes_vf_array_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">VFArrayType</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">PointIndex</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">PointValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesOverclockGetVFPointValues22zes_overclock_handle_t13zes_vf_type_t19zes_vf_array_type_t8uint32_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv328zesOverclockGetVFPointValues22zes_overclock_handle_t13zes_vf_type_t19zes_vf_array_type_t8uint32_tP8uint32_t"></span><span id="_CPPv228zesOverclockGetVFPointValues22zes_overclock_handle_t13zes_vf_type_t19zes_vf_array_type_t8uint32_tP8uint32_t"></span><span id="zesOverclockGetVFPointValues__zes_overclock_handle_t.zes_vf_type_t.zes_vf_array_type_t.uint32_t.uint32_tP"></span><span class="target" id="zes__api_8h_1a905c8b2ab5f2eaad9b2a72fdf502cdcd"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockGetVFPointValues</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-vf-type-t" title="zes_vf_type_t"><span class="n"><span class="pre">zes_vf_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">VFType</span></span>, <a class="reference internal" href="#zes-vf-array-type-t" title="zes_vf_array_type_t"><span class="n"><span class="pre">zes_vf_array_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">VFArrayType</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">PointIndex</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">PointValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesOverclockGetVFPointValues22zes_overclock_handle_t13zes_vf_type_t19zes_vf_array_type_t8uint32_tP8uint32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read the frequency or voltage of a V-F point from the default or custom V-F curve. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1109,11 +1146,11 @@
 
 </section>
 <section id="zesoverclocksetvfpointvalues">
-<span id="id9"></span><h3>zesOverclockSetVFPointValues<a class="headerlink" href="#zesoverclocksetvfpointvalues" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>zesOverclockSetVFPointValues<a class="headerlink" href="#zesoverclocksetvfpointvalues" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428zesOverclockSetVFPointValues22zes_overclock_handle_t13zes_vf_type_t8uint32_t8uint32_t">
-<span id="_CPPv328zesOverclockSetVFPointValues22zes_overclock_handle_t13zes_vf_type_t8uint32_t8uint32_t"></span><span id="_CPPv228zesOverclockSetVFPointValues22zes_overclock_handle_t13zes_vf_type_t8uint32_t8uint32_t"></span><span id="zesOverclockSetVFPointValues__zes_overclock_handle_t.zes_vf_type_t.uint32_t.uint32_t"></span><span class="target" id="zes__api_8h_1ad51f1fc784fc34038d4bafeaff1fe487"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockSetVFPointValues</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_overclock_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-vf-type-t" title="zes_vf_type_t"><span class="n"><span class="pre">zes_vf_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">VFType</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">PointIndex</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">PointValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesOverclockSetVFPointValues22zes_overclock_handle_t13zes_vf_type_t8uint32_t8uint32_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv328zesOverclockSetVFPointValues22zes_overclock_handle_t13zes_vf_type_t8uint32_t8uint32_t"></span><span id="_CPPv228zesOverclockSetVFPointValues22zes_overclock_handle_t13zes_vf_type_t8uint32_t8uint32_t"></span><span id="zesOverclockSetVFPointValues__zes_overclock_handle_t.zes_vf_type_t.uint32_t.uint32_t"></span><span class="target" id="zes__api_8h_1ad51f1fc784fc34038d4bafeaff1fe487"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesOverclockSetVFPointValues</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-overclock-handle-t" title="zes_overclock_handle_t"><span class="n"><span class="pre">zes_overclock_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDomainHandle</span></span>, <a class="reference internal" href="#zes-vf-type-t" title="zes_vf_type_t"><span class="n"><span class="pre">zes_vf_type_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">VFType</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">PointIndex</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">PointValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesOverclockSetVFPointValues22zes_overclock_handle_t13zes_vf_type_t8uint32_t8uint32_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Write the frequency or voltage of a V-F point to custom V-F curve. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1167,8 +1204,13 @@
 <section id="overclock-enums">
 <h2>Overclock Enums<a class="headerlink" href="#overclock-enums" title="Link to this heading">#</a></h2>
 <section id="zes-overclock-control-t">
-<span id="id10"></span><h3>zes_overclock_control_t<a class="headerlink" href="#zes-overclock-control-t" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>zes_overclock_control_t<a class="headerlink" href="#zes-overclock-control-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetdomaincontrolproperties"><span class="std std-ref">zesOverclockGetDomainControlProperties</span></a>, <a class="reference internal" href="#zesoverclockgetcontrolcurrentvalue"><span class="std std-ref">zesOverclockGetControlCurrentValue</span></a>, <a class="reference internal" href="#zesoverclockgetcontrolpendingvalue"><span class="std std-ref">zesOverclockGetControlPendingValue</span></a>, <a class="reference internal" href="#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a>, <a class="reference internal" href="#zesoverclockgetcontrolstate"><span class="std std-ref">zesOverclockGetControlState</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv423zes_overclock_control_t">
 <span id="_CPPv323zes_overclock_control_t"></span><span id="_CPPv223zes_overclock_control_t"></span><span class="target" id="zes__api_8h_1acd71229764e7e1d7ca5be8a9e0cc8ff7"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_overclock_control_t</span></span></span><a class="headerlink" href="#_CPPv423zes_overclock_control_t" title="Link to this definition">#</a><br /></dt>
@@ -1256,8 +1298,13 @@
 
 </section>
 <section id="zes-overclock-mode-t">
-<span id="id11"></span><h3>zes_overclock_mode_t<a class="headerlink" href="#zes-overclock-mode-t" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>zes_overclock_mode_t<a class="headerlink" href="#zes-overclock-mode-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="device-2.html#zesdevicereadoverclockstate"><span class="std std-ref">zesDeviceReadOverclockState</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420zes_overclock_mode_t">
 <span id="_CPPv320zes_overclock_mode_t"></span><span id="_CPPv220zes_overclock_mode_t"></span><span class="target" id="zes__api_8h_1a2f156c278df8aa461a98e9c8150b3b9f"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_overclock_mode_t</span></span></span><a class="headerlink" href="#_CPPv420zes_overclock_mode_t" title="Link to this definition">#</a><br /></dt>
@@ -1303,8 +1350,13 @@
 
 </section>
 <section id="zes-control-state-t">
-<span id="id12"></span><h3>zes_control_state_t<a class="headerlink" href="#zes-control-state-t" title="Link to this heading">#</a></h3>
+<span id="id13"></span><h3>zes_control_state_t<a class="headerlink" href="#zes-control-state-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetcontrolstate"><span class="std std-ref">zesOverclockGetControlState</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv419zes_control_state_t">
 <span id="_CPPv319zes_control_state_t"></span><span id="_CPPv219zes_control_state_t"></span><span class="target" id="zes__api_8h_1a8d04dd0f80d93c9ce1508970074ff54a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_control_state_t</span></span></span><a class="headerlink" href="#_CPPv419zes_control_state_t" title="Link to this definition">#</a><br /></dt>
@@ -1338,8 +1390,13 @@
 
 </section>
 <section id="zes-pending-action-t">
-<span id="id13"></span><h3>zes_pending_action_t<a class="headerlink" href="#zes-pending-action-t" title="Link to this heading">#</a></h3>
+<span id="id14"></span><h3>zes_pending_action_t<a class="headerlink" href="#zes-pending-action-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="device-2.html#zesdevicereadoverclockstate"><span class="std std-ref">zesDeviceReadOverclockState</span></a>, <a class="reference internal" href="#zesoverclocksetcontroluservalue"><span class="std std-ref">zesOverclockSetControlUserValue</span></a>, <a class="reference internal" href="#zesoverclockgetcontrolstate"><span class="std std-ref">zesOverclockGetControlState</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420zes_pending_action_t">
 <span id="_CPPv320zes_pending_action_t"></span><span id="_CPPv220zes_pending_action_t"></span><span class="target" id="zes__api_8h_1a17732e69fd190679d0fbde072b48c453"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_pending_action_t</span></span></span><a class="headerlink" href="#_CPPv420zes_pending_action_t" title="Link to this definition">#</a><br /></dt>
@@ -1379,8 +1436,13 @@
 
 </section>
 <section id="zes-vf-program-type-t">
-<span id="id14"></span><h3>zes_vf_program_type_t<a class="headerlink" href="#zes-vf-program-type-t" title="Link to this heading">#</a></h3>
+<span id="id15"></span><h3>zes_vf_program_type_t<a class="headerlink" href="#zes-vf-program-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-overclock-properties-t"><span class="std std-ref">zes_overclock_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv421zes_vf_program_type_t">
 <span id="_CPPv321zes_vf_program_type_t"></span><span id="_CPPv221zes_vf_program_type_t"></span><span class="target" id="zes__api_8h_1a1e630172674bd4324f29b07b148a6a35"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_program_type_t</span></span></span><a class="headerlink" href="#_CPPv421zes_vf_program_type_t" title="Link to this definition">#</a><br /></dt>
@@ -1414,8 +1476,13 @@
 
 </section>
 <section id="zes-vf-type-t">
-<span id="id15"></span><h3>zes_vf_type_t<a class="headerlink" href="#zes-vf-type-t" title="Link to this heading">#</a></h3>
+<span id="id16"></span><h3>zes_vf_type_t<a class="headerlink" href="#zes-vf-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetvfpointvalues"><span class="std std-ref">zesOverclockGetVFPointValues</span></a>, <a class="reference internal" href="#zesoverclocksetvfpointvalues"><span class="std std-ref">zesOverclockSetVFPointValues</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv413zes_vf_type_t">
 <span id="_CPPv313zes_vf_type_t"></span><span id="_CPPv213zes_vf_type_t"></span><span class="target" id="zes__api_8h_1a01c281cf0420dd2722f3040f178dd92c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_type_t</span></span></span><a class="headerlink" href="#_CPPv413zes_vf_type_t" title="Link to this definition">#</a><br /></dt>
@@ -1443,8 +1510,13 @@
 
 </section>
 <section id="zes-vf-array-type-t">
-<span id="id16"></span><h3>zes_vf_array_type_t<a class="headerlink" href="#zes-vf-array-type-t" title="Link to this heading">#</a></h3>
+<span id="id17"></span><h3>zes_vf_array_type_t<a class="headerlink" href="#zes-vf-array-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetvfpointvalues"><span class="std std-ref">zesOverclockGetVFPointValues</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv419zes_vf_array_type_t">
 <span id="_CPPv319zes_vf_array_type_t"></span><span id="_CPPv219zes_vf_array_type_t"></span><span class="target" id="zes__api_8h_1ad3ddda37d53453ac16623678a9e61b79"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_array_type_t</span></span></span><a class="headerlink" href="#_CPPv419zes_vf_array_type_t" title="Link to this definition">#</a><br /></dt>
@@ -1481,8 +1553,13 @@
 <section id="overclock-structures">
 <h2>Overclock Structures<a class="headerlink" href="#overclock-structures" title="Link to this heading">#</a></h2>
 <section id="zes-overclock-properties-t">
-<span id="id17"></span><h3>zes_overclock_properties_t<a class="headerlink" href="#zes-overclock-properties-t" title="Link to this heading">#</a></h3>
+<span id="id18"></span><h3>zes_overclock_properties_t<a class="headerlink" href="#zes-overclock-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetdomainproperties"><span class="std std-ref">zesOverclockGetDomainProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv426zes_overclock_properties_t">
 <span id="_CPPv326zes_overclock_properties_t"></span><span id="_CPPv226zes_overclock_properties_t"></span><span id="zes_overclock_properties_t"></span><span class="target" id="structzes__overclock__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_overclock_properties_t</span></span></span><a class="headerlink" href="#_CPPv426zes_overclock_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1534,8 +1611,13 @@
 
 </section>
 <section id="zes-control-property-t">
-<span id="id18"></span><h3>zes_control_property_t<a class="headerlink" href="#zes-control-property-t" title="Link to this heading">#</a></h3>
+<span id="id19"></span><h3>zes_control_property_t<a class="headerlink" href="#zes-control-property-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetdomaincontrolproperties"><span class="std std-ref">zesOverclockGetDomainControlProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv422zes_control_property_t">
 <span id="_CPPv322zes_control_property_t"></span><span id="_CPPv222zes_control_property_t"></span><span id="zes_control_property_t"></span><span class="target" id="structzes__control__property__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_control_property_t</span></span></span><a class="headerlink" href="#_CPPv422zes_control_property_t" title="Link to this definition">#</a><br /></dt>
@@ -1581,8 +1663,13 @@
 
 </section>
 <section id="zes-vf-property-t">
-<span id="id19"></span><h3>zes_vf_property_t<a class="headerlink" href="#zes-vf-property-t" title="Link to this heading">#</a></h3>
+<span id="id20"></span><h3>zes_vf_property_t<a class="headerlink" href="#zes-vf-property-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesoverclockgetdomainvfproperties"><span class="std std-ref">zesOverclockGetDomainVFProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv417zes_vf_property_t">
 <span id="_CPPv317zes_vf_property_t"></span><span id="_CPPv217zes_vf_property_t"></span><span id="zes_vf_property_t"></span><span class="target" id="structzes__vf__property__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_property_t</span></span></span><a class="headerlink" href="#_CPPv417zes_vf_property_t" title="Link to this definition">#</a><br /></dt>
@@ -1648,20 +1735,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="driver.html"
+       href="diagnostics.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Driver</p>
+        <p class="prev-next-title">Diagnostics</p>
       </div>
     </a>
     <a class="right-next"
-       href="diagnostics.html"
+       href="vf_management.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Diagnostics</p>
+        <p class="prev-next-title">VF Management</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1681,7 +1768,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zesOverclock</div><ul class="ctoc-list"><li><a href="overclock.html#zesoverclockgetdomainproperties">&hellip;GetDomainProperties</a></li><li><a href="overclock.html#zesoverclockgetdomainvfproperties">&hellip;GetDomainVFProperties</a></li><li><a href="overclock.html#zesoverclockgetdomaincontrolproperties">&hellip;GetDomainControlProperties</a></li><li><a href="overclock.html#zesoverclockgetcontrolcurrentvalue">&hellip;GetControlCurrentValue</a></li><li><a href="overclock.html#zesoverclockgetcontrolpendingvalue">&hellip;GetControlPendingValue</a></li><li><a href="overclock.html#zesoverclocksetcontroluservalue">&hellip;SetControlUserValue</a></li><li><a href="overclock.html#zesoverclockgetcontrolstate">&hellip;GetControlState</a></li><li><a href="overclock.html#zesoverclockgetvfpointvalues">&hellip;GetVFPointValues</a></li><li><a href="overclock.html#zesoverclocksetvfpointvalues">&hellip;SetVFPointValues</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">7</span></summary><ul class="ctoc-list"><li><a href="overclock.html#zes-overclock-control-t">zes_overclock_control_t</a></li><li><a href="overclock.html#zes-overclock-mode-t">zes_overclock_mode_t</a></li><li><a href="overclock.html#zes-control-state-t">zes_control_state_t</a></li><li><a href="overclock.html#zes-pending-action-t">zes_pending_action_t</a></li><li><a href="overclock.html#zes-vf-program-type-t">zes_vf_program_type_t</a></li><li><a href="overclock.html#zes-vf-type-t">zes_vf_type_t</a></li><li><a href="overclock.html#zes-vf-array-type-t">zes_vf_array_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="overclock.html#zes-overclock-properties-t">zes_overclock_properties_t</a></li><li><a href="overclock.html#zes-control-property-t">zes_control_property_t</a></li><li><a href="overclock.html#zes-vf-property-t">zes_vf_property_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="overclock.html#zes-overclock-handle-t">zes_overclock_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zesOverclock</div><ul class="ctoc-list"><li><a href="overclock.html#zesoverclockgetdomainproperties">&hellip;GetDomainProperties</a></li><li><a href="overclock.html#zesoverclockgetdomainvfproperties">&hellip;GetDomainVFProperties</a></li><li><a href="overclock.html#zesoverclockgetdomaincontrolproperties">&hellip;GetDomainControlProperties</a></li><li><a href="overclock.html#zesoverclockgetcontrolcurrentvalue">&hellip;GetControlCurrentValue</a></li><li><a href="overclock.html#zesoverclockgetcontrolpendingvalue">&hellip;GetControlPendingValue</a></li><li><a href="overclock.html#zesoverclocksetcontroluservalue">&hellip;SetControlUserValue</a></li><li><a href="overclock.html#zesoverclockgetcontrolstate">&hellip;GetControlState</a></li><li><a href="overclock.html#zesoverclockgetvfpointvalues">&hellip;GetVFPointValues</a></li><li><a href="overclock.html#zesoverclocksetvfpointvalues">&hellip;SetVFPointValues</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">7</span></summary><ul class="ctoc-list"><li><a href="overclock.html#zes-overclock-control-t">zes_overclock_control_t</a></li><li><a href="overclock.html#zes-overclock-mode-t">zes_overclock_mode_t</a></li><li><a href="overclock.html#zes-control-state-t">zes_control_state_t</a></li><li><a href="overclock.html#zes-pending-action-t">zes_pending_action_t</a></li><li><a href="overclock.html#zes-vf-program-type-t">zes_vf_program_type_t</a></li><li><a href="overclock.html#zes-vf-type-t">zes_vf_type_t</a></li><li><a href="overclock.html#zes-vf-array-type-t">zes_vf_array_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="overclock.html#zes-overclock-properties-t">zes_overclock_properties_t</a></li><li><a href="overclock.html#zes-control-property-t">zes_control_property_t</a></li><li><a href="overclock.html#zes-vf-property-t">zes_vf_property_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

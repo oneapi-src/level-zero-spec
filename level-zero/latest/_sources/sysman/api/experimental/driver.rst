@@ -1,7 +1,9 @@
 ============================================================
 Driver - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Driver - Experimental Functions
@@ -19,6 +21,7 @@ zesDriverGetDeviceByUuidExp
 
 .. doxygenfunction:: zesDriverGetDeviceByUuidExp
     :project: LevelZero
+
 
 
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Context - Extensions &#8212; Level Zero Specification v1.20.41</title>
+    <title>Context - Extensions &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Device - Extensions" href="device.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -475,6 +485,7 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context-extension-enums">Context - Extension Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-device-raytracing-ext-flags-t">ze_device_raytracing_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432ze_device_raytracing_ext_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_device_raytracing_ext_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431ze_device_raytracing_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_device_raytracing_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_device_raytracing_ext_flag_t38ZE_DEVICE_RAYTRACING_EXT_FLAG_RAYQUERYE"><code class="docutils literal notranslate"><span class="pre">ZE_DEVICE_RAYTRACING_EXT_FLAG_RAYQUERY</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31ze_device_raytracing_ext_flag_t42ZE_DEVICE_RAYTRACING_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_DEVICE_RAYTRACING_EXT_FLAG_FORCE_UINT32</span></code></a></li>
@@ -483,6 +494,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-raytracing-mem-alloc-ext-flags-t">ze_raytracing_mem_alloc_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv435ze_raytracing_mem_alloc_ext_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_raytracing_mem_alloc_ext_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv434ze_raytracing_mem_alloc_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_raytracing_mem_alloc_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_raytracing_mem_alloc_ext_flag_t36ZE_RAYTRACING_MEM_ALLOC_EXT_FLAG_TBDE"><code class="docutils literal notranslate"><span class="pre">ZE_RAYTRACING_MEM_ALLOC_EXT_FLAG_TBD</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N34ze_raytracing_mem_alloc_ext_flag_t45ZE_RAYTRACING_MEM_ALLOC_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RAYTRACING_MEM_ALLOC_EXT_FLAG_FORCE_UINT32</span></code></a></li>
@@ -545,12 +557,23 @@
                   
   <section id="context-extensions">
 <h1>Context - Extensions<a class="headerlink" href="#context-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="context-extension-enums">
 <h2>Context - Extension Enums<a class="headerlink" href="#context-extension-enums" title="Link to this heading">#</a></h2>
 <section id="ze-device-raytracing-ext-flags-t">
 <span id="id1"></span><h3>ze_device_raytracing_ext_flags_t<a class="headerlink" href="#ze-device-raytracing-ext-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-device-raytracing-ext-properties-t"><span class="std std-ref">ze_device_raytracing_ext_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv432ze_device_raytracing_ext_flags_t">
+<span id="_CPPv332ze_device_raytracing_ext_flags_t"></span><span id="_CPPv232ze_device_raytracing_ext_flags_t"></span><span id="ze_device_raytracing_ext_flags_t"></span><span class="target" id="ze__api_8h_1aa99bf2300569ee519d196b53a5ad231e"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_raytracing_ext_flags_t</span></span></span><a class="headerlink" href="#_CPPv432ze_device_raytracing_ext_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported raytracing capability flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv431ze_device_raytracing_ext_flag_t">
 <span id="_CPPv331ze_device_raytracing_ext_flag_t"></span><span id="_CPPv231ze_device_raytracing_ext_flag_t"></span><span class="target" id="ze__api_8h_1a623934f358544f5c914432f77354d7e3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_raytracing_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv431ze_device_raytracing_ext_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -573,6 +596,17 @@
 <section id="ze-raytracing-mem-alloc-ext-flags-t">
 <span id="id2"></span><h3>ze_raytracing_mem_alloc_ext_flags_t<a class="headerlink" href="#ze-raytracing-mem-alloc-ext-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-raytracing-mem-alloc-ext-desc-t"><span class="std std-ref">ze_raytracing_mem_alloc_ext_desc_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv435ze_raytracing_mem_alloc_ext_flags_t">
+<span id="_CPPv335ze_raytracing_mem_alloc_ext_flags_t"></span><span id="_CPPv235ze_raytracing_mem_alloc_ext_flags_t"></span><span id="ze_raytracing_mem_alloc_ext_flags_t"></span><span class="target" id="ze__api_8h_1a47dfc52601516f15e282f5ad50222264"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_raytracing_mem_alloc_ext_flags_t</span></span></span><a class="headerlink" href="#_CPPv435ze_raytracing_mem_alloc_ext_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported raytracing memory allocation flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv434ze_raytracing_mem_alloc_ext_flag_t">
 <span id="_CPPv334ze_raytracing_mem_alloc_ext_flag_t"></span><span id="_CPPv234ze_raytracing_mem_alloc_ext_flag_t"></span><span class="target" id="ze__api_8h_1ad9b4245c70f0b2f44c6b26e0f7af84fe"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_raytracing_mem_alloc_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv434ze_raytracing_mem_alloc_ext_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -627,6 +661,11 @@
 <section id="ze-device-raytracing-ext-properties-t">
 <span id="id4"></span><h3>ze_device_raytracing_ext_properties_t<a class="headerlink" href="#ze-device-raytracing-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-module-properties-t"><span class="std std-ref">ze_device_module_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv437ze_device_raytracing_ext_properties_t">
 <span id="_CPPv337ze_device_raytracing_ext_properties_t"></span><span id="_CPPv237ze_device_raytracing_ext_properties_t"></span><span id="ze_device_raytracing_ext_properties_t"></span><span class="target" id="structze__device__raytracing__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_raytracing_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv437ze_device_raytracing_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -651,8 +690,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N37ze_device_raytracing_ext_properties_t5flagsE">
-<span id="_CPPv3N37ze_device_raytracing_ext_properties_t5flagsE"></span><span id="_CPPv2N37ze_device_raytracing_ext_properties_t5flagsE"></span><span id="ze_device_raytracing_ext_properties_t::flags__ze_device_raytracing_ext_flags_t"></span><span class="target" id="structze__device__raytracing__ext__properties__t_1a99896003ffcb280cf40e8a3eb21b9c2a"></span><span class="n"><span class="pre">ze_device_raytracing_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N37ze_device_raytracing_ext_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] 0 or a valid combination of ze_device_raytracing_ext_flags_t</p>
+<span id="_CPPv3N37ze_device_raytracing_ext_properties_t5flagsE"></span><span id="_CPPv2N37ze_device_raytracing_ext_properties_t5flagsE"></span><span id="ze_device_raytracing_ext_properties_t::flags__ze_device_raytracing_ext_flags_t"></span><span class="target" id="structze__device__raytracing__ext__properties__t_1a99896003ffcb280cf40e8a3eb21b9c2a"></span><a class="reference internal" href="#ze-device-raytracing-ext-flags-t" title="ze_device_raytracing_ext_flags_t"><span class="n"><span class="pre">ze_device_raytracing_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N37ze_device_raytracing_ext_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 0 or a valid combination of <a class="reference internal" href="#ze-device-raytracing-ext-flags-t"><span class="std std-ref">ze_device_raytracing_ext_flags_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -668,6 +707,11 @@
 <section id="ze-raytracing-mem-alloc-ext-desc-t">
 <span id="id5"></span><h3>ze_raytracing_mem_alloc_ext_desc_t<a class="headerlink" href="#ze-raytracing-mem-alloc-ext-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/mem.html#ze-device-mem-alloc-desc-t"><span class="std std-ref">ze_device_mem_alloc_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv434ze_raytracing_mem_alloc_ext_desc_t">
 <span id="_CPPv334ze_raytracing_mem_alloc_ext_desc_t"></span><span id="_CPPv234ze_raytracing_mem_alloc_ext_desc_t"></span><span id="ze_raytracing_mem_alloc_ext_desc_t"></span><span class="target" id="structze__raytracing__mem__alloc__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_raytracing_mem_alloc_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv434ze_raytracing_mem_alloc_ext_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -692,8 +736,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N34ze_raytracing_mem_alloc_ext_desc_t5flagsE">
-<span id="_CPPv3N34ze_raytracing_mem_alloc_ext_desc_t5flagsE"></span><span id="_CPPv2N34ze_raytracing_mem_alloc_ext_desc_t5flagsE"></span><span id="ze_raytracing_mem_alloc_ext_desc_t::flags__ze_raytracing_mem_alloc_ext_flags_t"></span><span class="target" id="structze__raytracing__mem__alloc__ext__desc__t_1a08e410eaf6be3c625b513238a84c1317"></span><span class="n"><span class="pre">ze_raytracing_mem_alloc_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N34ze_raytracing_mem_alloc_ext_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[in] flags specifying additional allocation controls. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze-raytracing-mem-alloc-ext-flags-t"><span class="std std-ref">ze_raytracing_mem_alloc_ext_flag_t</span></a>; default behavior may use implicit driver-based heuristics. </p>
+<span id="_CPPv3N34ze_raytracing_mem_alloc_ext_desc_t5flagsE"></span><span id="_CPPv2N34ze_raytracing_mem_alloc_ext_desc_t5flagsE"></span><span id="ze_raytracing_mem_alloc_ext_desc_t::flags__ze_raytracing_mem_alloc_ext_flags_t"></span><span class="target" id="structze__raytracing__mem__alloc__ext__desc__t_1a08e410eaf6be3c625b513238a84c1317"></span><a class="reference internal" href="#ze-raytracing-mem-alloc-ext-flags-t" title="ze_raytracing_mem_alloc_ext_flags_t"><span class="n"><span class="pre">ze_raytracing_mem_alloc_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N34ze_raytracing_mem_alloc_ext_desc_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[in] flags specifying additional allocation controls. must be 0 (default) or a valid combination of <a class="reference internal" href="#ze__api_8h_1ad9b4245c70f0b2f44c6b26e0f7af84fe"><span class="std std-ref">ze_raytracing_mem_alloc_ext_flag_t</span></a>; default behavior may use implicit driver-based heuristics. </p>
 </dd></dl>
 
 </div>

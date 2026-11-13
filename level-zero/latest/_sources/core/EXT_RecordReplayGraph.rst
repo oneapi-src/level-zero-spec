@@ -68,8 +68,8 @@ Querying the driver and the device
 
 .. parsed-literal::
 
-    ze_driver_handle_t hDriver; // initialized driver
-    ze_device_handle_t hDevice; // created device out of the driver
+    :ref:`ze-driver-handle-t` hDriver; // initialized driver
+    :ref:`ze-device-handle-t` hDevice; // created device out of the driver
 
     // query extension count
     uint32_t extensionsCount = 0;
@@ -131,9 +131,9 @@ External Events
 
 .. parsed-literal::
 
-    ze_command_list_handle_t hCommandList; // immediate command list in record mode for the root branch
-    ze_command_list_handle_t hChildCommandList; // immediate command list used for the fork branch
-    ze_event_handle_t hEvent; // counter based event not created with :ref:`ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL <ze-event-counter-based-flags-t>`
+    :ref:`ze-command-list-handle-t` hCommandList; // immediate command list in record mode for the root branch
+    :ref:`ze-command-list-handle-t` hChildCommandList; // immediate command list used for the fork branch
+    :ref:`ze-event-handle-t` hEvent; // counter based event not created with :ref:`ZE_EVENT_COUNTER_BASED_FLAG_GRAPH_EXTERNAL <ze-event-counter-based-flags-t>`
 
     :ref:`ze-event-ext-flags-desc-t` graphExternalDesc = {
         :ref:`ZE_STRUCTURE_TYPE_EVENT_EXT_FLAGS_DESC <ze-structure-type-t>`\,      // stype

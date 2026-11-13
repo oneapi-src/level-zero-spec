@@ -1,7 +1,9 @@
 ============================================================
 Command List - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Command List - Extension Functions
@@ -256,6 +258,13 @@ ze_mutable_command_ext_flags_t
 
 *Added in version 1.20*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-mutable-command-id-ext-desc-t`, :ref:`ze-mutable-command-list-ext-properties-t`
+
+.. doxygentypedef:: ze_mutable_command_ext_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_mutable_command_ext_flag_t
     :project: LevelZero
 
@@ -269,8 +278,16 @@ ze_mutable_command_list_ext_flags_t
 
 *Added in version 1.20*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-mutable-command-list-ext-properties-t`, :ref:`ze-mutable-command-list-ext-desc-t`
+
+.. doxygentypedef:: ze_mutable_command_list_ext_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_mutable_command_list_ext_flag_t
     :project: LevelZero
+
 
  
 Command List - Extension Structures
@@ -285,6 +302,10 @@ ze_mutable_command_id_ext_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.20*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListGetNextCommandIdExt`, :ref:`zeCommandListGetNextCommandIdWithKernelsExt`
 
 .. doxygenstruct:: ze_mutable_command_id_ext_desc_t
     :project: LevelZero
@@ -330,6 +351,10 @@ ze_mutable_commands_ext_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.20*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandListUpdateMutableCommandsExt`
 
 .. doxygenstruct:: ze_mutable_commands_ext_desc_t
     :project: LevelZero

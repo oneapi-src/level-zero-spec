@@ -249,7 +249,7 @@ Structure members
    * - :ref:`zes_device_properties_t.core <zes-device-properties-t>`
      - 1.7
      - :ref:`zes-device-ext-properties-t`
-     - 
+     - Get the UUID, type and flags through pNext.
    * - :ref:`zes_mem_state_t.size <zes-mem-state-t>`
      - 1.15
      - :ref:`ze-device-usablemem-size-ext-properties-t`

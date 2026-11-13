@@ -1,7 +1,32 @@
 ============================================================
 Scheduler
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Scheduler Handles
+=================
+
+
+.. _zes-sched-handle-t:
+
+zes_sched_handle_t
+------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumSchedulers`
+   | **Used by:** :ref:`zesSchedulerGetProperties`, :ref:`zesSchedulerGetCurrentMode`, :ref:`zesSchedulerGetTimeoutModeProperties`, :ref:`zesSchedulerGetTimesliceModeProperties`, :ref:`zesSchedulerSetTimeoutMode`, :ref:`zesSchedulerSetTimesliceMode`, :ref:`zesSchedulerSetExclusiveMode`, :ref:`zesSchedulerSetComputeUnitDebugMode`
+   | **See also:** :ref:`Scheduler operations (Programming Guide) <Scheduler>`
+
+.. cpp:type:: zes_sched_handle_t
+
+    Handle for a Sysman device scheduler queue.
+
 
 
 Scheduler Functions
@@ -100,6 +125,7 @@ zesSchedulerSetExclusiveMode
 
 
 
+
  
 Scheduler Structures
 ====================
@@ -113,6 +139,10 @@ zes_sched_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesSchedulerGetProperties`
 
 .. doxygenstruct:: zes_sched_properties_t
     :project: LevelZero

@@ -59,17 +59,17 @@ The following pseudo-code demonstrates a basic initialization and device discove
            # Discover all the drivers
            uint32_t driversCount = 0
            :ref:`zesDriverGet`\(&driversCount, nullptr)
-           zes_driver_handle_t* allDrivers = allocate(driversCount * sizeof(zes_driver_handle_t))
+           :ref:`zes-driver-handle-t`\* allDrivers = allocate(driversCount * sizeof(:ref:`zes-driver-handle-t`\))
            :ref:`zesDriverGet`\(&driversCount, allDrivers)
 
-           zes_driver_handle_t hDriver = nullptr
+           :ref:`zes-driver-handle-t` hDriver = nullptr
            for(i = 0 .. driversCount-1)
                # Discover devices in a driver
                uint32_t deviceCount = 0
                :ref:`zesDeviceGet`\(allDrivers[i], &deviceCount, nullptr)
 
-               zes_device_handle_t* hSysmanHandles =
-                   allocate_memory(deviceCount * sizeof(zes_device_handle_t))
+               :ref:`zes-device-handle-t`\* hSysmanHandles =
+                   allocate_memory(deviceCount * sizeof(:ref:`zes-device-handle-t`\))
                :ref:`zesDeviceGet`\(allDrivers[i], &deviceCount, hSysmanHandles)
 
                # Use the hSymanHandles to manage the devices
@@ -307,7 +307,7 @@ the figure below:
 .. image:: ../images/tools_sysman_freq_flow.png
 
 In the C API, each class is associated with a unique handle type
-(e.g. zes_freq_handle_t refers to a frequency component). In
+(e.g. :ref:`zes-freq-handle-t` refers to a frequency component). In
 the C++ API, each class is a C++ class (e.g. An instance of the class zes::SysmanFrequency
 refers to a frequency component).
 
@@ -317,11 +317,11 @@ supported:
 
 .. parsed-literal::
 
-   function FixGpuFrequency(zes_device_handle_t hSysmanDevice, double FreqMHz)
+   function FixGpuFrequency(:ref:`zes-device-handle-t` hSysmanDevice, double FreqMHz)
        uint32_t numFreqDomains
        if ((:ref:`zesDeviceEnumFrequencyDomains`\(hSysmanDevice, &numFreqDomains, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\))
-           zes_freq_handle_t* pFreqHandles =
-               allocate_memory(numFreqDomains * sizeof(zes_freq_handle_t))
+           :ref:`zes-freq-handle-t`\* pFreqHandles =
+               allocate_memory(numFreqDomains * sizeof(:ref:`zes-freq-handle-t`\))
            if (:ref:`zesDeviceEnumFrequencyDomains`\(hSysmanDevice, &numFreqDomains, pFreqHandles) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (index = 0 .. numFreqDomains-1)
                    :ref:`zes-freq-properties-t` props {};
@@ -360,11 +360,11 @@ sub-device (notice the additional sub-device check):
 
 .. parsed-literal::
 
-   function FixSubdeviceGpuFrequency(zes_device_handle_t hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
+   function FixSubdeviceGpuFrequency(:ref:`zes-device-handle-t` hSysmanDevice, uint32_t subdeviceId, double FreqMHz)
        uint32_t numFreqDomains
        if ((:ref:`zesDeviceEnumFrequencyDomains`\(hSysmanDevice, &numFreqDomains, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\))
-           zes_freq_handle_t* pFreqHandles =
-               allocate_memory(numFreqDomains * sizeof(zes_freq_handle_t))
+           :ref:`zes-freq-handle-t`\* pFreqHandles =
+               allocate_memory(numFreqDomains * sizeof(:ref:`zes-freq-handle-t`\))
            if (:ref:`zesDeviceEnumFrequencyDomains`\(hSysmanDevice, &numFreqDomains, pFreqHandles) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (index = 0 .. numFreqDomains-1)
                    :ref:`zes-freq-properties-t` props {};
@@ -460,12 +460,15 @@ device:
 
 .. parsed-literal::
 
-  function ShowDeviceInfo(zes_device_handle_t hSysmanDevice)
+  function ShowDeviceInfo(:ref:`zes-device-handle-t` hSysmanDevice)
+      :ref:`zes-device-ext-properties-t` extProps {}
+      extProps.stype = :ref:`ZES_STRUCTURE_TYPE_DEVICE_EXT_PROPERTIES <zes-structure-type-t>`
       :ref:`zes-device-properties-t` devProps {}
-      devProps.stype = :ref:`ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES_1_2 <ze-structure-type-t>`    // :ref:`ZE_STRUCTURE_TYPE_DEVICE_PROPERTIES <ze-structure-type-t>` deprecated since 1.17
+      devProps.stype = :ref:`ZES_STRUCTURE_TYPE_DEVICE_PROPERTIES <zes-structure-type-t>`
+      devProps.pNext = &extProps
       :ref:`zes-device-state-t` devState
       if (:ref:`zesDeviceGetProperties`\(hSysmanDevice, &devProps) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
-          output("    UUID:           %s", devProps.core.uuid.id)
+          output("    UUID:           %s", extProps.uuid.id)
           output("    #subdevices:    %u", devProps.numSubdevices)
           output("    brand:          %s", devProps.brandName)
           output("    model:          %s", devProps.modelName)
@@ -540,7 +543,7 @@ The pseudo code below shows how to output the PCI BDF address:
 
 .. parsed-literal::
 
-   function ShowPciInfo(zes_device_handle_t hSysmanDevice)
+   function ShowPciInfo(:ref:`zes-device-handle-t` hSysmanDevice)
        :ref:`zes-pci-properties-t` pciProps {};
        pciProps.stype = :ref:`ZES_STRUCTURE_TYPE_PCI_PROPERTIES <zes-structure-type-t>`\;
        if (:ref:`zesDevicePciGetProperties`\(hSysmanDevice, &pciProps) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
@@ -580,7 +583,7 @@ The pseudo code below shows how to query the PCI configuration space properties:
    :ref:`zesInit`\(:ref:`ZES_INIT_FLAG_NO_DEVICES <zes-init-flags-t>`\);
 
    uint32_t driverCount = 1;
-   zes_driver_handle_t hDriver = nullptr;
+   :ref:`zes-driver-handle-t` hDriver = nullptr;
    :ref:`zesDriverGet`\(&driverCount, &hDriver);
 
    // Query the number of PCI devices supported by the driver
@@ -806,11 +809,11 @@ domain on a device:
 
 .. parsed-literal::
 
-   function ShowPowerDomains(zes_device_handle_t hSysmanDevice)
+   function ShowPowerDomains(:ref:`zes-device-handle-t` hSysmanDevice)
        uint32_t numPowerDomains
        if (:ref:`zesDeviceEnumPowerDomains`\(hSysmanDevice, &numPowerDomains, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
-           zes_pwr_handle_t* phPower =
-               allocate_memory(numPowerDomains * sizeof(zes_pwr_handle_t))
+           :ref:`zes-pwr-handle-t`\* phPower =
+               allocate_memory(numPowerDomains * sizeof(:ref:`zes-pwr-handle-t`\))
            if (:ref:`zesDeviceEnumPowerDomains`\(hSysmanDevice, &numPowerDomains, phPower) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (pwrIndex = 0 .. numPowerDomains-1)
                    :ref:`zes-power-properties-t` props {};
@@ -827,7 +830,7 @@ domain on a device:
        free_memory(...)
    }
 
-   function ShowPowerLimits(zes_pwr_handle_t hPower)
+   function ShowPowerLimits(:ref:`zes-pwr-handle-t` hPower)
        uint32_t limitCount = 0
        if (:ref:`zesPowerGetLimitsExt`\(hPower, &limitCount, nullptr) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
            :ref:`zes-power-limit-ext-desc-t` * allLimits = allocate(limitCount * sizeof(:ref:`zes-power-limit-ext-desc-t`\));
@@ -842,11 +845,11 @@ domain found on a device:
 
 .. parsed-literal::
 
-   function SetPowerDomainLimit(zes_device_handle_t hSysmanDevice)
+   function SetPowerDomainLimit(:ref:`zes-device-handle-t` hSysmanDevice)
        uint32_t numPowerDomains
        if (:ref:`zesDeviceEnumPowerDomains`\(hSysmanDevice, &numPowerDomains, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
-           zes_pwr_handle_t* phPower =
-               allocate_memory(numPowerDomains * sizeof(zes_pwr_handle_t))
+           :ref:`zes-pwr-handle-t`\* phPower =
+               allocate_memory(numPowerDomains * sizeof(:ref:`zes-pwr-handle-t`\))
            if (:ref:`zesDeviceEnumPowerDomains`\(hSysmanDevice, &numPowerDomains, phPower) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (pwrIndex = 0 .. numPowerDomains-1)
                    :ref:`zes-power-properties-t` props {};
@@ -868,7 +871,7 @@ the function is called regularly (say every 100ms).
 
 .. parsed-literal::
 
-   function ShowAveragePower(zes_pwr_handle_t hPower, :ref:`zes-power-energy-counter-t`\* pPrevEnergyCounter)
+   function ShowAveragePower(:ref:`zes-pwr-handle-t` hPower, :ref:`zes-power-energy-counter-t`\* pPrevEnergyCounter)
        :ref:`zes-power-energy-counter-t` newEnergyCounter;
        if (:ref:`zesPowerGetEnergyCounter`\(hPower, &newEnergyCounter) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
            uint64_t deltaTime = newEnergyCounter.timestamp - pPrevEnergyCounter->timestamp;
@@ -1170,18 +1173,18 @@ while permitting other work to attempt to run:
 
 .. parsed-literal::
 
-   function DisableSchedulerWatchdog(zes_device_handle_t hSysmanDevice)
+   function DisableSchedulerWatchdog(:ref:`zes-device-handle-t` hSysmanDevice)
        uint32_t numSched
        if ((:ref:`zesDeviceEnumSchedulers`\(hSysmanDevice, &numSched, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\))
-           zes_sched_handle_t* pSchedHandles =
-               allocate_memory(numSched * sizeof(zes_sched_handle_t))
+           :ref:`zes-sched-handle-t`\* pSchedHandles =
+               allocate_memory(numSched * sizeof(:ref:`zes-sched-handle-t`\))
            if (:ref:`zesDeviceEnumSchedulers`\(hSysmanDevice, &numSched, pSchedHandles) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (index = 0 .. numSched-1)
                    :ref:`ze-result-t` res
                    :ref:`zes-sched-mode-t` currentMode
                    res = :ref:`zesSchedulerGetCurrentMode`\(pSchedHandles[index], &currentMode)
                    if (res == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
-                       ze_bool_t requireReload
+                       :ref:`ze-bool-t` requireReload
                        :ref:`zes-sched-timeout-properties-t` props
                        props.watchdogTimeout = ZES_SCHED_WATCHDOG_DISABLE
                        res = :ref:`zesSchedulerSetTimeoutMode`\(pSchedHandles[index], &props, &requireReload)
@@ -1240,7 +1243,7 @@ from disabled to enabled:
 
 .. parsed-literal::
 
-    function EnableECC(zes_device_handle_t hSysmanDevice)
+    function EnableECC(:ref:`zes-device-handle-t` hSysmanDevice)
         ze_bool_t EccAvailable = False;
         :ref:`zesDeviceEccAvailable`\(hSysmanDevice, &EccAvailable)
         if (EccAvailable == True) {
@@ -1597,11 +1600,11 @@ the device and sub-devices:
 
 .. parsed-literal::
 
-   void ShowFabricPorts(zes_device_handle_t hSysmanDevice)
+   void ShowFabricPorts(:ref:`zes-device-handle-t` hSysmanDevice)
        uint32_t numPorts
        if ((:ref:`zesDeviceEnumFabricPorts`\(hSysmanDevice, &numPorts, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\))
-           zes_fabric_port_handle_t* phPorts =
-               allocate_memory(numPorts * sizeof(zes_fabric_port_handle_t))
+           :ref:`zes-fabric-port-handle-t`\* phPorts =
+               allocate_memory(numPorts * sizeof(:ref:`zes-fabric-port-handle-t`\))
            if (:ref:`zesDeviceEnumFabricPorts`\(hSysmanDevice, &numPorts, phPorts) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (index = 0 .. numPorts-1)
                    # Show information about a particular port
@@ -1609,7 +1612,7 @@ the device and sub-devices:
                    call_function ShowFabricPortInfo(phPorts[index])
        free_memory(...)
 
-   function ShowFabricPortInfo(zes_fabric_port_handle_t hPort)
+   function ShowFabricPortInfo(:ref:`zes-fabric-port-handle-t` hPort)
        :ref:`zes-fabric-port-properties-t` props {};
        props.stype = :ref:`ZES_STRUCTURE_TYPE_FABRIC_PORT_PROPERTIES <zes-structure-type-t>`\;
        if (:ref:`zesFabricPortGetProperties`\(hPort, &props) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
@@ -1658,8 +1661,8 @@ The following pseudo-code describes how API is used to gather throughput:
     // Enumerate fabric ports
     uint32_t numPorts = 0;
     :ref:`zesDeviceEnumFabricPorts`\(hSysmanDevice, &numPorts, NULL);
-    zes_fabric_port_handle_t* phPorts =
-        allocate_memory(numPorts * sizeof(zes_fabric_port_handle_t));
+    :ref:`zes-fabric-port-handle-t`\* phPorts =
+        allocate_memory(numPorts * sizeof(:ref:`zes-fabric-port-handle-t`\));
     :ref:`zesDeviceEnumFabricPorts`\(hSysmanDevice, &numPorts, phPorts);
 
     // Gather throughput for all fabric ports together
@@ -1838,11 +1841,11 @@ The pseudo code below shows how to output the fan speed of all fans:
 
 .. parsed-literal::
 
-    function ShowFans(zes_device_handle_t hSysmanDevice)
+    function ShowFans(:ref:`zes-device-handle-t` hSysmanDevice)
         uint32_t numFans
         if (:ref:`zesDeviceEnumFans`\(hSysmanDevice, &numFans, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
-            zes_fan_handle_t* phFans =
-                allocate_memory(numFans * sizeof(zes_fan_handle_t))
+            :ref:`zes-fan-handle-t`\* phFans =
+                allocate_memory(numFans * sizeof(:ref:`zes-fan-handle-t`\))
             if (:ref:`zesDeviceEnumFans`\(hSysmanDevice, &numFans, phFans) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                 output("    Fans")
                 for (fanIndex = 0 .. numFans-1)
@@ -1858,12 +1861,12 @@ value in RPM, but only if control is permitted:
 
 .. parsed-literal::
 
-   function SetFanSpeed(zes_device_handle_t hSysmanDevice, uint32_t SpeedRpm)
+   function SetFanSpeed(:ref:`zes-device-handle-t` hSysmanDevice, uint32_t SpeedRpm)
    {
        uint32_t numFans
        if (:ref:`zesDeviceEnumFans`\(hSysmanDevice, &numFans, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
-           zes_fan_handle_t* phFans =
-               allocate_memory(numFans * sizeof(zes_fan_handle_t))
+           :ref:`zes-fan-handle-t`\* phFans =
+               allocate_memory(numFans * sizeof(:ref:`zes-fan-handle-t`\))
            if (:ref:`zesDeviceEnumFans`\(hSysmanDevice, &numFans, phFans) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                :ref:`zes-fan-speed-t` speedRequest
                speedRequest.speed = SpeedRpm
@@ -2061,11 +2064,11 @@ current state of RAS errors:
 
 .. parsed-literal::
 
-   void ShowRasErrors(zes_device_handle_t hSysmanDevice)
+   void ShowRasErrors(:ref:`zes-device-handle-t` hSysmanDevice)
        uint32_t numRasErrorSets
        if ((:ref:`zesDeviceEnumRasErrorSets`\(hSysmanDevice, &numRasErrorSets, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\))
-           zes_ras_handle_t* phRasErrorSets =
-               allocate_memory(numRasErrorSets * sizeof(zes_ras_handle_t))
+           :ref:`zes-ras-handle-t`\* phRasErrorSets =
+               allocate_memory(numRasErrorSets * sizeof(:ref:`zes-ras-handle-t`\))
            if (:ref:`zesDeviceEnumRasErrorSets`\(hSysmanDevice, &numRasErrorSets, phRasErrorSets) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (rasIndex = 0 .. numRasErrorSets)
                    :ref:`zes-ras-properties-t` props {};
@@ -2181,12 +2184,12 @@ tests in each:
 
 .. parsed-literal::
 
-   function ListDiagnosticTests(zes_device_handle_t hSysmanDevice)
+   function ListDiagnosticTests(:ref:`zes-device-handle-t` hSysmanDevice)
    {
        uint32_t numTestSuites
        if ((:ref:`zesDeviceEnumDiagnosticTestSuites`\(hSysmanDevice, &numTestSuites, NULL) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\))
-           zes_diag_handle_t* phTestSuites =
-               allocate_memory(numTestSuites * sizeof(zes_diag_handle_t))
+           :ref:`zes-diag-handle-t`\* phTestSuites =
+               allocate_memory(numTestSuites * sizeof(:ref:`zes-diag-handle-t`\))
            if (:ref:`zesDeviceEnumDiagnosticTestSuites`\(hSysmanDevice, &numTestSuites, phTestSuites) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                for (suiteIndex = 0 .. numTestSuites-1)
                    uint32_t numTests = 0
@@ -2329,7 +2332,7 @@ when the critical temperature is reached.
 
 .. parsed-literal::
 
-   function WaitForExcessTemperatureEvent(zes_driver_handle_t hDriver, double tempLimit)
+   function WaitForExcessTemperatureEvent(:ref:`zes-driver-handle-t` hDriver, double tempLimit)
    {
        # This will contain the number of devices that we will listen for events from
        var numListenDevices = 0
@@ -2338,12 +2341,12 @@ when the critical temperature is reached.
        uint32_t deviceCount = 0
        :ref:`zeDeviceGet`\(hDriver, &deviceCount, nullptr)
        # Allocate memory for all device handles
-       ze_device_handle_t* phDevices =
-           allocate_memory(deviceCount * sizeof(ze_device_handle_t))
+       :ref:`ze-device-handle-t`\* phDevices =
+           allocate_memory(deviceCount * sizeof(:ref:`ze-device-handle-t`\))
 
        # Allocate memory for the devices from which we will listen to temperature events
-       zes_device_handle_t* phListenDevices =
-           allocate_memory(deviceCount * sizeof(zes_device_handle_t))
+       :ref:`zes-device-handle-t`\* phListenDevices =
+           allocate_memory(deviceCount * sizeof(:ref:`zes-device-handle-t`\))
        # Allocate memory for the events that have been received from each device in phListenDevices
        :ref:`zes-event-type-flags-t`\* pDeviceEvents =
            allocate_memory(deviceCount * sizeof(:ref:`zes-event-type-flags-t`\))
@@ -2354,14 +2357,14 @@ when the critical temperature is reached.
        :ref:`zeDeviceGet`\(hDriver, &deviceCount, phDevices)
        for(devIndex = 0 .. deviceCount-1)
            # Get Sysman handle for the device
-           zes_device_handle_t hSysmanDevice = (zes_device_handle_t)phDevices[devIndex]
+           :ref:`zes-device-handle-t` hSysmanDevice = (:ref:`zes-device-handle-t`\)phDevices[devIndex]
 
            # Get handles to all temperature sensors
            uint32_t numTempSensors = 0
            if (:ref:`zesDeviceEnumTemperatureSensors`\(hSysmanDevice, &numTempSensors, NULL) != :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                next_loop(devIndex)
-           zes_temp_handle_t* allTempSensors
-               allocate_memory(deviceCount * sizeof(zes_temp_handle_t))
+           :ref:`zes-temp-handle-t`\* allTempSensors
+               allocate_memory(deviceCount * sizeof(:ref:`zes-temp-handle-t`\))
            if (:ref:`zesDeviceEnumTemperatureSensors`\(hSysmanDevice, &numTempSensors, allTempSensors) == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\)
                # Configure each temperature sensor to trigger a critical event and a threshold1 event
                var numConfiguredTempSensors = 0

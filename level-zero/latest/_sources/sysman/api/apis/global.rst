@@ -1,7 +1,9 @@
 ============================================================
 Global
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Global Functions
@@ -35,7 +37,15 @@ zes_init_flags_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesInit`
+
+.. doxygentypedef:: zes_init_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_init_flag_t
     :project: LevelZero
+
 
  

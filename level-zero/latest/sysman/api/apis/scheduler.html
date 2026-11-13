@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Scheduler &#8212; Level Zero Specification v1.20.41</title>
+    <title>Scheduler &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/scheduler';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Standby" href="standby.html" />
-    <link rel="prev" title="Ras" href="ras.html" />
+    <link rel="next" title="Performance Factor" href="performance_factor.html" />
+    <link rel="prev" title="Device" href="device-2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduler-handles">Scheduler Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-sched-handle-t">zes_sched_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418zes_sched_handle_t"><code class="docutils literal notranslate"><span class="pre">zes_sched_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduler-functions">Scheduler Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesschedulergetproperties">zesSchedulerGetProperties</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t"><code class="docutils literal notranslate"><span class="pre">zesSchedulerGetProperties()</span></code></a></li>
@@ -533,15 +550,35 @@
                   
   <section id="scheduler">
 <h1>Scheduler<a class="headerlink" href="#scheduler" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="scheduler-handles">
+<h2>Scheduler Handles<a class="headerlink" href="#scheduler-handles" title="Link to this heading">#</a></h2>
+<section id="zes-sched-handle-t">
+<span id="id1"></span><h3>zes_sched_handle_t<a class="headerlink" href="#zes-sched-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="device.html#zesdeviceenumschedulers"><span class="std std-ref">zesDeviceEnumSchedulers</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesschedulergetproperties"><span class="std std-ref">zesSchedulerGetProperties</span></a>, <a class="reference internal" href="#zesschedulergetcurrentmode"><span class="std std-ref">zesSchedulerGetCurrentMode</span></a>, <a class="reference internal" href="#zesschedulergettimeoutmodeproperties"><span class="std std-ref">zesSchedulerGetTimeoutModeProperties</span></a>, <a class="reference internal" href="#zesschedulergettimeslicemodeproperties"><span class="std std-ref">zesSchedulerGetTimesliceModeProperties</span></a>, <a class="reference internal" href="#zesschedulersettimeoutmode"><span class="std std-ref">zesSchedulerSetTimeoutMode</span></a>, <a class="reference internal" href="#zesschedulersettimeslicemode"><span class="std std-ref">zesSchedulerSetTimesliceMode</span></a>, <a class="reference internal" href="#zesschedulersetexclusivemode"><span class="std std-ref">zesSchedulerSetExclusiveMode</span></a>, <a class="reference internal" href="../deprecated/scheduler.html#zesschedulersetcomputeunitdebugmode"><span class="std std-ref">zesSchedulerSetComputeUnitDebugMode</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#scheduler"><span class="std std-ref">Scheduler operations (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv418zes_sched_handle_t">
+<span id="_CPPv318zes_sched_handle_t"></span><span id="_CPPv218zes_sched_handle_t"></span><span id="zes_sched_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_sched_handle_t</span></span></span><a class="headerlink" href="#_CPPv418zes_sched_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle for a Sysman device scheduler queue.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="scheduler-functions">
 <h2>Scheduler Functions<a class="headerlink" href="#scheduler-functions" title="Link to this heading">#</a></h2>
 <section id="zesschedulergetproperties">
-<span id="id1"></span><h3>zesSchedulerGetProperties<a class="headerlink" href="#zesschedulergetproperties" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zesSchedulerGetProperties<a class="headerlink" href="#zesschedulergetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t">
-<span id="_CPPv325zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t"></span><span id="_CPPv225zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t"></span><span id="zesSchedulerGetProperties__zes_sched_handle_t.zes_sched_properties_tP"></span><span class="target" id="zes__api_8h_1af9ba1a0bfbc127b136a46156a0e2c33b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_sched_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="#zes-sched-properties-t" title="zes_sched_properties_t"><span class="n"><span class="pre">zes_sched_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t"></span><span id="_CPPv225zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t"></span><span id="zesSchedulerGetProperties__zes_sched_handle_t.zes_sched_properties_tP"></span><span class="target" id="zes__api_8h_1af9ba1a0bfbc127b136a46156a0e2c33b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-sched-handle-t" title="zes_sched_handle_t"><span class="n"><span class="pre">zes_sched_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="#zes-sched-properties-t" title="zes_sched_properties_t"><span class="n"><span class="pre">zes_sched_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zesSchedulerGetProperties18zes_sched_handle_tP22zes_sched_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get properties related to a scheduler component. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -586,11 +623,11 @@
 
 </section>
 <section id="zesschedulergetcurrentmode">
-<span id="id2"></span><h3>zesSchedulerGetCurrentMode<a class="headerlink" href="#zesschedulergetcurrentmode" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zesSchedulerGetCurrentMode<a class="headerlink" href="#zesschedulergetcurrentmode" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426zesSchedulerGetCurrentMode18zes_sched_handle_tP16zes_sched_mode_t">
-<span id="_CPPv326zesSchedulerGetCurrentMode18zes_sched_handle_tP16zes_sched_mode_t"></span><span id="_CPPv226zesSchedulerGetCurrentMode18zes_sched_handle_tP16zes_sched_mode_t"></span><span id="zesSchedulerGetCurrentMode__zes_sched_handle_t.zes_sched_mode_tP"></span><span class="target" id="zes__api_8h_1a8c784dbf3ef9184b7f2003eb490582b5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetCurrentMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_sched_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="device-2.html#zes-sched-mode-t" title="zes_sched_mode_t"><span class="n"><span class="pre">zes_sched_mode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesSchedulerGetCurrentMode18zes_sched_handle_tP16zes_sched_mode_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv326zesSchedulerGetCurrentMode18zes_sched_handle_tP16zes_sched_mode_t"></span><span id="_CPPv226zesSchedulerGetCurrentMode18zes_sched_handle_tP16zes_sched_mode_t"></span><span id="zesSchedulerGetCurrentMode__zes_sched_handle_t.zes_sched_mode_tP"></span><span class="target" id="zes__api_8h_1a8c784dbf3ef9184b7f2003eb490582b5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetCurrentMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-sched-handle-t" title="zes_sched_handle_t"><span class="n"><span class="pre">zes_sched_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="device-2.html#zes-sched-mode-t" title="zes_sched_mode_t"><span class="n"><span class="pre">zes_sched_mode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMode</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesSchedulerGetCurrentMode18zes_sched_handle_tP16zes_sched_mode_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get current scheduling mode in effect on a scheduler component. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -638,11 +675,11 @@
 
 </section>
 <section id="zesschedulergettimeoutmodeproperties">
-<span id="id3"></span><h3>zesSchedulerGetTimeoutModeProperties<a class="headerlink" href="#zesschedulergettimeoutmodeproperties" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zesSchedulerGetTimeoutModeProperties<a class="headerlink" href="#zesschedulergettimeoutmodeproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv436zesSchedulerGetTimeoutModeProperties18zes_sched_handle_t9ze_bool_tP30zes_sched_timeout_properties_t">
-<span id="_CPPv336zesSchedulerGetTimeoutModeProperties18zes_sched_handle_t9ze_bool_tP30zes_sched_timeout_properties_t"></span><span id="_CPPv236zesSchedulerGetTimeoutModeProperties18zes_sched_handle_t9ze_bool_tP30zes_sched_timeout_properties_t"></span><span id="zesSchedulerGetTimeoutModeProperties__zes_sched_handle_t.ze_bool_t.zes_sched_timeout_properties_tP"></span><span class="target" id="zes__api_8h_1a1892c198746bb22bd2c87b6be5da1156"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetTimeoutModeProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_sched_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">getDefaults</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeout-properties-t" title="zes_sched_timeout_properties_t"><span class="n"><span class="pre">zes_sched_timeout_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zesSchedulerGetTimeoutModeProperties18zes_sched_handle_t9ze_bool_tP30zes_sched_timeout_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv336zesSchedulerGetTimeoutModeProperties18zes_sched_handle_t9ze_bool_tP30zes_sched_timeout_properties_t"></span><span id="_CPPv236zesSchedulerGetTimeoutModeProperties18zes_sched_handle_t9ze_bool_tP30zes_sched_timeout_properties_t"></span><span id="zesSchedulerGetTimeoutModeProperties__zes_sched_handle_t.ze_bool_t.zes_sched_timeout_properties_tP"></span><span class="target" id="zes__api_8h_1a1892c198746bb22bd2c87b6be5da1156"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetTimeoutModeProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-sched-handle-t" title="zes_sched_handle_t"><span class="n"><span class="pre">zes_sched_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">getDefaults</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeout-properties-t" title="zes_sched_timeout_properties_t"><span class="n"><span class="pre">zes_sched_timeout_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zesSchedulerGetTimeoutModeProperties18zes_sched_handle_t9ze_bool_tP30zes_sched_timeout_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get scheduler config for mode <a class="reference internal" href="device-2.html#zes__api_8h_1ad20e48a3a2de16bae53f08aa07898513a5669c91326eaab3021a29b1b37ade2db"><span class="std std-ref">ZES_SCHED_MODE_TIMEOUT</span></a>. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -691,11 +728,11 @@
 
 </section>
 <section id="zesschedulergettimeslicemodeproperties">
-<span id="id4"></span><h3>zesSchedulerGetTimesliceModeProperties<a class="headerlink" href="#zesschedulergettimeslicemodeproperties" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zesSchedulerGetTimesliceModeProperties<a class="headerlink" href="#zesschedulergettimeslicemodeproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv438zesSchedulerGetTimesliceModeProperties18zes_sched_handle_t9ze_bool_tP32zes_sched_timeslice_properties_t">
-<span id="_CPPv338zesSchedulerGetTimesliceModeProperties18zes_sched_handle_t9ze_bool_tP32zes_sched_timeslice_properties_t"></span><span id="_CPPv238zesSchedulerGetTimesliceModeProperties18zes_sched_handle_t9ze_bool_tP32zes_sched_timeslice_properties_t"></span><span id="zesSchedulerGetTimesliceModeProperties__zes_sched_handle_t.ze_bool_t.zes_sched_timeslice_properties_tP"></span><span class="target" id="zes__api_8h_1ac09a3be4da54f6b7f36e3595f926a410"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetTimesliceModeProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_sched_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">getDefaults</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeslice-properties-t" title="zes_sched_timeslice_properties_t"><span class="n"><span class="pre">zes_sched_timeslice_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zesSchedulerGetTimesliceModeProperties18zes_sched_handle_t9ze_bool_tP32zes_sched_timeslice_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv338zesSchedulerGetTimesliceModeProperties18zes_sched_handle_t9ze_bool_tP32zes_sched_timeslice_properties_t"></span><span id="_CPPv238zesSchedulerGetTimesliceModeProperties18zes_sched_handle_t9ze_bool_tP32zes_sched_timeslice_properties_t"></span><span id="zesSchedulerGetTimesliceModeProperties__zes_sched_handle_t.ze_bool_t.zes_sched_timeslice_properties_tP"></span><span class="target" id="zes__api_8h_1ac09a3be4da54f6b7f36e3595f926a410"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerGetTimesliceModeProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-sched-handle-t" title="zes_sched_handle_t"><span class="n"><span class="pre">zes_sched_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">getDefaults</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeslice-properties-t" title="zes_sched_timeslice_properties_t"><span class="n"><span class="pre">zes_sched_timeslice_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pConfig</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zesSchedulerGetTimesliceModeProperties18zes_sched_handle_t9ze_bool_tP32zes_sched_timeslice_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get scheduler config for mode <a class="reference internal" href="device-2.html#zes__api_8h_1ad20e48a3a2de16bae53f08aa07898513a986a60af3fd05e03386bb0f12b60f93e"><span class="std std-ref">ZES_SCHED_MODE_TIMESLICE</span></a>. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -744,11 +781,11 @@
 
 </section>
 <section id="zesschedulersettimeoutmode">
-<span id="id5"></span><h3>zesSchedulerSetTimeoutMode<a class="headerlink" href="#zesschedulersettimeoutmode" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zesSchedulerSetTimeoutMode<a class="headerlink" href="#zesschedulersettimeoutmode" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426zesSchedulerSetTimeoutMode18zes_sched_handle_tP30zes_sched_timeout_properties_tP9ze_bool_t">
-<span id="_CPPv326zesSchedulerSetTimeoutMode18zes_sched_handle_tP30zes_sched_timeout_properties_tP9ze_bool_t"></span><span id="_CPPv226zesSchedulerSetTimeoutMode18zes_sched_handle_tP30zes_sched_timeout_properties_tP9ze_bool_t"></span><span id="zesSchedulerSetTimeoutMode__zes_sched_handle_t.zes_sched_timeout_properties_tP.ze_bool_tP"></span><span class="target" id="zes__api_8h_1a9fd9aa7c64fc39112865e3ea81567ada"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerSetTimeoutMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_sched_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeout-properties-t" title="zes_sched_timeout_properties_t"><span class="n"><span class="pre">zes_sched_timeout_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNeedReload</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesSchedulerSetTimeoutMode18zes_sched_handle_tP30zes_sched_timeout_properties_tP9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv326zesSchedulerSetTimeoutMode18zes_sched_handle_tP30zes_sched_timeout_properties_tP9ze_bool_t"></span><span id="_CPPv226zesSchedulerSetTimeoutMode18zes_sched_handle_tP30zes_sched_timeout_properties_tP9ze_bool_t"></span><span id="zesSchedulerSetTimeoutMode__zes_sched_handle_t.zes_sched_timeout_properties_tP.ze_bool_tP"></span><span class="target" id="zes__api_8h_1a9fd9aa7c64fc39112865e3ea81567ada"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerSetTimeoutMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-sched-handle-t" title="zes_sched_handle_t"><span class="n"><span class="pre">zes_sched_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeout-properties-t" title="zes_sched_timeout_properties_t"><span class="n"><span class="pre">zes_sched_timeout_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNeedReload</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zesSchedulerSetTimeoutMode18zes_sched_handle_tP30zes_sched_timeout_properties_tP9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Change scheduler mode to <a class="reference internal" href="device-2.html#zes__api_8h_1ad20e48a3a2de16bae53f08aa07898513a5669c91326eaab3021a29b1b37ade2db"><span class="std std-ref">ZES_SCHED_MODE_TIMEOUT</span></a> or update scheduler mode parameters if already running in this mode. </p>
 <p><ul class="simple">
 <li><p>This mode is optimized for multiple applications or contexts submitting work to the hardware. When higher priority work arrives, the scheduler attempts to pause the current executing work within some timeout interval, then submits the other work.</p></li>
@@ -802,11 +839,11 @@
 
 </section>
 <section id="zesschedulersettimeslicemode">
-<span id="id6"></span><h3>zesSchedulerSetTimesliceMode<a class="headerlink" href="#zesschedulersettimeslicemode" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zesSchedulerSetTimesliceMode<a class="headerlink" href="#zesschedulersettimeslicemode" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428zesSchedulerSetTimesliceMode18zes_sched_handle_tP32zes_sched_timeslice_properties_tP9ze_bool_t">
-<span id="_CPPv328zesSchedulerSetTimesliceMode18zes_sched_handle_tP32zes_sched_timeslice_properties_tP9ze_bool_t"></span><span id="_CPPv228zesSchedulerSetTimesliceMode18zes_sched_handle_tP32zes_sched_timeslice_properties_tP9ze_bool_t"></span><span id="zesSchedulerSetTimesliceMode__zes_sched_handle_t.zes_sched_timeslice_properties_tP.ze_bool_tP"></span><span class="target" id="zes__api_8h_1ad2e5405eb2a1adcf770f5ba2fb961fad"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerSetTimesliceMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_sched_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeslice-properties-t" title="zes_sched_timeslice_properties_t"><span class="n"><span class="pre">zes_sched_timeslice_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNeedReload</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesSchedulerSetTimesliceMode18zes_sched_handle_tP32zes_sched_timeslice_properties_tP9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv328zesSchedulerSetTimesliceMode18zes_sched_handle_tP32zes_sched_timeslice_properties_tP9ze_bool_t"></span><span id="_CPPv228zesSchedulerSetTimesliceMode18zes_sched_handle_tP32zes_sched_timeslice_properties_tP9ze_bool_t"></span><span id="zesSchedulerSetTimesliceMode__zes_sched_handle_t.zes_sched_timeslice_properties_tP.ze_bool_tP"></span><span class="target" id="zes__api_8h_1ad2e5405eb2a1adcf770f5ba2fb961fad"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerSetTimesliceMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-sched-handle-t" title="zes_sched_handle_t"><span class="n"><span class="pre">zes_sched_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="device-2.html#zes-sched-timeslice-properties-t" title="zes_sched_timeslice_properties_t"><span class="n"><span class="pre">zes_sched_timeslice_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNeedReload</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesSchedulerSetTimesliceMode18zes_sched_handle_tP32zes_sched_timeslice_properties_tP9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Change scheduler mode to <a class="reference internal" href="device-2.html#zes__api_8h_1ad20e48a3a2de16bae53f08aa07898513a986a60af3fd05e03386bb0f12b60f93e"><span class="std std-ref">ZES_SCHED_MODE_TIMESLICE</span></a> or update scheduler mode parameters if already running in this mode. </p>
 <p><ul class="simple">
 <li><p>This mode is optimized to provide fair sharing of hardware execution time between multiple contexts submitting work to the hardware concurrently.</p></li>
@@ -860,11 +897,11 @@
 
 </section>
 <section id="zesschedulersetexclusivemode">
-<span id="id7"></span><h3>zesSchedulerSetExclusiveMode<a class="headerlink" href="#zesschedulersetexclusivemode" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zesSchedulerSetExclusiveMode<a class="headerlink" href="#zesschedulersetexclusivemode" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv428zesSchedulerSetExclusiveMode18zes_sched_handle_tP9ze_bool_t">
-<span id="_CPPv328zesSchedulerSetExclusiveMode18zes_sched_handle_tP9ze_bool_t"></span><span id="_CPPv228zesSchedulerSetExclusiveMode18zes_sched_handle_tP9ze_bool_t"></span><span id="zesSchedulerSetExclusiveMode__zes_sched_handle_t.ze_bool_tP"></span><span class="target" id="zes__api_8h_1a3645eb954f6279d8bd6d5ae4cc314c32"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerSetExclusiveMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_sched_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNeedReload</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesSchedulerSetExclusiveMode18zes_sched_handle_tP9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv328zesSchedulerSetExclusiveMode18zes_sched_handle_tP9ze_bool_t"></span><span id="_CPPv228zesSchedulerSetExclusiveMode18zes_sched_handle_tP9ze_bool_t"></span><span id="zesSchedulerSetExclusiveMode__zes_sched_handle_t.ze_bool_tP"></span><span class="target" id="zes__api_8h_1a3645eb954f6279d8bd6d5ae4cc314c32"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesSchedulerSetExclusiveMode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-sched-handle-t" title="zes_sched_handle_t"><span class="n"><span class="pre">zes_sched_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hScheduler</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNeedReload</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv428zesSchedulerSetExclusiveMode18zes_sched_handle_tP9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Change scheduler mode to <a class="reference internal" href="device-2.html#zes__api_8h_1ad20e48a3a2de16bae53f08aa07898513ab6e355b2d18f431fa0262a102878ded7"><span class="std std-ref">ZES_SCHED_MODE_EXCLUSIVE</span></a>. </p>
 <p><ul class="simple">
 <li><p>This mode is optimized for single application/context use-cases. It permits a context to run indefinitely on the hardware without being preempted or terminated. All pending work for other contexts must wait until the running context completes with no further submitted work.</p></li>
@@ -919,8 +956,13 @@
 <section id="scheduler-structures">
 <h2>Scheduler Structures<a class="headerlink" href="#scheduler-structures" title="Link to this heading">#</a></h2>
 <section id="zes-sched-properties-t">
-<span id="id8"></span><h3>zes_sched_properties_t<a class="headerlink" href="#zes-sched-properties-t" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zes_sched_properties_t<a class="headerlink" href="#zes-sched-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesschedulergetproperties"><span class="std std-ref">zesSchedulerGetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv422zes_sched_properties_t">
 <span id="_CPPv322zes_sched_properties_t"></span><span id="_CPPv222zes_sched_properties_t"></span><span id="zes_sched_properties_t"></span><span class="target" id="structzes__sched__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_sched_properties_t</span></span></span><a class="headerlink" href="#_CPPv422zes_sched_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -941,7 +983,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22zes_sched_properties_t11onSubdeviceE">
-<span id="_CPPv3N22zes_sched_properties_t11onSubdeviceE"></span><span id="_CPPv2N22zes_sched_properties_t11onSubdeviceE"></span><span id="zes_sched_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__sched__properties__t_1a480dab97597206babaeb939a58e1a3b7"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N22zes_sched_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N22zes_sched_properties_t11onSubdeviceE"></span><span id="_CPPv2N22zes_sched_properties_t11onSubdeviceE"></span><span id="zes_sched_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__sched__properties__t_1a480dab97597206babaeb939a58e1a3b7"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N22zes_sched_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if this resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
 </dd></dl>
 
@@ -953,13 +995,13 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22zes_sched_properties_t10canControlE">
-<span id="_CPPv3N22zes_sched_properties_t10canControlE"></span><span id="_CPPv2N22zes_sched_properties_t10canControlE"></span><span id="zes_sched_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__sched__properties__t_1a0f3c02ee4ef22b526eccd6d770a86bdf"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N22zes_sched_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N22zes_sched_properties_t10canControlE"></span><span id="_CPPv2N22zes_sched_properties_t10canControlE"></span><span id="zes_sched_properties_t::canControl__ze_bool_t"></span><span class="target" id="structzes__sched__properties__t_1a0f3c02ee4ef22b526eccd6d770a86bdf"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">canControl</span></span></span><a class="headerlink" href="#_CPPv4N22zes_sched_properties_t10canControlE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Software can change the scheduler component configuration assuming the user has permissions. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22zes_sched_properties_t7enginesE">
-<span id="_CPPv3N22zes_sched_properties_t7enginesE"></span><span id="_CPPv2N22zes_sched_properties_t7enginesE"></span><span id="zes_sched_properties_t::engines__zes_engine_type_flags_t"></span><span class="target" id="structzes__sched__properties__t_1a424714c0b7b848d8414124fb828e4ed2"></span><span class="n"><span class="pre">zes_engine_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">engines</span></span></span><a class="headerlink" href="#_CPPv4N22zes_sched_properties_t7enginesE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N22zes_sched_properties_t7enginesE"></span><span id="_CPPv2N22zes_sched_properties_t7enginesE"></span><span id="zes_sched_properties_t::engines__zes_engine_type_flags_t"></span><span class="target" id="structzes__sched__properties__t_1a424714c0b7b848d8414124fb828e4ed2"></span><a class="reference internal" href="device-2.html#zes-engine-type-flags-t" title="zes_engine_type_flags_t"><span class="n"><span class="pre">zes_engine_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">engines</span></span></span><a class="headerlink" href="#_CPPv4N22zes_sched_properties_t7enginesE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Bitfield of accelerator engine types that are managed by this scheduler component. Note that there can be more than one scheduler component for the same type of accelerator engine. </p>
 </dd></dl>
 
@@ -988,20 +1030,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="ras.html"
+       href="device-2.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Ras</p>
+        <p class="prev-next-title">Device</p>
       </div>
     </a>
     <a class="right-next"
-       href="standby.html"
+       href="performance_factor.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Standby</p>
+        <p class="prev-next-title">Performance Factor</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1021,7 +1063,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">7</span></summary><div class="ctoc-prefix">zesScheduler</div><ul class="ctoc-list"><li><a href="scheduler.html#zesschedulergetproperties">&hellip;GetProperties</a></li><li><a href="scheduler.html#zesschedulergetcurrentmode">&hellip;GetCurrentMode</a></li><li><a href="scheduler.html#zesschedulergettimeoutmodeproperties">&hellip;GetTimeoutModeProperties</a></li><li><a href="scheduler.html#zesschedulergettimeslicemodeproperties">&hellip;GetTimesliceModeProperties</a></li><li><a href="scheduler.html#zesschedulersettimeoutmode">&hellip;SetTimeoutMode</a></li><li><a href="scheduler.html#zesschedulersettimeslicemode">&hellip;SetTimesliceMode</a></li><li><a href="scheduler.html#zesschedulersetexclusivemode">&hellip;SetExclusiveMode</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="scheduler.html#zes-sched-properties-t">zes_sched_properties_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="scheduler.html#zes-sched-handle-t">zes_sched_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">7</span></summary><div class="ctoc-prefix">zesScheduler</div><ul class="ctoc-list"><li><a href="scheduler.html#zesschedulergetproperties">&hellip;GetProperties</a></li><li><a href="scheduler.html#zesschedulergetcurrentmode">&hellip;GetCurrentMode</a></li><li><a href="scheduler.html#zesschedulergettimeoutmodeproperties">&hellip;GetTimeoutModeProperties</a></li><li><a href="scheduler.html#zesschedulergettimeslicemodeproperties">&hellip;GetTimesliceModeProperties</a></li><li><a href="scheduler.html#zesschedulersettimeoutmode">&hellip;SetTimeoutMode</a></li><li><a href="scheduler.html#zesschedulersettimeslicemode">&hellip;SetTimesliceMode</a></li><li><a href="scheduler.html#zesschedulersetexclusivemode">&hellip;SetExclusiveMode</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="scheduler.html#zes-sched-properties-t">zes_sched_properties_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

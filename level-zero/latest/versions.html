@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Versions &#8212; Level Zero Specification v1.20.41</title>
+    <title>Versions &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -49,7 +49,7 @@
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -475,6 +485,7 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero">Level Zero</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-notes">Release Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-21-26">Level Zero v1.21.26</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-20-41">Level Zero v1.20.41</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-19-12">Level Zero v1.19.12</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-18-31">Level Zero v1.18.31</a></li>
@@ -545,143 +556,147 @@ For any questions, file an issue at <a class="reference external" href="https://
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-20-41">Level Zero v1.20.41</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-21-26">Level Zero v1.21.26</a></p></td>
+<td><p>2026-11-12</p></td>
+<td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.21.26/index.html">HTML</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-20-41">Level Zero v1.20.41</a></p></td>
 <td><p>2026-10-23</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.20.41/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-19-12">Level Zero v1.19.12</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-19-12">Level Zero v1.19.12</a></p></td>
 <td><p>2026-9-16</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.19.12/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-18-31">Level Zero v1.18.31</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-18-31">Level Zero v1.18.31</a></p></td>
 <td><p>2026-8-19</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.18.31/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-17-24">Level Zero v1.17.24</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-17-24">Level Zero v1.17.24</a></p></td>
 <td><p>2026-6-25</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.17.24/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-16-24">Level Zero v1.16.24</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-16-24">Level Zero v1.16.24</a></p></td>
 <td><p>2026-4-24</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.16.24/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-15-31">Level Zero v1.15.31</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-15-31">Level Zero v1.15.31</a></p></td>
 <td><p>2026-1-27</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.15.31/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-15-26">Level Zero v1.15.26</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-15-26">Level Zero v1.15.26</a></p></td>
 <td><p>2025-12-19</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.15.26/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-14-33">Level Zero v1.14.33</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-14-33">Level Zero v1.14.33</a></p></td>
 <td><p>2025-10-10</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.14.33/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-13-0">Level Zero v1.13.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-13-0">Level Zero v1.13.0</a></p></td>
 <td><p>2025-4-15</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.13.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-12-15">Level Zero v1.12.15</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-12-15">Level Zero v1.12.15</a></p></td>
 <td><p>2025-1-10</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.12.15/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-11-8">Level Zero v1.11.8</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-11-8">Level Zero v1.11.8</a></p></td>
 <td><p>2024-11-13</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.11.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-11">Level Zero v1.11</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-11">Level Zero v1.11</a></p></td>
 <td><p>2024-10-03</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.11/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-10">Level Zero v1.10</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-10">Level Zero v1.10</a></p></td>
 <td><p>2024-09-06</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.10/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-3">Level Zero v1.9.3</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-3">Level Zero v1.9.3</a></p></td>
 <td><p>2024-05-03</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.3/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-2">Level Zero v1.9.2</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-2">Level Zero v1.9.2</a></p></td>
 <td><p>2024-02-20</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.2/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-1">Level Zero v1.9.1</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-1">Level Zero v1.9.1</a></p></td>
 <td><p>2024-02-09</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.1/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-9-0">Level Zero v1.9.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-9-0">Level Zero v1.9.0</a></p></td>
 <td><p>2024-02-02</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.9.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-8-0">Level Zero v1.8.0</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-8-0">Level Zero v1.8.0</a></p></td>
 <td><p>2023-10-13</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.8.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-7-8">Level Zero v1.7.8</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-7-8">Level Zero v1.7.8</a></p></td>
 <td><p>2023-8-28</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.7.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-7-0">Level Zero v1.7.0</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-7-0">Level Zero v1.7.0</a></p></td>
 <td><p>2023-7-9</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.7.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-10">Level Zero v1.6.10</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-6-10">Level Zero v1.6.10</a></p></td>
 <td><p>2023-5-19</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.10/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-6-3">Level Zero v1.6.3</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-3">Level Zero v1.6.3</a></p></td>
 <td><p>2023-4-25</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.3/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-6-0">Level Zero v1.6.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-6-0">Level Zero v1.6.0</a></p></td>
 <td><p>2023-3-31</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.6.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-17">Level Zero v1.5.17</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-17">Level Zero v1.5.17</a></p></td>
 <td><p>2023-3-2</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.17/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-16">Level Zero v1.5.16</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-16">Level Zero v1.5.16</a></p></td>
 <td><p>2023-2-28</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.16/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-8">Level Zero v1.5.8</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-8">Level Zero v1.5.8</a></p></td>
 <td><p>2023-1-19</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-5-0">Level Zero v1.5.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-5-0">Level Zero v1.5.0</a></p></td>
 <td><p>2023-1-11</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.5.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-4-8">Level Zero v1.4.8</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-4-8">Level Zero v1.4.8</a></p></td>
 <td><p>2022-07-22</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.4.8/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-4">Level Zero v1.4</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-4">Level Zero v1.4</a></p></td>
 <td><p>2022-05-05</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.4.0/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-3">Level Zero v1.3</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-3">Level Zero v1.3</a></p></td>
 <td><p>2021-11-27</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.3.7/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-2">Level Zero v1.2</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-2">Level Zero v1.2</a></p></td>
 <td><p>2021-05-11</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.2.43/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-1">Level Zero v1.1</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-1">Level Zero v1.1</a></p></td>
 <td><p>2021-02-04</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.1.2/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v1-0">Level Zero v1.0</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v1-0">Level Zero v1.0</a></p></td>
 <td><p>2020-10-02</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/1.0.4/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v0-95">Level Zero v0.95</a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v0-95">Level Zero v0.95</a></p></td>
 <td><p>2020-05-28</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/0.95/index.html">HTML</a></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#level-zero-v0-91">Level Zero v0.91</a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#level-zero-v0-91">Level Zero v0.91</a></p></td>
 <td><p>2020-03-04</p></td>
 <td><p><a class="reference external" href="https://oneapi-src.github.io/level-zero-spec/level-zero/0.91/index.html">HTML</a></p></td>
 </tr>
@@ -690,6 +705,51 @@ For any questions, file an issue at <a class="reference external" href="https://
 </div>
 <section id="release-notes">
 <h3>Release Notes<a class="headerlink" href="#release-notes" title="Link to this heading">#</a></h3>
+<section id="level-zero-v1-21-26">
+<h4>Level Zero v1.21.26<a class="headerlink" href="#level-zero-v1-21-26" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>New Features in v1.21</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Add Sysman API version query</p>
+<ul>
+<li><p>zesDriverGetApiVersion, zes_api_version_t, ZES_MAKE_VERSION, ZES_MAJOR_VERSION and ZES_MINOR_VERSION</p></li>
+</ul>
+</li>
+<li><p>Add Sysman Device SOC Unique ID extension (zes_device_soc_uid_ext_properties_t)</p></li>
+<li><p>Add version 1.1 of the Sysman Info Logs extension, with an info log decoder</p>
+<ul>
+<li><p>zesInfoLogDecoderContextCreateExt, zesInfoLogDecoderContextGetFieldInfoExt, zesInfoLogDecoderContextDecodeStartExt</p></li>
+<li><p>zesInfoLogDecoderContextReadFieldExt, zesInfoLogDecoderContextDecodeStopExt, zesInfoLogDecoderContextDeleteExt</p></li>
+</ul>
+</li>
+<li><p>Add ZE_COMMAND_QUEUE_PRIORITY_LOW and ZE_COMMAND_QUEUE_PRIORITY_HIGH</p>
+<ul>
+<li><p>Deprecate ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOW and ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGH</p></li>
+</ul>
+</li>
+<li><p>Add usage links to the API reference: each handle, struct, enum and typedef lists the APIs and types that use it (“Obtained from”, “Used by”, “Member of”, pNext and “Extension” links)</p></li>
+<li><p>Link handle, typedef and flags types in the API reference and the Programming Guides</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Patches since v1.20.41 release</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>zeGraphPauseCaptureExt and zeGraphResumeCaptureExt return ZE_RESULT_ERROR_COMMAND_LIST_NOT_CAPTURING when capture was never started or has already ended</p></li>
+<li><p>zetMetricGroupCalculateMultipleMetricValuesExp and zetMetricGroupCalculateMetricExportDataExp may return ZE_RESULT_WARNING_DROPPED_DATA</p></li>
+<li><p>Deprecate zet_tracer_exp_handle_t</p></li>
+<li><p>Clarify zeCommandListHostSynchronize for immediate command lists on the same ordinal</p></li>
+<li><p>Clarify defaultLimit in zes_power_ext_properties_t</p></li>
+<li><p>Point zes_device_properties_t users to pNext for the device extension properties</p></li>
+<li><p>Clean up the documentation of the device compute dot-product extension</p></li>
+<li><p>List the allowed transformFormat values for ray tracing acceleration structure instances</p></li>
+<li><p>Document the range of phMetrics in zetDeviceCreateMetricGroupsFromMetricsExp</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
 <section id="level-zero-v1-20-41">
 <h4>Level Zero v1.20.41<a class="headerlink" href="#level-zero-v1-20-41" title="Link to this heading">#</a></h4>
 <ul>
@@ -1698,6 +1758,7 @@ scheduler and memory components.</p></li>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero">Level Zero</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#release-notes">Release Notes</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-21-26">Level Zero v1.21.26</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-20-41">Level Zero v1.20.41</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-19-12">Level Zero v1.19.12</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-zero-v1-18-31">Level Zero v1.18.31</a></li>

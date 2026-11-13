@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Diagnostics &#8212; Level Zero Specification v1.20.41</title>
+    <title>Diagnostics &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'sysman/api/apis/diagnostics';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Engine" href="engine.html" />
-    <link rel="prev" title="Overclock" href="overclock.html" />
+    <link rel="next" title="Overclock" href="overclock.html" />
+    <link rel="prev" title="Ras" href="ras.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ras.html">Ras</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostics-handles">Diagnostics Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-diag-handle-t">zes_diag_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv417zes_diag_handle_t"><code class="docutils literal notranslate"><span class="pre">zes_diag_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnostics-functions">Diagnostics Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zesdiagnosticsgetproperties">zesDiagnosticsGetProperties</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t"><code class="docutils literal notranslate"><span class="pre">zesDiagnosticsGetProperties()</span></code></a></li>
@@ -538,15 +555,35 @@
                   
   <section id="diagnostics">
 <h1>Diagnostics<a class="headerlink" href="#diagnostics" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="diagnostics-handles">
+<h2>Diagnostics Handles<a class="headerlink" href="#diagnostics-handles" title="Link to this heading">#</a></h2>
+<section id="zes-diag-handle-t">
+<span id="id1"></span><h3>zes_diag_handle_t<a class="headerlink" href="#zes-diag-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="device.html#zesdeviceenumdiagnostictestsuites"><span class="std std-ref">zesDeviceEnumDiagnosticTestSuites</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesdiagnosticsgetproperties"><span class="std std-ref">zesDiagnosticsGetProperties</span></a>, <a class="reference internal" href="#zesdiagnosticsgettests"><span class="std std-ref">zesDiagnosticsGetTests</span></a>, <a class="reference internal" href="#zesdiagnosticsruntests"><span class="std std-ref">zesDiagnosticsRunTests</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#diagnostics"><span class="std std-ref">Performing Diagnostics (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv417zes_diag_handle_t">
+<span id="_CPPv317zes_diag_handle_t"></span><span id="_CPPv217zes_diag_handle_t"></span><span id="zes_diag_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_diag_handle_t</span></span></span><a class="headerlink" href="#_CPPv417zes_diag_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle for a Sysman device diagnostics test suite.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="diagnostics-functions">
 <h2>Diagnostics Functions<a class="headerlink" href="#diagnostics-functions" title="Link to this heading">#</a></h2>
 <section id="zesdiagnosticsgetproperties">
-<span id="id1"></span><h3>zesDiagnosticsGetProperties<a class="headerlink" href="#zesdiagnosticsgetproperties" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zesDiagnosticsGetProperties<a class="headerlink" href="#zesdiagnosticsgetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t">
-<span id="_CPPv327zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t"></span><span id="_CPPv227zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t"></span><span id="zesDiagnosticsGetProperties__zes_diag_handle_t.zes_diag_properties_tP"></span><span class="target" id="zes__api_8h_1a1d0b584212ec3db704d3b71a09dfdd2c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDiagnosticsGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_diag_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDiagnostics</span></span>, <a class="reference internal" href="#zes-diag-properties-t" title="zes_diag_properties_t"><span class="n"><span class="pre">zes_diag_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t"></span><span id="_CPPv227zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t"></span><span id="zesDiagnosticsGetProperties__zes_diag_handle_t.zes_diag_properties_tP"></span><span class="target" id="zes__api_8h_1a1d0b584212ec3db704d3b71a09dfdd2c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDiagnosticsGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-diag-handle-t" title="zes_diag_handle_t"><span class="n"><span class="pre">zes_diag_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDiagnostics</span></span>, <a class="reference internal" href="#zes-diag-properties-t" title="zes_diag_properties_t"><span class="n"><span class="pre">zes_diag_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zesDiagnosticsGetProperties17zes_diag_handle_tP21zes_diag_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get properties of a diagnostics test suite. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -591,11 +628,11 @@
 
 </section>
 <section id="zesdiagnosticsgettests">
-<span id="id2"></span><h3>zesDiagnosticsGetTests<a class="headerlink" href="#zesdiagnosticsgettests" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zesDiagnosticsGetTests<a class="headerlink" href="#zesdiagnosticsgettests" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zesDiagnosticsGetTests17zes_diag_handle_tP8uint32_tP15zes_diag_test_t">
-<span id="_CPPv322zesDiagnosticsGetTests17zes_diag_handle_tP8uint32_tP15zes_diag_test_t"></span><span id="_CPPv222zesDiagnosticsGetTests17zes_diag_handle_tP8uint32_tP15zes_diag_test_t"></span><span id="zesDiagnosticsGetTests__zes_diag_handle_t.uint32_tP.zes_diag_test_tP"></span><span class="target" id="zes__api_8h_1aa5dc4b0440ea0c827f028d23f896915a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDiagnosticsGetTests</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_diag_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDiagnostics</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-diag-test-t" title="zes_diag_test_t"><span class="n"><span class="pre">zes_diag_test_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pTests</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesDiagnosticsGetTests17zes_diag_handle_tP8uint32_tP15zes_diag_test_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zesDiagnosticsGetTests17zes_diag_handle_tP8uint32_tP15zes_diag_test_t"></span><span id="_CPPv222zesDiagnosticsGetTests17zes_diag_handle_tP8uint32_tP15zes_diag_test_t"></span><span id="zesDiagnosticsGetTests__zes_diag_handle_t.uint32_tP.zes_diag_test_tP"></span><span class="target" id="zes__api_8h_1aa5dc4b0440ea0c827f028d23f896915a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDiagnosticsGetTests</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-diag-handle-t" title="zes_diag_handle_t"><span class="n"><span class="pre">zes_diag_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDiagnostics</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-diag-test-t" title="zes_diag_test_t"><span class="n"><span class="pre">zes_diag_test_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pTests</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesDiagnosticsGetTests17zes_diag_handle_tP8uint32_tP15zes_diag_test_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get individual tests that can be run separately. Not all test suites permit running individual tests, check the <code class="docutils literal notranslate"><span class="pre">haveTests</span></code> member of <a class="reference internal" href="#zes-diag-properties-t"><span class="std std-ref">zes_diag_properties_t</span></a>. </p>
 <p><ul class="simple">
 <li><p>The list of available tests is returned in order of increasing test index (see the <code class="docutils literal notranslate"><span class="pre">index</span></code> member of <a class="reference internal" href="#zes-diag-test-t"><span class="std std-ref">zes_diag_test_t</span></a>).</p></li>
@@ -642,11 +679,11 @@
 
 </section>
 <section id="zesdiagnosticsruntests">
-<span id="id3"></span><h3>zesDiagnosticsRunTests<a class="headerlink" href="#zesdiagnosticsruntests" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zesDiagnosticsRunTests<a class="headerlink" href="#zesdiagnosticsruntests" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zesDiagnosticsRunTests17zes_diag_handle_t8uint32_t8uint32_tP17zes_diag_result_t">
-<span id="_CPPv322zesDiagnosticsRunTests17zes_diag_handle_t8uint32_t8uint32_tP17zes_diag_result_t"></span><span id="_CPPv222zesDiagnosticsRunTests17zes_diag_handle_t8uint32_t8uint32_tP17zes_diag_result_t"></span><span id="zesDiagnosticsRunTests__zes_diag_handle_t.uint32_t.uint32_t.zes_diag_result_tP"></span><span class="target" id="zes__api_8h_1a8174e9e85343dcbae665b06c0813ce16"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDiagnosticsRunTests</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_diag_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDiagnostics</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">startIndex</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">endIndex</span></span>, <a class="reference internal" href="#zes-diag-result-t" title="zes_diag_result_t"><span class="n"><span class="pre">zes_diag_result_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pResult</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesDiagnosticsRunTests17zes_diag_handle_t8uint32_t8uint32_tP17zes_diag_result_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zesDiagnosticsRunTests17zes_diag_handle_t8uint32_t8uint32_tP17zes_diag_result_t"></span><span id="_CPPv222zesDiagnosticsRunTests17zes_diag_handle_t8uint32_t8uint32_tP17zes_diag_result_t"></span><span id="zesDiagnosticsRunTests__zes_diag_handle_t.uint32_t.uint32_t.zes_diag_result_tP"></span><span class="target" id="zes__api_8h_1a8174e9e85343dcbae665b06c0813ce16"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesDiagnosticsRunTests</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zes-diag-handle-t" title="zes_diag_handle_t"><span class="n"><span class="pre">zes_diag_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDiagnostics</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">startIndex</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">endIndex</span></span>, <a class="reference internal" href="#zes-diag-result-t" title="zes_diag_result_t"><span class="n"><span class="pre">zes_diag_result_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pResult</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zesDiagnosticsRunTests17zes_diag_handle_t8uint32_t8uint32_tP17zes_diag_result_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Run a diagnostics test suite, either all tests or a subset of tests. </p>
 <p><ul class="simple">
 <li><p>WARNING: Running diagnostics may destroy current device state information. Gracefully close any running workloads before initiating.</p></li>
@@ -701,8 +738,13 @@
 <section id="diagnostics-enums">
 <h2>Diagnostics Enums<a class="headerlink" href="#diagnostics-enums" title="Link to this heading">#</a></h2>
 <section id="zes-diag-result-t">
-<span id="id4"></span><h3>zes_diag_result_t<a class="headerlink" href="#zes-diag-result-t" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zes_diag_result_t<a class="headerlink" href="#zes-diag-result-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesdiagnosticsruntests"><span class="std std-ref">zesDiagnosticsRunTests</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv417zes_diag_result_t">
 <span id="_CPPv317zes_diag_result_t"></span><span id="_CPPv217zes_diag_result_t"></span><span class="target" id="zes__api_8h_1a8426bd9675ba9b155b05c8490103b463"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_diag_result_t</span></span></span><a class="headerlink" href="#_CPPv417zes_diag_result_t" title="Link to this definition">#</a><br /></dt>
@@ -745,8 +787,13 @@
 <section id="diagnostics-structures">
 <h2>Diagnostics Structures<a class="headerlink" href="#diagnostics-structures" title="Link to this heading">#</a></h2>
 <section id="zes-diag-test-t">
-<span id="id5"></span><h3>zes_diag_test_t<a class="headerlink" href="#zes-diag-test-t" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zes_diag_test_t<a class="headerlink" href="#zes-diag-test-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesdiagnosticsgettests"><span class="std std-ref">zesDiagnosticsGetTests</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv415zes_diag_test_t">
 <span id="_CPPv315zes_diag_test_t"></span><span id="_CPPv215zes_diag_test_t"></span><span id="zes_diag_test_t"></span><span class="target" id="structzes__diag__test__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_diag_test_t</span></span></span><a class="headerlink" href="#_CPPv415zes_diag_test_t" title="Link to this definition">#</a><br /></dt>
@@ -770,8 +817,13 @@
 
 </section>
 <section id="zes-diag-properties-t">
-<span id="id6"></span><h3>zes_diag_properties_t<a class="headerlink" href="#zes-diag-properties-t" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zes_diag_properties_t<a class="headerlink" href="#zes-diag-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesdiagnosticsgetproperties"><span class="std std-ref">zesDiagnosticsGetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv421zes_diag_properties_t">
 <span id="_CPPv321zes_diag_properties_t"></span><span id="_CPPv221zes_diag_properties_t"></span><span id="zes_diag_properties_t"></span><span class="target" id="structzes__diag__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_diag_properties_t</span></span></span><a class="headerlink" href="#_CPPv421zes_diag_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -792,7 +844,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_diag_properties_t11onSubdeviceE">
-<span id="_CPPv3N21zes_diag_properties_t11onSubdeviceE"></span><span id="_CPPv2N21zes_diag_properties_t11onSubdeviceE"></span><span id="zes_diag_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__diag__properties__t_1ad7740a8e330339921889ce3e0fe4d506"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N21zes_diag_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_diag_properties_t11onSubdeviceE"></span><span id="_CPPv2N21zes_diag_properties_t11onSubdeviceE"></span><span id="zes_diag_properties_t::onSubdevice__ze_bool_t"></span><span class="target" id="structzes__diag__properties__t_1ad7740a8e330339921889ce3e0fe4d506"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">onSubdevice</span></span></span><a class="headerlink" href="#_CPPv4N21zes_diag_properties_t11onSubdeviceE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] True if the resource is located on a sub-device; false means that the resource is on the device of the calling Sysman handle </p>
 </dd></dl>
 
@@ -810,7 +862,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_diag_properties_t9haveTestsE">
-<span id="_CPPv3N21zes_diag_properties_t9haveTestsE"></span><span id="_CPPv2N21zes_diag_properties_t9haveTestsE"></span><span id="zes_diag_properties_t::haveTests__ze_bool_t"></span><span class="target" id="structzes__diag__properties__t_1a1dfd840296b8ee2b60b7e6005edb662a"></span><span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">haveTests</span></span></span><a class="headerlink" href="#_CPPv4N21zes_diag_properties_t9haveTestsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_diag_properties_t9haveTestsE"></span><span id="_CPPv2N21zes_diag_properties_t9haveTestsE"></span><span id="zes_diag_properties_t::haveTests__ze_bool_t"></span><span class="target" id="structzes__diag__properties__t_1a1dfd840296b8ee2b60b7e6005edb662a"></span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">haveTests</span></span></span><a class="headerlink" href="#_CPPv4N21zes_diag_properties_t9haveTestsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Indicates if this test suite has individual tests which can be run separately (use the function <a class="reference internal" href="#zesdiagnosticsgettests"><span class="std std-ref">zesDiagnosticsGetTests()</span></a> to get the list of these tests) </p>
 </dd></dl>
 
@@ -833,20 +885,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="overclock.html"
+       href="ras.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Overclock</p>
+        <p class="prev-next-title">Ras</p>
       </div>
     </a>
     <a class="right-next"
-       href="engine.html"
+       href="overclock.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Engine</p>
+        <p class="prev-next-title">Overclock</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -866,7 +918,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">3</span></summary><div class="ctoc-prefix">zesDiagnostics</div><ul class="ctoc-list"><li><a href="diagnostics.html#zesdiagnosticsgetproperties">&hellip;GetProperties</a></li><li><a href="diagnostics.html#zesdiagnosticsgettests">&hellip;GetTests</a></li><li><a href="diagnostics.html#zesdiagnosticsruntests">&hellip;RunTests</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="diagnostics.html#zes-diag-result-t">zes_diag_result_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="diagnostics.html#zes-diag-test-t">zes_diag_test_t</a></li><li><a href="diagnostics.html#zes-diag-properties-t">zes_diag_properties_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="diagnostics.html#zes-diag-handle-t">zes_diag_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">3</span></summary><div class="ctoc-prefix">zesDiagnostics</div><ul class="ctoc-list"><li><a href="diagnostics.html#zesdiagnosticsgetproperties">&hellip;GetProperties</a></li><li><a href="diagnostics.html#zesdiagnosticsgettests">&hellip;GetTests</a></li><li><a href="diagnostics.html#zesdiagnosticsruntests">&hellip;RunTests</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="diagnostics.html#zes-diag-result-t">zes_diag_result_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="diagnostics.html#zes-diag-test-t">zes_diag_test_t</a></li><li><a href="diagnostics.html#zes-diag-properties-t">zes_diag_properties_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

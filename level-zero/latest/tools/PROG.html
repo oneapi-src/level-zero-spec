@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Tools Programming Guide &#8212; Level Zero Specification v1.20.41</title>
+    <title>Tools Programming Guide &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Core Programming Guide" href="../core/PROG.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -680,25 +690,25 @@ type will be used.</p>
 </ul>
 </div></blockquote>
 </li>
-<li><p>Obtain the metric count for each Metric Group by calling <a class="reference internal" href="api/apis/metric_group.html#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a> with Metric Group handle (zet_metric_group_handle_t) and checking <a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.metricCount.</p></li>
-<li><p>Iterate over available Metrics using <a class="reference internal" href="api/apis/metric.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a> with parent Metric Group (zet_metric_group_handle_t).</p></li>
-<li><p>Check Metric properties (e.g. name, description) calling <a class="reference internal" href="api/apis/metric.html#zetmetricgetproperties"><span class="std std-ref">zetMetricGetProperties</span></a> with parent Metric (zet_metric_handle_t).</p></li>
+<li><p>Obtain the metric count for each Metric Group by calling <a class="reference internal" href="api/apis/metric_group.html#zetmetricgroupgetproperties"><span class="std std-ref">zetMetricGroupGetProperties</span></a> with Metric Group handle (<a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a>) and checking <a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-properties-t"><span class="std std-ref">zet_metric_group_properties_t</span></a>.metricCount.</p></li>
+<li><p>Iterate over available Metrics using <a class="reference internal" href="api/apis/metric.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a> with parent Metric Group (<a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a>).</p></li>
+<li><p>Check Metric properties (e.g. name, description) calling <a class="reference internal" href="api/apis/metric.html#zetmetricgetproperties"><span class="std std-ref">zetMetricGetProperties</span></a> with parent Metric (<a class="reference internal" href="api/apis/metric.html#zet-metric-handle-t"><span class="std std-ref">zet_metric_handle_t</span></a>).</p></li>
 </ol>
 <p>The following pseudo-code demonstrates a basic enumeration over all
 available metric groups and their metrics. Additionally, it returns a
 metric group with a chosen name and sampling type. Similar code could be
 used for selecting a preferred metric group for a specific type of
 measurements.</p>
-<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> FindMetricGroup( ze_device_handle_t hDevice,
+<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> FindMetricGroup( <a class="reference internal" href="../core/api/apis/device.html#ze-device-handle-t"><span class="std std-ref">ze_device_handle_t</span></a> hDevice,
                                char* pMetricGroupName,
                                uint32_t desiredSamplingType,
-                               zet_metric_group_handle_t* phMetricGroup )
+                               <a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a>* phMetricGroup )
 {
     // Obtain available metric groups for the specific device
     uint32_t metricGroupCount = 0;
     <a class="reference internal" href="api/apis/metric_group.html#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a>( hDevice, &amp;metricGroupCount, nullptr );
 
-    zet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(zet_metric_group_handle_t));
+    <a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a>* phMetricGroups = malloc(metricGroupCount * sizeof(<a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a>));
     <a class="reference internal" href="api/apis/metric_group.html#zetmetricgroupget"><span class="std std-ref">zetMetricGroupGet</span></a>( hDevice, &amp;metricGroupCount, phMetricGroups );
 
     // Iterate over all metric groups available
@@ -766,15 +776,15 @@ for data collection.</p>
 </ul>
 <img alt="../_images/tools_metric_streamer.png" src="../_images/tools_metric_streamer.png" />
 <p>The following pseudo-code demonstrates a basic sequence for time-based collection:</p>
-<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> TimeBasedUsageExample( ze_context_handle_t hContext,
-                                     ze_device_handle_t hDevice )
+<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> TimeBasedUsageExample( <a class="reference internal" href="../core/api/apis/context.html#ze-context-handle-t"><span class="std std-ref">ze_context_handle_t</span></a> hContext,
+                                     <a class="reference internal" href="../core/api/apis/device.html#ze-device-handle-t"><span class="std std-ref">ze_device_handle_t</span></a> hDevice )
 {
-    zet_metric_group_handle_t     hMetricGroup           = nullptr;
-    ze_event_handle_t            hNotificationEvent     = nullptr;
-    ze_event_pool_handle_t       hEventPool             = nullptr;
+    <a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a>     hMetricGroup           = nullptr;
+    <a class="reference internal" href="../core/api/apis/event.html#ze-event-handle-t"><span class="std std-ref">ze_event_handle_t</span></a>            hNotificationEvent     = nullptr;
+    <a class="reference internal" href="../core/api/apis/event_pool.html#ze-event-pool-handle-t"><span class="std std-ref">ze_event_pool_handle_t</span></a>       hEventPool             = nullptr;
     <a class="reference internal" href="../core/api/apis/event_pool.html#ze-event-pool-desc-t"><span class="std std-ref">ze_event_pool_desc_t</span></a>         eventPoolDesc          = {<a class="reference internal" href="../core/api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_POOL_DESC</span></a>, nullptr, 0, 1};
     <a class="reference internal" href="../core/api/apis/event.html#ze-event-desc-t"><span class="std std-ref">ze_event_desc_t</span></a>              eventDesc              = {<a class="reference internal" href="../core/api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_DESC</span></a>};
-    zet_metric_streamer_handle_t  hMetricStreamer        = nullptr;
+    <a class="reference internal" href="api/apis/metric_streamer.html#zet-metric-streamer-handle-t"><span class="std std-ref">zet_metric_streamer_handle_t</span></a>  hMetricStreamer        = nullptr;
     <a class="reference internal" href="api/apis/metric_streamer.html#zet-metric-streamer-desc-t"><span class="std std-ref">zet_metric_streamer_desc_t</span></a>    metricStreamerDesc     = {<a class="reference internal" href="api/apis/data_types.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC</span></a>};
 
     // Find a &quot;ComputeBasic&quot; metric group suitable for Time Based collection
@@ -855,16 +865,16 @@ for data collection.</p>
 </ul>
 <img alt="../_images/tools_metric_query.png" src="../_images/tools_metric_query.png" />
 <p>The following pseudo-code demonstrates a basic sequence for query-based collection:</p>
-<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> MetricQueryUsageExample( ze_context_handle_t hContext,
-                                       ze_device_handle_t hDevice )
+<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> MetricQueryUsageExample( <a class="reference internal" href="../core/api/apis/context.html#ze-context-handle-t"><span class="std std-ref">ze_context_handle_t</span></a> hContext,
+                                       <a class="reference internal" href="../core/api/apis/device.html#ze-device-handle-t"><span class="std std-ref">ze_device_handle_t</span></a> hDevice )
 {
-    zet_metric_group_handle_t      hMetricGroup          = nullptr;
-    ze_event_handle_t             hCompletionEvent      = nullptr;
+    <a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a>      hMetricGroup          = nullptr;
+    <a class="reference internal" href="../core/api/apis/event.html#ze-event-handle-t"><span class="std std-ref">ze_event_handle_t</span></a>             hCompletionEvent      = nullptr;
     <a class="reference internal" href="../core/api/apis/event_pool.html#ze-event-pool-desc-t"><span class="std std-ref">ze_event_pool_desc_t</span></a>          eventPoolDesc         = {<a class="reference internal" href="../core/api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_POOL_DESC</span></a>, nullptr};
     <a class="reference internal" href="../core/api/apis/event.html#ze-event-desc-t"><span class="std std-ref">ze_event_desc_t</span></a>               eventDesc             = {<a class="reference internal" href="../core/api/apis/data_types.html#ze-structure-type-t"><span class="std std-ref">ZE_STRUCTURE_TYPE_EVENT_DESC</span></a>, nullptr};
-    ze_event_pool_handle_t        hEventPool            = nullptr;
-    zet_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
-    zet_metric_query_handle_t      hMetricQuery          = nullptr;
+    <a class="reference internal" href="../core/api/apis/event_pool.html#ze-event-pool-handle-t"><span class="std std-ref">ze_event_pool_handle_t</span></a>        hEventPool            = nullptr;
+    <a class="reference internal" href="api/apis/metric_query_pool.html#zet-metric-query-pool-handle-t"><span class="std std-ref">zet_metric_query_pool_handle_t</span></a> hMetricQueryPool      = nullptr;
+    <a class="reference internal" href="api/apis/metric_query.html#zet-metric-query-handle-t"><span class="std std-ref">zet_metric_query_handle_t</span></a>      hMetricQuery          = nullptr;
     <a class="reference internal" href="api/apis/metric_query_pool.html#zet-metric-query-pool-desc-t"><span class="std std-ref">zet_metric_query_pool_desc_t</span></a>   queryPoolDesc         = {<a class="reference internal" href="api/apis/data_types.html#zet-structure-type-t"><span class="std std-ref">ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC</span></a>, nullptr};
 
     // Find a &quot;ComputeBasic&quot; metric group suitable for Event Based collection
@@ -925,7 +935,7 @@ for data collection.</p>
 <p>Both MetricStreamer and MetricQuery collect the data in device specific, raw form that is not suitable for application processing.
 To calculate metric values use <a class="reference internal" href="api/apis/metric_group.html#zetmetricgroupcalculatemetricvalues"><span class="std std-ref">zetMetricGroupCalculateMetricValues</span></a>.</p>
 <p>The following pseudo-code demonstrates a basic sequence for metric calculation and interpretation:</p>
-<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> CalculateMetricsExample( zet_metric_group_handle_t hMetricGroup,
+<pre class="literal-block"><a class="reference internal" href="../core/api/apis/data_types.html#ze-result-t"><span class="std std-ref">ze_result_t</span></a> CalculateMetricsExample( <a class="reference internal" href="api/apis/metric_group.html#zet-metric-group-handle-t"><span class="std std-ref">zet_metric_group_handle_t</span></a> hMetricGroup,
                                        size_t rawSize, uint8_t* rawData )
 {
     // Calculate metric data
@@ -939,7 +949,7 @@ To calculate metric values use <a class="reference internal" href="api/apis/metr
     uint32_t metricCount = 0;
     <a class="reference internal" href="api/apis/metric.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a>( hMetricGroup, &amp;metricCount, nullptr );
 
-    zet_metric_handle_t* phMetrics = malloc(metricCount * sizeof(zet_metric_handle_t));
+    <a class="reference internal" href="api/apis/metric.html#zet-metric-handle-t"><span class="std std-ref">zet_metric_handle_t</span></a>* phMetrics = malloc(metricCount * sizeof(<a class="reference internal" href="api/apis/metric.html#zet-metric-handle-t"><span class="std std-ref">zet_metric_handle_t</span></a>));
     <a class="reference internal" href="api/apis/metric.html#zetmetricget"><span class="std std-ref">zetMetricGet</span></a>( hMetricGroup, &amp;metricCount, phMetrics );
 
     // Print metric results
@@ -1093,13 +1103,13 @@ The library will check the following properties:</p>
 <li><p>device debug must be enabled on this system.</p></li>
 </ul>
 </div></blockquote>
-<p>If permission is granted, a zet_debug_session_handle_t is provided.
+<p>If permission is granted, a <a class="reference internal" href="api/apis/debug.html#zet-debug-session-handle-t"><span class="std std-ref">zet_debug_session_handle_t</span></a> is provided.
 The debug session handle can be used in other program debug APIs until the tool detaches again.</p>
 <p>To end a debug session, a tool calls <a class="reference internal" href="api/apis/debug.html#zetdebugdetach"><span class="std std-ref">zetDebugDetach</span></a> passing the
-zet_debug_session_handle_t that had been provided on the corresponding
+<a class="reference internal" href="api/apis/debug.html#zet-debug-session-handle-t"><span class="std std-ref">zet_debug_session_handle_t</span></a> that had been provided on the corresponding
 <a class="reference internal" href="api/apis/debug.html#zetdebugattach"><span class="std std-ref">zetDebugAttach</span></a> call.</p>
 <p>The following sample code demonstrates attaching and detaching:</p>
-<pre class="literal-block">zet_debug_session_handle_t hDebug;
+<pre class="literal-block"><a class="reference internal" href="api/apis/debug.html#zet-debug-session-handle-t"><span class="std std-ref">zet_debug_session_handle_t</span></a> hDebug;
 
 <a class="reference internal" href="api/apis/debug.html#zet-debug-config-t"><span class="std std-ref">zet_debug_config_t</span></a> config;
 memset(&amp;config, 0, sizeof(config));

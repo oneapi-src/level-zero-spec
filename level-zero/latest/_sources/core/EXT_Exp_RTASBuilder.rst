@@ -169,7 +169,7 @@ With the scene data prepared and relevant device properties known, create a ray 
         desc.pNext = nullptr;
         desc.builderVersion = :ref:`ZE_RTAS_BUILDER_EXP_VERSION_CURRENT <ze-rtas-builder-exp-version-t>`\;
 
-        ze_rtas_builder_exp_handle_t hBuilder = nullptr;
+        :ref:`ze-rtas-builder-exp-handle-t` hBuilder = nullptr;
         :ref:`ze-result-t` result = :ref:`zeRTASBuilderCreateExp`\(hDriver, &desc, &hBuilder);
         assert(result == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\);
 
@@ -259,7 +259,7 @@ In order to speed up the build operation using multiple worker threads, a parall
 
 .. parsed-literal::
 
-        ze_rtas_parallel_operation_exp_handle_t hParallelOperation = nullptr;
+        :ref:`ze-rtas-parallel-operation-exp-handle-t` hParallelOperation = nullptr;
         result = :ref:`zeRTASParallelOperationCreateExp`\(hDriver, &hParallelOperation);
         assert(result == :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\);
 

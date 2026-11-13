@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>VF Management - Deprecated &#8212; Level Zero Specification v1.20.41</title>
+    <title>VF Management - Deprecated &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Scheduler - Deprecated" href="scheduler.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Sysman</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -502,6 +512,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vf-management-deprecated-enums">VF Management - Deprecated Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-info-mem-type-exp-flags-t">zes_vf_info_mem_type_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv432zes_vf_info_mem_type_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_info_mem_type_exp_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431zes_vf_info_mem_type_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_info_mem_type_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEME"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_SYSTEM</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N31zes_vf_info_mem_type_exp_flag_t45ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICEE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_MEM_TYPE_EXP_FLAG_MEM_TYPE_DEVICE</span></code></a></li>
@@ -511,6 +522,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zes-vf-info-util-exp-flags-t">zes_vf_info_util_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv428zes_vf_info_util_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_info_util_exp_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv427zes_vf_info_util_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">zes_vf_info_util_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_vf_info_util_exp_flag_t35ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONEE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_NONE</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N27zes_vf_info_util_exp_flag_t38ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPUE"><code class="docutils literal notranslate"><span class="pre">ZES_VF_INFO_UTIL_EXP_FLAG_INFO_MEM_CPU</span></code></a></li>
@@ -585,7 +597,7 @@
                   
   <section id="vf-management-deprecated">
 <h1>VF Management - Deprecated<a class="headerlink" href="#vf-management-deprecated" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="vf-management-deprecated-functions">
 <h2>VF Management - Deprecated Functions<a class="headerlink" href="#vf-management-deprecated-functions" title="Link to this heading">#</a></h2>
 <section id="zesvfmanagementgetvfpropertiesexp">
@@ -594,7 +606,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.11. No longer supported. Use <a class="reference internal" href="../experimental/vf_management.html#zesvfmanagementgetvfcapabilitiesexp2"><span class="std std-ref">zesVFManagementGetVFCapabilitiesExp2</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv433zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t">
-<span id="_CPPv333zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t"></span><span id="_CPPv233zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t"></span><span id="zesVFManagementGetVFPropertiesExp__zes_vf_handle_t.zes_vf_exp_properties_tP"></span><span class="target" id="zes__api_8h_1a945a8eef4b644ef13d9c3f89e3345cbb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFPropertiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#zes-vf-exp-properties-t" title="zes_vf_exp_properties_t"><span class="n"><span class="pre">zes_vf_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv333zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t"></span><span id="_CPPv233zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t"></span><span id="zesVFManagementGetVFPropertiesExp__zes_vf_handle_t.zes_vf_exp_properties_tP"></span><span class="target" id="zes__api_8h_1a945a8eef4b644ef13d9c3f89e3345cbb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFPropertiesExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/vf_management.html#zes-vf-handle-t" title="zes_vf_handle_t"><span class="n"><span class="pre">zes_vf_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#zes-vf-exp-properties-t" title="zes_vf_exp_properties_t"><span class="n"><span class="pre">zes_vf_exp_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv433zesVFManagementGetVFPropertiesExp15zes_vf_handle_tP23zes_vf_exp_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get virtual function management properties </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -644,7 +656,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.11. No longer supported. Use <a class="reference internal" href="../experimental/vf_management.html#zesvfmanagementgetvfmemoryutilizationexp2"><span class="std std-ref">zesVFManagementGetVFMemoryUtilizationExp2</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv440zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t">
-<span id="_CPPv340zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t"></span><span id="_CPPv240zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t"></span><span id="zesVFManagementGetVFMemoryUtilizationExp__zes_vf_handle_t.uint32_tP.zes_vf_util_mem_exp_tP"></span><span class="target" id="zes__api_8h_1acb60a1937bc82ca2420152a6b10be134"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFMemoryUtilizationExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-vf-util-mem-exp-t" title="zes_vf_util_mem_exp_t"><span class="n"><span class="pre">zes_vf_util_mem_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMemUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv440zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv340zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t"></span><span id="_CPPv240zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t"></span><span id="zesVFManagementGetVFMemoryUtilizationExp__zes_vf_handle_t.uint32_tP.zes_vf_util_mem_exp_tP"></span><span class="target" id="zes__api_8h_1acb60a1937bc82ca2420152a6b10be134"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFMemoryUtilizationExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/vf_management.html#zes-vf-handle-t" title="zes_vf_handle_t"><span class="n"><span class="pre">zes_vf_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-vf-util-mem-exp-t" title="zes_vf_util_mem_exp_t"><span class="n"><span class="pre">zes_vf_util_mem_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMemUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv440zesVFManagementGetVFMemoryUtilizationExp15zes_vf_handle_tP8uint32_tP21zes_vf_util_mem_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get memory activity stats for each available memory types associated with Virtual Function (VF) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -704,7 +716,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.11. No longer supported. Use <a class="reference internal" href="../experimental/vf_management.html#zesvfmanagementgetvfengineutilizationexp2"><span class="std std-ref">zesVFManagementGetVFEngineUtilizationExp2</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv440zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t">
-<span id="_CPPv340zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t"></span><span id="_CPPv240zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t"></span><span id="zesVFManagementGetVFEngineUtilizationExp__zes_vf_handle_t.uint32_tP.zes_vf_util_engine_exp_tP"></span><span class="target" id="zes__api_8h_1aeb19589991ba8917632e77f3599fdf85"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFEngineUtilizationExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-vf-util-engine-exp-t" title="zes_vf_util_engine_exp_t"><span class="n"><span class="pre">zes_vf_util_engine_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pEngineUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv440zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv340zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t"></span><span id="_CPPv240zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t"></span><span id="zesVFManagementGetVFEngineUtilizationExp__zes_vf_handle_t.uint32_tP.zes_vf_util_engine_exp_tP"></span><span class="target" id="zes__api_8h_1aeb19589991ba8917632e77f3599fdf85"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFEngineUtilizationExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/vf_management.html#zes-vf-handle-t" title="zes_vf_handle_t"><span class="n"><span class="pre">zes_vf_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zes-vf-util-engine-exp-t" title="zes_vf_util_engine_exp_t"><span class="n"><span class="pre">zes_vf_util_engine_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pEngineUtil</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv440zesVFManagementGetVFEngineUtilizationExp15zes_vf_handle_tP8uint32_tP24zes_vf_util_engine_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get engine activity stats for each available engine group associated with Virtual Function (VF) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -764,7 +776,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.11. Utilization telemetry needs no enabling; query it directly (memory: zesVFManagementGetVFMemoryUtilizationExp2). Related: <a class="reference internal" href="../experimental/vf_management.html#zesvfmanagementgetvfengineutilizationexp2"><span class="std std-ref">zesVFManagementGetVFEngineUtilizationExp2</span></a>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv436zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t">
-<span id="_CPPv336zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t"></span><span id="_CPPv236zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t"></span><span id="zesVFManagementSetVFTelemetryModeExp__zes_vf_handle_t.zes_vf_info_util_exp_flags_t.ze_bool_t"></span><span class="target" id="zes__api_8h_1aaac3fc6bba3446c1d0c809b8ca840c97"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementSetVFTelemetryModeExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv336zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t"></span><span id="_CPPv236zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t"></span><span id="zesVFManagementSetVFTelemetryModeExp__zes_vf_handle_t.zes_vf_info_util_exp_flags_t.ze_bool_t"></span><span class="target" id="zes__api_8h_1aaac3fc6bba3446c1d0c809b8ca840c97"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementSetVFTelemetryModeExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/vf_management.html#zes-vf-handle-t" title="zes_vf_handle_t"><span class="n"><span class="pre">zes_vf_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#zes-vf-info-util-exp-flags-t" title="zes_vf_info_util_exp_flags_t"><span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">flags</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv436zesVFManagementSetVFTelemetryModeExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Configure utilization telemetry enabled or disabled associated with Virtual Function (VF) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -775,7 +787,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
-<li><p><strong>flags</strong> – [in] utilization flags to enable or disable. May be 0 or a valid combination of <a class="reference internal" href="#zes-vf-info-util-exp-flags-t"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p></li>
+<li><p><strong>flags</strong> – [in] utilization flags to enable or disable. May be 0 or a valid combination of <a class="reference internal" href="#zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p></li>
 <li><p><strong>enable</strong> – [in] Enable utilization telemetry. </p></li>
 </ul>
 </dd>
@@ -816,7 +828,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.11. Utilization telemetry needs no sampling setup; query it directly (memory: zesVFManagementGetVFMemoryUtilizationExp2). Related: <a class="reference internal" href="../experimental/vf_management.html#zesvfmanagementgetvfengineutilizationexp2"><span class="std std-ref">zesVFManagementGetVFEngineUtilizationExp2</span></a>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv448zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t">
-<span id="_CPPv348zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t"></span><span id="_CPPv248zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t"></span><span id="zesVFManagementSetVFTelemetrySamplingIntervalExp__zes_vf_handle_t.zes_vf_info_util_exp_flags_t.uint64_t"></span><span class="target" id="zes__api_8h_1ab12f59049a6f940cef12ec0985093956"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementSetVFTelemetrySamplingIntervalExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flag</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">samplingInterval</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv448zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv348zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t"></span><span id="_CPPv248zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t"></span><span id="zesVFManagementSetVFTelemetrySamplingIntervalExp__zes_vf_handle_t.zes_vf_info_util_exp_flags_t.uint64_t"></span><span class="target" id="zes__api_8h_1ab12f59049a6f940cef12ec0985093956"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementSetVFTelemetrySamplingIntervalExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/vf_management.html#zes-vf-handle-t" title="zes_vf_handle_t"><span class="n"><span class="pre">zes_vf_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#zes-vf-info-util-exp-flags-t" title="zes_vf_info_util_exp_flags_t"><span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">flag</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">samplingInterval</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv448zesVFManagementSetVFTelemetrySamplingIntervalExp15zes_vf_handle_t28zes_vf_info_util_exp_flags_t8uint64_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Set sampling interval to monitor for a particular utilization telemetry associated with Virtual Function (VF) </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -827,7 +839,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hVFhandle</strong> – [in] Sysman handle for the component. </p></li>
-<li><p><strong>flag</strong> – [in] utilization flags to set sampling interval. May be 0 or a valid combination of <a class="reference internal" href="#zes-vf-info-util-exp-flags-t"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p></li>
+<li><p><strong>flag</strong> – [in] utilization flags to set sampling interval. May be 0 or a valid combination of <a class="reference internal" href="#zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p></li>
 <li><p><strong>samplingInterval</strong> – [in] Sampling interval value. </p></li>
 </ul>
 </dd>
@@ -868,7 +880,7 @@
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.12. No longer supported. Use <a class="reference internal" href="../experimental/vf_management.html#zesvfmanagementgetvfcapabilitiesexp2"><span class="std std-ref">zesVFManagementGetVFCapabilitiesExp2</span></a> instead.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv435zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t">
-<span id="_CPPv335zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t"></span><span id="_CPPv235zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t"></span><span id="zesVFManagementGetVFCapabilitiesExp__zes_vf_handle_t.zes_vf_exp_capabilities_tP"></span><span class="target" id="zes__api_8h_1ace866999b90430c8b1324c3ce8c6e0cb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFCapabilitiesExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zes_vf_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#zes-vf-exp-capabilities-t" title="zes_vf_exp_capabilities_t"><span class="n"><span class="pre">zes_vf_exp_capabilities_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCapability</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv335zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t"></span><span id="_CPPv235zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t"></span><span id="zesVFManagementGetVFCapabilitiesExp__zes_vf_handle_t.zes_vf_exp_capabilities_tP"></span><span class="target" id="zes__api_8h_1ace866999b90430c8b1324c3ce8c6e0cb"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zesVFManagementGetVFCapabilitiesExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/vf_management.html#zes-vf-handle-t" title="zes_vf_handle_t"><span class="n"><span class="pre">zes_vf_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hVFhandle</span></span>, <a class="reference internal" href="#zes-vf-exp-capabilities-t" title="zes_vf_exp_capabilities_t"><span class="n"><span class="pre">zes_vf_exp_capabilities_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCapability</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zesVFManagementGetVFCapabilitiesExp15zes_vf_handle_tP25zes_vf_exp_capabilities_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get virtual function management capabilities </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -919,6 +931,17 @@
 <span id="id7"></span><h3>zes_vf_info_mem_type_exp_flags_t<a class="headerlink" href="#zes-vf-info-mem-type-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.10. Use <a class="reference internal" href="../apis/memory.html#zes-mem-loc-t"><span class="std std-ref">zes_mem_loc_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-vf-util-mem-exp-t"><span class="std std-ref">zes_vf_util_mem_exp_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv432zes_vf_info_mem_type_exp_flags_t">
+<span id="_CPPv332zes_vf_info_mem_type_exp_flags_t"></span><span id="_CPPv232zes_vf_info_mem_type_exp_flags_t"></span><span id="zes_vf_info_mem_type_exp_flags_t"></span><span class="target" id="zes__api_8h_1a35f011a95e309316bcd1af532b56bc13"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_info_mem_type_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv432zes_vf_info_mem_type_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.10</span> Virtual function memory types </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv431zes_vf_info_mem_type_exp_flag_t">
 <span id="_CPPv331zes_vf_info_mem_type_exp_flag_t"></span><span id="_CPPv231zes_vf_info_mem_type_exp_flag_t"></span><span class="target" id="zes__api_8h_1af0da0a2013464faf38302cd084f143f3"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_info_mem_type_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv431zes_vf_info_mem_type_exp_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -948,6 +971,18 @@
 <span id="id8"></span><h3>zes_vf_info_util_exp_flags_t<a class="headerlink" href="#zes-vf-info-util-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.10. The Exp2 utilization queries report what is available: memory by zes_mem_loc_t, engines by zes_engine_group_t. Related: <a class="reference internal" href="../experimental/vf_management.html#zesvfmanagementgetvfengineutilizationexp2"><span class="std std-ref">zesVFManagementGetVFEngineUtilizationExp2</span></a>.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesvfmanagementsetvftelemetrymodeexp"><span class="std std-ref">zesVFManagementSetVFTelemetryModeExp</span></a>, <a class="reference internal" href="#zesvfmanagementsetvftelemetrysamplingintervalexp"><span class="std std-ref">zesVFManagementSetVFTelemetrySamplingIntervalExp</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zes-vf-exp-properties-t"><span class="std std-ref">zes_vf_exp_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv428zes_vf_info_util_exp_flags_t">
+<span id="_CPPv328zes_vf_info_util_exp_flags_t"></span><span id="_CPPv228zes_vf_info_util_exp_flags_t"></span><span id="zes_vf_info_util_exp_flags_t"></span><span class="target" id="zes__api_8h_1af6f2987a2d023501800cb2f2dbce8c6f"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv428zes_vf_info_util_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.10</span> Virtual function utilization flag bit fields </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv427zes_vf_info_util_exp_flag_t">
 <span id="_CPPv327zes_vf_info_util_exp_flag_t"></span><span id="_CPPv227zes_vf_info_util_exp_flag_t"></span><span class="target" id="zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_info_util_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv427zes_vf_info_util_exp_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -992,10 +1027,15 @@
 <span id="id9"></span><h3>zes_vf_exp_properties_t<a class="headerlink" href="#zes-vf-exp-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.10. Use <a class="reference internal" href="../experimental/vf_management.html#zes-vf-exp2-capabilities-t"><span class="std std-ref">zes_vf_exp2_capabilities_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesvfmanagementgetvfpropertiesexp"><span class="std std-ref">zesVFManagementGetVFPropertiesExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv423zes_vf_exp_properties_t">
 <span id="_CPPv323zes_vf_exp_properties_t"></span><span id="_CPPv223zes_vf_exp_properties_t"></span><span id="zes_vf_exp_properties_t"></span><span class="target" id="structzes__vf__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv423zes_vf_exp_properties_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Virtual function management properties </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.10</span> Virtual function management properties </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -1024,8 +1064,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N23zes_vf_exp_properties_t5flagsE">
-<span id="_CPPv3N23zes_vf_exp_properties_t5flagsE"></span><span id="_CPPv2N23zes_vf_exp_properties_t5flagsE"></span><span id="zes_vf_exp_properties_t::flags__zes_vf_info_util_exp_flags_t"></span><span class="target" id="structzes__vf__exp__properties__t_1a044d9d83148246357d6f09141e914555"></span><span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N23zes_vf_exp_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] utilization flags available. May be 0 or a valid combination of <a class="reference internal" href="#zes-vf-info-util-exp-flags-t"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p>
+<span id="_CPPv3N23zes_vf_exp_properties_t5flagsE"></span><span id="_CPPv2N23zes_vf_exp_properties_t5flagsE"></span><span id="zes_vf_exp_properties_t::flags__zes_vf_info_util_exp_flags_t"></span><span class="target" id="structzes__vf__exp__properties__t_1a044d9d83148246357d6f09141e914555"></span><a class="reference internal" href="#zes-vf-info-util-exp-flags-t" title="zes_vf_info_util_exp_flags_t"><span class="n"><span class="pre">zes_vf_info_util_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N23zes_vf_exp_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] utilization flags available. May be 0 or a valid combination of <a class="reference internal" href="#zes__api_8h_1a3386b2c557cc03056485af3c06f0cbe8"><span class="std std-ref">zes_vf_info_util_exp_flag_t</span></a>. </p>
 </dd></dl>
 
 </div>
@@ -1036,10 +1076,15 @@
 <span id="id10"></span><h3>zes_vf_util_mem_exp_t<a class="headerlink" href="#zes-vf-util-mem-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.10. Use <a class="reference internal" href="../experimental/vf_management.html#zes-vf-util-mem-exp2-t"><span class="std std-ref">zes_vf_util_mem_exp2_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesvfmanagementgetvfmemoryutilizationexp"><span class="std std-ref">zesVFManagementGetVFMemoryUtilizationExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv421zes_vf_util_mem_exp_t">
 <span id="_CPPv321zes_vf_util_mem_exp_t"></span><span id="_CPPv221zes_vf_util_mem_exp_t"></span><span id="zes_vf_util_mem_exp_t"></span><span class="target" id="structzes__vf__util__mem__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_util_mem_exp_t</span></span></span><a class="headerlink" href="#_CPPv421zes_vf_util_mem_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Provides memory utilization values for a virtual function </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.10</span> Provides memory utilization values for a virtual function </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -1056,7 +1101,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N21zes_vf_util_mem_exp_t12memTypeFlagsE">
-<span id="_CPPv3N21zes_vf_util_mem_exp_t12memTypeFlagsE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t12memTypeFlagsE"></span><span id="zes_vf_util_mem_exp_t::memTypeFlags__zes_vf_info_mem_type_exp_flags_t"></span><span class="target" id="structzes__vf__util__mem__exp__t_1ad41afe52270f215b16ef7fc6eb251bc5"></span><span class="n"><span class="pre">zes_vf_info_mem_type_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memTypeFlags</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t12memTypeFlagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N21zes_vf_util_mem_exp_t12memTypeFlagsE"></span><span id="_CPPv2N21zes_vf_util_mem_exp_t12memTypeFlagsE"></span><span id="zes_vf_util_mem_exp_t::memTypeFlags__zes_vf_info_mem_type_exp_flags_t"></span><span class="target" id="structzes__vf__util__mem__exp__t_1ad41afe52270f215b16ef7fc6eb251bc5"></span><a class="reference internal" href="#zes-vf-info-mem-type-exp-flags-t" title="zes_vf_info_mem_type_exp_flags_t"><span class="n"><span class="pre">zes_vf_info_mem_type_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memTypeFlags</span></span></span><a class="headerlink" href="#_CPPv4N21zes_vf_util_mem_exp_t12memTypeFlagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Memory type flags. </p>
 </dd></dl>
 
@@ -1086,10 +1131,15 @@
 <span id="id11"></span><h3>zes_vf_util_engine_exp_t<a class="headerlink" href="#zes-vf-util-engine-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.9</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.10. Use <a class="reference internal" href="../experimental/vf_management.html#zes-vf-util-engine-exp2-t"><span class="std std-ref">zes_vf_util_engine_exp2_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesvfmanagementgetvfengineutilizationexp"><span class="std std-ref">zesVFManagementGetVFEngineUtilizationExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv424zes_vf_util_engine_exp_t">
 <span id="_CPPv324zes_vf_util_engine_exp_t"></span><span id="_CPPv224zes_vf_util_engine_exp_t"></span><span id="zes_vf_util_engine_exp_t"></span><span class="target" id="structzes__vf__util__engine__exp__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_util_engine_exp_t</span></span></span><a class="headerlink" href="#_CPPv424zes_vf_util_engine_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Provides engine utilization values for a virtual function </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.10</span> Provides engine utilization values for a virtual function </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
@@ -1136,10 +1186,15 @@
 <span id="id12"></span><h3>zes_vf_exp_capabilities_t<a class="headerlink" href="#zes-vf-exp-capabilities-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.12. Use <a class="reference internal" href="../experimental/vf_management.html#zes-vf-exp2-capabilities-t"><span class="std std-ref">zes_vf_exp2_capabilities_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zesvfmanagementgetvfcapabilitiesexp"><span class="std std-ref">zesVFManagementGetVFCapabilitiesExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv425zes_vf_exp_capabilities_t">
 <span id="_CPPv325zes_vf_exp_capabilities_t"></span><span id="_CPPv225zes_vf_exp_capabilities_t"></span><span id="zes_vf_exp_capabilities_t"></span><span class="target" id="structzes__vf__exp__capabilities__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zes_vf_exp_capabilities_t</span></span></span><a class="headerlink" href="#_CPPv425zes_vf_exp_capabilities_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Virtual function management capabilities </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.12</span> Virtual function management capabilities </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">

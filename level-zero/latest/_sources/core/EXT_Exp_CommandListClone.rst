@@ -42,7 +42,7 @@ A command list created with the cloneable flag may be cloned only after it has b
         0,
         :ref:`ZE_COMMAND_LIST_FLAG_EXP_CLONEABLE <ze-command-list-flags-t>`
     };
-    ze_command_list_handle_t hCommandList = nullptr;
+    :ref:`ze-command-list-handle-t` hCommandList = nullptr;
     :ref:`zeCommandListCreate`\(hContext, hDevice, &commandListDesc, &hCommandList);
 
     // { ...[construct command list]... }
@@ -54,7 +54,7 @@ A command list created with the cloneable flag may be cloned only after it has b
     zeCommandQueueExecuteCommandLists(hCommandQueue, 1, &hCommandList, nullptr);
 
     // Clone the command list, no synchronization required
-    ze_command_list_handle_t hClonedCommandList = nullptr;
+    :ref:`ze-command-list-handle-t` hClonedCommandList = nullptr;
     :ref:`zeCommandListCreateCloneExp`\(hCommandList, &hClonedCommandList);
 
     // ...

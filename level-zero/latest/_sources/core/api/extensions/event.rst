@@ -1,7 +1,9 @@
 ============================================================
 Event - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Event - Extension Functions
@@ -35,6 +37,13 @@ ze_event_ext_flags_t
 
 *Added in version 1.20*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-event-ext-flags-desc-t`
+
+.. doxygentypedef:: ze_event_ext_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_event_ext_flag_t
     :project: LevelZero
 
@@ -48,8 +57,16 @@ ze_event_query_kernel_timestamps_ext_flags_t
 
 *Added in version 1.6*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-event-query-kernel-timestamps-ext-properties-t`
+
+.. doxygentypedef:: ze_event_query_kernel_timestamps_ext_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_event_query_kernel_timestamps_ext_flag_t
     :project: LevelZero
+
 
  
 Event - Extension Structures
@@ -80,6 +97,10 @@ ze_synchronized_timestamp_data_ext_t
 
 *Added in version 1.6*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-synchronized-timestamp-result-ext-t`
+
 .. doxygenstruct:: ze_synchronized_timestamp_data_ext_t
     :project: LevelZero
     :members:
@@ -94,6 +115,10 @@ ze_synchronized_timestamp_result_ext_t
 .. rst-class:: api-version
 
 *Added in version 1.6*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-event-query-kernel-timestamps-results-ext-properties-t`
 
 .. doxygenstruct:: ze_synchronized_timestamp_result_ext_t
     :project: LevelZero

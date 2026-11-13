@@ -47,7 +47,7 @@ and also how to query sysman device handle from the UUID.
     uint32_t subDeviceId = 0;
     bool onSubDevice = false;
     :ref:`zes-uuid-t` coreDeviceUuid;
-    zes_device_handle_t* phDevice = (zes_device_handle_t*)allocate(sizeof(zes_device_handle_t));
+    :ref:`zes-device-handle-t`\* phDevice = (:ref:`zes-device-handle-t`\*)allocate(sizeof(:ref:`zes-device-handle-t`\));
     :ref:`zesDriverGetDeviceByUuidExp`\(pSysmanDriverHandle, coreDeviceUuid, phDevice, &subDeviceId, &onSubDevice);
 
     // Query for number of sub devices of the sysman device

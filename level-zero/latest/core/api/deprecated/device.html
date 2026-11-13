@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Device - Deprecated &#8212; Level Zero Specification v1.20.41</title>
+    <title>Device - Deprecated &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Driver - Deprecated" href="driver.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -475,6 +485,7 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-deprecated-enums">Device - Deprecated Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-device-exp-flags-t">ze_rtas_device_exp_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426ze_rtas_device_exp_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_device_exp_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425ze_rtas_device_exp_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_device_exp_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_rtas_device_exp_flag_t32ZE_RTAS_DEVICE_EXP_FLAG_RESERVEDE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_DEVICE_EXP_FLAG_RESERVED</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_rtas_device_exp_flag_t36ZE_RTAS_DEVICE_EXP_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_DEVICE_EXP_FLAG_FORCE_UINT32</span></code></a></li>
@@ -520,13 +531,24 @@
                   
   <section id="device-deprecated">
 <h1>Device - Deprecated<a class="headerlink" href="#device-deprecated" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="device-deprecated-enums">
 <h2>Device - Deprecated Enums<a class="headerlink" href="#device-deprecated-enums" title="Link to this heading">#</a></h2>
 <section id="ze-rtas-device-exp-flags-t">
 <span id="id1"></span><h3>ze_rtas_device_exp_flags_t<a class="headerlink" href="#ze-rtas-device-exp-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/device.html#ze-rtas-device-ext-flags-t"><span class="std std-ref">ze_rtas_device_ext_flags_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-device-exp-properties-t"><span class="std std-ref">ze_rtas_device_exp_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv426ze_rtas_device_exp_flags_t">
+<span id="_CPPv326ze_rtas_device_exp_flags_t"></span><span id="_CPPv226ze_rtas_device_exp_flags_t"></span><span id="ze_rtas_device_exp_flags_t"></span><span class="target" id="ze__api_8h_1ab0c07cbeb648c6444510fcea6b164039"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_device_exp_flags_t</span></span></span><a class="headerlink" href="#_CPPv426ze_rtas_device_exp_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure device flags </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv425ze_rtas_device_exp_flag_t">
 <span id="_CPPv325ze_rtas_device_exp_flag_t"></span><span id="_CPPv225ze_rtas_device_exp_flag_t"></span><span class="target" id="ze__api_8h_1a817237a9b2ec6e253f1cfdc45a67168e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_device_exp_flag_t</span></span></span><a class="headerlink" href="#_CPPv425ze_rtas_device_exp_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -550,10 +572,16 @@
 <span id="id2"></span><h3>ze_rtas_format_exp_t<a class="headerlink" href="#ze-rtas-format-exp-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/device.html#ze-rtas-format-ext-t"><span class="std std-ref">ze_rtas_format_ext_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="driver.html#zedriverrtasformatcompatibilitycheckexp"><span class="std std-ref">zeDriverRTASFormatCompatibilityCheckExp</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-device-exp-properties-t"><span class="std std-ref">ze_rtas_device_exp_properties_t</span></a>, <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-build-op-exp-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_exp_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420ze_rtas_format_exp_t">
 <span id="_CPPv320ze_rtas_format_exp_t"></span><span id="_CPPv220ze_rtas_format_exp_t"></span><span class="target" id="ze__api_8h_1a3cdec076ae3cb27517685fe6666acff7"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_format_exp_t</span></span></span><a class="headerlink" href="#_CPPv420ze_rtas_format_exp_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure format </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure format </p>
 <p><ul class="simple">
 <li><p>This is an opaque ray tracing acceleration structure format identifier.</p></li>
 </ul>
@@ -587,10 +615,15 @@
 <span id="id3"></span><h3>ze_rtas_device_exp_properties_t<a class="headerlink" href="#ze-rtas-device-exp-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.7</em></p>
 <p class="api-deprecated"><strong>Deprecated</strong> since 1.13. Use <a class="reference internal" href="../extensions/device.html#ze-rtas-device-ext-properties-t"><span class="std std-ref">ze_rtas_device_ext_properties_t</span></a> instead.</p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv431ze_rtas_device_exp_properties_t">
 <span id="_CPPv331ze_rtas_device_exp_properties_t"></span><span id="_CPPv231ze_rtas_device_exp_properties_t"></span><span id="ze_rtas_device_exp_properties_t"></span><span class="target" id="structze__rtas__device__exp__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_device_exp_properties_t</span></span></span><a class="headerlink" href="#_CPPv431ze_rtas_device_exp_properties_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>Ray tracing acceleration structure device properties </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.13</span> Ray tracing acceleration structure device properties </p>
 <p><ul class="simple">
 <li><p>This structure may be passed to <a class="reference internal" href="../apis/device.html#zedevicegetproperties"><span class="std std-ref">zeDeviceGetProperties</span></a>, via <code class="docutils literal notranslate"><span class="pre">pNext</span></code> member of <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a>.</p></li>
 <li><p>The implementation shall populate <code class="docutils literal notranslate"><span class="pre">format</span></code> with a value other than <a class="reference internal" href="#ze__api_8h_1a3cdec076ae3cb27517685fe6666acff7a4ddcc4da36522cfd0e53675fcfb82029"><span class="std std-ref">ZE_RTAS_FORMAT_EXP_INVALID</span></a> when the device supports ray tracing.</p></li>
@@ -612,7 +645,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N31ze_rtas_device_exp_properties_t5flagsE">
-<span id="_CPPv3N31ze_rtas_device_exp_properties_t5flagsE"></span><span id="_CPPv2N31ze_rtas_device_exp_properties_t5flagsE"></span><span id="ze_rtas_device_exp_properties_t::flags__ze_rtas_device_exp_flags_t"></span><span class="target" id="structze__rtas__device__exp__properties__t_1aca1e88fc3b6b09a62e4bbc7d52ada47a"></span><span class="n"><span class="pre">ze_rtas_device_exp_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N31ze_rtas_device_exp_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N31ze_rtas_device_exp_properties_t5flagsE"></span><span id="_CPPv2N31ze_rtas_device_exp_properties_t5flagsE"></span><span id="ze_rtas_device_exp_properties_t::flags__ze_rtas_device_exp_flags_t"></span><span class="target" id="structze__rtas__device__exp__properties__t_1aca1e88fc3b6b09a62e4bbc7d52ada47a"></span><a class="reference internal" href="#ze-rtas-device-exp-flags-t" title="ze_rtas_device_exp_flags_t"><span class="n"><span class="pre">ze_rtas_device_exp_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N31ze_rtas_device_exp_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] ray tracing acceleration structure device flags </p>
 </dd></dl>
 

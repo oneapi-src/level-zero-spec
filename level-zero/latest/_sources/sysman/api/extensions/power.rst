@@ -1,7 +1,9 @@
 ============================================================
 Power - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Power - Extension Functions
@@ -35,6 +37,7 @@ zesPowerSetLimitsExt
 
 
 
+
  
 Power - Extension Structures
 ============================
@@ -48,6 +51,11 @@ zes_power_limit_ext_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.4*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesPowerGetLimitsExt`, :ref:`zesPowerSetLimitsExt`
+   | **Member of:** :ref:`zes-power-ext-properties-t`
 
 .. doxygenstruct:: zes_power_limit_ext_desc_t
     :project: LevelZero
@@ -63,6 +71,10 @@ zes_power_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.4*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`zes-power-properties-t`
 
 .. doxygenstruct:: zes_power_ext_properties_t
     :project: LevelZero

@@ -53,12 +53,12 @@ Concrete visitor callbacks have the same signature as the visited API, with `use
 .. parsed-literal::
 
     :ref:`ze-result-t` ZE_VISITOR_CCONV myLaunchKernelVisitor(
-        ze_command_list_handle_t hCommandList,
-        ze_kernel_handle_t hKernel,
+        :ref:`ze-command-list-handle-t` hCommandList,
+        :ref:`ze-kernel-handle-t` hKernel,
         const :ref:`ze-group-count-t`\* pLaunchFuncArgs,
-        ze_event_handle_t hSignalEvent,
+        :ref:`ze-event-handle-t` hSignalEvent,
         uint32_t numWaitEvents,
-        ze_event_handle_t* phWaitEvents,
+        :ref:`ze-event-handle-t`\* phWaitEvents,
         void* userData);
 
 .. parsed-literal::
@@ -70,7 +70,7 @@ Concrete visitor callbacks have the same signature as the visited API, with `use
         0,                                                    // commandQueueGroupOrdinal
         :ref:`ZE_COMMAND_LIST_FLAG_ENABLE_COMMAND_VISIT <ze-command-list-flags-t>`           // flags
     };
-    ze_command_list_handle_t hCommandList;
+    :ref:`ze-command-list-handle-t` hCommandList;
     :ref:`zeCommandListCreate`\(hContext, hDevice, &srcDesc, &hCommandList);
 
     // ... record commands into hCommandList ...
@@ -82,7 +82,7 @@ Concrete visitor callbacks have the same signature as the visited API, with `use
         0,                                                    // commandQueueGroupOrdinal
         0                                                     // flags
     };
-    ze_command_list_handle_t hTargetCommandList;
+    :ref:`ze-command-list-handle-t` hTargetCommandList;
     :ref:`zeCommandListCreate`\(hContext, hDevice, &dstDesc, &hTargetCommandList);
 
     // Register a concrete visitor for kernel launches

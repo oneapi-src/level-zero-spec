@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Debug &#8212; Level Zero Specification v1.20.41</title>
+    <title>Debug &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -47,11 +47,11 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'tools/api/apis/debug';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Metric Group" href="metric_group.html" />
-    <link rel="prev" title="Kernel" href="kernel.html" />
+    <link rel="next" title="Data Types" href="data_types.html" />
+    <link rel="prev" title="Metric Query" href="metric_query.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
-<li class="toctree-l4 current active"><a class="current reference internal" href="#">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_query.html">Metric Query</a></li>
+<li class="toctree-l4 current active"><a class="current reference internal" href="#">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-handles">Debug Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-debug-session-handle-t">zet_debug_session_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426zet_debug_session_handle_t"><code class="docutils literal notranslate"><span class="pre">zet_debug_session_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-functions">Debug Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zetdebugattach">zetDebugAttach</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv414zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t"><code class="docutils literal notranslate"><span class="pre">zetDebugAttach()</span></code></a></li>
@@ -526,6 +543,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-enums">Debug Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-debug-event-flags-t">zet_debug_event_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zet_debug_event_flags_t"><code class="docutils literal notranslate"><span class="pre">zet_debug_event_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv422zet_debug_event_flag_t"><code class="docutils literal notranslate"><span class="pre">zet_debug_event_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zet_debug_event_flag_t29ZET_DEBUG_EVENT_FLAG_NEED_ACKE"><code class="docutils literal notranslate"><span class="pre">ZET_DEBUG_EVENT_FLAG_NEED_ACK</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N22zet_debug_event_flag_t33ZET_DEBUG_EVENT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZET_DEBUG_EVENT_FLAG_FORCE_UINT32</span></code></a></li>
@@ -580,6 +598,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-debug-regset-flags-t">zet_debug_regset_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zet_debug_regset_flags_t"><code class="docutils literal notranslate"><span class="pre">zet_debug_regset_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv423zet_debug_regset_flag_t"><code class="docutils literal notranslate"><span class="pre">zet_debug_regset_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_debug_regset_flag_t30ZET_DEBUG_REGSET_FLAG_READABLEE"><code class="docutils literal notranslate"><span class="pre">ZET_DEBUG_REGSET_FLAG_READABLE</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N23zet_debug_regset_flag_t31ZET_DEBUG_REGSET_FLAG_WRITEABLEE"><code class="docutils literal notranslate"><span class="pre">ZET_DEBUG_REGSET_FLAG_WRITEABLE</span></code></a></li>
@@ -690,15 +709,35 @@
                   
   <section id="debug">
 <h1>Debug<a class="headerlink" href="#debug" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="debug-handles">
+<h2>Debug Handles<a class="headerlink" href="#debug-handles" title="Link to this heading">#</a></h2>
+<section id="zet-debug-session-handle-t">
+<span id="id1"></span><h3>zet_debug_session_handle_t<a class="headerlink" href="#zet-debug-session-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zetdebugattach"><span class="std std-ref">zetDebugAttach</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetdebugdetach"><span class="std std-ref">zetDebugDetach</span></a>, <a class="reference internal" href="#zetdebugreadevent"><span class="std std-ref">zetDebugReadEvent</span></a>, <a class="reference internal" href="#zetdebugacknowledgeevent"><span class="std std-ref">zetDebugAcknowledgeEvent</span></a>, <a class="reference internal" href="#zetdebuginterrupt"><span class="std std-ref">zetDebugInterrupt</span></a>, <a class="reference internal" href="#zetdebugresume"><span class="std std-ref">zetDebugResume</span></a>, <a class="reference internal" href="#zetdebugreadmemory"><span class="std std-ref">zetDebugReadMemory</span></a>, <a class="reference internal" href="#zetdebugwritememory"><span class="std std-ref">zetDebugWriteMemory</span></a>, <a class="reference internal" href="#zetdebuggetthreadregistersetproperties"><span class="std std-ref">zetDebugGetThreadRegisterSetProperties</span></a>, <a class="reference internal" href="#zetdebugreadregisters"><span class="std std-ref">zetDebugReadRegisters</span></a>, <a class="reference internal" href="#zetdebugwriteregisters"><span class="std std-ref">zetDebugWriteRegisters</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference external" href="../../PROG.html#program-debug">Program Debug (Programming Guide)</a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv426zet_debug_session_handle_t">
+<span id="_CPPv326zet_debug_session_handle_t"></span><span id="_CPPv226zet_debug_session_handle_t"></span><span id="zet_debug_session_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></span><a class="headerlink" href="#_CPPv426zet_debug_session_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Debug session handle.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="debug-functions">
 <h2>Debug Functions<a class="headerlink" href="#debug-functions" title="Link to this heading">#</a></h2>
 <section id="zetdebugattach">
-<span id="id1"></span><h3>zetDebugAttach<a class="headerlink" href="#zetdebugattach" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zetDebugAttach<a class="headerlink" href="#zetdebugattach" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t">
-<span id="_CPPv314zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t"></span><span id="_CPPv214zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t"></span><span id="zetDebugAttach__zet_device_handle_t.zet_debug_config_tCP.zet_debug_session_handle_tP"></span><span class="target" id="zet__api_8h_1a2d1d103f06e25a29b7cdb661af0da3e3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugAttach</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-config-t" title="zet_debug_config_t"><span class="n"><span class="pre">zet_debug_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config</span></span>, <span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDebug</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t"></span><span id="_CPPv214zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t"></span><span id="zetDebugAttach__zet_device_handle_t.zet_debug_config_tCP.zet_debug_session_handle_tP"></span><span class="target" id="zet__api_8h_1a2d1d103f06e25a29b7cdb661af0da3e3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugAttach</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="device.html#zet-device-handle-t" title="zet_device_handle_t"><span class="n"><span class="pre">zet_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-config-t" title="zet_debug_config_t"><span class="n"><span class="pre">zet_debug_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">config</span></span>, <a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDebug</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zetDebugAttach19zet_device_handle_tPK18zet_debug_config_tP26zet_debug_session_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Attach to a device. </p>
 <p><ul class="simple">
 <li><p>The device must be enabled for debug; see <a class="reference internal" href="../../../sysman/api/deprecated/scheduler.html#zesschedulersetcomputeunitdebugmode"><span class="std std-ref">zesSchedulerSetComputeUnitDebugMode</span></a>.</p></li>
@@ -753,11 +792,11 @@
 
 </section>
 <section id="zetdebugdetach">
-<span id="id2"></span><h3>zetDebugDetach<a class="headerlink" href="#zetdebugdetach" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zetDebugDetach<a class="headerlink" href="#zetdebugdetach" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zetDebugDetach26zet_debug_session_handle_t">
-<span id="_CPPv314zetDebugDetach26zet_debug_session_handle_t"></span><span id="_CPPv214zetDebugDetach26zet_debug_session_handle_t"></span><span id="zetDebugDetach__zet_debug_session_handle_t"></span><span class="target" id="zet__api_8h_1a659676304d885792fd1932d2daf92e9b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugDetach</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zetDebugDetach26zet_debug_session_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zetDebugDetach26zet_debug_session_handle_t"></span><span id="_CPPv214zetDebugDetach26zet_debug_session_handle_t"></span><span id="zetDebugDetach__zet_debug_session_handle_t"></span><span class="target" id="zet__api_8h_1a659676304d885792fd1932d2daf92e9b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugDetach</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zetDebugDetach26zet_debug_session_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Close a debug session. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -790,11 +829,11 @@
 
 </section>
 <section id="zetdebugreadevent">
-<span id="id3"></span><h3>zetDebugReadEvent<a class="headerlink" href="#zetdebugreadevent" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zetDebugReadEvent<a class="headerlink" href="#zetdebugreadevent" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zetDebugReadEvent26zet_debug_session_handle_t8uint64_tP17zet_debug_event_t">
-<span id="_CPPv317zetDebugReadEvent26zet_debug_session_handle_t8uint64_tP17zet_debug_event_t"></span><span id="_CPPv217zetDebugReadEvent26zet_debug_session_handle_t8uint64_tP17zet_debug_event_t"></span><span id="zetDebugReadEvent__zet_debug_session_handle_t.uint64_t.zet_debug_event_tP"></span><span class="target" id="zet__api_8h_1a0ee17aeec5e9443b982c4970800d0c2e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugReadEvent</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <a class="reference internal" href="#zet-debug-event-t" title="zet_debug_event_t"><span class="n"><span class="pre">zet_debug_event_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">event</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zetDebugReadEvent26zet_debug_session_handle_t8uint64_tP17zet_debug_event_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zetDebugReadEvent26zet_debug_session_handle_t8uint64_tP17zet_debug_event_t"></span><span id="_CPPv217zetDebugReadEvent26zet_debug_session_handle_t8uint64_tP17zet_debug_event_t"></span><span id="zetDebugReadEvent__zet_debug_session_handle_t.uint64_t.zet_debug_event_tP"></span><span class="target" id="zet__api_8h_1a0ee17aeec5e9443b982c4970800d0c2e"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugReadEvent</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">timeout</span></span>, <a class="reference internal" href="#zet-debug-event-t" title="zet_debug_event_t"><span class="n"><span class="pre">zet_debug_event_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">event</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zetDebugReadEvent26zet_debug_session_handle_t8uint64_tP17zet_debug_event_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read the topmost debug event. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -839,11 +878,11 @@
 
 </section>
 <section id="zetdebugacknowledgeevent">
-<span id="id4"></span><h3>zetDebugAcknowledgeEvent<a class="headerlink" href="#zetdebugacknowledgeevent" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zetDebugAcknowledgeEvent<a class="headerlink" href="#zetdebugacknowledgeevent" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zetDebugAcknowledgeEvent26zet_debug_session_handle_tPK17zet_debug_event_t">
-<span id="_CPPv324zetDebugAcknowledgeEvent26zet_debug_session_handle_tPK17zet_debug_event_t"></span><span id="_CPPv224zetDebugAcknowledgeEvent26zet_debug_session_handle_tPK17zet_debug_event_t"></span><span id="zetDebugAcknowledgeEvent__zet_debug_session_handle_t.zet_debug_event_tCP"></span><span class="target" id="zet__api_8h_1a646a7c261c307b97072406bce25bb1c3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugAcknowledgeEvent</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-event-t" title="zet_debug_event_t"><span class="n"><span class="pre">zet_debug_event_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">event</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetDebugAcknowledgeEvent26zet_debug_session_handle_tPK17zet_debug_event_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zetDebugAcknowledgeEvent26zet_debug_session_handle_tPK17zet_debug_event_t"></span><span id="_CPPv224zetDebugAcknowledgeEvent26zet_debug_session_handle_tPK17zet_debug_event_t"></span><span id="zetDebugAcknowledgeEvent__zet_debug_session_handle_t.zet_debug_event_tCP"></span><span class="target" id="zet__api_8h_1a646a7c261c307b97072406bce25bb1c3"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugAcknowledgeEvent</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-event-t" title="zet_debug_event_t"><span class="n"><span class="pre">zet_debug_event_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">event</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetDebugAcknowledgeEvent26zet_debug_session_handle_tPK17zet_debug_event_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Acknowledge a debug event. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -883,11 +922,11 @@
 
 </section>
 <section id="zetdebuginterrupt">
-<span id="id5"></span><h3>zetDebugInterrupt<a class="headerlink" href="#zetdebuginterrupt" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zetDebugInterrupt<a class="headerlink" href="#zetdebuginterrupt" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417zetDebugInterrupt26zet_debug_session_handle_t18ze_device_thread_t">
-<span id="_CPPv317zetDebugInterrupt26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="_CPPv217zetDebugInterrupt26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="zetDebugInterrupt__zet_debug_session_handle_t.ze_device_thread_t"></span><span class="target" id="zet__api_8h_1af6d2f02e7ab069bc6163fe1cd85d417f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugInterrupt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zetDebugInterrupt26zet_debug_session_handle_t18ze_device_thread_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv317zetDebugInterrupt26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="_CPPv217zetDebugInterrupt26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="zetDebugInterrupt__zet_debug_session_handle_t.ze_device_thread_t"></span><span class="target" id="zet__api_8h_1af6d2f02e7ab069bc6163fe1cd85d417f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugInterrupt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417zetDebugInterrupt26zet_debug_session_handle_t18ze_device_thread_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Interrupt device threads. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -926,11 +965,11 @@
 
 </section>
 <section id="zetdebugresume">
-<span id="id6"></span><h3>zetDebugResume<a class="headerlink" href="#zetdebugresume" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zetDebugResume<a class="headerlink" href="#zetdebugresume" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zetDebugResume26zet_debug_session_handle_t18ze_device_thread_t">
-<span id="_CPPv314zetDebugResume26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="_CPPv214zetDebugResume26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="zetDebugResume__zet_debug_session_handle_t.ze_device_thread_t"></span><span class="target" id="zet__api_8h_1af0eadf3d27de6e37733a716abca65a4a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugResume</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zetDebugResume26zet_debug_session_handle_t18ze_device_thread_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zetDebugResume26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="_CPPv214zetDebugResume26zet_debug_session_handle_t18ze_device_thread_t"></span><span id="zetDebugResume__zet_debug_session_handle_t.ze_device_thread_t"></span><span class="target" id="zet__api_8h_1af0eadf3d27de6e37733a716abca65a4a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugResume</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zetDebugResume26zet_debug_session_handle_t18ze_device_thread_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Resume device threads. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -969,11 +1008,11 @@
 
 </section>
 <section id="zetdebugreadmemory">
-<span id="id7"></span><h3>zetDebugReadMemory<a class="headerlink" href="#zetdebugreadmemory" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zetDebugReadMemory<a class="headerlink" href="#zetdebugreadmemory" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418zetDebugReadMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPv">
-<span id="_CPPv318zetDebugReadMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPv"></span><span id="_CPPv218zetDebugReadMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPv"></span><span id="zetDebugReadMemory__zet_debug_session_handle_t.ze_device_thread_t.zet_debug_memory_space_desc_tCP.s.voidP"></span><span class="target" id="zet__api_8h_1a880cee4845f82443739462aeae13d84f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugReadMemory</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-memory-space-desc-t" title="zet_debug_memory_space_desc_t"><span class="n"><span class="pre">zet_debug_memory_space_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zetDebugReadMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv318zetDebugReadMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPv"></span><span id="_CPPv218zetDebugReadMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPv"></span><span id="zetDebugReadMemory__zet_debug_session_handle_t.ze_device_thread_t.zet_debug_memory_space_desc_tCP.s.voidP"></span><span class="target" id="zet__api_8h_1a880cee4845f82443739462aeae13d84f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugReadMemory</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-memory-space-desc-t" title="zet_debug_memory_space_desc_t"><span class="n"><span class="pre">zet_debug_memory_space_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418zetDebugReadMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read memory. </p>
 <p><ul class="simple">
 <li><p>The thread identifier ‘all’ can be used for accessing the default memory space, e.g. for setting breakpoints.</p></li>
@@ -1030,11 +1069,11 @@
 
 </section>
 <section id="zetdebugwritememory">
-<span id="id8"></span><h3>zetDebugWriteMemory<a class="headerlink" href="#zetdebugwritememory" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zetDebugWriteMemory<a class="headerlink" href="#zetdebugwritememory" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zetDebugWriteMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPKv">
-<span id="_CPPv319zetDebugWriteMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPKv"></span><span id="_CPPv219zetDebugWriteMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPKv"></span><span id="zetDebugWriteMemory__zet_debug_session_handle_t.ze_device_thread_t.zet_debug_memory_space_desc_tCP.s.voidCP"></span><span class="target" id="zet__api_8h_1a5f8d6c7304c6ceb4f0444e77e657bdea"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugWriteMemory</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-memory-space-desc-t" title="zet_debug_memory_space_desc_t"><span class="n"><span class="pre">zet_debug_memory_space_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zetDebugWriteMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPKv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zetDebugWriteMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPKv"></span><span id="_CPPv219zetDebugWriteMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPKv"></span><span id="zetDebugWriteMemory__zet_debug_session_handle_t.ze_device_thread_t.zet_debug_memory_space_desc_tCP.s.voidCP"></span><span class="target" id="zet__api_8h_1a5f8d6c7304c6ceb4f0444e77e657bdea"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugWriteMemory</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-debug-memory-space-desc-t" title="zet_debug_memory_space_desc_t"><span class="n"><span class="pre">zet_debug_memory_space_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">size</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zetDebugWriteMemory26zet_debug_session_handle_t18ze_device_thread_tPK29zet_debug_memory_space_desc_t6size_tPKv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Write memory. </p>
 <p><ul class="simple">
 <li><p>The thread identifier ‘all’ can be used for accessing the default memory space, e.g. for setting breakpoints.</p></li>
@@ -1091,11 +1130,11 @@
 
 </section>
 <section id="zetdebuggetregistersetproperties">
-<span id="id9"></span><h3>zetDebugGetRegisterSetProperties<a class="headerlink" href="#zetdebuggetregistersetproperties" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>zetDebugGetRegisterSetProperties<a class="headerlink" href="#zetdebuggetregistersetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv432zetDebugGetRegisterSetProperties19zet_device_handle_tP8uint32_tP29zet_debug_regset_properties_t">
-<span id="_CPPv332zetDebugGetRegisterSetProperties19zet_device_handle_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="_CPPv232zetDebugGetRegisterSetProperties19zet_device_handle_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="zetDebugGetRegisterSetProperties__zet_device_handle_t.uint32_tP.zet_debug_regset_properties_tP"></span><span class="target" id="zet__api_8h_1abdb51dcc392bb387298e7065c11302d1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugGetRegisterSetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zet-debug-regset-properties-t" title="zet_debug_regset_properties_t"><span class="n"><span class="pre">zet_debug_regset_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterSetProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zetDebugGetRegisterSetProperties19zet_device_handle_tP8uint32_tP29zet_debug_regset_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv332zetDebugGetRegisterSetProperties19zet_device_handle_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="_CPPv232zetDebugGetRegisterSetProperties19zet_device_handle_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="zetDebugGetRegisterSetProperties__zet_device_handle_t.uint32_tP.zet_debug_regset_properties_tP"></span><span class="target" id="zet__api_8h_1abdb51dcc392bb387298e7065c11302d1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugGetRegisterSetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="device.html#zet-device-handle-t" title="zet_device_handle_t"><span class="n"><span class="pre">zet_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zet-debug-regset-properties-t" title="zet_debug_regset_properties_t"><span class="n"><span class="pre">zet_debug_regset_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterSetProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv432zetDebugGetRegisterSetProperties19zet_device_handle_tP8uint32_tP29zet_debug_regset_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieves debug register set properties. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1136,11 +1175,11 @@
 
 </section>
 <section id="zetdebugreadregisters">
-<span id="id10"></span><h3>zetDebugReadRegisters<a class="headerlink" href="#zetdebugreadregisters" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>zetDebugReadRegisters<a class="headerlink" href="#zetdebugreadregisters" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zetDebugReadRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv">
-<span id="_CPPv321zetDebugReadRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="_CPPv221zetDebugReadRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="zetDebugReadRegisters__zet_debug_session_handle_t.ze_device_thread_t.uint32_t.uint32_t.uint32_t.voidP"></span><span class="target" id="zet__api_8h_1a47d961369a634260b82e67cfe946999d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugReadRegisters</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterValues</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetDebugReadRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zetDebugReadRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="_CPPv221zetDebugReadRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="zetDebugReadRegisters__zet_debug_session_handle_t.ze_device_thread_t.uint32_t.uint32_t.uint32_t.voidP"></span><span class="target" id="zet__api_8h_1a47d961369a634260b82e67cfe946999d"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugReadRegisters</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterValues</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zetDebugReadRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read register state. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1183,11 +1222,11 @@
 
 </section>
 <section id="zetdebugwriteregisters">
-<span id="id11"></span><h3>zetDebugWriteRegisters<a class="headerlink" href="#zetdebugwriteregisters" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>zetDebugWriteRegisters<a class="headerlink" href="#zetdebugwriteregisters" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zetDebugWriteRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv">
-<span id="_CPPv322zetDebugWriteRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="_CPPv222zetDebugWriteRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="zetDebugWriteRegisters__zet_debug_session_handle_t.ze_device_thread_t.uint32_t.uint32_t.uint32_t.voidP"></span><span class="target" id="zet__api_8h_1ab7fddccbe78589376872ba13582aafb1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugWriteRegisters</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterValues</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zetDebugWriteRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zetDebugWriteRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="_CPPv222zetDebugWriteRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv"></span><span id="zetDebugWriteRegisters__zet_debug_session_handle_t.ze_device_thread_t.uint32_t.uint32_t.uint32_t.voidP"></span><span class="target" id="zet__api_8h_1ab7fddccbe78589376872ba13582aafb1"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugWriteRegisters</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">start</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterValues</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zetDebugWriteRegisters26zet_debug_session_handle_t18ze_device_thread_t8uint32_t8uint32_t8uint32_tPv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Write register state. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1230,11 +1269,11 @@
 
 </section>
 <section id="zetdebuggetthreadregistersetproperties">
-<span id="id12"></span><h3>zetDebugGetThreadRegisterSetProperties<a class="headerlink" href="#zetdebuggetthreadregistersetproperties" title="Link to this heading">#</a></h3>
+<span id="id13"></span><h3>zetDebugGetThreadRegisterSetProperties<a class="headerlink" href="#zetdebuggetthreadregistersetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv438zetDebugGetThreadRegisterSetProperties26zet_debug_session_handle_t18ze_device_thread_tP8uint32_tP29zet_debug_regset_properties_t">
-<span id="_CPPv338zetDebugGetThreadRegisterSetProperties26zet_debug_session_handle_t18ze_device_thread_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="_CPPv238zetDebugGetThreadRegisterSetProperties26zet_debug_session_handle_t18ze_device_thread_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="zetDebugGetThreadRegisterSetProperties__zet_debug_session_handle_t.ze_device_thread_t.uint32_tP.zet_debug_regset_properties_tP"></span><span class="target" id="zet__api_8h_1aa3835d698dfbde00ec3f6a6f11d6ac17"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugGetThreadRegisterSetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_debug_session_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zet-debug-regset-properties-t" title="zet_debug_regset_properties_t"><span class="n"><span class="pre">zet_debug_regset_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterSetProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zetDebugGetThreadRegisterSetProperties26zet_debug_session_handle_t18ze_device_thread_tP8uint32_tP29zet_debug_regset_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv338zetDebugGetThreadRegisterSetProperties26zet_debug_session_handle_t18ze_device_thread_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="_CPPv238zetDebugGetThreadRegisterSetProperties26zet_debug_session_handle_t18ze_device_thread_tP8uint32_tP29zet_debug_regset_properties_t"></span><span id="zetDebugGetThreadRegisterSetProperties__zet_debug_session_handle_t.ze_device_thread_t.uint32_tP.zet_debug_regset_properties_tP"></span><span class="target" id="zet__api_8h_1aa3835d698dfbde00ec3f6a6f11d6ac17"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetDebugGetThreadRegisterSetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-debug-session-handle-t" title="zet_debug_session_handle_t"><span class="n"><span class="pre">zet_debug_session_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDebug</span></span>, <a class="reference internal" href="../../../core/api/apis/device.html#ze-device-thread-t" title="ze_device_thread_t"><span class="n"><span class="pre">ze_device_thread_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">thread</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#zet-debug-regset-properties-t" title="zet_debug_regset_properties_t"><span class="n"><span class="pre">zet_debug_regset_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRegisterSetProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv438zetDebugGetThreadRegisterSetProperties26zet_debug_session_handle_t18ze_device_thread_tP8uint32_tP29zet_debug_regset_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieves debug register set properties for a given thread. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1285,8 +1324,19 @@
 <section id="debug-enums">
 <h2>Debug Enums<a class="headerlink" href="#debug-enums" title="Link to this heading">#</a></h2>
 <section id="zet-debug-event-flags-t">
-<span id="id13"></span><h3>zet_debug_event_flags_t<a class="headerlink" href="#zet-debug-event-flags-t" title="Link to this heading">#</a></h3>
+<span id="id14"></span><h3>zet_debug_event_flags_t<a class="headerlink" href="#zet-debug-event-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-t"><span class="std std-ref">zet_debug_event_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv423zet_debug_event_flags_t">
+<span id="_CPPv323zet_debug_event_flags_t"></span><span id="_CPPv223zet_debug_event_flags_t"></span><span id="zet_debug_event_flags_t"></span><span class="target" id="zet__api_8h_1a251babeaa21848702f5bd7ff77ce3532"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_flags_t</span></span></span><a class="headerlink" href="#_CPPv423zet_debug_event_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported debug event flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv422zet_debug_event_flag_t">
 <span id="_CPPv322zet_debug_event_flag_t"></span><span id="_CPPv222zet_debug_event_flag_t"></span><span class="target" id="zet__api_8h_1ae4e81d56594479b79b17a9a54d4cfcd1"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_flag_t</span></span></span><a class="headerlink" href="#_CPPv422zet_debug_event_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1307,8 +1357,13 @@
 
 </section>
 <section id="zet-debug-event-type-t">
-<span id="id14"></span><h3>zet_debug_event_type_t<a class="headerlink" href="#zet-debug-event-type-t" title="Link to this heading">#</a></h3>
+<span id="id15"></span><h3>zet_debug_event_type_t<a class="headerlink" href="#zet-debug-event-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-t"><span class="std std-ref">zet_debug_event_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv422zet_debug_event_type_t">
 <span id="_CPPv322zet_debug_event_type_t"></span><span id="_CPPv222zet_debug_event_type_t"></span><span class="target" id="zet__api_8h_1a0e2685a738f3040ef460ff51bfe45285"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_type_t</span></span></span><a class="headerlink" href="#_CPPv422zet_debug_event_type_t" title="Link to this definition">#</a><br /></dt>
@@ -1378,8 +1433,13 @@
 
 </section>
 <section id="zet-debug-detach-reason-t">
-<span id="id15"></span><h3>zet_debug_detach_reason_t<a class="headerlink" href="#zet-debug-detach-reason-t" title="Link to this heading">#</a></h3>
+<span id="id16"></span><h3>zet_debug_detach_reason_t<a class="headerlink" href="#zet-debug-detach-reason-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-info-detached-t"><span class="std std-ref">zet_debug_event_info_detached_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv425zet_debug_detach_reason_t">
 <span id="_CPPv325zet_debug_detach_reason_t"></span><span id="_CPPv225zet_debug_detach_reason_t"></span><span class="target" id="zet__api_8h_1ad333e0c39555aa97da5f9b3309a891b1"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_detach_reason_t</span></span></span><a class="headerlink" href="#_CPPv425zet_debug_detach_reason_t" title="Link to this definition">#</a><br /></dt>
@@ -1407,8 +1467,13 @@
 
 </section>
 <section id="zet-debug-page-fault-reason-t">
-<span id="id16"></span><h3>zet_debug_page_fault_reason_t<a class="headerlink" href="#zet-debug-page-fault-reason-t" title="Link to this heading">#</a></h3>
+<span id="id17"></span><h3>zet_debug_page_fault_reason_t<a class="headerlink" href="#zet-debug-page-fault-reason-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.1</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-info-page-fault-t"><span class="std std-ref">zet_debug_event_info_page_fault_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv429zet_debug_page_fault_reason_t">
 <span id="_CPPv329zet_debug_page_fault_reason_t"></span><span id="_CPPv229zet_debug_page_fault_reason_t"></span><span class="target" id="zet__api_8h_1a64d67b2c86e0e06bb15b1f682438ae7e"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_page_fault_reason_t</span></span></span><a class="headerlink" href="#_CPPv429zet_debug_page_fault_reason_t" title="Link to this definition">#</a><br /></dt>
@@ -1442,8 +1507,13 @@
 
 </section>
 <section id="zet-debug-memory-space-type-t">
-<span id="id17"></span><h3>zet_debug_memory_space_type_t<a class="headerlink" href="#zet-debug-memory-space-type-t" title="Link to this heading">#</a></h3>
+<span id="id18"></span><h3>zet_debug_memory_space_type_t<a class="headerlink" href="#zet-debug-memory-space-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-memory-space-desc-t"><span class="std std-ref">zet_debug_memory_space_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv429zet_debug_memory_space_type_t">
 <span id="_CPPv329zet_debug_memory_space_type_t"></span><span id="_CPPv229zet_debug_memory_space_type_t"></span><span class="target" id="zet__api_8h_1a3ed201bab72f09406f082beae351e97c"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_memory_space_type_t</span></span></span><a class="headerlink" href="#_CPPv429zet_debug_memory_space_type_t" title="Link to this definition">#</a><br /></dt>
@@ -1483,8 +1553,19 @@
 
 </section>
 <section id="zet-debug-regset-flags-t">
-<span id="id18"></span><h3>zet_debug_regset_flags_t<a class="headerlink" href="#zet-debug-regset-flags-t" title="Link to this heading">#</a></h3>
+<span id="id19"></span><h3>zet_debug_regset_flags_t<a class="headerlink" href="#zet-debug-regset-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-regset-properties-t"><span class="std std-ref">zet_debug_regset_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv424zet_debug_regset_flags_t">
+<span id="_CPPv324zet_debug_regset_flags_t"></span><span id="_CPPv224zet_debug_regset_flags_t"></span><span id="zet_debug_regset_flags_t"></span><span class="target" id="zet__api_8h_1a8828e74427b6631cd833ff80b8df7f1a"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_regset_flags_t</span></span></span><a class="headerlink" href="#_CPPv424zet_debug_regset_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported general register set flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv423zet_debug_regset_flag_t">
 <span id="_CPPv323zet_debug_regset_flag_t"></span><span id="_CPPv223zet_debug_regset_flag_t"></span><span class="target" id="zet__api_8h_1a1108b5f36bcac6e731416f7d20ebaaad"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_regset_flag_t</span></span></span><a class="headerlink" href="#_CPPv423zet_debug_regset_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1514,8 +1595,13 @@
 <section id="debug-structures">
 <h2>Debug Structures<a class="headerlink" href="#debug-structures" title="Link to this heading">#</a></h2>
 <section id="zet-debug-config-t">
-<span id="id19"></span><h3>zet_debug_config_t<a class="headerlink" href="#zet-debug-config-t" title="Link to this heading">#</a></h3>
+<span id="id20"></span><h3>zet_debug_config_t<a class="headerlink" href="#zet-debug-config-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetdebugattach"><span class="std std-ref">zetDebugAttach</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv418zet_debug_config_t">
 <span id="_CPPv318zet_debug_config_t"></span><span id="_CPPv218zet_debug_config_t"></span><span id="zet_debug_config_t"></span><span class="target" id="structzet__debug__config__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_config_t</span></span></span><a class="headerlink" href="#_CPPv418zet_debug_config_t" title="Link to this definition">#</a><br /></dt>
@@ -1533,8 +1619,13 @@
 
 </section>
 <section id="zet-debug-event-info-detached-t">
-<span id="id20"></span><h3>zet_debug_event_info_detached_t<a class="headerlink" href="#zet-debug-event-info-detached-t" title="Link to this heading">#</a></h3>
+<span id="id21"></span><h3>zet_debug_event_info_detached_t<a class="headerlink" href="#zet-debug-event-info-detached-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-info-t"><span class="std std-ref">zet_debug_event_info_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv431zet_debug_event_info_detached_t">
 <span id="_CPPv331zet_debug_event_info_detached_t"></span><span id="_CPPv231zet_debug_event_info_detached_t"></span><span id="zet_debug_event_info_detached_t"></span><span class="target" id="structzet__debug__event__info__detached__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_info_detached_t</span></span></span><a class="headerlink" href="#_CPPv431zet_debug_event_info_detached_t" title="Link to this definition">#</a><br /></dt>
@@ -1552,8 +1643,13 @@
 
 </section>
 <section id="zet-debug-event-info-module-t">
-<span id="id21"></span><h3>zet_debug_event_info_module_t<a class="headerlink" href="#zet-debug-event-info-module-t" title="Link to this heading">#</a></h3>
+<span id="id22"></span><h3>zet_debug_event_info_module_t<a class="headerlink" href="#zet-debug-event-info-module-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-info-t"><span class="std std-ref">zet_debug_event_info_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv429zet_debug_event_info_module_t">
 <span id="_CPPv329zet_debug_event_info_module_t"></span><span id="_CPPv229zet_debug_event_info_module_t"></span><span id="zet_debug_event_info_module_t"></span><span class="target" id="structzet__debug__event__info__module__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_info_module_t</span></span></span><a class="headerlink" href="#_CPPv429zet_debug_event_info_module_t" title="Link to this definition">#</a><br /></dt>
@@ -1589,8 +1685,13 @@
 
 </section>
 <section id="zet-debug-event-info-thread-stopped-t">
-<span id="id22"></span><h3>zet_debug_event_info_thread_stopped_t<a class="headerlink" href="#zet-debug-event-info-thread-stopped-t" title="Link to this heading">#</a></h3>
+<span id="id23"></span><h3>zet_debug_event_info_thread_stopped_t<a class="headerlink" href="#zet-debug-event-info-thread-stopped-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-info-t"><span class="std std-ref">zet_debug_event_info_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv437zet_debug_event_info_thread_stopped_t">
 <span id="_CPPv337zet_debug_event_info_thread_stopped_t"></span><span id="_CPPv237zet_debug_event_info_thread_stopped_t"></span><span id="zet_debug_event_info_thread_stopped_t"></span><span class="target" id="structzet__debug__event__info__thread__stopped__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_info_thread_stopped_t</span></span></span><a class="headerlink" href="#_CPPv437zet_debug_event_info_thread_stopped_t" title="Link to this definition">#</a><br /></dt>
@@ -1608,8 +1709,13 @@
 
 </section>
 <section id="zet-debug-event-info-page-fault-t">
-<span id="id23"></span><h3>zet_debug_event_info_page_fault_t<a class="headerlink" href="#zet-debug-event-info-page-fault-t" title="Link to this heading">#</a></h3>
+<span id="id24"></span><h3>zet_debug_event_info_page_fault_t<a class="headerlink" href="#zet-debug-event-info-page-fault-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.1</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-info-t"><span class="std std-ref">zet_debug_event_info_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv433zet_debug_event_info_page_fault_t">
 <span id="_CPPv333zet_debug_event_info_page_fault_t"></span><span id="_CPPv233zet_debug_event_info_page_fault_t"></span><span id="zet_debug_event_info_page_fault_t"></span><span class="target" id="structzet__debug__event__info__page__fault__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_info_page_fault_t</span></span></span><a class="headerlink" href="#_CPPv433zet_debug_event_info_page_fault_t" title="Link to this definition">#</a><br /></dt>
@@ -1639,8 +1745,13 @@
 
 </section>
 <section id="zet-debug-event-info-t">
-<span id="id24"></span><h3>zet_debug_event_info_t<a class="headerlink" href="#zet-debug-event-info-t" title="Link to this heading">#</a></h3>
+<span id="id25"></span><h3>zet_debug_event_info_t<a class="headerlink" href="#zet-debug-event-info-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-debug-event-t"><span class="std std-ref">zet_debug_event_t</span></a></div>
+</div>
+</div>
 <dl class="cpp union">
 <dt class="sig sig-object cpp" id="_CPPv422zet_debug_event_info_t">
 <span id="_CPPv322zet_debug_event_info_t"></span><span id="_CPPv222zet_debug_event_info_t"></span><span class="target" id="unionzet__debug__event__info__t"></span><span class="k"><span class="pre">union</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_info_t</span></span></span><a class="headerlink" href="#_CPPv422zet_debug_event_info_t" title="Link to this definition">#</a><br /></dt>
@@ -1678,8 +1789,13 @@
 
 </section>
 <section id="zet-debug-event-t">
-<span id="id25"></span><h3>zet_debug_event_t<a class="headerlink" href="#zet-debug-event-t" title="Link to this heading">#</a></h3>
+<span id="id26"></span><h3>zet_debug_event_t<a class="headerlink" href="#zet-debug-event-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetdebugreadevent"><span class="std std-ref">zetDebugReadEvent</span></a>, <a class="reference internal" href="#zetdebugacknowledgeevent"><span class="std std-ref">zetDebugAcknowledgeEvent</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv417zet_debug_event_t">
 <span id="_CPPv317zet_debug_event_t"></span><span id="_CPPv217zet_debug_event_t"></span><span id="zet_debug_event_t"></span><span class="target" id="structzet__debug__event__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_event_t</span></span></span><a class="headerlink" href="#_CPPv417zet_debug_event_t" title="Link to this definition">#</a><br /></dt>
@@ -1694,8 +1810,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N17zet_debug_event_t5flagsE">
-<span id="_CPPv3N17zet_debug_event_t5flagsE"></span><span id="_CPPv2N17zet_debug_event_t5flagsE"></span><span id="zet_debug_event_t::flags__zet_debug_event_flags_t"></span><span class="target" id="structzet__debug__event__t_1a9df1710b5b00870642455d9a46eb9796"></span><span class="n"><span class="pre">zet_debug_event_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N17zet_debug_event_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] returns 0 (none) or a combination of <a class="reference internal" href="#zet-debug-event-flags-t"><span class="std std-ref">zet_debug_event_flag_t</span></a></p>
+<span id="_CPPv3N17zet_debug_event_t5flagsE"></span><span id="_CPPv2N17zet_debug_event_t5flagsE"></span><span id="zet_debug_event_t::flags__zet_debug_event_flags_t"></span><span class="target" id="structzet__debug__event__t_1a9df1710b5b00870642455d9a46eb9796"></span><a class="reference internal" href="#zet-debug-event-flags-t" title="zet_debug_event_flags_t"><span class="n"><span class="pre">zet_debug_event_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N17zet_debug_event_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] returns 0 (none) or a combination of <a class="reference internal" href="#zet__api_8h_1ae4e81d56594479b79b17a9a54d4cfcd1"><span class="std std-ref">zet_debug_event_flag_t</span></a></p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -1709,8 +1825,13 @@
 
 </section>
 <section id="zet-debug-memory-space-desc-t">
-<span id="id26"></span><h3>zet_debug_memory_space_desc_t<a class="headerlink" href="#zet-debug-memory-space-desc-t" title="Link to this heading">#</a></h3>
+<span id="id27"></span><h3>zet_debug_memory_space_desc_t<a class="headerlink" href="#zet-debug-memory-space-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetdebugreadmemory"><span class="std std-ref">zetDebugReadMemory</span></a>, <a class="reference internal" href="#zetdebugwritememory"><span class="std std-ref">zetDebugWriteMemory</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv429zet_debug_memory_space_desc_t">
 <span id="_CPPv329zet_debug_memory_space_desc_t"></span><span id="_CPPv229zet_debug_memory_space_desc_t"></span><span id="zet_debug_memory_space_desc_t"></span><span class="target" id="structzet__debug__memory__space__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_memory_space_desc_t</span></span></span><a class="headerlink" href="#_CPPv429zet_debug_memory_space_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -1746,8 +1867,13 @@
 
 </section>
 <section id="zet-debug-regset-properties-t">
-<span id="id27"></span><h3>zet_debug_regset_properties_t<a class="headerlink" href="#zet-debug-regset-properties-t" title="Link to this heading">#</a></h3>
+<span id="id28"></span><h3>zet_debug_regset_properties_t<a class="headerlink" href="#zet-debug-regset-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetdebuggetregistersetproperties"><span class="std std-ref">zetDebugGetRegisterSetProperties</span></a>, <a class="reference internal" href="#zetdebuggetthreadregistersetproperties"><span class="std std-ref">zetDebugGetThreadRegisterSetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv429zet_debug_regset_properties_t">
 <span id="_CPPv329zet_debug_regset_properties_t"></span><span id="_CPPv229zet_debug_regset_properties_t"></span><span id="zet_debug_regset_properties_t"></span><span class="target" id="structzet__debug__regset__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_debug_regset_properties_t</span></span></span><a class="headerlink" href="#_CPPv429zet_debug_regset_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1780,7 +1906,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N29zet_debug_regset_properties_t12generalFlagsE">
-<span id="_CPPv3N29zet_debug_regset_properties_t12generalFlagsE"></span><span id="_CPPv2N29zet_debug_regset_properties_t12generalFlagsE"></span><span id="zet_debug_regset_properties_t::generalFlags__zet_debug_regset_flags_t"></span><span class="target" id="structzet__debug__regset__properties__t_1a044c601badaeba9d4ff5e60b13e9ec40"></span><span class="n"><span class="pre">zet_debug_regset_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">generalFlags</span></span></span><a class="headerlink" href="#_CPPv4N29zet_debug_regset_properties_t12generalFlagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N29zet_debug_regset_properties_t12generalFlagsE"></span><span id="_CPPv2N29zet_debug_regset_properties_t12generalFlagsE"></span><span id="zet_debug_regset_properties_t::generalFlags__zet_debug_regset_flags_t"></span><span class="target" id="structzet__debug__regset__properties__t_1a044c601badaeba9d4ff5e60b13e9ec40"></span><a class="reference internal" href="#zet-debug-regset-flags-t" title="zet_debug_regset_flags_t"><span class="n"><span class="pre">zet_debug_regset_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">generalFlags</span></span></span><a class="headerlink" href="#_CPPv4N29zet_debug_regset_properties_t12generalFlagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] general register set flags </p>
 </dd></dl>
 
@@ -1827,20 +1953,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="kernel.html"
+       href="metric_query.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Kernel</p>
+        <p class="prev-next-title">Metric Query</p>
       </div>
     </a>
     <a class="right-next"
-       href="metric_group.html"
+       href="data_types.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Metric Group</p>
+        <p class="prev-next-title">Data Types</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1860,7 +1986,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">12</span></summary><div class="ctoc-prefix">zetDebug</div><ul class="ctoc-list"><li><a href="debug.html#zetdebugattach">&hellip;Attach</a></li><li><a href="debug.html#zetdebugdetach">&hellip;Detach</a></li><li><a href="debug.html#zetdebugreadevent">&hellip;ReadEvent</a></li><li><a href="debug.html#zetdebugacknowledgeevent">&hellip;AcknowledgeEvent</a></li><li><a href="debug.html#zetdebuginterrupt">&hellip;Interrupt</a></li><li><a href="debug.html#zetdebugresume">&hellip;Resume</a></li><li><a href="debug.html#zetdebugreadmemory">&hellip;ReadMemory</a></li><li><a href="debug.html#zetdebugwritememory">&hellip;WriteMemory</a></li><li><a href="debug.html#zetdebuggetregistersetproperties">&hellip;GetRegisterSetProperties</a></li><li><a href="debug.html#zetdebugreadregisters">&hellip;ReadRegisters</a></li><li><a href="debug.html#zetdebugwriteregisters">&hellip;WriteRegisters</a></li><li><a href="debug.html#zetdebuggetthreadregistersetproperties">&hellip;GetThreadRegisterSetProperties</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">6</span></summary><ul class="ctoc-list"><li><a href="debug.html#zet-debug-event-flags-t">zet_debug_event_flags_t</a></li><li><a href="debug.html#zet-debug-event-type-t">zet_debug_event_type_t</a></li><li><a href="debug.html#zet-debug-detach-reason-t">zet_debug_detach_reason_t</a></li><li><a href="debug.html#zet-debug-page-fault-reason-t">zet_debug_page_fault_reason_t</a></li><li><a href="debug.html#zet-debug-memory-space-type-t">zet_debug_memory_space_type_t</a></li><li><a href="debug.html#zet-debug-regset-flags-t">zet_debug_regset_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">9</span></summary><ul class="ctoc-list"><li><a href="debug.html#zet-debug-config-t">zet_debug_config_t</a></li><li><a href="debug.html#zet-debug-event-info-detached-t">zet_debug_event_info_detached_t</a></li><li><a href="debug.html#zet-debug-event-info-module-t">zet_debug_event_info_module_t</a></li><li><a href="debug.html#zet-debug-event-info-thread-stopped-t">zet_debug_event_info_thread_stopped_t</a></li><li><a href="debug.html#zet-debug-event-info-page-fault-t">zet_debug_event_info_page_fault_t</a></li><li><a href="debug.html#zet-debug-event-info-t">zet_debug_event_info_t</a></li><li><a href="debug.html#zet-debug-event-t">zet_debug_event_t</a></li><li><a href="debug.html#zet-debug-memory-space-desc-t">zet_debug_memory_space_desc_t</a></li><li><a href="debug.html#zet-debug-regset-properties-t">zet_debug_regset_properties_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="debug.html#zet-debug-session-handle-t">zet_debug_session_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">12</span></summary><div class="ctoc-prefix">zetDebug</div><ul class="ctoc-list"><li><a href="debug.html#zetdebugattach">&hellip;Attach</a></li><li><a href="debug.html#zetdebugdetach">&hellip;Detach</a></li><li><a href="debug.html#zetdebugreadevent">&hellip;ReadEvent</a></li><li><a href="debug.html#zetdebugacknowledgeevent">&hellip;AcknowledgeEvent</a></li><li><a href="debug.html#zetdebuginterrupt">&hellip;Interrupt</a></li><li><a href="debug.html#zetdebugresume">&hellip;Resume</a></li><li><a href="debug.html#zetdebugreadmemory">&hellip;ReadMemory</a></li><li><a href="debug.html#zetdebugwritememory">&hellip;WriteMemory</a></li><li><a href="debug.html#zetdebuggetregistersetproperties">&hellip;GetRegisterSetProperties</a></li><li><a href="debug.html#zetdebugreadregisters">&hellip;ReadRegisters</a></li><li><a href="debug.html#zetdebugwriteregisters">&hellip;WriteRegisters</a></li><li><a href="debug.html#zetdebuggetthreadregistersetproperties">&hellip;GetThreadRegisterSetProperties</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">6</span></summary><ul class="ctoc-list"><li><a href="debug.html#zet-debug-event-flags-t">zet_debug_event_flags_t</a></li><li><a href="debug.html#zet-debug-event-type-t">zet_debug_event_type_t</a></li><li><a href="debug.html#zet-debug-detach-reason-t">zet_debug_detach_reason_t</a></li><li><a href="debug.html#zet-debug-page-fault-reason-t">zet_debug_page_fault_reason_t</a></li><li><a href="debug.html#zet-debug-memory-space-type-t">zet_debug_memory_space_type_t</a></li><li><a href="debug.html#zet-debug-regset-flags-t">zet_debug_regset_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">9</span></summary><ul class="ctoc-list"><li><a href="debug.html#zet-debug-config-t">zet_debug_config_t</a></li><li><a href="debug.html#zet-debug-event-info-detached-t">zet_debug_event_info_detached_t</a></li><li><a href="debug.html#zet-debug-event-info-module-t">zet_debug_event_info_module_t</a></li><li><a href="debug.html#zet-debug-event-info-thread-stopped-t">zet_debug_event_info_thread_stopped_t</a></li><li><a href="debug.html#zet-debug-event-info-page-fault-t">zet_debug_event_info_page_fault_t</a></li><li><a href="debug.html#zet-debug-event-info-t">zet_debug_event_info_t</a></li><li><a href="debug.html#zet-debug-event-t">zet_debug_event_t</a></li><li><a href="debug.html#zet-debug-memory-space-desc-t">zet_debug_memory_space_desc_t</a></li><li><a href="debug.html#zet-debug-regset-properties-t">zet_debug_regset_properties_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

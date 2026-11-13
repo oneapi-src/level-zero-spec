@@ -1,7 +1,32 @@
 ============================================================
 Metric
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Metric Handles
+==============
+
+
+.. _zet-metric-handle-t:
+
+zet_metric_handle_t
+-------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zetMetricGet`, :ref:`zetMetricCreateFromProgrammableExp2`, :ref:`zetMetricCreateFromProgrammableExp`, :ref:`zetMetricDecoderGetDecodableMetricsExp`
+   | **Used by:** :ref:`zetMetricGetProperties`, :ref:`zetDeviceCreateMetricGroupsFromMetricsExp`, :ref:`zetMetricGroupAddMetricExp`, :ref:`zetMetricGroupRemoveMetricExp`, :ref:`zetMetricDestroyExp`, :ref:`zetMetricTracerDecodeExp`
+   | **See also:** `Metrics (Programming Guide) <../../PROG.html#metrics>`__
+
+.. cpp:type:: zet_metric_handle_t
+
+    Handle of metric's object.
+
 
 
 Metric Functions
@@ -48,8 +73,13 @@ zet_metric_type_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-metric-properties-t`
+
 .. doxygenenum:: zet_metric_type_t
     :project: LevelZero
+
 
  
 Metric Structures
@@ -64,6 +94,11 @@ zet_metric_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zetMetricGetProperties`
+   | **pNext may point to:** :ref:`zet-export-dma-buf-exp-properties-t`
 
 .. doxygenstruct:: zet_metric_properties_t
     :project: LevelZero

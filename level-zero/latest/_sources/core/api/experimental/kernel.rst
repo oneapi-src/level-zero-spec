@@ -1,7 +1,9 @@
 ============================================================
 Kernel - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Kernel - Experimental Functions
@@ -74,8 +76,16 @@ ze_scheduling_hint_exp_flags_t
 
 *Added in version 1.2*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-scheduling-hint-exp-properties-t`, :ref:`ze-scheduling-hint-exp-desc-t`
+
+.. doxygentypedef:: ze_scheduling_hint_exp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_scheduling_hint_exp_flag_t
     :project: LevelZero
+
 
  
 Kernel - Experimental Structures
@@ -91,6 +101,10 @@ ze_scheduling_hint_exp_desc_t
 
 *Added in version 1.2*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeKernelSchedulingHintExp`
+
 .. doxygenstruct:: ze_scheduling_hint_exp_desc_t
     :project: LevelZero
     :members:
@@ -105,6 +119,10 @@ ze_kernel_allocation_exp_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.14*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeKernelGetAllocationPropertiesExp`
 
 .. doxygenstruct:: ze_kernel_allocation_exp_properties_t
     :project: LevelZero

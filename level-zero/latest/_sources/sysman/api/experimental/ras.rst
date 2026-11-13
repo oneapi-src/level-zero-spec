@@ -1,7 +1,9 @@
 ============================================================
 Ras - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Ras - Experimental Functions
@@ -100,8 +102,14 @@ zes_ras_error_category_exp_t
 
 *Added in version 1.7*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesRasClearStateExp`, :ref:`zesRasGetSupportedCategoriesExp`, :ref:`zesRasGetStateExp2`
+   | **Member of:** :ref:`zes-ras-state-exp-t`, :ref:`zes-ras-config-exp-t`
+
 .. doxygenenum:: zes_ras_error_category_exp_t
     :project: LevelZero
+
 
  
 Ras - Experimental Structures
@@ -116,6 +124,10 @@ zes_ras_state_exp_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesRasGetStateExp`
 
 .. doxygenstruct:: zes_ras_state_exp_t
     :project: LevelZero
@@ -132,6 +144,10 @@ zes_ras_state_exp2_t
 
 *Added in version 1.16*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesRasGetStateExp2`
+
 .. doxygenstruct:: zes_ras_state_exp2_t
     :project: LevelZero
     :members:
@@ -146,6 +162,10 @@ zes_ras_config_exp_t
 .. rst-class:: api-version
 
 *Added in version 1.16*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesRasGetConfigExp`, :ref:`zesRasSetConfigExp`
 
 .. doxygenstruct:: zes_ras_config_exp_t
     :project: LevelZero

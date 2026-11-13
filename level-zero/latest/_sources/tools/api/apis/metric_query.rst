@@ -1,7 +1,32 @@
 ============================================================
 Metric Query
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Metric Query Handles
+====================
+
+
+.. _zet-metric-query-handle-t:
+
+zet_metric_query_handle_t
+-------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zetMetricQueryCreate`
+   | **Used by:** :ref:`zetMetricQueryDestroy`, :ref:`zetMetricQueryReset`, :ref:`zetCommandListAppendMetricQueryBegin`, :ref:`zetCommandListAppendMetricQueryEnd`, :ref:`zetMetricQueryGetData`
+   | **See also:** :ref:`Metric Query (Programming Guide) <Event-based>`
+
+.. cpp:type:: zet_metric_query_handle_t
+
+    Handle of metric query's object.
+
 
 
 Metric Query Functions
@@ -58,6 +83,7 @@ zetMetricQueryGetData
 
 .. doxygenfunction:: zetMetricQueryGetData
     :project: LevelZero
+
 
 
 

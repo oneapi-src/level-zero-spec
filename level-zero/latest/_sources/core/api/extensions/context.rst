@@ -1,7 +1,9 @@
 ============================================================
 Context - Extensions
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 
@@ -19,6 +21,13 @@ ze_device_raytracing_ext_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-raytracing-ext-properties-t`
+
+.. doxygentypedef:: ze_device_raytracing_ext_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_raytracing_ext_flag_t
     :project: LevelZero
 
@@ -31,6 +40,13 @@ ze_raytracing_mem_alloc_ext_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-raytracing-mem-alloc-ext-desc-t`
+
+.. doxygentypedef:: ze_raytracing_mem_alloc_ext_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_raytracing_mem_alloc_ext_flag_t
     :project: LevelZero
@@ -48,6 +64,7 @@ ze_power_saving_hint_ext_type_t
 .. doxygenenum:: ze_power_saving_hint_ext_type_t
     :project: LevelZero
 
+
  
 Context - Extension Structures
 ==============================
@@ -61,6 +78,10 @@ ze_device_raytracing_ext_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-module-properties-t`
 
 .. doxygenstruct:: ze_device_raytracing_ext_properties_t
     :project: LevelZero
@@ -76,6 +97,10 @@ ze_raytracing_mem_alloc_ext_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-mem-alloc-desc-t`
 
 .. doxygenstruct:: ze_raytracing_mem_alloc_ext_desc_t
     :project: LevelZero

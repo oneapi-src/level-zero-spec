@@ -1,7 +1,9 @@
 ============================================================
 Firmware - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Firmware - Experimental Functions
@@ -32,6 +34,7 @@ zesFirmwareSetSecurityVersionExp
 
 .. doxygenfunction:: zesFirmwareSetSecurityVersionExp
     :project: LevelZero
+
 
 
 

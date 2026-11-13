@@ -412,7 +412,7 @@ The following pseudo-code demonstrates a basic sequence for creating a physical 
 .. parsed-literal::
 
         // Create 1MB physical memory object
-        ze_physical_mem_handle_t hPhysicalAlloc;
+        :ref:`ze-physical-mem-handle-t` hPhysicalAlloc;
         size_t physicalSize = align(allocationSize, pageSize);
         :ref:`ze-physical-mem-desc-t` pmemDesc = {
             :ref:`ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC <ze-structure-type-t>`\,
@@ -533,7 +533,7 @@ The following pseudo-code demonstrates export without a local mapping on the exp
         physicalSize
     };
 
-    ze_physical_mem_handle_t hPhysicalMemory;
+    :ref:`ze-physical-mem-handle-t` hPhysicalMemory;
     :ref:`zePhysicalMemCreate`\(hContext, hDevice, &physMemDesc, &hPhysicalMemory);
 
     // Query properties to retrieve the exportable file descriptor
@@ -574,7 +574,7 @@ The following pseudo-code demonstrates export without a local mapping on the exp
         physicalSize
     };
 
-    ze_physical_mem_handle_t hPhysicalMemoryImport;
+    :ref:`ze-physical-mem-handle-t` hPhysicalMemoryImport;
     :ref:`zePhysicalMemCreate`\(hContext, hDevice, &importMemDesc, &hPhysicalMemoryImport);
 
     // Map the imported physical memory into this process's virtual address space
@@ -619,7 +619,7 @@ exporting side:
         physicalSize
     };
 
-    ze_physical_mem_handle_t hPhysicalMemory;
+    :ref:`ze-physical-mem-handle-t` hPhysicalMemory;
     :ref:`zePhysicalMemCreate`\(hContext, hDevice, &physMemDesc, &hPhysicalMemory);
 
     // Query properties to retrieve the exportable file descriptor
@@ -666,7 +666,7 @@ exporting side:
         physicalSize
     };
 
-    ze_physical_mem_handle_t hPhysicalMemoryImport;
+    :ref:`ze-physical-mem-handle-t` hPhysicalMemoryImport;
     :ref:`zePhysicalMemCreate`\(hContext, hDevice, &importMemDesc, &hPhysicalMemoryImport);
 
     // Map the imported physical memory into this process's virtual address space
@@ -754,7 +754,7 @@ The following example makes a 1GB reserved allocation and then makes both 128KB 
             0, // flags
             subAllocAlignedSize // size
         };
-        ze_physical_mem_handle_t hPhysicalAlloc;
+        :ref:`ze-physical-mem-handle-t` hPhysicalAlloc;
         :ref:`zePhysicalMemCreate`\(hContext, hDevice, &pmemDesc, &hPhysicalAlloc);
 
         // Find suitable 128KB sub-allocation that matches page alignments.
@@ -799,7 +799,7 @@ its contents will be implicitly decoded to be implementation-independent.
            format,
            128, 128, 0, 0, 0
        };
-       ze_image_handle_t hImage;
+       :ref:`ze-image-handle-t` hImage;
        :ref:`zeImageCreate`\(hContext, hDevice, &imageDesc, &hImage);
 
        // upload contents from host pointer
@@ -1068,7 +1068,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
         :ref:`ZE_COMMAND_QUEUE_MODE_DEFAULT <ze-command-queue-mode-t>`\,
         :ref:`ZE_COMMAND_QUEUE_PRIORITY_NORMAL <ze-command-queue-priority-t>`
     };
-    ze_command_queue_handle_t hCommandQueue;
+    :ref:`ze-command-queue-handle-t` hCommandQueue;
     :ref:`zeCommandQueueCreate`\(hContext, hDevice, &commandQueueDesc, &hCommandQueue);
     ...
 
@@ -1135,7 +1135,7 @@ The following pseudo-code demonstrates a basic sequence for creation of command 
            computeQueueGroupOrdinal,
            0 // flags
        };
-       ze_command_list_handle_t hCommandList;
+       :ref:`ze-command-list-handle-t` hCommandList;
        :ref:`zeCommandListCreate`\(hContext, hDevice, &commandListDesc, &hCommandList);
        ...
 
@@ -1220,6 +1220,10 @@ A special type of command list can be used for very low-latency submission usage
 - Commands appended into an immediate command list are immediately executed on the device.
 - Commands appended into an immediate command list may execute synchronously, by blocking until the command is complete.
 - An immediate command list is not required to be closed or reset. However, usage will be honored, and expected behaviors will be followed.
+- Some implementations may associate immediate command lists created with the same ordinal and index with the same hardware queue.
+  In that case, :ref:`zeCommandListHostSynchronize` on one of these command lists may also wait for commands appended to the
+  other command lists before the last command appended to this command list, and may return :ref:`ZE_RESULT_NOT_READY <ze-result-t>`
+  while those commands are not complete.
 
 The following pseudo-code demonstrates a basic sequence for creation and usage of immediate command lists:
 
@@ -1235,7 +1239,7 @@ The following pseudo-code demonstrates a basic sequence for creation and usage o
            :ref:`ZE_COMMAND_QUEUE_MODE_DEFAULT <ze-command-queue-mode-t>`\,
            :ref:`ZE_COMMAND_QUEUE_PRIORITY_NORMAL <ze-command-queue-priority-t>`
        };
-       ze_command_list_handle_t hCommandList;
+       :ref:`ze-command-list-handle-t` hCommandList;
        :ref:`zeCommandListCreateImmediate`\(hContext, hDevice, &commandQueueDesc, &hCommandList);
 
        // Immediately submit a kernel to the device
@@ -1256,7 +1260,7 @@ The following pseudo-code demonstrates appending both regular and cooperative ke
 .. parsed-literal::
 
        // existing command list
-       ze_command_list_handle_t hCommandList;
+       :ref:`ze-command-list-handle-t` hCommandList;
 
        // When appending regular kernel, just pass null pointer to extension argument
        void \*pNext = nullptr;
@@ -1293,10 +1297,10 @@ The following pseudo-code demonstrates appending kernel with pointer, SLM and im
         __kernel void foo(__global unsigned int \*dstBuff, __local unsigned int \*localArray, unsigned int addValue);
 
         // existing command list
-        ze_command_list_handle_t hCommandList;
+        :ref:`ze-command-list-handle-t` hCommandList;
 
         // existing kernel
-        ze_command_list_handle_t hKernel;
+        :ref:`ze-command-list-handle-t` hKernel;
 
         // output buffer
         void \*dstBuff;
@@ -1404,7 +1408,7 @@ The following pseudo-code demonstrates a sequence for creation, submission and q
            nullptr,
            0 // flags
        };
-       ze_fence_handle_t hFence;
+       :ref:`ze-fence-handle-t` hFence;
        :ref:`zeFenceCreate`\(hCommandQueue, &fenceDesc, &hFence);
 
        // Execute a command list with a signal of the fence
@@ -1469,7 +1473,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
            :ref:`ZE_EVENT_POOL_FLAG_HOST_VISIBLE <ze-event-pool-flags-t>`\, // all events in pool are visible to Host
            1 // count
        };
-       ze_event_pool_handle_t hEventPool;
+       :ref:`ze-event-pool-handle-t` hEventPool;
        :ref:`zeEventPoolCreate`\(hContext, &eventPoolDesc, 0, nullptr, &hEventPool);
 
        :ref:`ze-event-desc-t` eventDesc = {
@@ -1479,7 +1483,7 @@ The following pseudo-code demonstrates a sequence for creation and submission of
            0, // no additional memory/cache coherency required on signal
            :ref:`ZE_EVENT_SCOPE_FLAG_HOST <ze-event-scope-flags-t>`  // ensure memory coherency across device and Host after event completes
        };
-       ze_event_handle_t hEvent;
+       :ref:`ze-event-handle-t` hEvent;
        :ref:`zeEventCreate`\(hEventPool, &eventDesc, &hEvent);
 
        // Append a signal of an event into the command list after the kernel executes
@@ -1532,7 +1536,7 @@ timestampValidBits and kernelTimestampValidBits members of :ref:`ze-device-prope
            :ref:`ZE_EVENT_POOL_FLAG_KERNEL_TIMESTAMP <ze-event-pool-flags-t>`\, // all events in pool are kernel timestamps
            1 // count
        };
-       ze_event_pool_handle_t hTSEventPool;
+       :ref:`ze-event-pool-handle-t` hTSEventPool;
        :ref:`zeEventPoolCreate`\(hContext, &tsEventPoolDesc, 0, nullptr, &hTSEventPool);
 
        :ref:`ze-event-desc-t` tsEventDesc = {
@@ -1542,7 +1546,7 @@ timestampValidBits and kernelTimestampValidBits members of :ref:`ze-device-prope
            0, // no additional memory/cache coherency required on signal
            0  // no additional memory/cache coherency required on wait
        };
-       ze_event_handle_t hTSEvent;
+       :ref:`ze-event-handle-t` hTSEvent;
        :ref:`zeEventCreate`\(hTSEventPool, &tsEventDesc, &hTSEvent);
 
        // allocate memory for results
@@ -1832,7 +1836,7 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
            0, // no additional memory/cache coherency required on signal
            0  // no additional memory/cache coherency required on wait
        };
-       ze_event_handle_t hEvent1;
+       :ref:`ze-event-handle-t` hEvent1;
        :ref:`zeEventCreate`\(hEventPool, &event1Desc, &hEvent1);
 
        // Ensure hKernel1 completes before signaling hEvent1
@@ -1862,7 +1866,7 @@ The following pseudo-code demonstrates a sequence for submission of a fine-grain
            :ref:`ZE_EVENT_SCOPE_FLAG_DEVICE <ze-event-scope-flags-t>`\, // ensure memory coherency across device before event signaled
            0  // no additional memory/cache coherency required on wait
        };
-       ze_event_handle_t hEvent1;
+       :ref:`ze-event-handle-t` hEvent1;
        :ref:`zeEventCreate`\(hEventPool, &event1Desc, &hEvent1);
 
        // Ensure hKernel1 memory writes are fully coherent across the device before signaling hEvent1
@@ -1945,7 +1949,7 @@ The following pseudo-code demonstrates a sequence for creating a module from an 
            nullptr,
            nullptr
        };
-       ze_module_handle_t hModule;
+       :ref:`ze-module-handle-t` hModule;
        :ref:`zeModuleCreate`\(hContext, hDevice, &moduleDesc, &hModule, nullptr);
        ...
 
@@ -2032,9 +2036,9 @@ the check to a specific option value:
 
 .. parsed-literal::
 
-       ze_bool_t bf16Supported = false;
+       :ref:`ze-bool-t` bf16Supported = false;
        :ref:`zeDeviceGetCompilerInfoSupported`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_SPIRV_EXTENSIONS <ze-device-compiler-info-t>`\, nullptr, "SPV_INTEL_bfloat16_conversion", nullptr, &bf16Supported);
-       ze_bool_t optionSupported = false;
+       :ref:`ze-bool-t` optionSupported = false;
        :ref:`zeDeviceGetCompilerInfoSupported`\(hDevice, :ref:`ZE_DEVICE_COMPILER_INFO_COMPILER_OPTIONS <ze-device-compiler-info-t>`\, nullptr, "-ze-opt-large-register-file", nullptr, &optionSupported);
 
 Module Specialization Constants
@@ -2063,7 +2067,7 @@ corresponding identifiers to be passed in to override the constants in the SPIR-
            nullptr,
            &specConstants
        };
-       ze_module_handle_t hModule;
+       :ref:`ze-module-handle-t` hModule;
        :ref:`zeModuleCreate`\(hContext, hDevice, &moduleDesc, &hModule, nullptr);
        ...
 
@@ -2073,12 +2077,12 @@ you need to change them then you'll need to compile a new module.
 Module Build Log
 ~~~~~~~~~~~~~~~~
 
-The :ref:`zeModuleCreate` function can optionally generate a build log object ze_module_build_log_handle_t.
+The :ref:`zeModuleCreate` function can optionally generate a build log object :ref:`ze-module-build-log-handle-t`\.
 
 .. parsed-literal::
 
        ...
-       ze_module_build_log_handle_t buildlog;
+       :ref:`ze-module-build-log-handle-t` buildlog;
        :ref:`ze-result-t` result = :ref:`zeModuleCreate`\(hContext, hDevice, &desc, &module, &buildlog);
 
        // Only save build logs for module creation errors.
@@ -2103,14 +2107,14 @@ Dynamically Linked Modules
 
 Modules may be interdependent, i.e., a module may contain functions and global variables that are used and defined by different modules. Such a module is said to have both import as well as export linkage requirements. Private variables are not transferable between linked modules, i.e., their visibility is limited to the module in which they are defined. Only global variables or static values passed to linked functions are visible between linked modules. All the import linkage requirements of a module must be satisfied before a kernel can be created from that module. Modules that have no imports do not need to be linked. Dynamically linking modules together is performed using :ref:`zeModuleDynamicLink`\. Modules cannot have ambiguous import dependencies, i.e., imported functions and global variables must only be defined once in any given set of modules passed to :ref:`zeModuleDynamicLink`\. Imports are linked only once. Once all the import dependencies of a module have been linked, the use of that fully import-linked module in subsequent calls to :ref:`zeModuleDynamicLink` will not cause the imports of the module to be re-linked.
 
-The :ref:`zeModuleDynamicLink` function can optionally generate a link log object ze_module_build_log_handle_t.
+The :ref:`zeModuleDynamicLink` function can optionally generate a link log object :ref:`ze-module-build-log-handle-t`\.
 
 
 
 .. parsed-literal::
 
        ...
-       ze_module_build_log_handle_t linklog;
+       :ref:`ze-module-build-log-handle-t` linklog;
        :ref:`ze-result-t` result = :ref:`zeModuleDynamicLink`\(numModules, &hModules, &hLinklog);
 
        // Check if there are linking errors
@@ -2182,7 +2186,7 @@ The following pseudo-code demonstrates a sequence for creating a kernel from a m
            0, // flags
            "image_scaling"
        };
-       ze_kernel_handle_t hKernel;
+       :ref:`ze-kernel-handle-t` hKernel;
        :ref:`ze-result-t` result = :ref:`zeKernelCreate`\(hModule, &kernelDesc, &hKernel);
 
        // Check if there are unresolved imports
@@ -2275,8 +2279,8 @@ The following pseudo-code demonstrates a sequence for setting kernel arguments a
 .. parsed-literal::
 
        // Bind arguments
-       :ref:`zeKernelSetArgumentValue`\(hKernel, 0, sizeof(ze_image_handle_t), &src_image);
-       :ref:`zeKernelSetArgumentValue`\(hKernel, 1, sizeof(ze_image_handle_t), &dest_image);
+       :ref:`zeKernelSetArgumentValue`\(hKernel, 0, sizeof(:ref:`ze-image-handle-t`\), &src_image);
+       :ref:`zeKernelSetArgumentValue`\(hKernel, 1, sizeof(:ref:`ze-image-handle-t`\), &dest_image);
        :ref:`zeKernelSetArgumentValue`\(hKernel, 2, sizeof(uint32_t), &width);
        :ref:`zeKernelSetArgumentValue`\(hKernel, 3, sizeof(uint32_t), &height);
 
@@ -2286,8 +2290,8 @@ The following pseudo-code demonstrates a sequence for setting kernel arguments a
        :ref:`zeCommandListAppendLaunchKernel`\(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
 
        // Update image pointers to copy and scale next image.
-       :ref:`zeKernelSetArgumentValue`\(hKernel, 0, sizeof(ze_image_handle_t), &src2_image);
-       :ref:`zeKernelSetArgumentValue`\(hKernel, 1, sizeof(ze_image_handle_t), &dest2_image);
+       :ref:`zeKernelSetArgumentValue`\(hKernel, 0, sizeof(:ref:`ze-image-handle-t`\), &src2_image);
+       :ref:`zeKernelSetArgumentValue`\(hKernel, 1, sizeof(:ref:`ze-image-handle-t`\), &dest2_image);
 
        // Append launch kernel
        :ref:`zeCommandListAppendLaunchKernel`\(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
@@ -2391,12 +2395,12 @@ The following pseudo-code demonstrates the creation of a sampler object and pass
            :ref:`ZE_SAMPLER_FILTER_MODE_LINEAR <ze-sampler-filter-mode-t>`\,
            false
            };
-       ze_sampler_handle_t sampler;
+       :ref:`ze-sampler-handle-t` sampler;
        :ref:`zeSamplerCreate`\(hContext, hDevice, &desc, &sampler);
        ...
 
        // The sampler can be passed as a kernel argument.
-       :ref:`zeKernelSetArgumentValue`\(hKernel, 0, sizeof(ze_sampler_handle_t), &sampler);
+       :ref:`zeKernelSetArgumentValue`\(hKernel, 0, sizeof(:ref:`ze-sampler-handle-t`\), &sampler);
 
        // Append launch kernel
        :ref:`zeCommandListAppendLaunchKernel`\(hCommandList, hKernel, &launchArgs, nullptr, 0, nullptr);
@@ -2564,7 +2568,7 @@ Affinity Mask
 
 The affinity mask allows an application or tool to restrict which devices, and sub-devices, are visible to 3rd-party libraries or applications in another process, respectively.
 The affinity mask affects the number of handles returned from :ref:`zeDeviceGet` and :ref:`zeDeviceGetSubDevices`\.
-The affinity mask is specified via an environment variable as a comma-seperated list of device and/or subdevice ordinals.
+The affinity mask is specified via an environment variable as a comma-separated list of device and/or subdevice ordinals.
 The values are specific to system configuration; e.g., the number of devices and the number of sub-devices for each device.
 The values are specific to the order in which devices are reported by the driver; i.e., the first device maps to ordinal 0, the second device to ordinal 1, and so forth.
 If the affinity mask is not set, then all devices and sub-devices are reported; as is the default behavior.
@@ -2873,12 +2877,12 @@ or sub-device using :ref:`zeDeviceGetProperties`\.
        uint32_t subdeviceCount = 0;
        :ref:`zeDeviceGetSubDevices`\(hDevice, &subdeviceCount, nullptr);
 
-       ze_device_handle_t* allSubDevices = allocate(subdeviceCount * sizeof(ze_device_handle_t));
+       :ref:`ze-device-handle-t`\* allSubDevices = allocate(subdeviceCount * sizeof(:ref:`ze-device-handle-t`\));
        :ref:`zeDeviceGetSubDevices`\(hDevice, &subdeviceCount, &allSubDevices);
 
        // Desire is to allocate and dispatch work to sub-device 2.
        assert(subdeviceCount >= 3);
-       ze_device_handle_t hSubdevice = allSubDevices[2];
+       :ref:`ze-device-handle-t` hSubdevice = allSubDevices[2];
 
        // Query sub-device properties.
        :ref:`ze-device-properties-t` subdeviceProps {};
@@ -3026,7 +3030,7 @@ Level-Zero allocations across processes:
 Memory
 ~~~~~~
 
-Physical memory handles (``ze_physical_mem_handle_t``) may be used as the source for IPC handles
+Physical memory handles (``:ref:`ze-physical-mem-handle-t`\``) may be used as the source for IPC handles
 in both :ref:`zeMemGetIpcHandle` and :ref:`zeMemGetIpcHandleWithProperties`\. There are two ways to obtain an
 IPC handle backed by physical memory:
 
@@ -3127,7 +3131,7 @@ The receiving process gets a virtual address assigned automatically when it open
            0, // flags
            physicalSize
        };
-       ze_physical_mem_handle_t hPhysicalMem;
+       :ref:`ze-physical-mem-handle-t` hPhysicalMem;
        :ref:`zePhysicalMemCreate`\(hContext, hDevice, &pmemDesc, &hPhysicalMem);
 
        // Cast the physical memory handle directly to void* — no VirtualMemReserve
@@ -3186,7 +3190,7 @@ IPC handle at a time.
            0, // flags
            physicalSize
        };
-       ze_physical_mem_handle_t hPhysicalMem;
+       :ref:`ze-physical-mem-handle-t` hPhysicalMem;
        :ref:`zePhysicalMemCreate`\(hContext, hDevice, &pmemDesc, &hPhysicalMem);
 
        // Reserve VA and map the physical memory to it in this (parent) process
@@ -3250,7 +3254,7 @@ The following code examples demonstrate how to use the event IPC APIs:
            :ref:`ZE_EVENT_POOL_FLAG_IPC <ze-event-pool-flags-t>` | :ref:`ZE_EVENT_POOL_FLAG_HOST_VISIBLE <ze-event-pool-flags-t>`\,
            10 // count
        };
-       ze_event_pool_handle_t hEventPool;
+       :ref:`ze-event-pool-handle-t` hEventPool;
        :ref:`zeEventPoolCreate`\(hContext, &eventPoolDesc, 1, &hDevice, &hEventPool);
 
        // get IPC handle and send to another process
@@ -3270,7 +3274,7 @@ The following code examples demonstrate how to use the event IPC APIs:
        :ref:`ze-ipc-event-pool-handle-t` hIpcEventPool;
 
        // open event pool
-       ze_event_pool_handle_t hEventPool;
+       :ref:`ze-event-pool-handle-t` hEventPool;
        :ref:`zeEventPoolOpenIpcHandle`\(hContext, hIpcEventPool, &hEventPool);
 
 3. Each process may now refer to the same device event allocation via its handle:
@@ -3279,7 +3283,7 @@ Receiving process creates event at location
 
 .. parsed-literal::
 
-       ze_event_handle_t hEvent;
+       :ref:`ze-event-handle-t` hEvent;
        :ref:`ze-event-desc-t` eventDesc = {
            :ref:`ZE_STRUCTURE_TYPE_EVENT_DESC <ze-structure-type-t>`\,
            nullptr,
@@ -3298,7 +3302,7 @@ Sending process creates event at same location
 
 .. parsed-literal::
 
-       ze_event_handle_t hEvent;
+       :ref:`ze-event-handle-t` hEvent;
        :ref:`ze-event-desc-t` eventDesc = {
            :ref:`ZE_STRUCTURE_TYPE_EVENT_DESC <ze-structure-type-t>`\,
            nullptr,
@@ -3394,7 +3398,7 @@ command list created on ``hDevice0``, where P2P access between the two devices i
            0, // flags
            physicalSize
        };
-       ze_physical_mem_handle_t hPhysicalMem1;
+       :ref:`ze-physical-mem-handle-t` hPhysicalMem1;
        :ref:`zePhysicalMemCreate`\(hContext, hDevice1, &pmemDesc1, &hPhysicalMem1);
 
        // Reserve a VA range and map the physical memory from hDevice1 to a VA
@@ -3457,14 +3461,14 @@ range; the first half is local, and the second half is remote (P2P):
        :ref:`ze-physical-mem-desc-t` pmemDesc0 = {
            :ref:`ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC <ze-structure-type-t>`\, nullptr, 0, segmentSize
        };
-       ze_physical_mem_handle_t hPhysMem0;
+       :ref:`ze-physical-mem-handle-t` hPhysMem0;
        :ref:`zePhysicalMemCreate`\(hContext, hDevice0, &pmemDesc0, &hPhysMem0);
 
        // Create physical memory on hDevice1 (remote segment, accessed via P2P)
        :ref:`ze-physical-mem-desc-t` pmemDesc1 = {
            :ref:`ZE_STRUCTURE_TYPE_PHYSICAL_MEM_DESC <ze-structure-type-t>`\, nullptr, 0, segmentSize
        };
-       ze_physical_mem_handle_t hPhysMem1;
+       :ref:`ze-physical-mem-handle-t` hPhysMem1;
        :ref:`zePhysicalMemCreate`\(hContext, hDevice1, &pmemDesc1, &hPhysMem1);
 
        // Reserve a contiguous VA range large enough to hold both segments

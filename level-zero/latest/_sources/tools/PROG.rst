@@ -151,9 +151,9 @@ To enumerate through the Metric tree:
     - At this point it's possible to check Metric Group name, domain or sampling type.
     - Metric Group names may not be unique.
 
-4. Obtain the metric count for each Metric Group by calling :ref:`zetMetricGroupGetProperties` with Metric Group handle (zet_metric_group_handle_t) and checking :ref:`zet-metric-group-properties-t`\.metricCount.
-5. Iterate over available Metrics using :ref:`zetMetricGet` with parent Metric Group (zet_metric_group_handle_t).
-6. Check Metric properties (e.g. name, description) calling :ref:`zetMetricGetProperties` with parent Metric (zet_metric_handle_t).
+4. Obtain the metric count for each Metric Group by calling :ref:`zetMetricGroupGetProperties` with Metric Group handle (:ref:`zet-metric-group-handle-t`\) and checking :ref:`zet-metric-group-properties-t`\.metricCount.
+5. Iterate over available Metrics using :ref:`zetMetricGet` with parent Metric Group (:ref:`zet-metric-group-handle-t`\).
+6. Check Metric properties (e.g. name, description) calling :ref:`zetMetricGetProperties` with parent Metric (:ref:`zet-metric-handle-t`\).
 
 The following pseudo-code demonstrates a basic enumeration over all
 available metric groups and their metrics. Additionally, it returns a
@@ -163,16 +163,16 @@ measurements.
 
 .. parsed-literal::
 
-       :ref:`ze-result-t` FindMetricGroup( ze_device_handle_t hDevice,
+       :ref:`ze-result-t` FindMetricGroup( :ref:`ze-device-handle-t` hDevice,
                                       char* pMetricGroupName,
                                       uint32_t desiredSamplingType,
-                                      zet_metric_group_handle_t* phMetricGroup )
+                                      :ref:`zet-metric-group-handle-t`\* phMetricGroup )
        {
            // Obtain available metric groups for the specific device
            uint32_t metricGroupCount = 0;
            :ref:`zetMetricGroupGet`\( hDevice, &metricGroupCount, nullptr );
 
-           zet_metric_group_handle_t* phMetricGroups = malloc(metricGroupCount * sizeof(zet_metric_group_handle_t));
+           :ref:`zet-metric-group-handle-t`\* phMetricGroups = malloc(metricGroupCount * sizeof(:ref:`zet-metric-group-handle-t`\));
            :ref:`zetMetricGroupGet`\( hDevice, &metricGroupCount, phMetricGroups );
 
            // Iterate over all metric groups available
@@ -249,15 +249,15 @@ The following pseudo-code demonstrates a basic sequence for time-based collectio
 
 .. parsed-literal::
 
-       :ref:`ze-result-t` TimeBasedUsageExample( ze_context_handle_t hContext,
-                                            ze_device_handle_t hDevice )
+       :ref:`ze-result-t` TimeBasedUsageExample( :ref:`ze-context-handle-t` hContext,
+                                            :ref:`ze-device-handle-t` hDevice )
        {
-           zet_metric_group_handle_t     hMetricGroup           = nullptr;
-           ze_event_handle_t            hNotificationEvent     = nullptr;
-           ze_event_pool_handle_t       hEventPool             = nullptr;
+           :ref:`zet-metric-group-handle-t`     hMetricGroup           = nullptr;
+           :ref:`ze-event-handle-t`            hNotificationEvent     = nullptr;
+           :ref:`ze-event-pool-handle-t`       hEventPool             = nullptr;
            :ref:`ze-event-pool-desc-t`         eventPoolDesc          = {:ref:`ZE_STRUCTURE_TYPE_EVENT_POOL_DESC <ze-structure-type-t>`\, nullptr, 0, 1};
            :ref:`ze-event-desc-t`              eventDesc              = {:ref:`ZE_STRUCTURE_TYPE_EVENT_DESC <ze-structure-type-t>`\};
-           zet_metric_streamer_handle_t  hMetricStreamer        = nullptr;
+           :ref:`zet-metric-streamer-handle-t`  hMetricStreamer        = nullptr;
            :ref:`zet-metric-streamer-desc-t`    metricStreamerDesc     = {:ref:`ZET_STRUCTURE_TYPE_METRIC_STREAMER_DESC <zet-structure-type-t>`\}; 
 
            // Find a "ComputeBasic" metric group suitable for Time Based collection
@@ -345,16 +345,16 @@ The following pseudo-code demonstrates a basic sequence for query-based collecti
 
 .. parsed-literal::
 
-       :ref:`ze-result-t` MetricQueryUsageExample( ze_context_handle_t hContext,
-                                              ze_device_handle_t hDevice )
+       :ref:`ze-result-t` MetricQueryUsageExample( :ref:`ze-context-handle-t` hContext,
+                                              :ref:`ze-device-handle-t` hDevice )
        {
-           zet_metric_group_handle_t      hMetricGroup          = nullptr;
-           ze_event_handle_t             hCompletionEvent      = nullptr;
+           :ref:`zet-metric-group-handle-t`      hMetricGroup          = nullptr;
+           :ref:`ze-event-handle-t`             hCompletionEvent      = nullptr;
            :ref:`ze-event-pool-desc-t`          eventPoolDesc         = {:ref:`ZE_STRUCTURE_TYPE_EVENT_POOL_DESC <ze-structure-type-t>`\, nullptr};
            :ref:`ze-event-desc-t`               eventDesc             = {:ref:`ZE_STRUCTURE_TYPE_EVENT_DESC <ze-structure-type-t>`\, nullptr};
-           ze_event_pool_handle_t        hEventPool            = nullptr;
-           zet_metric_query_pool_handle_t hMetricQueryPool      = nullptr;
-           zet_metric_query_handle_t      hMetricQuery          = nullptr;
+           :ref:`ze-event-pool-handle-t`        hEventPool            = nullptr;
+           :ref:`zet-metric-query-pool-handle-t` hMetricQueryPool      = nullptr;
+           :ref:`zet-metric-query-handle-t`      hMetricQuery          = nullptr;
            :ref:`zet-metric-query-pool-desc-t`   queryPoolDesc         = {:ref:`ZET_STRUCTURE_TYPE_METRIC_QUERY_POOL_DESC <zet-structure-type-t>`\, nullptr};
        
            // Find a "ComputeBasic" metric group suitable for Event Based collection
@@ -419,7 +419,7 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
 
 .. parsed-literal::
 
-       :ref:`ze-result-t` CalculateMetricsExample( zet_metric_group_handle_t hMetricGroup,
+       :ref:`ze-result-t` CalculateMetricsExample( :ref:`zet-metric-group-handle-t` hMetricGroup,
                                               size_t rawSize, uint8_t* rawData )
        {
            // Calculate metric data
@@ -433,7 +433,7 @@ The following pseudo-code demonstrates a basic sequence for metric calculation a
            uint32_t metricCount = 0;
            :ref:`zetMetricGet`\( hMetricGroup, &metricCount, nullptr );
 
-           zet_metric_handle_t* phMetrics = malloc(metricCount * sizeof(zet_metric_handle_t));
+           :ref:`zet-metric-handle-t`\* phMetrics = malloc(metricCount * sizeof(:ref:`zet-metric-handle-t`\));
            :ref:`zetMetricGet`\( hMetricGroup, &metricCount, phMetrics );
 
            // Print metric results
@@ -614,18 +614,18 @@ The library will check the following properties:
   * device debug must be enabled on this system.
 
 
-If permission is granted, a zet_debug_session_handle_t is provided.
+If permission is granted, a :ref:`zet-debug-session-handle-t` is provided.
 The debug session handle can be used in other program debug APIs until the tool detaches again.
 
 To end a debug session, a tool calls :ref:`zetDebugDetach` passing the
-zet_debug_session_handle_t that had been provided on the corresponding
+:ref:`zet-debug-session-handle-t` that had been provided on the corresponding
 :ref:`zetDebugAttach` call.
 
 The following sample code demonstrates attaching and detaching:
 
 .. parsed-literal::
 
-    zet_debug_session_handle_t hDebug;
+    :ref:`zet-debug-session-handle-t` hDebug;
 
     :ref:`zet-debug-config-t` config;
     memset(&config, 0, sizeof(config));

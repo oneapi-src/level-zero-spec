@@ -1,7 +1,32 @@
 ============================================================
 Fabric Port
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Fabric Port Handles
+===================
+
+
+.. _zes-fabric-port-handle-t:
+
+zes_fabric_port_handle_t
+------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumFabricPorts`
+   | **Used by:** :ref:`zesFabricPortGetProperties`, :ref:`zesFabricPortGetLinkType`, :ref:`zesFabricPortGetConfig`, :ref:`zesFabricPortSetConfig`, :ref:`zesFabricPortGetState`, :ref:`zesFabricPortGetThroughput`, :ref:`zesFabricPortGetFabricErrorCounters`, :ref:`zesFabricPortGetMultiPortThroughput`
+   | **See also:** :ref:`Operations on Fabric ports (Programming Guide) <Fabric-Port>`
+
+.. cpp:type:: zes_fabric_port_handle_t
+
+    Handle for a Sysman fabric port.
+
 
 
 Fabric Port Functions
@@ -126,6 +151,10 @@ zes_fabric_port_status_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-fabric-port-state-t`
+
 .. doxygenenum:: zes_fabric_port_status_t
     :project: LevelZero
 
@@ -138,6 +167,13 @@ zes_fabric_port_qual_issue_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-fabric-port-state-t`
+
+.. doxygentypedef:: zes_fabric_port_qual_issue_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: zes_fabric_port_qual_issue_flag_t
     :project: LevelZero
@@ -152,8 +188,16 @@ zes_fabric_port_failure_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-fabric-port-state-t`
+
+.. doxygentypedef:: zes_fabric_port_failure_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_fabric_port_failure_flag_t
     :project: LevelZero
+
 
  
 Fabric Port Structures
@@ -168,6 +212,10 @@ zes_fabric_port_id_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-fabric-port-properties-t`, :ref:`zes-fabric-port-state-t`
 
 .. doxygenstruct:: zes_fabric_port_id_t
     :project: LevelZero
@@ -184,6 +232,10 @@ zes_fabric_port_speed_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-fabric-port-properties-t`, :ref:`zes-fabric-port-state-t`
+
 .. doxygenstruct:: zes_fabric_port_speed_t
     :project: LevelZero
     :members:
@@ -198,6 +250,10 @@ zes_fabric_port_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFabricPortGetProperties`
 
 .. doxygenstruct:: zes_fabric_port_properties_t
     :project: LevelZero
@@ -214,6 +270,10 @@ zes_fabric_link_type_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFabricPortGetLinkType`
+
 .. doxygenstruct:: zes_fabric_link_type_t
     :project: LevelZero
     :members:
@@ -228,6 +288,10 @@ zes_fabric_port_config_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFabricPortGetConfig`, :ref:`zesFabricPortSetConfig`
 
 .. doxygenstruct:: zes_fabric_port_config_t
     :project: LevelZero
@@ -244,6 +308,10 @@ zes_fabric_port_state_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFabricPortGetState`
+
 .. doxygenstruct:: zes_fabric_port_state_t
     :project: LevelZero
     :members:
@@ -259,6 +327,10 @@ zes_fabric_port_throughput_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFabricPortGetThroughput`, :ref:`zesFabricPortGetMultiPortThroughput`
+
 .. doxygenstruct:: zes_fabric_port_throughput_t
     :project: LevelZero
     :members:
@@ -273,6 +345,10 @@ zes_fabric_port_error_counters_t
 .. rst-class:: api-version
 
 *Added in version 1.7*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFabricPortGetFabricErrorCounters`
 
 .. doxygenstruct:: zes_fabric_port_error_counters_t
     :project: LevelZero

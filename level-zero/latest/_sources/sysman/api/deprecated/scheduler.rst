@@ -1,7 +1,9 @@
 ============================================================
 Scheduler - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Scheduler - Deprecated Functions
@@ -23,6 +25,7 @@ zesSchedulerSetComputeUnitDebugMode
 
 .. doxygenfunction:: zesSchedulerSetComputeUnitDebugMode
     :project: LevelZero
+
 
 
 

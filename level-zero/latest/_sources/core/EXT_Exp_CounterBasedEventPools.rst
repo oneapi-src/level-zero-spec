@@ -61,7 +61,7 @@ as pNext member of :ref:`ze-event-pool-desc-t`\.
 .. parsed-literal::
 
     uint32_t numEvents = 2;
-    ze_event_pool_handle_t eventPool = {};
+    :ref:`ze-event-pool-handle-t` eventPool = {};
     :ref:`ze-event-pool-desc-t` eventPoolDesc = {:ref:`ZE_STRUCTURE_TYPE_EVENT_POOL_DESC <ze-structure-type-t>`\};
     eventPoolDesc.count = numEvents;
 

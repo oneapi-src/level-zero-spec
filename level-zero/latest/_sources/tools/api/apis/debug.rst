@@ -1,7 +1,32 @@
 ============================================================
 Debug
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Debug Handles
+=============
+
+
+.. _zet-debug-session-handle-t:
+
+zet_debug_session_handle_t
+--------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zetDebugAttach`
+   | **Used by:** :ref:`zetDebugDetach`, :ref:`zetDebugReadEvent`, :ref:`zetDebugAcknowledgeEvent`, :ref:`zetDebugInterrupt`, :ref:`zetDebugResume`, :ref:`zetDebugReadMemory`, :ref:`zetDebugWriteMemory`, :ref:`zetDebugGetThreadRegisterSetProperties`, :ref:`zetDebugReadRegisters`, :ref:`zetDebugWriteRegisters`
+   | **See also:** `Program Debug (Programming Guide) <../../PROG.html#program-debug>`__
+
+.. cpp:type:: zet_debug_session_handle_t
+
+    Debug session handle.
+
 
 
 Debug Functions
@@ -178,6 +203,13 @@ zet_debug_event_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-t`
+
+.. doxygentypedef:: zet_debug_event_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zet_debug_event_flag_t
     :project: LevelZero
 
@@ -190,6 +222,10 @@ zet_debug_event_type_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-t`
 
 .. doxygenenum:: zet_debug_event_type_t
     :project: LevelZero
@@ -204,6 +240,10 @@ zet_debug_detach_reason_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-info-detached-t`
+
 .. doxygenenum:: zet_debug_detach_reason_t
     :project: LevelZero
 
@@ -216,6 +256,10 @@ zet_debug_page_fault_reason_t
 .. rst-class:: api-version
 
 *Added in version 1.1*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-info-page-fault-t`
 
 .. doxygenenum:: zet_debug_page_fault_reason_t
     :project: LevelZero
@@ -230,6 +274,10 @@ zet_debug_memory_space_type_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-memory-space-desc-t`
+
 .. doxygenenum:: zet_debug_memory_space_type_t
     :project: LevelZero
 
@@ -243,8 +291,16 @@ zet_debug_regset_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-regset-properties-t`
+
+.. doxygentypedef:: zet_debug_regset_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zet_debug_regset_flag_t
     :project: LevelZero
+
 
  
 Debug Structures
@@ -259,6 +315,10 @@ zet_debug_config_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zetDebugAttach`
 
 .. doxygenstruct:: zet_debug_config_t
     :project: LevelZero
@@ -275,6 +335,10 @@ zet_debug_event_info_detached_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-info-t`
+
 .. doxygenstruct:: zet_debug_event_info_detached_t
     :project: LevelZero
     :members:
@@ -289,6 +353,10 @@ zet_debug_event_info_module_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-info-t`
 
 .. doxygenstruct:: zet_debug_event_info_module_t
     :project: LevelZero
@@ -305,6 +373,10 @@ zet_debug_event_info_thread_stopped_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-info-t`
+
 .. doxygenstruct:: zet_debug_event_info_thread_stopped_t
     :project: LevelZero
     :members:
@@ -319,6 +391,10 @@ zet_debug_event_info_page_fault_t
 .. rst-class:: api-version
 
 *Added in version 1.1*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-info-t`
 
 .. doxygenstruct:: zet_debug_event_info_page_fault_t
     :project: LevelZero
@@ -335,6 +411,10 @@ zet_debug_event_info_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zet-debug-event-t`
+
 .. doxygenunion:: zet_debug_event_info_t
     :project: LevelZero
 
@@ -347,6 +427,10 @@ zet_debug_event_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zetDebugReadEvent`, :ref:`zetDebugAcknowledgeEvent`
 
 .. doxygenstruct:: zet_debug_event_t
     :project: LevelZero
@@ -363,6 +447,10 @@ zet_debug_memory_space_desc_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zetDebugReadMemory`, :ref:`zetDebugWriteMemory`
+
 .. doxygenstruct:: zet_debug_memory_space_desc_t
     :project: LevelZero
     :members:
@@ -377,6 +465,10 @@ zet_debug_regset_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zetDebugGetRegisterSetProperties`, :ref:`zetDebugGetThreadRegisterSetProperties`
 
 .. doxygenstruct:: zet_debug_regset_properties_t
     :project: LevelZero

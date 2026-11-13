@@ -68,3 +68,20 @@ Enumeration values
      - 1.7
      - :ref:`ZET_STRUCTURE_TYPE_METRIC_CALCULATE_EXP_DESC <zet-structure-type-t>`
      - 
+
+Other
+-----
+
+.. list-table::
+   :header-rows: 1
+   :widths: 28 6 28 38
+   :class: deprecated-table
+
+   * - Name
+     - Since
+     - Replacement
+     - Notes
+   * - ``zet_tracer_exp_handle_t``
+     - 1.14
+     - `L0 Loader API Tracing <https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing>`__
+     - Only used by the deprecated API Tracing extension.

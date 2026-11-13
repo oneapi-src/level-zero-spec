@@ -94,7 +94,7 @@ Programming example with Bindless images
 
     // A bindless image is valid on both host and device and can be passed into kernels
     // When passing :ref:`ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS <ze-image-bindless-exp-flags-t>` to zeImageCreate, only the backing memory is allocated for Image
-    ze_image_handle_t hImage;
+    :ref:`ze-image-handle-t` hImage;
     :ref:`zeImageCreate`\(hContext, hDevice, &imageDesc, &hImage);
 
     //Copy To new bindless image memory
@@ -106,7 +106,7 @@ Programming example with Bindless images
     :ref:`zeCommandListAppendImageCopyToMemory`\(hCommandlist, imageDataHost.data(), hImage, nullptr, nullptr, 0, nullptr);
 
     // Further image views can be created from the existing memory allocated using bindless flags
-    ze_image_handle_t hImageView;
+    :ref:`ze-image-handle-t` hImageView;
     :ref:`zeImageViewCreateExt`\(hContext, hDevice, &imageDesc, hImage, &hImageView);
 
     // New image view can be separately used by users and destroyed
@@ -172,7 +172,7 @@ Programming example with pitched memory usage
     imageDesc.pNext = &pitchedImageDesc;
 
     // A image created out of pitched memory is valid on both host and device and can be passed into kernels
-    ze_image_handle_t hImage;
+    :ref:`ze-image-handle-t` hImage;
     :ref:`zeImageCreate`\(hContext, hDevice, &imageDesc, &hImage);
 
     // Launch kernel and perform appropriate synchronizations
@@ -229,7 +229,7 @@ Programming example with Bindless sampled images
 
     // Create bindless sampled image
     // pass ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS and ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE to zeImageCreate(),
-    ze_image_handle_t hImage;
+    :ref:`ze-image-handle-t` hImage;
     :ref:`zeImageCreate`\(hContext, hDevice, &imageDesc, &hImage);
 
     // Create an image view from bindless sampled image
@@ -259,19 +259,19 @@ Programming example with Bindless sampled images
     };
     imageViewDesc.pNext = &bindlessImageDesc;
     bindlessImageDesc.pNext = &samplerDescForView;
-    ze_image_handle_t hImageView;
+    :ref:`ze-image-handle-t` hImageView;
 
     :ref:`zeImageViewCreateExt`\(hContext, hDevice, &imageViewDesc, hImage, &hImageView);
 
     // If ZE_IMAGE_BINDLESS_EXP_FLAG_SAMPLED_IMAGE is not set, unsampled image is created
-    ze_image_handle_t hUnsampledImageView;
+    :ref:`ze-image-handle-t` hUnsampledImageView;
     bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS;
     bindlessImageDesc.pNext = nullptr;
     :ref:`zeImageViewCreateExt`\(hContext, hDevice, &imageViewDesc, hImage, &hUnsampledImageView);
 
     // Create an image view from bindless unsampled image
-    ze_image_handle_t hUnsampledImage;
-    ze_image_handle_t hSampledImageView;
+    :ref:`ze-image-handle-t` hUnsampledImage;
+    :ref:`ze-image-handle-t` hSampledImageView;
     bindlessImageDesc.flags = ZE_IMAGE_BINDLESS_EXP_FLAG_BINDLESS;
     bindlessImageDesc.pNext = nullptr;
     imageDesc.pNext = &bindlessImageDesc;

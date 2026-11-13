@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Device - Extensions &#8212; Level Zero Specification v1.20.41</title>
+    <title>Device - Extensions &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Driver - Extensions" href="driver.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -502,6 +512,7 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#device-extension-enums">Device - Extension Enums</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-device-fp-atomic-ext-flags-t">ze_device_fp_atomic_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv431ze_device_fp_atomic_ext_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430ze_device_fp_atomic_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_device_fp_atomic_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_device_fp_atomic_ext_flag_t46ZE_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_LOAD_STOREE"><code class="docutils literal notranslate"><span class="pre">ZE_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_LOAD_STORE</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N30ze_device_fp_atomic_ext_flag_t39ZE_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADDE"><code class="docutils literal notranslate"><span class="pre">ZE_DEVICE_FP_ATOMIC_EXT_FLAG_GLOBAL_ADD</span></code></a></li>
@@ -563,6 +574,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-rtas-device-ext-flags-t">ze_rtas_device_ext_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426ze_rtas_device_ext_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_device_ext_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425ze_rtas_device_ext_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_rtas_device_ext_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_rtas_device_ext_flag_t32ZE_RTAS_DEVICE_EXT_FLAG_RESERVEDE"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_DEVICE_EXT_FLAG_RESERVED</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_rtas_device_ext_flag_t36ZE_RTAS_DEVICE_EXT_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_RTAS_DEVICE_EXT_FLAG_FORCE_UINT32</span></code></a></li>
@@ -783,7 +795,7 @@
                   
   <section id="device-extensions">
 <h1>Device - Extensions<a class="headerlink" href="#device-extensions" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
 <section id="device-extension-functions">
 <h2>Device - Extension Functions<a class="headerlink" href="#device-extension-functions" title="Link to this heading">#</a></h2>
 <section id="zedevicereservecacheext">
@@ -791,7 +803,7 @@
 <p class="api-version"><em>Added in version 1.2</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeDeviceReserveCacheExt18ze_device_handle_t6size_t6size_t">
-<span id="_CPPv323zeDeviceReserveCacheExt18ze_device_handle_t6size_t6size_t"></span><span id="_CPPv223zeDeviceReserveCacheExt18ze_device_handle_t6size_t6size_t"></span><span id="zeDeviceReserveCacheExt__ze_device_handle_t.s.s"></span><span class="target" id="ze__api_8h_1a8b25cf445ab34d0606244021c5dfbe47"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceReserveCacheExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cacheLevel</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cacheReservationSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeDeviceReserveCacheExt18ze_device_handle_t6size_t6size_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeDeviceReserveCacheExt18ze_device_handle_t6size_t6size_t"></span><span id="_CPPv223zeDeviceReserveCacheExt18ze_device_handle_t6size_t6size_t"></span><span id="zeDeviceReserveCacheExt__ze_device_handle_t.s.s"></span><span class="target" id="ze__api_8h_1a8b25cf445ab34d0606244021c5dfbe47"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceReserveCacheExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cacheLevel</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cacheReservationSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeDeviceReserveCacheExt18ze_device_handle_t6size_t6size_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Reserve Cache on Device. </p>
 <p><ul class="simple">
 <li><p>The application may call this function but may not be successful as some other application may have reserve prior</p></li>
@@ -844,7 +856,7 @@
 <p class="api-version"><em>Added in version 1.2</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zeDeviceSetCacheAdviceExt18ze_device_handle_tPv6size_t21ze_cache_ext_region_t">
-<span id="_CPPv325zeDeviceSetCacheAdviceExt18ze_device_handle_tPv6size_t21ze_cache_ext_region_t"></span><span id="_CPPv225zeDeviceSetCacheAdviceExt18ze_device_handle_tPv6size_t21ze_cache_ext_region_t"></span><span id="zeDeviceSetCacheAdviceExt__ze_device_handle_t.voidP.s.ze_cache_ext_region_t"></span><span class="target" id="ze__api_8h_1ad191f4314d92b9df7158dcccbf26f0d9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceSetCacheAdviceExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">regionSize</span></span>, <a class="reference internal" href="#ze-cache-ext-region-t" title="ze_cache_ext_region_t"><span class="n"><span class="pre">ze_cache_ext_region_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">cacheRegion</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeDeviceSetCacheAdviceExt18ze_device_handle_tPv6size_t21ze_cache_ext_region_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zeDeviceSetCacheAdviceExt18ze_device_handle_tPv6size_t21ze_cache_ext_region_t"></span><span id="_CPPv225zeDeviceSetCacheAdviceExt18ze_device_handle_tPv6size_t21ze_cache_ext_region_t"></span><span id="zeDeviceSetCacheAdviceExt__ze_device_handle_t.voidP.s.ze_cache_ext_region_t"></span><span class="target" id="ze__api_8h_1ad191f4314d92b9df7158dcccbf26f0d9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceSetCacheAdviceExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">regionSize</span></span>, <a class="reference internal" href="#ze-cache-ext-region-t" title="ze_cache_ext_region_t"><span class="n"><span class="pre">ze_cache_ext_region_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">cacheRegion</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zeDeviceSetCacheAdviceExt18ze_device_handle_tPv6size_t21ze_cache_ext_region_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Assign VA section to use reserved section. </p>
 <p><ul class="simple">
 <li><p>The application may call this function to assign VA to particular reservartion region</p></li>
@@ -899,7 +911,7 @@
 <p class="api-version"><em>Added in version 1.3</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv427zeDevicePciGetPropertiesExt18ze_device_handle_tP23ze_pci_ext_properties_t">
-<span id="_CPPv327zeDevicePciGetPropertiesExt18ze_device_handle_tP23ze_pci_ext_properties_t"></span><span id="_CPPv227zeDevicePciGetPropertiesExt18ze_device_handle_tP23ze_pci_ext_properties_t"></span><span id="zeDevicePciGetPropertiesExt__ze_device_handle_t.ze_pci_ext_properties_tP"></span><span class="target" id="ze__api_8h_1ac5dec60488d8f4de57d880e2d8ef7eac"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDevicePciGetPropertiesExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="#ze-pci-ext-properties-t" title="ze_pci_ext_properties_t"><span class="n"><span class="pre">ze_pci_ext_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPciProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeDevicePciGetPropertiesExt18ze_device_handle_tP23ze_pci_ext_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv327zeDevicePciGetPropertiesExt18ze_device_handle_tP23ze_pci_ext_properties_t"></span><span id="_CPPv227zeDevicePciGetPropertiesExt18ze_device_handle_tP23ze_pci_ext_properties_t"></span><span id="zeDevicePciGetPropertiesExt__ze_device_handle_t.ze_pci_ext_properties_tP"></span><span class="target" id="ze__api_8h_1ac5dec60488d8f4de57d880e2d8ef7eac"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDevicePciGetPropertiesExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="#ze-pci-ext-properties-t" title="ze_pci_ext_properties_t"><span class="n"><span class="pre">ze_pci_ext_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pPciProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427zeDevicePciGetPropertiesExt18ze_device_handle_tP23ze_pci_ext_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Get PCI properties - address, max speed. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -956,7 +968,7 @@
 <p class="api-version"><em>Added in version 1.12</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv434zeDeviceImportExternalSemaphoreExt18ze_device_handle_tPK32ze_external_semaphore_ext_desc_tP34ze_external_semaphore_ext_handle_t">
-<span id="_CPPv334zeDeviceImportExternalSemaphoreExt18ze_device_handle_tPK32ze_external_semaphore_ext_desc_tP34ze_external_semaphore_ext_handle_t"></span><span id="_CPPv234zeDeviceImportExternalSemaphoreExt18ze_device_handle_tPK32ze_external_semaphore_ext_desc_tP34ze_external_semaphore_ext_handle_t"></span><span id="zeDeviceImportExternalSemaphoreExt__ze_device_handle_t.ze_external_semaphore_ext_desc_tCP.ze_external_semaphore_ext_handle_tP"></span><span class="target" id="ze__api_8h_1a5218bf6f9be5f4ea2b1dfe4b24ae3389"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceImportExternalSemaphoreExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="external_semaphore.html#ze-external-semaphore-ext-desc-t" title="ze_external_semaphore_ext_desc_t"><span class="n"><span class="pre">ze_external_semaphore_ext_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_external_semaphore_ext_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phSemaphore</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zeDeviceImportExternalSemaphoreExt18ze_device_handle_tPK32ze_external_semaphore_ext_desc_tP34ze_external_semaphore_ext_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv334zeDeviceImportExternalSemaphoreExt18ze_device_handle_tPK32ze_external_semaphore_ext_desc_tP34ze_external_semaphore_ext_handle_t"></span><span id="_CPPv234zeDeviceImportExternalSemaphoreExt18ze_device_handle_tPK32ze_external_semaphore_ext_desc_tP34ze_external_semaphore_ext_handle_t"></span><span id="zeDeviceImportExternalSemaphoreExt__ze_device_handle_t.ze_external_semaphore_ext_desc_tCP.ze_external_semaphore_ext_handle_tP"></span><span class="target" id="ze__api_8h_1a5218bf6f9be5f4ea2b1dfe4b24ae3389"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceImportExternalSemaphoreExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="external_semaphore.html#ze-external-semaphore-ext-desc-t" title="ze_external_semaphore_ext_desc_t"><span class="n"><span class="pre">ze_external_semaphore_ext_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="external_semaphore.html#ze-external-semaphore-ext-handle-t" title="ze_external_semaphore_ext_handle_t"><span class="n"><span class="pre">ze_external_semaphore_ext_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phSemaphore</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv434zeDeviceImportExternalSemaphoreExt18ze_device_handle_tPK32ze_external_semaphore_ext_desc_tP34ze_external_semaphore_ext_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Import an external semaphore. </p>
 <p><ul class="simple">
 <li><p>Imports an external semaphore.</p></li>
@@ -1013,7 +1025,7 @@
 <p class="api-version"><em>Added in version 1.12</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv435zeDeviceReleaseExternalSemaphoreExt34ze_external_semaphore_ext_handle_t">
-<span id="_CPPv335zeDeviceReleaseExternalSemaphoreExt34ze_external_semaphore_ext_handle_t"></span><span id="_CPPv235zeDeviceReleaseExternalSemaphoreExt34ze_external_semaphore_ext_handle_t"></span><span id="zeDeviceReleaseExternalSemaphoreExt__ze_external_semaphore_ext_handle_t"></span><span class="target" id="ze__api_8h_1a7df078a714411568b562540d71e2a48b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceReleaseExternalSemaphoreExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_external_semaphore_ext_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hSemaphore</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zeDeviceReleaseExternalSemaphoreExt34ze_external_semaphore_ext_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv335zeDeviceReleaseExternalSemaphoreExt34ze_external_semaphore_ext_handle_t"></span><span id="_CPPv235zeDeviceReleaseExternalSemaphoreExt34ze_external_semaphore_ext_handle_t"></span><span id="zeDeviceReleaseExternalSemaphoreExt__ze_external_semaphore_ext_handle_t"></span><span class="target" id="ze__api_8h_1a7df078a714411568b562540d71e2a48b"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceReleaseExternalSemaphoreExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="external_semaphore.html#ze-external-semaphore-ext-handle-t" title="ze_external_semaphore_ext_handle_t"><span class="n"><span class="pre">ze_external_semaphore_ext_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hSemaphore</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zeDeviceReleaseExternalSemaphoreExt34ze_external_semaphore_ext_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Release an external semaphore. </p>
 <p><ul class="simple">
 <li><p>The application must ensure the device is not currently referencing the semaphore before it is released.</p></li>
@@ -1057,7 +1069,7 @@
 <p class="api-version"><em>Added in version 1.13</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv435zeDeviceGetVectorWidthPropertiesExt18ze_device_handle_tP8uint32_tP39ze_device_vector_width_properties_ext_t">
-<span id="_CPPv335zeDeviceGetVectorWidthPropertiesExt18ze_device_handle_tP8uint32_tP39ze_device_vector_width_properties_ext_t"></span><span id="_CPPv235zeDeviceGetVectorWidthPropertiesExt18ze_device_handle_tP8uint32_tP39ze_device_vector_width_properties_ext_t"></span><span id="zeDeviceGetVectorWidthPropertiesExt__ze_device_handle_t.uint32_tP.ze_device_vector_width_properties_ext_tP"></span><span class="target" id="ze__api_8h_1a9bc7183af8f8dffa38d57e8aa3299ff9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceGetVectorWidthPropertiesExt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#ze-device-vector-width-properties-ext-t" title="ze_device_vector_width_properties_ext_t"><span class="n"><span class="pre">ze_device_vector_width_properties_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pVectorWidthProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zeDeviceGetVectorWidthPropertiesExt18ze_device_handle_tP8uint32_tP39ze_device_vector_width_properties_ext_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv335zeDeviceGetVectorWidthPropertiesExt18ze_device_handle_tP8uint32_tP39ze_device_vector_width_properties_ext_t"></span><span id="_CPPv235zeDeviceGetVectorWidthPropertiesExt18ze_device_handle_tP8uint32_tP39ze_device_vector_width_properties_ext_t"></span><span id="zeDeviceGetVectorWidthPropertiesExt__ze_device_handle_t.uint32_tP.ze_device_vector_width_properties_ext_tP"></span><span class="target" id="ze__api_8h_1a9bc7183af8f8dffa38d57e8aa3299ff9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeDeviceGetVectorWidthPropertiesExt</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <a class="reference internal" href="#ze-device-vector-width-properties-ext-t" title="ze_device_vector_width_properties_ext_t"><span class="n"><span class="pre">ze_device_vector_width_properties_ext_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pVectorWidthProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv435zeDeviceGetVectorWidthPropertiesExt18ze_device_handle_tP8uint32_tP39ze_device_vector_width_properties_ext_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieves the vector width properties of the device. </p>
 <p><ul class="simple">
 <li><p>Properties are reported for each vector width supported by the device.</p></li>
@@ -1112,6 +1124,17 @@
 <section id="ze-device-fp-atomic-ext-flags-t">
 <span id="id7"></span><h3>ze_device_fp_atomic_ext_flags_t<a class="headerlink" href="#ze-device-fp-atomic-ext-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.1</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-float-atomic-ext-properties-t"><span class="std std-ref">ze_float_atomic_ext_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv431ze_device_fp_atomic_ext_flags_t">
+<span id="_CPPv331ze_device_fp_atomic_ext_flags_t"></span><span id="_CPPv231ze_device_fp_atomic_ext_flags_t"></span><span id="ze_device_fp_atomic_ext_flags_t"></span><span class="target" id="ze__api_8h_1af6bdc94153429c765a87d7fdacf70ac4"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></span></span><a class="headerlink" href="#_CPPv431ze_device_fp_atomic_ext_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported floating-point atomic capability flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv430ze_device_fp_atomic_ext_flag_t">
 <span id="_CPPv330ze_device_fp_atomic_ext_flag_t"></span><span id="_CPPv230ze_device_fp_atomic_ext_flag_t"></span><span class="target" id="ze__api_8h_1ae68ee680add4f27e516f6f3b2495b08b"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_fp_atomic_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv430ze_device_fp_atomic_ext_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1164,6 +1187,11 @@
 <section id="ze-cache-ext-region-t">
 <span id="id8"></span><h3>ze_cache_ext_region_t<a class="headerlink" href="#ze-cache-ext-region-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zedevicesetcacheadviceext"><span class="std std-ref">zeDeviceSetCacheAdviceExt</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv421ze_cache_ext_region_t">
 <span id="_CPPv321ze_cache_ext_region_t"></span><span id="_CPPv221ze_cache_ext_region_t"></span><span class="target" id="ze__api_8h_1a5499187a942f63757970fbce38321620"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_cache_ext_region_t</span></span></span><a class="headerlink" href="#_CPPv421ze_cache_ext_region_t" title="Link to this definition">#</a><br /></dt>
@@ -1184,7 +1212,7 @@
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N21ze_cache_ext_region_t48ZE_CACHE_EXT_REGION_ZE_CACHE_NON_RESERVED_REGIONE">
 <span id="_CPPv3N21ze_cache_ext_region_t48ZE_CACHE_EXT_REGION_ZE_CACHE_NON_RESERVED_REGIONE"></span><span id="_CPPv2N21ze_cache_ext_region_t48ZE_CACHE_EXT_REGION_ZE_CACHE_NON_RESERVED_REGIONE"></span><span class="target" id="ze__api_8h_1a5499187a942f63757970fbce38321620a3c6f48be77cfe66cce9854f3ad7b5d2a"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_CACHE_EXT_REGION_ZE_CACHE_NON_RESERVED_REGION</span></span></span><a class="headerlink" href="#_CPPv4N21ze_cache_ext_region_t48ZE_CACHE_EXT_REGION_ZE_CACHE_NON_RESERVED_REGIONE" title="Link to this definition">#</a><br /></dt>
-<dd><p><span class="deprecated-badge">Deprecated since 1.7</span> utilize non-reserverd region. Use <a class="reference internal" href="#ze__api_8h_1a5499187a942f63757970fbce38321620a2c4f5c683149aa3144d43a2322fc9930"><span class="std std-ref">ZE_CACHE_EXT_REGION_NON_RESERVED</span></a> instead. </p>
+<dd><p><span class="deprecated-badge">Deprecated since 1.7</span> utilize non-reserved region. Use <a class="reference internal" href="#ze__api_8h_1a5499187a942f63757970fbce38321620a2c4f5c683149aa3144d43a2322fc9930"><span class="std std-ref">ZE_CACHE_EXT_REGION_NON_RESERVED</span></a> instead. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
@@ -1202,7 +1230,7 @@
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp" id="_CPPv4N21ze_cache_ext_region_t32ZE_CACHE_EXT_REGION_NON_RESERVEDE">
 <span id="_CPPv3N21ze_cache_ext_region_t32ZE_CACHE_EXT_REGION_NON_RESERVEDE"></span><span id="_CPPv2N21ze_cache_ext_region_t32ZE_CACHE_EXT_REGION_NON_RESERVEDE"></span><span class="target" id="ze__api_8h_1a5499187a942f63757970fbce38321620a2c4f5c683149aa3144d43a2322fc9930"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZE_CACHE_EXT_REGION_NON_RESERVED</span></span></span><a class="headerlink" href="#_CPPv4N21ze_cache_ext_region_t32ZE_CACHE_EXT_REGION_NON_RESERVEDE" title="Link to this definition">#</a><br /></dt>
-<dd><p>utilize non-reserverd region <em class="since-note"> (since v1.7)</em></p>
+<dd><p>utilize non-reserved region <em class="since-note"> (since v1.7)</em></p>
 </dd></dl>
 
 <dl class="cpp enumerator">
@@ -1217,6 +1245,11 @@
 <section id="ze-device-memory-ext-type-t">
 <span id="id9"></span><h3>ze_device_memory_ext_type_t<a class="headerlink" href="#ze-device-memory-ext-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.4</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-device-memory-ext-properties-t"><span class="std std-ref">ze_device_memory_ext_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv427ze_device_memory_ext_type_t">
 <span id="_CPPv327ze_device_memory_ext_type_t"></span><span id="_CPPv227ze_device_memory_ext_type_t"></span><span class="target" id="ze__api_8h_1a5b4e66447b465b325393cb192a5bde20"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_memory_ext_type_t</span></span></span><a class="headerlink" href="#_CPPv427ze_device_memory_ext_type_t" title="Link to this definition">#</a><br /></dt>
@@ -1402,6 +1435,17 @@
 <section id="ze-rtas-device-ext-flags-t">
 <span id="id10"></span><h3>ze_rtas_device_ext_flags_t<a class="headerlink" href="#ze-rtas-device-ext-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-device-ext-properties-t"><span class="std std-ref">ze_rtas_device_ext_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv426ze_rtas_device_ext_flags_t">
+<span id="_CPPv326ze_rtas_device_ext_flags_t"></span><span id="_CPPv226ze_rtas_device_ext_flags_t"></span><span id="ze_rtas_device_ext_flags_t"></span><span class="target" id="ze__api_8h_1a3cdd3ffee5578c6cb107beadd57fdf70"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_device_ext_flags_t</span></span></span><a class="headerlink" href="#_CPPv426ze_rtas_device_ext_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Ray tracing acceleration structure device flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv425ze_rtas_device_ext_flag_t">
 <span id="_CPPv325ze_rtas_device_ext_flag_t"></span><span id="_CPPv225ze_rtas_device_ext_flag_t"></span><span class="target" id="ze__api_8h_1a0a7b1913c963687256d700798b09a013"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_device_ext_flag_t</span></span></span><a class="headerlink" href="#_CPPv425ze_rtas_device_ext_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1424,6 +1468,12 @@
 <section id="ze-rtas-format-ext-t">
 <span id="id11"></span><h3>ze_rtas_format_ext_t<a class="headerlink" href="#ze-rtas-format-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="driver.html#zedriverrtasformatcompatibilitycheckext"><span class="std std-ref">zeDriverRTASFormatCompatibilityCheckExt</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-rtas-device-ext-properties-t"><span class="std std-ref">ze_rtas_device_ext_properties_t</span></a>, <a class="reference internal" href="rtas_builder.html#ze-rtas-builder-build-op-ext-desc-t"><span class="std std-ref">ze_rtas_builder_build_op_ext_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv420ze_rtas_format_ext_t">
 <span id="_CPPv320ze_rtas_format_ext_t"></span><span id="_CPPv220ze_rtas_format_ext_t"></span><span class="target" id="ze__api_8h_1a32bec84b78db7412a8facddff130b6b4"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_format_ext_t</span></span></span><a class="headerlink" href="#_CPPv420ze_rtas_format_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -1480,44 +1530,44 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_device_compute_dotproduct_ext_properties_t7dp_capsE">
-<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t7dp_capsE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t7dp_capsE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dp_caps__ze_device_dp_capability_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a3fcfe0b5193186ce11d6f7a5a2042791"></span><span class="n"><span class="pre">ze_device_dp_capability_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dp_caps</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t7dp_capsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t7dp_capsE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t7dp_capsE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dp_caps__ze_device_dp_capability_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a3fcfe0b5193186ce11d6f7a5a2042791"></span><a class="reference internal" href="../apis/device.html#ze-device-dp-capability-flags-t" title="ze_device_dp_capability_flags_t"><span class="n"><span class="pre">ze_device_dp_capability_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dp_caps</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t7dp_capsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] indicates dot product capability of the device </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_device_compute_dotproduct_ext_properties_t16dpv4_input_typesE">
-<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t16dpv4_input_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t16dpv4_input_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpv4_input_types__ze_device_input_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a7c9d4e6591496307ad8c7fbed6c3f2e6"></span><span class="n"><span class="pre">ze_device_input_data_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpv4_input_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t16dpv4_input_typesE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Supported input data types when dp4v dot product capability is supported. </p>
+<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t16dpv4_input_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t16dpv4_input_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpv4_input_types__ze_device_input_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a7c9d4e6591496307ad8c7fbed6c3f2e6"></span><a class="reference internal" href="../apis/device.html#ze-device-input-data-type-flags-t" title="ze_device_input_data_type_flags_t"><span class="n"><span class="pre">ze_device_input_data_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpv4_input_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t16dpv4_input_typesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Supported input data types for the non-systolic vector dot-product path (DP4A). Valid only when <a class="reference internal" href="../apis/device.html#ze__api_8h_1ab148b7f2c503ac5ae6f161a77836bc62aa4c5ed3ecba09828bacf2fb1342e54cd"><span class="std std-ref">ZE_DEVICE_DP_CAPABILITY_FLAG_DEVICE_NON_SYSTOLIC_DPA4_SIMD_ALL</span></a> is set in dp_caps; a value of 0 indicates no supported input types for this path. The member is named ‘dpv4_*’ for ABI compatibility; the feature it describes is DP4A. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17dpv4_output_typesE">
-<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t17dpv4_output_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t17dpv4_output_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpv4_output_types__ze_device_output_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a0ef9d541d2221e303d3f30947a9beb1d"></span><span class="n"><span class="pre">ze_device_output_data_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpv4_output_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17dpv4_output_typesE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Supported output data types when dp4v dot product capability is supported. </p>
+<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t17dpv4_output_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t17dpv4_output_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpv4_output_types__ze_device_output_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a0ef9d541d2221e303d3f30947a9beb1d"></span><a class="reference internal" href="../apis/device.html#ze-device-output-data-type-flags-t" title="ze_device_output_data_type_flags_t"><span class="n"><span class="pre">ze_device_output_data_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpv4_output_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17dpv4_output_typesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Supported output / accumulator data types for the non-systolic vector dot-product path (DP4A). Valid only when <a class="reference internal" href="../apis/device.html#ze__api_8h_1ab148b7f2c503ac5ae6f161a77836bc62aa4c5ed3ecba09828bacf2fb1342e54cd"><span class="std std-ref">ZE_DEVICE_DP_CAPABILITY_FLAG_DEVICE_NON_SYSTOLIC_DPA4_SIMD_ALL</span></a> is set in dp_caps; a value of 0 indicates no supported output types for this path. The member is named ‘dpv4_*’ for ABI compatibility; the feature it describes is DP4A. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_device_compute_dotproduct_ext_properties_t16dpas_input_typesE">
-<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t16dpas_input_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t16dpas_input_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpas_input_types__ze_device_input_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1afaa533fe1c9dae177457bb4af4a7b749"></span><span class="n"><span class="pre">ze_device_input_data_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpas_input_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t16dpas_input_typesE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Supported input data types when dpas dot product capability is supported. </p>
+<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t16dpas_input_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t16dpas_input_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpas_input_types__ze_device_input_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1afaa533fe1c9dae177457bb4af4a7b749"></span><a class="reference internal" href="../apis/device.html#ze-device-input-data-type-flags-t" title="ze_device_input_data_type_flags_t"><span class="n"><span class="pre">ze_device_input_data_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpas_input_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t16dpas_input_typesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Supported input data types for the systolic dot-product (DPAS) path. Valid only when at least one of the DEVICE_SYSTOLIC_DPAS_* bits in <a class="reference internal" href="../apis/device.html#ze-device-dp-capability-flags-t"><span class="std std-ref">ze_device_dp_capability_flags_t</span></a> is set in dp_caps; a value of 0 indicates no supported input types for this path. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17dpas_output_typesE">
-<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t17dpas_output_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t17dpas_output_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpas_output_types__ze_device_output_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1ab884f463d04d32ce90ac01261b2f2424"></span><span class="n"><span class="pre">ze_device_output_data_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpas_output_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17dpas_output_typesE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Supported output data types when dpas dot product capability is supported. </p>
+<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t17dpas_output_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t17dpas_output_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::dpas_output_types__ze_device_output_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1ab884f463d04d32ce90ac01261b2f2424"></span><a class="reference internal" href="../apis/device.html#ze-device-output-data-type-flags-t" title="ze_device_output_data_type_flags_t"><span class="n"><span class="pre">ze_device_output_data_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dpas_output_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17dpas_output_typesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Supported output / accumulator data types for the systolic dot-product (DPAS) path. Valid only when at least one of the DEVICE_SYSTOLIC_DPAS_* bits in <a class="reference internal" href="../apis/device.html#ze-device-dp-capability-flags-t"><span class="std std-ref">ze_device_dp_capability_flags_t</span></a> is set in dp_caps; a value of 0 indicates no supported output types for this path. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17bdpas_input_typesE">
-<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t17bdpas_input_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t17bdpas_input_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::bdpas_input_types__ze_device_input_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a09a88bcc52d26747e0515f46aa0d115b"></span><span class="n"><span class="pre">ze_device_input_data_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bdpas_input_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17bdpas_input_typesE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Supported input data types when bdpas dot product capability is supported. </p>
+<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t17bdpas_input_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t17bdpas_input_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::bdpas_input_types__ze_device_input_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a09a88bcc52d26747e0515f46aa0d115b"></span><a class="reference internal" href="../apis/device.html#ze-device-input-data-type-flags-t" title="ze_device_input_data_type_flags_t"><span class="n"><span class="pre">ze_device_input_data_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bdpas_input_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t17bdpas_input_typesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Supported input data types for the block-scaled systolic dot-product (BDPAS) path. Valid only when at least one of the DEVICE_SYSTOLIC_BDPAS_* bits in <a class="reference internal" href="../apis/device.html#ze-device-dp-capability-flags-t"><span class="std std-ref">ze_device_dp_capability_flags_t</span></a> is set in dp_caps; a value of 0 indicates no supported input types for this path. The DEVICE_INPUT_DATA_SCALING_* bits in <a class="reference internal" href="../apis/device.html#ze-device-input-data-type-flags-t"><span class="std std-ref">ze_device_input_data_type_flags_t</span></a> only have meaning in this member. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N45ze_device_compute_dotproduct_ext_properties_t18bdpas_output_typesE">
-<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t18bdpas_output_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t18bdpas_output_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::bdpas_output_types__ze_device_output_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a665f5c139427f039b2361a94588d8cb3"></span><span class="n"><span class="pre">ze_device_output_data_type_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bdpas_output_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t18bdpas_output_typesE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] Supported output data types when bdpas dot product capability is supported. </p>
+<span id="_CPPv3N45ze_device_compute_dotproduct_ext_properties_t18bdpas_output_typesE"></span><span id="_CPPv2N45ze_device_compute_dotproduct_ext_properties_t18bdpas_output_typesE"></span><span id="ze_device_compute_dotproduct_ext_properties_t::bdpas_output_types__ze_device_output_data_type_flags_t"></span><span class="target" id="structze__device__compute__dotproduct__ext__properties__t_1a665f5c139427f039b2361a94588d8cb3"></span><a class="reference internal" href="../apis/device.html#ze-device-output-data-type-flags-t" title="ze_device_output_data_type_flags_t"><span class="n"><span class="pre">ze_device_output_data_type_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bdpas_output_types</span></span></span><a class="headerlink" href="#_CPPv4N45ze_device_compute_dotproduct_ext_properties_t18bdpas_output_typesE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] Supported output / accumulator data types for the block-scaled systolic dot-product (BDPAS) path. Valid only when at least one of the DEVICE_SYSTOLIC_BDPAS_* bits in <a class="reference internal" href="../apis/device.html#ze-device-dp-capability-flags-t"><span class="std std-ref">ze_device_dp_capability_flags_t</span></a> is set in dp_caps; a value of 0 indicates no supported output types for this path. </p>
 </dd></dl>
 
 </div>
@@ -1527,6 +1577,11 @@
 <section id="ze-float-atomic-ext-properties-t">
 <span id="id13"></span><h3>ze_float_atomic_ext_properties_t<a class="headerlink" href="#ze-float-atomic-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.1</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-module-properties-t"><span class="std std-ref">ze_device_module_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv432ze_float_atomic_ext_properties_t">
 <span id="_CPPv332ze_float_atomic_ext_properties_t"></span><span id="_CPPv232ze_float_atomic_ext_properties_t"></span><span id="ze_float_atomic_ext_properties_t"></span><span class="target" id="structze__float__atomic__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_float_atomic_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv432ze_float_atomic_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1551,19 +1606,19 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N32ze_float_atomic_ext_properties_t9fp16FlagsE">
-<span id="_CPPv3N32ze_float_atomic_ext_properties_t9fp16FlagsE"></span><span id="_CPPv2N32ze_float_atomic_ext_properties_t9fp16FlagsE"></span><span id="ze_float_atomic_ext_properties_t::fp16Flags__ze_device_fp_atomic_ext_flags_t"></span><span class="target" id="structze__float__atomic__ext__properties__t_1ae4bbace17272361bc98fd02631d44eb8"></span><span class="n"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp16Flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_float_atomic_ext_properties_t9fp16FlagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N32ze_float_atomic_ext_properties_t9fp16FlagsE"></span><span id="_CPPv2N32ze_float_atomic_ext_properties_t9fp16FlagsE"></span><span id="ze_float_atomic_ext_properties_t::fp16Flags__ze_device_fp_atomic_ext_flags_t"></span><span class="target" id="structze__float__atomic__ext__properties__t_1ae4bbace17272361bc98fd02631d44eb8"></span><a class="reference internal" href="#ze-device-fp-atomic-ext-flags-t" title="ze_device_fp_atomic_ext_flags_t"><span class="n"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp16Flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_float_atomic_ext_properties_t9fp16FlagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Capabilities for half-precision floating-point atomic operations </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N32ze_float_atomic_ext_properties_t9fp32FlagsE">
-<span id="_CPPv3N32ze_float_atomic_ext_properties_t9fp32FlagsE"></span><span id="_CPPv2N32ze_float_atomic_ext_properties_t9fp32FlagsE"></span><span id="ze_float_atomic_ext_properties_t::fp32Flags__ze_device_fp_atomic_ext_flags_t"></span><span class="target" id="structze__float__atomic__ext__properties__t_1a661986e6505de19ce14b51ec3c622bac"></span><span class="n"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp32Flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_float_atomic_ext_properties_t9fp32FlagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N32ze_float_atomic_ext_properties_t9fp32FlagsE"></span><span id="_CPPv2N32ze_float_atomic_ext_properties_t9fp32FlagsE"></span><span id="ze_float_atomic_ext_properties_t::fp32Flags__ze_device_fp_atomic_ext_flags_t"></span><span class="target" id="structze__float__atomic__ext__properties__t_1a661986e6505de19ce14b51ec3c622bac"></span><a class="reference internal" href="#ze-device-fp-atomic-ext-flags-t" title="ze_device_fp_atomic_ext_flags_t"><span class="n"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp32Flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_float_atomic_ext_properties_t9fp32FlagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Capabilities for single-precision floating-point atomic operations </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N32ze_float_atomic_ext_properties_t9fp64FlagsE">
-<span id="_CPPv3N32ze_float_atomic_ext_properties_t9fp64FlagsE"></span><span id="_CPPv2N32ze_float_atomic_ext_properties_t9fp64FlagsE"></span><span id="ze_float_atomic_ext_properties_t::fp64Flags__ze_device_fp_atomic_ext_flags_t"></span><span class="target" id="structze__float__atomic__ext__properties__t_1a191734c51ddd75270ae528a4161cbf3b"></span><span class="n"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp64Flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_float_atomic_ext_properties_t9fp64FlagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N32ze_float_atomic_ext_properties_t9fp64FlagsE"></span><span id="_CPPv2N32ze_float_atomic_ext_properties_t9fp64FlagsE"></span><span id="ze_float_atomic_ext_properties_t::fp64Flags__ze_device_fp_atomic_ext_flags_t"></span><span class="target" id="structze__float__atomic__ext__properties__t_1a191734c51ddd75270ae528a4161cbf3b"></span><a class="reference internal" href="#ze-device-fp-atomic-ext-flags-t" title="ze_device_fp_atomic_ext_flags_t"><span class="n"><span class="pre">ze_device_fp_atomic_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fp64Flags</span></span></span><a class="headerlink" href="#_CPPv4N32ze_float_atomic_ext_properties_t9fp64FlagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] Capabilities for double-precision floating-point atomic operations </p>
 </dd></dl>
 
@@ -1574,6 +1629,11 @@
 <section id="ze-cache-reservation-ext-desc-t">
 <span id="id14"></span><h3>ze_cache_reservation_ext_desc_t<a class="headerlink" href="#ze-cache-reservation-ext-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.2</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-cache-properties-t"><span class="std std-ref">ze_device_cache_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv431ze_cache_reservation_ext_desc_t">
 <span id="_CPPv331ze_cache_reservation_ext_desc_t"></span><span id="_CPPv231ze_cache_reservation_ext_desc_t"></span><span id="ze_cache_reservation_ext_desc_t"></span><span class="target" id="structze__cache__reservation__ext__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_cache_reservation_ext_desc_t</span></span></span><a class="headerlink" href="#_CPPv431ze_cache_reservation_ext_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -1610,6 +1670,11 @@
 <section id="ze-eu-count-ext-t">
 <span id="id15"></span><h3>ze_eu_count_ext_t<a class="headerlink" href="#ze-eu-count-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.3</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv417ze_eu_count_ext_t">
 <span id="_CPPv317ze_eu_count_ext_t"></span><span id="_CPPv217ze_eu_count_ext_t"></span><span id="ze_eu_count_ext_t"></span><span class="target" id="structze__eu__count__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_eu_count_ext_t</span></span></span><a class="headerlink" href="#_CPPv417ze_eu_count_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -1646,6 +1711,11 @@
 <section id="ze-pci-address-ext-t">
 <span id="id16"></span><h3>ze_pci_address_ext_t<a class="headerlink" href="#ze-pci-address-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.3</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-pci-ext-properties-t"><span class="std std-ref">ze_pci_ext_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv420ze_pci_address_ext_t">
 <span id="_CPPv320ze_pci_address_ext_t"></span><span id="_CPPv220ze_pci_address_ext_t"></span><span id="ze_pci_address_ext_t"></span><span class="target" id="structze__pci__address__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_pci_address_ext_t</span></span></span><a class="headerlink" href="#_CPPv420ze_pci_address_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -1688,6 +1758,11 @@
 <section id="ze-pci-speed-ext-t">
 <span id="id17"></span><h3>ze_pci_speed_ext_t<a class="headerlink" href="#ze-pci-speed-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.3</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-pci-ext-properties-t"><span class="std std-ref">ze_pci_ext_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv418ze_pci_speed_ext_t">
 <span id="_CPPv318ze_pci_speed_ext_t"></span><span id="_CPPv218ze_pci_speed_ext_t"></span><span id="ze_pci_speed_ext_t"></span><span class="target" id="structze__pci__speed__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_pci_speed_ext_t</span></span></span><a class="headerlink" href="#_CPPv418ze_pci_speed_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -1719,6 +1794,11 @@
 <section id="ze-pci-ext-properties-t">
 <span id="id18"></span><h3>ze_pci_ext_properties_t<a class="headerlink" href="#ze-pci-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zedevicepcigetpropertiesext"><span class="std std-ref">zeDevicePciGetPropertiesExt</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv423ze_pci_ext_properties_t">
 <span id="_CPPv323ze_pci_ext_properties_t"></span><span id="_CPPv223ze_pci_ext_properties_t"></span><span id="ze_pci_ext_properties_t"></span><span class="target" id="structze__pci__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_pci_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv423ze_pci_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1756,6 +1836,11 @@
 <section id="ze-device-luid-ext-properties-t">
 <span id="id19"></span><h3>ze_device_luid_ext_properties_t<a class="headerlink" href="#ze-device-luid-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.4</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv431ze_device_luid_ext_properties_t">
 <span id="_CPPv331ze_device_luid_ext_properties_t"></span><span id="_CPPv231ze_device_luid_ext_properties_t"></span><span id="ze_device_luid_ext_properties_t"></span><span class="target" id="structze__device__luid__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_luid_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv431ze_device_luid_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1797,6 +1882,11 @@
 <section id="ze-device-memory-ext-properties-t">
 <span id="id20"></span><h3>ze_device_memory_ext_properties_t<a class="headerlink" href="#ze-device-memory-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.4</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-memory-properties-t"><span class="std std-ref">ze_device_memory_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv433ze_device_memory_ext_properties_t">
 <span id="_CPPv333ze_device_memory_ext_properties_t"></span><span id="_CPPv233ze_device_memory_ext_properties_t"></span><span id="ze_device_memory_ext_properties_t"></span><span class="target" id="structze__device__memory__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_memory_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv433ze_device_memory_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1856,6 +1946,11 @@
 <section id="ze-device-ip-version-ext-t">
 <span id="id21"></span><h3>ze_device_ip_version_ext_t<a class="headerlink" href="#ze-device-ip-version-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.5</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv426ze_device_ip_version_ext_t">
 <span id="_CPPv326ze_device_ip_version_ext_t"></span><span id="_CPPv226ze_device_ip_version_ext_t"></span><span id="ze_device_ip_version_ext_t"></span><span class="target" id="structze__device__ip__version__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_ip_version_ext_t</span></span></span><a class="headerlink" href="#_CPPv426ze_device_ip_version_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -1891,6 +1986,11 @@
 <section id="ze-device-cache-line-size-ext-t">
 <span id="id22"></span><h3>ze_device_cache_line_size_ext_t<a class="headerlink" href="#ze-device-cache-line-size-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-cache-properties-t"><span class="std std-ref">ze_device_cache_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv431ze_device_cache_line_size_ext_t">
 <span id="_CPPv331ze_device_cache_line_size_ext_t"></span><span id="_CPPv231ze_device_cache_line_size_ext_t"></span><span id="ze_device_cache_line_size_ext_t"></span><span class="target" id="structze__device__cache__line__size__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_cache_line_size_ext_t</span></span></span><a class="headerlink" href="#_CPPv431ze_device_cache_line_size_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -1927,6 +2027,11 @@
 <section id="ze-rtas-device-ext-properties-t">
 <span id="id23"></span><h3>ze_rtas_device_ext_properties_t<a class="headerlink" href="#ze-rtas-device-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv431ze_rtas_device_ext_properties_t">
 <span id="_CPPv331ze_rtas_device_ext_properties_t"></span><span id="_CPPv231ze_rtas_device_ext_properties_t"></span><span id="ze_rtas_device_ext_properties_t"></span><span class="target" id="structze__rtas__device__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_rtas_device_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv431ze_rtas_device_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1952,7 +2057,7 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N31ze_rtas_device_ext_properties_t5flagsE">
-<span id="_CPPv3N31ze_rtas_device_ext_properties_t5flagsE"></span><span id="_CPPv2N31ze_rtas_device_ext_properties_t5flagsE"></span><span id="ze_rtas_device_ext_properties_t::flags__ze_rtas_device_ext_flags_t"></span><span class="target" id="structze__rtas__device__ext__properties__t_1a0b568a48ccacbf553bcde9a246108c10"></span><span class="n"><span class="pre">ze_rtas_device_ext_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N31ze_rtas_device_ext_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N31ze_rtas_device_ext_properties_t5flagsE"></span><span id="_CPPv2N31ze_rtas_device_ext_properties_t5flagsE"></span><span id="ze_rtas_device_ext_properties_t::flags__ze_rtas_device_ext_flags_t"></span><span class="target" id="structze__rtas__device__ext__properties__t_1a0b568a48ccacbf553bcde9a246108c10"></span><a class="reference internal" href="#ze-rtas-device-ext-flags-t" title="ze_rtas_device_ext_flags_t"><span class="n"><span class="pre">ze_rtas_device_ext_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N31ze_rtas_device_ext_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
 <dd><p>[out] ray tracing acceleration structure device flags </p>
 </dd></dl>
 
@@ -1975,6 +2080,11 @@
 <section id="ze-device-vector-width-properties-ext-t">
 <span id="id24"></span><h3>ze_device_vector_width_properties_ext_t<a class="headerlink" href="#ze-device-vector-width-properties-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.13</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zedevicegetvectorwidthpropertiesext"><span class="std std-ref">zeDeviceGetVectorWidthPropertiesExt</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv439ze_device_vector_width_properties_ext_t">
 <span id="_CPPv339ze_device_vector_width_properties_ext_t"></span><span id="_CPPv239ze_device_vector_width_properties_ext_t"></span><span id="ze_device_vector_width_properties_ext_t"></span><span class="target" id="structze__device__vector__width__properties__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_vector_width_properties_ext_t</span></span></span><a class="headerlink" href="#_CPPv439ze_device_vector_width_properties_ext_t" title="Link to this definition">#</a><br /></dt>
@@ -2090,6 +2200,11 @@
 <section id="ze-device-usablemem-size-ext-properties-t">
 <span id="id25"></span><h3>ze_device_usablemem_size_ext_properties_t<a class="headerlink" href="#ze-device-usablemem-size-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.15</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv441ze_device_usablemem_size_ext_properties_t">
 <span id="_CPPv341ze_device_usablemem_size_ext_properties_t"></span><span id="_CPPv241ze_device_usablemem_size_ext_properties_t"></span><span id="ze_device_usablemem_size_ext_properties_t"></span><span class="target" id="structze__device__usablemem__size__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_usablemem_size_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv441ze_device_usablemem_size_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -2125,6 +2240,11 @@
 <section id="ze-device-readonly-memory-ext-properties-t">
 <span id="id26"></span><h3>ze_device_readonly_memory_ext_properties_t<a class="headerlink" href="#ze-device-readonly-memory-ext-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.17</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv442ze_device_readonly_memory_ext_properties_t">
 <span id="_CPPv342ze_device_readonly_memory_ext_properties_t"></span><span id="_CPPv242ze_device_readonly_memory_ext_properties_t"></span><span id="ze_device_readonly_memory_ext_properties_t"></span><span class="target" id="structze__device__readonly__memory__ext__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_readonly_memory_ext_properties_t</span></span></span><a class="headerlink" href="#_CPPv442ze_device_readonly_memory_ext_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -2160,6 +2280,11 @@
 <section id="ze-device-npu-properties-ext-t">
 <span id="id27"></span><h3>ze_device_npu_properties_ext_t<a class="headerlink" href="#ze-device-npu-properties-ext-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.18</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Goes in pNext of:</strong> <a class="reference internal" href="../apis/device.html#ze-device-properties-t"><span class="std std-ref">ze_device_properties_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv430ze_device_npu_properties_ext_t">
 <span id="_CPPv330ze_device_npu_properties_ext_t"></span><span id="_CPPv230ze_device_npu_properties_ext_t"></span><span id="ze_device_npu_properties_ext_t"></span><span class="target" id="structze__device__npu__properties__ext__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_device_npu_properties_ext_t</span></span></span><a class="headerlink" href="#_CPPv430ze_device_npu_properties_ext_t" title="Link to this definition">#</a><br /></dt>

@@ -30,7 +30,7 @@ Extended Device Properties
 
 Users may wish get the status of the available allocatable/usable memory. Since this is a transient information based on the overall state of the device usage, user would need to invoke the extension to obtain the information at each point of interest. This extension provides extended information about the usable memory size available as part of the device. The extension introduces the :ref:`ze-device-usablemem-size-ext-properties-t` struct which can be passed to :ref:`zeDeviceGetProperties` via the `pNext` member of :ref:`ze-device-properties-t`\.
 
-The following psuedo-code demonstrates a sequence for obtaining extended information about the usable memory size:
+The following pseudo-code demonstrates a sequence for obtaining extended information about the usable memory size:
 
 .. parsed-literal::
 

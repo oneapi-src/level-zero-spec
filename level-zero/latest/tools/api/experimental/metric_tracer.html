@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Metric Tracer - Experimental &#8212; Level Zero Specification v1.20.41</title>
+    <title>Metric Tracer - Experimental &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Metric Programmable - Experimental" href="metric_programmable.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 has-children"><a class="reference internal" href="../apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-tracer-experimental-handles">Metric Tracer - Experimental Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-tracer-exp-handle-t">zet_metric_tracer_exp_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zet_metric_tracer_exp_handle_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_tracer_exp_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-tracer-experimental-functions">Metric Tracer - Experimental Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zetmetrictracercreateexp">zetMetricTracerCreateExp</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t"><code class="docutils literal notranslate"><span class="pre">zetMetricTracerCreateExp()</span></code></a></li>
@@ -525,15 +542,35 @@
                   
   <section id="metric-tracer-experimental">
 <h1>Metric Tracer - Experimental<a class="headerlink" href="#metric-tracer-experimental" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="metric-tracer-experimental-handles">
+<h2>Metric Tracer - Experimental Handles<a class="headerlink" href="#metric-tracer-experimental-handles" title="Link to this heading">#</a></h2>
+<section id="zet-metric-tracer-exp-handle-t">
+<span id="id1"></span><h3>zet_metric_tracer_exp_handle_t<a class="headerlink" href="#zet-metric-tracer-exp-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.10</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zetmetrictracercreateexp"><span class="std std-ref">zetMetricTracerCreateExp</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetmetrictracerdestroyexp"><span class="std std-ref">zetMetricTracerDestroyExp</span></a>, <a class="reference internal" href="#zetmetrictracerenableexp"><span class="std std-ref">zetMetricTracerEnableExp</span></a>, <a class="reference internal" href="#zetmetrictracerdisableexp"><span class="std std-ref">zetMetricTracerDisableExp</span></a>, <a class="reference internal" href="#zetmetrictracerreaddataexp"><span class="std std-ref">zetMetricTracerReadDataExp</span></a>, <a class="reference internal" href="metric_decoder.html#zetmetricdecodercreateexp"><span class="std std-ref">zetMetricDecoderCreateExp</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference external" href="../../PROG.html#metrics">Metrics (Programming Guide)</a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv430zet_metric_tracer_exp_handle_t">
+<span id="_CPPv330zet_metric_tracer_exp_handle_t"></span><span id="_CPPv230zet_metric_tracer_exp_handle_t"></span><span id="zet_metric_tracer_exp_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span></span><a class="headerlink" href="#_CPPv430zet_metric_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of metric tracer’s object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="metric-tracer-experimental-functions">
 <h2>Metric Tracer - Experimental Functions<a class="headerlink" href="#metric-tracer-experimental-functions" title="Link to this heading">#</a></h2>
 <section id="zetmetrictracercreateexp">
-<span id="id1"></span><h3>zetMetricTracerCreateExp<a class="headerlink" href="#zetmetrictracercreateexp" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zetMetricTracerCreateExp<a class="headerlink" href="#zetmetrictracercreateexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t">
-<span id="_CPPv324zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t"></span><span id="_CPPv224zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t"></span><span id="zetMetricTracerCreateExp__zet_context_handle_t.zet_device_handle_t.uint32_t.zet_metric_group_handle_tP.zet_metric_tracer_exp_desc_tP.ze_event_handle_t.zet_metric_tracer_exp_handle_tP"></span><span class="target" id="zet__api_8h_1a4b318b563a8c68118b486662ddae4c64"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerCreateExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">zet_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">metricGroupCount</span></span>, <span class="n"><span class="pre">zet_metric_group_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricGroups</span></span>, <a class="reference internal" href="#zet-metric-tracer-exp-desc-t" title="zet_metric_tracer_exp_desc_t"><span class="n"><span class="pre">zet_metric_tracer_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_event_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hNotificationEvent</span></span>, <span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t"></span><span id="_CPPv224zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t"></span><span id="zetMetricTracerCreateExp__zet_context_handle_t.zet_device_handle_t.uint32_t.zet_metric_group_handle_tP.zet_metric_tracer_exp_desc_tP.ze_event_handle_t.zet_metric_tracer_exp_handle_tP"></span><span class="target" id="zet__api_8h_1a4b318b563a8c68118b486662ddae4c64"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerCreateExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../apis/context.html#zet-context-handle-t" title="zet_context_handle_t"><span class="n"><span class="pre">zet_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="../apis/device.html#zet-device-handle-t" title="zet_device_handle_t"><span class="n"><span class="pre">zet_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">metricGroupCount</span></span>, <a class="reference internal" href="../apis/metric_group.html#zet-metric-group-handle-t" title="zet_metric_group_handle_t"><span class="n"><span class="pre">zet_metric_group_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricGroups</span></span>, <a class="reference internal" href="#zet-metric-tracer-exp-desc-t" title="zet_metric_tracer_exp_desc_t"><span class="n"><span class="pre">zet_metric_tracer_exp_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="../../../core/api/apis/event.html#ze-event-handle-t" title="ze_event_handle_t"><span class="n"><span class="pre">ze_event_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hNotificationEvent</span></span>, <a class="reference internal" href="#zet-metric-tracer-exp-handle-t" title="zet_metric_tracer_exp_handle_t"><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricTracerCreateExp20zet_context_handle_t19zet_device_handle_t8uint32_tP25zet_metric_group_handle_tP28zet_metric_tracer_exp_desc_t17ze_event_handle_tP30zet_metric_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Create a metric tracer for a device. </p>
 <p><ul class="simple">
 <li><p>The notification event must have been created from an event pool that was created using <a class="reference internal" href="../../../core/api/apis/event_pool.html#ze__api_8h_1a148be5a8b03e9d401a415d2227cf9f11af12236d0b143f0327b6be83fa42556ea"><span class="std std-ref">ZE_EVENT_POOL_FLAG_HOST_VISIBLE</span></a> flag.</p></li>
@@ -592,11 +629,11 @@
 
 </section>
 <section id="zetmetrictracerdestroyexp">
-<span id="id2"></span><h3>zetMetricTracerDestroyExp<a class="headerlink" href="#zetmetrictracerdestroyexp" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zetMetricTracerDestroyExp<a class="headerlink" href="#zetmetrictracerdestroyexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zetMetricTracerDestroyExp30zet_metric_tracer_exp_handle_t">
-<span id="_CPPv325zetMetricTracerDestroyExp30zet_metric_tracer_exp_handle_t"></span><span id="_CPPv225zetMetricTracerDestroyExp30zet_metric_tracer_exp_handle_t"></span><span id="zetMetricTracerDestroyExp__zet_metric_tracer_exp_handle_t"></span><span class="target" id="zet__api_8h_1a9aef9f032ffffaf4cc8985969edb14ae"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerDestroyExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricTracerDestroyExp30zet_metric_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zetMetricTracerDestroyExp30zet_metric_tracer_exp_handle_t"></span><span id="_CPPv225zetMetricTracerDestroyExp30zet_metric_tracer_exp_handle_t"></span><span id="zetMetricTracerDestroyExp__zet_metric_tracer_exp_handle_t"></span><span class="target" id="zet__api_8h_1a9aef9f032ffffaf4cc8985969edb14ae"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerDestroyExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-metric-tracer-exp-handle-t" title="zet_metric_tracer_exp_handle_t"><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricTracerDestroyExp30zet_metric_tracer_exp_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroy a metric tracer. </p>
 <p><ul class="simple">
 <li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same metric tracer handle.</p></li>
@@ -633,11 +670,11 @@
 
 </section>
 <section id="zetmetrictracerenableexp">
-<span id="id3"></span><h3>zetMetricTracerEnableExp<a class="headerlink" href="#zetmetrictracerenableexp" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zetMetricTracerEnableExp<a class="headerlink" href="#zetmetrictracerenableexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zetMetricTracerEnableExp30zet_metric_tracer_exp_handle_t9ze_bool_t">
-<span id="_CPPv324zetMetricTracerEnableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="_CPPv224zetMetricTracerEnableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="zetMetricTracerEnableExp__zet_metric_tracer_exp_handle_t.ze_bool_t"></span><span class="target" id="zet__api_8h_1aa60e17ec4d8025ab994d7ada1db2c045"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerEnableExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">synchronous</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricTracerEnableExp30zet_metric_tracer_exp_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zetMetricTracerEnableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="_CPPv224zetMetricTracerEnableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="zetMetricTracerEnableExp__zet_metric_tracer_exp_handle_t.ze_bool_t"></span><span class="target" id="zet__api_8h_1aa60e17ec4d8025ab994d7ada1db2c045"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerEnableExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-metric-tracer-exp-handle-t" title="zet_metric_tracer_exp_handle_t"><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">synchronous</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricTracerEnableExp30zet_metric_tracer_exp_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Start events collection. </p>
 <p><ul class="simple">
 <li><p>Driver implementations must make this API call have as minimal overhead as possible, to allow applications start/stop event collection at any point during execution</p></li>
@@ -678,11 +715,11 @@
 
 </section>
 <section id="zetmetrictracerdisableexp">
-<span id="id4"></span><h3>zetMetricTracerDisableExp<a class="headerlink" href="#zetmetrictracerdisableexp" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zetMetricTracerDisableExp<a class="headerlink" href="#zetmetrictracerdisableexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zetMetricTracerDisableExp30zet_metric_tracer_exp_handle_t9ze_bool_t">
-<span id="_CPPv325zetMetricTracerDisableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="_CPPv225zetMetricTracerDisableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="zetMetricTracerDisableExp__zet_metric_tracer_exp_handle_t.ze_bool_t"></span><span class="target" id="zet__api_8h_1a8cf27345731e6f4b26c32504e45e31e8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerDisableExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span>, <span class="n"><span class="pre">ze_bool_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">synchronous</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricTracerDisableExp30zet_metric_tracer_exp_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zetMetricTracerDisableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="_CPPv225zetMetricTracerDisableExp30zet_metric_tracer_exp_handle_t9ze_bool_t"></span><span id="zetMetricTracerDisableExp__zet_metric_tracer_exp_handle_t.ze_bool_t"></span><span class="target" id="zet__api_8h_1a8cf27345731e6f4b26c32504e45e31e8"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerDisableExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-metric-tracer-exp-handle-t" title="zet_metric_tracer_exp_handle_t"><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span>, <a class="reference internal" href="../../../core/api/apis/data_types.html#ze-bool-t" title="ze_bool_t"><span class="n"><span class="pre">ze_bool_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">synchronous</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricTracerDisableExp30zet_metric_tracer_exp_handle_t9ze_bool_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Stop events collection. </p>
 <p><ul class="simple">
 <li><p>Driver implementations must make this API call have as minimal overhead as possible, to allow applications start/stop event collection at any point during execution</p></li>
@@ -723,11 +760,11 @@
 
 </section>
 <section id="zetmetrictracerreaddataexp">
-<span id="id5"></span><h3>zetMetricTracerReadDataExp<a class="headerlink" href="#zetmetrictracerreaddataexp" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zetMetricTracerReadDataExp<a class="headerlink" href="#zetmetrictracerreaddataexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426zetMetricTracerReadDataExp30zet_metric_tracer_exp_handle_tP6size_tP7uint8_t">
-<span id="_CPPv326zetMetricTracerReadDataExp30zet_metric_tracer_exp_handle_tP6size_tP7uint8_t"></span><span id="_CPPv226zetMetricTracerReadDataExp30zet_metric_tracer_exp_handle_tP6size_tP7uint8_t"></span><span id="zetMetricTracerReadDataExp__zet_metric_tracer_exp_handle_t.sP.uint8_tP"></span><span class="target" id="zet__api_8h_1a81b5d3fbba3a9e72ee8bf6c2437e2eb5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerReadDataExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawDataSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawData</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zetMetricTracerReadDataExp30zet_metric_tracer_exp_handle_tP6size_tP7uint8_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv326zetMetricTracerReadDataExp30zet_metric_tracer_exp_handle_tP6size_tP7uint8_t"></span><span id="_CPPv226zetMetricTracerReadDataExp30zet_metric_tracer_exp_handle_tP6size_tP7uint8_t"></span><span id="zetMetricTracerReadDataExp__zet_metric_tracer_exp_handle_t.sP.uint8_tP"></span><span class="target" id="zet__api_8h_1a81b5d3fbba3a9e72ee8bf6c2437e2eb5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerReadDataExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-metric-tracer-exp-handle-t" title="zet_metric_tracer_exp_handle_t"><span class="n"><span class="pre">zet_metric_tracer_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricTracer</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawDataSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawData</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zetMetricTracerReadDataExp30zet_metric_tracer_exp_handle_tP6size_tP7uint8_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Read data from the metric tracer. </p>
 <p><ul class="simple">
 <li><p>The application must <strong>not</strong> call this function from simultaneous threads with the same metric tracer handle.</p></li>
@@ -781,11 +818,11 @@
 
 </section>
 <section id="zetmetrictracerdecodeexp">
-<span id="id6"></span><h3>zetMetricTracerDecodeExp<a class="headerlink" href="#zetmetrictracerdecodeexp" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zetMetricTracerDecodeExp<a class="headerlink" href="#zetmetrictracerdecodeexp" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zetMetricTracerDecodeExp31zet_metric_decoder_exp_handle_tP6size_tP7uint8_t8uint32_tP19zet_metric_handle_tP8uint32_tP8uint32_tP8uint32_tP22zet_metric_entry_exp_t">
-<span id="_CPPv324zetMetricTracerDecodeExp31zet_metric_decoder_exp_handle_tP6size_tP7uint8_t8uint32_tP19zet_metric_handle_tP8uint32_tP8uint32_tP8uint32_tP22zet_metric_entry_exp_t"></span><span id="_CPPv224zetMetricTracerDecodeExp31zet_metric_decoder_exp_handle_tP6size_tP7uint8_t8uint32_tP19zet_metric_handle_tP8uint32_tP8uint32_tP8uint32_tP22zet_metric_entry_exp_t"></span><span id="zetMetricTracerDecodeExp__zet_metric_decoder_exp_handle_t.sP.uint8_tP.uint32_t.zet_metric_handle_tP.uint32_tP.uint32_tP.uint32_tP.zet_metric_entry_exp_tP"></span><span class="target" id="zet__api_8h_1ac43750bcd04ed17d12c5e80d9d7dd94f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerDecodeExp</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_decoder_exp_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phMetricDecoder</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawDataSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawData</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">metricsCount</span></span>, <span class="n"><span class="pre">zet_metric_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetrics</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSetCount</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricEntriesCountPerSet</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricEntriesCount</span></span>, <a class="reference internal" href="data_types.html#zet-metric-entry-exp-t" title="zet_metric_entry_exp_t"><span class="n"><span class="pre">zet_metric_entry_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricEntries</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricTracerDecodeExp31zet_metric_decoder_exp_handle_tP6size_tP7uint8_t8uint32_tP19zet_metric_handle_tP8uint32_tP8uint32_tP8uint32_tP22zet_metric_entry_exp_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zetMetricTracerDecodeExp31zet_metric_decoder_exp_handle_tP6size_tP7uint8_t8uint32_tP19zet_metric_handle_tP8uint32_tP8uint32_tP8uint32_tP22zet_metric_entry_exp_t"></span><span id="_CPPv224zetMetricTracerDecodeExp31zet_metric_decoder_exp_handle_tP6size_tP7uint8_t8uint32_tP19zet_metric_handle_tP8uint32_tP8uint32_tP8uint32_tP22zet_metric_entry_exp_t"></span><span id="zetMetricTracerDecodeExp__zet_metric_decoder_exp_handle_t.sP.uint8_tP.uint32_t.zet_metric_handle_tP.uint32_tP.uint32_tP.uint32_tP.zet_metric_entry_exp_tP"></span><span class="target" id="zet__api_8h_1ac43750bcd04ed17d12c5e80d9d7dd94f"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricTracerDecodeExp</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="metric_decoder.html#zet-metric-decoder-exp-handle-t" title="zet_metric_decoder_exp_handle_t"><span class="n"><span class="pre">zet_metric_decoder_exp_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">phMetricDecoder</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawDataSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pRawData</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">metricsCount</span></span>, <a class="reference internal" href="../apis/metric.html#zet-metric-handle-t" title="zet_metric_handle_t"><span class="n"><span class="pre">zet_metric_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetrics</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSetCount</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricEntriesCountPerSet</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricEntriesCount</span></span>, <a class="reference internal" href="data_types.html#zet-metric-entry-exp-t" title="zet_metric_entry_exp_t"><span class="n"><span class="pre">zet_metric_entry_exp_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pMetricEntries</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricTracerDecodeExp31zet_metric_decoder_exp_handle_tP6size_tP7uint8_t8uint32_tP19zet_metric_handle_tP8uint32_tP8uint32_tP8uint32_tP22zet_metric_entry_exp_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Decode raw events collected from a tracer. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -838,8 +875,13 @@
 <section id="metric-tracer-experimental-structures">
 <h2>Metric Tracer - Experimental Structures<a class="headerlink" href="#metric-tracer-experimental-structures" title="Link to this heading">#</a></h2>
 <section id="zet-metric-tracer-exp-desc-t">
-<span id="id7"></span><h3>zet_metric_tracer_exp_desc_t<a class="headerlink" href="#zet-metric-tracer-exp-desc-t" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zet_metric_tracer_exp_desc_t<a class="headerlink" href="#zet-metric-tracer-exp-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.10</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetmetrictracercreateexp"><span class="std std-ref">zetMetricTracerCreateExp</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv428zet_metric_tracer_exp_desc_t">
 <span id="_CPPv328zet_metric_tracer_exp_desc_t"></span><span id="_CPPv228zet_metric_tracer_exp_desc_t"></span><span id="zet_metric_tracer_exp_desc_t"></span><span class="target" id="structzet__metric__tracer__exp__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_tracer_exp_desc_t</span></span></span><a class="headerlink" href="#_CPPv428zet_metric_tracer_exp_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -916,7 +958,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">6</span></summary><div class="ctoc-prefix">zetMetricTracer</div><ul class="ctoc-list"><li><a href="metric_tracer.html#zetmetrictracercreateexp">&hellip;CreateExp</a></li><li><a href="metric_tracer.html#zetmetrictracerdestroyexp">&hellip;DestroyExp</a></li><li><a href="metric_tracer.html#zetmetrictracerenableexp">&hellip;EnableExp</a></li><li><a href="metric_tracer.html#zetmetrictracerdisableexp">&hellip;DisableExp</a></li><li><a href="metric_tracer.html#zetmetrictracerreaddataexp">&hellip;ReadDataExp</a></li><li><a href="metric_tracer.html#zetmetrictracerdecodeexp">&hellip;DecodeExp</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_tracer.html#zet-metric-tracer-exp-desc-t">zet_metric_tracer_exp_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_tracer.html#zet-metric-tracer-exp-handle-t">zet_metric_tracer_exp_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">6</span></summary><div class="ctoc-prefix">zetMetricTracer</div><ul class="ctoc-list"><li><a href="metric_tracer.html#zetmetrictracercreateexp">&hellip;CreateExp</a></li><li><a href="metric_tracer.html#zetmetrictracerdestroyexp">&hellip;DestroyExp</a></li><li><a href="metric_tracer.html#zetmetrictracerenableexp">&hellip;EnableExp</a></li><li><a href="metric_tracer.html#zetmetrictracerdisableexp">&hellip;DisableExp</a></li><li><a href="metric_tracer.html#zetmetrictracerreaddataexp">&hellip;ReadDataExp</a></li><li><a href="metric_tracer.html#zetmetrictracerdecodeexp">&hellip;DecodeExp</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_tracer.html#zet-metric-tracer-exp-desc-t">zet_metric_tracer_exp_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

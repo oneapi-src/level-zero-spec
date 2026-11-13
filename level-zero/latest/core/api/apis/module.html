@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Module &#8212; Level Zero Specification v1.20.41</title>
+    <title>Module &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -48,10 +48,10 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Module Build Log" href="module_build_log.html" />
-    <link rel="prev" title="Mem" href="mem.html" />
+    <link rel="prev" title="Image" href="image.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../tools/api.html">Tools</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../tools/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query_pool.html">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../tools/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-handles">Module Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-handle-t">ze_module_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv418ze_module_handle_t"><code class="docutils literal notranslate"><span class="pre">ze_module_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-functions">Module Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zemodulecreate">zeModuleCreate</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv414zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"><code class="docutils literal notranslate"><span class="pre">zeModuleCreate()</span></code></a></li>
@@ -525,6 +542,7 @@
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ze-module-property-flags-t">ze_module_property_flags_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv426ze_module_property_flags_t"><code class="docutils literal notranslate"><span class="pre">ze_module_property_flags_t</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv425ze_module_property_flag_t"><code class="docutils literal notranslate"><span class="pre">ze_module_property_flag_t</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_module_property_flag_t31ZE_MODULE_PROPERTY_FLAG_IMPORTSE"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_PROPERTY_FLAG_IMPORTS</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N25ze_module_property_flag_t36ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32E"><code class="docutils literal notranslate"><span class="pre">ZE_MODULE_PROPERTY_FLAG_FORCE_UINT32</span></code></a></li>
@@ -581,15 +599,36 @@
                   
   <section id="module">
 <h1>Module<a class="headerlink" href="#module" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="module-handles">
+<h2>Module Handles<a class="headerlink" href="#module-handles" title="Link to this heading">#</a></h2>
+<section id="ze-module-handle-t">
+<span id="id1"></span><h3>ze_module_handle_t<a class="headerlink" href="#ze-module-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a>, <a class="reference internal" href="kernel.html#zekernelgetmodulehandle"><span class="std std-ref">zeKernelGetModuleHandle</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zemoduledestroy"><span class="std std-ref">zeModuleDestroy</span></a>, <a class="reference internal" href="#zemoduledynamiclink"><span class="std std-ref">zeModuleDynamicLink</span></a>, <a class="reference internal" href="#zemodulegetnativebinary"><span class="std std-ref">zeModuleGetNativeBinary</span></a>, <a class="reference internal" href="#zemodulegetglobalpointer"><span class="std std-ref">zeModuleGetGlobalPointer</span></a>, <a class="reference internal" href="#zemodulegetkernelnames"><span class="std std-ref">zeModuleGetKernelNames</span></a>, <a class="reference internal" href="#zemodulegetproperties"><span class="std std-ref">zeModuleGetProperties</span></a>, <a class="reference internal" href="#zemodulegetdevicehandle"><span class="std std-ref">zeModuleGetDeviceHandle</span></a>, <a class="reference internal" href="kernel.html#zekernelcreate"><span class="std std-ref">zeKernelCreate</span></a>, <a class="reference internal" href="#zemodulegetfunctionpointer"><span class="std std-ref">zeModuleGetFunctionPointer</span></a>, <a class="reference internal" href="../extensions/module.html#zemoduleinspectlinkageext"><span class="std std-ref">zeModuleInspectLinkageExt</span></a></div>
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="device.html#ze-runtime-requirements-module-desc-t"><span class="std std-ref">ze_runtime_requirements_module_desc_t</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#modules"><span class="std std-ref">Modules (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv418ze_module_handle_t">
+<span id="_CPPv318ze_module_handle_t"></span><span id="_CPPv218ze_module_handle_t"></span><span id="ze_module_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_handle_t</span></span></span><a class="headerlink" href="#_CPPv418ze_module_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of driver’s module object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="module-functions">
 <h2>Module Functions<a class="headerlink" href="#module-functions" title="Link to this heading">#</a></h2>
 <section id="zemodulecreate">
-<span id="id1"></span><h3>zeModuleCreate<a class="headerlink" href="#zemodulecreate" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zeModuleCreate<a class="headerlink" href="#zemodulecreate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t">
-<span id="_CPPv314zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="_CPPv214zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="zeModuleCreate__ze_context_handle_t.ze_device_handle_t.ze_module_desc_tCP.ze_module_handle_tP.ze_module_build_log_handle_tP"></span><span class="target" id="ze__api_8h_1a371b2babaa7f4fd5d0b4a98b8c28918c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-module-desc-t" title="ze_module_desc_t"><span class="n"><span class="pre">ze_module_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModule</span></span>, <span class="n"><span class="pre">ze_module_build_log_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phBuildLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv314zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="_CPPv214zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="zeModuleCreate__ze_context_handle_t.ze_device_handle_t.ze_module_desc_tCP.ze_module_handle_tP.ze_module_build_log_handle_tP"></span><span class="target" id="ze__api_8h_1a371b2babaa7f4fd5d0b4a98b8c28918c"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#ze-context-handle-t" title="ze_context_handle_t"><span class="n"><span class="pre">ze_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#ze-module-desc-t" title="ze_module_desc_t"><span class="n"><span class="pre">ze_module_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModule</span></span>, <a class="reference internal" href="module_build_log.html#ze-module-build-log-handle-t" title="ze_module_build_log_handle_t"><span class="n"><span class="pre">ze_module_build_log_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phBuildLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414zeModuleCreate19ze_context_handle_t18ze_device_handle_tPK16ze_module_desc_tP18ze_module_handle_tP28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a module on the context. </p>
 <p><ul class="simple">
 <li><p>Compiles the module for execution on the device.</p></li>
@@ -656,11 +695,11 @@
 
 </section>
 <section id="zemoduledestroy">
-<span id="id2"></span><h3>zeModuleDestroy<a class="headerlink" href="#zemoduledestroy" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zeModuleDestroy<a class="headerlink" href="#zemoduledestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv415zeModuleDestroy18ze_module_handle_t">
-<span id="_CPPv315zeModuleDestroy18ze_module_handle_t"></span><span id="_CPPv215zeModuleDestroy18ze_module_handle_t"></span><span id="zeModuleDestroy__ze_module_handle_t"></span><span class="target" id="ze__api_8h_1a67e7aa89f5ac4e6d3e4a344095057d09"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeModuleDestroy18ze_module_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv315zeModuleDestroy18ze_module_handle_t"></span><span id="_CPPv215zeModuleDestroy18ze_module_handle_t"></span><span id="zeModuleDestroy__ze_module_handle_t"></span><span class="target" id="ze__api_8h_1a67e7aa89f5ac4e6d3e4a344095057d09"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415zeModuleDestroy18ze_module_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Destroys module. </p>
 <p><ul class="simple">
 <li><p>The application must destroy all kernel handles created from the module before destroying the module itself.</p></li>
@@ -702,11 +741,11 @@
 
 </section>
 <section id="zemoduledynamiclink">
-<span id="id3"></span><h3>zeModuleDynamicLink<a class="headerlink" href="#zemoduledynamiclink" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zeModuleDynamicLink<a class="headerlink" href="#zemoduledynamiclink" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t">
-<span id="_CPPv319zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="_CPPv219zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="zeModuleDynamicLink__uint32_t.ze_module_handle_tP.ze_module_build_log_handle_tP"></span><span class="target" id="ze__api_8h_1a0d1f9dff8d8d28f49d6ecd154be75106"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleDynamicLink</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numModules</span></span>, <span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModules</span></span>, <span class="n"><span class="pre">ze_module_build_log_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phLinkLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv319zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="_CPPv219zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t"></span><span id="zeModuleDynamicLink__uint32_t.ze_module_handle_tP.ze_module_build_log_handle_tP"></span><span class="target" id="ze__api_8h_1a0d1f9dff8d8d28f49d6ecd154be75106"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleDynamicLink</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">numModules</span></span>, <a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phModules</span></span>, <a class="reference internal" href="module_build_log.html#ze-module-build-log-handle-t" title="ze_module_build_log_handle_t"><span class="n"><span class="pre">ze_module_build_log_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phLinkLog</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419zeModuleDynamicLink8uint32_tP18ze_module_handle_tP28ze_module_build_log_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Dynamically link modules together that share import/export linkage dependencies. </p>
 <p><ul class="simple">
 <li><p>Modules support SPIR-V import and export linkage types for functions and global variables. See the SPIR-V specification for linkage details.</p></li>
@@ -760,11 +799,11 @@
 
 </section>
 <section id="zemodulegetnativebinary">
-<span id="id4"></span><h3>zeModuleGetNativeBinary<a class="headerlink" href="#zemodulegetnativebinary" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zeModuleGetNativeBinary<a class="headerlink" href="#zemodulegetnativebinary" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t">
-<span id="_CPPv323zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t"></span><span id="_CPPv223zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t"></span><span id="zeModuleGetNativeBinary__ze_module_handle_t.sP.uint8_tP"></span><span class="target" id="ze__api_8h_1ad2572c6c65b8298c70922249ab9c2bc4"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetNativeBinary</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pModuleNativeBinary</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t"></span><span id="_CPPv223zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t"></span><span id="zeModuleGetNativeBinary__ze_module_handle_t.sP.uint8_tP"></span><span class="target" id="ze__api_8h_1ad2572c6c65b8298c70922249ab9c2bc4"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetNativeBinary</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pModuleNativeBinary</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleGetNativeBinary18ze_module_handle_tP6size_tP7uint8_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve native binary from Module. </p>
 <p><ul class="simple">
 <li><p>The native binary output can be cached to disk and new modules can be later constructed from the cached copy.</p></li>
@@ -814,11 +853,11 @@
 
 </section>
 <section id="zemodulegetglobalpointer">
-<span id="id5"></span><h3>zeModuleGetGlobalPointer<a class="headerlink" href="#zemodulegetglobalpointer" title="Link to this heading">#</a></h3>
+<span id="id6"></span><h3>zeModuleGetGlobalPointer<a class="headerlink" href="#zemodulegetglobalpointer" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv">
-<span id="_CPPv324zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv"></span><span id="_CPPv224zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv"></span><span id="zeModuleGetGlobalPointer__ze_module_handle_t.cCP.sP.voidPP"></span><span class="target" id="ze__api_8h_1a04011354917ef36d5de8ebd3f0206743"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetGlobalPointer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pGlobalName</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv"></span><span id="_CPPv224zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv"></span><span id="zeModuleGetGlobalPointer__ze_module_handle_t.cCP.sP.voidPP"></span><span class="target" id="ze__api_8h_1a04011354917ef36d5de8ebd3f0206743"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetGlobalPointer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pGlobalName</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pSize</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zeModuleGetGlobalPointer18ze_module_handle_tPKcP6size_tPPv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve global variable pointer from Module. </p>
 <p><ul class="simple">
 <li><p>For modules created from SPIR-V the interpretation of <code class="docutils literal notranslate"><span class="pre">pGlobalName</span></code> is described in the SPIR-V programming guide.</p></li>
@@ -868,11 +907,11 @@
 
 </section>
 <section id="zemodulegetkernelnames">
-<span id="id6"></span><h3>zeModuleGetKernelNames<a class="headerlink" href="#zemodulegetkernelnames" title="Link to this heading">#</a></h3>
+<span id="id7"></span><h3>zeModuleGetKernelNames<a class="headerlink" href="#zemodulegetkernelnames" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv422zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc">
-<span id="_CPPv322zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc"></span><span id="_CPPv222zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc"></span><span id="zeModuleGetKernelNames__ze_module_handle_t.uint32_tP.cCPP"></span><span class="target" id="ze__api_8h_1a5f976c050abb6b6a8aefcd33f9b031f9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetKernelNames</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNames</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv322zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc"></span><span id="_CPPv222zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc"></span><span id="zeModuleGetKernelNames__ze_module_handle_t.uint32_tP.cCPP"></span><span class="target" id="ze__api_8h_1a5f976c050abb6b6a8aefcd33f9b031f9"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetKernelNames</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pCount</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pNames</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422zeModuleGetKernelNames18ze_module_handle_tP8uint32_tPPKc" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve all kernel names in the module. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -918,11 +957,11 @@
 
 </section>
 <section id="zemodulegetproperties">
-<span id="id7"></span><h3>zeModuleGetProperties<a class="headerlink" href="#zemodulegetproperties" title="Link to this heading">#</a></h3>
+<span id="id8"></span><h3>zeModuleGetProperties<a class="headerlink" href="#zemodulegetproperties" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t">
-<span id="_CPPv321zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t"></span><span id="_CPPv221zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t"></span><span id="zeModuleGetProperties__ze_module_handle_t.ze_module_properties_tP"></span><span class="target" id="ze__api_8h_1ac6b2eaf29059f94ffb21e4ba36f6359a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetProperties</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <a class="reference internal" href="#ze-module-properties-t" title="ze_module_properties_t"><span class="n"><span class="pre">ze_module_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pModuleProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv321zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t"></span><span id="_CPPv221zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t"></span><span id="zeModuleGetProperties__ze_module_handle_t.ze_module_properties_tP"></span><span class="target" id="ze__api_8h_1ac6b2eaf29059f94ffb21e4ba36f6359a"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetProperties</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <a class="reference internal" href="#ze-module-properties-t" title="ze_module_properties_t"><span class="n"><span class="pre">ze_module_properties_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pModuleProperties</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421zeModuleGetProperties18ze_module_handle_tP22ze_module_properties_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve module properties. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -967,11 +1006,11 @@
 
 </section>
 <section id="zemodulegetfunctionpointer">
-<span id="id8"></span><h3>zeModuleGetFunctionPointer<a class="headerlink" href="#zemodulegetfunctionpointer" title="Link to this heading">#</a></h3>
+<span id="id9"></span><h3>zeModuleGetFunctionPointer<a class="headerlink" href="#zemodulegetfunctionpointer" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv426zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv">
-<span id="_CPPv326zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv"></span><span id="_CPPv226zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv"></span><span id="zeModuleGetFunctionPointer__ze_module_handle_t.cCP.voidPP"></span><span class="target" id="ze__api_8h_1a85c3ba7e9f0d0d58f57001ebc40019a5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetFunctionPointer</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFunctionName</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pfnFunction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv326zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv"></span><span id="_CPPv226zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv"></span><span id="zeModuleGetFunctionPointer__ze_module_handle_t.cCP.voidPP"></span><span class="target" id="ze__api_8h_1a85c3ba7e9f0d0d58f57001ebc40019a5"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetFunctionPointer</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pFunctionName</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pfnFunction</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426zeModuleGetFunctionPointer18ze_module_handle_tPKcPPv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve a function pointer from a module by name. </p>
 <p><ul class="simple">
 <li><p>The function pointer is unique for the device on which the module was created.</p></li>
@@ -1022,11 +1061,11 @@
 
 </section>
 <section id="zemodulegetdevicehandle">
-<span id="id9"></span><h3>zeModuleGetDeviceHandle<a class="headerlink" href="#zemodulegetdevicehandle" title="Link to this heading">#</a></h3>
+<span id="id10"></span><h3>zeModuleGetDeviceHandle<a class="headerlink" href="#zemodulegetdevicehandle" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.18</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv423zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t">
-<span id="_CPPv323zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t"></span><span id="_CPPv223zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t"></span><span id="zeModuleGetDeviceHandle__ze_module_handle_t.ze_device_handle_tP"></span><span class="target" id="ze__api_8h_1afdb5539c1dbe80143825e8a15bbde141"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetDeviceHandle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ze_module_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <span class="n"><span class="pre">ze_device_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv323zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t"></span><span id="_CPPv223zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t"></span><span id="zeModuleGetDeviceHandle__ze_module_handle_t.ze_device_handle_tP"></span><span class="target" id="ze__api_8h_1afdb5539c1dbe80143825e8a15bbde141"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zeModuleGetDeviceHandle</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#ze-module-handle-t" title="ze_module_handle_t"><span class="n"><span class="pre">ze_module_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hModule</span></span>, <a class="reference internal" href="device.html#ze-device-handle-t" title="ze_device_handle_t"><span class="n"><span class="pre">ze_device_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phDevice</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423zeModuleGetDeviceHandle18ze_module_handle_tP18ze_device_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Retrieve the handle of the device on which the module was created. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -1073,8 +1112,13 @@
 <section id="module-enums">
 <h2>Module Enums<a class="headerlink" href="#module-enums" title="Link to this heading">#</a></h2>
 <section id="ze-module-format-t">
-<span id="id10"></span><h3>ze_module_format_t<a class="headerlink" href="#ze-module-format-t" title="Link to this heading">#</a></h3>
+<span id="id11"></span><h3>ze_module_format_t<a class="headerlink" href="#ze-module-format-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-module-desc-t"><span class="std std-ref">ze_module_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv418ze_module_format_t">
 <span id="_CPPv318ze_module_format_t"></span><span id="_CPPv218ze_module_format_t"></span><span class="target" id="ze__api_8h_1ada45cd6433ed2ff26cb9b349fe6f5b3a"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_format_t</span></span></span><a class="headerlink" href="#_CPPv418ze_module_format_t" title="Link to this definition">#</a><br /></dt>
@@ -1114,8 +1158,19 @@
 
 </section>
 <section id="ze-module-property-flags-t">
-<span id="id11"></span><h3>ze_module_property_flags_t<a class="headerlink" href="#ze-module-property-flags-t" title="Link to this heading">#</a></h3>
+<span id="id12"></span><h3>ze_module_property_flags_t<a class="headerlink" href="#ze-module-property-flags-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-module-properties-t"><span class="std std-ref">ze_module_properties_t</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv426ze_module_property_flags_t">
+<span id="_CPPv326ze_module_property_flags_t"></span><span id="_CPPv226ze_module_property_flags_t"></span><span id="ze_module_property_flags_t"></span><span class="target" id="ze__api_8h_1a44455e2d72b9fd44c3c251ba5290542d"></span><span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_property_flags_t</span></span></span><a class="headerlink" href="#_CPPv426ze_module_property_flags_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Supported module property flags. </p>
+</dd></dl>
+
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv425ze_module_property_flag_t">
 <span id="_CPPv325ze_module_property_flag_t"></span><span id="_CPPv225ze_module_property_flag_t"></span><span class="target" id="ze__api_8h_1a60e368622444eeb9aee94699daa51bd0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_property_flag_t</span></span></span><a class="headerlink" href="#_CPPv425ze_module_property_flag_t" title="Link to this definition">#</a><br /></dt>
@@ -1139,8 +1194,13 @@
 <section id="module-structures">
 <h2>Module Structures<a class="headerlink" href="#module-structures" title="Link to this heading">#</a></h2>
 <section id="ze-module-constants-t">
-<span id="id12"></span><h3>ze_module_constants_t<a class="headerlink" href="#ze-module-constants-t" title="Link to this heading">#</a></h3>
+<span id="id13"></span><h3>ze_module_constants_t<a class="headerlink" href="#ze-module-constants-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#ze-module-desc-t"><span class="std std-ref">ze_module_desc_t</span></a>, <a class="reference internal" href="../experimental/module.html#ze-module-program-exp-desc-t"><span class="std std-ref">ze_module_program_exp_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv421ze_module_constants_t">
 <span id="_CPPv321ze_module_constants_t"></span><span id="_CPPv221ze_module_constants_t"></span><span id="ze_module_constants_t"></span><span class="target" id="structze__module__constants__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_constants_t</span></span></span><a class="headerlink" href="#_CPPv421ze_module_constants_t" title="Link to this definition">#</a><br /></dt>
@@ -1170,8 +1230,13 @@
 
 </section>
 <section id="ze-module-desc-t">
-<span id="id13"></span><h3>ze_module_desc_t<a class="headerlink" href="#ze-module-desc-t" title="Link to this heading">#</a></h3>
+<span id="id14"></span><h3>ze_module_desc_t<a class="headerlink" href="#ze-module-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zemodulecreate"><span class="std std-ref">zeModuleCreate</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv416ze_module_desc_t">
 <span id="_CPPv316ze_module_desc_t"></span><span id="_CPPv216ze_module_desc_t"></span><span id="ze_module_desc_t"></span><span class="target" id="structze__module__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_desc_t</span></span></span><a class="headerlink" href="#_CPPv416ze_module_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -1256,8 +1321,13 @@
 
 </section>
 <section id="ze-module-properties-t">
-<span id="id14"></span><h3>ze_module_properties_t<a class="headerlink" href="#ze-module-properties-t" title="Link to this heading">#</a></h3>
+<span id="id15"></span><h3>ze_module_properties_t<a class="headerlink" href="#ze-module-properties-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zemodulegetproperties"><span class="std std-ref">zeModuleGetProperties</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv422ze_module_properties_t">
 <span id="_CPPv322ze_module_properties_t"></span><span id="_CPPv222ze_module_properties_t"></span><span id="ze_module_properties_t"></span><span class="target" id="structze__module__properties__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ze_module_properties_t</span></span></span><a class="headerlink" href="#_CPPv422ze_module_properties_t" title="Link to this definition">#</a><br /></dt>
@@ -1278,8 +1348,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N22ze_module_properties_t5flagsE">
-<span id="_CPPv3N22ze_module_properties_t5flagsE"></span><span id="_CPPv2N22ze_module_properties_t5flagsE"></span><span id="ze_module_properties_t::flags__ze_module_property_flags_t"></span><span class="target" id="structze__module__properties__t_1a4e110d0f5e75876fb634f3514fc4e1ec"></span><span class="n"><span class="pre">ze_module_property_flags_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N22ze_module_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
-<dd><p>[out] 0 (none) or a valid combination of <a class="reference internal" href="#ze-module-property-flags-t"><span class="std std-ref">ze_module_property_flag_t</span></a></p>
+<span id="_CPPv3N22ze_module_properties_t5flagsE"></span><span id="_CPPv2N22ze_module_properties_t5flagsE"></span><span id="ze_module_properties_t::flags__ze_module_property_flags_t"></span><span class="target" id="structze__module__properties__t_1a4e110d0f5e75876fb634f3514fc4e1ec"></span><a class="reference internal" href="#ze-module-property-flags-t" title="ze_module_property_flags_t"><span class="n"><span class="pre">ze_module_property_flags_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flags</span></span></span><a class="headerlink" href="#_CPPv4N22ze_module_properties_t5flagsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>[out] 0 (none) or a valid combination of <a class="reference internal" href="#ze__api_8h_1a60e368622444eeb9aee94699daa51bd0"><span class="std std-ref">ze_module_property_flag_t</span></a></p>
 </dd></dl>
 
 </div>
@@ -1301,12 +1371,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="mem.html"
+       href="image.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Mem</p>
+        <p class="prev-next-title">Image</p>
       </div>
     </a>
     <a class="right-next"
@@ -1334,7 +1404,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zeModule</div><ul class="ctoc-list"><li><a href="module.html#zemodulecreate">&hellip;Create</a></li><li><a href="module.html#zemoduledestroy">&hellip;Destroy</a></li><li><a href="module.html#zemoduledynamiclink">&hellip;DynamicLink</a></li><li><a href="module.html#zemodulegetnativebinary">&hellip;GetNativeBinary</a></li><li><a href="module.html#zemodulegetglobalpointer">&hellip;GetGlobalPointer</a></li><li><a href="module.html#zemodulegetkernelnames">&hellip;GetKernelNames</a></li><li><a href="module.html#zemodulegetproperties">&hellip;GetProperties</a></li><li><a href="module.html#zemodulegetfunctionpointer">&hellip;GetFunctionPointer</a></li><li><a href="module.html#zemodulegetdevicehandle">&hellip;GetDeviceHandle</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="module.html#ze-module-format-t">ze_module_format_t</a></li><li><a href="module.html#ze-module-property-flags-t">ze_module_property_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="module.html#ze-module-constants-t">ze_module_constants_t</a></li><li><a href="module.html#ze-module-desc-t">ze_module_desc_t</a></li><li><a href="module.html#ze-module-properties-t">ze_module_properties_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="module.html#ze-module-handle-t">ze_module_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">9</span></summary><div class="ctoc-prefix">zeModule</div><ul class="ctoc-list"><li><a href="module.html#zemodulecreate">&hellip;Create</a></li><li><a href="module.html#zemoduledestroy">&hellip;Destroy</a></li><li><a href="module.html#zemoduledynamiclink">&hellip;DynamicLink</a></li><li><a href="module.html#zemodulegetnativebinary">&hellip;GetNativeBinary</a></li><li><a href="module.html#zemodulegetglobalpointer">&hellip;GetGlobalPointer</a></li><li><a href="module.html#zemodulegetkernelnames">&hellip;GetKernelNames</a></li><li><a href="module.html#zemodulegetproperties">&hellip;GetProperties</a></li><li><a href="module.html#zemodulegetfunctionpointer">&hellip;GetFunctionPointer</a></li><li><a href="module.html#zemodulegetdevicehandle">&hellip;GetDeviceHandle</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">2</span></summary><ul class="ctoc-list"><li><a href="module.html#ze-module-format-t">ze_module_format_t</a></li><li><a href="module.html#ze-module-property-flags-t">ze_module_property_flags_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">3</span></summary><ul class="ctoc-list"><li><a href="module.html#ze-module-constants-t">ze_module_constants_t</a></li><li><a href="module.html#ze-module-desc-t">ze_module_desc_t</a></li><li><a href="module.html#ze-module-properties-t">ze_module_properties_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

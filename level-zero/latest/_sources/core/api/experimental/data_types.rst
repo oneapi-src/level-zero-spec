@@ -1,7 +1,9 @@
 ============================================================
 Data Types - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 
@@ -19,6 +21,10 @@ ze_module_program_exp_version_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_module_program`
+
 .. doxygenenum:: ze_module_program_exp_version_t
     :project: LevelZero
 
@@ -31,6 +37,10 @@ ze_global_offset_exp_version_t
 .. rst-class:: api-version
 
 *Added in version 1.1*
+
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_global_offset`
 
 .. doxygenenum:: ze_global_offset_exp_version_t
     :project: LevelZero
@@ -45,6 +55,10 @@ ze_event_query_timestamps_exp_version_t
 
 *Added in version 1.2*
 
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_event_query_timestamps`
+
 .. doxygenenum:: ze_event_query_timestamps_exp_version_t
     :project: LevelZero
 
@@ -57,6 +71,10 @@ ze_image_memory_properties_exp_version_t
 .. rst-class:: api-version
 
 *Added in version 1.2*
+
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_image_memory_properties`
 
 .. doxygenenum:: ze_image_memory_properties_exp_version_t
     :project: LevelZero
@@ -71,6 +89,10 @@ ze_scheduling_hints_exp_version_t
 
 *Added in version 1.2*
 
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_scheduling_hints`
+
 .. doxygenenum:: ze_scheduling_hints_exp_version_t
     :project: LevelZero
 
@@ -83,6 +105,10 @@ ze_bandwidth_properties_exp_version_t
 .. rst-class:: api-version
 
 *Added in version 1.4*
+
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_bandwidth_properties`
 
 .. doxygenenum:: ze_bandwidth_properties_exp_version_t
     :project: LevelZero
@@ -97,6 +123,10 @@ ze_fabric_exp_version_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_fabric`
+
 .. doxygenenum:: ze_fabric_exp_version_t
     :project: LevelZero
 
@@ -109,6 +139,10 @@ ze_sub_allocations_exp_version_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_sub_allocations`
 
 .. doxygenenum:: ze_sub_allocations_exp_version_t
     :project: LevelZero
@@ -123,6 +157,10 @@ ze_bindless_image_exp_version_t
 
 *Added in version 1.9*
 
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_bindless_image`
+
 .. doxygenenum:: ze_bindless_image_exp_version_t
     :project: LevelZero
 
@@ -135,6 +173,10 @@ ze_kernel_get_binary_exp_version_t
 .. rst-class:: api-version
 
 *Added in version 1.11*
+
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_extension_kernel_binary_exp`
 
 .. doxygenenum:: ze_kernel_get_binary_exp_version_t
     :project: LevelZero
@@ -149,7 +191,12 @@ ze_kernel_get_allocation_properties_exp_version_t
 
 *Added in version 1.14*
 
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZE_experimental_kernel_allocation_properties`
+
 .. doxygenenum:: ze_kernel_get_allocation_properties_exp_version_t
     :project: LevelZero
+
 
  

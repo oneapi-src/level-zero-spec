@@ -1,7 +1,9 @@
 ============================================================
 Mem
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Mem Functions
@@ -178,6 +180,13 @@ ze_device_mem_alloc_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-device-mem-alloc-desc-t`
+
+.. doxygentypedef:: ze_device_mem_alloc_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_device_mem_alloc_flag_t
     :project: LevelZero
 
@@ -190,6 +199,13 @@ ze_host_mem_alloc_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-host-mem-alloc-desc-t`
+
+.. doxygentypedef:: ze_host_mem_alloc_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_host_mem_alloc_flag_t
     :project: LevelZero
@@ -204,6 +220,10 @@ ze_memory_type_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-memory-allocation-properties-t`, :ref:`ze-kernel-allocation-exp-properties-t`
+
 .. doxygenenum:: ze_memory_type_t
     :project: LevelZero
 
@@ -216,6 +236,13 @@ ze_ipc_memory_flags_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeMemOpenIpcHandle`
+
+.. doxygentypedef:: ze_ipc_memory_flags_t
+    :project: LevelZero
 
 .. doxygenenum:: ze_ipc_memory_flag_t
     :project: LevelZero
@@ -230,8 +257,16 @@ ze_ipc_mem_handle_type_flags_t
 
 *Added in version 1.15*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-ipc-mem-handle-type-ext-desc-t`
+
+.. doxygentypedef:: ze_ipc_mem_handle_type_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_ipc_mem_handle_type_flag_t
     :project: LevelZero
+
 
  
 Mem Structures
@@ -246,6 +281,11 @@ ze_device_mem_alloc_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeMemAllocShared`, :ref:`zeMemAllocDevice`
+   | **pNext may point to:** :ref:`ze-external-memory-export-desc-t`, :ref:`ze-external-memory-import-fd-t`, :ref:`ze-external-memory-import-win32-handle-t`, :ref:`ze-raytracing-mem-alloc-ext-desc-t`, :ref:`ze-relaxed-allocation-limits-ext-desc-t`, :ref:`ze-relaxed-allocation-limits-exp-desc-t`, :ref:`ze-memory-compression-hints-ext-desc-t`
 
 .. doxygenstruct:: ze_device_mem_alloc_desc_t
     :project: LevelZero
@@ -262,6 +302,11 @@ ze_host_mem_alloc_desc_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeMemAllocShared`, :ref:`zeMemAllocHost`
+   | **pNext may point to:** :ref:`ze-external-memory-export-desc-t`, :ref:`ze-external-memory-import-fd-t`, :ref:`ze-external-memory-import-win32-handle-t`, :ref:`ze-relaxed-allocation-limits-ext-desc-t`, :ref:`ze-relaxed-allocation-limits-exp-desc-t`, :ref:`ze-memory-compression-hints-ext-desc-t`, :ref:`ze-external-memmap-sysmem-ext-desc-t`
+
 .. doxygenstruct:: ze_host_mem_alloc_desc_t
     :project: LevelZero
     :members:
@@ -276,6 +321,11 @@ ze_memory_allocation_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeMemGetAllocProperties`
+   | **pNext may point to:** :ref:`ze-external-memory-export-fd-t`, :ref:`ze-external-memory-export-win32-handle-t`, :ref:`ze-memory-sub-allocations-exp-properties-t`
 
 .. doxygenstruct:: ze_memory_allocation_properties_t
     :project: LevelZero
@@ -292,6 +342,10 @@ ze_external_memory_export_desc_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-mem-alloc-desc-t`, :ref:`ze-host-mem-alloc-desc-t`, :ref:`ze-physical-mem-desc-t`, :ref:`ze-image-desc-t`
+
 .. doxygenstruct:: ze_external_memory_export_desc_t
     :project: LevelZero
     :members:
@@ -306,6 +360,10 @@ ze_external_memory_import_fd_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-mem-alloc-desc-t`, :ref:`ze-host-mem-alloc-desc-t`, :ref:`ze-physical-mem-desc-t`, :ref:`ze-image-desc-t`
 
 .. doxygenstruct:: ze_external_memory_import_fd_t
     :project: LevelZero
@@ -322,6 +380,10 @@ ze_external_memory_export_fd_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-memory-allocation-properties-t`, :ref:`ze-image-allocation-ext-properties-t`, :ref:`ze-physical-mem-properties-t`
+
 .. doxygenstruct:: ze_external_memory_export_fd_t
     :project: LevelZero
     :members:
@@ -336,6 +398,10 @@ ze_external_memory_import_win32_handle_t
 .. rst-class:: api-version
 
 *Added in version 1.2*
+
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-device-mem-alloc-desc-t`, :ref:`ze-host-mem-alloc-desc-t`, :ref:`ze-physical-mem-desc-t`, :ref:`ze-image-desc-t`
 
 .. doxygenstruct:: ze_external_memory_import_win32_handle_t
     :project: LevelZero
@@ -352,6 +418,10 @@ ze_external_memory_export_win32_handle_t
 
 *Added in version 1.2*
 
+.. container:: api-usage
+
+   | **Goes in pNext of:** :ref:`ze-memory-allocation-properties-t`, :ref:`ze-image-allocation-ext-properties-t`, :ref:`ze-physical-mem-properties-t`
+
 .. doxygenstruct:: ze_external_memory_export_win32_handle_t
     :project: LevelZero
     :members:
@@ -366,6 +436,10 @@ ze_sub_allocation_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-memory-sub-allocations-exp-properties-t`
 
 .. doxygenstruct:: ze_sub_allocation_t
     :project: LevelZero

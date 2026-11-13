@@ -1,7 +1,9 @@
 ============================================================
 Driver - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Driver - Deprecated Functions
@@ -40,6 +42,7 @@ zeDriverRTASFormatCompatibilityCheckExp
 
 .. doxygenfunction:: zeDriverRTASFormatCompatibilityCheckExp
     :project: LevelZero
+
 
 
 

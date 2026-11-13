@@ -190,6 +190,22 @@ Enumeration values
      - 1.13
      - Related: :ref:`zeDeviceGetSubDevices`
      - To place work on specific sub-devices, submit to sub-device handles or set ZE_FLAT_DEVICE_HIERARCHY=FLAT.
+   * - :ref:`ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_HIGH <ze-command-queue-priority-t>`
+     - 1.21
+     - :ref:`ZE_COMMAND_QUEUE_PRIORITY_HIGH <ze-command-queue-priority-t>`
+     - 
+   * - :ref:`ZE_COMMAND_QUEUE_PRIORITY_PRIORITY_LOW <ze-command-queue-priority-t>`
+     - 1.21
+     - :ref:`ZE_COMMAND_QUEUE_PRIORITY_LOW <ze-command-queue-priority-t>`
+     - 
+   * - :ref:`ZE_DEVICE_INPUT_DATA_TYPE_FLAG_DEVICE_INPUT_DATA_TYPE_NONE <ze-device-input-data-type-flags-t>`
+     - 1.21
+     - --
+     - No replacement; a field value of 0 already indicates that no data types are supported.
+   * - :ref:`ZE_DEVICE_INPUT_DATA_TYPE_FLAG_ZE_DEVICE_INPUT_DATA_INT8_PACK4_PER_SIMD_LANE <ze-device-input-data-type-flags-t>`
+     - 1.21
+     - :ref:`ZE_DEVICE_INPUT_DATA_TYPE_FLAG_DEVICE_INPUT_DATA_INT8_PACK4_PER_SIMD_LANE <ze-device-input-data-type-flags-t>`
+     - 
    * - :ref:`ZE_EVENT_COUNTER_BASED_FLAG_IPC_BIDIRECTIONAL <ze-event-counter-based-flags-t>`
      - 1.20
      - Related: :ref:`ZE_DEVICE_EVENT_PROPERTIES_FLAG_COUNTER_BASED_IPC_BIDIRECTIONAL <ze-device-event-properties-flags-t>`

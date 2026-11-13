@@ -1,7 +1,32 @@
 ============================================================
 Overclock
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Overclock Handles
+=================
+
+
+.. _zes-overclock-handle-t:
+
+zes_overclock_handle_t
+----------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumOverclockDomains`
+   | **Used by:** :ref:`zesOverclockGetDomainProperties`, :ref:`zesOverclockGetDomainVFProperties`, :ref:`zesOverclockGetDomainControlProperties`, :ref:`zesOverclockGetControlCurrentValue`, :ref:`zesOverclockGetControlPendingValue`, :ref:`zesOverclockSetControlUserValue`, :ref:`zesOverclockGetControlState`, :ref:`zesOverclockGetVFPointValues`, :ref:`zesOverclockSetVFPointValues`
+   | **See also:** `Frequency/Voltage overclocking (Programming Guide) <../../PROG.html#frequency-voltage-overclocking>`__
+
+.. cpp:type:: zes_overclock_handle_t
+
+    Handle for a Sysman device overclock domain.
+
 
 
 Overclock Functions
@@ -139,6 +164,10 @@ zes_overclock_control_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesOverclockGetDomainControlProperties`, :ref:`zesOverclockGetControlCurrentValue`, :ref:`zesOverclockGetControlPendingValue`, :ref:`zesOverclockSetControlUserValue`, :ref:`zesOverclockGetControlState`
+
 .. doxygenenum:: zes_overclock_control_t
     :project: LevelZero
 
@@ -151,6 +180,10 @@ zes_overclock_mode_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceReadOverclockState`
 
 .. doxygenenum:: zes_overclock_mode_t
     :project: LevelZero
@@ -165,6 +198,10 @@ zes_control_state_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesOverclockGetControlState`
+
 .. doxygenenum:: zes_control_state_t
     :project: LevelZero
 
@@ -177,6 +214,10 @@ zes_pending_action_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDeviceReadOverclockState`, :ref:`zesOverclockSetControlUserValue`, :ref:`zesOverclockGetControlState`
 
 .. doxygenenum:: zes_pending_action_t
     :project: LevelZero
@@ -191,6 +232,10 @@ zes_vf_program_type_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-overclock-properties-t`
+
 .. doxygenenum:: zes_vf_program_type_t
     :project: LevelZero
 
@@ -203,6 +248,10 @@ zes_vf_type_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesOverclockGetVFPointValues`, :ref:`zesOverclockSetVFPointValues`
 
 .. doxygenenum:: zes_vf_type_t
     :project: LevelZero
@@ -217,8 +266,13 @@ zes_vf_array_type_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesOverclockGetVFPointValues`
+
 .. doxygenenum:: zes_vf_array_type_t
     :project: LevelZero
+
 
  
 Overclock Structures
@@ -233,6 +287,10 @@ zes_overclock_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesOverclockGetDomainProperties`
 
 .. doxygenstruct:: zes_overclock_properties_t
     :project: LevelZero
@@ -249,6 +307,10 @@ zes_control_property_t
 
 *Added in version 1.5*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesOverclockGetDomainControlProperties`
+
 .. doxygenstruct:: zes_control_property_t
     :project: LevelZero
     :members:
@@ -263,6 +325,10 @@ zes_vf_property_t
 .. rst-class:: api-version
 
 *Added in version 1.5*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesOverclockGetDomainVFProperties`
 
 .. doxygenstruct:: zes_vf_property_t
     :project: LevelZero

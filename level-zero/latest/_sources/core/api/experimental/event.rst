@@ -1,7 +1,9 @@
 ============================================================
 Event - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Event - Experimental Functions
@@ -19,6 +21,7 @@ zeEventQueryTimestampsExp
 
 .. doxygenfunction:: zeEventQueryTimestampsExp
     :project: LevelZero
+
 
 
 

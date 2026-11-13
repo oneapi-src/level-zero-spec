@@ -1,7 +1,32 @@
 ============================================================
 Performance Factor
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Performance Factor Handles
+==========================
+
+
+.. _zes-perf-handle-t:
+
+zes_perf_handle_t
+-----------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumPerformanceFactorDomains`
+   | **Used by:** :ref:`zesPerformanceFactorGetProperties`, :ref:`zesPerformanceFactorGetConfig`, :ref:`zesPerformanceFactorSetConfig`
+   | **See also:** :ref:`Tuning workload performance (Programming Guide) <Performance-Factor>`
+
+.. cpp:type:: zes_perf_handle_t
+
+    Handle for a Sysman device performance factors.
+
 
 
 Performance Factor Functions
@@ -48,6 +73,7 @@ zesPerformanceFactorSetConfig
 
 
 
+
  
 Performance Factor Structures
 =============================
@@ -61,6 +87,10 @@ zes_perf_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesPerformanceFactorGetProperties`
 
 .. doxygenstruct:: zes_perf_properties_t
     :project: LevelZero

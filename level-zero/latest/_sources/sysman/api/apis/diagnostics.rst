@@ -1,7 +1,32 @@
 ============================================================
 Diagnostics
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Diagnostics Handles
+===================
+
+
+.. _zes-diag-handle-t:
+
+zes_diag_handle_t
+-----------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumDiagnosticTestSuites`
+   | **Used by:** :ref:`zesDiagnosticsGetProperties`, :ref:`zesDiagnosticsGetTests`, :ref:`zesDiagnosticsRunTests`
+   | **See also:** :ref:`Performing Diagnostics (Programming Guide) <Diagnostics>`
+
+.. cpp:type:: zes_diag_handle_t
+
+    Handle for a Sysman device diagnostics test suite.
+
 
 
 Diagnostics Functions
@@ -61,8 +86,13 @@ zes_diag_result_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDiagnosticsRunTests`
+
 .. doxygenenum:: zes_diag_result_t
     :project: LevelZero
+
 
  
 Diagnostics Structures
@@ -78,6 +108,10 @@ zes_diag_test_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDiagnosticsGetTests`
+
 .. doxygenstruct:: zes_diag_test_t
     :project: LevelZero
     :members:
@@ -92,6 +126,10 @@ zes_diag_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesDiagnosticsGetProperties`
 
 .. doxygenstruct:: zes_diag_properties_t
     :project: LevelZero

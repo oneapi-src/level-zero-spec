@@ -1,7 +1,9 @@
 ============================================================
 VF Management - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 VF Management - Deprecated Functions
@@ -128,6 +130,13 @@ zes_vf_info_mem_type_exp_flags_t
 
 **Deprecated** since 1.10. Use :ref:`zes-mem-loc-t` instead.
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`zes-vf-util-mem-exp-t`
+
+.. doxygentypedef:: zes_vf_info_mem_type_exp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_vf_info_mem_type_exp_flag_t
     :project: LevelZero
 
@@ -145,8 +154,17 @@ zes_vf_info_util_exp_flags_t
 
 **Deprecated** since 1.10. The Exp2 utilization queries report what is available: memory by zes_mem_loc_t, engines by zes_engine_group_t. Related: :ref:`zesVFManagementGetVFEngineUtilizationExp2`.
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementSetVFTelemetryModeExp`, :ref:`zesVFManagementSetVFTelemetrySamplingIntervalExp`
+   | **Member of:** :ref:`zes-vf-exp-properties-t`
+
+.. doxygentypedef:: zes_vf_info_util_exp_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: zes_vf_info_util_exp_flag_t
     :project: LevelZero
+
 
  
 VF Management - Deprecated Structures
@@ -165,6 +183,10 @@ zes_vf_exp_properties_t
 .. rst-class:: api-deprecated
 
 **Deprecated** since 1.10. Use :ref:`zes-vf-exp2-capabilities-t` instead.
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementGetVFPropertiesExp`
 
 .. doxygenstruct:: zes_vf_exp_properties_t
     :project: LevelZero
@@ -185,6 +207,10 @@ zes_vf_util_mem_exp_t
 
 **Deprecated** since 1.10. Use :ref:`zes-vf-util-mem-exp2-t` instead.
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementGetVFMemoryUtilizationExp`
+
 .. doxygenstruct:: zes_vf_util_mem_exp_t
     :project: LevelZero
     :members:
@@ -204,6 +230,10 @@ zes_vf_util_engine_exp_t
 
 **Deprecated** since 1.10. Use :ref:`zes-vf-util-engine-exp2-t` instead.
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementGetVFEngineUtilizationExp`
+
 .. doxygenstruct:: zes_vf_util_engine_exp_t
     :project: LevelZero
     :members:
@@ -222,6 +252,10 @@ zes_vf_exp_capabilities_t
 .. rst-class:: api-deprecated
 
 **Deprecated** since 1.12. Use :ref:`zes-vf-exp2-capabilities-t` instead.
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesVFManagementGetVFCapabilitiesExp`
 
 .. doxygenstruct:: zes_vf_exp_capabilities_t
     :project: LevelZero

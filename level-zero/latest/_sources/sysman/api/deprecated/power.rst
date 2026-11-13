@@ -1,7 +1,9 @@
 ============================================================
 Power - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Power - Deprecated Functions
@@ -43,6 +45,7 @@ zesPowerSetLimits
 
 
 
+
  
 Power - Deprecated Structures
 =============================
@@ -60,6 +63,10 @@ zes_power_sustained_limit_t
 .. rst-class:: api-deprecated
 
 **Deprecated** since 1.8. One descriptor per limit level replaces this struct. Use :ref:`zes-power-limit-ext-desc-t` instead.
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesPowerGetLimits`, :ref:`zesPowerSetLimits`
 
 .. doxygenstruct:: zes_power_sustained_limit_t
     :project: LevelZero
@@ -80,6 +87,10 @@ zes_power_burst_limit_t
 
 **Deprecated** since 1.8. One descriptor per limit level replaces this struct. Use :ref:`zes-power-limit-ext-desc-t` instead.
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesPowerGetLimits`, :ref:`zesPowerSetLimits`
+
 .. doxygenstruct:: zes_power_burst_limit_t
     :project: LevelZero
     :members:
@@ -98,6 +109,10 @@ zes_power_peak_limit_t
 .. rst-class:: api-deprecated
 
 **Deprecated** since 1.8. One descriptor per limit level replaces this struct. Use :ref:`zes-power-limit-ext-desc-t` instead.
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesPowerGetLimits`, :ref:`zesPowerSetLimits`
 
 .. doxygenstruct:: zes_power_peak_limit_t
     :project: LevelZero

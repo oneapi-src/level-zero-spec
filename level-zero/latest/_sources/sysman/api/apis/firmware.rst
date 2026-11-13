@@ -1,7 +1,32 @@
 ============================================================
 Firmware
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Firmware Handles
+================
+
+
+.. _zes-firmware-handle-t:
+
+zes_firmware_handle_t
+---------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumFirmwares`
+   | **Used by:** :ref:`zesFirmwareGetProperties`, :ref:`zesFirmwareFlash`, :ref:`zesFirmwareGetFlashProgress`, :ref:`zesFirmwareGetConsoleLogs`, :ref:`zesFirmwareGetSecurityVersionExp`, :ref:`zesFirmwareSetSecurityVersionExp`
+   | **See also:** :ref:`Operations on firmwares (Programming Guide) <Firmware>`
+
+.. cpp:type:: zes_firmware_handle_t
+
+    Handle for a Sysman device firmware.
+
 
 
 Firmware Functions
@@ -61,6 +86,7 @@ zesFirmwareGetConsoleLogs
 
 
 
+
  
 Firmware Structures
 ===================
@@ -74,6 +100,10 @@ zes_firmware_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesFirmwareGetProperties`
 
 .. doxygenstruct:: zes_firmware_properties_t
     :project: LevelZero

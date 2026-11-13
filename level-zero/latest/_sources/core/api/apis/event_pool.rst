@@ -1,7 +1,32 @@
 ============================================================
 Event Pool
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Event Pool Handles
+==================
+
+
+.. _ze-event-pool-handle-t:
+
+ze_event_pool_handle_t
+----------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zeEventPoolCreate`, :ref:`zeEventPoolOpenIpcHandle`, :ref:`zeEventGetEventPool`
+   | **Used by:** :ref:`zeEventPoolDestroy`, :ref:`zeEventCreate`, :ref:`zeEventPoolGetIpcHandle`, :ref:`zeEventPoolCloseIpcHandle`, :ref:`zeEventPoolGetContextHandle`, :ref:`zeEventPoolGetFlags`
+   | **See also:** :ref:`Events (Programming Guide) <Events>`
+
+.. cpp:type:: ze_event_pool_handle_t
+
+    Handle of driver's event pool object.
+
 
 
 Event Pool Functions
@@ -126,8 +151,17 @@ ze_event_pool_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeEventPoolGetFlags`
+   | **Member of:** :ref:`ze-event-pool-desc-t`
+
+.. doxygentypedef:: ze_event_pool_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_event_pool_flag_t
     :project: LevelZero
+
 
  
 Event Pool Structures
@@ -142,6 +176,11 @@ ze_event_pool_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeEventPoolCreate`
+   | **pNext may point to:** :ref:`ze-event-pool-counter-based-exp-desc-t`
 
 .. doxygenstruct:: ze_event_pool_desc_t
     :project: LevelZero

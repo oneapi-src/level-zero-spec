@@ -1,7 +1,9 @@
 ============================================================
 Data Types - Deprecated
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 
@@ -23,7 +25,12 @@ zet_api_tracing_exp_version_t
 
 **Deprecated** since 1.14. Not supported in L0 drivers; tracing moved to the loader. Use `L0 Loader API Tracing <https://github.com/oneapi-src/level-zero/tree/master/source/layers/tracing>`__ instead.
 
+.. container:: api-usage
+
+   | **Extension:** :ref:`ZET_experimental_api_tracing`
+
 .. doxygenenum:: zet_api_tracing_exp_version_t
     :project: LevelZero
+
 
  

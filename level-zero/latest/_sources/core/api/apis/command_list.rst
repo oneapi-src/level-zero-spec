@@ -7,7 +7,33 @@ Command List
 
    command_list-2
 
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Command List Handles
+====================
+
+
+.. _ze-command-list-handle-t:
+
+ze_command_list_handle_t
+------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zeCommandListCreate`, :ref:`zeCommandListCreateImmediate`, :ref:`zeCommandListCreateCloneExp`, :ref:`zeGraphGetPrimaryCommandListExt`
+   | **Used by:** :raw-html:`<span class="api-usage-fold"><input type="checkbox" id="usage-ze-command-list-handle-t-3"><span class="api-usage-links">` :ref:`zeCommandQueueExecuteCommandLists`, :ref:`zeCommandListDestroy`, :ref:`zeCommandListClose`, :ref:`zeCommandListReset`, :ref:`zeCommandListAppendWriteGlobalTimestamp`, :ref:`zeCommandListHostSynchronize`, :ref:`zeCommandListGetDeviceHandle`, :ref:`zeCommandListGetContextHandle`, :ref:`zeCommandListGetOrdinal`, :ref:`zeCommandListImmediateGetIndex`, :ref:`zeCommandListIsImmediate`, :ref:`zeCommandListGetFlags`, :ref:`zeCommandListImmediateGetFlags`, :ref:`zeCommandListImmediateGetMode`, :ref:`zeCommandListImmediateGetPriority`, :ref:`zeCommandListAppendBarrier`, :ref:`zeCommandListAppendMemoryRangesBarrier`, :ref:`zeCommandListAppendMemoryCopy`, :ref:`zeCommandListAppendMemoryCopyWithParameters`, :ref:`zeCommandListAppendMemoryFill`, :ref:`zeCommandListAppendMemoryFillWithParameters`, :ref:`zeCommandListAppendMemoryCopyRegion`, :ref:`zeCommandListAppendMemoryCopyFromContext`, :ref:`zeCommandListAppendImageCopy`, :ref:`zeCommandListAppendImageCopyRegion`, :ref:`zeCommandListAppendImageCopyToMemory`, :ref:`zeCommandListAppendImageCopyFromMemory`, :ref:`zeCommandListAppendMemoryPrefetch`, :ref:`zeCommandListAppendMemAdvise`, :ref:`zeCommandListAppendSignalEvent`, :ref:`zeCommandListAppendSignalEventWithParameters`, :ref:`zeCommandListAppendWaitOnEvents`, :ref:`zeCommandListAppendWaitOnEventsWithParameters`, :ref:`zeCommandListAppendEventReset`, :ref:`zeCommandListAppendQueryKernelTimestamps`, :ref:`zeCommandListAppendLaunchKernel`, :ref:`zeCommandListAppendLaunchKernelWithParameters`, :ref:`zeCommandListAppendLaunchKernelWithArguments`, :ref:`zeCommandListAppendLaunchCooperativeKernel`, :ref:`zeCommandListAppendLaunchKernelIndirect`, :ref:`zeCommandListAppendLaunchMultipleKernelsIndirect`, :ref:`zeCommandListAppendImageCopyToMemoryExt`, :ref:`zeCommandListAppendImageCopyFromMemoryExt`, :ref:`zeCommandListCreateCloneExp`, :ref:`zeCommandListImmediateAppendCommandListsExp`, :ref:`zeCommandListImmediateAppendCommandListsWithParameters`, :ref:`zeCommandListGetNextCommandIdExp`, :ref:`zeCommandListGetNextCommandIdWithKernelsExp`, :ref:`zeCommandListUpdateMutableCommandsExp`, :ref:`zeCommandListIsMutableExp`, :ref:`zeCommandListUpdateMutableCommandSignalEventExp`, :ref:`zeCommandListUpdateMutableCommandWaitEventsExp`, :ref:`zeCommandListUpdateMutableCommandKernelsExp`, :ref:`zeCommandListAppendSignalExternalSemaphoreExt`, :ref:`zeCommandListAppendWaitExternalSemaphoreExt`, :ref:`zeRTASBuilderCommandListAppendCopyExt`, :ref:`zeCommandListBeginGraphCaptureExt`, :ref:`zeCommandListBeginCaptureIntoGraphExt`, :ref:`zeCommandListIsGraphCaptureEnabledExt`, :ref:`zeCommandListEndGraphCaptureExt`, :ref:`zeCommandListGetGraphExt`, :ref:`zeCommandListAppendGraphExt`, :ref:`zeCommandListAppendHostFunction`, :ref:`zeCommandListVisitExt`, :ref:`zeCommandListGetNextCommandIdExt`, :ref:`zeCommandListGetNextCommandIdWithKernelsExt`, :ref:`zeCommandListUpdateMutableCommandsExt`, :ref:`zeCommandListIsMutableExt`, :ref:`zeCommandListUpdateMutableCommandSignalEventExt`, :ref:`zeCommandListUpdateMutableCommandWaitEventsExt`, :ref:`zeCommandListUpdateMutableCommandKernelsExt` :raw-html:`</span><label for="usage-ze-command-list-handle-t-3"><span class="more">Show all 71</span><span class="less">Show less</span></label></span>`
+   | **Member of:** :ref:`ze-command-visit-ext-desc-t`
+   | **See also:** `Command Lists (Programming Guide) <../../PROG.html#command-lists>`__
+
+.. cpp:type:: ze_command_list_handle_t
+
+    Handle of driver's command list object.
+
 
 
 Command List Functions
@@ -337,6 +363,7 @@ zeCommandListAppendLaunchKernelIndirect
 
 .. doxygenfunction:: zeCommandListAppendLaunchKernelIndirect
     :project: LevelZero
+
 
 
 

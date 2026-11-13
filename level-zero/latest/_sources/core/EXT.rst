@@ -204,6 +204,7 @@ List of Standard Sysman Extensions
     - :ref:`"ZES_extension_device_index" <ZES_extension_device_index>`
     - :ref:`"ZES_extension_device_gpu_topology" <ZES_extension_device_gpu_topology>`
     - :ref:`"ZES_extension_device_health" <ZES_extension_device_health>`
+    - :ref:`"ZES_extension_device_soc_uid" <ZES_extension_device_soc_uid>`
     - :ref:`"ZES_extension_device_ecc_default_properties" <ZES_extension_device_ecc_default_properties>`
     - :ref:`"ZES_extension_engine_activity" <ZES_extension_engine_activity>`
     - :ref:`"ZES_extension_info_logs" <ZES_extension_info_logs>`

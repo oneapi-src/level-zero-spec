@@ -19,11 +19,13 @@ API
     * :ref:`zes-info-log-type-ext-t`
     * :ref:`zes-info-log-format-ext-t`
     * :ref:`zes-info-log-record-type-ext-t`
+    * :ref:`zes-info-log-field-type-ext-t`
 
 * Handles
 
-    * zes_info_log_handle_t
-    * zes_info_log_instance_handle_t
+    * :ref:`zes-info-log-handle-t`
+    * :ref:`zes-info-log-instance-handle-t`
+    * :ref:`zes-info-log-decoder-context-handle-t`
 
 * Structures
 
@@ -31,6 +33,7 @@ API
     * :ref:`zes-info-log-instance-ext-desc-t`
     * :ref:`zes-info-log-metadata-ext-t`
     * :ref:`zes-info-log-read-status-ext-t`
+    * :ref:`zes-info-log-decodable-field-info-ext-t`
 
 * Functions
 
@@ -40,10 +43,17 @@ API
     * :ref:`zesInfoLogInstanceReadWithMetadataExt`
     * :ref:`zesInfoLogInstancePeekWithMetadataExt`
     * :ref:`zesInfoLogInstanceDeleteExt`
+    * :ref:`zesInfoLogDecoderContextCreateExt`
+    * :ref:`zesInfoLogDecoderContextGetFieldInfoExt`
+    * :ref:`zesInfoLogDecoderContextDecodeStartExt`
+    * :ref:`zesInfoLogDecoderContextReadFieldExt`
+    * :ref:`zesInfoLogDecoderContextDecodeStopExt`
+    * :ref:`zesInfoLogDecoderContextDeleteExt`
 
 * Macros
 
     * ZES_INFO_LOGS_EXT_NAME
+    * ZES_INFO_LOG_FIELD_DESC_SIZE
 
 Info Logs Overview
 ~~~~~~~~~~~~~~~~~~
@@ -61,12 +71,15 @@ The format of the records is reported by :ref:`zesInfoLogGetPropertiesExt`\. Rec
 extension returns them as opaque binary data and the application is responsible for
 decoding them.
 
+Where the driver can decode that format, an application can have it decode named fields
+out of those records instead of parsing the record format itself, as described in
+`Info Log Decoder Overview`_ below.
+
 Enumerating Info Logs and Querying Properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. parsed-literal::
 
-    // Query the number of info logs supported by the driver
     uint32_t logCount = 0;
     :ref:`zesDriverEnumInfoLogsExt`\(hDriver, &logCount, nullptr);
 
@@ -75,11 +88,10 @@ Enumerating Info Logs and Querying Properties
         return;
     }
 
-    zes_info_log_handle_t* phInfoLogs = (zes_info_log_handle_t*)
-        allocate(logCount * sizeof(zes_info_log_handle_t));
+    :ref:`zes-info-log-handle-t`\* phInfoLogs = (:ref:`zes-info-log-handle-t`\*)
+        allocate(logCount * sizeof(:ref:`zes-info-log-handle-t`\));
     :ref:`zesDriverEnumInfoLogsExt`\(hDriver, &logCount, phInfoLogs);
 
-    // Query the properties of the first info log
     :ref:`zes-info-log-ext-properties-t` logProps = {};
     logProps.stype = :ref:`ZES_STRUCTURE_TYPE_INFO_LOG_EXT_PROPERTIES <zes-structure-type-t>`\;
     logProps.pNext = nullptr;
@@ -98,7 +110,6 @@ Collecting and Reading Records
 
 .. parsed-literal::
 
-    // Request a 256 KB collection buffer
     uint32_t bufferSizeInKb = 256;
 
     :ref:`zes-info-log-instance-ext-desc-t` desc = {};
@@ -106,11 +117,10 @@ Collecting and Reading Records
     desc.pNext = nullptr;
     desc.pBufferSizeInKb = &bufferSizeInKb;
 
-    // Named instances require isNamedInstanceSupported == true
     const char* pInstanceName =
         logProps.isNamedInstanceSupported ? "my_collection" : nullptr;
 
-    zes_info_log_instance_handle_t hInstance = nullptr;
+    :ref:`zes-info-log-instance-handle-t` hInstance = nullptr;
     if (:ref:`zesInfoLogCreateInstanceExt`\(phInfoLogs[0], pInstanceName, &desc, &hInstance)
             != :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\) {
         output("Could not start info log collection\\n");
@@ -119,10 +129,9 @@ Collecting and Reading Records
 
     // The driver may round the requested values; re-read what was applied
     output("Collecting into %u KB\\n", bufferSizeInKb);
-    
+
     const uint64_t timeoutInMs = 500;
 
-    // Size a working buffer once
     const uint32_t bufferSize = 64 * 1024;
     const uint32_t maxRecords = 64;
 
@@ -130,7 +139,7 @@ Collecting and Reading Records
     :ref:`zes-info-log-metadata-ext-t`\* pDescriptors = (:ref:`zes-info-log-metadata-ext-t`\*)
         allocate(maxRecords * sizeof(:ref:`zes-info-log-metadata-ext-t`\));
 
-    ze_bool_t hasDataToRead = true;
+    :ref:`ze-bool-t` hasDataToRead = true;
     while (hasDataToRead) {
         uint32_t size = bufferSize;
         uint32_t recordCount = maxRecords;
@@ -143,7 +152,7 @@ Collecting and Reading Records
         :ref:`zes-info-log-read-status-ext-t` readStatus = {};
         readStatus.stype = :ref:`ZES_STRUCTURE_TYPE_INFO_LOG_READ_STATUS_EXT <zes-structure-type-t>`\;
         readStatus.pNext = nullptr;
-        
+
         :ref:`ze-result-t` result = :ref:`zesInfoLogInstanceReadWithMetadataExt`\(
             hInstance, timeoutInMs, &size, pBuffer,
             &recordCount, pDescriptors, &readStatus);
@@ -157,11 +166,11 @@ Collecting and Reading Records
         if (result == :ref:`ZE_RESULT_WARNING_DROPPED_DATA <ze-result-t>`\) {
             // The collection buffer overflowed. Consider a larger pBufferSizeInKb
             // or reading more often.
-            if (readStatus.droppedRecordCount == UINT32_MAX) {
+            if (readStatus.droppedRecordCount == -1) {
                 output("Warning: records were dropped, count unknown\\n");
             } else {
-                output("Warning: %u records dropped\\n",
-                       readStatus.droppedRecordCount);
+                output("Warning: %lld records dropped\\n",
+                       (long long) readStatus.droppedRecordCount);
             }
         }
 
@@ -192,7 +201,145 @@ Collecting and Reading Records
 
     free(pDescriptors);
     free(pBuffer);
-
-    // Cleanup    
     :ref:`zesInfoLogInstanceDeleteExt`\(hInstance);
     free(phInfoLogs);
+
+Info Log Decoder Overview
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The functions described above return records as opaque binary data: a record in
+:ref:`ZES_INFO_LOG_FORMAT_EXT_CPER <zes-info-log-format-ext-t>` format is a UEFI Common Platform Error Record.
+
+A decoder context reports the fields it can decode from a record, and reads the value of
+one of those fields out of one record.
+
+Whether the decoder is available depends on the format of the info log:
+:ref:`zesInfoLogDecoderContextCreateExt` returns :ref:`ZE_RESULT_ERROR_UNSUPPORTED_FEATURE <ze-result-t>` for an
+info log whose format the driver cannot decode, so an application must check the result of
+that call rather than assume that every info log can be decoded.
+
+A decoder context is created from an info log handle. One context decodes records read
+from any collection instance of the info log, and records held in a buffer whose
+collection instance was already deleted.
+
+Fields are decoded on demand, so the context reads the record buffer and the descriptor
+array for as long as it is decoding. The application must keep both allocated, and must
+not modify either, until :ref:`zesInfoLogDecoderContextDecodeStopExt` returns.
+
+A record that carries no field is not an error: every field of such a record is reported as
+:ref:`ZE_RESULT_ERROR_NOT_AVAILABLE <ze-result-t>`\, and the other records of the batch are unaffected.
+
+Decoding the Records
+~~~~~~~~~~~~~~~~~~~~
+
+.. parsed-literal::
+
+    // Runs inside the read loop above, after a read call returns and before the
+    // cleanup, so phInfoLogs, pBuffer, size, pDescriptors and recordCount are valid
+
+    :ref:`zes-info-log-decoder-context-handle-t` hDecoderContext = nullptr;
+    if (:ref:`zesInfoLogDecoderContextCreateExt`\(phInfoLogs[0], &hDecoderContext)
+            != :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\) {
+        output("Records of this info log cannot be decoded\\n");
+        return;
+    }
+
+    // The fields follow the format of the info log, so query them once
+    uint32_t fieldCount = 0;
+    :ref:`zesInfoLogDecoderContextGetFieldInfoExt`\(hDecoderContext, &fieldCount, nullptr);
+
+    :ref:`zes-info-log-decodable-field-info-ext-t`\* pFields =
+        (:ref:`zes-info-log-decodable-field-info-ext-t`\*)
+            allocate(fieldCount * sizeof(:ref:`zes-info-log-decodable-field-info-ext-t`\));
+
+    for (uint32_t f = 0; f < fieldCount; f++) {
+        pFields[f].stype = :ref:`ZES_STRUCTURE_TYPE_INFO_LOG_DECODABLE_FIELD_INFO_EXT <zes-structure-type-t>`\;
+        pFields[f].pNext = nullptr;
+    }
+
+    :ref:`zesInfoLogDecoderContextGetFieldInfoExt`\(hDecoderContext, &fieldCount, pFields);
+
+    for (uint32_t f = 0; f < fieldCount; f++) {
+        output("Field '%s' (id %u, %zu byte(s), since version %s): %s\\n",
+               pFields[f].name, pFields[f].fieldId, pFields[f].requiredBytes,
+               pFields[f].versionString, pFields[f].desc);
+    }
+
+    if (:ref:`zesInfoLogDecoderContextDecodeStartExt`\(hDecoderContext, size, pBuffer,
+                                               recordCount, pDescriptors)
+            != :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\) {
+        output("Could not start decoding this batch of records\\n");
+        free(pFields);
+        :ref:`zesInfoLogDecoderContextDeleteExt`\(phInfoLogs[0], hDecoderContext);
+        return;
+    }
+
+    :ref:`ze-bool-t` failed = false;
+    for (uint32_t r = 0; r < recordCount && !failed; r++) {
+        for (uint32_t f = 0; f < fieldCount; f++) {
+            uint8_t* pValue = (uint8_t*) allocate(pFields[f].requiredBytes);
+            size_t bytesCopied = 0;
+
+            :ref:`ze-result-t` result = :ref:`zesInfoLogDecoderContextReadFieldExt`\(
+                hDecoderContext, pFields[f].fieldId, r,
+                pValue, pFields[f].requiredBytes, &bytesCopied);
+
+            if (result == :ref:`ZE_RESULT_ERROR_NOT_AVAILABLE <ze-result-t>`\) {
+                // This record does not carry this field. Not a failure.
+                free(pValue);
+                continue;
+            }
+            if (result != :ref:`ZE_RESULT_SUCCESS <ze-result-t>`\) {
+                output("Could not read field '%s' of record %u\\n", pFields[f].name, r);
+                free(pValue);
+                failed = true;
+                break;
+            }
+
+            // A field may hold several elements; only bytesCopied bytes are valid
+            switch (pFields[f].type) {
+            case :ref:`ZES_INFO_LOG_FIELD_TYPE_EXT_UINT32 <zes-info-log-field-type-ext-t>`\:
+                for (size_t e = 0; e < bytesCopied / sizeof(uint32_t); e++) {
+                    uint32_t value;
+                    memcpy(&value, pValue + e * sizeof(value), sizeof(value));
+                    output("Record %u: %s[%zu] = %u\\n", r, pFields[f].name, e, value);
+                }
+                break;
+            case :ref:`ZES_INFO_LOG_FIELD_TYPE_EXT_INT64 <zes-info-log-field-type-ext-t>`\:
+                for (size_t e = 0; e < bytesCopied / sizeof(int64_t); e++) {
+                    int64_t value;
+                    memcpy(&value, pValue + e * sizeof(value), sizeof(value));
+                    output("Record %u: %s[%zu] = %lld\\n", r, pFields[f].name, e,
+                           (long long) value);
+                }
+                break;
+            case :ref:`ZES_INFO_LOG_FIELD_TYPE_EXT_DOUBLE <zes-info-log-field-type-ext-t>`\:
+                for (size_t e = 0; e < bytesCopied / sizeof(double); e++) {
+                    double value;
+                    memcpy(&value, pValue + e * sizeof(value), sizeof(value));
+                    output("Record %u: %s[%zu] = %f\\n", r, pFields[f].name, e, value);
+                }
+                break;
+            case :ref:`ZES_INFO_LOG_FIELD_TYPE_EXT_STRING <zes-info-log-field-type-ext-t>`\:
+                if (bytesCopied > 0) {
+                    output("Record %u: %s = %s\\n", r, pFields[f].name, (const char*) pValue);
+                }
+                break;
+            case :ref:`ZES_INFO_LOG_FIELD_TYPE_EXT_RAW_BYTES <zes-info-log-field-type-ext-t>`\:
+                // For example a :ref:`zes-uuid-t` when requiredBytes is ZES_MAX_UUID_SIZE
+                process(pValue, bytesCopied);
+                break;
+            default:
+                // Data types added by a later version of this extension
+                break;
+            }
+
+            free(pValue);
+        }
+    }
+
+    // pBuffer and pDescriptors may be reused after this returns
+    :ref:`zesInfoLogDecoderContextDecodeStopExt`\(hDecoderContext);
+
+    free(pFields);
+    :ref:`zesInfoLogDecoderContextDeleteExt`\(phInfoLogs[0], hDecoderContext);

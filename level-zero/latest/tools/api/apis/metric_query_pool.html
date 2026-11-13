@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Metric Query Pool &#8212; Level Zero Specification v1.20.41</title>
+    <title>Metric Query Pool &#8212; Level Zero Specification v1.21.26</title>
   
   
   
@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=bd51cb91" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=17af74ec" />
   
   <!-- So that users can add custom icons -->
   <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
@@ -51,7 +51,7 @@
     <link rel="prev" title="Metric Streamer" href="metric_streamer.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.20.41" />
+  <meta name="docsearch:version" content="1.21.26" />
   </head>
   
   
@@ -126,7 +126,7 @@
   
   
   
-    <p class="title logo__title">Level Zero Specification v1.20.41</p>
+    <p class="title logo__title">Level Zero Specification v1.21.26</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -155,17 +155,21 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_queue.html">Command Queue</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/command_list.html">Command List</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fence.html">Fence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event_pool.html">Event Pool</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/event.html">Event</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/image.html">Image</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/module_build_log.html">Module Build Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/kernel.html">Kernel</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/sampler.html">Sampler</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/physical_mem.html">Physical Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/mem.html">Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/virtual_mem.html">Virtual Mem</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_vertex.html">Fabric Vertex</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/fabric_edge.html">Fabric Edge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/graph.html">Graph</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/executable_graph.html">Executable Graph</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../core/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -220,17 +224,18 @@
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../../api.html">Tools</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active has-children"><a class="reference internal" href="index.html">APIs</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="driver.html">Driver</a></li>
 <li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="context.html">Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="command_list.html">Command List</a></li>
 <li class="toctree-l4"><a class="reference internal" href="module.html">Module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="kernel.html">Kernel</a></li>
-<li class="toctree-l4"><a class="reference internal" href="debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_group.html">Metric Group</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric.html">Metric</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_streamer.html">Metric Streamer</a></li>
 <li class="toctree-l4 current active"><a class="current reference internal" href="#">Metric Query Pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="metric_query.html">Metric Query</a></li>
+<li class="toctree-l4"><a class="reference internal" href="debug.html">Debug</a></li>
 <li class="toctree-l4"><a class="reference internal" href="data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -257,24 +262,28 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../sysman/api.html">Sysman</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../sysman/api/apis/index.html">APIs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/global.html">Global</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/driver.html">Driver</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/performance_factor.html">Performance Factor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/power.html">Power</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/scheduler.html">Scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/frequency.html">Frequency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/engine.html">Engine</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/standby.html">Standby</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/firmware.html">Firmware</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/memory.html">Memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fabric_port.html">Fabric Port</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/temperature.html">Temperature</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/psu.html">Psu</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/fan.html">Fan</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/led.html">Led</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/ras.html">Ras</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/diagnostics.html">Diagnostics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/overclock.html">Overclock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/vf_management.html">VF Management</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log.html">Info Log</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/apis/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -286,6 +295,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/memory.html">Memory</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log.html">Info Log</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_instance.html">Info Log Instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/info_log_decoder_context.html">Info Log Decoder Context</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../sysman/api/extensions/data_types.html">Data Types</a></li>
 </ul>
 </details></li>
@@ -473,6 +483,13 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-query-pool-handles">Metric Query Pool Handles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zet-metric-query-pool-handle-t">zet_metric_query_pool_handle_t</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv430zet_metric_query_pool_handle_t"><code class="docutils literal notranslate"><span class="pre">zet_metric_query_pool_handle_t</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metric-query-pool-functions">Metric Query Pool Functions</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zetmetricquerypoolcreate">zetMetricQueryPoolCreate</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv424zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t"><code class="docutils literal notranslate"><span class="pre">zetMetricQueryPoolCreate()</span></code></a></li>
@@ -522,15 +539,35 @@
                   
   <section id="metric-query-pool">
 <h1>Metric Query Pool<a class="headerlink" href="#metric-query-pool" title="Link to this heading">#</a></h1>
-<p>oneAPI Level Zero Specification - Version 1.20.41</p>
+<p>oneAPI Level Zero Specification - Version 1.21.26</p>
+<section id="metric-query-pool-handles">
+<h2>Metric Query Pool Handles<a class="headerlink" href="#metric-query-pool-handles" title="Link to this heading">#</a></h2>
+<section id="zet-metric-query-pool-handle-t">
+<span id="id1"></span><h3>zet_metric_query_pool_handle_t<a class="headerlink" href="#zet-metric-query-pool-handle-t" title="Link to this heading">#</a></h3>
+<p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Obtained from:</strong> <a class="reference internal" href="#zetmetricquerypoolcreate"><span class="std std-ref">zetMetricQueryPoolCreate</span></a></div>
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetmetricquerypooldestroy"><span class="std std-ref">zetMetricQueryPoolDestroy</span></a>, <a class="reference internal" href="metric_query.html#zetmetricquerycreate"><span class="std std-ref">zetMetricQueryCreate</span></a></div>
+<div class="line"><strong>See also:</strong> <a class="reference internal" href="../../PROG.html#event-based"><span class="std std-ref">Metric Query (Programming Guide)</span></a></div>
+</div>
+</div>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv430zet_metric_query_pool_handle_t">
+<span id="_CPPv330zet_metric_query_pool_handle_t"></span><span id="_CPPv230zet_metric_query_pool_handle_t"></span><span id="zet_metric_query_pool_handle_t"></span><span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_query_pool_handle_t</span></span></span><a class="headerlink" href="#_CPPv430zet_metric_query_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Handle of metric query pool’s object.</p>
+</dd></dl>
+
+</section>
+</section>
 <section id="metric-query-pool-functions">
 <h2>Metric Query Pool Functions<a class="headerlink" href="#metric-query-pool-functions" title="Link to this heading">#</a></h2>
 <section id="zetmetricquerypoolcreate">
-<span id="id1"></span><h3>zetMetricQueryPoolCreate<a class="headerlink" href="#zetmetricquerypoolcreate" title="Link to this heading">#</a></h3>
+<span id="id2"></span><h3>zetMetricQueryPoolCreate<a class="headerlink" href="#zetmetricquerypoolcreate" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t">
-<span id="_CPPv324zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t"></span><span id="_CPPv224zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t"></span><span id="zetMetricQueryPoolCreate__zet_context_handle_t.zet_device_handle_t.zet_metric_group_handle_t.zet_metric_query_pool_desc_tCP.zet_metric_query_pool_handle_tP"></span><span class="target" id="zet__api_8h_1a148c5a84d149abb08734d8b26d6e51f4"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricQueryPoolCreate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_context_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <span class="n"><span class="pre">zet_device_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <span class="n"><span class="pre">zet_metric_group_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricGroup</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-metric-query-pool-desc-t" title="zet_metric_query_pool_desc_t"><span class="n"><span class="pre">zet_metric_query_pool_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <span class="n"><span class="pre">zet_metric_query_pool_handle_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricQueryPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv324zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t"></span><span id="_CPPv224zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t"></span><span id="zetMetricQueryPoolCreate__zet_context_handle_t.zet_device_handle_t.zet_metric_group_handle_t.zet_metric_query_pool_desc_tCP.zet_metric_query_pool_handle_tP"></span><span class="target" id="zet__api_8h_1a148c5a84d149abb08734d8b26d6e51f4"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricQueryPoolCreate</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="context.html#zet-context-handle-t" title="zet_context_handle_t"><span class="n"><span class="pre">zet_context_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hContext</span></span>, <a class="reference internal" href="device.html#zet-device-handle-t" title="zet_device_handle_t"><span class="n"><span class="pre">zet_device_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hDevice</span></span>, <a class="reference internal" href="metric_group.html#zet-metric-group-handle-t" title="zet_metric_group_handle_t"><span class="n"><span class="pre">zet_metric_group_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricGroup</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#zet-metric-query-pool-desc-t" title="zet_metric_query_pool_desc_t"><span class="n"><span class="pre">zet_metric_query_pool_desc_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">desc</span></span>, <a class="reference internal" href="#zet-metric-query-pool-handle-t" title="zet_metric_query_pool_handle_t"><span class="n"><span class="pre">zet_metric_query_pool_handle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">phMetricQueryPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424zetMetricQueryPoolCreate20zet_context_handle_t19zet_device_handle_t25zet_metric_group_handle_tPK28zet_metric_query_pool_desc_tP30zet_metric_query_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Creates a pool of metric queries on the context. </p>
 <p><ul class="simple">
 <li><p>The application may call this function from simultaneous threads.</p></li>
@@ -586,11 +623,11 @@
 
 </section>
 <section id="zetmetricquerypooldestroy">
-<span id="id2"></span><h3>zetMetricQueryPoolDestroy<a class="headerlink" href="#zetmetricquerypooldestroy" title="Link to this heading">#</a></h3>
+<span id="id3"></span><h3>zetMetricQueryPoolDestroy<a class="headerlink" href="#zetmetricquerypooldestroy" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t">
-<span id="_CPPv325zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t"></span><span id="_CPPv225zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t"></span><span id="zetMetricQueryPoolDestroy__zet_metric_query_pool_handle_t"></span><span class="target" id="zet__api_8h_1a949a15c4f7926942111701514593a141"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricQueryPoolDestroy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">zet_metric_query_pool_handle_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricQueryPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv325zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t"></span><span id="_CPPv225zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t"></span><span id="zetMetricQueryPoolDestroy__zet_metric_query_pool_handle_t"></span><span class="target" id="zet__api_8h_1a949a15c4f7926942111701514593a141"></span><span class="pre">ZE_APIEXPORT</span><span class="w"> </span><a class="reference internal" href="../../../core/api/apis/data_types.html#ze-result-t" title="ze_result_t"><span class="n"><span class="pre">ze_result_t</span></span></a><span class="w"> </span><span class="pre">ZE_APICALL</span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zetMetricQueryPoolDestroy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#zet-metric-query-pool-handle-t" title="zet_metric_query_pool_handle_t"><span class="n"><span class="pre">zet_metric_query_pool_handle_t</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">hMetricQueryPool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425zetMetricQueryPoolDestroy30zet_metric_query_pool_handle_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Deletes a query pool object. </p>
 <p><ul class="simple">
 <li><p>The application must destroy all query handles created from the pool before destroying the pool itself.</p></li>
@@ -634,8 +671,13 @@
 <section id="metric-query-pool-enums">
 <h2>Metric Query Pool Enums<a class="headerlink" href="#metric-query-pool-enums" title="Link to this heading">#</a></h2>
 <section id="zet-metric-query-pool-type-t">
-<span id="id3"></span><h3>zet_metric_query_pool_type_t<a class="headerlink" href="#zet-metric-query-pool-type-t" title="Link to this heading">#</a></h3>
+<span id="id4"></span><h3>zet_metric_query_pool_type_t<a class="headerlink" href="#zet-metric-query-pool-type-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Member of:</strong> <a class="reference internal" href="#zet-metric-query-pool-desc-t"><span class="std std-ref">zet_metric_query_pool_desc_t</span></a></div>
+</div>
+</div>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv428zet_metric_query_pool_type_t">
 <span id="_CPPv328zet_metric_query_pool_type_t"></span><span id="_CPPv228zet_metric_query_pool_type_t"></span><span class="target" id="zet__api_8h_1ac43e6e54b76a41b0914d889f6ebe82de"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_query_pool_type_t</span></span></span><a class="headerlink" href="#_CPPv428zet_metric_query_pool_type_t" title="Link to this definition">#</a><br /></dt>
@@ -666,8 +708,13 @@
 <section id="metric-query-pool-structures">
 <h2>Metric Query Pool Structures<a class="headerlink" href="#metric-query-pool-structures" title="Link to this heading">#</a></h2>
 <section id="zet-metric-query-pool-desc-t">
-<span id="id4"></span><h3>zet_metric_query_pool_desc_t<a class="headerlink" href="#zet-metric-query-pool-desc-t" title="Link to this heading">#</a></h3>
+<span id="id5"></span><h3>zet_metric_query_pool_desc_t<a class="headerlink" href="#zet-metric-query-pool-desc-t" title="Link to this heading">#</a></h3>
 <p class="api-version"><em>Added in version 1.0</em></p>
+<div class="api-usage docutils container">
+<div class="line-block">
+<div class="line"><strong>Used by:</strong> <a class="reference internal" href="#zetmetricquerypoolcreate"><span class="std std-ref">zetMetricQueryPoolCreate</span></a></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv428zet_metric_query_pool_desc_t">
 <span id="_CPPv328zet_metric_query_pool_desc_t"></span><span id="_CPPv228zet_metric_query_pool_desc_t"></span><span id="zet_metric_query_pool_desc_t"></span><span class="target" id="structzet__metric__query__pool__desc__t"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zet_metric_query_pool_desc_t</span></span></span><a class="headerlink" href="#_CPPv428zet_metric_query_pool_desc_t" title="Link to this definition">#</a><br /></dt>
@@ -750,7 +797,7 @@
     <i class="fa-solid fa-list"></i> In this class
   </div>
   <nav class="class-toc" aria-labelledby="pst-class-toc-heading-2">
-    <details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zetMetricQueryPool</div><ul class="ctoc-list"><li><a href="metric_query_pool.html#zetmetricquerypoolcreate">&hellip;Create</a></li><li><a href="metric_query_pool.html#zetmetricquerypooldestroy">&hellip;Destroy</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_query_pool.html#zet-metric-query-pool-type-t">zet_metric_query_pool_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_query_pool.html#zet-metric-query-pool-desc-t">zet_metric_query_pool_desc_t</a></li></ul></details>
+    <details class="ctoc-group" open><summary>Handles <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_query_pool.html#zet-metric-query-pool-handle-t">zet_metric_query_pool_handle_t</a></li></ul></details><details class="ctoc-group" open><summary>Functions <span class="ctoc-count">2</span></summary><div class="ctoc-prefix">zetMetricQueryPool</div><ul class="ctoc-list"><li><a href="metric_query_pool.html#zetmetricquerypoolcreate">&hellip;Create</a></li><li><a href="metric_query_pool.html#zetmetricquerypooldestroy">&hellip;Destroy</a></li></ul></details><details class="ctoc-group" open><summary>Enumerations <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_query_pool.html#zet-metric-query-pool-type-t">zet_metric_query_pool_type_t</a></li></ul></details><details class="ctoc-group" open><summary>Structures <span class="ctoc-count">1</span></summary><ul class="ctoc-list"><li><a href="metric_query_pool.html#zet-metric-query-pool-desc-t">zet_metric_query_pool_desc_t</a></li></ul></details>
   </nav></div>
 
 </div></div>

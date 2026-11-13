@@ -1,7 +1,9 @@
 ============================================================
 Fabric Edge - Experimental
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 Fabric Edge - Experimental Functions
@@ -61,8 +63,13 @@ ze_fabric_edge_exp_duplexity_t
 
 *Added in version 1.4*
 
+.. container:: api-usage
+
+   | **Member of:** :ref:`ze-fabric-edge-exp-properties-t`
+
 .. doxygenenum:: ze_fabric_edge_exp_duplexity_t
     :project: LevelZero
+
 
  
 Fabric Edge - Experimental Structures
@@ -77,6 +84,10 @@ ze_fabric_edge_exp_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeFabricEdgeGetPropertiesExp`
 
 .. doxygenstruct:: ze_fabric_edge_exp_properties_t
     :project: LevelZero

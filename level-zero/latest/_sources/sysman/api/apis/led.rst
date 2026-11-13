@@ -1,7 +1,32 @@
 ============================================================
 Led
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Led Handles
+===========
+
+
+.. _zes-led-handle-t:
+
+zes_led_handle_t
+----------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zesDeviceEnumLeds`
+   | **Used by:** :ref:`zesLedGetProperties`, :ref:`zesLedGetState`, :ref:`zesLedSetState`, :ref:`zesLedSetColor`
+   | **See also:** :ref:`Operations on LEDs (Programming Guide) <LED>`
+
+.. cpp:type:: zes_led_handle_t
+
+    Handle for a Sysman device LED.
+
 
 
 Led Functions
@@ -61,6 +86,7 @@ zesLedSetColor
 
 
 
+
  
 Led Structures
 ==============
@@ -74,6 +100,10 @@ zes_led_properties_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesLedGetProperties`
 
 .. doxygenstruct:: zes_led_properties_t
     :project: LevelZero
@@ -90,6 +120,11 @@ zes_led_color_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesLedSetColor`
+   | **Member of:** :ref:`zes-led-state-t`
+
 .. doxygenstruct:: zes_led_color_t
     :project: LevelZero
     :members:
@@ -104,6 +139,10 @@ zes_led_state_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zesLedGetState`
 
 .. doxygenstruct:: zes_led_state_t
     :project: LevelZero

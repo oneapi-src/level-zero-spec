@@ -1,7 +1,9 @@
 ============================================================
 Data Types
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
 
 
 
@@ -21,6 +23,7 @@ zes_structure_type_t
 
 .. doxygenenum:: zes_structure_type_t
     :project: LevelZero
+
 
  
 Data Types Structures

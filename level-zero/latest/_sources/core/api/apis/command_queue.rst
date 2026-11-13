@@ -1,7 +1,32 @@
 ============================================================
 Command Queue
 ============================================================
-oneAPI Level Zero Specification - Version 1.20.41
+oneAPI Level Zero Specification - Version 1.21.26
+
+
+Command Queue Handles
+=====================
+
+
+.. _ze-command-queue-handle-t:
+
+ze_command_queue_handle_t
+-------------------------
+
+.. rst-class:: api-version
+
+*Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Obtained from:** :ref:`zeCommandQueueCreate`
+   | **Used by:** :raw-html:`<span class="api-usage-fold"><input type="checkbox" id="usage-ze-command-queue-handle-t-3"><span class="api-usage-links">` :ref:`zeCommandQueueDestroy`, :ref:`zeCommandQueueExecuteCommandLists`, :ref:`zeCommandQueueSynchronize`, :ref:`zeCommandQueueGetOrdinal`, :ref:`zeCommandQueueGetIndex`, :ref:`zeCommandQueueGetFlags`, :ref:`zeCommandQueueGetMode`, :ref:`zeCommandQueueGetPriority`, :ref:`zeFenceCreate`, :ref:`zeCommandQueueSignalExternalSemaphoreExt`, :ref:`zeCommandQueueWaitExternalSemaphoreExt`, :ref:`zeCommandQueueSetPriorityExt`, :ref:`zeCommandQueueSetQosExt`, :ref:`zeCommandQueueGetQosExt` :raw-html:`</span><label for="usage-ze-command-queue-handle-t-3"><span class="more">Show all 14</span><span class="less">Show less</span></label></span>`
+   | **See also:** `Command Queues (Programming Guide) <../../PROG.html#command-queues>`__
+
+.. cpp:type:: ze_command_queue_handle_t
+
+    Handle of driver's command queue object.
+
 
 
 Command Queue Functions
@@ -139,6 +164,14 @@ ze_command_queue_flags_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandQueueGetFlags`, :ref:`zeCommandListImmediateGetFlags`
+   | **Member of:** :ref:`ze-command-queue-desc-t`
+
+.. doxygentypedef:: ze_command_queue_flags_t
+    :project: LevelZero
+
 .. doxygenenum:: ze_command_queue_flag_t
     :project: LevelZero
 
@@ -151,6 +184,11 @@ ze_command_queue_mode_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandQueueGetMode`, :ref:`zeCommandListImmediateGetMode`
+   | **Member of:** :ref:`ze-command-queue-desc-t`
 
 .. doxygenenum:: ze_command_queue_mode_t
     :project: LevelZero
@@ -165,8 +203,14 @@ ze_command_queue_priority_t
 
 *Added in version 1.0*
 
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandQueueGetPriority`, :ref:`zeCommandListImmediateGetPriority`, :ref:`zeCommandQueueSetPriorityExt`
+   | **Member of:** :ref:`ze-command-queue-desc-t`
+
 .. doxygenenum:: ze_command_queue_priority_t
     :project: LevelZero
+
 
  
 Command Queue Structures
@@ -181,6 +225,11 @@ ze_command_queue_desc_t
 .. rst-class:: api-version
 
 *Added in version 1.0*
+
+.. container:: api-usage
+
+   | **Used by:** :ref:`zeCommandQueueCreate`, :ref:`zeCommandListCreateImmediate`
+   | **pNext may point to:** :ref:`ze-command-queue-qos-ext-desc-t`
 
 .. doxygenstruct:: ze_command_queue_desc_t
     :project: LevelZero
