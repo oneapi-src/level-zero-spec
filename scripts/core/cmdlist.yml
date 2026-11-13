@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019-2022 Intel Corporation
+# Copyright (C) 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
 #
@@ -221,6 +221,10 @@ details:
     - |
       Waiting on one immediate command list shall not block the concurrent execution of commands appended to other
       immediate command lists created with either a different ordinal or different index.
+    - |
+      Some implementations may associate immediate command lists created with the same ordinal and index with the same hardware queue.
+      In that case, this function may also wait for commands appended to the other immediate command lists before
+      the last command appended to this command list, and may return $X_RESULT_NOT_READY while those commands are not complete.
     - "The application may call this function from simultaneous threads."
     - "The implementation of this function should be lock-free."
 params:

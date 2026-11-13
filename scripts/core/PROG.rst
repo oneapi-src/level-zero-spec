@@ -1233,6 +1233,10 @@ A special type of command list can be used for very low-latency submission usage
 - Commands appended into an immediate command list are immediately executed on the device.
 - Commands appended into an immediate command list may execute synchronously, by blocking until the command is complete.
 - An immediate command list is not required to be closed or reset. However, usage will be honored, and expected behaviors will be followed.
+- Some implementations may associate immediate command lists created with the same ordinal and index with the same hardware queue.
+  In that case, ${x}CommandListHostSynchronize on one of these command lists may also wait for commands appended to the
+  other command lists before the last command appended to this command list, and may return ${X}_RESULT_NOT_READY
+  while those commands are not complete.
 
 The following pseudo-code demonstrates a basic sequence for creation and usage of immediate command lists:
 

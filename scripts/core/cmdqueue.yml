@@ -98,7 +98,7 @@ members:
       name: index
       desc: |
             [in] command queue index within the group;
-            must be zero. 
+            zero-based, so it must be less than the `numQueues` member of $x_command_queue_group_properties_t for the command queue group.
     - type: $x_command_queue_flags_t
       name: flags
       desc: |
